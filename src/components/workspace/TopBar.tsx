@@ -1,0 +1,87 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { ArrowLeft, Pencil, Redo2, Undo2 } from "lucide-react";
+import { useProjectStore } from "@/store/useProjectStore";
+import type { Project } from "@/types/project";
+
+export function TopBar({ project }: { project: Project }) {
+  const renameProject = useProjectStore((s) => s.renameProject);
+  const undo = useProjectStore((s) => s.undo);
+  const redo = useProjectStore((s) => s.redo);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(project.name);
+
+  const canUndo = project.currentVersionIndex > 0;
+  const canRedo = project.currentVersionIndex < project.versions.length - 1;
+
+  const commitRename = () => {
+    renameProject(project.id, draft);
+    setEditing(false);
+  };
+
+  return (
+    <header className="flex h-12 shrink-0 items-center justify-between border-b border-white/[0.07] bg-neutral-950/95 px-3 backdrop-blur md:px-4">
+      <div className="flex items-center gap-2">
+        <Link
+          href="/"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 hover:bg-white/8 hover:text-neutral-300 transition"
+          title="Back to home"
+        >
+          <ArrowLeft size={16} />
+        </Link>
+
+        {/* Logo dot */}
+        <div className="hidden sm:flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-amber-400 to-orange-600 shadow-sm">
+          <span className="text-[10px] font-bold text-neutral-950">A</span>
+        </div>
+      </div>
+
+      {/* Project name — center */}
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
+        {editing ? (
+          <input
+            autoFocus
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={commitRename}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitRename();
+              if (e.key === "Escape") { setDraft(project.name); setEditing(false); }
+            }}
+            className="w-40 rounded-lg border border-amber-500/40 bg-neutral-900 px-2.5 py-1 text-sm font-medium text-neutral-100 outline-none text-center"
+          />
+        ) : (
+          <button
+            onClick={() => setEditing(true)}
+            className="group flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-sm font-semibold text-neutral-200 hover:text-white hover:bg-white/5 transition"
+          >
+            <span className="max-w-[140px] truncate">{project.name}</span>
+            <Pencil size={11} className="shrink-0 text-neutral-600 group-hover:text-neutral-400 transition" />
+          </button>
+        )}
+      </div>
+
+      {/* Undo/Redo — right */}
+      <div className="flex items-center gap-0.5">
+        <button
+          onClick={() => undo(project.id)}
+          disabled={!canUndo}
+          title="Undo"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-white/8 hover:text-neutral-200 disabled:text-neutral-700 disabled:hover:bg-transparent transition"
+        >
+          <Undo2 size={15} />
+        </button>
+        <button
+          onClick={() => redo(project.id)}
+          disabled={!canRedo}
+          title="Redo"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-white/8 hover:text-neutral-200 disabled:text-neutral-700 disabled:hover:bg-transparent transition"
+        >
+          <Redo2 size={15} />
+        </button>
+      </div>
+    </header>
+  );
+}

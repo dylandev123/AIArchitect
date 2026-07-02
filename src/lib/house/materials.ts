@@ -1,0 +1,104 @@
+import type { MaterialAssignment, MaterialsConfig, MaterialType, MaterialZone } from "@/types/house";
+import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
+
+export const MATERIAL_TYPES: MaterialType[] = ["concrete", "stone", "wood", "glass", "metal", "stucco", "tile"];
+export const MATERIAL_ZONES: MaterialZone[] = ["exterior", "roof", "trim", "decking"];
+
+export const MATERIAL_LABELS: Record<MaterialType, string> = {
+  concrete: "Concrete",
+  stone: "Stone",
+  wood: "Wood",
+  glass: "Glass",
+  metal: "Metal",
+  stucco: "Stucco",
+  tile: "Tile",
+};
+
+export const MATERIAL_ZONE_LABELS: Record<MaterialZone, string> = {
+  exterior: "Exterior Walls",
+  roof: "Roof",
+  trim: "Trim (frames & railings)",
+  decking: "Decking",
+};
+
+interface MaterialPhysicalProperties {
+  roughness: number;
+  metalness: number;
+  defaultColor: string;
+}
+
+export const MATERIAL_PROPERTIES: Record<MaterialType, MaterialPhysicalProperties> = {
+  concrete: { roughness: 0.9, metalness: 0.05, defaultColor: "#aaa9a3" },
+  stone: { roughness: 0.85, metalness: 0.02, defaultColor: "#8d8579" },
+  wood: { roughness: 0.55, metalness: 0.0, defaultColor: "#9c6b3e" },
+  glass: { roughness: 0.05, metalness: 0.05, defaultColor: "#9fc4d8" },
+  metal: { roughness: 0.3, metalness: 0.85, defaultColor: "#9a9ea3" },
+  stucco: { roughness: 0.95, metalness: 0.0, defaultColor: "#e9e4d8" },
+  tile: { roughness: 0.35, metalness: 0.05, defaultColor: "#c9c2b0" },
+};
+
+export interface ResolvedMaterial {
+  color: string;
+  roughness: number;
+  metalness: number;
+  transparent?: boolean;
+  opacity?: number;
+}
+
+/** Turns a {material, color} assignment into the render-ready PBR-ish properties for a primitive. */
+export function resolveMaterial(assignment: MaterialAssignment): ResolvedMaterial {
+  const props = MATERIAL_PROPERTIES[assignment.material];
+  const resolved: ResolvedMaterial = {
+    color: assignment.color,
+    roughness: props.roughness,
+    metalness: props.metalness,
+  };
+  if (assignment.material === "glass") {
+    resolved.transparent = true;
+    resolved.opacity = 0.55;
+  }
+  return resolved;
+}
+
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+
+function validateAssignment(
+  raw: unknown,
+  fallback: MaterialAssignment,
+  zoneLabel: string,
+  warnings: string[]
+): MaterialAssignment {
+  const o = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+
+  let material = fallback.material;
+  if (typeof o.material === "string") {
+    if (MATERIAL_TYPES.includes(o.material as MaterialType)) {
+      material = o.material as MaterialType;
+    } else {
+      warnings.push(`Unknown material ${JSON.stringify(o.material)} for "${zoneLabel}" — keeping "${fallback.material}".`);
+    }
+  }
+
+  const materialChanged = material !== fallback.material;
+  let color = materialChanged ? MATERIAL_PROPERTIES[material].defaultColor : fallback.color;
+  if (typeof o.color === "string") {
+    if (HEX_COLOR_RE.test(o.color)) {
+      color = o.color;
+    } else {
+      warnings.push(`Invalid color ${JSON.stringify(o.color)} for "${zoneLabel}" — using a default.`);
+    }
+  }
+
+  return { material, color };
+}
+
+/** Always succeeds — a missing or malformed "materials" block just falls back to sensible defaults. */
+export function validateMaterials(raw: unknown, warnings: string[]): MaterialsConfig {
+  const o = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+  return {
+    exterior: validateAssignment(o.exterior, DEFAULT_MATERIALS_CONFIG.exterior, "exterior", warnings),
+    roof: validateAssignment(o.roof, DEFAULT_MATERIALS_CONFIG.roof, "roof", warnings),
+    trim: validateAssignment(o.trim, DEFAULT_MATERIALS_CONFIG.trim, "trim", warnings),
+    decking: validateAssignment(o.decking, DEFAULT_MATERIALS_CONFIG.decking, "decking", warnings),
+  };
+}
