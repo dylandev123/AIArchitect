@@ -9,7 +9,8 @@ export interface GrassTuft {
   color: string;
 }
 
-const GRASS_COLORS = ["#5f8a4a", "#6b9654", "#557d42"] as const;
+/** Saturated game-style grass tufts — bright like Sims 4 lawn. */
+const GRASS_COLORS = ["#48c030", "#55cc3c", "#3ab828"] as const;
 const TUFT_COUNT = 450;
 const MAX_ATTEMPTS = TUFT_COUNT * 6;
 

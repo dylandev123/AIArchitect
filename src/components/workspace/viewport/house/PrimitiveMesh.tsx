@@ -34,8 +34,9 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
     metalness: primitive.metalness ?? 0,
     transparent: primitive.transparent ?? false,
     opacity: primitive.opacity ?? 1,
-    emissive: isSelected ? "#f59e0b" : "#000000",
-    emissiveIntensity: isSelected ? 0.45 : 0,
+    // Sims-style selection: warm amber glow, slightly brighter than before
+    emissive: isSelected ? "#f5a800" : "#000000",
+    emissiveIntensity: isSelected ? 0.55 : 0,
   };
 
   if (primitive.kind === "box" && primitive.id.endsWith("-water")) {

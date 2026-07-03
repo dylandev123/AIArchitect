@@ -99,27 +99,32 @@ export const LANDSCAPE_LIMITS = {
   depth: { min: 1, max: 60 },
 };
 
+/**
+ * Base colours used by procedurally-generated primitives (walls, floors, glass, etc.).
+ * Tuned for Sims-style bright outdoor environments — saturated, clean, game-friendly.
+ */
 export const MATERIAL_COLORS = {
-  floor: "#c9c2b0",
-  wall: "#e9e4d8",
-  roof: "#454b54",
-  glass: "#9fc4d8",
-  frame: "#5b4a3a",
-  door: "#6b4a35",
-  garageDoor: "#8a8d92",
-  railing: "#3a3f47",
-  paving: "#aba79c",
-  driveway: "#6b6d70",
-  poolWater: "#3aa0c4",
-  poolCoping: "#d8d3c5",
+  floor:      "#d4cfc4",   // warm light stone
+  wall:       "#f0ece4",   // clean stucco white
+  roof:       "#5a82aa",   // game blue-gray tile roof
+  glass:      "#a0e0f8",   // bright reflective sky-blue glass
+  frame:      "#4a3420",   // rich dark trim
+  door:       "#8a5c30",   // warm honey-brown door
+  garageDoor: "#b0b4ba",   // light silver garage
+  railing:    "#2a4060",   // deep blue-steel railing
+  paving:     "#c4c0b6",   // light warm concrete
+  driveway:   "#80858a",   // medium-gray asphalt
+  poolWater:  "#00c8e8",   // vivid Sims-cyan pool (matches WaterSurface)
+  poolCoping: "#e4e0d8",   // bright pool deck
 } as const;
 
+/** Sims-style room floor tones — warm, distinct, and easy to read from top-down. */
 export const ROOM_FLOOR_COLORS: Record<RoomType, string> = {
-  kitchen: "#d8d2c4",
-  living: "#b89169",
-  bedroom: "#c9a877",
-  bathroom: "#cfdbe0",
-  hallway: "#cabfa9",
+  kitchen:  "#e8e2d4",   // light cream tile
+  living:   "#c8a870",   // warm oak
+  bedroom:  "#d4b880",   // soft honey wood
+  bathroom: "#b8d8e8",   // cool blue-white tile
+  hallway:  "#d0cbc0",   // neutral warm stone
 };
 
 export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
@@ -148,6 +153,6 @@ export const LANDSCAPE_KIND_LABELS: Record<LandscapeKind, string> = {
 };
 
 export const LANDSCAPE_COLORS: Record<LandscapeKind, string> = {
-  garden: "#5d7a4a",
-  lawn: "#7fa05f",
+  garden: "#2da03c",   // rich garden green
+  lawn:   "#50c038",   // bright open lawn
 };

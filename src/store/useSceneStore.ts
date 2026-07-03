@@ -2,6 +2,12 @@
 
 import { create } from "zustand";
 
+interface RoomFocusTarget {
+  worldX: number;
+  worldZ: number;
+  roomSize: number;
+}
+
 interface SceneStore {
   selectedKey: string | null;
   selectKey: (key: string | null) => void;
@@ -9,9 +15,23 @@ interface SceneStore {
   toggleGrid: () => void;
   showRoof: boolean;
   toggleRoof: () => void;
-  /** When true, the right sidebar shows the full advanced property inspector. */
-  showAdvanced: boolean;
   setShowAdvanced: (show: boolean) => void;
+  showAdvanced: boolean;
+
+  /** Persistent view mode — persists across selections. */
+  viewMode: "site" | "room";
+  setViewMode: (mode: "site" | "room") => void;
+
+  /**
+   * One-shot camera preset trigger. Viewport.tsx watches this, applies the
+   * camera move, then resets it to null. Never persists across frames.
+   */
+  cameraPreset: "site" | "house" | "top" | "room" | null;
+  roomFocusTarget: RoomFocusTarget | null;
+  triggerCameraPreset: (
+    preset: "site" | "house" | "top" | "room" | null,
+    roomTarget?: RoomFocusTarget
+  ) => void;
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
@@ -23,4 +43,12 @@ export const useSceneStore = create<SceneStore>((set) => ({
   toggleRoof: () => set((state) => ({ showRoof: !state.showRoof })),
   showAdvanced: false,
   setShowAdvanced: (show) => set({ showAdvanced: show }),
+
+  viewMode: "site",
+  setViewMode: (mode) => set({ viewMode: mode }),
+
+  cameraPreset: null,
+  roomFocusTarget: null,
+  triggerCameraPreset: (preset, roomTarget) =>
+    set({ cameraPreset: preset, roomFocusTarget: roomTarget ?? null }),
 }));

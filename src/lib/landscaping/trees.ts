@@ -12,7 +12,8 @@ export interface TreePlacement {
   rotationY: number;
 }
 
-const FOLIAGE_COLORS = ["#4a7c3f", "#3f6b35", "#5a8a47", "#456e3a"] as const;
+/** Vibrant Sims-style game greens — saturated and bright, not realistic muddy tones. */
+const FOLIAGE_COLORS = ["#38c040", "#2aac38", "#44c84c", "#30b035"] as const;
 const TREE_COUNT = 14;
 const MIN_SPACING = 3;
 const MAX_ATTEMPTS_PER_TREE = 40;

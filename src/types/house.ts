@@ -177,11 +177,15 @@ export const DEFAULT_HOUSE_CONFIG: HouseConfig = {
   roof: "gable",
 };
 
+/**
+ * Default material assignments — Sims-inspired: crisp white stucco, blue-slate tile roof,
+ * warm wood trim, warm wood decking. Tile gives a clean slightly-glossy roof look.
+ */
 export const DEFAULT_MATERIALS_CONFIG: MaterialsConfig = {
-  exterior: { material: "stucco", color: "#e9e4d8" },
-  roof: { material: "metal", color: "#454b54" },
-  trim: { material: "wood", color: "#5b4a3a" },
-  decking: { material: "concrete", color: "#aba79c" },
+  exterior: { material: "stucco", color: "#f5f2ec" },
+  roof:     { material: "tile",   color: "#5a7a9c" },
+  trim:     { material: "wood",   color: "#6b4d2a" },
+  decking:  { material: "wood",   color: "#c8a070" },
 };
 
 const DEFAULT_SITE_CONFIG: SiteConfig = {

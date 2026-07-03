@@ -27,14 +27,18 @@ interface MaterialPhysicalProperties {
   defaultColor: string;
 }
 
+/**
+ * PBR properties per material type — tuned for Sims-style bright, clean outdoor look.
+ * Glass is near-mirror for vivid sky reflections. Tile has mild gloss for clean roofs.
+ */
 export const MATERIAL_PROPERTIES: Record<MaterialType, MaterialPhysicalProperties> = {
-  concrete: { roughness: 0.9, metalness: 0.05, defaultColor: "#aaa9a3" },
-  stone: { roughness: 0.85, metalness: 0.02, defaultColor: "#8d8579" },
-  wood: { roughness: 0.55, metalness: 0.0, defaultColor: "#9c6b3e" },
-  glass: { roughness: 0.05, metalness: 0.05, defaultColor: "#9fc4d8" },
-  metal: { roughness: 0.3, metalness: 0.85, defaultColor: "#9a9ea3" },
-  stucco: { roughness: 0.95, metalness: 0.0, defaultColor: "#e9e4d8" },
-  tile: { roughness: 0.35, metalness: 0.05, defaultColor: "#c9c2b0" },
+  concrete: { roughness: 0.88, metalness: 0.04, defaultColor: "#b8b4ac" },
+  stone:    { roughness: 0.82, metalness: 0.02, defaultColor: "#9a9490" },
+  wood:     { roughness: 0.55, metalness: 0.0,  defaultColor: "#b07848" },
+  glass:    { roughness: 0.02, metalness: 0.04, defaultColor: "#a0e0f8" },
+  metal:    { roughness: 0.28, metalness: 0.88, defaultColor: "#b2b6bc" },
+  stucco:   { roughness: 0.93, metalness: 0.0,  defaultColor: "#f2eeea" },
+  tile:     { roughness: 0.32, metalness: 0.04, defaultColor: "#5a7a9c" },
 };
 
 export interface ResolvedMaterial {
@@ -55,7 +59,7 @@ export function resolveMaterial(assignment: MaterialAssignment): ResolvedMateria
   };
   if (assignment.material === "glass") {
     resolved.transparent = true;
-    resolved.opacity = 0.55;
+    resolved.opacity = 0.65; // more visible glass, still see-through
   }
   return resolved;
 }

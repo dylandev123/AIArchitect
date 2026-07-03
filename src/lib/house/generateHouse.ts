@@ -81,6 +81,7 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
   const footprint = { center: [0, 0] as [number, number], width, depth };
   const exteriorMaterial = resolveMaterial(materials.exterior);
   const roofMaterial = resolveMaterial(materials.roof);
+  const trimMaterial = resolveMaterial(materials.trim);
 
   for (let level = 0; level < floors; level++) {
     const floorY = level * LEVEL_HEIGHT;
@@ -108,6 +109,33 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
         exteriorMaterial
       )
     );
+
+    // Base-trim strip at the bottom of each floor's wall ring.
+    // Four thin boxes forming a visual foundation band.
+    const trimH = 0.18;
+    const trimThick = 0.08;
+    const trimY = floorY + FLOOR_THICKNESS + trimH / 2;
+    const halfW = width / 2;
+    const halfD = depth / 2;
+    ([
+      { id: `trim-${level}-n`, pos: [0, trimY, -halfD - trimThick / 2] as [number,number,number], size: [width + trimThick * 2, trimH, trimThick] as [number,number,number] },
+      { id: `trim-${level}-s`, pos: [0, trimY,  halfD + trimThick / 2] as [number,number,number], size: [width + trimThick * 2, trimH, trimThick] as [number,number,number] },
+      { id: `trim-${level}-e`, pos: [ halfW + trimThick / 2, trimY, 0] as [number,number,number], size: [trimThick, trimH, depth] as [number,number,number] },
+      { id: `trim-${level}-w`, pos: [-halfW - trimThick / 2, trimY, 0] as [number,number,number], size: [trimThick, trimH, depth] as [number,number,number] },
+    ] as { id: string; pos: [number,number,number]; size: [number,number,number] }[]).forEach(({ id, pos, size }) => {
+      primitives.push({
+        kind: "box",
+        id,
+        category: "wall",
+        label: `Wall Trim ${level + 1}`,
+        position: pos,
+        rotation: [0, 0, 0],
+        size,
+        color: trimMaterial.color,
+        roughness: trimMaterial.roughness,
+        metalness: trimMaterial.metalness,
+      });
+    });
   }
 
   const roofBaseY = floors * LEVEL_HEIGHT;

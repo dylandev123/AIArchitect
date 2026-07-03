@@ -11,10 +11,19 @@ import { Scenery } from "./scenery/Scenery";
 export function Scene() {
   return (
     <>
-      <Sky sunPosition={[40, 35, 20]} turbidity={6} rayleigh={1.5} mieCoefficient={0.005} />
+      {/* Atmospheric depth — light sky-blue fog fades the far horizon like GTA V outdoors */}
+      <fog attach="fog" args={["#c4dff0", 160, 380]} />
+
+      {/* Sims/GTA-style bright midday sky: low turbidity = clear blue, high rayleigh = rich colour */}
+      <Sky sunPosition={[40, 35, 20]} turbidity={1.5} rayleigh={3.0} mieCoefficient={0.002} />
       <SceneEnvironment />
-      <ambientLight intensity={0.5} />
-      <hemisphereLight args={["#bcd9ff", "#5b6b58", 0.6]} />
+
+      {/* Warm, bright ambient fill */}
+      <ambientLight intensity={0.7} color="#f2f6ff" />
+
+      {/* Sky bounce from above, grass bounce from below */}
+      <hemisphereLight args={["#c8ddff", "#72a858", 0.8]} />
+
       <SunLight />
       <GroundPlane />
       <SceneGrid />

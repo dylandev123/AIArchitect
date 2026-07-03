@@ -1,8 +1,10 @@
+/** Bright warm midday sun — high intensity for Sims/GTA-style saturated outdoor lighting. */
 export function SunLight() {
   return (
     <directionalLight
       position={[40, 35, 20]}
-      intensity={2.2}
+      intensity={3.5}
+      color="#fffbee"
       castShadow
       shadow-mapSize-width={2048}
       shadow-mapSize-height={2048}
@@ -12,8 +14,8 @@ export function SunLight() {
       shadow-camera-bottom={-45}
       shadow-camera-near={0.5}
       shadow-camera-far={150}
-      shadow-bias={-0.0004}
-      shadow-normalBias={0.02}
+      shadow-bias={-0.0002}
+      shadow-normalBias={0.015}
     />
   );
 }

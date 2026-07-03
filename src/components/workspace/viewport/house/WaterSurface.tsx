@@ -10,7 +10,7 @@ interface WaterSurfaceProps {
   depth: number;
 }
 
-/** Animated, reflective pool water — a rippling procedural plane, no textures. */
+/** Animated Sims-style pool water — vivid cyan with strong reflections and gentle ripple. */
 export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
   const geometryRef = useRef<THREE.PlaneGeometry>(null);
   const baseRef = useRef<Float32Array | null>(null);
@@ -42,14 +42,14 @@ export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
     <mesh position={position} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
       <planeGeometry ref={geometryRef} args={[width, depth, 18, 12]} />
       <meshPhysicalMaterial
-        color="#2f8fb8"
-        roughness={0.08}
+        color="#00c8e8"
+        roughness={0.03}
         metalness={0}
         transparent
-        opacity={0.85}
-        envMapIntensity={1.4}
-        clearcoat={0.6}
-        clearcoatRoughness={0.2}
+        opacity={0.88}
+        envMapIntensity={2.8}
+        clearcoat={1.0}
+        clearcoatRoughness={0.06}
       />
     </mesh>
   );
