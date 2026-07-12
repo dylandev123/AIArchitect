@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Project, ProjectVersion } from "@/types/project";
+import type { Project, ProjectType, ProjectVersion } from "@/types/project";
 import { DEFAULT_HOUSE_JSON } from "@/types/house";
 
 function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
@@ -11,8 +11,9 @@ function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
 
 interface ProjectStore {
   projects: Project[];
-  createProject: (name: string) => Project;
+  createProject: (name: string, projectType?: ProjectType) => Project;
   renameProject: (id: string, name: string) => void;
+  setProjectType: (id: string, projectType: ProjectType) => void;
   deleteProject: (id: string) => void;
   touchProject: (id: string) => void;
   getProject: (id: string) => Project | undefined;
@@ -33,13 +34,14 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
 
-      createProject: (name) => {
+      createProject: (name, projectType = "house") => {
         const initialVersion = makeVersion("Initial design", DEFAULT_HOUSE_JSON);
         const project: Project = {
           id: crypto.randomUUID(),
           name: name.trim() || "Untitled Project",
           createdAt: Date.now(),
           updatedAt: Date.now(),
+          projectType,
           houseConfigJson: DEFAULT_HOUSE_JSON,
           versions: [initialVersion],
           currentVersionIndex: 0,
@@ -52,6 +54,13 @@ export const useProjectStore = create<ProjectStore>()(
         set((state) => ({
           projects: state.projects.map((p) =>
             p.id === id ? { ...p, name: name.trim() || p.name, updatedAt: Date.now() } : p
+          ),
+        })),
+
+      setProjectType: (id, projectType) =>
+        set((state) => ({
+          projects: state.projects.map((p) =>
+            p.id === id ? { ...p, projectType, updatedAt: Date.now() } : p
           ),
         })),
 
@@ -132,7 +141,7 @@ export const useProjectStore = create<ProjectStore>()(
     }),
     {
       name: "ai-architect-projects",
-      version: 4,
+      version: 5,
       migrate: (persisted) => {
         const state = persisted as { projects?: Project[] };
         return {
@@ -146,7 +155,9 @@ export const useProjectStore = create<ProjectStore>()(
               p.currentVersionIndex < versions.length
                 ? p.currentVersionIndex
                 : versions.length - 1;
-            return { ...p, houseConfigJson, versions, currentVersionIndex };
+            // v5: backfill projectType — existing projects default to "house"
+            const projectType: ProjectType = (p as Project & { projectType?: ProjectType }).projectType ?? "house";
+            return { ...p, houseConfigJson, versions, currentVersionIndex, projectType };
           }),
         };
       },

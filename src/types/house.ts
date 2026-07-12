@@ -1,6 +1,14 @@
 export type RoofType = "flat" | "gable" | "hip";
 export type WallSide = "north" | "south" | "east" | "west";
-export type RoomType = "kitchen" | "living" | "bedroom" | "bathroom" | "hallway";
+export type RoomType =
+  | "kitchen"
+  | "living"
+  | "bedroom"
+  | "bathroom"
+  | "hallway"
+  | "dining"
+  | "office"
+  | "laundry";
 
 export type MaterialType = "concrete" | "stone" | "wood" | "glass" | "metal" | "stucco" | "tile";
 export type MaterialZone = "exterior" | "roof" | "trim" | "decking";

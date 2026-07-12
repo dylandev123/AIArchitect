@@ -3,7 +3,7 @@ export function SunLight() {
   return (
     <directionalLight
       position={[40, 35, 20]}
-      intensity={3.5}
+      intensity={3.0}
       color="#fffbee"
       castShadow
       shadow-mapSize-width={2048}

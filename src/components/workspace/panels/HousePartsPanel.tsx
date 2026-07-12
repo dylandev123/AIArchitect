@@ -1,27 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import type { ComponentType } from "react";
-import {
-  Bath,
-  BedDouble,
-  Building,
-  ChefHat,
-  DoorOpen,
-  Flower2,
-  Footprints,
-  Grid2x2,
-  Layers,
-  ParkingSquare,
-  Plus,
-  RectangleHorizontal,
-  Route,
-  Sofa,
-  Square,
-  UtensilsCrossed,
-  Warehouse,
-  Waves,
-} from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSceneStore } from "@/store/useSceneStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
@@ -32,145 +11,198 @@ import {
   getDefaultLandscapeConfig,
   getDefaultRoomConfig,
 } from "@/lib/house/features/defaults";
-import { FEATURE_LABEL, type FeatureType } from "@/lib/house/features/featureTypes";
-import { BUILDING_KIND_LABELS, LANDSCAPE_KIND_LABELS, ROOM_TYPE_LABELS } from "@/lib/house/constants";
-import { DEFAULT_HOUSE_CONFIG, type BuildingKind, type LandscapeKind, type RoomType } from "@/types/house";
+import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
+import {
+  ELEMENT_REGISTRY,
+  GROUP_LABELS,
+  GROUP_ORDER,
+  getElementsForType,
+  getProjectTypeSwitchWarning,
+  type ElementEntry,
+} from "@/lib/elementRegistry";
+import { PROJECT_TYPE_EMOJI, PROJECT_TYPE_LABELS, type ProjectType } from "@/types/project";
 
-const PARTS: { type: FeatureType; icon: ComponentType<{ size?: number }> }[] = [
-  { type: "window", icon: Square },
-  { type: "door", icon: DoorOpen },
-  { type: "garage", icon: Warehouse },
-  { type: "balcony", icon: RectangleHorizontal },
-  { type: "patio", icon: Grid2x2 },
-  { type: "pool", icon: Waves },
-  { type: "driveway", icon: Route },
-];
+// ── Element card ──────────────────────────────────────────────────────────────
 
-const ROOM_PARTS: { type: RoomType; icon: ComponentType<{ size?: number }> }[] = [
-  { type: "kitchen", icon: ChefHat },
-  { type: "living", icon: Sofa },
-  { type: "bedroom", icon: BedDouble },
-  { type: "bathroom", icon: Bath },
-  { type: "hallway", icon: Footprints },
-];
+function ElementCard({ entry, onClick }: { entry: ElementEntry; onClick: () => void }) {
+  const Icon = entry.icon;
+  const isSoon = entry.action.kind === "coming-soon";
 
-const BUILDING_PARTS: { kind: BuildingKind; icon: ComponentType<{ size?: number }> }[] = [
-  { kind: "villa", icon: Building },
-  { kind: "restaurant", icon: UtensilsCrossed },
-  { kind: "reception", icon: Layers },
-];
-
-const LANDSCAPE_PARTS: { kind: LandscapeKind; icon: ComponentType<{ size?: number }> }[] = [
-  { kind: "garden", icon: Flower2 },
-  { kind: "lawn", icon: Grid2x2 },
-];
-
-function SectionButton({
-  icon: Icon,
-  label,
-  onClick,
-}: {
-  icon: ComponentType<{ size?: number }>;
-  label: string;
-  onClick: () => void;
-}) {
   return (
     <button
-      onClick={onClick}
-      className="group flex flex-col items-center gap-2.5 rounded-xl border border-white/[0.07] bg-white/[0.03] px-2 py-3.5 text-neutral-400 transition-all duration-150 hover:border-amber-500/25 hover:bg-amber-500/8 hover:text-amber-300 active:scale-95"
+      onClick={isSoon ? undefined : onClick}
+      disabled={isSoon}
+      title={isSoon ? `${entry.label} — coming soon` : `Add ${entry.label}`}
+      className={`group relative flex flex-col items-center gap-2 rounded-xl border px-2 py-3 text-neutral-400 transition-all duration-150 active:scale-95 ${
+        isSoon
+          ? "cursor-default border-white/[0.04] bg-white/[0.01] opacity-35"
+          : "border-white/[0.07] bg-white/[0.03] hover:border-amber-500/25 hover:bg-amber-500/8 hover:text-amber-300"
+      }`}
     >
       <span className="relative">
-        <Icon size={18} />
-        <span className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Plus size={8} strokeWidth={3} className="text-neutral-950" />
-        </span>
+        <Icon size={17} />
+        {isSoon && (
+          <span className="absolute -right-4 -top-1 rounded px-0.5 text-[8px] font-bold uppercase tracking-wide text-neutral-600">
+            soon
+          </span>
+        )}
       </span>
-      <span className="text-[11px] font-medium leading-tight text-center">{label}</span>
+      <span className="text-[11px] font-medium leading-tight text-center">{entry.label}</span>
     </button>
   );
 }
 
-export function HousePartsPanel() {
-  const params = useParams<{ projectId: string }>();
-  const houseConfigJson = useProjectStore(
-    (s) => s.getProject(params.projectId)?.houseConfigJson ?? "{}"
-  );
-  const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
-  const selectKey = useSceneStore((s) => s.selectKey);
+// ── Project type selector ─────────────────────────────────────────────────────
 
-  const house = generateHouseFromJson(houseConfigJson).config ?? DEFAULT_HOUSE_CONFIG;
+const PROJECT_TYPES: ProjectType[] = ["house", "villa", "resort", "restaurant", "commercial"];
 
-  const handleAdd = (type: FeatureType) => {
-    const defaults = getDefaultFeatureConfig(type, house);
-    const newIndex = getFeatureCount(houseConfigJson, type);
-    updateHouseConfig(params.projectId, addFeature(houseConfigJson, type, defaults));
-    selectKey(`${type}-${newIndex}`);
-  };
+function ProjectTypeSelector({
+  projectId,
+  currentType,
+  houseConfigJson,
+}: {
+  projectId: string;
+  currentType: ProjectType;
+  houseConfigJson: string;
+}) {
+  const setProjectType = useProjectStore((s) => s.setProjectType);
 
-  const handleAddRoom = (roomType: RoomType) => {
-    const existingCount = getFeatureCount(houseConfigJson, "room");
-    const defaults = getDefaultRoomConfig(roomType, house, existingCount);
-    updateHouseConfig(params.projectId, addFeature(houseConfigJson, "room", defaults));
-    selectKey(`room-${existingCount}`);
-  };
-
-  const handleAddBuilding = (kind: BuildingKind) => {
-    const existingCount = getFeatureCount(houseConfigJson, "building");
-    const defaults = getDefaultBuildingConfig(kind, house, existingCount);
-    updateHouseConfig(params.projectId, addFeature(houseConfigJson, "building", defaults));
-    selectKey(`building-${existingCount}`);
-  };
-
-  const handleAddLandscape = (kind: LandscapeKind) => {
-    const existingCount = getFeatureCount(houseConfigJson, "landscape");
-    const defaults = getDefaultLandscapeConfig(kind, house, existingCount);
-    updateHouseConfig(params.projectId, addFeature(houseConfigJson, "landscape", defaults));
-    selectKey(`landscape-${existingCount}`);
+  const handleChange = (newType: ProjectType) => {
+    if (newType === currentType) return;
+    const warning = getProjectTypeSwitchWarning(houseConfigJson, newType);
+    if (warning) {
+      const ok = window.confirm(`${warning}\n\nContinue?`);
+      if (!ok) return;
+    }
+    setProjectType(projectId, newType);
   };
 
   return (
-    <div className="space-y-5 p-3">
-      <div>
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-neutral-600">
-          🛏 Rooms
-        </p>
-        <div className="grid grid-cols-2 gap-2">
-          {ROOM_PARTS.map(({ type, icon }) => (
-            <SectionButton key={type} icon={icon} label={ROOM_TYPE_LABELS[type]} onClick={() => handleAddRoom(type)} />
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-neutral-600">
-          🏗 Site Structures
-        </p>
-        <div className="grid grid-cols-2 gap-2">
-          {BUILDING_PARTS.map(({ kind, icon }) => (
-            <SectionButton key={kind} icon={icon} label={BUILDING_KIND_LABELS[kind]} onClick={() => handleAddBuilding(kind)} />
-          ))}
-          <SectionButton icon={Route} label={FEATURE_LABEL["road"]} onClick={() => handleAdd("road")} />
-          <SectionButton icon={ParkingSquare} label={FEATURE_LABEL["parking"]} onClick={() => handleAdd("parking")} />
-          {LANDSCAPE_PARTS.map(({ kind, icon }) => (
-            <SectionButton key={kind} icon={icon} label={LANDSCAPE_KIND_LABELS[kind]} onClick={() => handleAddLandscape(kind)} />
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-neutral-600">
-          🏠 House Features
-        </p>
-        <div className="grid grid-cols-2 gap-2">
-          {PARTS.map(({ type, icon }) => (
-            <SectionButton key={type} icon={icon} label={FEATURE_LABEL[type]} onClick={() => handleAdd(type)} />
-          ))}
-        </div>
-      </div>
-
-      <p className="text-[11px] text-neutral-700 leading-relaxed px-1">
-        Click anything to add it, then tap it in the scene to edit.
-      </p>
+    <div className="flex flex-wrap gap-1 px-3 pb-3 pt-2">
+      {PROJECT_TYPES.map((type) => (
+        <button
+          key={type}
+          onClick={() => handleChange(type)}
+          title={PROJECT_TYPE_LABELS[type]}
+          className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition-all ${
+            type === currentType
+              ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+              : "border-white/[0.07] bg-white/[0.03] text-neutral-500 hover:border-white/15 hover:text-neutral-300"
+          }`}
+        >
+          <span>{PROJECT_TYPE_EMOJI[type]}</span>
+          <span className="hidden sm:inline">{PROJECT_TYPE_LABELS[type]}</span>
+        </button>
+      ))}
     </div>
   );
 }
+
+// ── Main panel ────────────────────────────────────────────────────────────────
+
+export function ElementsPanel() {
+  const params = useParams<{ projectId: string }>();
+  const project = useProjectStore((s) => s.getProject(params.projectId));
+  const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
+  const selectKey = useSceneStore((s) => s.selectKey);
+
+  if (!project) return null;
+
+  const { id: projectId, houseConfigJson, projectType } = project;
+  const house = generateHouseFromJson(houseConfigJson).config ?? DEFAULT_HOUSE_CONFIG;
+
+  const handleEntry = (entry: ElementEntry) => {
+    const { action } = entry;
+
+    if (action.kind === "coming-soon") return;
+
+    if (action.kind === "add-feature") {
+      const defaults = getDefaultFeatureConfig(action.featureType, house);
+      const newIndex = getFeatureCount(houseConfigJson, action.featureType);
+      updateHouseConfig(projectId, addFeature(houseConfigJson, action.featureType, defaults));
+      selectKey(`${action.featureType}-${newIndex}`);
+      return;
+    }
+
+    if (action.kind === "add-room") {
+      const existingCount = getFeatureCount(houseConfigJson, "room");
+      const defaults = getDefaultRoomConfig(action.roomType, house, existingCount);
+      updateHouseConfig(projectId, addFeature(houseConfigJson, "room", defaults));
+      selectKey(`room-${existingCount}`);
+      return;
+    }
+
+    if (action.kind === "add-building") {
+      const existingCount = getFeatureCount(houseConfigJson, "building");
+      const defaults = getDefaultBuildingConfig(action.buildingKind, house, existingCount);
+      updateHouseConfig(projectId, addFeature(houseConfigJson, "building", defaults));
+      selectKey(`building-${existingCount}`);
+      return;
+    }
+
+    if (action.kind === "add-landscape") {
+      const existingCount = getFeatureCount(houseConfigJson, "landscape");
+      const defaults = getDefaultLandscapeConfig(action.landscapeKind, house, existingCount);
+      updateHouseConfig(projectId, addFeature(houseConfigJson, "landscape", defaults));
+      selectKey(`landscape-${existingCount}`);
+      return;
+    }
+  };
+
+  const allowed = getElementsForType(projectType);
+  const groups = GROUP_ORDER[projectType];
+
+  // Map group → entries in registry order
+  const groupedEntries = new Map<string, ElementEntry[]>();
+  for (const groupId of groups) {
+    // Pull from the full registry filtered by both group AND projectType
+    const entries = ELEMENT_REGISTRY.filter(
+      (e) => e.group === groupId && allowed.some((a) => a.id === e.id)
+    );
+    if (entries.length > 0) groupedEntries.set(groupId, entries);
+  }
+
+  return (
+    <div className="flex flex-col">
+      {/* Project type selector */}
+      <div className="border-b border-white/[0.05]">
+        <ProjectTypeSelector
+          projectId={projectId}
+          currentType={projectType}
+          houseConfigJson={houseConfigJson}
+        />
+      </div>
+
+      {/* Element groups */}
+      <div className="space-y-4 p-3">
+        {groups.map((groupId) => {
+          const entries = groupedEntries.get(groupId);
+          if (!entries) return null;
+          return (
+            <div key={groupId}>
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-neutral-600">
+                {GROUP_LABELS[groupId]}
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {entries.map((entry) => (
+                  <ElementCard
+                    key={entry.id}
+                    entry={entry}
+                    onClick={() => handleEntry(entry)}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        <p className="text-[11px] leading-relaxed text-neutral-700 px-1">
+          Click to add an element, then tap it in the scene to edit.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Re-export legacy name so any remaining imports don't break
+export { ElementsPanel as HousePartsPanel };

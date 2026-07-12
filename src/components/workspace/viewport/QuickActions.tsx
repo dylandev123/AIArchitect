@@ -14,7 +14,8 @@ import {
   type QuickAction,
   type QuickActionGroup,
 } from "@/lib/quickActions";
-import { WALL_THICKNESS } from "@/lib/house/constants";
+import { ROOM_TYPE_LABELS, WALL_THICKNESS } from "@/lib/house/constants";
+import type { RoomType } from "@/types/house";
 
 // ── Accent palette ────────────────────────────────────────────────────────────
 
@@ -175,14 +176,16 @@ export function QuickActions() {
     const rz = (room.z as number) || 0;
     const rw = (room.width as number) || 3;
     const rd = (room.depth as number) || 3;
+    const rType = (room.type as RoomType) || "bedroom";
 
     const worldX = -houseWidth / 2 + WALL_THICKNESS + rx + rw / 2;
     const worldZ = -houseDepth / 2 + WALL_THICKNESS + rz + rd / 2;
     const roomSize = Math.max(rw, rd);
+    const label = ROOM_TYPE_LABELS[rType] ?? "Room";
 
     if (showRoof) toggleRoof();
     setViewMode("room");
-    triggerCameraPreset("room", { worldX, worldZ, roomSize });
+    triggerCameraPreset("room", { worldX, worldZ, roomSize }, label);
   };
 
   // ── Action handler ───────────────────────────────────────────────────────

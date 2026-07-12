@@ -120,19 +120,25 @@ export const MATERIAL_COLORS = {
 
 /** Sims-style room floor tones — warm, distinct, and easy to read from top-down. */
 export const ROOM_FLOOR_COLORS: Record<RoomType, string> = {
-  kitchen:  "#e8e2d4",   // light cream tile
-  living:   "#c8a870",   // warm oak
-  bedroom:  "#d4b880",   // soft honey wood
-  bathroom: "#b8d8e8",   // cool blue-white tile
-  hallway:  "#d0cbc0",   // neutral warm stone
+  kitchen:  "#e8e2d4",
+  living:   "#c8a870",
+  bedroom:  "#d4b880",
+  bathroom: "#b8d8e8",
+  hallway:  "#d0cbc0",
+  dining:   "#c8b48a",
+  office:   "#c0bab4",
+  laundry:  "#d8d8d8",
 };
 
 export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
-  kitchen: "Kitchen",
-  living: "Living Room",
-  bedroom: "Bedroom",
+  kitchen:  "Kitchen",
+  living:   "Living Room",
+  bedroom:  "Bedroom",
   bathroom: "Bathroom",
-  hallway: "Hallway",
+  hallway:  "Hallway",
+  dining:   "Dining Room",
+  office:   "Office",
+  laundry:  "Laundry Room",
 };
 
 export const BUILDING_KIND_LABELS: Record<BuildingKind, string> = {

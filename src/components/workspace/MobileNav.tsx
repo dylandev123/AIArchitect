@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Boxes, Braces, MousePointerClick, Palette, X } from "lucide-react";
 import { useUIStore, type MobileSheet } from "@/store/useUIStore";
 import { HouseJsonPanel } from "./panels/HouseJsonPanel";
-import { HousePartsPanel } from "./panels/HousePartsPanel";
+import { ElementsPanel } from "./panels/HousePartsPanel";
 import { MaterialsPanel } from "./panels/MaterialsPanel";
 import { PropertyInspector } from "./inspector/PropertyInspector";
 
@@ -45,7 +45,7 @@ export function MobileNav() {
             </div>
             <div className="pb-safe">
               {mobileSheet === "design" && <HouseJsonPanel key={params.projectId} />}
-              {mobileSheet === "elements" && <HousePartsPanel />}
+              {mobileSheet === "elements" && <ElementsPanel />}
               {mobileSheet === "materials" && <MaterialsPanel />}
               {mobileSheet === "properties" && <PropertyInspector />}
             </div>

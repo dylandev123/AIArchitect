@@ -29,6 +29,10 @@ export function buildHipRoof(
   const metalness = roofMaterial.metalness;
   const primitives: HousePrimitive[] = [];
 
+  const FASCIA_H = 0.22;
+  const FASCIA_T = 0.08;
+  const fasciaY = baseY - FASCIA_H / 2;
+
   if (ridgeAlongX) {
     const nw: Vec3 = [-halfLong, baseY, -halfShort];
     const ne: Vec3 = [halfLong, baseY, -halfShort];
@@ -48,6 +52,14 @@ export function buildHipRoof(
       { kind: "triMesh", id: `${idPrefix}-hip-east`, category: "roof", label: "Roof Hip (East)", vertices: tri(...eastFace), color, roughness, metalness },
       { kind: "triMesh", id: `${idPrefix}-hip-west`, category: "roof", label: "Roof Hip (West)", vertices: tri(...westFace), color, roughness, metalness }
     );
+
+    // Fascia boards on all 4 eave edges.
+    primitives.push(
+      { kind: "box", id: `${idPrefix}-fascia-n`, category: "roof", label: "Roof Fascia (North)", position: [0, fasciaY, -halfShort - FASCIA_T / 2], rotation: [0, 0, 0], size: [halfLong * 2, FASCIA_H, FASCIA_T], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-s`, category: "roof", label: "Roof Fascia (South)", position: [0, fasciaY,  halfShort + FASCIA_T / 2], rotation: [0, 0, 0], size: [halfLong * 2, FASCIA_H, FASCIA_T], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-e`, category: "roof", label: "Roof Fascia (East)",  position: [ halfLong + FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfShort * 2], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-w`, category: "roof", label: "Roof Fascia (West)",  position: [-halfLong - FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfShort * 2], color, roughness, metalness }
+    );
   } else {
     const nw: Vec3 = [-halfShort, baseY, -halfLong];
     const ne: Vec3 = [halfShort, baseY, -halfLong];
@@ -66,6 +78,14 @@ export function buildHipRoof(
       { kind: "triMesh", id: `${idPrefix}-hip-east`, category: "roof", label: "Roof Hip (East)", vertices: quad(...eastFace), color, roughness, metalness },
       { kind: "triMesh", id: `${idPrefix}-hip-north`, category: "roof", label: "Roof Hip (North)", vertices: tri(...northFace), color, roughness, metalness },
       { kind: "triMesh", id: `${idPrefix}-hip-south`, category: "roof", label: "Roof Hip (South)", vertices: tri(...southFace), color, roughness, metalness }
+    );
+
+    // Fascia boards on all 4 eave edges.
+    primitives.push(
+      { kind: "box", id: `${idPrefix}-fascia-n`, category: "roof", label: "Roof Fascia (North)", position: [0, fasciaY, -halfLong - FASCIA_T / 2], rotation: [0, 0, 0], size: [halfShort * 2, FASCIA_H, FASCIA_T], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-s`, category: "roof", label: "Roof Fascia (South)", position: [0, fasciaY,  halfLong + FASCIA_T / 2], rotation: [0, 0, 0], size: [halfShort * 2, FASCIA_H, FASCIA_T], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-e`, category: "roof", label: "Roof Fascia (East)",  position: [ halfShort + FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfLong * 2], color, roughness, metalness },
+      { kind: "box", id: `${idPrefix}-fascia-w`, category: "roof", label: "Roof Fascia (West)",  position: [-halfShort - FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfLong * 2], color, roughness, metalness }
     );
   }
 

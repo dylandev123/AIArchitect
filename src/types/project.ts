@@ -1,3 +1,21 @@
+export type ProjectType = "house" | "villa" | "resort" | "restaurant" | "commercial";
+
+export const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
+  house:      "House",
+  villa:      "Villa",
+  resort:     "Resort",
+  restaurant: "Restaurant",
+  commercial: "Commercial",
+};
+
+export const PROJECT_TYPE_EMOJI: Record<ProjectType, string> = {
+  house:      "🏠",
+  villa:      "🏡",
+  resort:     "🏖",
+  restaurant: "🍽",
+  commercial: "🏢",
+};
+
 export interface ProjectVersion {
   id: string;
   createdAt: number;
@@ -11,6 +29,8 @@ export interface Project {
   name: string;
   createdAt: number;
   updatedAt: number;
+  /** Categorises what's being built — drives which sidebar elements are available. */
+  projectType: ProjectType;
   /** Raw JSON text driving procedural house generation for this project. */
   houseConfigJson: string;
   /** Permanent, append-only log of every AI edit. Never truncated or overwritten. */

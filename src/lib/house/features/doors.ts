@@ -40,6 +40,15 @@ export function buildDoor(config: DoorConfig, house: HouseConfig, materials: Mat
 
   const trim = resolveMaterial(materials.trim);
 
+  // Lever handle — horizontal bar near the latch side of the door, at knob height.
+  const HANDLE_ALONG = 0.12;
+  const HANDLE_H = 0.035;
+  const HANDLE_PROJ = 0.055;
+  const handleBase = pointOnWall(anchor, config.offset + config.width * 0.78);
+  const handleCenter: Vec3 = [handleBase[0], anchor.origin[1] + 1.0, handleBase[2]];
+  const handlePos = offsetOutward(handleCenter, anchor, FRAME_THICKNESS + DOOR_PANEL_THICKNESS + HANDLE_PROJ / 2);
+  const handleSize = wallMountedSize(config.wall, HANDLE_ALONG, HANDLE_H, HANDLE_PROJ);
+
   const idPrefix = `door-${index}`;
   const label = `Door ${index + 1}`;
   return [
@@ -64,6 +73,18 @@ export function buildDoor(config: DoorConfig, house: HouseConfig, materials: Mat
       rotation: [0, 0, 0],
       size: panelSize,
       color: MATERIAL_COLORS.door,
+    },
+    {
+      kind: "box",
+      id: `${idPrefix}-handle`,
+      category: "door",
+      label: `${label} Handle`,
+      position: handlePos,
+      rotation: [0, 0, 0],
+      size: handleSize,
+      color: "#c09010",
+      roughness: 0.28,
+      metalness: 0.72,
     },
   ];
 }

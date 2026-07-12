@@ -42,6 +42,13 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
   const trim = resolveMaterial(materials.trim);
   const glass = resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass });
 
+  // Sill ledge — flat shelf projecting outward below the window opening.
+  const SILL_PROJ = 0.14;
+  const SILL_H = 0.05;
+  const sillCenter: Vec3 = [base[0], anchor.origin[1] + config.sill - SILL_H / 2, base[2]];
+  const sillPos = offsetOutward(sillCenter, anchor, SILL_PROJ / 2);
+  const sillSize = wallMountedSize(config.wall, config.width + FRAME_BORDER * 2 + 0.06, SILL_H, SILL_PROJ);
+
   const idPrefix = `window-${index}`;
   const label = `Window ${index + 1}`;
   return [
@@ -70,6 +77,18 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
       metalness: glass.metalness,
       transparent: glass.transparent,
       opacity: glass.opacity,
+    },
+    {
+      kind: "box",
+      id: `${idPrefix}-sill`,
+      category: "window",
+      label: `${label} Sill`,
+      position: sillPos,
+      rotation: [0, 0, 0],
+      size: sillSize,
+      color: trim.color,
+      roughness: trim.roughness,
+      metalness: trim.metalness,
     },
   ];
 }

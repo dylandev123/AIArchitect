@@ -6,7 +6,7 @@ import { Boxes, Braces, Building2, History, Palette } from "lucide-react";
 import { useUIStore, type LeftPanelTab } from "@/store/useUIStore";
 import { ProjectsPanel } from "./panels/ProjectsPanel";
 import { HouseJsonPanel } from "./panels/HouseJsonPanel";
-import { HousePartsPanel } from "./panels/HousePartsPanel";
+import { ElementsPanel } from "./panels/HousePartsPanel";
 import { MaterialsPanel } from "./panels/MaterialsPanel";
 import { HistoryPanel } from "./panels/HistoryPanel";
 
@@ -55,7 +55,7 @@ export function LeftSidebar() {
         <div className="flex-1 overflow-y-auto">
           {activeTab === "projects" && <ProjectsPanel />}
           {activeTab === "houseJson" && <HouseJsonPanel key={params.projectId} />}
-          {activeTab === "parts" && <HousePartsPanel />}
+          {activeTab === "parts" && <ElementsPanel />}
           {activeTab === "materials" && <MaterialsPanel />}
           {activeTab === "history" && <HistoryPanel />}
         </div>

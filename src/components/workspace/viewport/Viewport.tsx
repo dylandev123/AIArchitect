@@ -68,9 +68,10 @@ export function Viewport() {
       case "room": {
         if (roomFocusTarget) {
           const { worldX, worldZ, roomSize } = roomFocusTarget;
-          const h = Math.max(roomSize * 1.8, 6);
-          controls.object.position.set(worldX, h, worldZ + 0.001);
-          controls.target.set(worldX, 0, worldZ);
+          // Angled Sims-style view: south-east of room, looking down at a comfortable angle
+          const dist = Math.max(roomSize * 1.5, 4.5);
+          controls.object.position.set(worldX + dist * 0.35, dist * 0.85, worldZ + dist);
+          controls.target.set(worldX, 0.35, worldZ);
         }
         break;
       }

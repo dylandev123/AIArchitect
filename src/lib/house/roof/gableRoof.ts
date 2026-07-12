@@ -27,6 +27,10 @@ export function buildGableRoof(
   const wallColor = exteriorMaterial.color;
   const primitives: HousePrimitive[] = [];
 
+  const FASCIA_H = 0.22;
+  const FASCIA_T = 0.08;
+  const fasciaY = baseY - FASCIA_H / 2;
+
   if (ridgeAlongX) {
     const north: [Vec3, Vec3, Vec3, Vec3] = [
       [-halfRidgeLen, baseY, -halfSpan],
@@ -57,6 +61,12 @@ export function buildGableRoof(
       { kind: "triMesh", id: `${idPrefix}-gable-west`, category: "roof", label: "Gable End (West)", vertices: tri(...west), color: wallColor, roughness: exteriorMaterial.roughness, metalness: exteriorMaterial.metalness },
       { kind: "triMesh", id: `${idPrefix}-gable-east`, category: "roof", label: "Gable End (East)", vertices: tri(...east), color: wallColor, roughness: exteriorMaterial.roughness, metalness: exteriorMaterial.metalness }
     );
+
+    // Fascia boards on the two long eave edges.
+    primitives.push(
+      { kind: "box", id: `${idPrefix}-fascia-n`, category: "roof", label: "Roof Fascia (North)", position: [0, fasciaY, -halfSpan - FASCIA_T / 2], rotation: [0, 0, 0], size: [halfRidgeLen * 2, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
+      { kind: "box", id: `${idPrefix}-fascia-s`, category: "roof", label: "Roof Fascia (South)", position: [0, fasciaY,  halfSpan + FASCIA_T / 2], rotation: [0, 0, 0], size: [halfRidgeLen * 2, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
+    );
   } else {
     const west: [Vec3, Vec3, Vec3, Vec3] = [
       [-halfSpan, baseY, -halfRidgeLen],
@@ -86,6 +96,12 @@ export function buildGableRoof(
       { kind: "triMesh", id: `${idPrefix}-slope-east`, category: "roof", label: "Roof Slope (East)", vertices: quad(...east), color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
       { kind: "triMesh", id: `${idPrefix}-gable-north`, category: "roof", label: "Gable End (North)", vertices: tri(...north), color: wallColor, roughness: exteriorMaterial.roughness, metalness: exteriorMaterial.metalness },
       { kind: "triMesh", id: `${idPrefix}-gable-south`, category: "roof", label: "Gable End (South)", vertices: tri(...south), color: wallColor, roughness: exteriorMaterial.roughness, metalness: exteriorMaterial.metalness }
+    );
+
+    // Fascia boards on the two long eave edges.
+    primitives.push(
+      { kind: "box", id: `${idPrefix}-fascia-w`, category: "roof", label: "Roof Fascia (West)", position: [-halfSpan - FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfRidgeLen * 2], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
+      { kind: "box", id: `${idPrefix}-fascia-e`, category: "roof", label: "Roof Fascia (East)",  position: [ halfSpan + FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfRidgeLen * 2], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
     );
   }
 

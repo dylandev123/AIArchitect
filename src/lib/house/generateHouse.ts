@@ -1,6 +1,6 @@
 import type { HouseConfig, MaterialsConfig, RoofType, SiteConfig } from "@/types/house";
 import type { HouseModel, HousePrimitive } from "./types";
-import { FLOOR_THICKNESS, HOUSE_LIMITS, LEVEL_HEIGHT, MATERIAL_COLORS, WALL_HEIGHT } from "./constants";
+import { FLOOR_THICKNESS, HOUSE_LIMITS, LEVEL_HEIGHT, MATERIAL_COLORS, WALL_HEIGHT, WALL_THICKNESS } from "./constants";
 import { buildFloorSlabPrimitive, buildWallRingPrimitives } from "./primitiveBuilders";
 import { resolveMaterial, validateMaterials } from "./materials";
 import { buildFlatRoof } from "./roof/flatRoof";
@@ -111,9 +111,8 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
     );
 
     // Base-trim strip at the bottom of each floor's wall ring.
-    // Four thin boxes forming a visual foundation band.
-    const trimH = 0.18;
-    const trimThick = 0.08;
+    const trimH = 0.22;
+    const trimThick = 0.10;
     const trimY = floorY + FLOOR_THICKNESS + trimH / 2;
     const halfW = width / 2;
     const halfD = depth / 2;
@@ -136,6 +135,55 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
         metalness: trimMaterial.metalness,
       });
     });
+
+    // Corner column pillars — square posts at each outer corner for visible wall thickness.
+    const pillarW = WALL_THICKNESS + 0.08;
+    const pillarY = floorY + FLOOR_THICKNESS + WALL_HEIGHT / 2;
+    ([
+      { id: `pillar-${level}-nw`, pos: [-halfW, pillarY, -halfD] as [number,number,number] },
+      { id: `pillar-${level}-ne`, pos: [ halfW, pillarY, -halfD] as [number,number,number] },
+      { id: `pillar-${level}-se`, pos: [ halfW, pillarY,  halfD] as [number,number,number] },
+      { id: `pillar-${level}-sw`, pos: [-halfW, pillarY,  halfD] as [number,number,number] },
+    ] as { id: string; pos: [number,number,number] }[]).forEach(({ id, pos }) => {
+      primitives.push({
+        kind: "box",
+        id,
+        category: "wall",
+        label: `Corner Pillar ${level + 1}`,
+        position: pos,
+        rotation: [0, 0, 0],
+        size: [pillarW, WALL_HEIGHT, pillarW],
+        color: trimMaterial.color,
+        roughness: trimMaterial.roughness,
+        metalness: trimMaterial.metalness,
+      });
+    });
+
+    // Top cornice on the uppermost floor only — broad trim band at wall top.
+    if (level === floors - 1) {
+      const corniceH = 0.18;
+      const corniceThick = 0.12;
+      const corniceY = floorY + FLOOR_THICKNESS + WALL_HEIGHT - corniceH / 2;
+      ([
+        { id: "cornice-n", pos: [0, corniceY, -halfD - corniceThick / 2] as [number,number,number], size: [width + corniceThick * 2, corniceH, corniceThick] as [number,number,number] },
+        { id: "cornice-s", pos: [0, corniceY,  halfD + corniceThick / 2] as [number,number,number], size: [width + corniceThick * 2, corniceH, corniceThick] as [number,number,number] },
+        { id: "cornice-e", pos: [ halfW + corniceThick / 2, corniceY, 0] as [number,number,number], size: [corniceThick, corniceH, depth] as [number,number,number] },
+        { id: "cornice-w", pos: [-halfW - corniceThick / 2, corniceY, 0] as [number,number,number], size: [corniceThick, corniceH, depth] as [number,number,number] },
+      ] as { id: string; pos: [number,number,number]; size: [number,number,number] }[]).forEach(({ id, pos, size }) => {
+        primitives.push({
+          kind: "box",
+          id,
+          category: "wall",
+          label: "Wall Cornice",
+          position: pos,
+          rotation: [0, 0, 0],
+          size,
+          color: trimMaterial.color,
+          roughness: trimMaterial.roughness,
+          metalness: trimMaterial.metalness,
+        });
+      });
+    }
   }
 
   const roofBaseY = floors * LEVEL_HEIGHT;

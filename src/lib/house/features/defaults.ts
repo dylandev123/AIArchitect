@@ -40,14 +40,21 @@ export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): 
 }
 
 const ROOM_TYPE_SIZE: Record<RoomType, { width: number; depth: number }> = {
-  kitchen: { width: 3.5, depth: 3.5 },
-  living: { width: 5.0, depth: 4.0 },
-  bedroom: { width: 3.5, depth: 3.5 },
+  kitchen:  { width: 3.5, depth: 3.5 },
+  living:   { width: 5.0, depth: 4.0 },
+  bedroom:  { width: 3.5, depth: 3.5 },
   bathroom: { width: 2.2, depth: 2.5 },
-  hallway: { width: 4.0, depth: 1.2 },
+  hallway:  { width: 4.0, depth: 1.2 },
+  dining:   { width: 4.0, depth: 3.5 },
+  office:   { width: 3.0, depth: 3.0 },
+  laundry:  { width: 2.2, depth: 2.0 },
 };
 
-/** Starting values for a new room of a specific type, cascaded slightly so sequential adds don't stack exactly. */
+/**
+ * Starting values for a new room — packed into a non-overlapping grid so consecutive
+ * adds never stack on top of each other. The grid cell size is the room's own footprint
+ * plus a small gap, and cells wrap left-to-right then top-to-bottom.
+ */
 export function getDefaultRoomConfig(
   type: RoomType,
   house: HouseConfig,
@@ -56,13 +63,23 @@ export function getDefaultRoomConfig(
   const { width, depth } = ROOM_TYPE_SIZE[type];
   const usableWidth = Math.max(width, house.width - WALL_THICKNESS * 2);
   const usableDepth = Math.max(depth, house.depth - WALL_THICKNESS * 2);
-  const cascade = existingRoomCount * 1.0;
+
+  const GAP = 0.3;
+  const cellW = width + GAP;
+  const cellD = depth + GAP;
+  const roomsPerRow = Math.max(1, Math.floor((usableWidth + GAP) / cellW));
+
+  const col = existingRoomCount % roomsPerRow;
+  const row = Math.floor(existingRoomCount / roomsPerRow);
+
+  const rawX = col * cellW;
+  const rawZ = row * cellD;
 
   return {
     type,
     level: 0,
-    x: Math.min(Math.max(0, usableWidth - width), cascade),
-    z: Math.min(Math.max(0, usableDepth - depth), cascade),
+    x: Math.min(rawX, Math.max(0, usableWidth - width)),
+    z: Math.min(rawZ, Math.max(0, usableDepth - depth)),
     width,
     depth,
   };

@@ -18,7 +18,8 @@ const TREE_COUNT = 14;
 const MIN_SPACING = 3;
 const MAX_ATTEMPTS_PER_TREE = 40;
 
-/** Scatters a stable set of trees around the yard, avoiding the house and every site feature. */
+/** Scatters a stable set of trees around the yard, avoiding the house and every site feature.
+ * First 8 trees are biased toward the yard perimeter; the rest scatter more freely. */
 export function generateTrees(site: SiteConfig): TreePlacement[] {
   const seed = hashSeed("trees", site.house.width, site.house.depth, site.house.floors, site.house.roof);
   const rng = createRng(seed);
@@ -29,8 +30,19 @@ export function generateTrees(site: SiteConfig): TreePlacement[] {
 
   for (let i = 0; i < TREE_COUNT; i++) {
     for (let attempt = 0; attempt < MAX_ATTEMPTS_PER_TREE; attempt++) {
-      const x = rngRange(rng, -half, half);
-      const z = rngRange(rng, -half, half);
+      let x: number, z: number;
+
+      if (i < 8) {
+        // Outer ring — trees near the yard perimeter for a framed, planted feel.
+        const angle = rng() * Math.PI * 2;
+        const dist = rngRange(rng, half * 0.48, half * 0.88);
+        x = Math.cos(angle) * dist;
+        z = Math.sin(angle) * dist;
+      } else {
+        // Inner scatter — fills the remaining yard area.
+        x = rngRange(rng, -half * 0.85, half * 0.85);
+        z = rngRange(rng, -half * 0.85, half * 0.85);
+      }
 
       if (isInsideAnyFootprint(x, z, footprints)) continue;
       const tooClose = placed.some((t) => {
