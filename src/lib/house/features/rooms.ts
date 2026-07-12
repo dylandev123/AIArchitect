@@ -14,7 +14,10 @@ import {
 import { buildFloorSlabPrimitive, buildWallRingPrimitives } from "../primitiveBuilders";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
 
-const ROOM_TYPES: RoomType[] = ["kitchen", "living", "bedroom", "bathroom", "hallway"];
+const ROOM_TYPES: RoomType[] = [
+  "kitchen", "living", "bedroom", "bathroom", "hallway",
+  "dining", "office", "laundry", "gym",
+];
 
 export function validateRoom(raw: unknown, house: HouseConfig): FeatureValidation<RoomConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -265,6 +268,28 @@ function buildHallwayFurniture(
   ];
 }
 
+function buildGymFurniture(
+  cx: number, cz: number, hw: number, hd: number, fy: number, pre: string
+): HousePrimitive[] {
+  return [
+    // Dark rubber floor mat covering most of the room
+    fBox(`${pre}-mat`,    "Rubber Mat",     cx, cz,  0,           0,              fy,           hw * 1.8, 0.025, hd * 1.8,  "#222222",  0.95),
+    // Treadmill along east wall
+    fBox(`${pre}-tmill`,  "Treadmill",      cx, cz,  hw - 0.48,  -(hd * 0.3),    fy,           0.82,  1.15, 1.95,  "#1a1a1a",  0.6,  0.3),
+    fBox(`${pre}-tbelt`,  "Treadmill Belt", cx, cz,  hw - 0.48,  -(hd * 0.3) + 0.08, fy + 0.28, 0.74, 0.06, 1.65, "#333333",  0.85),
+    // Weights rack along north wall
+    fBox(`${pre}-rack`,   "Weights Rack",   cx, cz,  0,          -(hd - 0.22),   fy,           Math.min(1.8, hw * 1.5), 1.15, 0.42, "#242430",  0.5,  0.6),
+    // Dumbbell rows on rack
+    fBox(`${pre}-db1`,    "Dumbbell",       cx, cz, -0.55,       -(hd - 0.22),   fy + 0.32,    0.28, 0.20, 0.20, "#1a1a1a", 0.5, 0.5),
+    fBox(`${pre}-db2`,    "Dumbbell",       cx, cz,  0,          -(hd - 0.22),   fy + 0.32,    0.28, 0.20, 0.20, "#1a1a1a", 0.5, 0.5),
+    fBox(`${pre}-db3`,    "Dumbbell",       cx, cz,  0.55,       -(hd - 0.22),   fy + 0.32,    0.28, 0.20, 0.20, "#1a1a1a", 0.5, 0.5),
+    // Adjustable bench
+    fBox(`${pre}-bench`,  "Bench",          cx, cz, -(hw - 0.45), hd * 0.2,      fy,           0.58, 0.44, 1.25,  "#1a2030",  0.8),
+    // Mirror along north wall (large, reflective)
+    fBox(`${pre}-mirror`, "Mirror",         cx, cz,  0,          -(hd - 0.04),   fy + 0.65,    Math.min(hw * 1.7, 2.8), 1.20, 0.04, "#a0b8cc",  0.05, 0.15),
+  ];
+}
+
 // ── Room builder ──────────────────────────────────────────────────────────────
 
 export function buildRoom(room: RoomConfig, house: HouseConfig, index: number): HousePrimitive[] {
@@ -335,6 +360,9 @@ export function buildRoom(room: RoomConfig, house: HouseConfig, index: number): 
       break;
     case "laundry":
       primitives.push(...buildLaundryFurniture(centerX, centerZ, hw, hd, furnitureFy, idPrefix));
+      break;
+    case "gym":
+      primitives.push(...buildGymFurniture(centerX, centerZ, hw, hd, furnitureFy, idPrefix));
       break;
   }
 

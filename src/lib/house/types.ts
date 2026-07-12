@@ -13,7 +13,8 @@ export type PrimitiveCategory =
   | "building"
   | "road"
   | "parking"
-  | "landscape";
+  | "landscape"
+  | "deck";
 
 /** Optional PBR-ish overrides; primitives that omit these render with the renderer's defaults. */
 interface MaterialFields {

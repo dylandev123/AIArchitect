@@ -13,6 +13,7 @@ import { validateBuilding } from "./buildings";
 import { validateRoad } from "./roads";
 import { validateParking } from "./parking";
 import { validateLandscapeZone } from "./landscapeZones";
+import { validateDeck } from "./decks";
 
 export type FeatureRecord = Record<string, unknown>;
 
@@ -40,4 +41,5 @@ export const FEATURE_MODULES: Record<FeatureType, FeatureModule> = {
   road: { validate: validateRoad as unknown as FeatureModule["validate"] },
   parking: { validate: validateParking as unknown as FeatureModule["validate"] },
   landscape: { validate: validateLandscapeZone as unknown as FeatureModule["validate"] },
+  deck: { validate: validateDeck as unknown as FeatureModule["validate"] },
 };

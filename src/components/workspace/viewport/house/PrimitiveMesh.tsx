@@ -26,6 +26,23 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
     selectKey(selectionKey);
+
+    // Room floor click → auto-enter room view (only if not already inside a room)
+    if (
+      primitive.category === "room" &&
+      primitive.kind === "box" &&
+      primitive.id.endsWith("-floor")
+    ) {
+      const store = useSceneStore.getState();
+      if (store.viewMode !== "room") {
+        const [worldX, , worldZ] = primitive.position;
+        const roomSize = Math.max(primitive.size[0], primitive.size[2]);
+        const roomLabel = primitive.label.replace(/\s*Floor$/i, "");
+        if (store.showRoof) store.toggleRoof();
+        store.setViewMode("room");
+        store.triggerCameraPreset("room", { worldX, worldZ, roomSize }, roomLabel);
+      }
+    }
   };
 
   const materialProps = {
@@ -34,7 +51,7 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
     metalness: primitive.metalness ?? 0,
     transparent: primitive.transparent ?? false,
     opacity: primitive.opacity ?? 1,
-    // Sims-style selection: warm amber glow, slightly brighter than before
+    // Sims-style selection: warm amber glow
     emissive: isSelected ? "#f5a800" : "#000000",
     emissiveIntensity: isSelected ? 0.55 : 0,
   };

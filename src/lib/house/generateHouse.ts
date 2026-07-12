@@ -20,6 +20,7 @@ import { buildBuilding, validateBuilding } from "./features/buildings";
 import { buildRoad, validateRoad } from "./features/roads";
 import { buildParking, validateParking } from "./features/parking";
 import { buildLandscapeZone, validateLandscapeZone } from "./features/landscapeZones";
+import { buildDeck, validateDeck } from "./features/decks";
 
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip"];
 
@@ -272,6 +273,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const roads = processFeatureArray(root, "road", validateRoad, (v, idx) => buildRoad(v, idx), errors, warnings, primitives);
   const parking = processFeatureArray(root, "parking", validateParking, (v, idx) => buildParking(v, idx), errors, warnings, primitives);
   const landscaping = processFeatureArray(root, "landscape", validateLandscapeZone, (v, idx) => buildLandscapeZone(v, idx), errors, warnings, primitives);
+  const decks = processFeatureArray(root, "deck", validateDeck, (v, idx) => buildDeck(v, materials, idx), errors, warnings, primitives);
 
   const site: SiteConfig = {
     house: config,
@@ -288,6 +290,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
     roads,
     parking,
     landscaping,
+    decks,
   };
 
   return { model: { id: "house", primitives }, config, site, errors, warnings };

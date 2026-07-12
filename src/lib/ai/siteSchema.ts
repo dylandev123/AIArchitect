@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   BALCONY_LIMITS,
   BUILDING_LIMITS,
+  DECK_LIMITS,
   DOOR_LIMITS,
   DRIVEWAY_LIMITS,
   GARAGE_LIMITS,
@@ -147,8 +148,8 @@ const materialsFieldsSchema = z
 
 const buildingSchema = z.object({
   kind: z
-    .enum(["villa", "restaurant", "reception"])
-    .describe("What kind of structure this is."),
+    .enum(["villa", "restaurant", "reception", "gazebo", "outdoor_bar"])
+    .describe("What kind of structure this is. gazebo = open pavilion with posts and hip roof. outdoor_bar = open-air counter with pergola."),
   x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
     .describe("Absolute site X position (positive = east of main house center)."),
   z: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
@@ -182,8 +183,21 @@ const landscapeSchema = z.object({
   depth: z.number().min(LANDSCAPE_LIMITS.depth.min).max(LANDSCAPE_LIMITS.depth.max),
 });
 
+const deckSchema = z.object({
+  x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
+    .describe("Absolute site X position (positive = east of main house center)."),
+  z: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
+    .describe("Absolute site Z position (positive = south of main house center)."),
+  level: z.number().int().min(0).max(12)
+    .describe("0 = ground level platform, 1+ = elevated to match that floor level."),
+  width: z.number().min(DECK_LIMITS.width.min).max(DECK_LIMITS.width.max),
+  depth: z.number().min(DECK_LIMITS.depth.min).max(DECK_LIMITS.depth.max),
+  rotation: z.number().min(-180).max(180).optional()
+    .describe("Y rotation in degrees. Optional."),
+});
+
 const roomSchema = z.object({
-  type: z.enum(["kitchen", "living", "bedroom", "bathroom", "hallway", "dining", "office", "laundry"]).describe("What kind of room this is."),
+  type: z.enum(["kitchen", "living", "bedroom", "bathroom", "hallway", "dining", "office", "laundry", "gym"]).describe("What kind of room this is. gym renders with rubber flooring and equipment."),
   level: z.number().int().min(0).describe("0-indexed floor this room is on."),
   x: z
     .number()
@@ -231,6 +245,7 @@ const patchOpSchema = z.discriminatedUnion("op", [
   ...featureOps("Road", roadSchema),
   ...featureOps("Parking", parkingSchema),
   ...featureOps("Landscape", landscapeSchema),
+  ...featureOps("Deck", deckSchema),
 ]);
 
 export const aiPatchResponseSchema = z.object({

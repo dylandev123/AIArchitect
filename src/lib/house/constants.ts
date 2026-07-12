@@ -70,7 +70,7 @@ export const ROOM_LIMITS = {
 };
 
 /** Shorter than a structural wall — interior partitions are a floor-plan diagram, not a full ceiling-height wall. */
-export const ROOM_WALL_HEIGHT = 1.1;
+export const ROOM_WALL_HEIGHT = 1.4;
 export const ROOM_FLOOR_FINISH_THICKNESS = 0.02;
 
 /** Generic bound for offsets that aren't constrained by a wall's own length (garage, patio, pool, driveway). */
@@ -97,6 +97,11 @@ export const PARKING_LIMITS = {
 export const LANDSCAPE_LIMITS = {
   width: { min: 1, max: 60 },
   depth: { min: 1, max: 60 },
+};
+
+export const DECK_LIMITS = {
+  width: { min: 1, max: 40 },
+  depth: { min: 1, max: 40 },
 };
 
 /**
@@ -128,6 +133,7 @@ export const ROOM_FLOOR_COLORS: Record<RoomType, string> = {
   dining:   "#c8b48a",
   office:   "#c0bab4",
   laundry:  "#d8d8d8",
+  gym:      "#2e3030",
 };
 
 export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
@@ -139,18 +145,23 @@ export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   dining:   "Dining Room",
   office:   "Office",
   laundry:  "Laundry Room",
+  gym:      "Gym",
 };
 
 export const BUILDING_KIND_LABELS: Record<BuildingKind, string> = {
   villa: "Villa",
   restaurant: "Restaurant",
   reception: "Reception",
+  gazebo: "Gazebo",
+  outdoor_bar: "Outdoor Bar",
 };
 
 export const BUILDING_DEFAULT_SIZE: Record<BuildingKind, { width: number; depth: number; floors: number }> = {
   villa: { width: 8, depth: 7, floors: 1 },
   restaurant: { width: 14, depth: 10, floors: 1 },
   reception: { width: 12, depth: 9, floors: 1 },
+  gazebo: { width: 5, depth: 5, floors: 1 },
+  outdoor_bar: { width: 6, depth: 3, floors: 1 },
 };
 
 export const LANDSCAPE_KIND_LABELS: Record<LandscapeKind, string> = {

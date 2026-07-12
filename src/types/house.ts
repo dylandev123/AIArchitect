@@ -8,7 +8,8 @@ export type RoomType =
   | "hallway"
   | "dining"
   | "office"
-  | "laundry";
+  | "laundry"
+  | "gym";
 
 export type MaterialType = "concrete" | "stone" | "wood" | "glass" | "metal" | "stucco" | "tile";
 export type MaterialZone = "exterior" | "roof" | "trim" | "decking";
@@ -113,7 +114,7 @@ export interface RoomConfig {
   depth: number;
 }
 
-export type BuildingKind = "villa" | "restaurant" | "reception";
+export type BuildingKind = "villa" | "restaurant" | "reception" | "gazebo" | "outdoor_bar";
 
 /**
  * A freestanding structure positioned anywhere on the site (not attached to
@@ -150,6 +151,16 @@ export interface ParkingConfig {
   depth: number;
 }
 
+/** A freestanding outdoor platform, ground-level or elevated, positioned anywhere on site. */
+export interface DeckConfig {
+  x: number;
+  z: number;
+  level: number;
+  width: number;
+  depth: number;
+  rotation?: number;
+}
+
 export type LandscapeKind = "garden" | "lawn";
 
 /** A deliberate, named landscaping area (vs. the site's ambient automatic trees/grass). */
@@ -176,6 +187,7 @@ export interface SiteConfig {
   roads: RoadConfig[];
   parking: ParkingConfig[];
   landscaping: LandscapeZoneConfig[];
+  decks: DeckConfig[];
 }
 
 export const DEFAULT_HOUSE_CONFIG: HouseConfig = {
@@ -222,6 +234,7 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
   roads: [],
   parking: [],
   landscaping: [],
+  decks: [],
 };
 
 export const DEFAULT_HOUSE_JSON = JSON.stringify(DEFAULT_SITE_CONFIG, null, 2);

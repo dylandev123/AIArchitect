@@ -8,6 +8,7 @@ import {
   FRAME_THICKNESS,
   LEVEL_HEIGHT,
   MATERIAL_COLORS,
+  PAVING_THICKNESS,
   SITE_POSITION_LIMIT,
   WALL_HEIGHT,
 } from "../constants";
@@ -19,7 +20,7 @@ import { buildGableRoof } from "../roof/gableRoof";
 import { buildHipRoof } from "../roof/hipRoof";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
 
-const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception"];
+const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar"];
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip"];
 
 export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig> {
@@ -106,6 +107,179 @@ function addWindow(
   );
 }
 
+// ── Gazebo builder ────────────────────────────────────────────────────────────
+
+function buildGazebo(
+  config: BuildingConfig,
+  materials: MaterialsConfig,
+  idPrefix: string,
+  label: string
+): HousePrimitive[] {
+  const { x, z, width, depth } = config;
+  const hw = width / 2;
+  const hd = depth / 2;
+  const decking = resolveMaterial(materials.decking);
+  const roofMat = resolveMaterial(materials.roof);
+  const trim = resolveMaterial(materials.trim);
+
+  const POST_W = 0.20;
+  const POST_H = 2.8;
+  const SLAB_H = PAVING_THICKNESS;
+  const POST_INSET = POST_W * 0.5;
+
+  const primitives: HousePrimitive[] = [];
+
+  // Floor slab
+  primitives.push({
+    kind: "box",
+    id: `${idPrefix}-floor`,
+    category: "building" as const,
+    label: `${label} Floor`,
+    position: [x, SLAB_H / 2, z],
+    rotation: [0, 0, 0],
+    size: [width, SLAB_H, depth],
+    color: decking.color,
+    roughness: decking.roughness,
+    metalness: decking.metalness,
+  });
+
+  // 4 corner posts
+  ([
+    [-(hw - POST_INSET), -(hd - POST_INSET), "nw"],
+    [ (hw - POST_INSET), -(hd - POST_INSET), "ne"],
+    [ (hw - POST_INSET),  (hd - POST_INSET), "se"],
+    [-(hw - POST_INSET),  (hd - POST_INSET), "sw"],
+  ] as [number, number, string][]).forEach(([dx, dz, dir]) => {
+    primitives.push({
+      kind: "box",
+      id: `${idPrefix}-post-${dir}`,
+      category: "building" as const,
+      label: `${label} Post`,
+      position: [x + dx, SLAB_H + POST_H / 2, z + dz],
+      rotation: [0, 0, 0],
+      size: [POST_W, POST_H, POST_W],
+      color: trim.color,
+      roughness: trim.roughness,
+      metalness: trim.metalness,
+    });
+  });
+
+  // Hip roof on top of posts (built in local space, then translated to world space)
+  const roofBaseY = SLAB_H + POST_H;
+  primitives.push(
+    ...buildHipRoof(width, depth, roofBaseY, idPrefix, roofMat, trim).map((p) =>
+      translatePrimitive(p, x, z)
+    )
+  );
+
+  return primitives;
+}
+
+// ── Outdoor bar builder ───────────────────────────────────────────────────────
+
+function buildOutdoorBar(
+  config: BuildingConfig,
+  materials: MaterialsConfig,
+  idPrefix: string,
+  label: string
+): HousePrimitive[] {
+  const { x, z, width, depth } = config;
+  const hw = width / 2;
+  const hd = depth / 2;
+  const decking = resolveMaterial(materials.decking);
+  const exterior = resolveMaterial(materials.exterior);
+  const roofMat = resolveMaterial(materials.roof);
+  const trim = resolveMaterial(materials.trim);
+
+  const SLAB_H = PAVING_THICKNESS;
+  const COUNTER_H = 1.08;
+  const COUNTER_D = 0.62;
+  const POST_W = 0.16;
+  const PERGOLA_H = 2.6;
+
+  const primitives: HousePrimitive[] = [];
+
+  // Floor slab
+  primitives.push({
+    kind: "box",
+    id: `${idPrefix}-floor`,
+    category: "building" as const,
+    label: `${label} Floor`,
+    position: [x, SLAB_H / 2, z],
+    rotation: [0, 0, 0],
+    size: [width, SLAB_H, depth],
+    color: decking.color,
+    roughness: decking.roughness,
+    metalness: decking.metalness,
+  });
+
+  // Bar counter body along north interior face
+  const counterZ = z - hd + COUNTER_D / 2;
+  primitives.push({
+    kind: "box",
+    id: `${idPrefix}-counter`,
+    category: "building" as const,
+    label: `${label} Counter`,
+    position: [x, SLAB_H + COUNTER_H / 2, counterZ],
+    rotation: [0, 0, 0],
+    size: [width - COUNTER_D * 0.5, COUNTER_H, COUNTER_D],
+    color: exterior.color,
+    roughness: exterior.roughness,
+    metalness: exterior.metalness,
+  });
+
+  // Counter top surface (trim material, slight overhang)
+  primitives.push({
+    kind: "box",
+    id: `${idPrefix}-countertop`,
+    category: "building" as const,
+    label: `${label} Counter Top`,
+    position: [x, SLAB_H + COUNTER_H + 0.03, counterZ + 0.04],
+    rotation: [0, 0, 0],
+    size: [width - COUNTER_D * 0.3, 0.06, COUNTER_D + 0.08],
+    color: trim.color,
+    roughness: trim.roughness,
+    metalness: trim.metalness,
+  });
+
+  // 4 pergola posts
+  ([
+    [-(hw - POST_W), -(hd - POST_W), "nw"],
+    [ (hw - POST_W), -(hd - POST_W), "ne"],
+    [ (hw - POST_W),  (hd - POST_W), "se"],
+    [-(hw - POST_W),  (hd - POST_W), "sw"],
+  ] as [number, number, string][]).forEach(([dx, dz, dir]) => {
+    primitives.push({
+      kind: "box",
+      id: `${idPrefix}-post-${dir}`,
+      category: "building" as const,
+      label: `${label} Post`,
+      position: [x + dx, SLAB_H + PERGOLA_H / 2, z + dz],
+      rotation: [0, 0, 0],
+      size: [POST_W, PERGOLA_H, POST_W],
+      color: trim.color,
+      roughness: trim.roughness,
+      metalness: trim.metalness,
+    });
+  });
+
+  // Flat pergola roof slab
+  primitives.push({
+    kind: "box",
+    id: `${idPrefix}-pergola`,
+    category: "building" as const,
+    label: `${label} Pergola`,
+    position: [x, SLAB_H + PERGOLA_H + 0.07, z],
+    rotation: [0, 0, 0],
+    size: [width + 0.2, 0.12, depth + 0.2],
+    color: roofMat.color,
+    roughness: roofMat.roughness,
+    metalness: roofMat.metalness,
+  });
+
+  return primitives;
+}
+
 // ── Main builder ──────────────────────────────────────────────────────────────
 
 export function buildBuilding(
@@ -113,15 +287,19 @@ export function buildBuilding(
   materials: MaterialsConfig,
   index: number
 ): HousePrimitive[] {
+  const idPrefix = `building-${index}`;
+  const kindLabel = config.kind.charAt(0).toUpperCase() + config.kind.slice(1).replace("_", " ");
+  const label = `${kindLabel} ${index + 1}`;
+
+  if (config.kind === "gazebo") return buildGazebo(config, materials, idPrefix, label);
+  if (config.kind === "outdoor_bar") return buildOutdoorBar(config, materials, idPrefix, label);
+
   const footprint = { center: [config.x, config.z] as [number, number], width: config.width, depth: config.depth };
   const exteriorMaterial = resolveMaterial(materials.exterior);
   const roofMaterial = resolveMaterial(materials.roof);
   const trim = resolveMaterial(materials.trim);
   const glass = resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass });
 
-  const idPrefix = `building-${index}`;
-  const kindLabel = config.kind.charAt(0).toUpperCase() + config.kind.slice(1);
-  const label = `${kindLabel} ${index + 1}`;
   const primitives: HousePrimitive[] = [];
 
   // ── Shared: floor slabs + wall rings per level ───────────────────────────

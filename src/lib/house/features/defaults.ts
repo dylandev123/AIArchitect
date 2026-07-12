@@ -36,6 +36,8 @@ export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): 
       return { x: 0, z: house.depth / 2 + 16, width: 12, depth: 8 };
     case "landscape":
       return { kind: "garden", x: -(house.width / 2 + 6), z: 0, width: 6, depth: 5 };
+    case "deck":
+      return { x: 0, z: house.depth / 2 + 4, level: 0, width: 5, depth: 4 };
   }
 }
 
@@ -48,6 +50,7 @@ const ROOM_TYPE_SIZE: Record<RoomType, { width: number; depth: number }> = {
   dining:   { width: 4.0, depth: 3.5 },
   office:   { width: 3.0, depth: 3.0 },
   laundry:  { width: 2.2, depth: 2.0 },
+  gym:      { width: 5.0, depth: 5.0 },
 };
 
 /**

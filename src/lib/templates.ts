@@ -44,7 +44,7 @@ export const TEMPLATES: Template[] = [
         { type: "bedroom", level: 0, x: 5.0, z: 0.2, width: 4.0, depth: 3.0 },
         { type: "bathroom", level: 0, x: 9.2, z: 0.2, width: 2.2, depth: 3.0 },
       ],
-      buildings: [], roads: [], parking: [], landscaping: [],
+      buildings: [], roads: [], parking: [], landscaping: [], decks: [],
     },
   },
   {
@@ -66,7 +66,7 @@ export const TEMPLATES: Template[] = [
         { type: "living", level: 0, x: 0.2, z: 7, width: 10, depth: 6.5 },
         { type: "kitchen", level: 0, x: 11, z: 7, width: 10.5, depth: 6.5 },
       ],
-      buildings: [], roads: [], parking: [{ x: 0, z: -20, width: 22, depth: 8 }], landscaping: [{ kind: "garden", x: -14, z: 0, width: 6, depth: 10 }],
+      buildings: [], roads: [], parking: [{ x: 0, z: -20, width: 22, depth: 8 }], landscaping: [{ kind: "garden", x: -14, z: 0, width: 6, depth: 10 }], decks: [],
     },
   },
   {
@@ -93,7 +93,7 @@ export const TEMPLATES: Template[] = [
         { type: "living", level: 0, x: 0.2, z: 0.2, width: 10, depth: 11.5 },
         { type: "kitchen", level: 0, x: 11, z: 0.2, width: 4.5, depth: 11.5 },
       ],
-      buildings: [], roads: [], parking: [{ x: -14, z: 0, width: 10, depth: 12 }], landscaping: [{ kind: "garden", x: 13, z: 0, width: 4, depth: 5 }],
+      buildings: [], roads: [], parking: [{ x: -14, z: 0, width: 10, depth: 12 }], landscaping: [{ kind: "garden", x: 13, z: 0, width: 4, depth: 5 }], decks: [],
     },
   },
   {
@@ -119,7 +119,7 @@ export const TEMPLATES: Template[] = [
         { type: "living", level: 0, x: 0.2, z: 0.2, width: 6, depth: 7.5 },
         { type: "kitchen", level: 0, x: 6.5, z: 0.2, width: 2, depth: 7.5 },
       ],
-      buildings: [], roads: [], parking: [], landscaping: [{ kind: "garden", x: -7, z: 0, width: 4, depth: 5 }],
+      buildings: [], roads: [], parking: [], landscaping: [{ kind: "garden", x: -7, z: 0, width: 4, depth: 5 }], decks: [],
     },
   },
   {
@@ -149,7 +149,7 @@ export const TEMPLATES: Template[] = [
         { type: "bedroom", level: 0, x: 8.5, z: 0.2, width: 5, depth: 4.4 },
         { type: "bathroom", level: 0, x: 8.5, z: 4.8, width: 5, depth: 4.4 },
       ],
-      buildings: [], roads: [], parking: [], landscaping: [{ kind: "garden", x: -10, z: 2, width: 4, depth: 6 }],
+      buildings: [], roads: [], parking: [], landscaping: [{ kind: "garden", x: -10, z: 2, width: 4, depth: 6 }], decks: [],
     },
   },
   {
@@ -181,7 +181,7 @@ export const TEMPLATES: Template[] = [
         { type: "kitchen", level: 0, x: 13, z: 0.2, width: 6.5, depth: 6 },
         { type: "bathroom", level: 0, x: 13, z: 6.5, width: 6.5, depth: 5 },
       ],
-      buildings: [], roads: [], parking: [{ x: 0, z: -18, width: 20, depth: 8 }], landscaping: [],
+      buildings: [], roads: [], parking: [{ x: 0, z: -18, width: 20, depth: 8 }], landscaping: [], decks: [],
     },
   },
   {
@@ -195,7 +195,7 @@ export const TEMPLATES: Template[] = [
       house: { width: 12, depth: 9, floors: 1, roof: "flat" },
       materials: DEFAULT_MATERIALS_CONFIG,
       windows: [], doors: [], garages: [], balconies: [], patios: [], pools: [], driveways: [],
-      rooms: [], buildings: [], roads: [], parking: [], landscaping: [],
+      rooms: [], buildings: [], roads: [], parking: [], landscaping: [], decks: [],
     },
   },
 ];

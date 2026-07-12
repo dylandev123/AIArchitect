@@ -1,4 +1,5 @@
 export type ProjectType = "house" | "villa" | "resort" | "restaurant" | "commercial";
+export type TimeOfDay = "morning" | "midday" | "sunset" | "night";
 
 export const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
   house:      "House",
@@ -37,4 +38,6 @@ export interface Project {
   versions: ProjectVersion[];
   /** Index into `versions` the project is currently viewing — the undo/redo cursor. */
   currentVersionIndex: number;
+  /** Visual time of day for the viewport sky and lighting. Persisted per project. */
+  timeOfDay?: TimeOfDay;
 }

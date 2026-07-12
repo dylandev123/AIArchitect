@@ -95,4 +95,12 @@ export const FEATURE_FIELDS: Record<FeatureType, FieldSchema[]> = {
     WIDTH_FIELD,
     { key: "depth", label: "Depth (m)", type: "number", step: 0.1 },
   ],
+  deck: [
+    { key: "x", label: "X Position (m)", type: "number", step: 0.5 },
+    { key: "z", label: "Z Position (m)", type: "number", step: 0.5 },
+    LEVEL_FIELD,
+    WIDTH_FIELD,
+    { key: "depth", label: "Depth (m)", type: "number", step: 0.1 },
+    { key: "rotation", label: "Rotation (°)", type: "number", step: 5 },
+  ],
 };

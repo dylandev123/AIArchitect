@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Project, ProjectType, ProjectVersion } from "@/types/project";
+import type { Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
 import { DEFAULT_HOUSE_JSON } from "@/types/house";
 
 function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
@@ -27,6 +27,8 @@ interface ProjectStore {
   redo: (id: string) => void;
   /** Jumps the cursor directly to an arbitrary version (e.g. from the History panel). */
   restoreVersion: (id: string, versionIndex: number) => void;
+  /** Sets the visual time of day for the project's viewport. */
+  setTimeOfDay: (id: string, tod: TimeOfDay) => void;
 }
 
 export const useProjectStore = create<ProjectStore>()(
@@ -137,6 +139,13 @@ export const useProjectStore = create<ProjectStore>()(
               updatedAt: Date.now(),
             };
           }),
+        })),
+
+      setTimeOfDay: (id, tod) =>
+        set((state) => ({
+          projects: state.projects.map((p) =>
+            p.id === id ? { ...p, timeOfDay: tod } : p
+          ),
         })),
     }),
     {

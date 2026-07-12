@@ -36,6 +36,10 @@ interface SceneStore {
     roomTarget?: RoomFocusTarget,
     roomLabel?: string
   ) => void;
+
+  /** First-person walk mode: disables OrbitControls, activates PointerLockControls + WASD. */
+  walkMode: boolean;
+  setWalkMode: (active: boolean) => void;
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
@@ -64,4 +68,7 @@ export const useSceneStore = create<SceneStore>((set) => ({
       // clearing the preset (triggerCameraPreset(null)) so the breadcrumb stays visible.
       roomLabel: roomLabel !== undefined ? roomLabel : state.roomLabel,
     })),
+
+  walkMode: false,
+  setWalkMode: (active) => set({ walkMode: active }),
 }));

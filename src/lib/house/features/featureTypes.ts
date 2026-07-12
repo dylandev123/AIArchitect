@@ -11,6 +11,7 @@ export const FEATURE_TYPES = [
   "road",
   "parking",
   "landscape",
+  "deck",
 ] as const;
 
 export type FeatureType = (typeof FEATURE_TYPES)[number];
@@ -29,6 +30,7 @@ export const FEATURE_JSON_KEY: Record<FeatureType, string> = {
   road: "roads",
   parking: "parking",
   landscape: "landscaping",
+  deck: "decks",
 };
 
 export const FEATURE_LABEL: Record<FeatureType, string> = {
@@ -44,4 +46,5 @@ export const FEATURE_LABEL: Record<FeatureType, string> = {
   road: "Road",
   parking: "Parking Lot",
   landscape: "Landscaping",
+  deck: "Deck",
 };
