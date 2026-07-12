@@ -7,30 +7,34 @@ export function Tree({ tree }: { tree: TreePlacement }) {
 
   return (
     <group position={[x, 0, z]} rotation={[0, tree.rotationY, 0]}>
-      {/* Trunk: rich dark brown */}
+      {/* Trunk */}
       <mesh position={[0, trunkTop / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[tree.trunkRadius * 0.65, tree.trunkRadius, trunkTop, 7]} />
-        <meshStandardMaterial color="#3d2208" roughness={0.9} />
+        <cylinderGeometry args={[tree.trunkRadius * 0.6, tree.trunkRadius, trunkTop, 6]} />
+        <meshStandardMaterial color="#2e1a06" roughness={0.92} />
       </mesh>
 
-      {/* Main foliage sphere — flat-shaded icosahedron for Sims low-poly look */}
+      {/* Main foliage mass */}
       <mesh position={[0, trunkTop + tree.foliageRadius * 0.65, 0]} castShadow receiveShadow>
         <icosahedronGeometry args={[tree.foliageRadius, 0]} />
-        <meshStandardMaterial color={tree.foliageColor} roughness={0.8} flatShading />
+        <meshStandardMaterial color={tree.foliageColor} roughness={0.82} flatShading />
       </mesh>
 
-      {/* Offset secondary blob for organic silhouette */}
+      {/* Upper secondary blob */}
       <mesh
-        position={[
-          tree.foliageRadius * 0.32,
-          trunkTop + tree.foliageRadius * 1.15,
-          tree.foliageRadius * 0.2,
-        ]}
-        castShadow
-        receiveShadow
+        position={[tree.foliageRadius * 0.28, trunkTop + tree.foliageRadius * 1.18, tree.foliageRadius * 0.18]}
+        castShadow receiveShadow
       >
-        <icosahedronGeometry args={[tree.foliageRadius * 0.62, 0]} />
-        <meshStandardMaterial color={tree.foliageColor} roughness={0.8} flatShading />
+        <icosahedronGeometry args={[tree.foliageRadius * 0.60, 0]} />
+        <meshStandardMaterial color={tree.foliageColor} roughness={0.82} flatShading />
+      </mesh>
+
+      {/* Third accent blob — opposite side for fuller silhouette */}
+      <mesh
+        position={[-tree.foliageRadius * 0.22, trunkTop + tree.foliageRadius * 0.88, -tree.foliageRadius * 0.20]}
+        castShadow receiveShadow
+      >
+        <icosahedronGeometry args={[tree.foliageRadius * 0.48, 0]} />
+        <meshStandardMaterial color={tree.foliageColor} roughness={0.82} flatShading />
       </mesh>
     </group>
   );

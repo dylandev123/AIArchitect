@@ -96,7 +96,7 @@ export function Viewport() {
   return (
     <div className="relative h-full w-full">
       <Canvas
-        shadows
+        shadows="soft"
         camera={{ position: toTuple(initialFit.position), fov: 45, near: 0.1, far: 5000 }}
         className="!h-full !w-full"
         onPointerMissed={() => selectKey(null)}

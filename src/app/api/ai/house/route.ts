@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, NoObjectGeneratedError, Output } from "ai";
 import { aiPatchResponseSchema } from "@/lib/ai/siteSchema";
-import { buildSystemPrompt } from "@/lib/ai/systemPrompt";
+import { buildScopedSystemPrompt } from "@/lib/ai/systemPrompt";
+import { classifyPromptTarget, validateOpsForScope, type EditScope } from "@/lib/ai/targeting";
 import { applyPatch } from "@/lib/house/applyPatch";
 
 export const maxDuration = 60;
@@ -18,6 +19,7 @@ interface RequestBody {
   prompt?: string;
   currentHouseJson?: string;
   history?: ChatTurn[];
+  scope?: EditScope;
 }
 
 export async function POST(req: NextRequest) {
@@ -45,12 +47,13 @@ export async function POST(req: NextRequest) {
 
   const currentHouseJson = typeof body.currentHouseJson === "string" ? body.currentHouseJson : "{}";
   const history = Array.isArray(body.history) ? body.history.slice(-MAX_HISTORY_TURNS) : [];
+  const scope = body.scope ?? classifyPromptTarget(prompt);
 
   try {
     const { output } = await generateText({
       model: MODEL,
       maxOutputTokens: 8000,
-      system: buildSystemPrompt(),
+      system: buildScopedSystemPrompt(scope),
       messages: [
         ...history.map((turn) => ({ role: turn.role, content: turn.content }) as const),
         {
@@ -61,7 +64,16 @@ export async function POST(req: NextRequest) {
       output: Output.object({ schema: aiPatchResponseSchema }),
     });
 
-    const { json, errors } = applyPatch(currentHouseJson, output.operations);
+    const violations = validateOpsForScope(output.operations, scope);
+    if (violations.length > 0) {
+      console.warn(`[AI] Scope violations (${scope.label}):`, violations);
+    }
+    const allowedOps = scope.allowedOps.length > 0
+      ? output.operations.filter(o => scope.allowedOps.includes(o.op))
+      : output.operations;
+    const opsToApply = allowedOps.length > 0 ? allowedOps : output.operations;
+
+    const { json, errors } = applyPatch(currentHouseJson, opsToApply);
     if (errors.length > 0) {
       console.error("AI patch application failed:", errors);
       return NextResponse.json(

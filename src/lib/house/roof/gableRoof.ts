@@ -27,8 +27,8 @@ export function buildGableRoof(
   const wallColor = exteriorMaterial.color;
   const primitives: HousePrimitive[] = [];
 
-  const FASCIA_H = 0.22;
-  const FASCIA_T = 0.08;
+  const FASCIA_H = 0.28;
+  const FASCIA_T = 0.10;
   const fasciaY = baseY - FASCIA_H / 2;
 
   if (ridgeAlongX) {

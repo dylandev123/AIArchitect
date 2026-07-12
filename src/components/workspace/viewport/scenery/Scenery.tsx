@@ -49,12 +49,12 @@ export function Scenery() {
       ))}
       <ContactShadows
         position={[0, 0.015, 0]}
-        opacity={0.35}
-        scale={halfExtent * 2.2}
-        blur={2.2}
-        far={12}
-        resolution={512}
-        color="#0a1208"
+        opacity={0.45}
+        scale={halfExtent * 2.4}
+        blur={3.0}
+        far={18}
+        resolution={768}
+        color="#0a1408"
       />
     </>
   );

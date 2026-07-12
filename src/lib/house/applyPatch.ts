@@ -1,5 +1,9 @@
 import { FEATURE_JSON_KEY, FEATURE_TYPES } from "./features/featureTypes";
 
+function genApplyId(): string {
+  try { return globalThis.crypto.randomUUID(); } catch { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`; }
+}
+
 export interface PatchOp {
   op: string;
   value?: Record<string, unknown>;
@@ -119,9 +123,19 @@ export function applyPatch(jsonText: string, operations: PatchOp[]): ApplyPatchR
     original.forEach((item, idx) => {
       if (bucket.removes.has(idx)) return;
       const fields = bucket.updates.get(idx);
-      next.push(fields ? { ...item, ...fields } : item);
+      if (fields) {
+        // Strip `id` so AI cannot change stable element identifiers.
+        const safeFields = { ...fields };
+        delete safeFields.id;
+        next.push({ ...item, ...safeFields });
+      } else {
+        next.push(item);
+      }
     });
-    next.push(...bucket.adds);
+    // Inject stable id for AI-added elements that don't have one.
+    for (const item of bucket.adds) {
+      next.push("id" in item ? item : { id: genApplyId(), ...item });
+    }
 
     root[arrayKey] = next;
   }

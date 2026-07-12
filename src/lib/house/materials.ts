@@ -32,13 +32,13 @@ interface MaterialPhysicalProperties {
  * Glass is near-mirror for vivid sky reflections. Tile has mild gloss for clean roofs.
  */
 export const MATERIAL_PROPERTIES: Record<MaterialType, MaterialPhysicalProperties> = {
-  concrete: { roughness: 0.88, metalness: 0.04, defaultColor: "#b8b4ac" },
-  stone:    { roughness: 0.82, metalness: 0.02, defaultColor: "#9a9490" },
-  wood:     { roughness: 0.55, metalness: 0.0,  defaultColor: "#b07848" },
-  glass:    { roughness: 0.02, metalness: 0.04, defaultColor: "#a0e0f8" },
-  metal:    { roughness: 0.28, metalness: 0.88, defaultColor: "#b2b6bc" },
-  stucco:   { roughness: 0.93, metalness: 0.0,  defaultColor: "#f2eeea" },
-  tile:     { roughness: 0.32, metalness: 0.04, defaultColor: "#5a7a9c" },
+  concrete: { roughness: 0.80, metalness: 0.04, defaultColor: "#b0aca2" },
+  stone:    { roughness: 0.74, metalness: 0.02, defaultColor: "#969088" },
+  wood:     { roughness: 0.65, metalness: 0.0,  defaultColor: "#8c5a2c" },
+  glass:    { roughness: 0.04, metalness: 0.20, defaultColor: "#88d4f0" },
+  metal:    { roughness: 0.22, metalness: 0.94, defaultColor: "#b0b4ba" },
+  stucco:   { roughness: 0.82, metalness: 0.0,  defaultColor: "#ece8e0" },
+  tile:     { roughness: 0.52, metalness: 0.05, defaultColor: "#486c88" },
 };
 
 export interface ResolvedMaterial {
@@ -59,7 +59,7 @@ export function resolveMaterial(assignment: MaterialAssignment): ResolvedMateria
   };
   if (assignment.material === "glass") {
     resolved.transparent = true;
-    resolved.opacity = 0.65; // more visible glass, still see-through
+    resolved.opacity = 0.50; // vivid see-through with strong sky reflection
   }
   return resolved;
 }

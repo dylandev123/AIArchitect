@@ -9,7 +9,7 @@ import { Environment, Sky } from "@react-three/drei";
  */
 export function SceneEnvironment() {
   return (
-    <Environment resolution={128} frames={1}>
+    <Environment resolution={256} frames={1}>
       <Sky sunPosition={[40, 35, 20]} turbidity={1.5} rayleigh={3.0} mieCoefficient={0.002} />
     </Environment>
   );

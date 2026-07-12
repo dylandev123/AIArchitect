@@ -54,8 +54,8 @@ export function GroundPlane() {
 
   return (
     <mesh geometry={geometry} receiveShadow>
-      {/* Sims-style vibrant manicured lawn green */}
-      <meshStandardMaterial color="#52b53c" roughness={0.92} side={THREE.DoubleSide} />
+      {/* Rich manicured lawn — deep green with slight variation in roughness */}
+      <meshStandardMaterial color="#48ae36" roughness={0.95} metalness={0.0} side={THREE.DoubleSide} />
     </mesh>
   );
 }

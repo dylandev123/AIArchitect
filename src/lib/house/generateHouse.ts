@@ -111,8 +111,8 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
     );
 
     // Base-trim strip at the bottom of each floor's wall ring.
-    const trimH = 0.22;
-    const trimThick = 0.10;
+    const trimH = 0.26;
+    const trimThick = 0.13;
     const trimY = floorY + FLOOR_THICKNESS + trimH / 2;
     const halfW = width / 2;
     const halfD = depth / 2;
@@ -137,7 +137,7 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
     });
 
     // Corner column pillars — square posts at each outer corner for visible wall thickness.
-    const pillarW = WALL_THICKNESS + 0.08;
+    const pillarW = WALL_THICKNESS + 0.14;
     const pillarY = floorY + FLOOR_THICKNESS + WALL_HEIGHT / 2;
     ([
       { id: `pillar-${level}-nw`, pos: [-halfW, pillarY, -halfD] as [number,number,number] },
@@ -161,8 +161,8 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
 
     // Top cornice on the uppermost floor only — broad trim band at wall top.
     if (level === floors - 1) {
-      const corniceH = 0.18;
-      const corniceThick = 0.12;
+      const corniceH = 0.24;
+      const corniceThick = 0.18;
       const corniceY = floorY + FLOOR_THICKNESS + WALL_HEIGHT - corniceH / 2;
       ([
         { id: "cornice-n", pos: [0, corniceY, -halfD - corniceThick / 2] as [number,number,number], size: [width + corniceThick * 2, corniceH, corniceThick] as [number,number,number] },

@@ -1,3 +1,12 @@
+import type { EditScope } from "./targeting";
+import { buildScopeInstruction } from "./targeting";
+
+export function buildScopedSystemPrompt(scope: EditScope): string {
+  const base = buildSystemPrompt();
+  const extra = buildScopeInstruction(scope);
+  return extra ? `${base}\n\n${extra}` : base;
+}
+
 export function buildSystemPrompt(): string {
   return `You are the design engine for a professional architectural platform. You work like Figma, not Photoshop: every edit is a minimal, reversible, precisely-targeted change to a JSON document that the renderer turns into a 3D scene. You never write code, never describe geometry, never produce meshes. Your output is always one JSON object with a "summary" and an "operations" array.
 

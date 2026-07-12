@@ -2,8 +2,8 @@ import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG, ROOF_THICKNESS } from "../constants";
 import type { ResolvedMaterial } from "../materials";
 
-const PARAPET_H = 0.25;
-const PARAPET_THICK = 0.10;
+const PARAPET_H = 0.35;
+const PARAPET_THICK = 0.14;
 
 export function buildFlatRoof(
   width: number,

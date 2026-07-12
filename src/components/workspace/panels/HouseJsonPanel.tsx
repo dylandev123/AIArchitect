@@ -1,16 +1,59 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { AlertTriangle, RotateCcw, Sparkles } from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { DEFAULT_HOUSE_JSON } from "@/types/house";
+import { classifyPromptTarget } from "@/lib/ai/targeting";
 
 export function HouseJsonPanel() {
   const params = useParams<{ projectId: string }>();
   const project = useProjectStore((s) => s.getProject(params.projectId));
   const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
+  const appendVersion = useProjectStore((s) => s.appendVersion);
   const text = project?.houseConfigJson ?? DEFAULT_HOUSE_JSON;
+
+  const [aiDraft, setAiDraft] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const detectedScope = useMemo(
+    () => (aiDraft.trim() ? classifyPromptTarget(aiDraft) : null),
+    [aiDraft]
+  );
+
+  const handleAiSubmit = async () => {
+    if (!aiDraft.trim() || !project || aiLoading) return;
+    setAiLoading(true);
+    setAiFeedback(null);
+    try {
+      const res = await fetch("/api/ai/house", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiDraft,
+          currentHouseJson: project.houseConfigJson,
+          history: [],
+          scope: detectedScope ?? undefined,
+        }),
+      });
+      const data = await res.json() as { summary?: string; json?: string; error?: string };
+      if (res.ok && data.json) {
+        appendVersion(project.id, data.summary ?? "AI edit", data.json);
+        setAiDraft("");
+        setAiFeedback({ ok: true, text: data.summary ?? "Done" });
+      } else {
+        setAiFeedback({ ok: false, text: data.error ?? "AI edit failed." });
+      }
+    } catch {
+      setAiFeedback({ ok: false, text: "Network error." });
+    } finally {
+      setAiLoading(false);
+      setTimeout(() => setAiFeedback(null), 3000);
+    }
+  };
 
   const { errors, warnings, config, site } = generateHouseFromJson(text);
 
@@ -107,6 +150,45 @@ export function HouseJsonPanel() {
           {config.roof} roof · {featureCount} feature{featureCount === 1 ? "" : "s"}
         </p>
       )}
+
+      {/* AI edit */}
+      <div className="mt-2 border-t border-white/[0.05] pt-2">
+        {detectedScope && detectedScope.kind !== "full" && (
+          <div className="mb-1.5 flex items-center gap-1.5">
+            <span className="text-[9px] text-neutral-600">Target:</span>
+            <span className="rounded bg-violet-500/20 px-1.5 py-0.5 text-[9px] font-medium text-violet-300">
+              {detectedScope.label}
+            </span>
+          </div>
+        )}
+        <div className="flex gap-1.5">
+          <input
+            value={aiDraft}
+            onChange={(e) => setAiDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void handleAiSubmit(); }
+            }}
+            placeholder="Ask AI to change something…"
+            disabled={aiLoading || !project}
+            className="min-w-0 flex-1 rounded-lg border border-white/10 bg-neutral-950/60 px-2.5 py-1.5 text-xs text-neutral-200 outline-none placeholder:text-neutral-600 focus:border-violet-500/50 disabled:opacity-50"
+          />
+          <button
+            onClick={() => void handleAiSubmit()}
+            disabled={!aiDraft.trim() || aiLoading || !project}
+            title="Send to AI"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-violet-500/15 text-violet-400 transition hover:bg-violet-500/25 hover:text-violet-200 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {aiLoading
+              ? <span className="h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" />
+              : <Sparkles size={13} />}
+          </button>
+        </div>
+        {aiFeedback && (
+          <p className={`mt-1.5 text-[11px] ${aiFeedback.ok ? "text-emerald-400" : "text-red-400"}`}>
+            {aiFeedback.ok ? "✓" : "✗"} {aiFeedback.text}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

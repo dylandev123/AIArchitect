@@ -43,8 +43,8 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
   const glass = resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass });
 
   // Sill ledge — flat shelf projecting outward below the window opening.
-  const SILL_PROJ = 0.14;
-  const SILL_H = 0.05;
+  const SILL_PROJ = 0.20;
+  const SILL_H = 0.06;
   const sillCenter: Vec3 = [base[0], anchor.origin[1] + config.sill - SILL_H / 2, base[2]];
   const sillPos = offsetOutward(sillCenter, anchor, SILL_PROJ / 2);
   const sillSize = wallMountedSize(config.wall, config.width + FRAME_BORDER * 2 + 0.06, SILL_H, SILL_PROJ);

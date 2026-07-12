@@ -15,6 +15,7 @@ import {
   type QuickActionGroup,
 } from "@/lib/quickActions";
 import { ROOM_TYPE_LABELS, WALL_THICKNESS } from "@/lib/house/constants";
+import { makeScopeForFeature } from "@/lib/ai/targeting";
 import type { RoomType } from "@/types/house";
 
 // ── Accent palette ────────────────────────────────────────────────────────────
@@ -216,11 +217,14 @@ export function QuickActions() {
       } else if (kind === "ai") {
         const index = featureRef?.index ?? 0;
         const prompt = action.action.prompt(index, rawFeature);
+        const scope = featureRef
+          ? makeScopeForFeature(featureRef.type)
+          : { kind: "house" as const, label: "House", allowedOps: ["setHouse", "setMaterials"] };
 
         const res = await fetch("/api/ai/house", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, currentHouseJson: project.houseConfigJson, history: [] }),
+          body: JSON.stringify({ prompt, currentHouseJson: project.houseConfigJson, history: [], scope }),
         });
 
         const data = await res.json();

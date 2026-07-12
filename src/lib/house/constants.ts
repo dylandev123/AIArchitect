@@ -4,13 +4,13 @@ export const WALL_HEIGHT = 3;
 export const WALL_THICKNESS = 0.2;
 export const FLOOR_THICKNESS = 0.2;
 export const ROOF_THICKNESS = 0.25;
-export const ROOF_OVERHANG = 0.4;
+export const ROOF_OVERHANG = 0.60;
 export const LEVEL_HEIGHT = WALL_HEIGHT + FLOOR_THICKNESS;
 
-export const FRAME_BORDER = 0.08;
-export const FRAME_THICKNESS = 0.08;
-export const GLASS_THICKNESS = 0.03;
-export const DOOR_PANEL_THICKNESS = 0.06;
+export const FRAME_BORDER = 0.11;
+export const FRAME_THICKNESS = 0.12;
+export const GLASS_THICKNESS = 0.04;
+export const DOOR_PANEL_THICKNESS = 0.07;
 export const RAILING_POST_SIZE = 0.08;
 export const RAILING_RAIL_THICKNESS = 0.06;
 export const PAVING_THICKNESS = 0.1;
@@ -104,18 +104,18 @@ export const LANDSCAPE_LIMITS = {
  * Tuned for Sims-style bright outdoor environments — saturated, clean, game-friendly.
  */
 export const MATERIAL_COLORS = {
-  floor:      "#d4cfc4",   // warm light stone
-  wall:       "#f0ece4",   // clean stucco white
-  roof:       "#5a82aa",   // game blue-gray tile roof
-  glass:      "#a0e0f8",   // bright reflective sky-blue glass
-  frame:      "#4a3420",   // rich dark trim
-  door:       "#8a5c30",   // warm honey-brown door
-  garageDoor: "#b0b4ba",   // light silver garage
-  railing:    "#2a4060",   // deep blue-steel railing
-  paving:     "#c4c0b6",   // light warm concrete
-  driveway:   "#80858a",   // medium-gray asphalt
+  floor:      "#cec9bc",   // warm muted stone
+  wall:       "#ede9e1",   // clean warm stucco
+  roof:       "#486e90",   // deeper slate-blue tile
+  glass:      "#88d4f0",   // rich sky-blue glass
+  frame:      "#352014",   // deep espresso trim
+  door:       "#7a4c24",   // warm rich brown door
+  garageDoor: "#a8acb2",   // cool silver garage panel
+  railing:    "#1e3350",   // deep navy-steel railing
+  paving:     "#bab6aa",   // warm concrete
+  driveway:   "#707880",   // deep cool-gray asphalt
   poolWater:  "#00c8e8",   // vivid Sims-cyan pool (matches WaterSurface)
-  poolCoping: "#e4e0d8",   // bright pool deck
+  poolCoping: "#dedad0",   // warm pool deck
 } as const;
 
 /** Sims-style room floor tones — warm, distinct, and easy to read from top-down. */

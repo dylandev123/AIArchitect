@@ -18,14 +18,17 @@ export function Scene() {
       <Sky sunPosition={[40, 35, 20]} turbidity={1.5} rayleigh={3.0} mieCoefficient={0.002} />
       <SceneEnvironment />
 
-      {/* Warm ambient fill — reduced so shadows read clearly */}
-      <ambientLight intensity={0.55} color="#f2f6ff" />
+      {/* Warm ambient fill */}
+      <ambientLight intensity={0.50} color="#f0f5ff" />
 
-      {/* Sky bounce from above, grass bounce from below */}
-      <hemisphereLight args={["#b8d0ff", "#68a04c", 0.65]} />
+      {/* Sky bounce from above, warm grass bounce from below */}
+      <hemisphereLight args={["#c0d4ff", "#6aaa48", 0.55]} />
 
-      {/* Soft blue-white fill from the NW to lift shadow darkness without flattening contrast */}
-      <directionalLight position={[-22, 18, -14]} intensity={0.28} color="#dde8ff" />
+      {/* Cool NW fill — lifts shadow darkness without killing contrast */}
+      <directionalLight position={[-22, 18, -14]} intensity={0.26} color="#dde8ff" />
+
+      {/* Warm SE rim — separates the back/right faces of the house from the sky */}
+      <directionalLight position={[20, 10, 18]} intensity={0.18} color="#ffe8c0" />
 
       <SunLight />
       <GroundPlane />

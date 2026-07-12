@@ -45,13 +45,18 @@ export function getFeatureRawAt(jsonText: string, type: FeatureType, index: numb
   return arr[index];
 }
 
-/** Appends a new entry to a feature array. No-ops on unparseable JSON. */
+function genId(): string {
+  try { return globalThis.crypto.randomUUID(); } catch { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`; }
+}
+
+/** Appends a new entry to a feature array, auto-assigning a stable `id` if absent. */
 export function addFeature(jsonText: string, type: FeatureType, value: unknown): string {
   const root = tryParseRoot(jsonText);
   if (!root) return jsonText;
   const key = FEATURE_JSON_KEY[type];
   const arr = Array.isArray(root[key]) ? [...(root[key] as unknown[])] : [];
-  arr.push(value);
+  const obj = (typeof value === "object" && value !== null ? value : {}) as Record<string, unknown>;
+  arr.push("id" in obj ? obj : { id: genId(), ...obj });
   root[key] = arr;
   return JSON.stringify(root, null, 2);
 }

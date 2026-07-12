@@ -183,7 +183,7 @@ const landscapeSchema = z.object({
 });
 
 const roomSchema = z.object({
-  type: z.enum(["kitchen", "living", "bedroom", "bathroom", "hallway"]).describe("What kind of room this is."),
+  type: z.enum(["kitchen", "living", "bedroom", "bathroom", "hallway", "dining", "office", "laundry"]).describe("What kind of room this is."),
   level: z.number().int().min(0).describe("0-indexed floor this room is on."),
   x: z
     .number()
