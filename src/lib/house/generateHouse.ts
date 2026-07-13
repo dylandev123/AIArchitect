@@ -15,7 +15,7 @@ import { buildBalcony, validateBalcony } from "./features/balconies";
 import { buildPatio, validatePatio } from "./features/patios";
 import { buildPool, validatePool } from "./features/pools";
 import { buildDriveway, validateDriveway } from "./features/driveways";
-import { buildRoom, validateRoom } from "./features/rooms";
+import { buildRoom, buildRoomPartitions, validateRoom } from "./features/rooms";
 import { buildBuilding, validateBuilding } from "./features/buildings";
 import { buildRoad, validateRoad } from "./features/roads";
 import { buildParking, validateParking } from "./features/parking";
@@ -269,6 +269,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const pools = processFeatureArray(root, "pool", validatePool, (v, idx) => buildPool(v, config, materials, idx), errors, warnings, primitives);
   const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx), errors, warnings, primitives);
   const rooms = processFeatureArray(root, "room", (i) => validateRoom(i, config), (v, idx) => buildRoom(v, config, idx), errors, warnings, primitives);
+  primitives.push(...buildRoomPartitions(rooms, config));
   const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx), errors, warnings, primitives);
   const roads = processFeatureArray(root, "road", validateRoad, (v, idx) => buildRoad(v, idx), errors, warnings, primitives);
   const parking = processFeatureArray(root, "parking", validateParking, (v, idx) => buildParking(v, idx), errors, warnings, primitives);

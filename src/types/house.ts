@@ -208,27 +208,34 @@ export const DEFAULT_MATERIALS_CONFIG: MaterialsConfig = {
   decking:  { material: "wood",   color: "#c8a070" },
 };
 
+// House 12×9 → usableWidth=11.6, usableDepth=8.6 (interior face to face)
+// Room layout tiles gaplessly: cols 4.4+3.8+3.4=11.6, rows 3.8+1.0+3.8=8.6
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   house: DEFAULT_HOUSE_CONFIG,
   materials: DEFAULT_MATERIALS_CONFIG,
   windows: [
-    { wall: "south", level: 0, offset: 1.5, width: 1.2, height: 1.4, sill: 0.9 },
-    { wall: "south", level: 0, offset: 9.3, width: 1.2, height: 1.4, sill: 0.9 },
-    { wall: "north", level: 0, offset: 5.4, width: 1.2, height: 1.4, sill: 0.9 },
+    // North wall — bedroom row
+    { wall: "north", level: 0, offset: 1.8,  width: 1.2, height: 1.4, sill: 0.9 },
+    { wall: "north", level: 0, offset: 5.7,  width: 1.2, height: 1.4, sill: 0.9 },
+    // South wall — living + kitchen
+    { wall: "south", level: 0, offset: 2.4,  width: 1.4, height: 1.4, sill: 0.9 },
+    { wall: "south", level: 0, offset: 9.0,  width: 1.2, height: 1.4, sill: 0.9 },
+    // East wall — bathroom vent
+    { wall: "east",  level: 0, offset: 1.5,  width: 0.7, height: 1.0, sill: 1.1 },
   ],
-  doors: [{ wall: "south", level: 0, offset: 5.5, width: 1.0, height: 2.1 }],
+  doors: [{ wall: "south", level: 0, offset: 5.3, width: 1.0, height: 2.1 }],
   garages: [],
   balconies: [],
   patios: [{ wall: "south", offset: 0, width: 12, depth: 3 }],
   pools: [],
   driveways: [{ wall: "west", offset: 3, width: 3, length: 6 }],
   rooms: [
-    { type: "living", level: 0, x: 0.2, z: 4.4, width: 6.0, depth: 4.0 },
-    { type: "kitchen", level: 0, x: 6.4, z: 4.4, width: 5.0, depth: 4.0 },
-    { type: "hallway", level: 0, x: 0.2, z: 3.3, width: 11.2, depth: 1.0 },
-    { type: "bedroom", level: 0, x: 0.2, z: 0.2, width: 4.5, depth: 3.0 },
-    { type: "bedroom", level: 0, x: 5.0, z: 0.2, width: 4.0, depth: 3.0 },
-    { type: "bathroom", level: 0, x: 9.2, z: 0.2, width: 2.2, depth: 3.0 },
+    { type: "bedroom",  level: 0, x: 0,    z: 0,   width: 4.4,  depth: 3.8 },
+    { type: "bedroom",  level: 0, x: 4.4,  z: 0,   width: 3.8,  depth: 3.8 },
+    { type: "bathroom", level: 0, x: 8.2,  z: 0,   width: 3.4,  depth: 3.8 },
+    { type: "hallway",  level: 0, x: 0,    z: 3.8, width: 11.6, depth: 1.0 },
+    { type: "living",   level: 0, x: 0,    z: 4.8, width: 6.6,  depth: 3.8 },
+    { type: "kitchen",  level: 0, x: 6.6,  z: 4.8, width: 5.0,  depth: 3.8 },
   ],
   buildings: [],
   roads: [],

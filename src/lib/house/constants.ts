@@ -14,6 +14,8 @@ export const DOOR_PANEL_THICKNESS = 0.07;
 export const RAILING_POST_SIZE = 0.08;
 export const RAILING_RAIL_THICKNESS = 0.06;
 export const PAVING_THICKNESS = 0.1;
+/** Thin interior partition wall between rooms — thinner than structural exterior walls. */
+export const PARTITION_WALL_THICKNESS = 0.10;
 export const POOL_COPING_WIDTH = 0.4;
 export const POOL_COPING_THICKNESS = 0.1;
 export const POOL_WALL_THICKNESS = 0.15;

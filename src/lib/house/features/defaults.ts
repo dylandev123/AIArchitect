@@ -6,9 +6,9 @@ import { BUILDING_DEFAULT_SIZE, WALL_THICKNESS } from "../constants";
 export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): Record<string, unknown> {
   switch (type) {
     case "window":
-      return { wall: "south", level: 0, offset: Math.max(0.5, house.width / 4), width: 1.2, height: 1.4, sill: 0.9 };
+      return { wall: "south", level: 0, offset: Math.max(0.5, house.width / 4 - 0.6), width: 1.2, height: 1.4, sill: 0.9 };
     case "door":
-      return { wall: "south", level: 0, offset: Math.max(0, house.width / 2 - 0.5), width: 1.0, height: 2.1 };
+      return { wall: "south", level: 0, offset: Math.max(0.5, house.width / 2 - 0.5), width: 1.0, height: 2.1 };
     case "garage":
       return { wall: "east", offset: 0, width: Math.min(6, house.depth), depth: 6, height: 2.6 };
     case "balcony":
@@ -42,47 +42,43 @@ export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): 
 }
 
 const ROOM_TYPE_SIZE: Record<RoomType, { width: number; depth: number }> = {
-  kitchen:  { width: 3.5, depth: 3.5 },
-  living:   { width: 5.0, depth: 4.0 },
-  bedroom:  { width: 3.5, depth: 3.5 },
-  bathroom: { width: 2.2, depth: 2.5 },
-  hallway:  { width: 4.0, depth: 1.2 },
-  dining:   { width: 4.0, depth: 3.5 },
-  office:   { width: 3.0, depth: 3.0 },
-  laundry:  { width: 2.2, depth: 2.0 },
+  kitchen:  { width: 4.0, depth: 3.8 },
+  living:   { width: 5.5, depth: 4.2 },
+  bedroom:  { width: 4.0, depth: 3.8 },
+  bathroom: { width: 2.8, depth: 3.0 },
+  hallway:  { width: 5.0, depth: 1.2 },
+  dining:   { width: 4.2, depth: 3.8 },
+  office:   { width: 3.5, depth: 3.5 },
+  laundry:  { width: 2.8, depth: 2.5 },
   gym:      { width: 5.0, depth: 5.0 },
 };
 
 /**
- * Starting values for a new room — packed into a non-overlapping grid so consecutive
- * adds never stack on top of each other. The grid cell size is the room's own footprint
- * plus a small gap, and cells wrap left-to-right then top-to-bottom.
+ * Starting values for a new room — cells tile flush (no gap) so successive
+ * adds build toward a gapless floor plan. Wraps left-to-right then top-to-bottom.
  */
 export function getDefaultRoomConfig(
   type: RoomType,
   house: HouseConfig,
   existingRoomCount: number
 ): Record<string, unknown> {
-  const { width, depth } = ROOM_TYPE_SIZE[type];
-  const usableWidth = Math.max(width, house.width - WALL_THICKNESS * 2);
-  const usableDepth = Math.max(depth, house.depth - WALL_THICKNESS * 2);
+  const usableWidth = Math.max(1, house.width - WALL_THICKNESS * 2);
+  const usableDepth = Math.max(1, house.depth - WALL_THICKNESS * 2);
 
-  const GAP = 0.3;
-  const cellW = width + GAP;
-  const cellD = depth + GAP;
-  const roomsPerRow = Math.max(1, Math.floor((usableWidth + GAP) / cellW));
+  // Scale room to fit within the interior while respecting min proportions
+  const base = ROOM_TYPE_SIZE[type];
+  const width = Math.min(base.width, usableWidth);
+  const depth = Math.min(base.depth, usableDepth);
 
+  const roomsPerRow = Math.max(1, Math.floor(usableWidth / width));
   const col = existingRoomCount % roomsPerRow;
   const row = Math.floor(existingRoomCount / roomsPerRow);
-
-  const rawX = col * cellW;
-  const rawZ = row * cellD;
 
   return {
     type,
     level: 0,
-    x: Math.min(rawX, Math.max(0, usableWidth - width)),
-    z: Math.min(rawZ, Math.max(0, usableDepth - depth)),
+    x: Math.min(col * width, Math.max(0, usableWidth - width)),
+    z: Math.min(row * depth, Math.max(0, usableDepth - depth)),
     width,
     depth,
   };
