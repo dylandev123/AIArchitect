@@ -3,7 +3,7 @@ import { composeExteriorOptions } from "./catalog/composition";
 import type { HouseModel, HousePrimitive } from "./types";
 import { FLOOR_THICKNESS, HOUSE_LIMITS, LEVEL_HEIGHT, MATERIAL_COLORS, WALL_HEIGHT, WALL_THICKNESS } from "./constants";
 import { buildFloorSlabPrimitive, buildWallRingPrimitives } from "./primitiveBuilders";
-import { resolveMaterial, validateMaterials } from "./materials";
+import { materialProps, resolveMaterial, validateMaterials } from "./materials";
 import { buildFlatRoof } from "./roof/flatRoof";
 import { buildGableRoof } from "./roof/gableRoof";
 import { buildHipRoof } from "./roof/hipRoof";
@@ -137,8 +137,7 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
         rotation: [0, 0, 0],
         size,
         color: trimMaterial.color,
-        roughness: trimMaterial.roughness,
-        metalness: trimMaterial.metalness,
+        ...materialProps(trimMaterial),
       });
     });
 
@@ -160,8 +159,7 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
         rotation: [0, 0, 0],
         size: [pillarW, WALL_HEIGHT, pillarW],
         color: trimMaterial.color,
-        roughness: trimMaterial.roughness,
-        metalness: trimMaterial.metalness,
+        ...materialProps(trimMaterial),
       });
     });
 
@@ -185,8 +183,7 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
           rotation: [0, 0, 0],
           size,
           color: trimMaterial.color,
-          roughness: trimMaterial.roughness,
-          metalness: trimMaterial.metalness,
+          ...materialProps(trimMaterial),
         });
       });
     }
@@ -284,7 +281,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const balconies = processFeatureArray(root, "balcony", (i) => validateBalcony(i, config), (v, idx) => buildBalcony(v, config, materials, idx, opts), errors, warnings, primitives);
   const patios = processFeatureArray(root, "patio", validatePatio, (v, idx) => buildPatio(v, config, materials, idx, opts), errors, warnings, primitives);
   const pools = processFeatureArray(root, "pool", validatePool, (v, idx) => buildPool(v, config, materials, idx, opts), errors, warnings, primitives);
-  const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx), errors, warnings, primitives);
+  const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx, opts), errors, warnings, primitives);
   const rooms = processFeatureArray(root, "room", (i) => validateRoom(i, config), (v, idx) => buildRoom(v, config, idx), errors, warnings, primitives);
   primitives.push(...buildRoomPartitions(rooms, config));
   const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx), errors, warnings, primitives);

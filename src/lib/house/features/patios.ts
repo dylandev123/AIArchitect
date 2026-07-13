@@ -48,6 +48,10 @@ export function buildPatio(
   const deckRough  = surfEntry?.roughness    ?? resolveMaterial(materials.decking).roughness;
   const deckMetal  = surfEntry?.metalness    ?? resolveMaterial(materials.decking).metalness;
 
+  // Imported PBR material overrides the surface entry when set.
+  const assetId  = opts?.patioAssetId;
+  const uvScale  = opts?.patioUvScale ?? 1;
+
   return [
     {
       kind: "box",
@@ -60,6 +64,7 @@ export function buildPatio(
       color: deckColor,
       roughness: deckRough,
       metalness: deckMetal,
+      ...(assetId && { assetId, uvScale }),
     },
   ];
 }

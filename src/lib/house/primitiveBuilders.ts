@@ -59,6 +59,8 @@ export function buildFloorSlabPrimitive(
     metalness: finish?.metalness,
     transparent: finish?.transparent,
     opacity: finish?.opacity,
+    assetId: finish?.assetId,
+    uvScale: finish?.uvScale,
   };
 }
 
@@ -119,5 +121,7 @@ export function buildWallRingPrimitives(
       metalness: finish?.metalness,
       transparent: finish?.transparent,
       opacity: finish?.opacity,
+      assetId: finish?.assetId,
+      uvScale: finish?.uvScale,
     }));
 }

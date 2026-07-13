@@ -1,6 +1,6 @@
 import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG, ROOF_THICKNESS } from "../constants";
-import type { ResolvedMaterial } from "../materials";
+import { materialProps, type ResolvedMaterial } from "../materials";
 
 const PARAPET_H = 0.35;
 const PARAPET_THICK = 0.14;
@@ -24,8 +24,7 @@ export function buildFlatRoof(
     rotation: [0, 0, 0],
     size: [width + ROOF_OVERHANG * 2, ROOF_THICKNESS, depth + ROOF_OVERHANG * 2],
     color: roofMaterial.color,
-    roughness: roofMaterial.roughness,
-    metalness: roofMaterial.metalness,
+    ...materialProps(roofMaterial),
   });
 
   // Parapet walls on all 4 edges — low walls that ring the flat roof.
@@ -50,8 +49,7 @@ export function buildFlatRoof(
       rotation: [0, 0, 0],
       size,
       color: exteriorMaterial.color,
-      roughness: exteriorMaterial.roughness,
-      metalness: exteriorMaterial.metalness,
+      ...materialProps(exteriorMaterial),
     });
   });
 

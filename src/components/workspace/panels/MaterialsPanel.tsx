@@ -1,13 +1,137 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
+import { X } from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useAssetStore } from "@/store/useAssetStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
-import { setMaterialZone } from "@/lib/house/jsonEdit";
+import { setMaterialZone, setExteriorOption } from "@/lib/house/jsonEdit";
 import { MATERIAL_LABELS, MATERIAL_TYPES, MATERIAL_ZONES, MATERIAL_ZONE_LABELS } from "@/lib/house/materials";
-import { DEFAULT_MATERIALS_CONFIG, type MaterialType, type MaterialZone } from "@/types/house";
+import { SURFACES } from "@/lib/house/catalog/surfaces";
+import { DEFAULT_MATERIALS_CONFIG, type MaterialType, type MaterialZone, type SurfaceKey } from "@/types/house";
+import type { CuratedAsset } from "@/types/assets";
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+const SURFACE_KEYS = Object.keys(SURFACES) as SurfaceKey[];
+
+// ── Imported-asset strip inside a zone card ───────────────────────────────────
+
+function ImportedAssetStrip({
+  assets,
+  activeId,
+  uvScale,
+  onSelect,
+  onClear,
+  onUvScaleChange,
+}: {
+  assets: CuratedAsset[];
+  activeId?: string;
+  uvScale: number;
+  onSelect: (asset: CuratedAsset) => void;
+  onClear: () => void;
+  onUvScaleChange: (v: number) => void;
+}) {
+  if (assets.length === 0) return null;
+
+  return (
+    <div className="mt-2 border-t border-white/5 pt-2">
+      <p className="mb-1.5 text-[10px] text-neutral-600">Imported texture</p>
+      <div className="flex flex-wrap gap-1.5">
+        {assets.map((a) => (
+          <button
+            key={a.id}
+            onClick={() => onSelect(a)}
+            title={a.name}
+            className={`h-7 w-7 rounded-md border transition ${
+              a.id === activeId
+                ? "border-amber-400 ring-1 ring-amber-400/40"
+                : "border-white/10 hover:border-white/25"
+            }`}
+            style={{ backgroundColor: a.pbr.baseColor }}
+          />
+        ))}
+      </div>
+
+      {activeId && (
+        <div className="mt-2 flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <span className="shrink-0 text-[10px] text-neutral-500">UV Scale</span>
+            <input
+              type="range"
+              min={0.25}
+              max={8}
+              step={0.25}
+              value={uvScale}
+              onChange={(e) => onUvScaleChange(parseFloat(e.target.value))}
+              className="flex-1"
+            />
+            <span className="w-6 text-right text-[10px] font-mono text-neutral-400">{uvScale}×</span>
+            <button
+              onClick={onClear}
+              title="Remove texture"
+              className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-neutral-600 hover:text-neutral-300 transition"
+            >
+              <X size={11} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Patio / driveway / pool surface card ──────────────────────────────────────
+
+function SurfaceCard({
+  label,
+  surfaceKey,
+  activeAssetId,
+  uvScale,
+  allAssets,
+  onSurfaceChange,
+  onAssetSelect,
+  onAssetClear,
+  onUvScaleChange,
+}: {
+  label: string;
+  surfaceKey: SurfaceKey;
+  activeAssetId?: string;
+  uvScale: number;
+  allAssets: CuratedAsset[];
+  onSurfaceChange: (key: SurfaceKey) => void;
+  onAssetSelect: (asset: CuratedAsset) => void;
+  onAssetClear: () => void;
+  onUvScaleChange: (v: number) => void;
+}) {
+  return (
+    <div className="rounded-lg border border-white/5 bg-white/[0.02] p-3">
+      <p className="mb-2 text-xs font-medium text-neutral-300">{label}</p>
+      <select
+        value={surfaceKey}
+        onChange={(e) => onSurfaceChange(e.target.value as SurfaceKey)}
+        className="w-full rounded-md border border-white/10 bg-neutral-800/60 px-2.5 py-1.5 text-sm text-neutral-200 outline-none focus:border-amber-500/50"
+      >
+        {SURFACE_KEYS.map((key) => (
+          <option key={key} value={key}>
+            {SURFACES[key].label}
+          </option>
+        ))}
+      </select>
+
+      <ImportedAssetStrip
+        assets={allAssets}
+        activeId={activeAssetId}
+        uvScale={uvScale}
+        onSelect={onAssetSelect}
+        onClear={onAssetClear}
+        onUvScaleChange={onUvScaleChange}
+      />
+    </div>
+  );
+}
+
+// ── Main panel ────────────────────────────────────────────────────────────────
 
 export function MaterialsPanel() {
   const params = useParams<{ projectId: string }>();
@@ -16,20 +140,39 @@ export function MaterialsPanel() {
   );
   const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
   const pbrMaterials = useAssetStore((s) => s.getPBRMaterials());
-  const [applyZone, setApplyZone] = useState<string | null>(null);
 
   const { site } = generateHouseFromJson(houseConfigJson);
   const materials = site?.materials ?? DEFAULT_MATERIALS_CONFIG;
+  const extOpts = site?.exteriorOptions;
 
-  const handleChange = (zone: MaterialZone, fields: Record<string, unknown>) => {
+  // ── Zone handlers ──────────────────────────────────────────────────────────
+
+  const handleZoneChange = (zone: MaterialZone, fields: Record<string, unknown>) => {
     updateHouseConfig(params.projectId, setMaterialZone(houseConfigJson, zone, fields));
   };
 
-  const applyPBRToZone = (
-    zone: MaterialZone,
-    pbr: { baseColor: string; roughness: number; metalness: number }
-  ) => {
-    handleChange(zone, { color: pbr.baseColor, roughness: pbr.roughness, metalness: pbr.metalness });
+  const applyAssetToZone = (zone: MaterialZone, asset: CuratedAsset) => {
+    handleZoneChange(zone, {
+      color: asset.pbr.baseColor,
+      roughness: asset.pbr.roughness,
+      metalness: asset.pbr.metalness,
+      assetId: asset.id,
+      uvScale: materials[zone].uvScale ?? 1,
+    });
+  };
+
+  const clearAssetFromZone = (zone: MaterialZone) => {
+    handleZoneChange(zone, { assetId: null, uvScale: null });
+  };
+
+  const setZoneUvScale = (zone: MaterialZone, scale: number) => {
+    handleZoneChange(zone, { uvScale: scale });
+  };
+
+  // ── Exterior option helpers ────────────────────────────────────────────────
+
+  const setExtOpt = (key: string, value: unknown) => {
+    updateHouseConfig(params.projectId, setExteriorOption(houseConfigJson, key, value));
   };
 
   return (
@@ -38,15 +181,26 @@ export function MaterialsPanel() {
         Materials
       </p>
 
+      {/* ── Zone cards: exterior, roof, trim, decking ── */}
       {MATERIAL_ZONES.map((zone) => {
         const assignment = materials[zone];
+        const activeId = assignment.assetId;
+        const uvScale = assignment.uvScale ?? 1;
+
         return (
           <div key={zone} className="rounded-lg border border-white/5 bg-white/[0.02] p-3">
             <p className="mb-2 text-xs font-medium text-neutral-300">{MATERIAL_ZONE_LABELS[zone]}</p>
             <div className="flex items-center gap-2">
               <select
                 value={assignment.material}
-                onChange={(e) => handleChange(zone, { material: e.target.value as MaterialType })}
+                onChange={(e) => {
+                  // Clear imported asset when changing built-in material type
+                  handleZoneChange(zone, {
+                    material: e.target.value as MaterialType,
+                    assetId: null,
+                    uvScale: null,
+                  });
+                }}
                 className="flex-1 rounded-md border border-white/10 bg-neutral-800/60 px-2.5 py-1.5 text-sm text-neutral-200 outline-none focus:border-amber-500/50"
               >
                 {MATERIAL_TYPES.map((type) => (
@@ -58,73 +212,97 @@ export function MaterialsPanel() {
               <input
                 type="color"
                 value={assignment.color}
-                onChange={(e) => handleChange(zone, { color: e.target.value })}
+                onChange={(e) => handleZoneChange(zone, { color: e.target.value })}
                 title="Color"
                 className="h-9 w-10 shrink-0 cursor-pointer rounded-md border border-white/10 bg-neutral-800/60 p-1"
               />
             </div>
+
+            <ImportedAssetStrip
+              assets={pbrMaterials}
+              activeId={activeId}
+              uvScale={uvScale}
+              onSelect={(asset) => applyAssetToZone(zone, asset)}
+              onClear={() => clearAssetFromZone(zone)}
+              onUvScaleChange={(v) => setZoneUvScale(zone, v)}
+            />
           </div>
         );
       })}
 
-      {/* Imported Materials from the Asset Curator */}
-      {pbrMaterials.length > 0 && (
-        <div className="rounded-lg border border-white/5 bg-white/[0.02] p-3">
-          <p className="mb-2 text-xs font-medium text-neutral-300">Imported Materials</p>
-          <div className="flex flex-wrap gap-2">
-            {pbrMaterials.map((asset) => (
-              <div key={asset.id} className="relative">
-                <button
-                  onClick={() => setApplyZone(applyZone === asset.id ? null : asset.id)}
-                  title={asset.name}
-                  className="group flex flex-col items-center gap-1 rounded-lg border border-white/5 bg-neutral-800/60 p-1.5 transition hover:border-white/15"
-                >
-                  <div
-                    className="h-8 w-8 rounded-md border border-white/10"
-                    style={{ backgroundColor: asset.pbr.baseColor }}
-                  />
-                  <span className="max-w-[48px] truncate text-[9px] text-neutral-500 group-hover:text-neutral-400">
-                    {asset.name}
-                  </span>
-                </button>
+      {/* ── Surface overrides: patio, driveway, pool ── */}
+      <p className="px-1 text-xs font-medium uppercase tracking-wider text-neutral-500">
+        Surfaces
+      </p>
 
-                {/* Zone picker dropdown */}
-                {applyZone === asset.id && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setApplyZone(null)} />
-                    <div className="absolute left-0 top-full z-50 mt-1 min-w-[140px] overflow-hidden rounded-lg border border-white/10 bg-neutral-900 py-1 shadow-2xl">
-                      <p className="px-3 pb-1 pt-1.5 text-[10px] text-neutral-600">Apply to zone</p>
-                      {MATERIAL_ZONES.map((zone) => (
-                        <button
-                          key={zone}
-                          onClick={() => {
-                            applyPBRToZone(zone, asset.pbr);
-                            setApplyZone(null);
-                          }}
-                          className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-neutral-300 hover:bg-white/5 transition"
-                        >
-                          <div
-                            className="h-3 w-3 shrink-0 rounded-sm border border-white/10"
-                            style={{ backgroundColor: materials[zone].color }}
-                          />
-                          {MATERIAL_ZONE_LABELS[zone]}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-[10px] text-neutral-700">
-            Click a swatch to apply it to a zone. Add more in the Asset Curator (shield icon).
-          </p>
-        </div>
-      )}
+      <SurfaceCard
+        label="Patio"
+        surfaceKey={(extOpts?.patioSurface ?? "concrete") as SurfaceKey}
+        activeAssetId={extOpts?.patioAssetId}
+        uvScale={extOpts?.patioUvScale ?? 1}
+        allAssets={pbrMaterials}
+        onSurfaceChange={(key) => {
+          setExtOpt("patioSurface", key);
+          setExtOpt("patioAssetId", null);
+          setExtOpt("patioUvScale", null);
+        }}
+        onAssetSelect={(asset) => {
+          setExtOpt("patioAssetId", asset.id);
+          setExtOpt("patioUvScale", extOpts?.patioUvScale ?? 1);
+        }}
+        onAssetClear={() => {
+          setExtOpt("patioAssetId", null);
+          setExtOpt("patioUvScale", null);
+        }}
+        onUvScaleChange={(v) => setExtOpt("patioUvScale", v)}
+      />
+
+      <SurfaceCard
+        label="Driveway"
+        surfaceKey={(extOpts?.patioSurface ?? "concrete") as SurfaceKey}
+        activeAssetId={extOpts?.drivewayAssetId}
+        uvScale={extOpts?.drivewayUvScale ?? 1}
+        allAssets={pbrMaterials}
+        onSurfaceChange={(key) => {
+          setExtOpt("patioSurface", key);
+          setExtOpt("drivewayAssetId", null);
+          setExtOpt("drivewayUvScale", null);
+        }}
+        onAssetSelect={(asset) => {
+          setExtOpt("drivewayAssetId", asset.id);
+          setExtOpt("drivewayUvScale", extOpts?.drivewayUvScale ?? 1);
+        }}
+        onAssetClear={() => {
+          setExtOpt("drivewayAssetId", null);
+          setExtOpt("drivewayUvScale", null);
+        }}
+        onUvScaleChange={(v) => setExtOpt("drivewayUvScale", v)}
+      />
+
+      <SurfaceCard
+        label="Pool Tile"
+        surfaceKey={(extOpts?.poolTile ?? "mosaic-tile") as SurfaceKey}
+        activeAssetId={extOpts?.poolAssetId}
+        uvScale={extOpts?.poolUvScale ?? 1}
+        allAssets={pbrMaterials}
+        onSurfaceChange={(key) => {
+          setExtOpt("poolTile", key);
+          setExtOpt("poolAssetId", null);
+          setExtOpt("poolUvScale", null);
+        }}
+        onAssetSelect={(asset) => {
+          setExtOpt("poolAssetId", asset.id);
+          setExtOpt("poolUvScale", extOpts?.poolUvScale ?? 1);
+        }}
+        onAssetClear={() => {
+          setExtOpt("poolAssetId", null);
+          setExtOpt("poolUvScale", null);
+        }}
+        onUvScaleChange={(v) => setExtOpt("poolUvScale", v)}
+      />
 
       <p className="px-1 text-xs text-neutral-600">
-        Changes apply instantly. Ask the AI Chat too — e.g. &quot;Make exterior white stucco&quot;
-        or &quot;Use teak decking&quot;.
+        Changes apply instantly. Imported textures load in the background — solid color shows as fallback.
       </p>
     </div>
   );

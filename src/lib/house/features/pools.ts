@@ -107,6 +107,10 @@ export function buildPool(
   const deckRough  = tileEntry?.roughness    ?? resolveMaterial(materials.decking).roughness;
   const deckMetal  = tileEntry?.metalness    ?? resolveMaterial(materials.decking).metalness;
 
+  // Imported PBR material overrides the tile entry when set.
+  const poolAssetId = opts?.poolAssetId;
+  const poolUvScale = opts?.poolUvScale ?? 1;
+
   const idPrefix = `pool-${index}`;
   const label = `Pool ${index + 1}`;
   const primitives: HousePrimitive[] = [];
@@ -120,6 +124,8 @@ export function buildPool(
     { id: "east", position: [cx + sizeX / 2 + POOL_COPING_WIDTH / 2, deckY, cz], size: [POOL_COPING_WIDTH, POOL_COPING_THICKNESS, sizeZ] },
     { id: "west", position: [cx - sizeX / 2 - POOL_COPING_WIDTH / 2, deckY, cz], size: [POOL_COPING_WIDTH, POOL_COPING_THICKNESS, sizeZ] },
   ];
+  const assetOverride = poolAssetId ? { assetId: poolAssetId, uvScale: poolUvScale } : {};
+
   for (const strip of deckStrips) {
     primitives.push({
       kind: "box",
@@ -132,10 +138,11 @@ export function buildPool(
       color: deckColor,
       roughness: deckRough,
       metalness: deckMetal,
+      ...assetOverride,
     });
   }
 
-  const shellMat = { color: deckColor, roughness: deckRough, metalness: deckMetal };
+  const shellMat = { color: deckColor, roughness: deckRough, metalness: deckMetal, ...assetOverride };
   primitives.push(
     ...buildWallRingPrimitives(
       footprint,

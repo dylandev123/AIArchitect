@@ -75,6 +75,11 @@ export function composeExteriorOptions(
   const style: StyleKey = raw.style ?? DEFAULTS.style;
   const preset = STYLE_PRESETS[style]?.defaults ?? DEFAULTS;
 
+  const safeStr = (v: unknown): string | undefined =>
+    typeof v === "string" && v.length > 0 ? v : undefined;
+  const safePos = (v: unknown): number | undefined =>
+    typeof v === "number" && v > 0 ? v : undefined;
+
   const opts: ResolvedExteriorOptions = {
     style,
     wallFinish:   safeWallFinish(  raw.wallFinish   ?? preset.wallFinish   ?? DEFAULTS.wallFinish),
@@ -84,6 +89,12 @@ export function composeExteriorOptions(
     columnStyle:  safeColumn(      raw.columnStyle   ?? preset.columnStyle  ?? DEFAULTS.columnStyle),
     patioSurface: safeSurface(     raw.patioSurface  ?? preset.patioSurface ?? DEFAULTS.patioSurface),
     poolTile:     safeSurface(     raw.poolTile      ?? preset.poolTile     ?? DEFAULTS.poolTile),
+    patioAssetId:    safeStr(raw.patioAssetId),
+    patioUvScale:    safePos(raw.patioUvScale),
+    poolAssetId:     safeStr(raw.poolAssetId),
+    poolUvScale:     safePos(raw.poolUvScale),
+    drivewayAssetId: safeStr(raw.drivewayAssetId),
+    drivewayUvScale: safePos(raw.drivewayUvScale),
   };
 
   return { opts, warnings: compatible(opts) };

@@ -72,9 +72,11 @@ export interface ResolvedMaterial {
   metalness: number;
   transparent?: boolean;
   opacity?: number;
+  assetId?: string;
+  uvScale?: number;
 }
 
-/** Turns a {material, color} assignment into the render-ready PBR-ish properties for a primitive. */
+/** Turns a MaterialAssignment into render-ready PBR properties for a primitive. */
 export function resolveMaterial(assignment: MaterialAssignment): ResolvedMaterial {
   const props = MATERIAL_PROPERTIES[assignment.material];
   const resolved: ResolvedMaterial = {
@@ -82,11 +84,30 @@ export function resolveMaterial(assignment: MaterialAssignment): ResolvedMateria
     roughness: assignment.roughness ?? props.roughness,
     metalness: assignment.metalness ?? props.metalness,
   };
+  if (assignment.assetId) {
+    resolved.assetId = assignment.assetId;
+    resolved.uvScale = assignment.uvScale ?? 1;
+  }
   if (assignment.material === "glass") {
     resolved.transparent = true;
-    resolved.opacity = 0.50; // vivid see-through with strong sky reflection
+    resolved.opacity = 0.50;
   }
   return resolved;
+}
+
+/** Spread-safe primitive material fields extracted from a ResolvedMaterial. */
+export function materialProps(mat: ResolvedMaterial): {
+  roughness: number; metalness: number;
+  transparent?: boolean; opacity?: number;
+  assetId?: string; uvScale?: number;
+} {
+  return {
+    roughness: mat.roughness,
+    metalness: mat.metalness,
+    ...(mat.transparent !== undefined && { transparent: mat.transparent }),
+    ...(mat.opacity !== undefined && { opacity: mat.opacity }),
+    ...(mat.assetId && { assetId: mat.assetId, uvScale: mat.uvScale }),
+  };
 }
 
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
@@ -122,8 +143,16 @@ function validateAssignment(
     ? o.roughness : undefined;
   const metalness = typeof o.metalness === "number" && o.metalness >= 0 && o.metalness <= 1
     ? o.metalness : undefined;
+  const assetId = typeof o.assetId === "string" && o.assetId.length > 0 ? o.assetId : undefined;
+  const uvScale = typeof o.uvScale === "number" && o.uvScale > 0 ? o.uvScale : undefined;
 
-  return { material, color, ...(roughness !== undefined && { roughness }), ...(metalness !== undefined && { metalness }) };
+  return {
+    material, color,
+    ...(roughness !== undefined && { roughness }),
+    ...(metalness !== undefined && { metalness }),
+    ...(assetId !== undefined && { assetId }),
+    ...(uvScale !== undefined && { uvScale }),
+  };
 }
 
 /** Always succeeds — a missing or malformed "materials" block just falls back to sensible defaults. */

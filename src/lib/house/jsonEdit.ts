@@ -61,6 +61,21 @@ export function addFeature(jsonText: string, type: FeatureType, value: unknown):
   return JSON.stringify(root, null, 2);
 }
 
+/** Sets one key in the exteriorOptions block, creating it if absent. No-ops on unparseable JSON. */
+export function setExteriorOption(jsonText: string, key: string, value: unknown): string {
+  const root = tryParseRoot(jsonText);
+  if (!root) return jsonText;
+  const ext = typeof root.exteriorOptions === "object" && root.exteriorOptions !== null
+    ? { ...(root.exteriorOptions as Record<string, unknown>) } : {};
+  if (value === null || value === undefined) {
+    delete ext[key];
+  } else {
+    ext[key] = value;
+  }
+  root.exteriorOptions = ext;
+  return JSON.stringify(root, null, 2);
+}
+
 /** Merges fields into one material zone (e.g. {color: "#ffffff"}), leaving other zones untouched. No-ops on unparseable JSON. */
 export function setMaterialZone(jsonText: string, zone: MaterialZone, fields: Record<string, unknown>): string {
   const root = tryParseRoot(jsonText);

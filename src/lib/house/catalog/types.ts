@@ -21,6 +21,13 @@ export interface ResolvedExteriorOptions {
   columnStyle:   ColumnStyleKey;
   patioSurface:  SurfaceKey;
   poolTile:      SurfaceKey;
+  /** Imported PBR asset overrides — take priority over surface enum when present. */
+  patioAssetId?:    string;
+  patioUvScale?:    number;
+  poolAssetId?:     string;
+  poolUvScale?:     number;
+  drivewayAssetId?: string;
+  drivewayUvScale?: number;
 }
 
 // ── Cladding detail ───────────────────────────────────────────────────────────

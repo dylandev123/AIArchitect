@@ -16,12 +16,16 @@ export type PrimitiveCategory =
   | "landscape"
   | "deck";
 
-/** Optional PBR-ish overrides; primitives that omit these render with the renderer's defaults. */
+/** Optional PBR overrides; primitives omitting these render with renderer defaults. */
 interface MaterialFields {
   roughness?: number;
   metalness?: number;
   transparent?: boolean;
   opacity?: number;
+  /** Imported CuratedAsset ID — triggers texture loading in PrimitiveMesh. */
+  assetId?: string;
+  /** UV repeat scale — tiles across the face. Default 1. */
+  uvScale?: number;
 }
 
 export interface BoxPrimitive extends MaterialFields {

@@ -21,6 +21,10 @@ export interface MaterialAssignment {
   color: string;
   roughness?: number;
   metalness?: number;
+  /** ID of an imported CuratedAsset to use as a PBR texture set. Fallback to color when absent. */
+  assetId?: string;
+  /** UV repeat scale — how many tiles across the face. Default 1. */
+  uvScale?: number;
 }
 
 export type MaterialsConfig = Record<MaterialZone, MaterialAssignment>;
@@ -205,6 +209,13 @@ export interface ExteriorOptions {
   columnStyle?:  ColumnStyleKey;
   patioSurface?: SurfaceKey;
   poolTile?:     SurfaceKey;
+  /** Imported PBR asset overrides — take priority over surface enum when set. */
+  patioAssetId?:    string;
+  patioUvScale?:    number;
+  poolAssetId?:     string;
+  poolUvScale?:     number;
+  drivewayAssetId?: string;
+  drivewayUvScale?: number;
 }
 
 export interface SiteConfig {

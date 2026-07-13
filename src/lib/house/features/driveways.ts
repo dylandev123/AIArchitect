@@ -4,6 +4,7 @@ import type { HousePrimitive } from "../types";
 import { DRIVEWAY_LIMITS, MATERIAL_COLORS, PAVING_THICKNESS, SITE_OFFSET_LIMIT } from "../constants";
 import { getWallAnchor, offsetOutward, pointOnWall } from "../wallAnchor";
 import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import type { ResolvedExteriorOptions } from "../catalog/types";
 
 export function validateDriveway(raw: unknown): FeatureValidation<DrivewayConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -24,7 +25,12 @@ export function validateDriveway(raw: unknown): FeatureValidation<DrivewayConfig
   return { value: { wall: wall.value, offset, width, length }, errors: [], warnings };
 }
 
-export function buildDriveway(config: DrivewayConfig, house: HouseConfig, index: number): HousePrimitive[] {
+export function buildDriveway(
+  config: DrivewayConfig,
+  house: HouseConfig,
+  index: number,
+  opts?: ResolvedExteriorOptions
+): HousePrimitive[] {
   const anchor = getWallAnchor(house, config.wall, 0);
   const base = pointOnWall(anchor, config.offset + config.width / 2);
   const ground: Vec3 = [base[0], 0, base[2]];
@@ -33,6 +39,10 @@ export function buildDriveway(config: DrivewayConfig, house: HouseConfig, index:
   const isNS = config.wall === "north" || config.wall === "south";
   const sizeX = isNS ? config.width : config.length;
   const sizeZ = isNS ? config.length : config.width;
+
+  const assetOverride = opts?.drivewayAssetId
+    ? { assetId: opts.drivewayAssetId, uvScale: opts.drivewayUvScale ?? 1 }
+    : {};
 
   return [
     {
@@ -44,6 +54,7 @@ export function buildDriveway(config: DrivewayConfig, house: HouseConfig, index:
       rotation: [0, 0, 0],
       size: [sizeX, PAVING_THICKNESS, sizeZ],
       color: MATERIAL_COLORS.driveway,
+      ...assetOverride,
     },
   ];
 }
