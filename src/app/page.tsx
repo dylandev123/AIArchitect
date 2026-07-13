@@ -8,6 +8,7 @@ import { useProjectStore } from "@/store/useProjectStore";
 import { useHydrated } from "@/lib/useHydrated";
 import { formatRelativeTime } from "@/lib/format";
 import { TEMPLATES } from "@/lib/templates";
+import { AdminButton } from "@/components/admin/AdminButton";
 
 export default function Home() {
   const router = useRouter();
@@ -52,15 +53,18 @@ export default function Home() {
           </div>
           <span className="text-base font-semibold tracking-tight text-neutral-100">AI Architect</span>
         </div>
-        {hydrated && projects.length > 0 && (
-          <Link
-            href="#recent"
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-neutral-300 hover:bg-white/10 transition"
-          >
-            <Clock size={12} />
-            {projects.length} project{projects.length === 1 ? "" : "s"}
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          {hydrated && projects.length > 0 && (
+            <Link
+              href="#recent"
+              className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-neutral-300 hover:bg-white/10 transition"
+            >
+              <Clock size={12} />
+              {projects.length} project{projects.length === 1 ? "" : "s"}
+            </Link>
+          )}
+          <AdminButton />
+        </div>
       </header>
 
       {/* Hero */}

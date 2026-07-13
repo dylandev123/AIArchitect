@@ -8,6 +8,7 @@ import { useLearnStore } from "@/store/useLearnStore";
 import { inferPBR, inferCompatibleStyles, makeAssetId, detectAssetType, hashContent } from "@/lib/assets/processor";
 import { SOURCE_LABELS } from "@/lib/assets/sources";
 import { LearnWorkspace } from "./LearnWorkspace";
+import { ModalPortal } from "./ModalPortal";
 import type { BrowseAsset, AssetSource, PBRValues } from "@/types/assets";
 
 // ── PBR Editor ──────────────────────────────────────────────────────────────
@@ -489,7 +490,8 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-neutral-950/98 backdrop-blur">
+    <ModalPortal onEscape={onClose}>
+    <div className="fixed inset-0 flex flex-col bg-neutral-950/98 backdrop-blur" style={{ zIndex: 9999 }}>
       {/* Header */}
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-white/[0.07] px-4">
         <div className="flex items-center gap-3">
@@ -547,6 +549,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
