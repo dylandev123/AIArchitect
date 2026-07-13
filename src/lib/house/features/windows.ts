@@ -5,6 +5,7 @@ import { FRAME_BORDER, FRAME_THICKNESS, GLASS_THICKNESS, MATERIAL_COLORS, WINDOW
 import { getWallAnchor, offsetOutward, pointOnWall, wallMountedSize } from "../wallAnchor";
 import { resolveMaterial } from "../materials";
 import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import type { ResolvedExteriorOptions } from "../catalog/types";
 
 export function validateWindow(raw: unknown, house: HouseConfig): FeatureValidation<WindowConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -29,7 +30,7 @@ export function validateWindow(raw: unknown, house: HouseConfig): FeatureValidat
   return { value: { wall: wall.value, level, offset, width, height, sill }, errors: [], warnings };
 }
 
-export function buildWindow(config: WindowConfig, house: HouseConfig, materials: MaterialsConfig, index: number): HousePrimitive[] {
+export function buildWindow(config: WindowConfig, house: HouseConfig, materials: MaterialsConfig, index: number, opts?: ResolvedExteriorOptions): HousePrimitive[] {
   const anchor = getWallAnchor(house, config.wall, config.level);
   const base = pointOnWall(anchor, config.offset + config.width / 2);
   const center: Vec3 = [base[0], anchor.origin[1] + config.sill + config.height / 2, base[2]];
@@ -51,7 +52,9 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
 
   const idPrefix = `window-${index}`;
   const label = `Window ${index + 1}`;
-  return [
+  const style = opts?.windowStyle ?? "casement";
+
+  const primitives: HousePrimitive[] = [
     {
       kind: "box",
       id: `${idPrefix}-frame`,
@@ -91,4 +94,63 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
       metalness: trim.metalness,
     },
   ];
+
+  if (style === "double-hung") {
+    // Horizontal centre rail dividing the two sashes
+    const railY: Vec3 = [center[0], center[1], center[2]];
+    const railPos = offsetOutward(railY, anchor, FRAME_THICKNESS + GLASS_THICKNESS / 2);
+    primitives.push({
+      kind: "box",
+      id: `${idPrefix}-rail`,
+      category: "window",
+      label: `${label} Centre Rail`,
+      position: railPos,
+      rotation: [0, 0, 0],
+      size: wallMountedSize(config.wall, config.width, 0.05, GLASS_THICKNESS + 0.02),
+      color: trim.color,
+      roughness: trim.roughness,
+      metalness: trim.metalness,
+    });
+  } else if (style === "louvered") {
+    // Horizontal louver slats — 5 equally-spaced bars across glass area
+    const N = 5;
+    const step = config.height / (N + 1);
+    for (let i = 1; i <= N; i++) {
+      const slY = anchor.origin[1] + config.sill + step * i;
+      const slCenter: Vec3 = [base[0], slY, base[2]];
+      const slPos = offsetOutward(slCenter, anchor, FRAME_THICKNESS + 0.02);
+      primitives.push({
+        kind: "box",
+        id: `${idPrefix}-louver-${i}`,
+        category: "window",
+        label: `${label} Louver`,
+        position: slPos,
+        rotation: [0, 0, 0],
+        size: wallMountedSize(config.wall, config.width - 0.06, 0.04, 0.08),
+        color: trim.color,
+        roughness: trim.roughness,
+        metalness: trim.metalness,
+      });
+    }
+  } else if (style === "arched") {
+    // Arch lintel cap — wider, slightly taller box sitting above the frame top
+    const archCapH = Math.min(0.28, config.width * 0.18);
+    const topY = anchor.origin[1] + config.sill + config.height + archCapH / 2;
+    const capCenter: Vec3 = [base[0], topY, base[2]];
+    const capPos = offsetOutward(capCenter, anchor, FRAME_THICKNESS / 2);
+    primitives.push({
+      kind: "box",
+      id: `${idPrefix}-arch`,
+      category: "window",
+      label: `${label} Arch Lintel`,
+      position: capPos,
+      rotation: [0, 0, 0],
+      size: wallMountedSize(config.wall, config.width + FRAME_BORDER * 2 + 0.04, archCapH, FRAME_THICKNESS),
+      color: trim.color,
+      roughness: trim.roughness,
+      metalness: trim.metalness,
+    });
+  }
+
+  return primitives;
 }

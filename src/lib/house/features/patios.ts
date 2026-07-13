@@ -5,6 +5,8 @@ import { PATIO_LIMITS, PAVING_THICKNESS, SITE_OFFSET_LIMIT } from "../constants"
 import { getWallAnchor, offsetOutward, pointOnWall } from "../wallAnchor";
 import { resolveMaterial } from "../materials";
 import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import type { ResolvedExteriorOptions } from "../catalog/types";
+import { SURFACES } from "../catalog/surfaces";
 
 export function validatePatio(raw: unknown): FeatureValidation<PatioConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -29,7 +31,8 @@ export function buildPatio(
   config: PatioConfig,
   house: HouseConfig,
   materials: MaterialsConfig,
-  index: number
+  index: number,
+  opts?: ResolvedExteriorOptions
 ): HousePrimitive[] {
   const anchor = getWallAnchor(house, config.wall, 0);
   const base = pointOnWall(anchor, config.offset + config.width / 2);
@@ -40,7 +43,10 @@ export function buildPatio(
   const sizeX = isNS ? config.width : config.depth;
   const sizeZ = isNS ? config.depth : config.width;
 
-  const decking = resolveMaterial(materials.decking);
+  const surfEntry  = opts ? SURFACES[opts.patioSurface] : null;
+  const deckColor  = surfEntry?.defaultColor ?? resolveMaterial(materials.decking).color;
+  const deckRough  = surfEntry?.roughness    ?? resolveMaterial(materials.decking).roughness;
+  const deckMetal  = surfEntry?.metalness    ?? resolveMaterial(materials.decking).metalness;
 
   return [
     {
@@ -51,9 +57,9 @@ export function buildPatio(
       position: [center[0], PAVING_THICKNESS / 2, center[2]],
       rotation: [0, 0, 0],
       size: [sizeX, PAVING_THICKNESS, sizeZ],
-      color: decking.color,
-      roughness: decking.roughness,
-      metalness: decking.metalness,
+      color: deckColor,
+      roughness: deckRough,
+      metalness: deckMetal,
     },
   ];
 }

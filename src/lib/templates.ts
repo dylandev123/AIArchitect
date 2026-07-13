@@ -24,7 +24,8 @@ export const TEMPLATES: Template[] = [
     site: {
       // 12×9, 2 floors → usableW=11.6, usableD=8.6
       house: { width: 12, depth: 9, floors: 2, roof: "gable" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "stucco", color: "#f0ece4" }, roof: { material: "metal", color: "#454b54" } },
+      materials: { ...BASE_MATERIALS, exterior: { material: "timber", color: "#7a5632" }, roof: { material: "slate", color: "#4a5058" }, trim: { material: "timber", color: "#4a3018" }, decking: { material: "timber", color: "#b88040" } },
+      exteriorOptions: { style: "craftsman", wallFinish: "board-batten", windowStyle: "double-hung", doorStyle: "paneled", railingStyle: "timber", columnStyle: "craftsman-post", patioSurface: "brick-paver" },
       windows: [
         // Ground floor — north (bedrooms) + south (living/kitchen)
         { wall: "north", level: 0, offset: 1.8, width: 1.2, height: 1.4, sill: 0.9 },
@@ -70,7 +71,8 @@ export const TEMPLATES: Template[] = [
     site: {
       // 22×14, 4 floors → usableW=21.6, usableD=13.6
       house: { width: 22, depth: 14, floors: 4, roof: "flat" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "concrete", color: "#d8d4cc" }, roof: { material: "metal", color: "#3a3f47" } },
+      materials: { ...BASE_MATERIALS, exterior: { material: "render", color: "#f0f0ec" }, roof: { material: "concrete", color: "#c0bcb8" }, trim: { material: "metal", color: "#2a2e36" }, decking: { material: "concrete", color: "#c0bcb8" } },
+      exteriorOptions: { style: "modern-minimalist", windowStyle: "picture", doorStyle: "flush", railingStyle: "glass-panel", columnStyle: "none", patioSurface: "concrete", poolTile: "mosaic-tile" },
       windows: Array.from({ length: 8 }, (_, i) => ({
         wall: "south" as const, level: i % 4,
         offset: 2.5 + Math.floor(i / 4) * 9,
@@ -112,8 +114,9 @@ export const TEMPLATES: Template[] = [
     accentColor: "#ef4444",
     site: {
       // 16×12, 1 floor → usableW=15.6, usableD=11.6
-      house: { width: 16, depth: 12, floors: 1, roof: "flat" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "stone", color: "#c4b9aa" }, trim: { material: "metal", color: "#2c2c30" }, decking: { material: "wood", color: "#7a5c3a" } },
+      house: { width: 16, depth: 12, floors: 1, roof: "sawtooth" },
+      materials: { ...BASE_MATERIALS, exterior: { material: "concrete", color: "#9c9890" }, roof: { material: "zinc", color: "#7a8490" }, trim: { material: "metal", color: "#1a1e26" }, decking: { material: "concrete", color: "#a8a4a0" } },
+      exteriorOptions: { style: "industrial", wallFinish: "split-face-block", windowStyle: "picture", doorStyle: "flush", railingStyle: "cable", columnStyle: "steel-section", patioSurface: "concrete", poolTile: "slate-tile" },
       windows: [
         { wall: "south", level: 0, offset: 1.0,  width: 3.5, height: 2.2, sill: 0.7 },
         { wall: "south", level: 0, offset: 6.0,  width: 3.5, height: 2.2, sill: 0.7 },
@@ -143,8 +146,9 @@ export const TEMPLATES: Template[] = [
     accentColor: "#eab308",
     site: {
       // 9×8, 1 floor → usableW=8.6, usableD=7.6
-      house: { width: 9, depth: 8, floors: 1, roof: "gable" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "wood", color: "#8a6545" }, roof: { material: "metal", color: "#3d3028" }, trim: { material: "wood", color: "#4a3020" } },
+      house: { width: 9, depth: 8, floors: 1, roof: "shed" },
+      materials: { ...BASE_MATERIALS, exterior: { material: "timber", color: "#2c2824" }, roof: { material: "zinc", color: "#606870" }, trim: { material: "timber", color: "#1a1614" }, decking: { material: "timber", color: "#a07848" } },
+      exteriorOptions: { style: "nordic", wallFinish: "board-batten", windowStyle: "picture", doorStyle: "flush", railingStyle: "cable", columnStyle: "board-strip", patioSurface: "slate-tile" },
       windows: [
         { wall: "south", level: 0, offset: 0.8, width: 2.5, height: 2.0, sill: 0.7 },
         { wall: "south", level: 0, offset: 5.5, width: 1.5, height: 2.0, sill: 0.7 },
@@ -171,8 +175,9 @@ export const TEMPLATES: Template[] = [
     accentColor: "#14b8a6",
     site: {
       // 14×10, 1 floor → usableW=13.6, usableD=9.6
-      house: { width: 14, depth: 10, floors: 1, roof: "flat" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "stucco", color: "#f5f0e8" }, roof: { material: "concrete", color: "#a0a0a0" }, decking: { material: "wood", color: "#8a6a3c" } },
+      house: { width: 14, depth: 10, floors: 1, roof: "butterfly" },
+      materials: { ...BASE_MATERIALS, exterior: { material: "stucco", color: "#f4ede0" }, roof: { material: "metal", color: "#5a7a6a" }, trim: { material: "timber", color: "#8a6040" }, decking: { material: "timber", color: "#b88848" } },
+      exteriorOptions: { style: "tropical", wallFinish: "smooth-stucco", windowStyle: "louvered", doorStyle: "glass-panel", railingStyle: "cable", columnStyle: "square-pilaster", patioSurface: "teak-deck", poolTile: "mosaic-tile" },
       windows: [
         { wall: "south", level: 0, offset: 1.0, width: 4.0, height: 2.4, sill: 0.5 },
         { wall: "south", level: 0, offset: 9.2, width: 3.5, height: 2.4, sill: 0.5 },
@@ -205,8 +210,9 @@ export const TEMPLATES: Template[] = [
     accentColor: "#0ea5e9",
     site: {
       // 20×12, 2 floors → usableW=19.6, usableD=11.6
-      house: { width: 20, depth: 12, floors: 2, roof: "hip" },
-      materials: { ...BASE_MATERIALS, exterior: { material: "concrete", color: "#e8e4de" }, roof: { material: "metal", color: "#5a7a8a" }, trim: { material: "metal", color: "#3a5a6a" } },
+      house: { width: 20, depth: 12, floors: 2, roof: "shed" },
+      materials: { ...BASE_MATERIALS, exterior: { material: "cedar", color: "#8a6040" }, roof: { material: "metal", color: "#4a4e54" }, trim: { material: "metal", color: "#1e2228" }, decking: { material: "timber", color: "#b8904a" } },
+      exteriorOptions: { style: "mid-century", wallFinish: "horizontal-lap", windowStyle: "casement", doorStyle: "glass-panel", railingStyle: "cable", columnStyle: "steel-section", patioSurface: "teak-deck", poolTile: "mosaic-tile" },
       windows: [
         { wall: "south", level: 0, offset: 1.0,  width: 3.0, height: 2.2, sill: 0.6 },
         { wall: "south", level: 0, offset: 7.0,  width: 5.0, height: 2.2, sill: 0.6 },

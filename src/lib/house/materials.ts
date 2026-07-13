@@ -1,17 +1,30 @@
 import type { MaterialAssignment, MaterialsConfig, MaterialType, MaterialZone } from "@/types/house";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 
-export const MATERIAL_TYPES: MaterialType[] = ["concrete", "stone", "wood", "glass", "metal", "stucco", "tile"];
+export const MATERIAL_TYPES: MaterialType[] = [
+  "concrete", "stone", "wood", "glass", "metal", "stucco", "tile",
+  "brick", "timber", "render", "cedar", "slate", "copper", "terracotta", "marble", "zinc", "corten",
+];
 export const MATERIAL_ZONES: MaterialZone[] = ["exterior", "roof", "trim", "decking"];
 
 export const MATERIAL_LABELS: Record<MaterialType, string> = {
-  concrete: "Concrete",
-  stone: "Stone",
-  wood: "Wood",
-  glass: "Glass",
-  metal: "Metal",
-  stucco: "Stucco",
-  tile: "Tile",
+  concrete:   "Concrete",
+  stone:      "Stone",
+  wood:       "Wood",
+  glass:      "Glass",
+  metal:      "Metal",
+  stucco:     "Stucco",
+  tile:       "Tile",
+  brick:      "Brick",
+  timber:     "Timber",
+  render:     "Cement Render",
+  cedar:      "Cedar",
+  slate:      "Slate",
+  copper:     "Copper",
+  terracotta: "Terracotta",
+  marble:     "Marble",
+  zinc:       "Zinc",
+  corten:     "Corten Steel",
 };
 
 export const MATERIAL_ZONE_LABELS: Record<MaterialZone, string> = {
@@ -32,13 +45,25 @@ interface MaterialPhysicalProperties {
  * Glass is near-mirror for vivid sky reflections. Tile has mild gloss for clean roofs.
  */
 export const MATERIAL_PROPERTIES: Record<MaterialType, MaterialPhysicalProperties> = {
-  concrete: { roughness: 0.80, metalness: 0.04, defaultColor: "#b0aca2" },
-  stone:    { roughness: 0.74, metalness: 0.02, defaultColor: "#969088" },
-  wood:     { roughness: 0.65, metalness: 0.0,  defaultColor: "#8c5a2c" },
-  glass:    { roughness: 0.04, metalness: 0.20, defaultColor: "#88d4f0" },
-  metal:    { roughness: 0.22, metalness: 0.94, defaultColor: "#b0b4ba" },
-  stucco:   { roughness: 0.82, metalness: 0.0,  defaultColor: "#ece8e0" },
-  tile:     { roughness: 0.52, metalness: 0.05, defaultColor: "#486c88" },
+  // original seven
+  concrete:   { roughness: 0.80, metalness: 0.04, defaultColor: "#b0aca2" },
+  stone:      { roughness: 0.74, metalness: 0.02, defaultColor: "#969088" },
+  wood:       { roughness: 0.65, metalness: 0.0,  defaultColor: "#8c5a2c" },
+  glass:      { roughness: 0.04, metalness: 0.20, defaultColor: "#88d4f0" },
+  metal:      { roughness: 0.22, metalness: 0.94, defaultColor: "#b0b4ba" },
+  stucco:     { roughness: 0.82, metalness: 0.0,  defaultColor: "#ece8e0" },
+  tile:       { roughness: 0.52, metalness: 0.05, defaultColor: "#486c88" },
+  // catalog extensions
+  brick:      { roughness: 0.90, metalness: 0.0,  defaultColor: "#b05838" },
+  timber:     { roughness: 0.85, metalness: 0.0,  defaultColor: "#6a4820" },
+  render:     { roughness: 0.55, metalness: 0.0,  defaultColor: "#d8d4cc" },
+  cedar:      { roughness: 0.78, metalness: 0.0,  defaultColor: "#a06840" },
+  slate:      { roughness: 0.88, metalness: 0.02, defaultColor: "#5a5c60" },
+  copper:     { roughness: 0.62, metalness: 0.85, defaultColor: "#5a8858" },
+  terracotta: { roughness: 0.82, metalness: 0.0,  defaultColor: "#c06840" },
+  marble:     { roughness: 0.15, metalness: 0.0,  defaultColor: "#e8e4dc" },
+  zinc:       { roughness: 0.72, metalness: 0.55, defaultColor: "#8a9298" },
+  corten:     { roughness: 0.85, metalness: 0.30, defaultColor: "#8c4828" },
 };
 
 export interface ResolvedMaterial {
@@ -54,8 +79,8 @@ export function resolveMaterial(assignment: MaterialAssignment): ResolvedMateria
   const props = MATERIAL_PROPERTIES[assignment.material];
   const resolved: ResolvedMaterial = {
     color: assignment.color,
-    roughness: props.roughness,
-    metalness: props.metalness,
+    roughness: assignment.roughness ?? props.roughness,
+    metalness: assignment.metalness ?? props.metalness,
   };
   if (assignment.material === "glass") {
     resolved.transparent = true;
@@ -93,7 +118,12 @@ function validateAssignment(
     }
   }
 
-  return { material, color };
+  const roughness = typeof o.roughness === "number" && o.roughness >= 0 && o.roughness <= 1
+    ? o.roughness : undefined;
+  const metalness = typeof o.metalness === "number" && o.metalness >= 0 && o.metalness <= 1
+    ? o.metalness : undefined;
+
+  return { material, color, ...(roughness !== undefined && { roughness }), ...(metalness !== undefined && { metalness }) };
 }
 
 /** Always succeeds — a missing or malformed "materials" block just falls back to sensible defaults. */

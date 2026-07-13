@@ -1,4 +1,4 @@
-export type RoofType = "flat" | "gable" | "hip";
+export type RoofType = "flat" | "gable" | "hip" | "mansard" | "shed" | "butterfly" | "sawtooth";
 export type WallSide = "north" | "south" | "east" | "west";
 export type RoomType =
   | "kitchen"
@@ -11,12 +11,16 @@ export type RoomType =
   | "laundry"
   | "gym";
 
-export type MaterialType = "concrete" | "stone" | "wood" | "glass" | "metal" | "stucco" | "tile";
+export type MaterialType =
+  | "concrete" | "stone" | "wood" | "glass" | "metal" | "stucco" | "tile"
+  | "brick" | "timber" | "render" | "cedar" | "slate" | "copper" | "terracotta" | "marble" | "zinc" | "corten";
 export type MaterialZone = "exterior" | "roof" | "trim" | "decking";
 
 export interface MaterialAssignment {
   material: MaterialType;
   color: string;
+  roughness?: number;
+  metalness?: number;
 }
 
 export type MaterialsConfig = Record<MaterialZone, MaterialAssignment>;
@@ -172,6 +176,37 @@ export interface LandscapeZoneConfig {
   depth: number;
 }
 
+// ── Exterior catalog key types ────────────────────────────────────────────────
+// These are part of the JSON schema (stored in SiteConfig.exteriorOptions).
+
+export type WallFinishKey =
+  | "smooth-stucco" | "rough-stucco" | "board-batten" | "horizontal-lap"
+  | "brick" | "stone-veneer" | "cedar-shingle" | "corrugated-metal"
+  | "venetian-plaster" | "split-face-block";
+
+export type WindowStyleKey = "casement" | "double-hung" | "picture" | "arched" | "louvered";
+export type DoorStyleKey   = "flush" | "paneled" | "glass-panel" | "double" | "pivot";
+export type RailingStyleKey = "iron" | "cable" | "glass-panel" | "timber" | "concrete-wall" | "picket";
+export type ColumnStyleKey  = "none" | "square-pilaster" | "craftsman-post" | "steel-section" | "board-strip";
+export type SurfaceKey =
+  | "concrete" | "travertine" | "slate-tile" | "terracotta" | "pebble"
+  | "brick-paver" | "teak-deck" | "mosaic-tile";
+export type StyleKey =
+  | "mediterranean" | "modern-minimalist" | "craftsman" | "industrial"
+  | "colonial" | "tropical" | "nordic" | "mid-century";
+
+/** All per-component exterior overrides that can be stored alongside a SiteConfig. */
+export interface ExteriorOptions {
+  style?:        StyleKey;
+  wallFinish?:   WallFinishKey;
+  windowStyle?:  WindowStyleKey;
+  doorStyle?:    DoorStyleKey;
+  railingStyle?: RailingStyleKey;
+  columnStyle?:  ColumnStyleKey;
+  patioSurface?: SurfaceKey;
+  poolTile?:     SurfaceKey;
+}
+
 export interface SiteConfig {
   house: HouseConfig;
   materials: MaterialsConfig;
@@ -188,6 +223,7 @@ export interface SiteConfig {
   parking: ParkingConfig[];
   landscaping: LandscapeZoneConfig[];
   decks: DeckConfig[];
+  exteriorOptions?: ExteriorOptions;
 }
 
 export const DEFAULT_HOUSE_CONFIG: HouseConfig = {

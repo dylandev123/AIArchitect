@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft, ChevronDown, Pencil, Redo2, Undo2 } from "lucide-react";
+import { AdminButton } from "@/components/admin/AdminButton";
 import { useProjectStore } from "@/store/useProjectStore";
 import {
   PROJECT_TYPE_EMOJI,
@@ -134,7 +135,7 @@ export function TopBar({ project }: { project: Project }) {
         <ProjectTypePill project={project} />
       </div>
 
-      {/* Right: undo/redo */}
+      {/* Right: undo/redo + admin */}
       <div className="flex items-center gap-0.5">
         <button
           onClick={() => undo(project.id)}
@@ -152,6 +153,8 @@ export function TopBar({ project }: { project: Project }) {
         >
           <Redo2 size={15} />
         </button>
+        <div className="ml-0.5 h-5 w-px bg-white/[0.07]" />
+        <AdminButton projectId={project.id} />
       </div>
     </header>
   );

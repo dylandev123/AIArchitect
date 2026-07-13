@@ -1,4 +1,6 @@
 import type { HouseConfig, MaterialsConfig, PoolConfig } from "@/types/house";
+import type { ResolvedExteriorOptions } from "../catalog/types";
+import { SURFACES } from "../catalog/surfaces";
 import type { Vec3 } from "../geometryUtils";
 import type { HousePrimitive } from "../types";
 import {
@@ -92,14 +94,18 @@ export function buildPool(
   config: PoolConfig,
   house: HouseConfig,
   materials: MaterialsConfig,
-  index: number
+  index: number,
+  opts?: ResolvedExteriorOptions
 ): HousePrimitive[] {
   const footprint = getPoolFootprint(config, house);
   const [cx, cz] = footprint.center;
   const sizeX = footprint.width;
   const sizeZ = footprint.depth;
 
-  const decking = resolveMaterial(materials.decking);
+  const tileEntry  = opts ? SURFACES[opts.poolTile] : null;
+  const deckColor  = tileEntry?.defaultColor ?? resolveMaterial(materials.decking).color;
+  const deckRough  = tileEntry?.roughness    ?? resolveMaterial(materials.decking).roughness;
+  const deckMetal  = tileEntry?.metalness    ?? resolveMaterial(materials.decking).metalness;
 
   const idPrefix = `pool-${index}`;
   const label = `Pool ${index + 1}`;
@@ -123,12 +129,13 @@ export function buildPool(
       position: strip.position,
       rotation: [0, 0, 0],
       size: strip.size,
-      color: decking.color,
-      roughness: decking.roughness,
-      metalness: decking.metalness,
+      color: deckColor,
+      roughness: deckRough,
+      metalness: deckMetal,
     });
   }
 
+  const shellMat = { color: deckColor, roughness: deckRough, metalness: deckMetal };
   primitives.push(
     ...buildWallRingPrimitives(
       footprint,
@@ -136,9 +143,9 @@ export function buildPool(
       config.waterDepth,
       `${idPrefix}-shell`,
       `${label} Shell`,
-      decking.color,
+      deckColor,
       [],
-      decking
+      shellMat
     ).map((p) => ({ ...p, category: "pool" as const }))
   );
 

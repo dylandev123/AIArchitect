@@ -1,4 +1,5 @@
-import type { HouseConfig, MaterialsConfig, RoofType, SiteConfig } from "@/types/house";
+import type { ExteriorOptions, HouseConfig, MaterialsConfig, RoofType, SiteConfig } from "@/types/house";
+import { composeExteriorOptions } from "./catalog/composition";
 import type { HouseModel, HousePrimitive } from "./types";
 import { FLOOR_THICKNESS, HOUSE_LIMITS, LEVEL_HEIGHT, MATERIAL_COLORS, WALL_HEIGHT, WALL_THICKNESS } from "./constants";
 import { buildFloorSlabPrimitive, buildWallRingPrimitives } from "./primitiveBuilders";
@@ -6,6 +7,10 @@ import { resolveMaterial, validateMaterials } from "./materials";
 import { buildFlatRoof } from "./roof/flatRoof";
 import { buildGableRoof } from "./roof/gableRoof";
 import { buildHipRoof } from "./roof/hipRoof";
+import { buildMansardRoof } from "./roof/mansardRoof";
+import { buildShedRoof } from "./roof/shedRoof";
+import { buildButterflyRoof } from "./roof/butterflyRoof";
+import { buildSawtoothRoof } from "./roof/sawtoothRoof";
 import { FEATURE_JSON_KEY, FEATURE_LABEL, type FeatureType } from "./features/featureTypes";
 import type { FeatureValidation } from "./features/validateHelpers";
 import { buildWindow, validateWindow } from "./features/windows";
@@ -22,7 +27,7 @@ import { buildParking, validateParking } from "./features/parking";
 import { buildLandscapeZone, validateLandscapeZone } from "./features/landscapeZones";
 import { buildDeck, validateDeck } from "./features/decks";
 
-const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip"];
+const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -189,9 +194,13 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
 
   const roofBaseY = floors * LEVEL_HEIGHT;
   const roofBuilders: Record<RoofType, typeof buildFlatRoof> = {
-    flat: buildFlatRoof,
-    gable: buildGableRoof,
-    hip: buildHipRoof,
+    flat:      buildFlatRoof,
+    gable:     buildGableRoof,
+    hip:       buildHipRoof,
+    mansard:   buildMansardRoof,
+    shed:      buildShedRoof,
+    butterfly: buildButterflyRoof,
+    sawtooth:  buildSawtoothRoof,
   };
   primitives.push(...roofBuilders[roof](width, depth, roofBaseY, "roof", roofMaterial, exteriorMaterial));
 
@@ -261,12 +270,20 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const materials = validateMaterials(root.materials, warnings);
   const primitives = generateHouseModel(config, materials);
 
-  const windows = processFeatureArray(root, "window", (i) => validateWindow(i, config), (v, idx) => buildWindow(v, config, materials, idx), errors, warnings, primitives);
-  const doors = processFeatureArray(root, "door", (i) => validateDoor(i, config), (v, idx) => buildDoor(v, config, materials, idx), errors, warnings, primitives);
+  // Parse and resolve exterior options (optional; defaults applied when absent)
+  const rawExtOpts = root.exteriorOptions;
+  const { opts, warnings: extWarnings } = composeExteriorOptions(
+    typeof rawExtOpts === "object" && rawExtOpts !== null ? (rawExtOpts as ExteriorOptions) : {},
+    config
+  );
+  warnings.push(...extWarnings);
+
+  const windows = processFeatureArray(root, "window", (i) => validateWindow(i, config), (v, idx) => buildWindow(v, config, materials, idx, opts), errors, warnings, primitives);
+  const doors = processFeatureArray(root, "door", (i) => validateDoor(i, config), (v, idx) => buildDoor(v, config, materials, idx, opts), errors, warnings, primitives);
   const garages = processFeatureArray(root, "garage", validateGarage, (v, idx) => buildGarage(v, config, materials, idx), errors, warnings, primitives);
-  const balconies = processFeatureArray(root, "balcony", (i) => validateBalcony(i, config), (v, idx) => buildBalcony(v, config, materials, idx), errors, warnings, primitives);
-  const patios = processFeatureArray(root, "patio", validatePatio, (v, idx) => buildPatio(v, config, materials, idx), errors, warnings, primitives);
-  const pools = processFeatureArray(root, "pool", validatePool, (v, idx) => buildPool(v, config, materials, idx), errors, warnings, primitives);
+  const balconies = processFeatureArray(root, "balcony", (i) => validateBalcony(i, config), (v, idx) => buildBalcony(v, config, materials, idx, opts), errors, warnings, primitives);
+  const patios = processFeatureArray(root, "patio", validatePatio, (v, idx) => buildPatio(v, config, materials, idx, opts), errors, warnings, primitives);
+  const pools = processFeatureArray(root, "pool", validatePool, (v, idx) => buildPool(v, config, materials, idx, opts), errors, warnings, primitives);
   const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx), errors, warnings, primitives);
   const rooms = processFeatureArray(root, "room", (i) => validateRoom(i, config), (v, idx) => buildRoom(v, config, idx), errors, warnings, primitives);
   primitives.push(...buildRoomPartitions(rooms, config));
@@ -292,6 +309,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
     parking,
     landscaping,
     decks,
+    exteriorOptions: opts,
   };
 
   return { model: { id: "house", primitives }, config, site, errors, warnings };

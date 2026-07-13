@@ -18,10 +18,14 @@ import { resolveMaterial } from "../materials";
 import { buildFlatRoof } from "../roof/flatRoof";
 import { buildGableRoof } from "../roof/gableRoof";
 import { buildHipRoof } from "../roof/hipRoof";
+import { buildMansardRoof } from "../roof/mansardRoof";
+import { buildShedRoof } from "../roof/shedRoof";
+import { buildButterflyRoof } from "../roof/butterflyRoof";
+import { buildSawtoothRoof } from "../roof/sawtoothRoof";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
 
 const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar"];
-const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip"];
+const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
 export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -334,9 +338,13 @@ export function buildBuilding(
 
   const roofBaseY = config.floors * LEVEL_HEIGHT;
   const roofBuilders: Record<RoofType, typeof buildFlatRoof> = {
-    flat: buildFlatRoof,
-    gable: buildGableRoof,
-    hip: buildHipRoof,
+    flat:      buildFlatRoof,
+    gable:     buildGableRoof,
+    hip:       buildHipRoof,
+    mansard:   buildMansardRoof,
+    shed:      buildShedRoof,
+    butterfly: buildButterflyRoof,
+    sawtooth:  buildSawtoothRoof,
   };
   const localRoof = roofBuilders[config.roof](config.width, config.depth, roofBaseY, idPrefix, roofMaterial, exteriorMaterial);
   primitives.push(...localRoof.map((p) => translatePrimitive(p, config.x, config.z)));
