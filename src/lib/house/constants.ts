@@ -101,6 +101,86 @@ export const LANDSCAPE_LIMITS = {
   depth: { min: 1, max: 60 },
 };
 
+export const PORCH_LIMITS = {
+  width: { min: 1.5, max: 30 },
+  depth: { min: 1.2, max: 6 },
+};
+
+export const CHIMNEY_LIMITS = {
+  width: { min: 0.6, max: 3 },
+  depth: { min: 0.5, max: 2.5 },
+};
+
+export const CURVED_WALL_LIMITS = {
+  radius: { min: 1.5, max: 40 },
+  sweep: { min: 20, max: 360 },
+  height: { min: 0.6, max: 12 },
+  thickness: { min: 0.15, max: 1.2 },
+};
+
+export const ARCH_LIMITS = {
+  width: { min: 1, max: 8 },
+  height: { min: 1.8, max: 6 },
+  depth: { min: 0.1, max: 1.2 },
+};
+
+export const BAY_LIMITS = {
+  width: { min: 1.5, max: 8 },
+  depth: { min: 0.6, max: 4 },
+  levels: { min: 1, max: 6 },
+};
+
+export const FOUNDATION_LIMITS = {
+  steps: { min: 1, max: 4 },
+  riser: { min: 0.08, max: 0.4 },
+  projection: { min: 0.08, max: 0.6 },
+};
+
+export const STAIRS_LIMITS = {
+  width: { min: 0.9, max: 6 },
+  rise: { min: 0.3, max: 4 },
+};
+
+export const DORMER_LIMITS = {
+  width: { min: 1, max: 4 },
+};
+
+export const CROSS_GABLE_LIMITS = {
+  width: { min: 2.5, max: 20 },
+};
+
+export const RETAINING_WALL_LIMITS = {
+  height: { min: 0.3, max: 6 },
+  thickness: { min: 0.2, max: 1.2 },
+  bend: { min: -30, max: 30 },
+  length: { min: 1, max: 200 },
+};
+
+export const PATH_LIMITS = {
+  width: { min: 0.6, max: 6 },
+  bend: { min: -30, max: 30 },
+  length: { min: 1, max: 250 },
+};
+
+export const WATERWAY_LIMITS = {
+  width: { min: 1, max: 24 },
+  bend: { min: -40, max: 40 },
+  meander: { min: 0, max: 1 },
+  length: { min: 6, max: 400 },
+};
+
+export const ROCK_LIMITS = {
+  radius: { min: 0.5, max: 20 },
+  count: { min: 1, max: 24 },
+  size: { min: 0.4, max: 3 },
+};
+
+export const SLOPE_LIMITS = {
+  width: { min: 3, max: 80 },
+  depth: { min: 3, max: 80 },
+  rise: { min: 0.3, max: 8 },
+};
+
 export const DECK_LIMITS = {
   width: { min: 1, max: 40 },
   depth: { min: 1, max: 40 },
@@ -156,6 +236,8 @@ export const BUILDING_KIND_LABELS: Record<BuildingKind, string> = {
   reception: "Reception",
   gazebo: "Gazebo",
   outdoor_bar: "Outdoor Bar",
+  shed: "Shed",
+  detached_garage: "Detached Garage",
 };
 
 export const BUILDING_DEFAULT_SIZE: Record<BuildingKind, { width: number; depth: number; floors: number }> = {
@@ -164,14 +246,18 @@ export const BUILDING_DEFAULT_SIZE: Record<BuildingKind, { width: number; depth:
   reception: { width: 12, depth: 9, floors: 1 },
   gazebo: { width: 5, depth: 5, floors: 1 },
   outdoor_bar: { width: 6, depth: 3, floors: 1 },
+  shed: { width: 4, depth: 3.5, floors: 1 },
+  detached_garage: { width: 6.5, depth: 6, floors: 1 },
 };
 
 export const LANDSCAPE_KIND_LABELS: Record<LandscapeKind, string> = {
   garden: "Garden",
   lawn: "Lawn",
+  clearing: "Clearing",
 };
 
 export const LANDSCAPE_COLORS: Record<LandscapeKind, string> = {
   garden: "#2da03c",   // rich garden green
   lawn:   "#50c038",   // bright open lawn
+  clearing: "#8dbf58", // open meadow, trampled lighter than the forest floor around it
 };

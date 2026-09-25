@@ -5,6 +5,8 @@ import type { HousePrimitive } from "../types";
 import { DOOR_LIMITS, DOOR_PANEL_THICKNESS, FRAME_BORDER, FRAME_THICKNESS, MATERIAL_COLORS } from "../constants";
 import { getWallAnchor, offsetOutward, pointOnWall, wallMountedSize } from "../wallAnchor";
 import { resolveMaterial } from "../materials";
+import { paintOf } from "../architecture/parts";
+import { buildReveal } from "../architecture/reveal";
 import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
 
 export function validateDoor(raw: unknown, house: HouseConfig): FeatureValidation<DoorConfig> {
@@ -29,7 +31,7 @@ export function validateDoor(raw: unknown, house: HouseConfig): FeatureValidatio
   return { value: { wall: wall.value, level, offset, width, height }, errors: [], warnings };
 }
 
-export function buildDoor(config: DoorConfig, house: HouseConfig, materials: MaterialsConfig, index: number, opts?: ResolvedExteriorOptions): HousePrimitive[] {
+export function buildDoor(config: DoorConfig, house: HouseConfig, materials: MaterialsConfig, index: number, opts?: ResolvedExteriorOptions, recess = 0): HousePrimitive[] {
   const anchor = getWallAnchor(house, config.wall, config.level);
   const base = pointOnWall(anchor, config.offset + config.width / 2);
   const center: Vec3 = [base[0], anchor.origin[1] + config.height / 2, base[2]];
@@ -153,6 +155,32 @@ export function buildDoor(config: DoorConfig, house: HouseConfig, materials: Mat
       color: trim.color,
       roughness: trim.roughness,
       metalness: trim.metalness,
+    });
+  }
+
+  primitives.push(
+    ...buildReveal(
+      idPrefix, "door", label, anchor, config.wall,
+      { center: config.offset + config.width / 2, width: config.width, bottomY: anchor.origin[1], height: config.height },
+      FRAME_THICKNESS + DOOR_PANEL_THICKNESS, recess, paintOf(trim), false
+    )
+  );
+
+  // A proper threshold step at ground-floor doors once the design invests in detail.
+  if (recess >= 0.1 && config.level === 0) {
+    const stepDepth = 0.5;
+    const stepBase = pointOnWall(anchor, config.offset + config.width / 2);
+    primitives.push({
+      kind: "box",
+      id: `${idPrefix}-threshold`,
+      category: "door",
+      label: `${label} Threshold`,
+      position: offsetOutward([stepBase[0], anchor.origin[1] / 2, stepBase[2]], anchor, stepDepth / 2),
+      rotation: [0, 0, 0],
+      size: wallMountedSize(config.wall, config.width + 0.5, anchor.origin[1], stepDepth),
+      color: trim.color,
+      roughness: 0.85,
+      metalness: 0,
     });
   }
 

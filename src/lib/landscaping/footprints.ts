@@ -2,6 +2,10 @@ import type { SiteConfig } from "@/types/house";
 import { getWallAnchor, offsetOutward, pointOnWall } from "@/lib/house/wallAnchor";
 import { getPoolDeckFootprint } from "@/lib/house/features/pools";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
+import { arcPoints, arcSegments, polylineLength, type P2 } from "@/lib/house/geometry/mesh";
+import { pathCurve } from "@/lib/house/features/paths";
+import { retainingWallCurve } from "@/lib/house/features/retainingWalls";
+import { waterwayCurve } from "@/lib/house/features/waterways";
 
 export interface Footprint {
   cx: number;
@@ -91,7 +95,34 @@ export function collectOccupiedFootprints(site: SiteConfig): Footprint[] {
     footprints.push({ cx, cz, halfW: len / 2 + r.width / 2 + CLEARANCE, halfD: r.width / 2 + CLEARANCE });
   }
 
-  return footprints;
+  return [...footprints, ...shapedFootprints(site)];
+}
+
+/** Square footprints laid along a curve, `half` metres either side, so ambient trees keep clear of it. */
+function alongCurve(points: readonly P2[], half: number): Footprint[] {
+  const step = Math.max(1.5, half);
+  const count = Math.max(1, Math.ceil(polylineLength(points) / step));
+  const out: Footprint[] = [];
+  for (let i = 0; i <= count; i++) {
+    const p = points[Math.min(points.length - 1, Math.round((i / count) * (points.length - 1)))];
+    out.push({ cx: p[0], cz: p[1], halfW: half, halfD: half });
+  }
+  return out;
+}
+
+/** Footprints of the site features that are not rectangles, so scenery avoids rivers, paths, walls and rocks. */
+function shapedFootprints(site: SiteConfig): Footprint[] {
+  const out: Footprint[] = [];
+  site.waterways?.forEach((w, i) => out.push(...alongCurve(waterwayCurve(w, i), w.width / 2 + 2.5 + CLEARANCE)));
+  site.paths?.forEach((p) => out.push(...alongCurve(pathCurve(p), p.width / 2 + CLEARANCE)));
+  site.retainingWalls?.forEach((w) => out.push(...alongCurve(retainingWallCurve(w), w.thickness / 2 + CLEARANCE + 0.5)));
+  site.curvedWalls?.forEach((w) => out.push(...alongCurve(arcPoints(w.x, w.z, w.radius, w.startAngle, w.sweep, arcSegments(w.sweep, 10)), w.thickness / 2 + CLEARANCE)));
+  site.rocks?.forEach((r) => out.push({ cx: r.x, cz: r.z, halfW: r.radius + r.size / 2 + CLEARANCE, halfD: r.radius + r.size / 2 + CLEARANCE }));
+  site.slopes?.forEach((s) => {
+    const half = Math.max(s.width, s.depth) / 2;
+    out.push({ cx: s.x, cz: s.z, halfW: half, halfD: half });
+  });
+  return out;
 }
 
 export function isInsideAnyFootprint(x: number, z: number, footprints: Footprint[]): boolean {

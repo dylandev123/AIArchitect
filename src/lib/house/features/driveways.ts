@@ -3,7 +3,8 @@ import type { Vec3 } from "../geometryUtils";
 import type { HousePrimitive } from "../types";
 import { DRIVEWAY_LIMITS, MATERIAL_COLORS, PAVING_THICKNESS, SITE_OFFSET_LIMIT } from "../constants";
 import { getWallAnchor, offsetOutward, pointOnWall } from "../wallAnchor";
-import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { clampNumber, readNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { bowedCurve, extrudeBand, offsetPolyline, samplesFor, triMeshOf, type P2 } from "../geometry/mesh";
 import type { ResolvedExteriorOptions } from "../catalog/types";
 
 export function validateDriveway(raw: unknown): FeatureValidation<DrivewayConfig> {
@@ -22,7 +23,10 @@ export function validateDriveway(raw: unknown): FeatureValidation<DrivewayConfig
   const length = clampNumber(values.length, DRIVEWAY_LIMITS.length.min, DRIVEWAY_LIMITS.length.max, "length", warnings);
   const offset = clampNumber(values.offset, SITE_OFFSET_LIMIT.min, SITE_OFFSET_LIMIT.max, "offset", warnings);
 
-  return { value: { wall: wall.value, offset, width, length }, errors: [], warnings };
+  const value: DrivewayConfig = { wall: wall.value, offset, width, length };
+  // Only written when given, so a straight driveway's JSON stays exactly as it was.
+  if (o.bend !== undefined) value.bend = readNumber(o, "bend", 0, -30, 30, warnings);
+  return { value, errors: [], warnings };
 }
 
 export function buildDriveway(
@@ -43,6 +47,20 @@ export function buildDriveway(
   const assetOverride = opts?.drivewayAssetId
     ? { assetId: opts.drivewayAssetId, uvScale: opts.drivewayUvScale ?? 1 }
     : {};
+
+  if (config.bend) {
+    // A curved driveway: a paved band bowed sideways between the wall and its far end.
+    const start: P2 = [ground[0], ground[2]];
+    const end: P2 = [ground[0] + anchor.outwardNormal[0] * config.length, ground[2] + anchor.outwardNormal[2] * config.length];
+    const centre = bowedCurve(start, end, config.bend, samplesFor(config.length, 1.5, 6, 60));
+    return [
+      triMeshOf(`driveway-${index}-slab`, "driveway", `Driveway ${index + 1}`, extrudeBand(offsetPolyline(centre, config.width / 2), offsetPolyline(centre, -config.width / 2), 0, PAVING_THICKNESS), {
+        color: MATERIAL_COLORS.driveway,
+        roughness: 0.92,
+        metalness: 0,
+      }),
+    ];
+  }
 
   return [
     {

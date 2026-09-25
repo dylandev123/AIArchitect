@@ -14,6 +14,19 @@ import { validateRoad } from "./roads";
 import { validateParking } from "./parking";
 import { validateLandscapeZone } from "./landscapeZones";
 import { validateDeck } from "./decks";
+import { validatePorch } from "./porches";
+import { validateChimney } from "./chimneys";
+import { validateCurvedWall } from "./curvedWalls";
+import { validateArch } from "./arches";
+import { validateBay } from "./bays";
+import { validateFoundation } from "./foundations";
+import { validateStairs } from "./stairs";
+import { validateCrossGable, validateDormer } from "./roofParts";
+import { validateRetainingWall } from "./retainingWalls";
+import { validatePath } from "./paths";
+import { validateWaterway } from "./waterways";
+import { validateRockCluster } from "./rocks";
+import { validateSlope } from "./slopes";
 
 export type FeatureRecord = Record<string, unknown>;
 
@@ -42,4 +55,18 @@ export const FEATURE_MODULES: Record<FeatureType, FeatureModule> = {
   parking: { validate: validateParking as unknown as FeatureModule["validate"] },
   landscape: { validate: validateLandscapeZone as unknown as FeatureModule["validate"] },
   deck: { validate: validateDeck as unknown as FeatureModule["validate"] },
+  porch: { validate: validatePorch as unknown as FeatureModule["validate"] },
+  chimney: { validate: validateChimney as unknown as FeatureModule["validate"] },
+  curvedWall: { validate: validateCurvedWall as unknown as FeatureModule["validate"] },
+  arch: { validate: validateArch as unknown as FeatureModule["validate"] },
+  bay: { validate: validateBay as unknown as FeatureModule["validate"] },
+  foundation: { validate: validateFoundation as unknown as FeatureModule["validate"] },
+  stairs: { validate: validateStairs as unknown as FeatureModule["validate"] },
+  dormer: { validate: validateDormer as unknown as FeatureModule["validate"] },
+  crossGable: { validate: validateCrossGable as unknown as FeatureModule["validate"] },
+  retainingWall: { validate: validateRetainingWall as unknown as FeatureModule["validate"] },
+  path: { validate: validatePath as unknown as FeatureModule["validate"] },
+  waterway: { validate: validateWaterway as unknown as FeatureModule["validate"] },
+  rockCluster: { validate: validateRockCluster as unknown as FeatureModule["validate"] },
+  slope: { validate: validateSlope as unknown as FeatureModule["validate"] },
 };

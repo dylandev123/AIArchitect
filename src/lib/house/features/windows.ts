@@ -6,6 +6,10 @@ import { getWallAnchor, offsetOutward, pointOnWall, wallMountedSize } from "../w
 import { resolveMaterial } from "../materials";
 import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
 import type { ResolvedExteriorOptions } from "../catalog/types";
+import { getArchitectureProfile } from "../architecture/profiles";
+import { buildWindowDecor } from "../architecture/windowDecor";
+import { paintOf } from "../architecture/parts";
+import { buildReveal } from "../architecture/reveal";
 
 export function validateWindow(raw: unknown, house: HouseConfig): FeatureValidation<WindowConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -30,7 +34,7 @@ export function validateWindow(raw: unknown, house: HouseConfig): FeatureValidat
   return { value: { wall: wall.value, level, offset, width, height, sill }, errors: [], warnings };
 }
 
-export function buildWindow(config: WindowConfig, house: HouseConfig, materials: MaterialsConfig, index: number, opts?: ResolvedExteriorOptions): HousePrimitive[] {
+export function buildWindow(config: WindowConfig, house: HouseConfig, materials: MaterialsConfig, index: number, opts?: ResolvedExteriorOptions, recess = 0): HousePrimitive[] {
   const anchor = getWallAnchor(house, config.wall, config.level);
   const base = pointOnWall(anchor, config.offset + config.width / 2);
   const center: Vec3 = [base[0], anchor.origin[1] + config.sill + config.height / 2, base[2]];
@@ -150,6 +154,19 @@ export function buildWindow(config: WindowConfig, house: HouseConfig, materials:
       roughness: trim.roughness,
       metalness: trim.metalness,
     });
+  }
+
+  const profile = getArchitectureProfile(opts?.style);
+  if (profile) primitives.push(...buildWindowDecor(profile.windows.decor, config, house, index, paintOf(trim)));
+  // Styles with their own surrounds (timber, shutters) keep them; otherwise the tier's reveal recesses the glass.
+  if (!profile || profile.windows.decor === "none") {
+    primitives.push(
+      ...buildReveal(
+        `${idPrefix}`, "window", label, anchor, config.wall,
+        { center: config.offset + config.width / 2, width: config.width, bottomY: anchor.origin[1] + config.sill, height: config.height },
+        FRAME_THICKNESS + GLASS_THICKNESS, recess, paintOf(trim), true
+      )
+    );
   }
 
   return primitives;

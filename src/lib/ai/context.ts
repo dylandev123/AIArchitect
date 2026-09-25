@@ -30,6 +30,20 @@ const DEPENDENCIES: Record<FeatureType, Dependency[]> = {
   parking: [{ type: "road", rel: "near" }, { type: "building", rel: "near" }],
   landscape: [{ type: "building", rel: "near" }, { type: "pool", rel: "near" }],
   deck: [{ type: "building", rel: "near" }, { type: "pool", rel: "near" }, { type: "patio", rel: "wall" }],
+  porch: [{ type: "door", rel: "wall" }, { type: "window", rel: "wall" }, { type: "patio", rel: "wall" }, { type: "chimney", rel: "wall" }],
+  chimney: [{ type: "porch", rel: "wall" }, { type: "window", rel: "wall" }, { type: "door", rel: "wall" }],
+  curvedWall: [{ type: "building", rel: "near" }, { type: "landscape", rel: "near" }, { type: "pool", rel: "near" }],
+  arch: [{ type: "window", rel: "wall" }, { type: "door", rel: "wall" }, { type: "porch", rel: "wall" }, { type: "bay", rel: "wall" }],
+  bay: [{ type: "window", rel: "wall" }, { type: "door", rel: "wall" }, { type: "arch", rel: "wall" }, { type: "porch", rel: "wall" }],
+  foundation: [{ type: "door", rel: "wall" }, { type: "stairs", rel: "wall" }],
+  stairs: [{ type: "door", rel: "wall" }, { type: "porch", rel: "wall" }, { type: "foundation", rel: "wall" }],
+  dormer: [{ type: "crossGable", rel: "wall" }, { type: "chimney", rel: "wall" }],
+  crossGable: [{ type: "dormer", rel: "wall" }, { type: "chimney", rel: "wall" }],
+  retainingWall: [{ type: "path", rel: "near" }, { type: "building", rel: "near" }, { type: "slope", rel: "near" }],
+  path: [{ type: "door", rel: "wall" }, { type: "road", rel: "near" }, { type: "waterway", rel: "near" }, { type: "landscape", rel: "near" }],
+  waterway: [{ type: "path", rel: "near" }, { type: "building", rel: "near" }, { type: "rockCluster", rel: "near" }],
+  rockCluster: [{ type: "waterway", rel: "near" }, { type: "path", rel: "near" }],
+  slope: [{ type: "retainingWall", rel: "near" }, { type: "building", rel: "near" }, { type: "path", rel: "near" }],
 };
 
 const NEAR_RADIUS_M = 30;
@@ -109,7 +123,7 @@ function selectDependencies(
 }
 
 /** Feature types whose placement depends on the view/approach sides, so they see `site` read-only. */
-const SITE_AWARE_TYPES: FeatureType[] = ["patio", "pool", "deck", "balcony", "driveway", "garage", "door", "parking", "road", "landscape", "building"];
+const SITE_AWARE_TYPES: FeatureType[] = ["patio", "pool", "deck", "balcony", "driveway", "garage", "door", "parking", "road", "landscape", "building", "path", "waterway", "rockCluster", "slope", "retainingWall", "curvedWall", "stairs"];
 
 /**
  * Builds the smallest model-visible view of the project that can support the scoped edit:

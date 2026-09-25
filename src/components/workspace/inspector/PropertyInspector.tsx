@@ -16,7 +16,7 @@ import type { BuildingKind, LandscapeKind, RoofType, RoomType, WallSide } from "
 const WALL_OPTIONS: WallSide[] = ["north", "south", "east", "west"];
 const ROOM_TYPE_OPTIONS: RoomType[] = ["kitchen", "living", "bedroom", "bathroom", "hallway"];
 const BUILDING_KIND_OPTIONS: BuildingKind[] = ["villa", "restaurant", "reception"];
-const LANDSCAPE_KIND_OPTIONS: LandscapeKind[] = ["garden", "lawn"];
+const LANDSCAPE_KIND_OPTIONS: LandscapeKind[] = ["garden", "lawn", "clearing"];
 const ROOF_TYPE_OPTIONS: RoofType[] = ["flat", "gable", "hip"];
 
 function capitalize(s: string): string {
@@ -164,13 +164,14 @@ function FeatureInspector({
       </div>
 
       {FEATURE_FIELDS[type].map((field) => {
-        const options = SELECT_OPTIONS[field.type];
+        const options = field.type === "select" ? field.options?.map((o) => ({ value: o, label: capitalize(o) })) : SELECT_OPTIONS[field.type];
+        const current = value[field.key] ?? field.fallback;
         return (
           <div key={field.key}>
             <label className="mb-1 block text-xs font-medium text-neutral-500">{field.label}</label>
             {options ? (
               <select
-                value={String(value[field.key])}
+                value={String(current ?? "")}
                 onChange={(e) => handleChange(field.key, e.target.value)}
                 className="w-full rounded-md border border-white/10 bg-neutral-800/60 px-2.5 py-1.5 text-sm text-neutral-200 outline-none focus:border-amber-500/50"
               >
@@ -184,7 +185,7 @@ function FeatureInspector({
               <input
                 type="number"
                 step={field.step ?? 0.1}
-                value={Number(value[field.key])}
+                value={Number(current ?? 0)}
                 onChange={(e) => handleChange(field.key, e.target.valueAsNumber)}
                 className="w-full rounded-md border border-white/10 bg-neutral-800/60 px-2.5 py-1.5 text-sm text-neutral-200 outline-none focus:border-amber-500/50"
               />

@@ -5,7 +5,7 @@ export const WALL_FINISHES: Record<WallFinishKey, WallFinishEntry> = {
   "smooth-stucco": {
     key: "smooth-stucco", label: "Smooth Stucco", description: "Fine-ground plaster, flat surface.",
     materialType: "stucco", defaultColor: "#f0ece4", roughness: 0.72, metalness: 0,
-    compatibleStyles: ["mediterranean", "modern-minimalist", "colonial", "tropical"],
+    compatibleStyles: ["mediterranean", "modern-minimalist", "colonial", "tropical", "modern-luxury", "caribbean-villa"],
   },
   "rough-stucco": {
     key: "rough-stucco", label: "Rough Stucco", description: "Textured lime render, handmade look.",
@@ -16,13 +16,13 @@ export const WALL_FINISHES: Record<WallFinishKey, WallFinishEntry> = {
   "board-batten": {
     key: "board-batten", label: "Board & Batten", description: "Vertical wood boards with narrow cover strips.",
     materialType: "timber", defaultColor: "#7a5032", roughness: 0.82, metalness: 0,
-    compatibleStyles: ["craftsman", "nordic", "mid-century"],
+    compatibleStyles: ["craftsman", "nordic", "mid-century", "cabin"],
     cladding: { kind: "vertical-strips", spacing: 0.52, projection: 0.022, elementSize: 0.06 },
   },
   "horizontal-lap": {
     key: "horizontal-lap", label: "Horizontal Lap", description: "Overlapping horizontal planks, classic clapboard.",
     materialType: "cedar", defaultColor: "#8a6040", roughness: 0.80, metalness: 0,
-    compatibleStyles: ["craftsman", "colonial", "mid-century"],
+    compatibleStyles: ["craftsman", "colonial", "mid-century", "cabin"],
     cladding: { kind: "horizontal-bands", spacing: 0.22, projection: 0.018, elementSize: 0.05 },
   },
   "brick": {
@@ -33,12 +33,12 @@ export const WALL_FINISHES: Record<WallFinishKey, WallFinishEntry> = {
   "stone-veneer": {
     key: "stone-veneer", label: "Stone Veneer", description: "Cut-stone cladding panels, natural texture.",
     materialType: "stone", defaultColor: "#8c8478", roughness: 0.86, metalness: 0,
-    compatibleStyles: ["mediterranean", "colonial", "craftsman"],
+    compatibleStyles: ["mediterranean", "colonial", "craftsman", "cabin", "modern-luxury"],
   },
   "cedar-shingle": {
     key: "cedar-shingle", label: "Cedar Shingle", description: "Staggered wood shingles, coastal cottage look.",
     materialType: "cedar", defaultColor: "#9a6848", roughness: 0.84, metalness: 0,
-    compatibleStyles: ["craftsman", "nordic", "tropical"],
+    compatibleStyles: ["craftsman", "nordic", "tropical", "cabin"],
     cladding: { kind: "horizontal-bands", spacing: 0.18, projection: 0.016, elementSize: 0.04 },
   },
   "corrugated-metal": {

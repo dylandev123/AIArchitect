@@ -2,6 +2,7 @@ import { quad, tri, type Vec3 } from "../geometryUtils";
 import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG } from "../constants";
 import type { ResolvedMaterial } from "../materials";
+import type { RoofShape } from "../architecture/profiles";
 
 /**
  * Ridge runs along the longer footprint axis; the roof slopes down across
@@ -15,14 +16,16 @@ export function buildGableRoof(
   baseY: number,
   idPrefix: string,
   roofMaterial: ResolvedMaterial,
-  exteriorMaterial: ResolvedMaterial
+  exteriorMaterial: ResolvedMaterial,
+  shape?: Partial<RoofShape>
 ): HousePrimitive[] {
   const ridgeAlongX = width >= depth;
   const span = ridgeAlongX ? depth : width;
-  const roofHeight = Math.max(0.6, span * 0.35);
+  const roofHeight = Math.max(0.6, span * (shape?.pitch ?? 0.35));
   const ridgeY = baseY + roofHeight;
-  const halfRidgeLen = (ridgeAlongX ? width : depth) / 2 + ROOF_OVERHANG;
-  const halfSpan = span / 2 + ROOF_OVERHANG;
+  const eave = shape?.overhang ?? ROOF_OVERHANG;
+  const halfRidgeLen = (ridgeAlongX ? width : depth) / 2 + (shape?.rakeOverhang ?? eave);
+  const halfSpan = span / 2 + eave;
   const roofColor = roofMaterial.color;
   const wallColor = exteriorMaterial.color;
   const primitives: HousePrimitive[] = [];

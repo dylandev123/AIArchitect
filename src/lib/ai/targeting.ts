@@ -126,25 +126,42 @@ const RULES: Rule[] = [
     surface: { featureTypes: ["building", "road", "parking", "landscape", "pool"] } },
 
   // ── components: exactly one thing ──
-  { level: "component", label: "Garage", pattern: /\b(garages?|carports?|car\s+ports?)\b/i, surface: { featureType: "garage", featureTypes: ["garage"] } },
+  { level: "component", label: "Garage", pattern: /\b((?<!detached\s)garages?|carports?|car\s+ports?)\b/i, surface: { featureType: "garage", featureTypes: ["garage"] } },
   { level: "component", label: "Windows", pattern: /\b(windows?|glazing|fenestration)\b/i, surface: { featureType: "window", featureTypes: ["window"] } },
   { level: "component", label: "Doors", pattern: /\b(doors?|entrance|entryway)\b/i, surface: { featureType: "door", featureTypes: ["door"] } },
   { level: "component", label: "Pool", pattern: /\b(pools?|swimming\s+pool|infinity\s+pool)\b/i, surface: { featureType: "pool", featureTypes: ["pool"] } },
   { level: "component", label: "Patio", pattern: /\b(patios?|(?<!rooftop\s)(?<!roof\s)terraces?)\b/i, surface: { featureType: "patio", featureTypes: ["patio"] } },
   { level: "component", label: "Balcony", pattern: /\b(balcon(y|ies))\b/i, surface: { featureType: "balcony", featureTypes: ["balcony"] } },
   { level: "component", label: "Deck", pattern: /\b(decks?|rooftop|roof\s+(terrace|deck))\b/i, surface: { featureType: "deck", featureTypes: ["deck"] } },
+  { level: "component", label: "Porch", pattern: /\b(porch(es)?|veranda[hs]?|verandahs?|stoop|entry\s+canopy)\b/i, surface: { featureType: "porch", featureTypes: ["porch"] } },
+  { level: "component", label: "Chimney", pattern: /\b(chimneys?|fireplace\s+stack)\b/i, surface: { featureType: "chimney", featureTypes: ["chimney"] } },
+  { level: "component", label: "Arch", pattern: /\b(arch(?:es|ed|way|ways)?|arcades?|colonnades?|loggias?)\b/i, surface: { featureType: "arch", featureTypes: ["arch"] } },
+  { level: "component", label: "Bay / Turret", pattern: /\b(bay\s+windows?|bays?|turrets?|towers?|oriels?)\b/i, surface: { featureType: "bay", featureTypes: ["bay"] } },
+  { level: "component", label: "Foundation", pattern: /\b(foundations?|plinths?|stepped\s+base)\b/i, surface: { featureType: "foundation", featureTypes: ["foundation"] } },
+  { level: "component", label: "Stairs", pattern: /\b(stairs?|staircases?|stairways?|steps)\b/i, surface: { featureType: "stairs", featureTypes: ["stairs"] } },
+  { level: "component", label: "Dormer", pattern: /\bdormers?\b/i, surface: { featureType: "dormer", featureTypes: ["dormer"] } },
+  { level: "component", label: "Cross Gable", pattern: /\bcross[\s-]gables?\b/i, surface: { featureType: "crossGable", featureTypes: ["crossGable"] } },
+  { level: "component", label: "Curved Wall", pattern: /\b(curved|round|circular|arc(?:ed)?)\s+(garden\s+)?walls?\b|\bgarden\s+walls?\b/i, surface: { featureType: "curvedWall", featureTypes: ["curvedWall"] } },
+  { level: "component", label: "Retaining Wall", pattern: /\bretaining\s+walls?\b/i, surface: { featureType: "retainingWall", featureTypes: ["retainingWall"] } },
+  { level: "component", label: "Path", pattern: /\b(paths?|pathways?|walkways?|footpaths?|boardwalks?|stepping\s+stones)\b/i, surface: { featureType: "path", featureTypes: ["path"] } },
+  { level: "component", label: "River / Stream", pattern: /\b(rivers?|streams?|creeks?|brooks?|waterways?|watercourses?)\b/i, surface: { featureType: "waterway", featureTypes: ["waterway"] } },
+  { level: "component", label: "Rocks", pattern: /\b(rocks?|boulders?|outcrops?)\b/i, surface: { featureType: "rockCluster", featureTypes: ["rockCluster"] } },
+  { level: "component", label: "Slope", pattern: /\b(mounds?|berms?|hillocks?|embankments?|grading|earthworks?|ramps?)\b/i, surface: { featureType: "slope", featureTypes: ["slope"] } },
   { level: "component", label: "Driveway", pattern: /\bdriveways?\b/i, surface: { featureType: "driveway", featureTypes: ["driveway"] } },
   { level: "component", label: "Rooms", pattern: /\b(bedrooms?|bathrooms?|kitchens?|living\s+rooms?|dining|offices?|hallways?|laundry|gym|rooms?)\b/i,
     surface: { featureType: "room", featureTypes: ["room"] } },
-  { level: "component", label: "Landscaping", pattern: /\b(gardens?|lawns?|landscap\w*|trees?|plants?|shrubs?)\b/i, surface: { featureType: "landscape", featureTypes: ["landscape"] } },
-  { level: "component", label: "Buildings", pattern: /\b(villas?|resort|hotel|restaurants?|reception|gazebos?|bar)\b/i, surface: { featureType: "building", featureTypes: ["building"] } },
-  { level: "component", label: "Roads", pattern: /\b(roads?|streets?|paths?)\b/i, surface: { featureType: "road", featureTypes: ["road"] } },
+  { level: "component", label: "Landscaping", pattern: /\b(gardens?|lawns?|landscap\w*|trees?|plants?|shrubs?|clearings?|meadows?)\b/i, surface: { featureType: "landscape", featureTypes: ["landscape"] } },
+  { level: "component", label: "Buildings", pattern: /\b(villas?|resort|hotel|restaurants?|reception|gazebos?|bar|sheds?(?!\s+roofs?)|workshops?|outbuildings?|detached\s+garages?)\b/i, surface: { featureType: "building", featureTypes: ["building"] } },
+  { level: "component", label: "Roads", pattern: /\b(roads?|streets?)\b/i, surface: { featureType: "road", featureTypes: ["road"] } },
   { level: "component", label: "Parking", pattern: /\b(parking|car\s+park)\b/i, surface: { featureType: "parking", featureTypes: ["parking"] } },
+  { level: "component", label: "Design tier", kind: "site",
+    pattern: /\b(design\s+tier|(?:starter|budget|comfort|luxury|estate)\s+(?:tier|level|grade)|(?:make|turn)\s+(?:it|this)\s+(?:more\s+|a\s+)?(?:luxur\w+|upscale|estate|grand|basic|starter|simpler))\b/i,
+    surface: { site: true } },
   { level: "component", label: "Site setting", kind: "site",
     pattern: /\b(beach|seaside|oceanfront|cliff|hillside|countryside|farmland|forest|woodland|suburb\w*|urban|city|slope[ds]?|steep|terrain|view\s+direction|sunrise|sunset|(?:facing|faces|view\s+(?:to|toward|towards))\s+(?:the\s+)?(?:north|east|south|west|sunrise|sunset|ocean|sea)|entrance\s+(?:from|on)|approach\s+(?:from|side))\b/i,
     surface: { site: true } },
   { level: "component", label: "Roof", kind: "house",
-    pattern: /\b(roof(ing|line)?|ridge|gable|hip(ped)?|mansard|sawtooth|butterfly|shed\s+roof|flat\s+roof)\b/i,
+    pattern: /\b(roof(ing|line)?|ridge|(?<!cross[\s-])gable|hip(ped)?|mansard|sawtooth|butterfly|shed\s+roof|flat\s+roof)\b/i,
     surface: { houseFields: ["roof"], materialZones: ["roof"] } },
   { level: "component", label: "Exterior style", kind: "materials",
     pattern: /\b(style|cladding|wall\s+finish|window\s+style|door\s+style|railings?|columns?|pilasters?|pavers?|surface)\b/i,
@@ -178,12 +195,13 @@ const ROOM_WORDS: [RegExp, RoomType][] = [
 ];
 const BUILDING_WORDS: [RegExp, BuildingKind][] = [
   [/\bvillas?\b/i, "villa"], [/\brestaurants?\b/i, "restaurant"], [/\breception\b/i, "reception"], [/\bgazebos?\b/i, "gazebo"], [/\bbar\b/i, "outdoor_bar"],
+  [/\bsheds?\b/i, "shed"], [/\bdetached\s+garages?\b/i, "detached_garage"],
 ];
 const ORDINAL_WORDS: Record<string, number> = {
   first: 0, second: 1, third: 2, fourth: 3, fifth: 4, sixth: 5, seventh: 6, eighth: 7, ninth: 8, tenth: 9,
 };
 const TARGET_NOUN =
-  "villa|window|door|garage|balcon(?:y|ie)|patio|pool|driveway|room|bedroom|bathroom|kitchen|building|road|parking|deck|restaurant|gazebo|garden|lawn";
+  "villa|window|door|garage|balcon(?:y|ie)|patio|pool|driveway|room|bedroom|bathroom|kitchen|building|road|parking|deck|restaurant|gazebo|garden|lawn|porch|chimney|shed|arch|bay|turret|stairs|dormer|path|river|stream|rocks";
 
 /** "villa 12", "bedroom #2", "the third window" → 0-based ordinals. Floor/level phrases are ignored. */
 function parseOrdinals(prompt: string): number[] {
@@ -206,7 +224,7 @@ export function mentionedRoomTypes(prompt: string): RoomType[] {
 
 function deriveFilter(prompt: string, featureTypes: readonly FeatureType[], base?: TargetFilter): TargetFilter | undefined {
   const filter: TargetFilter = { ...base };
-  const wallMounted = featureTypes.some((t) => ["window", "door", "garage", "balcony", "patio", "pool", "driveway"].includes(t));
+  const wallMounted = featureTypes.some((t) => ["window", "door", "garage", "balcony", "patio", "pool", "driveway", "porch", "chimney", "arch", "bay", "stairs", "dormer", "crossGable"].includes(t));
   if (wallMounted && !filter.walls) {
     const walls = WALL_WORDS.filter(([re]) => re.test(prompt)).map(([, w]) => w);
     if (walls.length > 0 && walls.length < 4) filter.walls = walls;

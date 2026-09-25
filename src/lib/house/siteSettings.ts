@@ -1,4 +1,5 @@
-import type { CompassSide, SiteEnvironment, SiteSettings, TerrainSlope } from "@/types/house";
+import type { CompassSide, DesignTier, SiteEnvironment, SiteSettings, TerrainSlope } from "@/types/house";
+import { DEFAULT_DESIGN_TIER, isDesignTier } from "./tiers";
 
 export const SITE_ENVIRONMENTS: [SiteEnvironment, ...SiteEnvironment[]] = [
   "countryside", "beach", "cliff", "hillside", "farm", "forest", "suburban", "urban",
@@ -45,15 +46,26 @@ export function parseSiteSettings(raw: unknown, warnings: string[]): SiteSetting
   };
   const d = DEFAULT_SITE_SETTINGS;
   const viewDirection = pick("viewDirection", COMPASS_SIDES, d.viewDirection);
-  return {
+  const settings: SiteSettings = {
     environment: pick("environment", SITE_ENVIRONMENTS, d.environment),
     viewDirection,
     terrainSlope: pick("terrainSlope", TERRAIN_SLOPES, d.terrainSlope),
     approachSide: pick("approachSide", COMPASS_SIDES, oppositeSide(viewDirection)),
   };
+  // The tier postdates the other fields, so its absence is normal (it means "comfort") and never warns.
+  if (isDesignTier(r.designTier)) settings.designTier = r.designTier;
+  else if (r.designTier !== undefined) warnings.push(`site.designTier: unknown value ${JSON.stringify(r.designTier)} — using "${DEFAULT_DESIGN_TIER}".`);
+  return settings;
 }
 
 // ── Brief → site hints ──────────────────────────────────────────────────────
+
+/** Words in a brief that state how elaborate the project should be; the most elaborate reading wins. */
+const TIER_WORDS: [RegExp, DesignTier][] = [
+  [/\b(estate|manor|mansion|palatial|palace|ch[aâ]teau|castle|grand\s+(?:house|home|villa)|opulent|ultra[-\s]?luxur\w*)\b/i, "estate"],
+  [/\b(luxur\w*|high[-\s]end|upscale|premium|bespoke|lavish|prestigious|designer\s+(?:home|house|villa))\b/i, "luxury"],
+  [/\b(starter\s+(?:home|house)|budget|affordable|low[-\s]cost|entry[-\s]level|no[-\s]frills|modest|first[-\s]time\s+buyer|bare[-\s]bones)\b/i, "starter"],
+];
 
 export interface SiteHints extends Partial<SiteSettings> {
   timeOfDay?: "morning" | "sunset";
@@ -95,6 +107,10 @@ export function inferSiteHints(brief: string): SiteHints {
   if (/\b(sunrise|dawn)\b/i.test(brief)) hints.timeOfDay = "morning";
   else if (/\b(sunset|dusk|golden\s+hour)\b/i.test(brief)) hints.timeOfDay = "sunset";
 
+  for (const [pattern, tier] of TIER_WORDS) {
+    if (pattern.test(brief)) { hints.designTier = tier; break; }
+  }
+
   if (/\b(steep|precipitous|sheer|dramatic\s+slope)\b/i.test(brief)) hints.terrainSlope = "steep";
   else if (/\b(gentle(?:ly)?\s+slop\w*|gentle\s+hill|slight\s+slope)\b/i.test(brief)) hints.terrainSlope = "gentle";
   else if (/\b(flat|level)\s+(site|land|lot|ground|terrain|plot)\b/i.test(brief)) hints.terrainSlope = "flat";
@@ -123,5 +139,6 @@ export function resolveSiteSettings(model: Partial<SiteSettings> | undefined, hi
   if (approachSide === viewDirection && (hints.approachSide === undefined || hints.viewDirection === undefined)) {
     approachSide = oppositeSide(viewDirection);
   }
-  return { environment, viewDirection, terrainSlope, approachSide };
+  const designTier = hints.designTier ?? (isDesignTier(model?.designTier) ? model.designTier : DEFAULT_DESIGN_TIER);
+  return { environment, viewDirection, terrainSlope, approachSide, designTier };
 }

@@ -14,7 +14,19 @@ export type PrimitiveCategory =
   | "road"
   | "parking"
   | "landscape"
-  | "deck";
+  | "deck"
+  | "porch"
+  | "chimney"
+  | "curvedWall"
+  | "arch"
+  | "bay"
+  | "foundation"
+  | "stairs"
+  | "retainingWall"
+  | "path"
+  | "waterway"
+  | "rock"
+  | "slope";
 
 /** Optional PBR overrides; primitives omitting these render with renderer defaults. */
 interface MaterialFields {
@@ -37,6 +49,8 @@ export interface BoxPrimitive extends MaterialFields {
   rotation: [number, number, number];
   size: [number, number, number];
   color: string;
+  /** Radius (m) of the rounded edge on every exposed edge. Absent or 0 = a sharp box. */
+  bevel?: number;
 }
 
 export interface TriMeshPrimitive extends MaterialFields {

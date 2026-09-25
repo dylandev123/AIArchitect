@@ -161,4 +161,64 @@ export const STYLE_PRESETS: Record<StyleKey, StylePreset> = {
       decking:  { material: "timber", color: "#b8904a" },
     },
   },
+
+  "cabin": {
+    key: "cabin", label: "Cabin / Woodland", description: "Notched log walls, steep deep-eaved gable, stone chimney and base, covered timber porch.",
+    roofType: "gable",
+    defaults: {
+      wallFinish:   "horizontal-lap",
+      windowStyle:  "double-hung",
+      doorStyle:    "paneled",
+      railingStyle: "timber",
+      columnStyle:  "craftsman-post",
+      patioSurface: "brick-paver",
+      poolTile:     "pebble",
+    },
+    materials: {
+      exterior: { material: "timber", color: "#8a5a30" },
+      roof:     { material: "cedar",  color: "#5a4230" },
+      trim:     { material: "timber", color: "#4a3018" },
+      decking:  { material: "timber", color: "#9a6c3c" },
+    },
+  },
+
+  "modern-luxury": {
+    key: "modern-luxury", label: "Modern Luxury", description: "Stacked cantilevered slabs, floating flat roof, blade wall, floor-to-ceiling glass and slim steel.",
+    roofType: "flat",
+    defaults: {
+      wallFinish:   "smooth-stucco",
+      windowStyle:  "picture",
+      doorStyle:    "pivot",
+      railingStyle: "glass-panel",
+      columnStyle:  "steel-section",
+      patioSurface: "travertine",
+      poolTile:     "mosaic-tile",
+    },
+    materials: {
+      exterior: { material: "render",   color: "#ebe8e2" },
+      roof:     { material: "concrete", color: "#6a6c70" },
+      trim:     { material: "metal",    color: "#1c1f24" },
+      decking:  { material: "timber",   color: "#8a6a48" },
+    },
+  },
+
+  "caribbean-villa": {
+    key: "caribbean-villa", label: "Caribbean Villa", description: "Raised plinth, deep-eaved hip roof, wraparound columned veranda, louvered shutters and cupola.",
+    roofType: "hip",
+    defaults: {
+      wallFinish:   "smooth-stucco",
+      windowStyle:  "louvered",
+      doorStyle:    "double",
+      railingStyle: "picket",
+      columnStyle:  "square-pilaster",
+      patioSurface: "terracotta",
+      poolTile:     "mosaic-tile",
+    },
+    materials: {
+      exterior: { material: "stucco", color: "#f3e3b5" },
+      roof:     { material: "metal",  color: "#b4483a" },
+      trim:     { material: "wood",   color: "#fbf8f0" },
+      decking:  { material: "timber", color: "#b8894e" },
+    },
+  },
 };

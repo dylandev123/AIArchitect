@@ -1,6 +1,7 @@
 import type { BuildingKind, HouseConfig, LandscapeKind, RoomType } from "@/types/house";
 import type { FeatureType } from "./featureTypes";
 import { BUILDING_DEFAULT_SIZE, WALL_THICKNESS } from "../constants";
+import { pitchedRoof } from "../architecture/roofPlane";
 
 /** Sensible starting values for a newly-added feature, derived from the house's own dimensions. */
 export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): Record<string, unknown> {
@@ -38,6 +39,37 @@ export function getDefaultFeatureConfig(type: FeatureType, house: HouseConfig): 
       return { kind: "garden", x: -(house.width / 2 + 6), z: 0, width: 6, depth: 5 };
     case "deck":
       return { x: 0, z: house.depth / 2 + 4, level: 0, width: 5, depth: 4 };
+    case "porch":
+      return { wall: "south", offset: Math.max(0, house.width / 2 - 2.5), width: Math.min(5, house.width), depth: 2.4 };
+    case "chimney":
+      return { wall: "east", offset: Math.max(0, house.depth / 2 - 0.6), width: 1.2, depth: 0.9 };
+    case "curvedWall":
+      return { x: -(house.width / 2 + 8), z: house.depth / 2 + 6, radius: 6, startAngle: 20, sweep: 140, height: 2.2, thickness: 0.4 };
+    case "arch":
+      return { wall: "south", level: 0, offset: Math.max(0, house.width / 2 - 1.5), width: 3, height: 3, depth: 0.35 };
+    case "bay":
+      return { wall: "south", level: 0, offset: Math.max(0, house.width / 2 - 1.5), width: 3, depth: 1, levels: 1, form: "angled" };
+    case "foundation":
+      return { steps: 2, riser: 0.15, projection: 0.18 };
+    case "stairs":
+      return { wall: "south", offset: Math.max(0, house.width / 2 - 1), width: 2, rise: 0.9, form: "straight", turn: "right" };
+    case "dormer":
+    case "crossGable": {
+      const roof = pitchedRoof({ ...house, roof: house.roof === "hip" ? "hip" : "gable" });
+      const width = type === "dormer" ? 1.8 : 5;
+      const [lo, hi] = roof?.usable ?? [0, house.width];
+      return { wall: roof?.slopeWalls[0] ?? "south", offset: Math.max(lo, (lo + hi) / 2 - width / 2), width };
+    }
+    case "retainingWall":
+      return { x1: -(house.width / 2 + 4), z1: -(house.depth / 2 + 6), x2: house.width / 2 + 4, z2: -(house.depth / 2 + 6), height: 1.2, thickness: 0.4, bend: 3 };
+    case "path":
+      return { x1: 0, z1: house.depth / 2 + 1, x2: 4, z2: house.depth / 2 + 14, width: 1.4, bend: 3, surface: "gravel" };
+    case "waterway":
+      return { kind: "stream", x1: -40, z1: house.depth / 2 + 12, x2: 40, z2: house.depth / 2 + 12, width: 3, bend: 4, meander: 0.6 };
+    case "rockCluster":
+      return { x: house.width / 2 + 8, z: house.depth / 2 + 6, radius: 3, count: 6, size: 1.4 };
+    case "slope":
+      return { x: -(house.width / 2 + 10), z: house.depth / 2 + 6, width: 14, depth: 10, rise: 1.6, rotation: 0, form: "mound" };
   }
 }
 
@@ -104,6 +136,7 @@ export function getDefaultBuildingConfig(
 const LANDSCAPE_SIZE: Record<LandscapeKind, { width: number; depth: number }> = {
   garden: { width: 6, depth: 5 },
   lawn: { width: 10, depth: 8 },
+  clearing: { width: 16, depth: 12 },
 };
 
 /** Starting values for a new landscaping zone of a specific kind, west of the main house. */

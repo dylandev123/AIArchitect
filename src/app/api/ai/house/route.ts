@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, NoObjectGeneratedError, Output } from "ai";
-import { buildGenerationResponseSchema, buildPatchResponseSchema } from "@/lib/ai/siteSchema";
+import { buildGenerationResponseSchema, buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
 import {
   assembleGeneratedProject,
   buildGenerationSystemPrompt,
@@ -13,15 +13,15 @@ import type { AssetRef } from "@/lib/ai/capabilities";
 import { applyPatch } from "@/lib/house/applyPatch";
 import { revisionOf } from "@/lib/house/revision";
 import { isBlankSite } from "@/lib/house/blank";
-import { AI_NOT_CONFIGURED_MESSAGE, getAiModel, isAiConfigured } from "@/lib/ai/model";
+import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, isAiConfigured } from "@/lib/ai/model";
 
 export const maxDuration = 60;
 
 const MAX_HISTORY_TURNS = { world: 12, zone: 6, component: 4 } as const;
 const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
-/** Initial generation gets one automatic repair pass: validation errors are fed back to the model once. */
-const MAX_GENERATION_ATTEMPTS = 2;
+/** Initial generation gets automatic repair passes: validation errors are fed back to the model. */
+const MAX_GENERATION_ATTEMPTS = 3;
 
 interface ChatTurn {
   role: "user" | "assistant";
@@ -114,10 +114,16 @@ export async function POST(req: NextRequest) {
       output: Output.object({
         schema: buildPatchResponseSchema(scope, assets.map((a) => a.id)),
       }),
+      providerOptions: AI_PROVIDER_OPTIONS,
     });
 
+    // Payloads are validated locally against the per-op schemas; invalid ops are never applied.
+    const assetIds = assets.map((a) => a.id);
+    const { valid, invalid } = validateOperations(output.operations, scope, assetIds);
+
     // Out-of-scope, off-target, or invented-id ops are dropped: never applied, never used as a fallback.
-    const { allowed, rejected } = partitionOpsForScope(output.operations, scope, context.targetIds);
+    const { allowed, rejected } = partitionOpsForScope(valid, scope, context.targetIds);
+    rejected.unshift(...invalid);
     if (rejected.length > 0) {
       console.warn(`[AI] Rejected ops (${scope.level}/${scope.label}):`, rejected);
     }
@@ -168,9 +174,10 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         system: buildGenerationSystemPrompt(assets),
         messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
         output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
+        providerOptions: AI_PROVIDER_OPTIONS,
       });
 
-      const result = assembleGeneratedProject(output, assets, brief);
+      const result = assembleGeneratedProject(output, assets, brief, attempt === MAX_GENERATION_ATTEMPTS - 1);
       if (result.ok) {
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         return NextResponse.json({

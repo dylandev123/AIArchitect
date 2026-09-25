@@ -1,5 +1,7 @@
 import { describeCapabilities, type AssetRef } from "./capabilities";
+import { describeOperationPayloads } from "./siteSchema";
 import type { EditScope } from "./targeting";
+import { GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, TIER_GUIDANCE } from "./designGuidance";
 
 const CORE = `You are the design engine for a professional architectural platform. You work like Figma, not Photoshop: every edit is a minimal, reversible, precisely-targeted change to a JSON document that the renderer turns into a 3D scene. You never write code, never describe geometry, never produce meshes. Your output is always one JSON object with a "summary" and an "operations" array.
 
@@ -30,7 +32,7 @@ Only include the zones and sub-fields you're actually changing. Use an imported 
 
 const EXTERIOR = `═══ EXTERIOR OPTIONS ═══
 
-exteriorOptions selects catalog styles (wall finish, window/door/railing/column styles, patio/pool surfaces). "setExteriorOptions" merges only the keys you give; null clears a key. A style preset is a starting point — per-component keys override it.`;
+exteriorOptions selects catalog styles (wall finish, window/door/railing/column styles, patio/pool surfaces). "setExteriorOptions" merges only the keys you give; null clears a key. A style preset is a starting point — per-component keys override it. The styles "cabin", "modern-luxury" and "caribbean-villa" also change the building's construction (walls, roof form and pitch, foundation, porch, chimney, outbuildings); switching between them rebuilds the shell, so only set them when the instruction names that style.`;
 
 const SITE_PLANNING = `═══ RESORT-SCALE PLANNING ═══
 
@@ -44,7 +46,8 @@ For prompts like "Luxury Caribbean resort with 40 villas overlooking the sea":
 const SITE = `═══ SITE SETTING ═══
 
 "site" describes the land around the house and is drawn as simple procedural terrain: environment (countryside | beach | cliff | hillside | farm | forest | suburban | urban), viewDirection (the side the view faces), terrainSlope (flat | gentle | steep — land rises behind the house, away from the view) and approachSide (where the road and entrance arrive from).
-"setSite" merges only the fields you give. "Move it to a beach" → {"environment":"beach"} only; "facing sunrise" → {"viewDirection":"east"}; "facing sunset" → west. Do not move the house or its features to match — change only the site setting unless the instruction says otherwise.`;
+"setSite" merges only the fields you give. "Move it to a beach" → {"environment":"beach"} only; "facing sunrise" → {"viewDirection":"east"}; "facing sunset" → west. Do not move the house or its features to match — change only the site setting unless the instruction says otherwise.
+"setSite" also carries designTier (starter | comfort | luxury | estate). Changing it changes how much detail the renderer invests in; it never adds or removes features by itself, so "make it more luxurious" changes the tier and only adds features if the instruction asks for them.`;
 
 const PRECISION = `═══ PRECISION EDITING ═══
 
@@ -60,6 +63,8 @@ export function buildScopedSystemPrompt(scope: EditScope, assets: readonly Asset
   const editsMaterials = scope.materialZones.length > 0;
   const editsRoof = scope.houseFields.includes("roof") || scope.featureTypes.includes("building");
   const site = ["building", "road", "parking"].some((t) => scope.featureTypes.includes(t as never));
+  const usesGeometry = ["curvedWall", "arch", "bay", "foundation", "stairs", "dormer", "crossGable", "retainingWall", "pool", "deck", "driveway", "path"].some((t) => scope.featureTypes.includes(t as never));
+  const usesTerrain = ["waterway", "rockCluster", "slope", "retainingWall", "path", "landscape"].some((t) => scope.featureTypes.includes(t as never));
 
   const capabilities = describeCapabilities({
     roofs: editsRoof,
@@ -83,9 +88,13 @@ export function buildScopedSystemPrompt(scope: EditScope, assets: readonly Asset
     editsMaterials ? MATERIALS : "",
     scope.exterior ? EXTERIOR : "",
     scope.site ? SITE : "",
+    scope.site ? TIER_GUIDANCE : "",
+    isWorld || usesGeometry ? GEOMETRY_GUIDANCE : "",
+    isWorld || usesTerrain ? TERRAIN_GUIDANCE : "",
     capabilities ? `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}` : "",
     isWorld || site ? SITE_PLANNING : "",
     hasFeatures ? PRECISION : "",
+    `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "id"?, "value"?, "fields"? }. "value" is the full item for add* ops; "fields" holds only the changed fields for set*/update* ops. Payloads are validated strictly — an op with a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(scope, assets.map((a) => a.id))}`,
   ]
     .filter(Boolean)
     .join("\n\n");

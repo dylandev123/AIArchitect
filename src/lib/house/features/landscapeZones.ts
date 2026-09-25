@@ -2,8 +2,9 @@ import type { LandscapeKind, LandscapeZoneConfig } from "@/types/house";
 import type { HousePrimitive } from "../types";
 import { LANDSCAPE_COLORS, LANDSCAPE_LIMITS, SITE_POSITION_LIMIT } from "../constants";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { ellipseOutline, flatPolygon, translateOutline, triMeshOf } from "../geometry/mesh";
 
-const LANDSCAPE_KINDS: LandscapeKind[] = ["garden", "lawn"];
+const LANDSCAPE_KINDS: LandscapeKind[] = ["garden", "lawn", "clearing"];
 
 export function validateLandscapeZone(raw: unknown): FeatureValidation<LandscapeZoneConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -28,7 +29,12 @@ export function validateLandscapeZone(raw: unknown): FeatureValidation<Landscape
 
 /** A deliberate, colored ground treatment — distinct from the site's ambient automatic trees/grass. */
 export function buildLandscapeZone(config: LandscapeZoneConfig, index: number): HousePrimitive[] {
-  const label = config.kind === "garden" ? "Garden" : "Lawn";
+  const label = config.kind === "garden" ? "Garden" : config.kind === "clearing" ? "Clearing" : "Lawn";
+  if (config.kind === "clearing") {
+    // An open meadow: an irregular oval, so it reads as a gap in the trees rather than a marked rectangle.
+    const outline = translateOutline(ellipseOutline(config.width, config.depth, 32), config.x, config.z);
+    return [triMeshOf(`landscape-${index}-zone`, "landscape", `${label} ${index + 1}`, flatPolygon(outline, 0.035), { color: LANDSCAPE_COLORS.clearing, roughness: 0.95, metalness: 0 })];
+  }
   return [
     {
       kind: "box",

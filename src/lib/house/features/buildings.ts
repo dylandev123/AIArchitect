@@ -23,8 +23,10 @@ import { buildShedRoof } from "../roof/shedRoof";
 import { buildButterflyRoof } from "../roof/butterflyRoof";
 import { buildSawtoothRoof } from "../roof/sawtoothRoof";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import type { ResolvedExteriorOptions } from "../catalog/types";
+import { buildOutbuilding } from "./outbuildings";
 
-const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar"];
+const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar", "shed", "detached_garage"];
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
 export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig> {
@@ -289,7 +291,8 @@ function buildOutdoorBar(
 export function buildBuilding(
   config: BuildingConfig,
   materials: MaterialsConfig,
-  index: number
+  index: number,
+  opts?: ResolvedExteriorOptions
 ): HousePrimitive[] {
   const idPrefix = `building-${index}`;
   const kindLabel = config.kind.charAt(0).toUpperCase() + config.kind.slice(1).replace("_", " ");
@@ -297,6 +300,7 @@ export function buildBuilding(
 
   if (config.kind === "gazebo") return buildGazebo(config, materials, idPrefix, label);
   if (config.kind === "outdoor_bar") return buildOutdoorBar(config, materials, idPrefix, label);
+  if (config.kind === "shed" || config.kind === "detached_garage") return buildOutbuilding(config, materials, idPrefix, label, opts);
 
   const footprint = { center: [config.x, config.z] as [number, number], width: config.width, depth: config.depth };
   const exteriorMaterial = resolveMaterial(materials.exterior);

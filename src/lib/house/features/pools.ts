@@ -1,4 +1,4 @@
-import type { HouseConfig, MaterialsConfig, PoolConfig } from "@/types/house";
+import type { HouseConfig, MaterialsConfig, PoolConfig, PoolShape } from "@/types/house";
 import type { ResolvedExteriorOptions } from "../catalog/types";
 import { SURFACES } from "../catalog/surfaces";
 import type { Vec3 } from "../geometryUtils";
@@ -15,7 +15,11 @@ import {
 import { getWallAnchor, offsetOutward, pointOnWall } from "../wallAnchor";
 import { buildWallRingPrimitives, type RoomFootprint } from "../primitiveBuilders";
 import { resolveMaterial } from "../materials";
-import { clampNumber, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { clampNumber, readEnum, readWall, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { flatPolygon, loopWall, ringBetween, translateOutline, triMeshOf, type P2 } from "../geometry/mesh";
+import { poolOutline } from "../geometry/shapes";
+
+const POOL_SHAPES: PoolShape[] = ["rectangle", "rounded", "oval", "kidney"];
 
 export function validatePool(raw: unknown): FeatureValidation<PoolConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -48,6 +52,8 @@ export function validatePool(raw: unknown): FeatureValidation<PoolConfig> {
   const offset = clampNumber(values.offset, SITE_OFFSET_LIMIT.min, SITE_OFFSET_LIMIT.max, "offset", warnings);
 
   const value: PoolConfig = { wall: wall.value, offset, distance, width, depth, waterDepth };
+  // Only written when given, so a rectangular pool's JSON stays exactly as it was.
+  if (o.shape !== undefined) value.shape = readEnum(o, "shape", POOL_SHAPES, "rectangle", warnings);
 
   if (typeof o.siteX === "number" || typeof o.siteZ === "number") {
     const siteXRaw = typeof o.siteX === "number" ? o.siteX : 0;
@@ -90,6 +96,12 @@ export function getPoolDeckFootprint(config: PoolConfig, house: HouseConfig): Ro
   };
 }
 
+/** The deck's outline in world XZ, whatever the pool's shape — the ground plane is cut to this. */
+export function getPoolDeckOutline(config: PoolConfig, house: HouseConfig): P2[] {
+  const water = getPoolFootprint(config, house);
+  return translateOutline(poolOutline(config.shape ?? "rectangle", water.width, water.depth, POOL_COPING_WIDTH), water.center[0], water.center[1]);
+}
+
 export function buildPool(
   config: PoolConfig,
   house: HouseConfig,
@@ -114,6 +126,10 @@ export function buildPool(
   const idPrefix = `pool-${index}`;
   const label = `Pool ${index + 1}`;
   const primitives: HousePrimitive[] = [];
+
+  if (config.shape && config.shape !== "rectangle") {
+    return buildShapedPool(config, footprint, idPrefix, label, { color: deckColor, roughness: deckRough, metalness: deckMetal });
+  }
 
   // Coping deck as a frame (not a solid slab) so the water stays open to the sky.
   const outerW = sizeX + POOL_COPING_WIDTH * 2;
@@ -182,4 +198,30 @@ export function buildPool(
   });
 
   return primitives;
+}
+
+/**
+ * A pool with a curved outline: a coping ring, the basin wall, a floor and a water surface, all following the same
+ * outline. Ids match the rectangular pool's (`-floor`, `-water`) so selection and the water shader work unchanged.
+ */
+function buildShapedPool(
+  config: PoolConfig,
+  footprint: RoomFootprint,
+  idPrefix: string,
+  label: string,
+  paint: { color: string; roughness: number; metalness: number }
+): HousePrimitive[] {
+  const shape = config.shape ?? "rectangle";
+  const [cx, cz] = footprint.center;
+  const place = (o: P2[]) => translateOutline(o, cx, cz);
+  const water = place(poolOutline(shape, footprint.width, footprint.depth, 0));
+  const deck = place(poolOutline(shape, footprint.width, footprint.depth, POOL_COPING_WIDTH));
+  const inner = place(poolOutline(shape, footprint.width, footprint.depth, -POOL_WALL_THICKNESS));
+
+  return [
+    triMeshOf(`${idPrefix}-deck`, "pool", `${label} Deck`, [...ringBetween(deck, water, 0), ...loopWall(deck, -POOL_COPING_THICKNESS * 3, 0)], paint),
+    triMeshOf(`${idPrefix}-shell`, "pool", `${label} Shell`, loopWall(water, -config.waterDepth, 0), paint),
+    triMeshOf(`${idPrefix}-floor`, "pool", `${label} Floor`, flatPolygon(inner, -config.waterDepth + 0.03), { color: MATERIAL_COLORS.poolWater, roughness: 0.6, metalness: 0 }),
+    triMeshOf(`${idPrefix}-water`, "pool", `${label} Water`, flatPolygon(inner, -0.15), { color: "#0a9fd0", roughness: 0.1, metalness: 0, transparent: true, opacity: 0.9 }),
+  ];
 }

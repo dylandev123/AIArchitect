@@ -72,3 +72,52 @@ export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
     </group>
   );
 }
+
+/**
+ * Water over an arbitrary outline (a kidney pool, a river): a triangle mesh in world space with planar UVs, so the
+ * same scrolling ripple normal maps apply. Used for every "-water" triangle mesh; rectangular pools keep WaterSurface.
+ */
+export function ShapedWaterSurface({ vertices, color, opacity = 0.86 }: { vertices: number[]; color: string; opacity?: number }) {
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    const uv = new Float32Array((vertices.length / 3) * 2);
+    for (let i = 0; i < vertices.length / 3; i++) {
+      uv[i * 2] = vertices[i * 3] / RIPPLE_METERS;
+      uv[i * 2 + 1] = vertices[i * 3 + 2] / RIPPLE_METERS;
+    }
+    geo.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+    geo.computeVertexNormals();
+    return geo;
+  }, [vertices]);
+
+  const ripples = useMemo(() => {
+    const tex = getWaterNormalMap().clone();
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    ripples.offset.set(t * 0.012, t * 0.007);
+  });
+
+  return (
+    <mesh geometry={geometry} receiveShadow>
+      <meshPhysicalMaterial
+        color={color}
+        roughness={0.08}
+        metalness={0}
+        transparent
+        opacity={opacity}
+        envMapIntensity={0.45}
+        clearcoat={0.6}
+        clearcoatRoughness={0.1}
+        normalMap={ripples}
+        normalScale={new THREE.Vector2(0.14, 0.14)}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}

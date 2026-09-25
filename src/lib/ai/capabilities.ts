@@ -1,11 +1,18 @@
 import type {
+  BayForm,
   BuildingKind,
+  DeckShape,
   ExteriorOptions,
   LandscapeKind,
   MaterialType,
   MaterialZone,
+  PathSurface,
+  PoolShape,
   RoofType,
   RoomType,
+  SlopeForm,
+  StairForm,
+  WaterwayKind,
 } from "@/types/house";
 import {
   COLUMN_STYLES,
@@ -20,6 +27,7 @@ import {
 import { MATERIAL_TYPES, MATERIAL_ZONES } from "@/lib/house/materials";
 import { FEATURE_TYPES } from "@/lib/house/features/featureTypes";
 import { COMPASS_SIDES, SITE_ENVIRONMENTS, TERRAIN_SLOPES } from "@/lib/house/siteSettings";
+import { DESIGN_TIERS } from "@/lib/house/tiers";
 
 type NonEmpty<T> = [T, ...T[]];
 
@@ -52,8 +60,15 @@ export const MATERIAL_ZONE_LIST = MATERIAL_ZONES as NonEmpty<MaterialZone>;
 export const ROOM_TYPES: NonEmpty<RoomType> = [
   "kitchen", "living", "bedroom", "bathroom", "hallway", "dining", "office", "laundry", "gym",
 ];
-export const BUILDING_KINDS: NonEmpty<BuildingKind> = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar"];
-export const LANDSCAPE_KINDS: NonEmpty<LandscapeKind> = ["garden", "lawn"];
+export const BUILDING_KINDS: NonEmpty<BuildingKind> = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar", "shed", "detached_garage"];
+export const LANDSCAPE_KINDS: NonEmpty<LandscapeKind> = ["garden", "lawn", "clearing"];
+export const POOL_SHAPES: NonEmpty<PoolShape> = ["rectangle", "rounded", "oval", "kidney"];
+export const DECK_SHAPES: NonEmpty<DeckShape> = ["rectangle", "rounded", "oval", "arc"];
+export const BAY_FORMS: NonEmpty<BayForm> = ["angled", "round", "turret"];
+export const STAIR_FORMS: NonEmpty<StairForm> = ["straight", "curved", "angled"];
+export const PATH_SURFACES: NonEmpty<PathSurface> = ["gravel", "flagstone", "dirt", "boardwalk"];
+export const WATERWAY_KINDS: NonEmpty<WaterwayKind> = ["river", "stream"];
+export const SLOPE_FORMS: NonEmpty<SlopeForm> = ["mound", "ramp", "terraced"];
 
 /** Compact imported-material reference the client sends with a request. */
 export interface AssetRef {
@@ -83,7 +98,8 @@ export function describeCapabilities(sections: {
     lines.push(
       `site.environment: ${SITE_ENVIRONMENTS.join(" | ")}`,
       `site.viewDirection / site.approachSide: ${COMPASS_SIDES.join(" | ")}`,
-      `site.terrainSlope: ${TERRAIN_SLOPES.join(" | ")}`
+      `site.terrainSlope: ${TERRAIN_SLOPES.join(" | ")}`,
+      `site.designTier: ${DESIGN_TIERS.join(" | ")}`
     );
   }
   if (sections.featureTypes) lines.push(`Feature types: ${FEATURE_TYPES.join(", ")}.`);

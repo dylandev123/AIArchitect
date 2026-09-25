@@ -13,11 +13,16 @@ import type { HousePrimitive } from "@/lib/house/types";
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
  * gables, roofs and trim with their zone's colour. Anything else (floors, glass, garages…) keeps a plain finish.
  */
+const MASONRY_CATEGORIES = new Set<HousePrimitive["category"]>(["bay", "curvedWall", "arch", "foundation", "stairs"]);
+
 function surfaceOf(primitive: HousePrimitive, materials: MaterialsConfig | undefined): MaterialType | undefined {
   if (!materials || primitive.assetId) return undefined;
   const color = primitive.color.toLowerCase();
   const is = (zone: keyof MaterialsConfig) => materials[zone].color.toLowerCase() === color;
   if (primitive.category === "roof") return is("roof") ? materials.roof.material : is("exterior") ? materials.exterior.material : undefined;
+  // Masonry parts are shades of the exterior finish (or plain stone), so they take its pattern regardless of exact colour.
+  if (MASONRY_CATEGORIES.has(primitive.category)) return materials.exterior.material;
+  if (primitive.category === "retainingWall" || primitive.category === "rock") return "stone";
   if (primitive.category === "wall") return is("exterior") ? materials.exterior.material : is("trim") ? materials.trim.material : undefined;
   return undefined;
 }

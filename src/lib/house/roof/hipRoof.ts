@@ -2,6 +2,7 @@ import { quad, tri, type Vec3 } from "../geometryUtils";
 import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG } from "../constants";
 import type { ResolvedMaterial } from "../materials";
+import type { RoofShape } from "../architecture/profiles";
 
 /**
  * Ridge runs along the longer footprint axis with length = longer - shorter
@@ -14,16 +15,18 @@ export function buildHipRoof(
   baseY: number,
   idPrefix: string,
   roofMaterial: ResolvedMaterial,
-  _exteriorMaterial: ResolvedMaterial
+  _exteriorMaterial: ResolvedMaterial,
+  shape?: Partial<RoofShape>
 ): HousePrimitive[] {
   const ridgeAlongX = width >= depth;
   const longer = Math.max(width, depth);
   const shorter = Math.min(width, depth);
-  const roofHeight = Math.max(0.6, shorter * 0.35);
+  const roofHeight = Math.max(0.6, shorter * (shape?.pitch ?? 0.35));
+  const overhang = shape?.overhang ?? ROOF_OVERHANG;
   const ridgeY = baseY + roofHeight;
   const halfRidge = Math.max(0, longer - shorter) / 2;
-  const halfShort = shorter / 2 + ROOF_OVERHANG;
-  const halfLong = longer / 2 + ROOF_OVERHANG;
+  const halfShort = shorter / 2 + overhang;
+  const halfLong = longer / 2 + overhang;
   const color = roofMaterial.color;
   const roughness = roofMaterial.roughness;
   const metalness = roofMaterial.metalness;

@@ -7,6 +7,7 @@ import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import {
   buildApproachRoad,
+  buildRollingMesh,
   buildTerrainMesh,
   generateEnvironmentScenery,
   planTerrain,
@@ -93,22 +94,29 @@ export function Terrain() {
     if (!site || !plan) return undefined;
     const meshData = plan.slope !== "flat" || plan.edge !== undefined ? buildTerrainMesh(plan) : undefined;
     const road = buildApproachRoad(plan);
+    const rolling = buildRollingMesh(plan);
     return {
       plan,
       relief: meshData ? reliefGeometry(meshData) : undefined,
+      rolling: rolling ? reliefGeometry(rolling) : undefined,
       road: road ? { geometry: roadGeometry(road), color: road.color } : undefined,
       scenery: generateEnvironmentScenery(site, plan),
     };
   }, [houseConfigJson]);
 
   if (!built) return null;
-  const { plan, relief, road, scenery } = built;
+  const { plan, relief, rolling, road, scenery } = built;
   const water = plan.water;
 
   return (
     <>
       {relief && (
         <mesh geometry={relief} receiveShadow castShadow>
+          <meshStandardMaterial vertexColors roughness={0.95} flatShading side={THREE.DoubleSide} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
+        </mesh>
+      )}
+      {rolling && (
+        <mesh geometry={rolling} receiveShadow castShadow>
           <meshStandardMaterial vertexColors roughness={0.95} flatShading side={THREE.DoubleSide} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
         </mesh>
       )}

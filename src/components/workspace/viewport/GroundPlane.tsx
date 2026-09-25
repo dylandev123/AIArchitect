@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
-import { getPoolDeckFootprint } from "@/lib/house/features/pools";
+import { getPoolDeckOutline } from "@/lib/house/features/pools";
 import { groundRect, planTerrain } from "@/lib/landscaping/terrain";
 import { getGrassTextures, GRASS_TILE_METERS } from "@/lib/proceduralTextures";
 
@@ -35,18 +35,10 @@ export function GroundPlane() {
 
     if (site) {
       for (const pool of site.pools) {
-        const footprint = getPoolDeckFootprint(pool, site.house);
-        const [worldX, worldZ] = footprint.center;
-        const localX = worldX;
-        const localY = -worldZ;
-        const hw = footprint.width / 2;
-        const hd = footprint.depth / 2;
-
+        // The hole follows the pool's own outline, so a curved pool sits in a curved cut.
+        const outline = getPoolDeckOutline(pool, site.house);
         const hole = new THREE.Path();
-        hole.moveTo(localX - hw, localY - hd);
-        hole.lineTo(localX - hw, localY + hd);
-        hole.lineTo(localX + hw, localY + hd);
-        hole.lineTo(localX + hw, localY - hd);
+        outline.forEach(([wx, wz], i) => (i === 0 ? hole.moveTo(wx, -wz) : hole.lineTo(wx, -wz)));
         hole.closePath();
         shape.holes.push(hole);
       }

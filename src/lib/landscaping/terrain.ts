@@ -1,6 +1,7 @@
 import type { SiteConfig, SiteEnvironment, SiteSettings, TerrainSlope } from "@/types/house";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
-import { collectOccupiedFootprints, isInsideAnyFootprint, yardHalfExtent } from "./footprints";
+import { collectOccupiedFootprints, isInsideAnyFootprint, yardHalfExtent, type Footprint } from "./footprints";
+import { resolveTier, TIER_PROFILES } from "@/lib/house/tiers";
 import { createRng, hashSeed, rngPick, rngRange } from "./rng";
 
 /**
@@ -51,7 +52,14 @@ export interface TerrainPlan {
   grassTufts: boolean;
   /** Overrides for the ambient yard trees (count, palette, trunk height). */
   yardTrees: { count: number; colors: readonly string[]; trunk: [number, number] };
+  /** Amplitude (m) of the gentle rolling ground outside the yard; 0 keeps the land dead flat. */
+  relief: number;
+  /** Everything ground relief must leave alone: the house, every site feature, rivers, paths and walls. */
+  avoid: Footprint[];
 }
+
+/** Environments whose land rolls a little rather than lying dead flat. */
+const ROLLING_ENVIRONMENTS: readonly SiteEnvironment[] = ["countryside", "farm", "forest"];
 
 export function effectiveSlope(settings: SiteSettings): TerrainSlope {
   // Streets and neighbouring lots are laid out on level ground.
@@ -80,9 +88,15 @@ export function planTerrain(site: SiteConfig): TerrainPlan | undefined {
     }
   })();
 
+  const tier = TIER_PROFILES[resolveTier(settings.designTier)].detail;
+  yardTrees.count = Math.max(0, Math.round(yardTrees.count * tier.planting));
+  const slope = effectiveSlope(settings);
+
   return {
     settings,
-    slope: effectiveSlope(settings),
+    slope,
+    relief: slope === "flat" && ROLLING_ENVIRONMENTS.includes(env) ? tier.relief : 0,
+    avoid: collectOccupiedFootprints(site),
     groundColor: GROUND_COLOR[env],
     yard,
     edge: water ? yard + (env === "cliff" ? 8 : 16) : undefined,
@@ -124,11 +138,32 @@ export function toWorld(plan: TerrainPlan, d: number, l: number): [number, numbe
   return [d * plan.view[0] + l * plan.across[0], d * plan.view[1] + l * plan.across[1]];
 }
 
+/**
+ * Gentle rolling ground outside the yard: soft mounds that fade to nothing at the pad and around every site
+ * feature, so buildings, pools, paths and rivers always sit on level ground. Only rises above the base plane
+ * (never dips below it), which keeps the flat ground plane underneath it hidden.
+ */
+function rollingHeight(plan: TerrainPlan, x: number, z: number): number {
+  if (plan.relief <= 0) return 0;
+  const outside = Math.max(Math.abs(x), Math.abs(z)) - plan.yard;
+  if (outside <= 0) return 0;
+  let clear = Math.min(1, outside / 16);
+  for (const f of plan.avoid) {
+    const gap = Math.max(Math.abs(x - f.cx) - f.halfW, Math.abs(z - f.cz) - f.halfD);
+    if (gap < 5) {
+      clear = Math.min(clear, Math.max(0, gap / 5));
+      if (clear <= 0) return 0;
+    }
+  }
+  const n = Math.sin(x * 0.083 + 1.3) * Math.cos(z * 0.071 + 0.4) * 0.6 + Math.sin((x + z) * 0.043 + 2.1) * 0.4;
+  return n > 0 ? plan.relief * clear * clear * (3 - 2 * clear) * n : 0;
+}
+
 /** Ground height at a world point (0 on the pad and flat land). */
 export function terrainHeightAt(plan: TerrainPlan, x: number, z: number): number {
   const { d, l } = toLocal(plan, x, z);
   if (plan.edge !== undefined && d > plan.edge) return seaHeight(plan, d - plan.edge, l);
-  return hillRise(plan, -d - plan.yard);
+  return hillRise(plan, -d - plan.yard) + rollingHeight(plan, x, z);
 }
 
 /** Axis-aligned world rectangle the flat ground plane should cover (trimmed on the water side). */
@@ -242,6 +277,56 @@ export function buildTerrainMesh(plan: TerrainPlan): TerrainMeshData {
       const c2: RGB = [base[0] * shade2, base[1] * shade2, base[2] * shade2];
       pushTri(p00, p10, p11, c1);
       pushTri(p00, p11, p01, c2);
+    }
+  }
+  return { positions, normals, colors };
+}
+
+/**
+ * The rolling mounds of a flat site as a coarse grid mesh. Only cells that actually rise off the ground plane are
+ * emitted, so a mostly-flat site costs a few hundred triangles and the rest is left to the ground plane.
+ */
+export function buildRollingMesh(plan: TerrainPlan): TerrainMeshData | undefined {
+  if (plan.relief <= 0) return undefined;
+  const CELL = 3.5;
+  const R = Math.min(150, plan.yard + 100);
+  const n = Math.ceil((R * 2) / CELL);
+  const heights = new Float32Array((n + 1) * (n + 1));
+  const at = (i: number, j: number) => j * (n + 1) + i;
+  for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) heights[at(i, j)] = rollingHeight(plan, -R + i * CELL, -R + j * CELL);
+
+  const quads: [number, number][] = [];
+  for (let j = 0; j < n; j++) {
+    for (let i = 0; i < n; i++) {
+      if (Math.max(heights[at(i, j)], heights[at(i + 1, j)], heights[at(i + 1, j + 1)], heights[at(i, j + 1)]) > 0.04) quads.push([i, j]);
+    }
+  }
+  if (quads.length === 0) return undefined;
+
+  const positions = new Float32Array(quads.length * 18);
+  const normals = new Float32Array(quads.length * 18);
+  const colors = new Float32Array(quads.length * 18);
+  const rng = createRng(plan.seed ^ 0x51ed270b);
+  const ground = hexToRgb(plan.groundColor);
+  let v = 0;
+  for (const [i, j] of quads) {
+    const p = (a: number, b: number): [number, number, number] => [-R + a * CELL, heights[at(a, b)], -R + b * CELL];
+    const corners = [p(i, j), p(i + 1, j), p(i + 1, j + 1), p(i, j + 1)];
+    const avg = corners.reduce((sum, c) => sum + c[1], 0) / 4;
+    for (const tri of [[0, 1, 2], [0, 2, 3]] as const) {
+      const [a, b, c] = tri.map((k) => corners[k]);
+      const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+      const wx = c[0] - a[0], wy = c[1] - a[1], wz = c[2] - a[2];
+      let nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+      if (ny < 0) { nx = -nx; ny = -ny; nz = -nz; }
+      const len = Math.hypot(nx, ny, nz) || 1;
+      const shade = 0.94 + rng() * 0.1 + Math.min(0.05, avg * 0.03);
+      for (const pt of [a, b, c]) {
+        positions.set(pt, v);
+        normals.set([nx / len, ny / len, nz / len], v);
+        colors.set([ground[0] * shade, ground[1] * shade, ground[2] * shade], v);
+        v += 3;
+      }
     }
   }
   return { positions, normals, colors };

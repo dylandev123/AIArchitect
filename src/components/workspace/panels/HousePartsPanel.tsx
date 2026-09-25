@@ -11,7 +11,9 @@ import {
   getDefaultLandscapeConfig,
   getDefaultRoomConfig,
 } from "@/lib/house/features/defaults";
-import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
+import { applyPatch } from "@/lib/house/applyPatch";
+import { DESIGN_TIERS, TIER_PROFILES, resolveTier } from "@/lib/house/tiers";
+import { DEFAULT_HOUSE_CONFIG, type DesignTier } from "@/types/house";
 import {
   ELEMENT_REGISTRY,
   GROUP_LABELS,
@@ -98,6 +100,47 @@ function ProjectTypeSelector({
   );
 }
 
+// ── Design tier selector ──────────────────────────────────────────────────────
+
+/**
+ * The project's design tier: how elaborate its architecture, materials and grounds are. It edits `site.designTier`
+ * with the same setSite patch the AI uses, so it changes rendering detail only — it never adds or removes parts.
+ * Projects without a site block have nowhere to keep it, so the selector is shown but disabled for them.
+ */
+function DesignTierSelector({ projectId, houseConfigJson }: { projectId: string; houseConfigJson: string }) {
+  const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
+  const site = generateHouseFromJson(houseConfigJson).site?.settings;
+  const current = resolveTier(site?.designTier);
+
+  const choose = (tier: DesignTier) => {
+    if (!site || tier === current) return;
+    updateHouseConfig(projectId, applyPatch(houseConfigJson, [{ op: "setSite", fields: { designTier: tier } }]).json);
+  };
+
+  return (
+    <div className="px-3 pb-3">
+      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-600">Design tier</p>
+      <div className="flex gap-1">
+        {DESIGN_TIERS.map((tier) => (
+          <button
+            key={tier}
+            onClick={() => choose(tier)}
+            disabled={!site}
+            title={site ? TIER_PROFILES[tier].guidance : "This project has no site settings yet"}
+            className={`flex-1 rounded-lg border px-1.5 py-1 text-[11px] font-medium transition-all disabled:cursor-default disabled:opacity-40 ${
+              tier === current
+                ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+                : "border-white/[0.07] bg-white/[0.03] text-neutral-500 hover:border-white/15 hover:text-neutral-300"
+            }`}
+          >
+            {TIER_PROFILES[tier].label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Main panel ────────────────────────────────────────────────────────────────
 
 export function ElementsPanel() {
@@ -171,6 +214,7 @@ export function ElementsPanel() {
           currentType={projectType}
           houseConfigJson={houseConfigJson}
         />
+        <DesignTierSelector projectId={projectId} houseConfigJson={houseConfigJson} />
       </div>
 
       {/* Element groups */}

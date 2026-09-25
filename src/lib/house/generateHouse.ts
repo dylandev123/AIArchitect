@@ -1,4 +1,5 @@
-import type { ExteriorOptions, HouseConfig, MaterialsConfig, RoofType, SiteConfig } from "@/types/house";
+import type { DesignTier, ExteriorOptions, HouseConfig, MaterialsConfig, RoofType, SiteConfig, SiteSettings } from "@/types/house";
+import type { ResolvedExteriorOptions } from "./catalog/types";
 import { composeExteriorOptions } from "./catalog/composition";
 import type { HouseModel, HousePrimitive } from "./types";
 import { FLOOR_THICKNESS, HOUSE_LIMITS, LEVEL_HEIGHT, MATERIAL_COLORS, WALL_HEIGHT, WALL_THICKNESS } from "./constants";
@@ -26,7 +27,28 @@ import { buildRoad, validateRoad } from "./features/roads";
 import { buildParking, validateParking } from "./features/parking";
 import { buildLandscapeZone, validateLandscapeZone } from "./features/landscapeZones";
 import { buildDeck, validateDeck } from "./features/decks";
+import { buildPorch, validatePorch } from "./features/porches";
+import { buildChimney, validateChimney } from "./features/chimneys";
+import { buildCurvedWall, validateCurvedWall } from "./features/curvedWalls";
+import { buildArch, validateArch } from "./features/arches";
+import { buildBay, validateBay } from "./features/bays";
+import { buildFoundation, validateFoundation } from "./features/foundations";
+import { buildStairs, validateStairs } from "./features/stairs";
+import { buildCrossGable, buildDormer, validateCrossGable, validateDormer } from "./features/roofParts";
+import { buildRetainingWall, validateRetainingWall } from "./features/retainingWalls";
+import { buildPath, validatePath } from "./features/paths";
+import { buildWaterway, validateWaterway } from "./features/waterways";
+import { buildRockCluster, validateRockCluster } from "./features/rocks";
+import { buildSlope, validateSlope } from "./features/slopes";
+import type { BuildContext } from "./features/context";
+import { planTerrain, terrainHeightAt } from "@/lib/landscaping/terrain";
+import { resolveTier, TIER_PROFILES } from "./tiers";
+import { buildRoofDetail } from "./architecture/roofDetail";
+import { applyEdgeDetail } from "./architecture/edgeDetail";
 import { parseSiteSettings } from "./siteSettings";
+import { getArchitectureProfile } from "./architecture/profiles";
+import { buildStyledShell } from "./architecture/shell";
+import type { DoorSpan } from "./architecture/parts";
 
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
@@ -82,7 +104,26 @@ function validateConfig(raw: unknown): HouseValidationResult {
   };
 }
 
-export function generateHouseModel(config: HouseConfig, materials: MaterialsConfig): HousePrimitive[] {
+/** What the styled shell needs beyond the dimensions: the resolved style, site orientation and door openings. */
+export interface ShellStyling {
+  opts: ResolvedExteriorOptions;
+  settings?: SiteSettings;
+  doors: readonly DoorSpan[];
+  tier?: DesignTier;
+}
+
+export function generateHouseModel(config: HouseConfig, materials: MaterialsConfig, styling?: ShellStyling): HousePrimitive[] {
+  // Styles with an architectural profile build their own envelope; every other style keeps the generic shell below.
+  const profile = getArchitectureProfile(styling?.opts.style);
+  if (styling && profile) {
+    return buildStyledShell(config, materials, {
+      profile,
+      view: styling.settings?.viewDirection ?? "south",
+      approach: styling.settings?.approachSide ?? "south",
+      doors: styling.doors,
+    });
+  }
+
   const { width, depth, floors, roof } = config;
   const primitives: HousePrimitive[] = [];
   const footprint = { center: [0, 0] as [number, number], width, depth };
@@ -202,6 +243,12 @@ export function generateHouseModel(config: HouseConfig, materials: MaterialsConf
   };
   primitives.push(...roofBuilders[roof](width, depth, roofBaseY, "roof", roofMaterial, exteriorMaterial));
 
+  // Higher tiers layer the roof edge: soffit, drip board, crown moulding and ridge cap.
+  const roofLayers = TIER_PROFILES[resolveTier(styling?.tier)].detail.roofLayers;
+  if (roofLayers !== 0 && (roof === "gable" || roof === "hip")) {
+    primitives.push(...buildRoofDetail(roof, width, depth, roofBaseY, roofLayers, trimMaterial, roofMaterial));
+  }
+
   return primitives;
 }
 
@@ -239,6 +286,17 @@ function processFeatureArray<T>(
   return valid;
 }
 
+/** Ground-floor door openings, so plinths and foundations can stay clear of them. */
+function groundFloorDoorSpans(rawDoors: unknown, config: HouseConfig): DoorSpan[] {
+  if (!Array.isArray(rawDoors)) return [];
+  const spans: DoorSpan[] = [];
+  for (const item of rawDoors) {
+    const door = validateDoor(item, config).value;
+    if (door && door.level === 0) spans.push({ wall: door.wall, from: door.offset, to: door.offset + door.width });
+  }
+  return spans;
+}
+
 export interface HouseGenerationResult {
   model: HouseModel | null;
   config: HouseConfig | null;
@@ -266,7 +324,6 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
 
   const root = raw as Record<string, unknown>;
   const materials = validateMaterials(root.materials, warnings);
-  const primitives = generateHouseModel(config, materials);
 
   // Parse and resolve exterior options (optional; defaults applied when absent)
   const rawExtOpts = root.exteriorOptions;
@@ -276,8 +333,14 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   );
   warnings.push(...extWarnings);
 
-  const windows = processFeatureArray(root, "window", (i) => validateWindow(i, config), (v, idx) => buildWindow(v, config, materials, idx, opts), errors, warnings, primitives);
-  const doors = processFeatureArray(root, "door", (i) => validateDoor(i, config), (v, idx) => buildDoor(v, config, materials, idx, opts), errors, warnings, primitives);
+  const settings = parseSiteSettings(root.site, warnings);
+  const tier = resolveTier(settings?.designTier);
+  const detail = TIER_PROFILES[tier].detail;
+  const doorSpans = groundFloorDoorSpans(root.doors, config);
+  const primitives = generateHouseModel(config, materials, { opts, settings, doors: doorSpans, tier });
+
+  const windows = processFeatureArray(root, "window", (i) => validateWindow(i, config), (v, idx) => buildWindow(v, config, materials, idx, opts, detail.recess), errors, warnings, primitives);
+  const doors = processFeatureArray(root, "door", (i) => validateDoor(i, config), (v, idx) => buildDoor(v, config, materials, idx, opts, detail.recess), errors, warnings, primitives);
   const garages = processFeatureArray(root, "garage", validateGarage, (v, idx) => buildGarage(v, config, materials, idx), errors, warnings, primitives);
   const balconies = processFeatureArray(root, "balcony", (i) => validateBalcony(i, config), (v, idx) => buildBalcony(v, config, materials, idx, opts), errors, warnings, primitives);
   const patios = processFeatureArray(root, "patio", validatePatio, (v, idx) => buildPatio(v, config, materials, idx, opts), errors, warnings, primitives);
@@ -285,15 +348,35 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx, opts), errors, warnings, primitives);
   const rooms = processFeatureArray(root, "room", (i) => validateRoom(i, config), (v, idx) => buildRoom(v, config, idx), errors, warnings, primitives);
   primitives.push(...buildRoomPartitions(rooms, config));
-  const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx), errors, warnings, primitives);
+  const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx, opts), errors, warnings, primitives);
   const roads = processFeatureArray(root, "road", validateRoad, (v, idx) => buildRoad(v, idx), errors, warnings, primitives);
   const parking = processFeatureArray(root, "parking", validateParking, (v, idx) => buildParking(v, idx), errors, warnings, primitives);
   const landscaping = processFeatureArray(root, "landscape", validateLandscapeZone, (v, idx) => buildLandscapeZone(v, idx), errors, warnings, primitives);
   const decks = processFeatureArray(root, "deck", validateDeck, (v, idx) => buildDeck(v, materials, idx), errors, warnings, primitives);
+  const porches = processFeatureArray(root, "porch", (i) => validatePorch(i, config), (v, idx) => buildPorch(v, config, materials, idx, opts), errors, warnings, primitives);
+  const chimneys = processFeatureArray(root, "chimney", (i) => validateChimney(i, config), (v, idx) => buildChimney(v, config, materials, idx, opts), errors, warnings, primitives);
+
+  // Parts attached to the house: independent of the ground, so they build straight away.
+  const ctx: BuildContext = { house: config, materials, opts, tier, doors: doorSpans, groundAt: () => 0, groundColor: "#48ae36" };
+  const arches = processFeatureArray(root, "arch", (i) => validateArch(i, config), (v, idx) => buildArch(v, ctx, idx), errors, warnings, primitives);
+  const bays = processFeatureArray(root, "bay", (i) => validateBay(i, config), (v, idx) => buildBay(v, ctx, idx), errors, warnings, primitives);
+  const foundations = processFeatureArray(root, "foundation", validateFoundation, (v, idx) => buildFoundation(v, ctx, idx), errors, warnings, primitives);
+  const stairs = processFeatureArray(root, "stairs", (i) => validateStairs(i, config), (v, idx) => buildStairs(v, ctx, idx), errors, warnings, primitives);
+  const dormers = processFeatureArray(root, "dormer", (i) => validateDormer(i, config), (v, idx) => buildDormer(v, ctx, idx), errors, warnings, primitives);
+  const crossGables = processFeatureArray(root, "crossGable", (i) => validateCrossGable(i, config), (v, idx) => buildCrossGable(v, ctx, idx), errors, warnings, primitives);
+
+  // Ground-following site features: validated now, built once the terrain is known (below).
+  const none = () => [] as HousePrimitive[];
+  const curvedWalls = processFeatureArray(root, "curvedWall", validateCurvedWall, none, errors, warnings, primitives);
+  const retainingWalls = processFeatureArray(root, "retainingWall", validateRetainingWall, none, errors, warnings, primitives);
+  const paths = processFeatureArray(root, "path", validatePath, none, errors, warnings, primitives);
+  const waterways = processFeatureArray(root, "waterway", validateWaterway, none, errors, warnings, primitives);
+  const rocks = processFeatureArray(root, "rockCluster", validateRockCluster, none, errors, warnings, primitives);
+  const slopes = processFeatureArray(root, "slope", validateSlope, none, errors, warnings, primitives);
 
   const site: SiteConfig = {
     house: config,
-    settings: parseSiteSettings(root.site, warnings),
+    settings,
     materials,
     windows,
     doors,
@@ -308,8 +391,32 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
     parking,
     landscaping,
     decks,
+    porches,
+    chimneys,
+    curvedWalls,
+    arches,
+    bays,
+    foundations,
+    stairs,
+    dormers,
+    crossGables,
+    retainingWalls,
+    paths,
+    waterways,
+    rocks,
+    slopes,
     exteriorOptions: opts,
   };
 
-  return { model: { id: "house", primitives }, config, site, errors, warnings };
+  // Now the ground is known, build what sits on it.
+  const plan = planTerrain(site);
+  const groundCtx: BuildContext = { ...ctx, groundAt: plan ? (x, z) => terrainHeightAt(plan, x, z) : () => 0, groundColor: plan?.groundColor ?? "#48ae36" };
+  curvedWalls.forEach((v, i) => primitives.push(...buildCurvedWall(v, groundCtx, i)));
+  retainingWalls.forEach((v, i) => primitives.push(...buildRetainingWall(v, groundCtx, i)));
+  paths.forEach((v, i) => primitives.push(...buildPath(v, groundCtx, i)));
+  waterways.forEach((v, i) => primitives.push(...buildWaterway(v, groundCtx, i)));
+  rocks.forEach((v, i) => primitives.push(...buildRockCluster(v, groundCtx, i)));
+  slopes.forEach((v, i) => primitives.push(...buildSlope(v, groundCtx, i)));
+
+  return { model: { id: "house", primitives: applyEdgeDetail(primitives, detail.bevel) }, config, site, errors, warnings };
 }

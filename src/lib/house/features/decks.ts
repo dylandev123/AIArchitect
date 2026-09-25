@@ -1,4 +1,4 @@
-import type { DeckConfig, MaterialsConfig } from "@/types/house";
+import type { DeckConfig, DeckShape, MaterialsConfig } from "@/types/house";
 import type { HousePrimitive } from "../types";
 import {
   DECK_LIMITS,
@@ -8,7 +8,11 @@ import {
   SITE_POSITION_LIMIT,
 } from "../constants";
 import { resolveMaterial } from "../materials";
-import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { clampNumber, readEnum, requireNumbers, type FeatureValidation } from "./validateHelpers";
+import { extrudeOutline, translateOutline, triMeshOf } from "../geometry/mesh";
+import { deckOutline } from "../geometry/shapes";
+
+const DECK_SHAPES: DeckShape[] = ["rectangle", "rounded", "oval", "arc"];
 
 const DECK_SLAB_THICKNESS = 0.14;
 const POST_SIZE = 0.12;
@@ -34,6 +38,8 @@ export function validateDeck(raw: unknown): FeatureValidation<DeckConfig> {
 
   const value: DeckConfig = { x, z, level, width, depth };
   if (rotation !== undefined) value.rotation = rotation;
+  // Only written when given, so a rectangular deck's JSON stays exactly as it was.
+  if (o.shape !== undefined) value.shape = readEnum(o, "shape", DECK_SHAPES, "rectangle", warnings);
   return { value, errors: [], warnings };
 }
 
@@ -54,8 +60,18 @@ export function buildDeck(config: DeckConfig, materials: MaterialsConfig, index:
 
   const primitives: HousePrimitive[] = [];
 
-  // Main platform slab
-  primitives.push({
+  const curved = config.shape !== undefined && config.shape !== "rectangle";
+
+  // Main platform slab: a box for a rectangular deck, an extruded outline for a curved one.
+  if (curved) {
+    // Rotated to match a box's own Y rotation, so switching shape never spins the deck.
+    const outline = translateOutline(deckOutline(config.shape!, width, depth), x, z, -rotRad);
+    primitives.push(triMeshOf(`${idPrefix}-slab`, "deck", `${label} Platform`, extrudeOutline(outline, slabCenterY - DECK_SLAB_THICKNESS / 2, surfaceTopY), {
+      color: decking.color,
+      roughness: decking.roughness,
+      metalness: decking.metalness,
+    }));
+  } else primitives.push({
     kind: "box",
     id: `${idPrefix}-slab`,
     category: "deck",
@@ -72,8 +88,10 @@ export function buildDeck(config: DeckConfig, materials: MaterialsConfig, index:
   if (level > 0) {
     const postH = surfaceTopY - DECK_SLAB_THICKNESS;
     const postCenterY = postH / 2;
-    const hw = width / 2;
-    const hd = depth / 2;
+    // Curved decks pull their posts in from the bounding corners, which would otherwise stick out past the edge.
+    const inset = curved ? 0.62 : 1;
+    const hw = (width / 2) * inset;
+    const hd = (depth / 2) * inset;
     const cos = Math.cos(rotRad);
     const sin = Math.sin(rotRad);
 

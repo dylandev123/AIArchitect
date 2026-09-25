@@ -8,7 +8,8 @@ import { useSceneStore } from "@/store/useSceneStore";
 import { useAssetStore } from "@/store/useAssetStore";
 import { deriveTextureUrls } from "@/lib/textures";
 import { featureKey, parseFeatureMeshId } from "@/lib/house/features/parseFeatureId";
-import { WaterSurface } from "./WaterSurface";
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { ShapedWaterSurface, WaterSurface } from "./WaterSurface";
 import type { MaterialType } from "@/types/house";
 import { getSurfaceTextures, PATTERN_TILE_METERS, SURFACE_PATTERN } from "@/lib/proceduralTextures";
 
@@ -26,6 +27,29 @@ function worldUvBox(size: [number, number, number], tile: number): THREE.BoxGeom
     }
   });
   uv.needsUpdate = true;
+  return geometry;
+}
+
+/**
+ * A box with rounded exposed edges. When a procedural surface pattern applies, UVs are re-projected in metres onto
+ * whichever axis each vertex faces, so the pattern keeps its real-world scale across the curved edges too.
+ */
+function bevelBox(size: [number, number, number], radius: number, tile?: number): THREE.BufferGeometry {
+  const [sx, sy, sz] = size;
+  const geometry = new RoundedBoxGeometry(sx, sy, sz, 2, Math.min(radius, Math.min(sx, sy, sz) / 2 - 1e-3));
+  if (tile) {
+    const pos = geometry.attributes.position as THREE.BufferAttribute;
+    const normal = geometry.attributes.normal as THREE.BufferAttribute;
+    const uv = geometry.attributes.uv as THREE.BufferAttribute;
+    for (let i = 0; i < pos.count; i++) {
+      const ax = Math.abs(normal.getX(i));
+      const ay = Math.abs(normal.getY(i));
+      const az = Math.abs(normal.getZ(i));
+      const [u, v] = ax >= ay && ax >= az ? [pos.getZ(i), pos.getY(i)] : ay >= az ? [pos.getX(i), pos.getZ(i)] : [pos.getX(i), pos.getY(i)];
+      uv.setXY(i, u / tile, v / tile);
+    }
+    uv.needsUpdate = true;
+  }
   return geometry;
 }
 
@@ -57,6 +81,9 @@ function planarUvs(vertices: number[], tile: number): Float32Array {
   }
   return uvs;
 }
+
+/** Metres of a curved or free-form surface covered by one repeat of an imported PBR texture (before uvScale). */
+const TRI_ASSET_TILE_METERS = 2;
 
 // ── Texture cache ─────────────────────────────────────────────────────────────
 
@@ -174,15 +201,18 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
     if (primitive.kind !== "triMesh") return null;
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(primitive.vertices, 3));
+    // Procedural patterns tile in metres; an imported PBR set repeats once per TRI_ASSET_TILE_METERS (times its uvScale).
     if (pattern) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, tile), 2));
+    else if (assetId) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, TRI_ASSET_TILE_METERS), 2));
     geometry.computeVertexNormals();
     return geometry;
-  }, [primitive, pattern, tile]);
+  }, [primitive, pattern, tile, assetId]);
 
-  const boxGeometry = useMemo(
-    () => (primitive.kind === "box" && pattern ? worldUvBox(primitive.size, tile) : null),
-    [primitive, pattern, tile]
-  );
+  const boxGeometry = useMemo(() => {
+    if (primitive.kind !== "box") return null;
+    if (primitive.bevel && primitive.bevel > 0) return bevelBox(primitive.size, primitive.bevel, pattern ? tile : undefined);
+    return pattern ? worldUvBox(primitive.size, tile) : null;
+  }, [primitive, pattern, tile]);
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
@@ -236,6 +266,11 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
     );
   }
 
+  // Water over an arbitrary outline (curved pools, rivers) gets the animated ripple shader.
+  if (primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
+    return <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
+  }
+
   // Glass (windows, doors, glass railings, glazed roofs): tinted, clear and mirror-like, sky-lit by the environment.
   const isGlass = !!primitive.transparent && (primitive.opacity ?? 1) < 0.95;
   const glass = isGlass ? (
@@ -284,7 +319,7 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
       onClick={handleClick}
       userData={{ id: primitive.id }}
     >
-      {glass ?? <meshStandardMaterial {...baseMaterialProps} {...detailProps} side={THREE.DoubleSide} />}
+      {glass ?? <meshStandardMaterial {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} side={THREE.DoubleSide} />}
     </mesh>
   );
 }

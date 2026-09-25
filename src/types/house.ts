@@ -97,7 +97,11 @@ export interface PoolConfig {
   waterDepth: number;
   siteX?: number;
   siteZ?: number;
+  /** Outline of the basin. Absent = "rectangle" (every pre-existing pool). */
+  shape?: PoolShape;
 }
+
+export type PoolShape = "rectangle" | "rounded" | "oval" | "kidney";
 
 /** A paved path running outward from a wall. */
 export interface DrivewayConfig {
@@ -105,6 +109,8 @@ export interface DrivewayConfig {
   offset: number;
   width: number;
   length: number;
+  /** Sideways bow of the driveway in metres (signed). Absent or 0 = straight. */
+  bend?: number;
 }
 
 /**
@@ -122,7 +128,9 @@ export interface RoomConfig {
   depth: number;
 }
 
-export type BuildingKind = "villa" | "restaurant" | "reception" | "gazebo" | "outdoor_bar";
+export type BuildingKind =
+  | "villa" | "restaurant" | "reception" | "gazebo" | "outdoor_bar"
+  | "shed" | "detached_garage";
 
 /**
  * A freestanding structure positioned anywhere on the site (not attached to
@@ -142,6 +150,29 @@ export interface BuildingConfig {
   roof: RoofType;
 }
 
+/**
+ * A covered porch / veranda / entry canopy attached to a ground-floor wall. Its posts, beams, roof, railing and
+ * steps follow the project's architectural style, so the same config reads as a log porch, a steel canopy or a
+ * columned veranda.
+ */
+export interface PorchConfig {
+  wall: WallSide;
+  offset: number;
+  width: number;
+  depth: number;
+}
+
+/**
+ * An exterior chimney stack built against a wall and rising above the roof ridge. `offset`/`width` run along the
+ * wall, `depth` is how far the stack projects outward.
+ */
+export interface ChimneyConfig {
+  wall: WallSide;
+  offset: number;
+  width: number;
+  depth: number;
+}
+
 /** A straight paved road segment between two absolute site points. */
 export interface RoadConfig {
   x1: number;
@@ -149,6 +180,8 @@ export interface RoadConfig {
   x2: number;
   z2: number;
   width: number;
+  /** Sideways bow of the road in metres (signed). Absent or 0 = straight. */
+  bend?: number;
 }
 
 /** An absolute-positioned paved lot, e.g. for a reception or restaurant. */
@@ -167,9 +200,13 @@ export interface DeckConfig {
   width: number;
   depth: number;
   rotation?: number;
+  /** Outline of the platform. Absent = "rectangle" (every pre-existing deck). */
+  shape?: DeckShape;
 }
 
-export type LandscapeKind = "garden" | "lawn";
+export type DeckShape = "rectangle" | "rounded" | "oval" | "arc";
+
+export type LandscapeKind = "garden" | "lawn" | "clearing";
 
 /** A deliberate, named landscaping area (vs. the site's ambient automatic trees/grass). */
 export interface LandscapeZoneConfig {
@@ -178,6 +215,144 @@ export interface LandscapeZoneConfig {
   z: number;
   width: number;
   depth: number;
+}
+
+// ── Architectural richness: curved, arched and layered parts ─────────────────────────────────────────────────────
+// Each of these is an ordinary feature array item with its own stable id, so it can be edited or removed on its own.
+
+/** A freestanding curved wall: an arc of masonry around a centre point on the site (garden wall, tower base, screen). */
+export interface CurvedWallConfig {
+  x: number;
+  z: number;
+  radius: number;
+  /** Where the arc starts, in degrees: 0 = east, 90 = south (x east, z south). */
+  startAngle: number;
+  /** How far the arc sweeps, in degrees. */
+  sweep: number;
+  height: number;
+  thickness: number;
+}
+
+/** An arched opening / archway framed on a wall: piers, a semicircular arch ring, a keystone and a recessed void. */
+export interface ArchConfig {
+  wall: WallSide;
+  level: number;
+  offset: number;
+  width: number;
+  height: number;
+  /** How far the arch surround projects from the wall (the depth of the reveal). */
+  depth: number;
+}
+
+export type BayForm = "angled" | "round" | "turret";
+
+/**
+ * A bay or turret volume attached to a wall. "angled" is a three-sided bay, "round" a half-round bay and "turret" a
+ * full round tower with a conical roof. `levels` is how many storeys it climbs.
+ */
+export interface BayConfig {
+  wall: WallSide;
+  level: number;
+  offset: number;
+  width: number;
+  depth: number;
+  levels: number;
+  form: BayForm;
+}
+
+/** A stepped masonry foundation ringing the house: `steps` tiers, each stepping out by `projection`. */
+export interface FoundationConfig {
+  steps: number;
+  riser: number;
+  projection: number;
+}
+
+export type StairForm = "straight" | "curved" | "angled";
+
+/** Entry stairs rising to a ground-floor door: a straight flight, a curved fan, or an angled dog-leg with a landing. */
+export interface StairsConfig {
+  wall: WallSide;
+  offset: number;
+  width: number;
+  rise: number;
+  form: StairForm;
+  turn: "left" | "right";
+}
+
+/** A gabled dormer standing on a roof slope. Needs a gable or hip roof. */
+export interface DormerConfig {
+  wall: WallSide;
+  offset: number;
+  width: number;
+}
+
+/** A cross gable: a gabled wing that cuts across the main roof and finishes flush with a wall. Needs a gable or hip roof. */
+export interface CrossGableConfig {
+  wall: WallSide;
+  offset: number;
+  width: number;
+}
+
+/** A retaining wall between two site points, optionally bowed into a curve. */
+export interface RetainingWallConfig {
+  x1: number;
+  z1: number;
+  x2: number;
+  z2: number;
+  height: number;
+  thickness: number;
+  bend: number;
+}
+
+export type PathSurface = "gravel" | "flagstone" | "dirt" | "boardwalk";
+
+/** A garden or woodland path between two site points; `bend` bows it into a curve. */
+export interface PathConfig {
+  x1: number;
+  z1: number;
+  x2: number;
+  z2: number;
+  width: number;
+  bend: number;
+  surface: PathSurface;
+}
+
+// ── Contextual site features: only present when the brief calls for them ────────────────────────────────────────
+
+export type WaterwayKind = "river" | "stream";
+
+/** A procedural river or stream between two site points, bowed by `bend` and wandering by `meander` (0–1). */
+export interface WaterwayConfig {
+  kind: WaterwayKind;
+  x1: number;
+  z1: number;
+  x2: number;
+  z2: number;
+  width: number;
+  bend: number;
+  meander: number;
+}
+
+/** A scatter of boulders: `count` rocks spread over `radius`, the largest about `size` metres across. */
+export interface RockClusterConfig {
+  x: number;
+  z: number;
+  radius: number;
+  count: number;
+  size: number;
+}
+
+export type SlopeForm = "mound" | "ramp" | "terraced";
+
+/** A piece of shaped ground: a grassy mound, a ramp, or stepped terraces. */
+export interface SlopeConfig {
+  x: number;
+  z: number;
+  width: number;
+  depth: number;
+  rise: number;
+  rotation: number;
+  form: SlopeForm;
 }
 
 // ── Exterior catalog key types ────────────────────────────────────────────────
@@ -197,7 +372,8 @@ export type SurfaceKey =
   | "brick-paver" | "teak-deck" | "mosaic-tile";
 export type StyleKey =
   | "mediterranean" | "modern-minimalist" | "craftsman" | "industrial"
-  | "colonial" | "tropical" | "nordic" | "mid-century";
+  | "colonial" | "tropical" | "nordic" | "mid-century"
+  | "cabin" | "modern-luxury" | "caribbean-villa";
 
 /** All per-component exterior overrides that can be stored alongside a SiteConfig. */
 export interface ExteriorOptions {
@@ -224,6 +400,12 @@ export type CompassSide = "north" | "east" | "south" | "west";
 export type TerrainSlope = "flat" | "gentle" | "steep";
 
 /**
+ * How elaborate the project is: a steer for architectural complexity, materials, landscaping and outdoor features,
+ * not a construction-cost estimate. "comfort" is the baseline and the meaning of an absent tier.
+ */
+export type DesignTier = "starter" | "comfort" | "luxury" | "estate";
+
+/**
  * Lightweight description of the land around the house. It drives the procedural scenery and
  * tells generation where to put outdoor living (`viewDirection`) and the entrance (`approachSide`).
  * Optional in the JSON: projects without it keep the original plain-lawn look.
@@ -235,6 +417,8 @@ export interface SiteSettings {
   terrainSlope: TerrainSlope;
   /** The side the access road / entrance arrives from. */
   approachSide: CompassSide;
+  /** Absent on projects that predate it; treated as "comfort". */
+  designTier?: DesignTier;
 }
 
 export interface SiteConfig {
@@ -255,6 +439,21 @@ export interface SiteConfig {
   parking: ParkingConfig[];
   landscaping: LandscapeZoneConfig[];
   decks: DeckConfig[];
+  /** Absent on projects that predate them. */
+  porches?: PorchConfig[];
+  chimneys?: ChimneyConfig[];
+  curvedWalls?: CurvedWallConfig[];
+  arches?: ArchConfig[];
+  bays?: BayConfig[];
+  foundations?: FoundationConfig[];
+  stairs?: StairsConfig[];
+  dormers?: DormerConfig[];
+  crossGables?: CrossGableConfig[];
+  retainingWalls?: RetainingWallConfig[];
+  paths?: PathConfig[];
+  waterways?: WaterwayConfig[];
+  rocks?: RockClusterConfig[];
+  slopes?: SlopeConfig[];
   exteriorOptions?: ExteriorOptions;
 }
 
