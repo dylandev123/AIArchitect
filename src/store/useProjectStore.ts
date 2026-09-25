@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
-import { DEFAULT_HOUSE_JSON } from "@/types/house";
+import { BLANK_HOUSE_JSON } from "@/types/house";
 
 function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
   return { id: crypto.randomUUID(), createdAt: Date.now(), summary, houseConfigJson };
@@ -37,14 +37,14 @@ export const useProjectStore = create<ProjectStore>()(
       projects: [],
 
       createProject: (name, projectType = "house") => {
-        const initialVersion = makeVersion("Initial design", DEFAULT_HOUSE_JSON);
+        const initialVersion = makeVersion("Blank project", BLANK_HOUSE_JSON);
         const project: Project = {
           id: crypto.randomUUID(),
           name: name.trim() || "Untitled Project",
           createdAt: Date.now(),
           updatedAt: Date.now(),
           projectType,
-          houseConfigJson: DEFAULT_HOUSE_JSON,
+          houseConfigJson: BLANK_HOUSE_JSON,
           versions: [initialVersion],
           currentVersionIndex: 0,
         };
@@ -155,9 +155,9 @@ export const useProjectStore = create<ProjectStore>()(
         const state = persisted as { projects?: Project[] };
         return {
           projects: (state.projects ?? []).map((p) => {
-            const houseConfigJson = p.houseConfigJson ?? DEFAULT_HOUSE_JSON;
+            const houseConfigJson = p.houseConfigJson ?? BLANK_HOUSE_JSON;
             const versions =
-              p.versions && p.versions.length > 0 ? p.versions : [makeVersion("Initial design", houseConfigJson)];
+              p.versions && p.versions.length > 0 ? p.versions : [makeVersion("Blank project", houseConfigJson)];
             const currentVersionIndex =
               typeof p.currentVersionIndex === "number" &&
               p.currentVersionIndex >= 0 &&

@@ -15,6 +15,8 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Scene } from "./Scene";
 import { ViewportToolbar } from "./ViewportToolbar";
 import { QuickActions } from "./QuickActions";
+import { GenerationOverlay } from "./GenerationOverlay";
+import { useNeedsGeneration } from "./useNeedsGeneration";
 import { useSceneStore } from "@/store/useSceneStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
@@ -82,6 +84,7 @@ export function Viewport() {
   const walkMode = useSceneStore((s) => s.walkMode);
   const setWalkMode = useSceneStore((s) => s.setWalkMode);
 
+  const blank = useNeedsGeneration();
   const params = useParams<{ projectId: string }>();
   const houseConfigJson = useProjectStore(
     (s) => s.getProject(params.projectId)?.houseConfigJson
@@ -175,6 +178,8 @@ export function Viewport() {
               ref={controlsRef}
               makeDefault
               enableDamping
+              autoRotate={blank}
+              autoRotateSpeed={0.35}
               dampingFactor={0.08}
               target={toTuple(initialFit.target)}
               minDistance={2}
@@ -198,7 +203,8 @@ export function Viewport() {
         onResetCamera={handleResetCamera}
         onEnterWalk={() => setWalkMode(true)}
       />
-      <QuickActions />
+      <GenerationOverlay />
+      {!blank && <QuickActions />}
     </div>
   );
 }

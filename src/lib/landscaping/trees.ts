@@ -5,6 +5,8 @@ import { collectOccupiedFootprints, isInsideAnyFootprint, yardHalfExtent } from 
 export interface TreePlacement {
   id: string;
   position: [number, number];
+  /** Ground height at the tree; 0 when omitted. */
+  y?: number;
   trunkHeight: number;
   trunkRadius: number;
   foliageRadius: number;
@@ -14,13 +16,23 @@ export interface TreePlacement {
 
 /** Vibrant Sims-style game greens — saturated and bright, not realistic muddy tones. */
 const FOLIAGE_COLORS = ["#38c040", "#2aac38", "#44c84c", "#30b035"] as const;
-const TREE_COUNT = 14;
+const DEFAULT_TREE_COUNT = 10;
 const MIN_SPACING = 3;
 const MAX_ATTEMPTS_PER_TREE = 40;
 
+/** Environment-specific overrides for the yard's ambient trees (see `planTerrain`). */
+export interface TreeStyle {
+  count: number;
+  colors: readonly string[];
+  trunk: [number, number];
+}
+
 /** Scatters a stable set of trees around the yard, avoiding the house and every site feature.
  * First 8 trees are biased toward the yard perimeter; the rest scatter more freely. */
-export function generateTrees(site: SiteConfig): TreePlacement[] {
+export function generateTrees(site: SiteConfig, style?: TreeStyle): TreePlacement[] {
+  const TREE_COUNT = style?.count ?? DEFAULT_TREE_COUNT;
+  const colors = style?.colors ?? FOLIAGE_COLORS;
+  const trunk = style?.trunk ?? [1.8, 3.2];
   const seed = hashSeed("trees", site.house.width, site.house.depth, site.house.floors, site.house.roof);
   const rng = createRng(seed);
   const footprints = collectOccupiedFootprints(site);
@@ -39,9 +51,11 @@ export function generateTrees(site: SiteConfig): TreePlacement[] {
         x = Math.cos(angle) * dist;
         z = Math.sin(angle) * dist;
       } else {
-        // Inner scatter — fills the remaining yard area.
-        x = rngRange(rng, -half * 0.85, half * 0.85);
-        z = rngRange(rng, -half * 0.85, half * 0.85);
+        // Inner scatter — a looser ring that keeps the lawn around the house open.
+        const angle = rng() * Math.PI * 2;
+        const dist = rngRange(rng, half * 0.38, half * 0.85);
+        x = Math.cos(angle) * dist;
+        z = Math.sin(angle) * dist;
       }
 
       if (isInsideAnyFootprint(x, z, footprints)) continue;
@@ -55,10 +69,10 @@ export function generateTrees(site: SiteConfig): TreePlacement[] {
       placed.push({
         id: `tree-${i}`,
         position: [x, z],
-        trunkHeight: rngRange(rng, 1.8, 3.2),
+        trunkHeight: rngRange(rng, trunk[0], trunk[1]),
         trunkRadius: rngRange(rng, 0.12, 0.22),
         foliageRadius: rngRange(rng, 1.1, 1.9),
-        foliageColor: rngPick(rng, FOLIAGE_COLORS),
+        foliageColor: rngPick(rng, colors),
         rotationY: rng() * Math.PI * 2,
       });
       break;

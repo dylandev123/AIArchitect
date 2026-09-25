@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, NoObjectGeneratedError, Output } from "ai";
 import { z } from "zod";
+import { AI_NOT_CONFIGURED_MESSAGE, getAiModel, isAiConfigured } from "@/lib/ai/model";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "dylandevaux3@gmail.com";
-const MODEL = process.env.AI_HOUSE_MODEL || "anthropic/claude-sonnet-4.6";
 
 export const maxDuration = 60;
 
@@ -95,11 +95,8 @@ RULES:
 // ── Route handler ─────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  if (!process.env.AI_GATEWAY_API_KEY && !process.env.VERCEL_OIDC_TOKEN) {
-    return NextResponse.json(
-      { error: "AI isn't configured. Set AI_GATEWAY_API_KEY to enable this." },
-      { status: 503 }
-    );
+  if (!isAiConfigured()) {
+    return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
   }
 
   let body: unknown;
@@ -120,7 +117,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { output } = await generateText({
-      model: MODEL,
+      model: getAiModel(),
       maxOutputTokens: 4000,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: prompt.trim() }],

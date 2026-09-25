@@ -26,6 +26,7 @@ import { buildRoad, validateRoad } from "./features/roads";
 import { buildParking, validateParking } from "./features/parking";
 import { buildLandscapeZone, validateLandscapeZone } from "./features/landscapeZones";
 import { buildDeck, validateDeck } from "./features/decks";
+import { parseSiteSettings } from "./siteSettings";
 
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
@@ -292,6 +293,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
 
   const site: SiteConfig = {
     house: config,
+    settings: parseSiteSettings(root.site, warnings),
     materials,
     windows,
     doors,

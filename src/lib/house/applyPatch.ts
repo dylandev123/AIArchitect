@@ -8,6 +8,8 @@ export interface PatchOp {
   op: string;
   value?: Record<string, unknown>;
   fields?: Record<string, unknown>;
+  /** Stable id of the target item. Preferred over `index`; resolved against the pre-batch snapshot. */
+  id?: string;
   index?: number;
 }
 
@@ -30,14 +32,15 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /** Ops handled as whole-object merges in the first pass, not array add/update/remove. */
-const WHOLE_OBJECT_OPS = new Set(["setHouse", "setMaterials"]);
+const WHOLE_OBJECT_OPS = new Set(["setHouse", "setMaterials", "setExteriorOptions", "setSite"]);
 
 /**
  * Applies a batch of typed patch operations to the project's JSON, touching
- * only the paths the operations name. Index-based ops (update/remove) are
- * resolved against a snapshot of each array taken before the batch runs, so
- * multiple ops on the same array behave correctly regardless of the order
- * the model emitted them in — there is no progressive index drift.
+ * only the paths the operations name. Update/remove ops address an item by
+ * stable `id` (preferred) or by `index`; both are resolved against a snapshot
+ * of each array taken before the batch runs, so multiple ops on the same array
+ * behave correctly regardless of the order the model emitted them in — there
+ * is no progressive index drift.
  */
 export function applyPatch(jsonText: string, operations: PatchOp[]): ApplyPatchResult {
   let root: Record<string, unknown>;
@@ -54,6 +57,9 @@ export function applyPatch(jsonText: string, operations: PatchOp[]): ApplyPatchR
     if (op.op === "setHouse") {
       const house = isRecord(root.house) ? root.house : {};
       root.house = { ...house, ...(op.fields ?? {}) };
+    } else if (op.op === "setSite") {
+      const site = isRecord(root.site) ? root.site : {};
+      root.site = { ...site, ...(op.fields ?? {}) };
     } else if (op.op === "setMaterials") {
       const materials = isRecord(root.materials) ? root.materials : {};
       const fields = isRecord(op.fields) ? op.fields : {};
@@ -65,8 +71,32 @@ export function applyPatch(jsonText: string, operations: PatchOp[]): ApplyPatchR
         merged[zone] = { ...existingZone, ...zoneFields };
       }
       root.materials = merged;
+    } else if (op.op === "setExteriorOptions") {
+      const existing = isRecord(root.exteriorOptions) ? root.exteriorOptions : {};
+      const merged: Record<string, unknown> = { ...existing };
+      for (const [key, value] of Object.entries(isRecord(op.fields) ? op.fields : {})) {
+        if (value === null) delete merged[key];
+        else if (value !== undefined) merged[key] = value;
+      }
+      root.exteriorOptions = merged;
     }
   }
+
+  /** Resolves an op's target to an index in the pre-batch array, or null (error already recorded). */
+  const resolveTarget = (op: PatchOp, arrayKey: string): number | null => {
+    if (typeof op.id === "string") {
+      const arr = Array.isArray(root[arrayKey]) ? (root[arrayKey] as Record<string, unknown>[]) : [];
+      const at = arr.findIndex((item) => isRecord(item) && item.id === op.id);
+      if (at === -1) {
+        errors.push(`${op.op}: no item with id "${op.id}" in "${arrayKey}".`);
+        return null;
+      }
+      return at;
+    }
+    if (typeof op.index === "number") return op.index;
+    errors.push(`${op.op}: missing "id".`);
+    return null;
+  };
 
   interface Bucket {
     updates: Map<number, Record<string, unknown>>;
@@ -94,18 +124,14 @@ export function applyPatch(jsonText: string, operations: PatchOp[]): ApplyPatchR
     if (action === "add") {
       bucket.adds.push(op.value ?? {});
     } else if (action === "update") {
-      if (typeof op.index !== "number") {
-        errors.push(`${op.op}: missing "index".`);
-        continue;
-      }
-      const existing = bucket.updates.get(op.index) ?? {};
-      bucket.updates.set(op.index, { ...existing, ...(op.fields ?? {}) });
+      const at = resolveTarget(op, arrayKey);
+      if (at === null) continue;
+      const existing = bucket.updates.get(at) ?? {};
+      bucket.updates.set(at, { ...existing, ...(op.fields ?? {}) });
     } else {
-      if (typeof op.index !== "number") {
-        errors.push(`${op.op}: missing "index".`);
-        continue;
-      }
-      bucket.removes.add(op.index);
+      const at = resolveTarget(op, arrayKey);
+      if (at === null) continue;
+      bucket.removes.add(at);
     }
   }
 

@@ -5,15 +5,16 @@ import { useParams } from "next/navigation";
 import { AlertTriangle, RotateCcw, Sparkles } from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
-import { DEFAULT_HOUSE_JSON } from "@/types/house";
+import { BLANK_HOUSE_JSON } from "@/types/house";
 import { classifyPromptTarget } from "@/lib/ai/targeting";
+import { requestHouseEdit } from "@/lib/ai/client";
 
 export function HouseJsonPanel() {
   const params = useParams<{ projectId: string }>();
   const project = useProjectStore((s) => s.getProject(params.projectId));
   const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
   const appendVersion = useProjectStore((s) => s.appendVersion);
-  const text = project?.houseConfigJson ?? DEFAULT_HOUSE_JSON;
+  const text = project?.houseConfigJson ?? BLANK_HOUSE_JSON;
 
   const [aiDraft, setAiDraft] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
@@ -29,23 +30,16 @@ export function HouseJsonPanel() {
     setAiLoading(true);
     setAiFeedback(null);
     try {
-      const res = await fetch("/api/ai/house", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: aiDraft,
-          currentHouseJson: project.houseConfigJson,
-          history: [],
-          scope: detectedScope ?? undefined,
-        }),
+      const result = await requestHouseEdit({
+        projectId: project.id,
+        prompt: aiDraft,
+        apply: (summary, json) => appendVersion(project.id, summary, json),
       });
-      const data = await res.json() as { summary?: string; json?: string; error?: string };
-      if (res.ok && data.json) {
-        appendVersion(project.id, data.summary ?? "AI edit", data.json);
+      if (result.ok) {
         setAiDraft("");
-        setAiFeedback({ ok: true, text: data.summary ?? "Done" });
+        setAiFeedback({ ok: true, text: result.summary });
       } else {
-        setAiFeedback({ ok: false, text: data.error ?? "AI edit failed." });
+        setAiFeedback({ ok: false, text: result.error });
       }
     } catch {
       setAiFeedback({ ok: false, text: "Network error." });
@@ -62,7 +56,7 @@ export function HouseJsonPanel() {
   };
 
   const handleReset = () => {
-    if (project) updateHouseConfig(project.id, DEFAULT_HOUSE_JSON);
+    if (project) updateHouseConfig(project.id, BLANK_HOUSE_JSON);
   };
 
   const handleFormat = () => {

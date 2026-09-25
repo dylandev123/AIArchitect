@@ -9,6 +9,8 @@ import { SceneGrid } from "./SceneGrid";
 import { HouseRenderer } from "./house/HouseRenderer";
 import { SceneEnvironment } from "./scenery/SceneEnvironment";
 import { Scenery } from "./scenery/Scenery";
+import { Terrain } from "./scenery/Terrain";
+import { useNeedsGeneration } from "./useNeedsGeneration";
 
 interface SceneProps {
   timeOfDay: TimeOfDay;
@@ -17,6 +19,8 @@ interface SceneProps {
 export function Scene({ timeOfDay }: SceneProps) {
   const cfg = TIME_OF_DAY[timeOfDay];
   const { sky, sun, ambient, hemi, fills, fog } = cfg;
+  // A never-designed project shows only the site, terrain and horizon — no placeholder house.
+  const blank = useNeedsGeneration();
 
   return (
     <>
@@ -54,8 +58,9 @@ export function Scene({ timeOfDay }: SceneProps) {
 
       <GroundPlane />
       <SceneGrid />
-      <HouseRenderer />
-      <Scenery />
+      <Terrain />
+      {!blank && <HouseRenderer />}
+      {!blank && <Scenery />}
     </>
   );
 }

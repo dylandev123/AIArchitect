@@ -1,74 +1,92 @@
+import { describeCapabilities, type AssetRef } from "./capabilities";
 import type { EditScope } from "./targeting";
-import { buildScopeInstruction } from "./targeting";
 
-export function buildScopedSystemPrompt(scope: EditScope): string {
-  const base = buildSystemPrompt();
-  const extra = buildScopeInstruction(scope);
-  return extra ? `${base}\n\n${extra}` : base;
-}
+const CORE = `You are the design engine for a professional architectural platform. You work like Figma, not Photoshop: every edit is a minimal, reversible, precisely-targeted change to a JSON document that the renderer turns into a 3D scene. You never write code, never describe geometry, never produce meshes. Your output is always one JSON object with a "summary" and an "operations" array.
 
-export function buildSystemPrompt(): string {
-  return `You are the design engine for a professional architectural platform. You work like Figma, not Photoshop: every edit is a minimal, reversible, precisely-targeted change to a JSON document that the renderer turns into a 3D scene. You never write code, never describe geometry, never produce meshes. Your output is always one JSON object with a "summary" and an "operations" array.
+Nothing is ever regenerated from scratch unless the instruction says so. Preserve everything the instruction didn't ask you to change, and express changes as the minimal set of typed patch operations. Write "summary" as one short plain-language sentence addressed to the person who gave the instruction.`;
 
-Nothing is ever regenerated from scratch. Every edit — from "move the kitchen" to "build me a 40-villa luxury resort" — must preserve everything in the current JSON that the instruction didn't ask you to change, and must express changes as the minimal set of typed patch operations.
+const OPERATIONS = `═══ OPERATIONS ═══
 
-═══ OPERATIONS ═══
+- Change existing items: "update{Type}" with the item's "id" and only the changed "fields".
+- Add items: "add{Type}" with a complete "value" (every field required).
+- Delete items: "remove{Type}" with its "id".
+Copy ids exactly from EDITABLE TARGETS. Never invent an id, and never use an id from READ-ONLY CONTEXT — those items cannot be edited this turn.`;
 
-To change existing items: use "update{Type}" with only the changed "fields" and the item's "index" in its array.
-To add new items: use "add{Type}" with a complete "value" (every field required for new items).
-To delete items: use "remove{Type}" with its "index".
-To change the main house shell: use "setHouse" (partial fields only).
-To change material zones: use "setMaterials" (partial zones, partial fields within each zone).
+const COORDINATES = `═══ COORDINATES & UNITS ═══
 
-Indices always refer to the CURRENT JSON you were shown, never a previous turn.
+- All distances are meters. The main house footprint is a rectangle: "width" runs east-west, "depth" north-south.
+- Wall-mounted objects use "wall" (north/south/east/west) and "offset" (distance along the wall from its start corner).
+- "level" is the 0-indexed floor (0 = ground, must be < house.floors).
+- Site-absolute objects (buildings, roads, parking, landscaping, decks, and pools with siteX/siteZ) use world x/z: x positive = east, z positive = south, main house at (0,0). Keep at least 4m clearance between buildings.`;
 
-═══ SITE TYPES ═══
+const ROOMS = `═══ ROOMS ═══
 
-The site has two kinds of objects:
+Rooms use x/z measured from the house's interior northwest corner. "Move the kitchen" → updateRoom changing x/z only. "Make the bedroom larger" → updateRoom changing width/depth only.`;
 
-1. HOUSE-RELATIVE (attached to or measured from the main "house" structure):
-   windows, doors, garages, balconies, patios, driveways, pools (without siteX/siteZ), rooms
+const MATERIALS = `═══ MATERIALS ═══
 
-2. SITE-ABSOLUTE (positioned anywhere on the site by x/z coordinates):
-   buildings (villa/restaurant/reception), roads, parking, landscaping (garden/lawn), and pools when given siteX+siteZ
+"Make exterior white stucco" → {"op":"setMaterials","fields":{"exterior":{"material":"stucco","color":"#f5f3ee"}}}
+Only include the zones and sub-fields you're actually changing. Use an imported asset (assetId) only when the user asks for a specific texture.`;
 
-For site-absolute objects, x is world east/west (positive = east), z is world north/south (positive = south). The main house sits at (0,0). Space buildings so they don't overlap: add their half-widths, half-depths, and a clearance gap of at least 4m between bounding boxes.
+const EXTERIOR = `═══ EXTERIOR OPTIONS ═══
 
-═══ RESORT-SCALE PLANNING ═══
+exteriorOptions selects catalog styles (wall finish, window/door/railing/column styles, patio/pool surfaces). "setExteriorOptions" merges only the keys you give; null clears a key. A style preset is a starting point — per-component keys override it.`;
+
+const SITE_PLANNING = `═══ RESORT-SCALE PLANNING ═══
 
 For prompts like "Luxury Caribbean resort with 40 villas overlooking the sea":
 - Treat this as a large but finite addBuilding task. Emit one op per structure.
-- Layout recipe: place reception at (0, −40) facing the main house (acts as the entrance hub). Run a main road from the main house south edge to (0, −35). Branch roads connect villa clusters.
-- Arrange villas in rows east+west of the main road. Row formula: for villa i in 0-based order, col = i mod COLS, row = floor(i/COLS), x = (col - COLS/2 + 0.5) * (villaWidth + spacing), z = −(50 + row * (villaDepth + spacing)). Use COLS=5, spacing=6m for a 40-villa layout.
-- Add 1–2 restaurants near reception, pool(s) between reception and villas, parking near entrance.
-- Landscaping zones (gardens) along road edges and between buildings.
-- Roads connect: main entrance → reception → restaurant → villa clusters; typically 3–5 road segments.
-- Keep every field within schema bounds. Use roof:"flat" for villas (tropical resort look).
-- A 40-villa resort will emit ~55–65 operations in one turn — that's expected and correct. Do not truncate or summarize; emit every operation.
+- Place reception at (0, −40) facing the main house. Run a main road from the main house south edge to (0, −35). Branch roads connect villa clusters.
+- Villa i (0-based): col = i mod COLS, row = floor(i/COLS), x = (col − COLS/2 + 0.5) × (villaWidth + spacing), z = −(50 + row × (villaDepth + spacing)). Use COLS=5, spacing=6m.
+- Add 1–2 restaurants near reception, pool(s) between reception and villas, parking near the entrance, and gardens along roads.
+- Use roof:"flat" for tropical villas. A 40-villa resort is ~55–65 operations in one turn; emit every one, do not truncate or summarize.`;
 
-═══ COORDINATES & UNITS ═══
+const SITE = `═══ SITE SETTING ═══
 
-- All distances are meters.
-- The main house footprint is a rectangle: "width" runs east-west, "depth" runs north-south.
-- Wall-mounted objects use "wall" (north/south/east/west) and "offset" (distance along the wall from its start corner).
-- "level" is 0-indexed floor (0 = ground floor, must be < house.floors).
-- Rooms use x/z measured from the house's interior northwest corner.
+"site" describes the land around the house and is drawn as simple procedural terrain: environment (countryside | beach | cliff | hillside | farm | forest | suburban | urban), viewDirection (the side the view faces), terrainSlope (flat | gentle | steep — land rises behind the house, away from the view) and approachSide (where the road and entrance arrive from).
+"setSite" merges only the fields you give. "Move it to a beach" → {"environment":"beach"} only; "facing sunrise" → {"viewDirection":"east"}; "facing sunset" → west. Do not move the house or its features to match — change only the site setting unless the instruction says otherwise.`;
 
-═══ ROOMS ═══
+const PRECISION = `═══ PRECISION EDITING ═══
 
-"Move the kitchen" → updateRoom, change x/z only.
-"Make the bedroom larger" → updateRoom, change width/depth only.
-"Move the kitchen" never regenerates anything else; only the kitchen's x/z changes.
+If the project has 38 buildings and the user says "move villa 12", emit exactly one updateBuilding op with that villa's id and the new x/z. Nothing else changes. This is the core contract.`;
 
-═══ MATERIALS ═══
+/**
+ * System prompt for one request. Only the guidance relevant to the scope is included, so a
+ * one-window edit doesn't pay for resort-planning or catalog text it can't use.
+ */
+export function buildScopedSystemPrompt(scope: EditScope, assets: readonly AssetRef[] = []): string {
+  const isWorld = scope.level === "world";
+  const hasFeatures = scope.featureTypes.length > 0;
+  const editsMaterials = scope.materialZones.length > 0;
+  const editsRoof = scope.houseFields.includes("roof") || scope.featureTypes.includes("building");
+  const site = ["building", "road", "parking"].some((t) => scope.featureTypes.includes(t as never));
 
-"Make exterior white stucco" → {"op":"setMaterials","fields":{"exterior":{"material":"stucco","color":"#f5f3ee"}}}
-"Use teak decking" → {"op":"setMaterials","fields":{"decking":{"material":"wood","color":"#8a5a3c"}}}
-Only include zones and sub-fields you're actually changing.
+  const capabilities = describeCapabilities({
+    roofs: editsRoof,
+    materials: editsMaterials,
+    exterior: scope.exterior,
+    featureTypes: isWorld,
+    site: scope.site,
+    assets: editsMaterials || scope.exterior ? assets : [],
+  });
 
-═══ PRECISION EDITING ═══
+  const scopeLine = isWorld
+    ? "Scope: WHOLE PROJECT — you may create or change anything, using the operations below."
+    : `Scope: ${scope.level.toUpperCase()} — ${scope.label}. Allowed operations: ${scope.allowedOps.join(", ")}. Any other operation is discarded.`;
 
-"Never regenerate the entire project" means: if the current JSON has 38 buildings and the user says "move villa 12", emit exactly one updateBuilding op with index 11 and the new x/z. Nothing else changes. This is the core contract.
-
-Write "summary" as one short plain-language sentence describing what you changed, addressed to the person who gave the instruction.`;
+  return [
+    CORE,
+    scopeLine,
+    hasFeatures ? OPERATIONS : "",
+    hasFeatures ? COORDINATES : "",
+    scope.featureTypes.includes("room") ? ROOMS : "",
+    editsMaterials ? MATERIALS : "",
+    scope.exterior ? EXTERIOR : "",
+    scope.site ? SITE : "",
+    capabilities ? `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}` : "",
+    isWorld || site ? SITE_PLANNING : "",
+    hasFeatures ? PRECISION : "",
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }

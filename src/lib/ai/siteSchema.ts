@@ -17,6 +17,18 @@ import {
   SITE_POSITION_LIMIT,
   WINDOW_LIMITS,
 } from "@/lib/house/constants";
+import { FEATURE_TYPES, type FeatureType } from "@/lib/house/features/featureTypes";
+import { COMPASS_SIDES, SITE_ENVIRONMENTS, TERRAIN_SLOPES } from "@/lib/house/siteSettings";
+import type { EditScope } from "./targeting";
+import {
+  BUILDING_KINDS,
+  EXTERIOR_ASSET_OPTIONS,
+  EXTERIOR_ENUM_OPTIONS,
+  LANDSCAPE_KINDS,
+  MATERIAL_TYPE_LIST,
+  ROOF_TYPES,
+  ROOM_TYPES,
+} from "./capabilities";
 
 /**
  * Per-feature shapes mirroring `src/types/house.ts` field-for-field. These are
@@ -27,15 +39,17 @@ const wallSchema = z
   .enum(["north", "south", "east", "west"])
   .describe("Which exterior wall of the house this is mounted on or measured from.");
 
-const houseFieldsSchema = z
-  .object({
-    width: z.number().min(HOUSE_LIMITS.width.min).max(HOUSE_LIMITS.width.max),
-    depth: z.number().min(HOUSE_LIMITS.depth.min).max(HOUSE_LIMITS.depth.max),
-    floors: z.number().int().min(HOUSE_LIMITS.floors.min).max(HOUSE_LIMITS.floors.max),
-    roof: z.enum(["flat", "gable", "hip"]),
-  })
-  .partial()
-  .describe("Only include the house fields you're changing.");
+const houseShape = {
+  width: z.number().min(HOUSE_LIMITS.width.min).max(HOUSE_LIMITS.width.max),
+  depth: z.number().min(HOUSE_LIMITS.depth.min).max(HOUSE_LIMITS.depth.max),
+  floors: z.number().int().min(HOUSE_LIMITS.floors.min).max(HOUSE_LIMITS.floors.max),
+  roof: z.enum(ROOF_TYPES),
+};
+
+function houseFieldsSchema(fields: readonly string[]) {
+  const picked = Object.fromEntries(Object.entries(houseShape).filter(([key]) => fields.includes(key)));
+  return z.object(picked).partial().describe("Only include the house fields you're changing.");
+}
 
 const windowSchema = z.object({
   wall: wallSchema,
@@ -124,31 +138,9 @@ const drivewaySchema = z.object({
     .describe("How far the driveway extends outward from the wall, in meters."),
 });
 
-const materialAssignmentFieldsSchema = z
-  .object({
-    material: z
-      .enum(["concrete", "stone", "wood", "glass", "metal", "stucco", "tile"])
-      .describe("The material type for this surface."),
-    color: z
-      .string()
-      .regex(/^#[0-9a-fA-F]{6}$/)
-      .describe("Hex color, e.g. #f5f3ee. Omit to use the new material's natural color."),
-  })
-  .partial();
-
-const materialsFieldsSchema = z
-  .object({
-    exterior: materialAssignmentFieldsSchema.describe("Exterior wall material."),
-    roof: materialAssignmentFieldsSchema.describe("Roof material."),
-    trim: materialAssignmentFieldsSchema.describe("Window frame, door frame, and railing material."),
-    decking: materialAssignmentFieldsSchema.describe("Patio, balcony platform, and pool deck material."),
-  })
-  .partial()
-  .describe("Only include the zones you're changing.");
-
 const buildingSchema = z.object({
   kind: z
-    .enum(["villa", "restaurant", "reception", "gazebo", "outdoor_bar"])
+    .enum(BUILDING_KINDS)
     .describe("What kind of structure this is. gazebo = open pavilion with posts and hip roof. outdoor_bar = open-air counter with pergola."),
   x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
     .describe("Absolute site X position (positive = east of main house center)."),
@@ -157,7 +149,7 @@ const buildingSchema = z.object({
   width: z.number().min(BUILDING_LIMITS.width.min).max(BUILDING_LIMITS.width.max),
   depth: z.number().min(BUILDING_LIMITS.depth.min).max(BUILDING_LIMITS.depth.max),
   floors: z.number().int().min(BUILDING_LIMITS.floors.min).max(BUILDING_LIMITS.floors.max),
-  roof: z.enum(["flat", "gable", "hip"]),
+  roof: z.enum(ROOF_TYPES),
 });
 
 const roadSchema = z.object({
@@ -176,7 +168,7 @@ const parkingSchema = z.object({
 });
 
 const landscapeSchema = z.object({
-  kind: z.enum(["garden", "lawn"]).describe("Garden is a planted area; lawn is open grass."),
+  kind: z.enum(LANDSCAPE_KINDS).describe("Garden is a planted area; lawn is open grass."),
   x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max),
   z: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max),
   width: z.number().min(LANDSCAPE_LIMITS.width.min).max(LANDSCAPE_LIMITS.width.max),
@@ -197,7 +189,7 @@ const deckSchema = z.object({
 });
 
 const roomSchema = z.object({
-  type: z.enum(["kitchen", "living", "bedroom", "bathroom", "hallway", "dining", "office", "laundry", "gym"]).describe("What kind of room this is. gym renders with rubber flooring and equipment."),
+  type: z.enum(ROOM_TYPES).describe("What kind of room this is. gym renders with rubber flooring and equipment."),
   level: z.number().int().min(0).describe("0-indexed floor this room is on."),
   x: z
     .number()
@@ -211,8 +203,71 @@ const roomSchema = z.object({
   depth: z.number().min(ROOM_LIMITS.depth.min).max(ROOM_LIMITS.depth.max),
 });
 
-/** One feature type's add/update/remove op trio, keyed off a literal name (e.g. "Window"). */
+// ── Materials & exterior options (built per request so imported assets can be enumerated) ──
+
+function materialAssignmentSchema(assetIds: readonly string[]) {
+  return z
+    .object({
+      material: z.enum(MATERIAL_TYPE_LIST).describe("The material type for this surface."),
+      color: z
+        .string()
+        .regex(/^#[0-9a-fA-F]{6}$/)
+        .describe("Hex color, e.g. #f5f3ee. Omit to use the new material's natural color."),
+      roughness: z.number().min(0).max(1),
+      metalness: z.number().min(0).max(1),
+      ...(assetIds.length > 0
+        ? {
+            assetId: z.enum(assetIds as [string, ...string[]]).describe("Imported PBR texture set to use instead of a flat color."),
+            uvScale: z.number().min(0.1).max(20).describe("Texture repeat scale across the face."),
+          }
+        : {}),
+    })
+    .partial();
+}
+
+function materialsFieldsSchema(zones: readonly string[], assetIds: readonly string[]) {
+  const zoneDescriptions: Record<string, string> = {
+    exterior: "Exterior wall material.",
+    roof: "Roof material.",
+    trim: "Window frame, door frame, and railing material.",
+    decking: "Patio, balcony platform, and pool deck material.",
+  };
+  const assignment = materialAssignmentSchema(assetIds);
+  return z
+    .object(Object.fromEntries(zones.map((zone) => [zone, assignment.optional().describe(zoneDescriptions[zone] ?? zone)])))
+    .describe("Only include the zones you're changing.");
+}
+
+function exteriorFieldsSchema(assetIds: readonly string[]) {
+  const shape: Record<string, z.ZodTypeAny> = {};
+  for (const [key, values] of Object.entries(EXTERIOR_ENUM_OPTIONS)) {
+    shape[key] = z.enum(values as [string, ...string[]]).nullable().optional();
+  }
+  if (assetIds.length > 0) {
+    for (const [assetKey, scaleKey] of EXTERIOR_ASSET_OPTIONS) {
+      shape[assetKey] = z.enum(assetIds as [string, ...string[]]).nullable().optional();
+      shape[scaleKey] = z.number().min(0.1).max(20).nullable().optional();
+    }
+  }
+  return z.object(shape).describe("Only include the options you're changing. null clears an option.");
+}
+
+// ── Site environment ──
+
+const siteShape = {
+  environment: z.enum(SITE_ENVIRONMENTS).describe("The kind of land the house sits on; drives the terrain and scenery around it."),
+  viewDirection: z.enum(COMPASS_SIDES).describe("Compass side the main view faces (ocean, valley, sunrise, garden)."),
+  terrainSlope: z.enum(TERRAIN_SLOPES).describe("How much the land rises behind the house, away from the view."),
+  approachSide: z.enum(COMPASS_SIDES).describe("Compass side the access road and entrance arrive from."),
+};
+
+const siteFieldsSchema = z.object(siteShape).partial().describe("Only include the site fields you're changing.");
+
+// ── Feature ops ─────────────────────────────────────────────────────────────
+
+/** One feature type's add/update/remove op trio. Existing items are addressed by stable id. */
 function featureOps<Schema extends z.ZodObject<z.ZodRawShape>>(name: string, schema: Schema) {
+  const id = z.string().min(1).describe("Stable id of the existing item, copied exactly from TARGETS.");
   return [
     z.object({
       op: z.literal(`add${name}`),
@@ -220,44 +275,111 @@ function featureOps<Schema extends z.ZodObject<z.ZodRawShape>>(name: string, sch
     }),
     z.object({
       op: z.literal(`update${name}`),
-      index: z.number().int().min(0).describe("Index of the existing item in the current JSON's array."),
+      id,
       fields: schema.partial().describe("Only the fields you're changing on this item."),
     }),
     z.object({
       op: z.literal(`remove${name}`),
-      index: z.number().int().min(0).describe("Index of the item to remove from the current JSON's array."),
+      id,
     }),
   ] as const;
 }
 
-const patchOpSchema = z.discriminatedUnion("op", [
-  z.object({ op: z.literal("setHouse"), fields: houseFieldsSchema }),
-  z.object({ op: z.literal("setMaterials"), fields: materialsFieldsSchema }),
-  ...featureOps("Window", windowSchema),
-  ...featureOps("Door", doorSchema),
-  ...featureOps("Garage", garageSchema),
-  ...featureOps("Balcony", balconySchema),
-  ...featureOps("Patio", patioSchema),
-  ...featureOps("Pool", poolSchema),
-  ...featureOps("Driveway", drivewaySchema),
-  ...featureOps("Room", roomSchema),
-  ...featureOps("Building", buildingSchema),
-  ...featureOps("Road", roadSchema),
-  ...featureOps("Parking", parkingSchema),
-  ...featureOps("Landscape", landscapeSchema),
-  ...featureOps("Deck", deckSchema),
-]);
+const FEATURE_SCHEMAS: Record<FeatureType, z.ZodObject<z.ZodRawShape>> = {
+  window: windowSchema,
+  door: doorSchema,
+  garage: garageSchema,
+  balcony: balconySchema,
+  patio: patioSchema,
+  pool: poolSchema,
+  driveway: drivewaySchema,
+  room: roomSchema,
+  building: buildingSchema,
+  road: roadSchema,
+  parking: parkingSchema,
+  landscape: landscapeSchema,
+  deck: deckSchema,
+};
 
-export const aiPatchResponseSchema = z.object({
-  summary: z
-    .string()
-    .describe("One short sentence (under ~20 words) telling the user what you changed, in plain language."),
-  operations: z
-    .array(patchOpSchema)
-    .min(1)
-    .describe(
-      "The minimal set of operations needed to satisfy the instruction. Do not include any operation for something the instruction didn't ask you to change."
-    ),
-});
+const FEATURE_OP_SCHEMAS = Object.fromEntries(
+  FEATURE_TYPES.map((type) => [type, featureOps(type.charAt(0).toUpperCase() + type.slice(1), FEATURE_SCHEMAS[type])])
+) as Record<FeatureType, ReturnType<typeof featureOps>>;
 
-export type AiPatchOp = z.infer<typeof patchOpSchema>;
+/** Shape of one operation as it leaves the model (loosely typed; validated per scope before applying). */
+export interface AiOperation {
+  op: string;
+  id?: string;
+  value?: Record<string, unknown>;
+  fields?: Record<string, unknown>;
+}
+
+export interface AiPatchResponse {
+  summary: string;
+  operations: AiOperation[];
+}
+
+function buildOperationsSchema(scope: EditScope, assetIds: readonly string[]) {
+  const ops: z.ZodObject<z.ZodRawShape>[] = [];
+  if (scope.houseFields.length > 0) ops.push(z.object({ op: z.literal("setHouse"), fields: houseFieldsSchema(scope.houseFields) }));
+  if (scope.materialZones.length > 0) {
+    ops.push(z.object({ op: z.literal("setMaterials"), fields: materialsFieldsSchema(scope.materialZones, assetIds) }));
+  }
+  if (scope.site) ops.push(z.object({ op: z.literal("setSite"), fields: siteFieldsSchema }));
+  if (scope.exterior) ops.push(z.object({ op: z.literal("setExteriorOptions"), fields: exteriorFieldsSchema(assetIds) }));
+  for (const type of scope.featureTypes) ops.push(...FEATURE_OP_SCHEMAS[type]);
+  return z.discriminatedUnion("op", ops as unknown as [z.ZodObject<z.ZodRawShape>, ...z.ZodObject<z.ZodRawShape>[]]);
+}
+
+/**
+ * Builds the structured-output schema for one request: only the ops (and only the
+ * fields) the scope permits are representable, so an out-of-scope edit cannot even be
+ * generated. `assetIds` are the imported materials the client offered; they become
+ * closed enums so the model cannot invent one.
+ */
+export function buildPatchResponseSchema(scope: EditScope, assetIds: readonly string[] = []) {
+  const schema = z.object({
+    summary: z
+      .string()
+      .describe("One short sentence (under ~20 words) telling the user what you changed, in plain language."),
+    operations: z
+      .array(buildOperationsSchema(scope, assetIds))
+      .min(1)
+      .describe(
+        "The minimal set of operations needed to satisfy the instruction. Do not include any operation for something the instruction didn't ask you to change."
+      ),
+  });
+  return schema as unknown as z.ZodType<AiPatchResponse>;
+}
+
+/** Shape of a new-project generation: the required house shell plus add/set ops for everything else. */
+export interface AiGenerationResponse {
+  summary: string;
+  timeOfDay?: "morning" | "midday" | "sunset" | "night";
+  house: { width: number; depth: number; floors: number; roof: string };
+  site: { environment: string; viewDirection: string; terrainSlope: string; approachSide: string };
+  operations: AiOperation[];
+}
+
+/**
+ * Schema for the initial generation. The house shell is a required top-level object (so a
+ * result without footprint, floors or roof cannot exist); everything else is expressed with
+ * the same typed add/set ops as scoped edits. Update/remove ops are not offered because a
+ * blank project has nothing to update or remove.
+ */
+export function buildGenerationResponseSchema(scope: EditScope, assetIds: readonly string[] = []) {
+  const ops = buildOperationsSchema({ ...scope, houseFields: [], site: false }, assetIds).options.filter(
+    (o) => !/^(update|remove)/.test((o.shape.op as z.ZodLiteral<string>).value)
+  );
+  const schema = z.object({
+    summary: z.string().describe("One or two plain-language sentences describing the design you created."),
+    timeOfDay: z.enum(["morning", "midday", "sunset", "night"]).optional()
+      .describe("Lighting that best shows off the design or matches the brief. Omit if the brief doesn't imply one."),
+    house: z.object(houseShape).describe("The main building's footprint (meters), number of floors and roof form."),
+    site: z.object(siteShape).describe("The land around the house: environment, view direction, slope and approach side."),
+    operations: z
+      .array(z.discriminatedUnion("op", ops as unknown as [z.ZodObject<z.ZodRawShape>, ...z.ZodObject<z.ZodRawShape>[]]))
+      .min(1)
+      .describe("setMaterials, setExteriorOptions and add* operations that build out the design."),
+  });
+  return schema as unknown as z.ZodType<AiGenerationResponse>;
+}

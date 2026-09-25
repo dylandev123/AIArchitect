@@ -9,6 +9,54 @@ import { useAssetStore } from "@/store/useAssetStore";
 import { deriveTextureUrls } from "@/lib/textures";
 import { featureKey, parseFeatureMeshId } from "@/lib/house/features/parseFeatureId";
 import { WaterSurface } from "./WaterSurface";
+import type { MaterialType } from "@/types/house";
+import { getSurfaceTextures, PATTERN_TILE_METERS, SURFACE_PATTERN } from "@/lib/proceduralTextures";
+
+/** Box geometry whose UVs are in metres / tile, so a pattern keeps its real-world scale on any face size. */
+function worldUvBox(size: [number, number, number], tile: number): THREE.BoxGeometry {
+  const [sx, sy, sz] = size;
+  const geometry = new THREE.BoxGeometry(sx, sy, sz);
+  const uv = geometry.attributes.uv as THREE.BufferAttribute;
+  // BoxGeometry face order: +x, -x, +y, -y, +z, -z — four vertices each.
+  const faces: [number, number][] = [[sz, sy], [sz, sy], [sx, sz], [sx, sz], [sx, sy], [sx, sy]];
+  faces.forEach(([w, h], face) => {
+    for (let i = 0; i < 4; i++) {
+      const idx = face * 4 + i;
+      uv.setXY(idx, (uv.getX(idx) * w) / tile, (uv.getY(idx) * h) / tile);
+    }
+  });
+  uv.needsUpdate = true;
+  return geometry;
+}
+
+/** Planar UVs for a flat-shaded triangle soup: along the slope on pitched faces, x/z on flat ones. */
+function planarUvs(vertices: number[], tile: number): Float32Array {
+  const uvs = new Float32Array((vertices.length / 3) * 2);
+  const a = new THREE.Vector3();
+  const b = new THREE.Vector3();
+  const c = new THREE.Vector3();
+  const normal = new THREE.Vector3();
+  const u = new THREE.Vector3();
+  const v = new THREE.Vector3();
+  for (let t = 0; t < vertices.length; t += 9) {
+    a.fromArray(vertices, t);
+    b.fromArray(vertices, t + 3);
+    c.fromArray(vertices, t + 6);
+    normal.subVectors(c, b).cross(a.clone().sub(b)).normalize();
+    if (Math.abs(normal.y) > 0.98) {
+      u.set(1, 0, 0);
+      v.set(0, 0, 1);
+    } else {
+      u.set(-normal.z, 0, normal.x).normalize();
+      v.crossVectors(normal, u).normalize();
+    }
+    [a, b, c].forEach((p, i) => {
+      uvs[(t / 3 + i) * 2] = p.dot(u) / tile;
+      uvs[(t / 3 + i) * 2 + 1] = p.dot(v) / tile;
+    });
+  }
+  return uvs;
+}
 
 // ── Texture cache ─────────────────────────────────────────────────────────────
 
@@ -106,7 +154,7 @@ function usePBRTextures(assetId: string | undefined, uvScale: number): TextureSe
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
+export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitive; surface?: MaterialType }) {
   const featureRef = useMemo(() => parseFeatureMeshId(primitive.id), [primitive.id]);
   const selectionKey = featureRef ? featureKey(featureRef) : primitive.id;
 
@@ -117,13 +165,24 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
   const uvScale = primitive.uvScale ?? 1;
   const textures = usePBRTextures(assetId, uvScale);
 
+  // Procedural wall/roof detail, only when no imported PBR asset supplies the surface.
+  const pattern = !assetId && surface ? SURFACE_PATTERN[surface] : undefined;
+  const detail = useMemo(() => (pattern ? getSurfaceTextures(pattern) : null), [pattern]);
+  const tile = pattern ? PATTERN_TILE_METERS[pattern] : 1;
+
   const triGeometry = useMemo(() => {
     if (primitive.kind !== "triMesh") return null;
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(primitive.vertices, 3));
+    if (pattern) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, tile), 2));
     geometry.computeVertexNormals();
     return geometry;
-  }, [primitive]);
+  }, [primitive, pattern, tile]);
+
+  const boxGeometry = useMemo(
+    () => (primitive.kind === "box" && pattern ? worldUvBox(primitive.size, tile) : null),
+    [primitive, pattern, tile]
+  );
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
@@ -177,18 +236,42 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
     );
   }
 
+  // Glass (windows, doors, glass railings, glazed roofs): tinted, clear and mirror-like, sky-lit by the environment.
+  const isGlass = !!primitive.transparent && (primitive.opacity ?? 1) < 0.95;
+  const glass = isGlass ? (
+    <meshPhysicalMaterial
+      color={primitive.color}
+      transparent
+      opacity={Math.min(primitive.opacity ?? 0.4, 0.42)}
+      roughness={0.03}
+      metalness={0.1}
+      envMapIntensity={2.4}
+      clearcoat={1}
+      clearcoatRoughness={0.02}
+      ior={1.5}
+      depthWrite={false}
+      emissive={baseMaterialProps.emissive}
+      emissiveIntensity={baseMaterialProps.emissiveIntensity}
+      side={THREE.DoubleSide}
+    />
+  ) : null;
+
+  const detailProps = detail
+    ? { map: detail.map, bumpMap: detail.bump, bumpScale: 2.2 }
+    : {};
+
   if (primitive.kind === "box") {
     return (
       <mesh
         position={primitive.position}
         rotation={primitive.rotation}
-        castShadow
+        castShadow={!isGlass}
         receiveShadow
         onClick={handleClick}
         userData={{ id: primitive.id }}
       >
-        <boxGeometry args={primitive.size} />
-        <meshStandardMaterial {...texturedProps} />
+        {boxGeometry ? <primitive object={boxGeometry} attach="geometry" /> : <boxGeometry args={primitive.size} />}
+        {glass ?? <meshStandardMaterial {...texturedProps} {...(textures ? {} : detailProps)} />}
       </mesh>
     );
   }
@@ -196,12 +279,12 @@ export function PrimitiveMesh({ primitive }: { primitive: HousePrimitive }) {
   return (
     <mesh
       geometry={triGeometry!}
-      castShadow
+      castShadow={!isGlass}
       receiveShadow
       onClick={handleClick}
       userData={{ id: primitive.id }}
     >
-      <meshStandardMaterial {...baseMaterialProps} side={THREE.DoubleSide} />
+      {glass ?? <meshStandardMaterial {...baseMaterialProps} {...detailProps} side={THREE.DoubleSide} />}
     </mesh>
   );
 }

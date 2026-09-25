@@ -16,6 +16,7 @@ import {
 } from "@/lib/quickActions";
 import { ROOM_TYPE_LABELS, WALL_THICKNESS } from "@/lib/house/constants";
 import { makeScopeForFeature } from "@/lib/ai/targeting";
+import { requestHouseEdit } from "@/lib/ai/client";
 import type { RoomType } from "@/types/house";
 
 // ── Accent palette ────────────────────────────────────────────────────────────
@@ -218,23 +219,21 @@ export function QuickActions() {
         const index = featureRef?.index ?? 0;
         const prompt = action.action.prompt(index, rawFeature);
         const scope = featureRef
-          ? makeScopeForFeature(featureRef.type)
-          : { kind: "house" as const, label: "House", allowedOps: ["setHouse", "setMaterials"] };
+          ? makeScopeForFeature(featureRef.type, featureRef.index)
+          : { kind: "house" as const, label: "House" };
 
-        const res = await fetch("/api/ai/house", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, currentHouseJson: project.houseConfigJson, history: [], scope }),
+        const result = await requestHouseEdit({
+          projectId: project.id,
+          prompt,
+          scope,
+          apply: (summary, json) => appendVersion(project.id, summary, json),
         });
-
-        const data = await res.json();
-        if (res.ok) {
-          appendVersion(project.id, data.summary, data.json);
+        if (result.ok) {
           setFeedback("Done ✓");
-        } else if (data.error?.includes("configured") || res.status === 503) {
+        } else if (result.error.includes("configured") || result.status === 503) {
           setFeedback("Connect AI to use this →");
         } else {
-          setFeedback("Try again?");
+          setFeedback(result.stale ? "Project changed — try again" : "Try again?");
         }
       }
     } finally {

@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { useUIStore } from "@/store/useUIStore";
 import { useProjectStore } from "@/store/useProjectStore";
+import { requestHouseEdit, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
+import { needsInitialGeneration } from "@/lib/house/blank";
 
 // ── Step generator ──────────────────────────────────────────────────────────
 // Reads the prompt for keywords and returns steps that feel relevant.
@@ -68,7 +70,16 @@ function getArchitectSteps(prompt: string): string[] {
 // Turns technical error strings into friendly messages.
 // No logic change — purely cosmetic.
 function humanizeError(raw: string): string {
-  if (raw.includes("configured") || raw.includes("AI_GATEWAY") || raw.includes("503")) {
+  if (raw === STALE_PROJECT_MESSAGE) {
+    return "The design changed while I was working, so I held back my edit. Ask again and I'll use the latest version.";
+  }
+  if (raw.includes("couldn't produce a valid design")) {
+    return "I couldn't turn that into a valid design. Try describing the house a little differently.";
+  }
+  if (raw.includes("didn't produce any valid edit")) {
+    return "I couldn't find a precise change to make for that. Could you say what should change?";
+  }
+  if (raw.includes("configured") || raw.includes("OPENAI_API_KEY") || raw.includes("503")) {
     return "Your architect isn't connected yet. Set up the AI service to get started.";
   }
   if (raw.includes("schema") || raw.includes("rephrase")) {
@@ -84,6 +95,12 @@ function humanizeError(raw: string): string {
 const COMPLETION_HEADER = "Your architect has finished the latest revision.";
 
 // ── Quick-start prompts ──────────────────────────────────────────────────────
+const BRIEF_PROMPTS = [
+  "A modern two-storey family home with a pool and double garage",
+  "A cozy single-storey beach cottage with a wooden deck",
+  "A Mediterranean villa with a courtyard garden and driveway",
+];
+
 const QUICK_PROMPTS = [
   "Design a rooftop terrace",
   "Make it two storeys",
@@ -110,6 +127,10 @@ export function ChatPanel() {
   const params = useParams<{ projectId: string }>();
   const project = useProjectStore((s) => s.getProject(params.projectId));
   const appendVersion = useProjectStore((s) => s.appendVersion);
+  const needsGeneration = !!project && needsInitialGeneration(project);
+  const setAiWorking = useUIStore((s) => s.setAiWorking);
+  const setGenerationError = useUIStore((s) => s.setGenerationError);
+  const takePendingBrief = useUIStore((s) => s.takePendingBrief);
 
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -153,49 +174,55 @@ export function ChatPanel() {
   const send = async (text: string) => {
     const prompt = text.trim();
     if (!prompt || isLoading || !project) return;
+    const wasBlank = needsInitialGeneration(project);
 
     setMessages((prev) => [...prev, { role: "user", content: prompt }]);
     setDraft("");
     setIsLoading(true);
+    setAiWorking(true);
+    setGenerationError(null);
     beginWork(prompt);
 
     try {
-      const res = await fetch("/api/ai/house", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt,
-          currentHouseJson: project.houseConfigJson,
-          history: messages
-            .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
-            .map((m) => ({ role: m.role, content: m.content })),
-        }),
+      const result = await requestHouseEdit({
+        projectId: project.id,
+        prompt,
+        history: messages
+          .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
+          .map((m) => ({ role: m.role, content: m.content })),
+        apply: (summary, json) => appendVersion(project.id, summary, json),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "error", content: humanizeError(data.error ?? "") },
-        ]);
-      } else {
-        appendVersion(project.id, data.summary, data.json);
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: data.summary },
-        ]);
-      }
-    } catch {
+      const failure = result.ok ? undefined : humanizeError(result.error);
       setMessages((prev) => [
         ...prev,
-        { role: "error", content: humanizeError("network error") },
+        result.ok ? { role: "assistant", content: result.summary } : { role: "error", content: failure! },
       ]);
+      if (failure && wasBlank) {
+        setGenerationError(failure);
+        setDraft(prompt);
+      }
+    } catch {
+      const failure = humanizeError("network error");
+      setMessages((prev) => [...prev, { role: "error", content: failure }]);
+      if (wasBlank) {
+        setGenerationError(failure);
+        setDraft(prompt);
+      }
     } finally {
       setIsLoading(false);
+      setAiWorking(false);
       endWork();
     }
   };
+
+  // A brief typed on the home page starts the initial generation as soon as the workspace opens.
+  useEffect(() => {
+    if (!project) return;
+    const brief = takePendingBrief(project.id);
+    if (brief) queueMicrotask(() => void send(brief));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project?.id]);
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
@@ -235,10 +262,12 @@ export function ChatPanel() {
             {messages.length === 0 && !isLoading && (
               <div className="space-y-3 px-4 pb-3 pt-1">
                 <p className="text-xs leading-relaxed text-neutral-500">
-                  Tell me what you&apos;d like to build or change, and I&apos;ll bring it to life.
+                  {needsGeneration
+                    ? "Describe the house you'd like — style, size, floors, garage, pool, garden — and I'll design it from scratch."
+                    : "Tell me what you'd like to build or change, and I'll bring it to life."}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {QUICK_PROMPTS.map((p) => (
+                  {(needsGeneration ? BRIEF_PROMPTS : QUICK_PROMPTS).map((p) => (
                     <button
                       key={p}
                       onClick={() => send(p)}
@@ -341,7 +370,9 @@ export function ChatPanel() {
               placeholder={
                 isLoading
                   ? "Your architect is designing…"
-                  : "Tell your architect what to create…"
+                  : needsGeneration
+                    ? "Describe your project…"
+                    : "Tell your architect what to create…"
               }
               className="flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-600 transition focus:border-amber-500/40 focus:bg-white/[0.06] disabled:opacity-50"
             />

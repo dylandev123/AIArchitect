@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:ai": "node --test scripts/test-ai-house.mjs"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.118",
+    "@next/swc-darwin-arm64": "^16.3.6",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "ai": "^6.0.216",
