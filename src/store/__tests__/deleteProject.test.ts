@@ -49,3 +49,27 @@ describe("deleteProject", () => {
     expect(stored()).toEqual(["Keep me"]);
   });
 });
+
+describe("duplicateProject", () => {
+  beforeEach(stubBrowser);
+
+  it("creates a new ID with a (Copy) name and leaves the original intact", async () => {
+    const store = await load();
+    const a = store.getState().createProject("House");
+    const copy = store.getState().duplicateProject(a.id)!;
+    expect(copy.id).not.toBe(a.id);
+    expect(copy.name).toBe("House (Copy)");
+    expect(store.getState().projects.map((p) => p.name)).toEqual(["House", "House (Copy)"]);
+  });
+});
+
+describe("renameProject", () => {
+  beforeEach(stubBrowser);
+
+  it("keeps the same ID", async () => {
+    const store = await load();
+    const a = store.getState().createProject("Old");
+    store.getState().renameProject(a.id, "New");
+    expect(store.getState().projects.map((p) => [p.id, p.name])).toEqual([[a.id, "New"]]);
+  });
+});

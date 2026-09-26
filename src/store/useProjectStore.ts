@@ -15,6 +15,8 @@ interface ProjectStore {
   projects: Project[];
   createProject: (name: string, projectType?: ProjectType) => Project;
   renameProject: (id: string, name: string) => void;
+  /** Copies a project (all versions) under a new ID, named "<name> (Copy)". Returns the copy. */
+  duplicateProject: (id: string) => Project | undefined;
   setProjectType: (id: string, projectType: ProjectType) => void;
   /** Permanently removes a project. Returns false (and leaves it in place) if it couldn't be removed from storage. */
   deleteProject: (id: string) => boolean;
@@ -61,6 +63,21 @@ export const useProjectStore = create<ProjectStore>()(
             p.id === id ? { ...p, name: name.trim() || p.name, updatedAt: Date.now() } : p
           ),
         })),
+
+      duplicateProject: (id) => {
+        const source = get().projects.find((p) => p.id === id);
+        if (!source) return undefined;
+        const now = Date.now();
+        const copy: Project = {
+          ...structuredClone(source),
+          id: crypto.randomUUID(),
+          name: `${source.name} (Copy)`,
+          createdAt: now,
+          updatedAt: now,
+        };
+        set((state) => ({ projects: [...state.projects, copy] }));
+        return copy;
+      },
 
       setProjectType: (id, projectType) =>
         set((state) => ({

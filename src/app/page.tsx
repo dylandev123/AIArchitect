@@ -11,6 +11,7 @@ import { formatRelativeTime } from "@/lib/format";
 import { PROMPT_SUGGESTIONS } from "@/lib/promptSuggestions";
 import { AdminButton } from "@/components/admin/AdminButton";
 import { HeroInspiration } from "@/components/landing/HeroInspiration";
+import { AllProjectsDialog } from "@/components/landing/AllProjectsDialog";
 
 /** "A modern two-storey house with a pool…" → "A modern two-storey house with a". */
 function projectNameFromBrief(brief: string): string {
@@ -26,6 +27,7 @@ export default function Home() {
   const hydrated = useHydrated();
   const [prompt, setPrompt] = useState("");
   const [creating, setCreating] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   /** Suggestions and inspiration only tailor the prompt; the user still presses Generate. */
@@ -178,8 +180,10 @@ export default function Home() {
               <h2 className="text-sm font-medium text-neutral-500 uppercase tracking-wider">
                 Recent Projects
               </h2>
-              {projects.length > 4 && (
-                <button className="flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-400 transition">
+              {projects.length > 0 && (
+                <button
+                  onClick={() => setShowAll(true)}
+                  className="flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-400 transition">
                   <FolderOpen size={12} />
                   View all
                 </button>
@@ -210,6 +214,8 @@ export default function Home() {
           </section>
         )}
       </main>
+
+      {showAll && <AllProjectsDialog onClose={() => setShowAll(false)} />}
 
       {/* Footer */}
       <footer className="relative pb-8 text-center">
