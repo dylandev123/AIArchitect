@@ -7,7 +7,9 @@ import { inferSiteHints, resolveSiteSettings, type SiteHints } from "@/lib/house
 import type { SiteSettings } from "@/types/house";
 import { applyArchitectureRules } from "@/lib/house/architecture/generationRules";
 import { applySiteRules } from "@/lib/house/architecture/siteRules";
-import { GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, TIER_GUIDANCE } from "./designGuidance";
+import { findSiteCollisions, resolveSiteCollisions } from "@/lib/house/architecture/siteCollisions";
+import { applyScaleRules, finalizeScale, fitShellToScale } from "@/lib/house/architecture/scaleRules";
+import { GEOMETRY_GUIDANCE, SCALE_GUIDANCE, TERRAIN_GUIDANCE, TIER_GUIDANCE } from "./designGuidance";
 import { describeArchitectureStyles } from "@/lib/house/architecture/profiles";
 import { partitionOpsForScope, WORLD_SCOPE } from "./targeting";
 import { describeCapabilities, EXTERIOR_ENUM_OPTIONS, EXTERIOR_ASSET_OPTIONS, type AssetRef } from "./capabilities";
@@ -18,12 +20,12 @@ const CORE = `You are the design engine for a professional architectural platfor
 const WORLD = `═══ WHAT TO DESIGN ═══
 
 Read the brief and decide, in this order:
-1. House shell ("house"): footprint width (east-west) and depth (north-south) in meters, number of floors, roof form. Match the brief's scale: a cottage is ~8–12 × 7–9 m, a family home ~12–18 × 9–12 m, a villa or multi-storey block larger.
+1. House shell ("house"): the main block's footprint width (east-west) and depth (north-south) in meters, number of floors, roof form. Size it from the project scale (see PROJECT SCALE) — that section, not any style guidance below, decides how big the house is.
 2. Exterior character: "setExteriorOptions" (style plus wall finish, window/door/railing/column styles, patio/pool surfaces) and "setMaterials" (exterior, roof, trim, decking). Pick a coherent look that fits the style and setting.
 3. Openings: windows and a front door on the walls that suit the design, plus balconies only where the brief or style calls for them.
 4. Garage and driveway if the brief implies cars (attached to a wall; the driveway leaves from the same wall).
 5. Outdoor areas the brief mentions or strongly implies: patio, deck, pool, landscaping zones (garden / lawn), parking, a road. Do not add extras nobody asked for.
-6. Site ("site"): pick environment (countryside | beach | cliff | hillside | farm | forest | suburban | urban), viewDirection, terrainSlope and approachSide from the brief. "Sunrise" means the view faces east, "sunset" west; a beach or cliff view faces the water. Without a stated orientation use viewDirection south and approachSide north; approachSide should not equal viewDirection. Land rises behind the house (opposite the view) when terrainSlope is gentle or steep, so hillside and cliff sites usually have a slope. Also choose "designTier" (starter | comfort | luxury | estate) from how elaborate the brief is — see DESIGN TIER — and "timeOfDay" only if the brief implies a mood.
+6. Site ("site"): pick environment (countryside | beach | cliff | hillside | farm | forest | suburban | urban), viewDirection, terrainSlope and approachSide from the brief. "Sunrise" means the view faces east, "sunset" west; a beach or cliff view faces the water. Without a stated orientation use viewDirection south and approachSide north; approachSide should not equal viewDirection. Land rises behind the house (opposite the view) when terrainSlope is gentle or steep, so hillside and cliff sites usually have a slope. Also choose "projectScale" (cottage | family | luxury | estate | mansion) from how big the brief says the project is — see PROJECT SCALE — "designTier" (starter | comfort | luxury | estate) from how elaborate it is — see DESIGN TIER — and "timeOfDay" only if the brief implies a mood.
    Orientation is expressed through wall choice: put the main outdoor spaces (patio, deck, pool, balcony, large windows) on the wall equal to viewDirection, and the entrance door, garage, driveway and parking on the wall equal to approachSide. Match the setting: a beach or cliff house wants a deck or pool facing the water; a farm wants open space and a driveway; an urban house is compact with little lawn.
 7. Extra structures (guest house, gazebo, outdoor bar, restaurant, reception) only as "addBuilding" when the brief asks for them.
 8. Silhouette and setting: use the curved, arched and layered parts and the terrain features described below to match the designTier and the brief — richer for luxury and estate, plain for starter — and only add terrain (river, rocks, clearing…) when the brief or setting calls for it.
@@ -34,7 +36,7 @@ const ARCHITECTURE = `═══ ARCHITECTURAL STYLES ═══
 
 Three exteriorOptions.style values change the building's actual construction, not just its colours. When the brief matches one, set exteriorOptions.style to it and design to that massing (roof form and pitch, walls, foundation, porches and the detached structure are then built by the renderer from the style):
 ${describeArchitectureStyles()}
-Their signature parts are ordinary features you may add yourself, sized to the design: "addPorch" (a covered porch / veranda on a ground-floor wall — usually the entrance wall, centred on the door), "addChimney" (an exterior stack on a gable-end wall) and "addBuilding" with kind "shed", "detached_garage" or "gazebo". Any of these you leave out is added for you. Give these styles wide, consistent proportions — do not fall back to a generic box with a different colour.`;
+Their signature parts are ordinary features you may add yourself, sized to the design: "addPorch" (a covered porch / veranda on a ground-floor wall — usually the entrance wall, centred on the door), "addChimney" (an exterior stack on a gable-end wall) and "addBuilding" with kind "shed", "detached_garage" or "gazebo". Any of these you leave out is added for you. Give these styles wide, consistent proportions — do not fall back to a generic box with a different colour. Footprint sizes quoted for a style are its typical proportions; the project scale decides the actual size.`;
 
 const RULES = `═══ RULES ═══
 
@@ -48,7 +50,7 @@ const RULES = `═══ RULES ═══
 export function buildGenerationSystemPrompt(assets: readonly AssetRef[]): string {
   const capabilities = describeCapabilities({ roofs: true, materials: true, exterior: true, featureTypes: true, site: true, assets });
   const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(WORLD_SCOPE, assets.map((a) => a.id), true)}`;
-  return [CORE, WORLD, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads].join("\n\n");
+  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads].join("\n\n");
 }
 
 export function buildGenerationUserMessage(brief: string, previousErrors: readonly string[] = []): string {
@@ -71,7 +73,7 @@ export function buildGenerationUserMessage(brief: string, previousErrors: readon
 const ADVISORY_WARNING = /will render fine/;
 
 export type GenerationOutcome =
-  | { ok: true; json: string; timeOfDay?: AiGenerationResponse["timeOfDay"]; site: SiteSettings; skipped: string[] }
+  | { ok: true; json: string; timeOfDay?: AiGenerationResponse["timeOfDay"]; site: SiteSettings; skipped: string[]; adjusted: string[] }
   | { ok: false; errors: string[] };
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -100,20 +102,32 @@ export function assembleGeneratedProject(
   // What the brief explicitly says ("facing sunrise", "cliff") overrides the model's guess.
   const hints: SiteHints = inferSiteHints(brief);
   const site = resolveSiteSettings(output.site as Partial<SiteSettings>, hints);
-  const layout = normalizeGeneratedRooms(allowed, output.house);
+  // The scale brings the shell into its size envelope (a mansion is never a suburban box) and carries the ops with it.
+  const fitted = fitShellToScale({ brief, house: output.house, site, ops: allowed });
+  const layout = normalizeGeneratedRooms(fitted.ops, fitted.house);
   if (layout.errors.length > 0) return { ok: false, errors: layout.errors };
   // A named style (cabin, modern luxury, Caribbean villa) fixes the roof form, the setting and its signature parts.
-  const styled = applyArchitectureRules({ brief, house: output.house, site, ops: layout.ops, statedEnvironment: hints.environment !== undefined });
+  const styled = applyArchitectureRules({ brief, house: fitted.house, site, ops: layout.ops, statedEnvironment: hints.environment !== undefined });
+  // The scale adds what its size calls for: connected wings, a garage row, outdoor living, grounds and outbuildings.
+  const scaled = applyScaleRules({ brief, house: styled.house, site: styled.site, ops: styled.ops });
   // The tier and the brief decide what richness and terrain the design still lacks (a river for "beside a river").
-  const designed = applySiteRules({ brief, house: styled.house, site: styled.site, ops: styled.ops, style: styled.style });
-  const ops: PatchOp[] = [{ op: "setHouse", fields: { ...styled.house } }, { op: "setSite", fields: { ...styled.site } }, ...designed.ops];
+  const designed = applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled, style: styled.style });
+  // With every rule run, clear the walls the wings cover and give the larger facades their window rhythm.
+  const finished = finalizeScale({ brief, house: styled.house, site: styled.site, ops: designed.ops });
+  // Nothing is committed on top of anything else: features that collide move to the nearest clear place, or fail the attempt.
+  const spatial = resolveSiteCollisions({ house: styled.house, ops: finished });
+  if (spatial.errors.length > 0) return { ok: false, errors: spatial.errors };
+  const ops: PatchOp[] = [{ op: "setHouse", fields: { ...styled.house } }, { op: "setSite", fields: { ...styled.site } }, ...spatial.ops];
 
   const { json, errors: patchErrors } = applyPatch(BLANK_HOUSE_JSON, ops);
   if (patchErrors.length > 0) return { ok: false, errors: patchErrors };
 
   const errors = validateGeneratedProject(json, assets);
   if (errors.length > 0) return { ok: false, errors };
-  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected };
+  // The last gate looks at the committed JSON itself, independent of how the ops got there.
+  const overlaps = findSiteCollisions(JSON.parse(json) as Record<string, unknown>);
+  if (overlaps.length > 0) return { ok: false, errors: overlaps };
+  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected, adjusted: spatial.relocated };
 }
 
 /**

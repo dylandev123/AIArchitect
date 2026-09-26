@@ -17,7 +17,9 @@ export function validateParking(raw: unknown): FeatureValidation<ParkingConfig> 
   const width = clampNumber(values.width, PARKING_LIMITS.width.min, PARKING_LIMITS.width.max, "width", warnings);
   const depth = clampNumber(values.depth, PARKING_LIMITS.depth.min, PARKING_LIMITS.depth.max, "depth", warnings);
 
-  return { value: { x, z, width, depth }, errors: [], warnings };
+  const value: ParkingConfig = { x, z, width, depth };
+  if (o.stripes === false) value.stripes = false;
+  return { value, errors: [], warnings };
 }
 
 const MAX_STRIPES = 12;
@@ -39,7 +41,7 @@ export function buildParking(config: ParkingConfig, index: number): HousePrimiti
     },
   ];
 
-  const stallCount = Math.min(MAX_STRIPES, Math.max(0, Math.floor(config.width / STALL_WIDTH) - 1));
+  const stallCount = config.stripes === false ? 0 : Math.min(MAX_STRIPES, Math.max(0, Math.floor(config.width / STALL_WIDTH) - 1));
   const startX = config.x - config.width / 2;
   for (let i = 1; i <= stallCount; i++) {
     const stripeX = startX + (config.width / (stallCount + 1)) * i;

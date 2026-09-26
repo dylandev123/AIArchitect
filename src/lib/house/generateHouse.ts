@@ -348,7 +348,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const driveways = processFeatureArray(root, "driveway", validateDriveway, (v, idx) => buildDriveway(v, config, idx, opts), errors, warnings, primitives);
   const rooms = processFeatureArray(root, "room", (i) => validateRoom(i, config), (v, idx) => buildRoom(v, config, idx), errors, warnings, primitives);
   primitives.push(...buildRoomPartitions(rooms, config));
-  const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx, opts), errors, warnings, primitives);
+  const buildings = processFeatureArray(root, "building", validateBuilding, (v, idx) => buildBuilding(v, materials, idx, opts, tier), errors, warnings, primitives);
   const roads = processFeatureArray(root, "road", validateRoad, (v, idx) => buildRoad(v, idx), errors, warnings, primitives);
   const parking = processFeatureArray(root, "parking", validateParking, (v, idx) => buildParking(v, idx), errors, warnings, primitives);
   const landscaping = processFeatureArray(root, "landscape", validateLandscapeZone, (v, idx) => buildLandscapeZone(v, idx), errors, warnings, primitives);

@@ -10,8 +10,12 @@ export function isAiConfigured(): boolean {
   return Boolean(process.env.OPENAI_API_KEY?.trim());
 }
 
+export function getAiModelId(): string {
+  return process.env.AI_HOUSE_MODEL || DEFAULT_MODEL;
+}
+
 export function getAiModel() {
-  return openai(process.env.AI_HOUSE_MODEL || DEFAULT_MODEL);
+  return openai(getAiModelId());
 }
 
 /**

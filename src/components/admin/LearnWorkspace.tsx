@@ -342,7 +342,7 @@ export function LearnWorkspace({ projectId }: LearnWorkspaceProps) {
       const res = await fetch("/api/admin/learn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: trimmed, adminEmail }),
+        body: JSON.stringify({ prompt: trimmed, adminEmail, projectId }),
       });
       const data = (await res.json()) as {
         proposal?: {

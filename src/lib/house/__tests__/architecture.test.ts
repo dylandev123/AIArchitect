@@ -28,7 +28,7 @@ const MODEL_OUTPUT: AiGenerationResponse = {
 
 const BRIEFS = {
   cabin: "A cozy cabin in the woods",
-  modern: "A modern luxury house",
+  modern: "A modern luxury family home",
   caribbean: "A Caribbean villa by the sea",
 } as const;
 

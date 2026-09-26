@@ -52,7 +52,7 @@ const SITE = `═══ SITE SETTING ═══
 
 "site" describes the land around the house and is drawn as simple procedural terrain: environment (countryside | beach | cliff | hillside | farm | forest | suburban | urban), viewDirection (the side the view faces), terrainSlope (flat | gentle | steep — land rises behind the house, away from the view) and approachSide (where the road and entrance arrive from).
 "setSite" merges only the fields you give. "Move it to a beach" → {"environment":"beach"} only; "facing sunrise" → {"viewDirection":"east"}; "facing sunset" → west. Do not move the house or its features to match — change only the site setting unless the instruction says otherwise.
-"setSite" also carries designTier (starter | comfort | luxury | estate). Changing it changes how much detail the renderer invests in; it never adds or removes features by itself, so "make it more luxurious" changes the tier and only adds features if the instruction asks for them.`;
+"setSite" also carries designTier (starter | comfort | luxury | estate). Changing it changes how much detail the renderer invests in; it never adds or removes features by itself, so "make it more luxurious" changes the tier and only adds features if the instruction asks for them. It also carries projectScale, which only records how big the project was generated: changing it changes nothing on its own, so leave it alone unless the instruction names a scale.`;
 
 const PRECISION = `═══ PRECISION EDITING ═══
 

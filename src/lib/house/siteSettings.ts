@@ -1,5 +1,6 @@
 import type { CompassSide, DesignTier, SiteEnvironment, SiteSettings, TerrainSlope } from "@/types/house";
-import { DEFAULT_DESIGN_TIER, isDesignTier } from "./tiers";
+import { DEFAULT_DESIGN_TIER, DESIGN_TIERS, isDesignTier, tierRank } from "./tiers";
+import { inferScaleFromBrief, isProjectScale, SCALE_PROFILES } from "./scale";
 
 export const SITE_ENVIRONMENTS: [SiteEnvironment, ...SiteEnvironment[]] = [
   "countryside", "beach", "cliff", "hillside", "farm", "forest", "suburban", "urban",
@@ -55,6 +56,9 @@ export function parseSiteSettings(raw: unknown, warnings: string[]): SiteSetting
   // The tier postdates the other fields, so its absence is normal (it means "comfort") and never warns.
   if (isDesignTier(r.designTier)) settings.designTier = r.designTier;
   else if (r.designTier !== undefined) warnings.push(`site.designTier: unknown value ${JSON.stringify(r.designTier)} — using "${DEFAULT_DESIGN_TIER}".`);
+  // Likewise the scale: absent means the project predates it and the scale rules never apply to it.
+  if (isProjectScale(r.projectScale)) settings.projectScale = r.projectScale;
+  else if (r.projectScale !== undefined) warnings.push(`site.projectScale: unknown value ${JSON.stringify(r.projectScale)} — ignoring.`);
   return settings;
 }
 
@@ -111,6 +115,9 @@ export function inferSiteHints(brief: string): SiteHints {
     if (pattern.test(brief)) { hints.designTier = tier; break; }
   }
 
+  const scale = inferScaleFromBrief(brief);
+  if (scale) hints.projectScale = scale;
+
   if (/\b(steep|precipitous|sheer|dramatic\s+slope)\b/i.test(brief)) hints.terrainSlope = "steep";
   else if (/\b(gentle(?:ly)?\s+slop\w*|gentle\s+hill|slight\s+slope)\b/i.test(brief)) hints.terrainSlope = "gentle";
   else if (/\b(flat|level)\s+(site|land|lot|ground|terrain|plot)\b/i.test(brief)) hints.terrainSlope = "flat";
@@ -139,6 +146,10 @@ export function resolveSiteSettings(model: Partial<SiteSettings> | undefined, hi
   if (approachSide === viewDirection && (hints.approachSide === undefined || hints.viewDirection === undefined)) {
     approachSide = oppositeSide(viewDirection);
   }
-  const designTier = hints.designTier ?? (isDesignTier(model?.designTier) ? model.designTier : DEFAULT_DESIGN_TIER);
-  return { environment, viewDirection, terrainSlope, approachSide, designTier };
+  const projectScale = hints.projectScale ?? (isProjectScale(model?.projectScale) ? model.projectScale : undefined);
+  let designTier = hints.designTier ?? (isDesignTier(model?.designTier) ? model.designTier : DEFAULT_DESIGN_TIER);
+  // A mansion is never a plain house: unless the brief states a tier, the scale lifts a lower one to its floor.
+  const floor = projectScale ? SCALE_PROFILES[projectScale].minTier : undefined;
+  if (hints.designTier === undefined && floor && tierRank(designTier) < tierRank(floor)) designTier = DESIGN_TIERS[tierRank(floor)];
+  return { environment, viewDirection, terrainSlope, approachSide, designTier, ...(projectScale ? { projectScale } : {}) };
 }

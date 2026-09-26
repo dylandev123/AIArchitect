@@ -130,7 +130,7 @@ export interface RoomConfig {
 
 export type BuildingKind =
   | "villa" | "restaurant" | "reception" | "gazebo" | "outdoor_bar"
-  | "shed" | "detached_garage";
+  | "shed" | "detached_garage" | "wing";
 
 /**
  * A freestanding structure positioned anywhere on the site (not attached to
@@ -148,6 +148,10 @@ export interface BuildingConfig {
   depth: number;
   floors: number;
   roof: RoofType;
+  /** Degrees about the building's own centre; 0 (or absent) leaves its front facing south. */
+  rotation?: number;
+  /** Built in the main house's own architectural language (walls, foundation, trim, roof). Absent = the plain kind. */
+  matchHouse?: boolean;
 }
 
 /**
@@ -190,6 +194,8 @@ export interface ParkingConfig {
   z: number;
   width: number;
   depth: number;
+  /** False leaves the stall stripes off, so a plain paved apron reads as part of the driveway. Absent = striped. */
+  stripes?: boolean;
 }
 
 /** A freestanding outdoor platform, ground-level or elevated, positioned anywhere on site. */
@@ -410,6 +416,8 @@ export type DesignTier = "starter" | "comfort" | "luxury" | "estate";
  * tells generation where to put outdoor living (`viewDirection`) and the entrance (`approachSide`).
  * Optional in the JSON: projects without it keep the original plain-lawn look.
  */
+export type ProjectScale = "cottage" | "family" | "luxury" | "estate" | "mansion";
+
 export interface SiteSettings {
   environment: SiteEnvironment;
   /** The side the main view faces (ocean, valley, sunrise…). */
@@ -419,6 +427,8 @@ export interface SiteSettings {
   approachSide: CompassSide;
   /** Absent on projects that predate it; treated as "comfort". */
   designTier?: DesignTier;
+  /** Absent on projects that predate it; generation rules never touch a project without one. */
+  projectScale?: ProjectScale;
 }
 
 export interface SiteConfig {

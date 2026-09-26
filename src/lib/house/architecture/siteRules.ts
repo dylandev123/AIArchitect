@@ -4,6 +4,7 @@ import { SIDE_VECTORS, getArchitectureProfile } from "./profiles";
 import { outbuildingFor } from "./generationRules";
 import { pitchedRoof } from "./roofPlane";
 import { TIER_PROFILES, resolveTier, tierRank } from "../tiers";
+import { scaleRank } from "../scale";
 
 /**
  * Design rules for the parts of a design that follow from the *brief and the tier* rather than from a named style.
@@ -33,7 +34,7 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 const wallLen = (h: Shell, wall: WallSide) => (wall === "north" || wall === "south" ? h.width : h.depth);
 
 /** World x/z of a point `u` along a wall (from its start corner) and `out` metres out from its face. */
-function wallPoint(h: Shell, wall: WallSide, u: number, out: number): [number, number] {
+export function wallPoint(h: Shell, wall: WallSide, u: number, out: number): [number, number] {
   switch (wall) {
     case "north": return [-h.width / 2 + u, -h.depth / 2 - out];
     case "south": return [-h.width / 2 + u, h.depth / 2 + out];
@@ -255,7 +256,7 @@ function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): Patch
           if (chimneyAtStart) atStart = false;
           else if (chimneyAtEnd) atStart = true;
         }
-        out.push({ op: "addBay", value: { wall: approach, level: 0, offset: atStart ? 0 : round(len - width), width, depth: 2.8, levels: Math.min(house.floors + 1, 4), form: "turret" } });
+        out.push({ op: "addBay", value: { wall: approach, level: 0, offset: atStart ? 0 : Math.floor((len - width) * 10 + 1e-6) / 10, width, depth: 2.8, levels: Math.min(house.floors + 1, 4), form: "turret" } });
       }
     }
     if (!has("addArch")) {
@@ -303,7 +304,9 @@ function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): Patch
     const to = wallPoint(house, approach, u, gap + 20);
     out.push({ op: "addPath", value: { x1: round(from[0]), z1: round(from[1]), x2: round(to[0] + (az !== 0 ? 2.5 : 0)), z2: round(to[1] + (ax !== 0 ? 2.5 : 0)), width: 1.6, bend: 2.5, surface: rank >= 3 ? "flagstone" : "gravel" } });
   }
-  const gardens = rank >= 3 ? 3 : 2;
+  // A design with a large scale has had its garden zones and detached buildings placed by the scale rules already.
+  const scaled = input.site.projectScale !== undefined && scaleRank(input.site.projectScale) >= 2;
+  const gardens = scaled ? 0 : rank >= 3 ? 3 : 2;
   const gardenCount = ops.filter((op) => op.op === "addLandscape").length;
   if (gardenCount < gardens) {
     const halfLat = (Math.abs(ax) > 0.5 ? house.depth : house.width) / 2;
@@ -317,7 +320,7 @@ function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): Patch
   }
 
   // Estate outbuildings: a gazebo and a detached garage, unless the design already has them.
-  if (rank >= 3) {
+  if (rank >= 3 && !scaled) {
     for (const kind of ["gazebo", "detached_garage"] as const) {
       if (!ops.some((op) => op.op === "addBuilding" && valueOf(op).kind === kind) && !out.some((op) => op.op === "addBuilding" && valueOf(op).kind === kind)) {
         out.push({ op: "addBuilding", value: outbuildingFor(kind, house, site) });

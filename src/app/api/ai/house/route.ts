@@ -11,9 +11,11 @@ import { buildScopeContext } from "@/lib/ai/context";
 import { partitionOpsForScope, scopeFromHint, WORLD_SCOPE } from "@/lib/ai/targeting";
 import type { AssetRef } from "@/lib/ai/capabilities";
 import { applyPatch } from "@/lib/house/applyPatch";
+import { resolveSiteCollisions } from "@/lib/house/architecture/siteCollisions";
 import { revisionOf } from "@/lib/house/revision";
 import { isBlankSite } from "@/lib/house/blank";
-import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, isAiConfigured } from "@/lib/ai/model";
+import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
+import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
 
 export const maxDuration = 60;
 
@@ -31,6 +33,8 @@ interface ChatTurn {
 interface RequestBody {
   /** "generate" creates the initial design of a blank project; anything else is a scoped edit. */
   mode?: "generate" | "edit";
+  /** Only used to attribute AI usage; never trusted for anything else. */
+  projectId?: string;
   prompt?: string;
   currentHouseJson?: string;
   /** Revision (see revisionOf) of `currentHouseJson` as the client read it. */
@@ -48,6 +52,10 @@ function parseAssets(raw: unknown): AssetRef[] {
     .filter((a): a is AssetRef => typeof a?.id === "string" && typeof a?.name === "string")
     .slice(0, MAX_ASSETS)
     .map((a) => ({ id: a.id, name: a.name.slice(0, 60) }));
+}
+
+function parseProjectId(raw: unknown): string | null {
+  return typeof raw === "string" && /^[\w-]{1,64}$/.test(raw) ? raw : null;
 }
 
 export async function POST(req: NextRequest) {
@@ -86,6 +94,7 @@ export async function POST(req: NextRequest) {
   }
 
   const assets = parseAssets(body.assets);
+  const projectId = parseProjectId(body.projectId);
 
   if (body.mode === "generate") {
     // Generation only ever starts from a blank project; an existing design is never regenerated here.
@@ -95,7 +104,12 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    return generateInitialDesign(prompt, assets, baseRevision);
+    return generateInitialDesign(prompt, assets, baseRevision, {
+      projectId,
+      requestType: "generation",
+      scope: WORLD_SCOPE.level,
+      model: getAiModelId(),
+    });
   }
 
   const scope = scopeFromHint(body.scope, prompt);
@@ -104,19 +118,23 @@ export async function POST(req: NextRequest) {
   if (context.blocked) return NextResponse.json({ error: context.blocked }, { status: 422 });
 
   try {
-    const { output } = await generateText({
-      model: getAiModel(),
-      maxOutputTokens: MAX_OUTPUT_TOKENS[scope.level],
-      system: buildScopedSystemPrompt(scope, assets),
-      messages: [
-        ...history.map((turn) => ({ role: turn.role, content: turn.content }) as const),
-        { role: "user" as const, content: context.userMessage },
-      ],
-      output: Output.object({
-        schema: buildPatchResponseSchema(scope, assets.map((a) => a.id)),
-      }),
-      providerOptions: AI_PROVIDER_OPTIONS,
-    });
+    const { output } = await withUsageLogging(
+      { projectId, requestType: "scoped_edit", scope: scope.level, model: getAiModelId() },
+      () =>
+        generateText({
+          model: getAiModel(),
+          maxOutputTokens: MAX_OUTPUT_TOKENS[scope.level],
+          system: buildScopedSystemPrompt(scope, assets),
+          messages: [
+            ...history.map((turn) => ({ role: turn.role, content: turn.content }) as const),
+            { role: "user" as const, content: context.userMessage },
+          ],
+          output: Output.object({
+            schema: buildPatchResponseSchema(scope, assets.map((a) => a.id)),
+          }),
+          providerOptions: AI_PROVIDER_OPTIONS,
+        })
+    );
 
     // Payloads are validated locally against the per-op schemas; invalid ops are never applied.
     const assetIds = assets.map((a) => a.id);
@@ -135,7 +153,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { json, errors } = applyPatch(JSON.stringify(context.root), allowed);
+    // Features this edit adds must not land on anything: they move to the nearest clear spot, or the edit is refused.
+    // What the project already has is never moved, and neither are existing features the edit does not name.
+    const spatial = resolveSiteCollisions({ ops: allowed, existing: context.root });
+    if (spatial.errors.length > 0) {
+      return NextResponse.json(
+        { error: `That would overlap something already on the site: ${spatial.errors[0]} Try describing where it should go.` },
+        { status: 422 }
+      );
+    }
+
+    const { json, errors } = applyPatch(JSON.stringify(context.root), spatial.ops);
     if (errors.length > 0) {
       console.error("AI patch application failed:", errors);
       return NextResponse.json(
@@ -151,6 +179,7 @@ export async function POST(req: NextRequest) {
       revision: revisionOf(json),
       scope: { level: scope.level, label: scope.label },
       skipped: rejected,
+      adjusted: spatial.relocated,
     });
   } catch (error) {
     if (NoObjectGeneratedError.isInstance(error)) {
@@ -165,18 +194,20 @@ export async function POST(req: NextRequest) {
 }
 
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
-async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string) {
+async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, usageMeta: UsageMeta) {
   let errors: string[] = [];
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
-      const { output } = await generateText({
-        model: getAiModel(),
-        maxOutputTokens: MAX_OUTPUT_TOKENS.world,
-        system: buildGenerationSystemPrompt(assets),
-        messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
-        output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
-        providerOptions: AI_PROVIDER_OPTIONS,
-      });
+      const { output } = await withUsageLogging(usageMeta, () =>
+        generateText({
+          model: getAiModel(),
+          maxOutputTokens: MAX_OUTPUT_TOKENS.world,
+          system: buildGenerationSystemPrompt(assets),
+          messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
+          output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
+          providerOptions: AI_PROVIDER_OPTIONS,
+        })
+      );
 
       const result = assembleGeneratedProject(output, assets, brief, attempt === MAX_GENERATION_ATTEMPTS - 1);
       if (result.ok) {
@@ -190,6 +221,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
           site: result.site,
           scope: { level: WORLD_SCOPE.level, label: "New design" },
           skipped: result.skipped,
+          adjusted: result.adjusted,
         });
       }
       errors = result.errors;

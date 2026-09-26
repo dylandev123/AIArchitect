@@ -13,6 +13,7 @@ import {
 } from "@/lib/house/features/defaults";
 import { applyPatch } from "@/lib/house/applyPatch";
 import { DESIGN_TIERS, TIER_PROFILES, resolveTier } from "@/lib/house/tiers";
+import { SCALE_PROFILES } from "@/lib/house/scale";
 import { DEFAULT_HOUSE_CONFIG, type DesignTier } from "@/types/house";
 import {
   ELEMENT_REGISTRY,
@@ -137,6 +138,11 @@ function DesignTierSelector({ projectId, houseConfigJson }: { projectId: string;
           </button>
         ))}
       </div>
+      {site?.projectScale && (
+        <p className="mt-2 text-[10px] text-neutral-600" title={SCALE_PROFILES[site.projectScale].guidance}>
+          Generated at <span className="font-medium text-neutral-400">{SCALE_PROFILES[site.projectScale].label}</span> scale
+        </p>
+      )}
     </div>
   );
 }

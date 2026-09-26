@@ -1,18 +1,16 @@
-import type { BuildingConfig, BuildingKind, MaterialsConfig, RoofType } from "@/types/house";
+import type { BuildingConfig, BuildingKind, DesignTier, MaterialsConfig, RoofType } from "@/types/house";
 import type { HousePrimitive } from "../types";
 import {
   BUILDING_LIMITS,
   DOOR_PANEL_THICKNESS,
   FLOOR_THICKNESS,
-  FRAME_BORDER,
-  FRAME_THICKNESS,
   LEVEL_HEIGHT,
   MATERIAL_COLORS,
   PAVING_THICKNESS,
   SITE_POSITION_LIMIT,
   WALL_HEIGHT,
 } from "../constants";
-import { buildFloorSlabPrimitive, buildWallRingPrimitives, translatePrimitive } from "../primitiveBuilders";
+import { buildFloorSlabPrimitive, buildWallRingPrimitives, rotatePrimitiveY, translatePrimitive } from "../primitiveBuilders";
 import { getWallAnchorForFootprint, offsetOutward, pointOnWall, wallMountedSize } from "../wallAnchor";
 import { resolveMaterial } from "../materials";
 import { buildFlatRoof } from "../roof/flatRoof";
@@ -25,8 +23,10 @@ import { buildSawtoothRoof } from "../roof/sawtoothRoof";
 import { clampNumber, requireNumbers, type FeatureValidation } from "./validateHelpers";
 import type { ResolvedExteriorOptions } from "../catalog/types";
 import { buildOutbuilding } from "./outbuildings";
+import { buildStyledMass, buildWing } from "./wings";
+import { addWindow } from "./buildingParts";
 
-const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar", "shed", "detached_garage"];
+const BUILDING_KINDS: BuildingKind[] = ["villa", "restaurant", "reception", "gazebo", "outdoor_bar", "shed", "detached_garage", "wing"];
 const ROOF_TYPES: RoofType[] = ["flat", "gable", "hip", "mansard", "shed", "butterfly", "sawtooth"];
 
 export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig> {
@@ -58,59 +58,11 @@ export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig
   const x = clampNumber(values.x, SITE_POSITION_LIMIT.min, SITE_POSITION_LIMIT.max, "x", warnings);
   const z = clampNumber(values.z, SITE_POSITION_LIMIT.min, SITE_POSITION_LIMIT.max, "z", warnings);
 
-  return { value: { kind, x, z, width, depth, floors, roof }, errors: [], warnings };
-}
-
-// ── Per-kind window/door helpers ──────────────────────────────────────────────
-
-function addWindow(
-  primitives: HousePrimitive[],
-  anchor: ReturnType<typeof getWallAnchorForFootprint>,
-  offset: number,
-  winWidth: number,
-  winHeight: number,
-  sill: number,
-  idKey: string,
-  label: string,
-  trim: { color: string; roughness?: number; metalness?: number },
-  glass: { color: string; roughness?: number; metalness?: number; transparent?: boolean; opacity?: number }
-) {
-  const base = pointOnWall(anchor, offset);
-  const y = FLOOR_THICKNESS + sill + winHeight / 2;
-  const framePos = offsetOutward([base[0], y, base[2]], anchor, FRAME_THICKNESS / 2);
-  const glassPos = offsetOutward([base[0], y, base[2]], anchor, FRAME_THICKNESS + 0.02);
-
-  // Infer wall side from anchor outwardNormal
-  const wall = anchor.outwardNormal[2] === 1 ? "south" : anchor.outwardNormal[2] === -1 ? "north" : anchor.outwardNormal[0] === 1 ? "east" : "west";
-
-  primitives.push(
-    {
-      kind: "box",
-      id: `${idKey}-frame`,
-      category: "building",
-      label: `${label} Frame`,
-      position: framePos,
-      rotation: [0, 0, 0],
-      size: wallMountedSize(wall, winWidth + FRAME_BORDER * 2, winHeight + FRAME_BORDER * 2, FRAME_THICKNESS),
-      color: trim.color,
-      roughness: trim.roughness,
-      metalness: trim.metalness,
-    },
-    {
-      kind: "box",
-      id: `${idKey}-glass`,
-      category: "building",
-      label: `${label} Glass`,
-      position: glassPos,
-      rotation: [0, 0, 0],
-      size: wallMountedSize(wall, winWidth, winHeight, 0.03),
-      color: glass.color,
-      roughness: glass.roughness,
-      metalness: glass.metalness,
-      transparent: glass.transparent,
-      opacity: glass.opacity,
-    }
-  );
+  const value: BuildingConfig = { kind, x, z, width, depth, floors, roof };
+  // Only written when given, so an unrotated building's JSON stays exactly as it was.
+  if (typeof o.rotation === "number" && Number.isFinite(o.rotation)) value.rotation = clampNumber(o.rotation, -360, 360, "rotation", warnings);
+  if (o.matchHouse === true) value.matchHouse = true;
+  return { value, errors: [], warnings };
 }
 
 // ── Gazebo builder ────────────────────────────────────────────────────────────
@@ -288,11 +240,25 @@ function buildOutdoorBar(
 
 // ── Main builder ──────────────────────────────────────────────────────────────
 
+/** Builds a building, turned about its own centre by `rotation` degrees (0 = the front faces south, as always). */
 export function buildBuilding(
   config: BuildingConfig,
   materials: MaterialsConfig,
   index: number,
-  opts?: ResolvedExteriorOptions
+  opts?: ResolvedExteriorOptions,
+  tier?: DesignTier
+): HousePrimitive[] {
+  const primitives = buildUnrotated(config, materials, index, opts, tier);
+  const yaw = ((config.rotation ?? 0) * Math.PI) / 180;
+  return yaw === 0 ? primitives : primitives.map((p) => rotatePrimitiveY(p, config.x, config.z, yaw));
+}
+
+function buildUnrotated(
+  config: BuildingConfig,
+  materials: MaterialsConfig,
+  index: number,
+  opts?: ResolvedExteriorOptions,
+  tier?: DesignTier
 ): HousePrimitive[] {
   const idPrefix = `building-${index}`;
   const kindLabel = config.kind.charAt(0).toUpperCase() + config.kind.slice(1).replace("_", " ");
@@ -300,7 +266,8 @@ export function buildBuilding(
 
   if (config.kind === "gazebo") return buildGazebo(config, materials, idPrefix, label);
   if (config.kind === "outdoor_bar") return buildOutdoorBar(config, materials, idPrefix, label);
-  if (config.kind === "shed" || config.kind === "detached_garage") return buildOutbuilding(config, materials, idPrefix, label, opts);
+  if (config.kind === "shed" || config.kind === "detached_garage") return buildOutbuilding(config, materials, idPrefix, label, opts, tier);
+  if (config.kind === "wing") return buildWing(config, materials, idPrefix, label, opts, tier);
 
   const footprint = { center: [config.x, config.z] as [number, number], width: config.width, depth: config.depth };
   const exteriorMaterial = resolveMaterial(materials.exterior);
@@ -310,48 +277,53 @@ export function buildBuilding(
 
   const primitives: HousePrimitive[] = [];
 
-  // ── Shared: floor slabs + wall rings per level ───────────────────────────
+  // A guest house flagged `matchHouse` takes the main house's shell; every other building keeps the plain one below.
+  const matched = config.matchHouse === true && config.kind === "villa";
+  if (matched) primitives.push(...buildStyledMass(config, materials, idPrefix, label, opts, tier));
+  else {
+    // ── Shared: floor slabs + wall rings per level ───────────────────────────
 
-  for (let level = 0; level < config.floors; level++) {
-    const floorY = level * LEVEL_HEIGHT;
-    primitives.push(
-      buildFloorSlabPrimitive(
-        footprint,
-        floorY,
-        FLOOR_THICKNESS,
-        `${idPrefix}-floor-${level}`,
-        `${label} Floor ${level + 1}`,
-        MATERIAL_COLORS.floor
-      )
-    );
-    primitives.push(
-      ...buildWallRingPrimitives(
-        footprint,
-        floorY + FLOOR_THICKNESS,
-        WALL_HEIGHT,
-        `${idPrefix}-wall-${level}`,
-        `${label} Wall ${level + 1}`,
-        exteriorMaterial.color,
-        [],
-        exteriorMaterial
-      )
-    );
+    for (let level = 0; level < config.floors; level++) {
+      const floorY = level * LEVEL_HEIGHT;
+      primitives.push(
+        buildFloorSlabPrimitive(
+          footprint,
+          floorY,
+          FLOOR_THICKNESS,
+          `${idPrefix}-floor-${level}`,
+          `${label} Floor ${level + 1}`,
+          MATERIAL_COLORS.floor
+        )
+      );
+      primitives.push(
+        ...buildWallRingPrimitives(
+          footprint,
+          floorY + FLOOR_THICKNESS,
+          WALL_HEIGHT,
+          `${idPrefix}-wall-${level}`,
+          `${label} Wall ${level + 1}`,
+          exteriorMaterial.color,
+          [],
+          exteriorMaterial
+        )
+      );
+    }
+
+    // ── Shared: roof ─────────────────────────────────────────────────────────
+
+    const roofBaseY = config.floors * LEVEL_HEIGHT;
+    const roofBuilders: Record<RoofType, typeof buildFlatRoof> = {
+      flat:      buildFlatRoof,
+      gable:     buildGableRoof,
+      hip:       buildHipRoof,
+      mansard:   buildMansardRoof,
+      shed:      buildShedRoof,
+      butterfly: buildButterflyRoof,
+      sawtooth:  buildSawtoothRoof,
+    };
+    const localRoof = roofBuilders[config.roof](config.width, config.depth, roofBaseY, idPrefix, roofMaterial, exteriorMaterial);
+    primitives.push(...localRoof.map((p) => translatePrimitive(p, config.x, config.z)));
   }
-
-  // ── Shared: roof ─────────────────────────────────────────────────────────
-
-  const roofBaseY = config.floors * LEVEL_HEIGHT;
-  const roofBuilders: Record<RoofType, typeof buildFlatRoof> = {
-    flat:      buildFlatRoof,
-    gable:     buildGableRoof,
-    hip:       buildHipRoof,
-    mansard:   buildMansardRoof,
-    shed:      buildShedRoof,
-    butterfly: buildButterflyRoof,
-    sawtooth:  buildSawtoothRoof,
-  };
-  const localRoof = roofBuilders[config.roof](config.width, config.depth, roofBaseY, idPrefix, roofMaterial, exteriorMaterial);
-  primitives.push(...localRoof.map((p) => translatePrimitive(p, config.x, config.z)));
 
   // ── Per-kind facade ───────────────────────────────────────────────────────
 

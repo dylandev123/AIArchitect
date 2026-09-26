@@ -1,4 +1,4 @@
-import type { BuildingConfig, MaterialsConfig, RoofType } from "@/types/house";
+import type { BuildingConfig, DesignTier, MaterialsConfig, RoofType } from "@/types/house";
 import type { HousePrimitive } from "../types";
 import { DOOR_PANEL_THICKNESS, FLOOR_THICKNESS, FRAME_BORDER, MATERIAL_COLORS, WALL_HEIGHT } from "../constants";
 import { buildFloorSlabPrimitive, translatePrimitive } from "../primitiveBuilders";
@@ -12,6 +12,9 @@ import { box, paintOf, shade, type Paint } from "../architecture/parts";
 import { getArchitectureProfile, type RoofShape } from "../architecture/profiles";
 import { buildCabinRoof, buildFloatingRoof } from "../architecture/roofs";
 import { buildFieldstoneFoundation, buildWalls } from "../architecture/walls";
+import { buildRoofDetail } from "../architecture/roofDetail";
+import { TIER_PROFILES, resolveTier } from "../tiers";
+import { genericLevelTrim } from "./wings";
 
 /** Roofs a small detached structure can carry; anything else falls back to a gable (or flat in a modern style). */
 const SIMPLE_ROOFS: RoofType[] = ["flat", "gable", "hip", "shed"];
@@ -26,7 +29,8 @@ export function buildOutbuilding(
   materials: MaterialsConfig,
   idPrefix: string,
   label: string,
-  opts?: ResolvedExteriorOptions
+  opts?: ResolvedExteriorOptions,
+  tier?: DesignTier
 ): HousePrimitive[] {
   const { x, z, width, depth } = config;
   const profile = getArchitectureProfile(opts?.style);
@@ -66,6 +70,14 @@ export function buildOutbuilding(
     else roof = buildGableRoof(width, depth, baseY, idPrefix, roofMat, exterior, shape);
   }
   out.push(...roof.map((p) => translatePrimitive(p, x, z)));
+
+  // Flagged `matchHouse` in an unprofiled style: carry the generic shell's trim, cornice and roof layers too.
+  if (config.matchHouse && !profile) {
+    out.push(...genericLevelTrim(config, trim, idPrefix, label, 0));
+    const layers = TIER_PROFILES[resolveTier(tier)].detail.roofLayers;
+    const form = SIMPLE_ROOFS.includes(config.roof) ? config.roof : "gable";
+    if (layers !== 0 && (form === "gable" || form === "hip")) out.push(...buildRoofDetail(form, width, depth, baseY, layers, trim, roofMat).map((p) => translatePrimitive({ ...p, id: `${idPrefix}-${p.id}` }, x, z)));
+  }
 
   // South face: a door (shed) or a wide overhead door (garage), plus a small window on the shed.
   const faceZ = z + depth / 2;

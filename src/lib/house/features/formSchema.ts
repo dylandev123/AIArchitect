@@ -85,6 +85,7 @@ export const FEATURE_FIELDS: Record<FeatureType, FieldSchema[]> = {
     { key: "depth", label: "Depth (m)", type: "number", step: 0.1 },
     { key: "floors", label: "Floors", type: "number", step: 1 },
     { key: "roof", label: "Roof", type: "roofTypeSelect" },
+    { key: "rotation", label: "Rotation (°)", type: "number", step: 5, fallback: 0 },
   ],
   road: [
     { key: "x1", label: "Start X (m)", type: "number", step: 0.5 },

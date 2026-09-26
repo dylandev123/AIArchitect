@@ -40,6 +40,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       mode: generate ? "generate" : "edit",
+      projectId: req.projectId,
       prompt: req.prompt,
       currentHouseJson: baseJson,
       baseRevision,

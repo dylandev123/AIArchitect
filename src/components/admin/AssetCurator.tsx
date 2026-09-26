@@ -8,6 +8,7 @@ import { useLearnStore } from "@/store/useLearnStore";
 import { inferPBR, inferCompatibleStyles, makeAssetId, detectAssetType, hashContent } from "@/lib/assets/processor";
 import { SOURCE_LABELS } from "@/lib/assets/sources";
 import { LearnWorkspace } from "./LearnWorkspace";
+import { UsageTab } from "./UsageTab";
 import { ModalPortal } from "./ModalPortal";
 import type { BrowseAsset, AssetSource, PBRValues } from "@/types/assets";
 
@@ -468,7 +469,7 @@ function LibraryTab() {
 
 // ── Shell ────────────────────────────────────────────────────────────────────
 
-type CuratorTab = "browse" | "queue" | "library" | "learn";
+type CuratorTab = "browse" | "queue" | "library" | "learn" | "usage";
 
 interface AssetCuratorProps {
   onClose: () => void;
@@ -487,6 +488,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
     { id: "browse",  label: "Assets" },
     { id: "queue",   label: "Queue",   count: queueLength },
     { id: "library", label: "Library", count: catalogLength },
+    { id: "usage",   label: "Usage" },
   ];
 
   return (
@@ -541,11 +543,12 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
 
       {/* Body */}
       <div className="flex flex-1 overflow-hidden">
-        <div className="mx-auto flex w-full max-w-4xl flex-col overflow-hidden p-4">
+        <div className={`mx-auto flex w-full flex-col overflow-hidden p-4 ${tab === "usage" ? "max-w-6xl" : "max-w-4xl"}`}>
           {tab === "learn"   && <LearnWorkspace projectId={projectId} />}
           {tab === "browse"  && <BrowseTab />}
           {tab === "queue"   && <QueueTab />}
           {tab === "library" && <LibraryTab />}
+          {tab === "usage"   && <UsageTab />}
         </div>
       </div>
     </div>

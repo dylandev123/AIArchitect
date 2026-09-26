@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, NoObjectGeneratedError, Output } from "ai";
 import { z } from "zod";
-import { AI_NOT_CONFIGURED_MESSAGE, getAiModel, isAiConfigured } from "@/lib/ai/model";
+import { AI_NOT_CONFIGURED_MESSAGE, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
+import { withUsageLogging } from "@/lib/ai/usage/track";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "dylandevaux3@gmail.com";
 
@@ -106,7 +107,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { prompt, adminEmail } = (body ?? {}) as Record<string, unknown>;
+  const { prompt, adminEmail, projectId } = (body ?? {}) as Record<string, unknown>;
 
   if (typeof adminEmail !== "string" || adminEmail.trim().toLowerCase() !== ADMIN_EMAIL.trim().toLowerCase()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -116,13 +117,22 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { output } = await generateText({
-      model: getAiModel(),
-      maxOutputTokens: 4000,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: prompt.trim() }],
-      output: Output.object({ schema: proposalResponseSchema }),
-    });
+    const { output } = await withUsageLogging(
+      {
+        projectId: typeof projectId === "string" && /^[\w-]{1,64}$/.test(projectId) ? projectId : null,
+        requestType: "learn",
+        scope: "world",
+        model: getAiModelId(),
+      },
+      () =>
+        generateText({
+          model: getAiModel(),
+          maxOutputTokens: 4000,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: "user", content: prompt.trim() }],
+          output: Output.object({ schema: proposalResponseSchema }),
+        })
+    );
 
     return NextResponse.json({ proposal: output });
   } catch (err) {

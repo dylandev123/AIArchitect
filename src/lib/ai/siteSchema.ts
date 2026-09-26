@@ -34,6 +34,7 @@ import {
 import { FEATURE_TYPES, type FeatureType } from "@/lib/house/features/featureTypes";
 import { COMPASS_SIDES, SITE_ENVIRONMENTS, TERRAIN_SLOPES } from "@/lib/house/siteSettings";
 import { DESIGN_TIERS } from "@/lib/house/tiers";
+import { PROJECT_SCALES } from "@/lib/house/scale";
 import type { EditScope } from "./targeting";
 import {
   BAY_FORMS,
@@ -165,7 +166,7 @@ const drivewaySchema = z.object({
 const buildingSchema = z.object({
   kind: z
     .enum(BUILDING_KINDS)
-    .describe("What kind of structure this is. gazebo = open pavilion with posts and hip roof. outdoor_bar = open-air counter with pergola. shed / detached_garage = small outbuildings that take on the project style (log walls and steep gable on a cabin, plate roof on a modern house)."),
+    .describe("What kind of structure this is. gazebo = open pavilion with posts and hip roof. outdoor_bar = open-air counter with pergola. shed / detached_garage = small outbuildings that take on the project style (log walls and steep gable on a cabin, plate roof on a modern house). wing = a lower extension attached flush to a side of the house (x/z is its centre; it has windows but no door)."),
   x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
     .describe("Absolute site X position (positive = east of main house center)."),
   z: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max)
@@ -406,6 +407,7 @@ const siteShape = {
   viewDirection: z.enum(COMPASS_SIDES).describe("Compass side the main view faces (ocean, valley, sunrise, garden)."),
   terrainSlope: z.enum(TERRAIN_SLOPES).describe("How much the land rises behind the house, away from the view."),
   approachSide: z.enum(COMPASS_SIDES).describe("Compass side the access road and entrance arrive from."),
+  projectScale: z.enum(PROJECT_SCALES).describe("How big the project is: cottage (compact single mass), family (one ordinary block), luxury (large, one connected wing), estate (very large, two wings, big grounds) or mansion (very large multi-wing composition with major outdoor areas). Independent of designTier; use family when the brief doesn't say."),
   designTier: z.enum(DESIGN_TIERS).describe("How elaborate the project is: starter (simple, compact), comfort (well-rounded family home), luxury (layered silhouette, premium materials, shaped outdoor spaces) or estate (grand, richly layered, with turrets, arches and formal grounds). A design steer, not a cost estimate."),
 };
 
@@ -613,7 +615,7 @@ export interface AiGenerationResponse {
   summary: string;
   timeOfDay?: "morning" | "midday" | "sunset" | "night";
   house: { width: number; depth: number; floors: number; roof: string };
-  site: { environment: string; viewDirection: string; terrainSlope: string; approachSide: string; designTier?: string };
+  site: { environment: string; viewDirection: string; terrainSlope: string; approachSide: string; designTier?: string; projectScale?: string };
   operations: AiOperation[];
 }
 

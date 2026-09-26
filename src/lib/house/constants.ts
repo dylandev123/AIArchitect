@@ -238,6 +238,7 @@ export const BUILDING_KIND_LABELS: Record<BuildingKind, string> = {
   outdoor_bar: "Outdoor Bar",
   shed: "Shed",
   detached_garage: "Detached Garage",
+  wing: "Wing",
 };
 
 export const BUILDING_DEFAULT_SIZE: Record<BuildingKind, { width: number; depth: number; floors: number }> = {
@@ -248,6 +249,7 @@ export const BUILDING_DEFAULT_SIZE: Record<BuildingKind, { width: number; depth:
   outdoor_bar: { width: 6, depth: 3, floors: 1 },
   shed: { width: 4, depth: 3.5, floors: 1 },
   detached_garage: { width: 6.5, depth: 6, floors: 1 },
+  wing: { width: 9, depth: 9, floors: 1 },
 };
 
 export const LANDSCAPE_KIND_LABELS: Record<LandscapeKind, string> = {

@@ -1,10 +1,17 @@
 import { describeTiers } from "@/lib/house/tiers";
+import { describeScales } from "@/lib/house/scale";
 
 /**
  * Prompt sections shared by the initial generation and scoped edits, so both describe the richer geometry, the design
  * tiers and the contextual terrain the same way. Each names ops the renderer really has; nothing here is a template
  * for a whole house — every part is a small feature sized from the design it belongs to.
  */
+
+export const SCALE_GUIDANCE = `═══ PROJECT SCALE ═══
+
+"site.projectScale" says how big the project is — footprint, floors, wings, garage, pool and deck, driveway, grounds and outbuildings. It is separate from designTier (how elaborate): a luxury cottage is small with premium finishes. Pick it from the brief ("small cottage", "family home", "luxury home", "estate", "mansion"); when it is not stated, use "family".
+${describeScales()}
+Size "house" as the main block only — the renderer adds the connected wings, the garage row, the pool and deck, the longer drive, the extra garden zones and the detached buildings for the scale, so do not add wings yourself and do not shrink the main block to make room. Scale changes the composition, not just the numbers: larger scales have more floors, several connected wings and much more site, not a bigger box. A mansion must never come out as a suburban house.`;
 
 export const TIER_GUIDANCE = `═══ DESIGN TIER ═══
 

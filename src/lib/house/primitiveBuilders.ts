@@ -1,3 +1,4 @@
+import { Euler, Quaternion, Vector3 } from "three";
 import type { WallSide } from "@/types/house";
 import type { Vec3 } from "./geometryUtils";
 import type { HousePrimitive } from "./types";
@@ -34,6 +35,34 @@ export function translatePrimitive(primitive: HousePrimitive, dx: number, dz: nu
     if (axis === 2) return value + dz;
     return value;
   });
+  return { ...primitive, vertices };
+}
+
+/**
+ * Turns a primitive about the vertical axis through (cx, cz) by `yaw` radians, the same sense as a box's own Y
+ * rotation: a front that faced +z afterwards faces (sin yaw, cos yaw).
+ */
+export function rotatePrimitiveY(primitive: HousePrimitive, cx: number, cz: number, yaw: number): HousePrimitive {
+  const sin = Math.sin(yaw);
+  const cos = Math.cos(yaw);
+  if (primitive.kind === "box") {
+    const dx = primitive.position[0] - cx;
+    const dz = primitive.position[2] - cz;
+    const [rx, ry, rz] = primitive.rotation;
+    const position: [number, number, number] = [cx + dx * cos + dz * sin, primitive.position[1], cz - dx * sin + dz * cos];
+    if (rx === 0 && rz === 0) return { ...primitive, position, rotation: [0, ry + yaw, 0] };
+    // A tilted box: compose the turn with its own orientation (three.js "XYZ" Euler order).
+    const q = new Quaternion().setFromEuler(new Euler(rx, ry, rz, "XYZ")).premultiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), yaw));
+    const e = new Euler().setFromQuaternion(q, "XYZ");
+    return { ...primitive, position, rotation: [e.x, e.y, e.z] };
+  }
+  const vertices = primitive.vertices.slice();
+  for (let i = 0; i < vertices.length; i += 3) {
+    const dx = vertices[i] - cx;
+    const dz = vertices[i + 2] - cz;
+    vertices[i] = cx + dx * cos + dz * sin;
+    vertices[i + 2] = cz - dx * sin + dz * cos;
+  }
   return { ...primitive, vertices };
 }
 
