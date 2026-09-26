@@ -13,6 +13,8 @@ export interface RoomLayoutResult<T extends LayoutRoom> {
   /** Same length and order as the input; rooms on nonexistent levels are returned untouched. */
   rooms: T[];
   errors: string[];
+  /** Levels that could not be packed (one per error), so a caller can repair locally instead of re-asking the model. */
+  failedLevels: number[];
   /** How many rooms had their position or size changed. */
   adjusted: number;
 }
@@ -132,6 +134,7 @@ export function normalizeRoomLayout<T extends LayoutRoom>(
   const interior = roomInterior(house);
   const out: T[] = rooms.map((r) => r);
   const errors: string[] = [];
+  const failedLevels: number[] = [];
   let adjusted = 0;
 
   const byLevel = new Map<number, number[]>();
@@ -157,6 +160,7 @@ export function normalizeRoomLayout<T extends LayoutRoom>(
       errors.push(
         `Level ${level}: ${indices.length} rooms (${area.toFixed(0)} m² requested) cannot be laid out without overlapping inside the ${interior.usableW.toFixed(1)} × ${interior.usableD.toFixed(1)} m interior. Use fewer or smaller rooms on that floor.`
       );
+      failedLevels.push(level);
       continue;
     }
 
@@ -168,5 +172,5 @@ export function normalizeRoomLayout<T extends LayoutRoom>(
     });
   }
 
-  return { rooms: out, errors, adjusted };
+  return { rooms: out, errors, failedLevels, adjusted };
 }

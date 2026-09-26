@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText, NoObjectGeneratedError, Output } from "ai";
+import { APICallError, generateText, NoObjectGeneratedError, Output } from "ai";
 import { buildGenerationResponseSchema, buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
 import {
   assembleGeneratedProject,
@@ -15,15 +15,22 @@ import { resolveSiteCollisions } from "@/lib/house/architecture/siteCollisions";
 import { revisionOf } from "@/lib/house/revision";
 import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
+import { createTimings, logTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
 
-export const maxDuration = 60;
+/** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
+export const maxDuration = 300;
+/** Stop waiting for the model this long into the request, leaving room to answer before the platform kills the function. */
+const GENERATION_BUDGET_MS = 270_000;
 
 const MAX_HISTORY_TURNS = { world: 12, zone: 6, component: 4 } as const;
 const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
-/** Initial generation gets automatic repair passes: validation errors are fed back to the model. */
-const MAX_GENERATION_ATTEMPTS = 3;
+/**
+ * Initial generation gets one repair pass: validation errors the server cannot fix itself are fed back to the model.
+ * Placement, layout and payload problems never reach it — they are repaired locally (see assembleGeneratedProject).
+ */
+const MAX_GENERATION_ATTEMPTS = 2;
 
 interface ChatTurn {
   role: "user" | "assistant";
@@ -52,6 +59,28 @@ function parseAssets(raw: unknown): AssetRef[] {
     .filter((a): a is AssetRef => typeof a?.id === "string" && typeof a?.name === "string")
     .slice(0, MAX_ASSETS)
     .map((a) => ({ id: a.id, name: a.name.slice(0, 60) }));
+}
+
+const isTimeout = (e: unknown) => e instanceof Error && (e.name === "TimeoutError" || e.name === "AbortError");
+
+/** Maps a model-call failure to a clear, actionable response instead of a generic one (or a platform 504). */
+function providerErrorResponse(error: unknown) {
+  if (isTimeout(error)) {
+    return NextResponse.json(
+      { error: "The AI took too long to respond. Try again, or start with a shorter brief and add detail afterwards." },
+      { status: 504 }
+    );
+  }
+  if (APICallError.isInstance(error)) {
+    if (error.statusCode === 429) {
+      return NextResponse.json({ error: "The AI provider is rate-limiting requests right now. Please wait a moment and try again." }, { status: 429 });
+    }
+    return NextResponse.json(
+      { error: `The AI provider returned an error${error.statusCode ? ` (HTTP ${error.statusCode})` : ""}. Please try again.` },
+      { status: 502 }
+    );
+  }
+  return NextResponse.json({ error: "AI request failed. Please try again." }, { status: 500 });
 }
 
 function parseProjectId(raw: unknown): string | null {
@@ -189,16 +218,29 @@ export async function POST(req: NextRequest) {
       );
     }
     console.error("AI house generation failed:", error);
-    return NextResponse.json({ error: "AI request failed. Please try again." }, { status: 500 });
+    return providerErrorResponse(error);
   }
 }
 
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
 async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, usageMeta: UsageMeta) {
   let errors: string[] = [];
+  const timings = createTimings();
+  const finish = (outcome: string, attempts: number) => logTimings("generate", timings, { outcome, attempts, briefChars: brief.length });
+  let lastAttemptMs = 0;
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
-      const { output } = await withUsageLogging(usageMeta, () =>
+      // A repair pass takes about as long as the first call: don't start one that cannot finish inside the budget.
+      const remainingMs = GENERATION_BUDGET_MS - timings.elapsed();
+      if (attempt > 0 && remainingMs < lastAttemptMs * 1.3) {
+        finish("budget_exhausted", attempt);
+        return NextResponse.json(
+          { error: "The AI took too long to finish that design. Try again, or start with a shorter brief and add detail afterwards." },
+          { status: 504 }
+        );
+      }
+      const callStart = performance.now();
+      const { output } = await timings.timeAsync(`openai#${attempt + 1}`, () => withUsageLogging(usageMeta, () =>
         generateText({
           model: getAiModel(),
           maxOutputTokens: MAX_OUTPUT_TOKENS.world,
@@ -206,11 +248,15 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
           messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
           output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
           providerOptions: AI_PROVIDER_OPTIONS,
+          abortSignal: AbortSignal.timeout(Math.max(Math.floor(remainingMs), 1_000)),
+          maxRetries: 1,
         })
-      );
+      ));
+      lastAttemptMs = performance.now() - callStart;
 
-      const result = assembleGeneratedProject(output, assets, brief, attempt === MAX_GENERATION_ATTEMPTS - 1);
+      const result = assembleGeneratedProject(output, assets, brief, true, timings);
       if (result.ok) {
+        finish("ok", attempt + 1);
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         return NextResponse.json({
           summary: output.summary,
@@ -227,11 +273,13 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
       errors = result.errors;
       console.warn(`[AI] Generation attempt ${attempt + 1} failed validation:`, errors);
     }
+    finish("invalid_after_retries", MAX_GENERATION_ATTEMPTS);
     return NextResponse.json(
       { error: "I couldn't produce a valid design from that brief. Try describing it a little differently." },
       { status: 502 }
     );
   } catch (error) {
+    finish("error", 0);
     if (NoObjectGeneratedError.isInstance(error)) {
       return NextResponse.json(
         { error: "The AI's response didn't match the design schema. Try rephrasing your brief." },
@@ -239,6 +287,6 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
       );
     }
     console.error("AI initial generation failed:", error);
-    return NextResponse.json({ error: "AI request failed. Please try again." }, { status: 500 });
+    return providerErrorResponse(error);
   }
 }

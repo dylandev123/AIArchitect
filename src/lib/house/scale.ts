@@ -67,7 +67,7 @@ export const SCALE_PROFILES: Record<ProjectScale, ScaleProfile> = {
     outbuildings: { shed: 0.3, guestHouse: 0, gazebo: 0, poolHouse: 0 },
     door: 0.95,
     guidance:
-      "A compact single mass, about 8–11 × 6–8.5 m and one storey (two only when the brief says so), under one simple roof. No wings. A tiny patio or deck at most, a short drive, no pool unless asked and then only a small plunge pool, at most a one-car garage, and a shed at most. Two or three rooms.",
+      "Compact, simple massing: one main volume, about 8–11 × 6–8.5 m and one storey (two only when the brief says so), under one simple roof. No wings are required. A tiny patio or deck at most, a short drive, no pool unless asked and then only a small plunge pool, at most a one-car garage, and a shed at most. Two or three rooms.",
   },
   family: {
     key: "family",
@@ -84,7 +84,7 @@ export const SCALE_PROFILES: Record<ProjectScale, ScaleProfile> = {
     outbuildings: { shed: 0.2, guestHouse: 0, gazebo: 0, poolHouse: 0 },
     door: 1.1,
     guidance:
-      "A well-proportioned single block, about 12–16 × 9–11.5 m, one or two storeys. No wings. A porch, patio or deck of ordinary size, an up-to-two-car garage, a modest pool only if the brief asks, a driveway of 8–16 m. Up to five rooms per floor.",
+      "Simple to moderate massing, about 12–16 × 9–11.5 m, one or two storeys. A single well-proportioned block is fine, and offsets, an attached garage, a porch or a rear projection may break it up; no wings are required. A porch, patio or deck of ordinary size, an up-to-two-car garage, a modest pool only if the brief asks, a driveway of 8–16 m. Up to five rooms per floor.",
   },
   luxury: {
     key: "luxury",
@@ -104,7 +104,7 @@ export const SCALE_PROFILES: Record<ProjectScale, ScaleProfile> = {
     outbuildings: { shed: 0, guestHouse: 0.35, gazebo: 0.5, poolHouse: 0 },
     door: 1.4,
     guidance:
-      "A large, articulated house: a main block about 17–22 × 11–14 m, two or three storeys, plus one connected wing (a lower block, 7–9 m out from a side of the house) so the plan is an L, not a box. A three-car garage, a generous patio, a shaped pool about 10 × 5 m with a sun deck beyond it, a driveway of 18–24 m and two garden zones. A guest house is possible but not automatic. Up to six rooms per floor.",
+      "Varied, composed massing: a main block about 17–22 × 11–14 m, two or three storeys, in an L, U, stepped or offset arrangement rather than a plain box. One connected secondary volume (a lower block, 7–9 m out from a side of the house) is typical but not mandatory. A three-car garage, a generous patio, a shaped pool about 10 × 5 m with a sun deck beyond it, a driveway of 18–24 m and two garden zones. A guest house is possible but not automatic. Up to six rooms per floor.",
   },
   estate: {
     key: "estate",
@@ -124,7 +124,7 @@ export const SCALE_PROFILES: Record<ProjectScale, ScaleProfile> = {
     outbuildings: { shed: 0, guestHouse: 0.75, gazebo: 1, poolHouse: 0.5 },
     door: 1.7,
     guidance:
-      "A very large house: a main block about 22–28 × 13–16 m, two or three storeys, flanked by two connected wings (8–11 m out from each side), so the plan reads as a wide U or H with a courtyard-like rear. A four-car garage, a large terrace and a pool of about 13 × 6 m with a wide sun deck, a long driveway of 28–34 m, three garden zones, a gazebo and usually a guest house. Up to eight rooms per floor.",
+      "Multi-volume composition: a main block about 22–28 × 13–16 m, two or three storeys, with two or more connected or closely related masses (wings 8–11 m out, pavilions, a stepped service block) in whatever arrangement suits the style (U, H, L with a pavilion, staggered). Courtyards and terraces are encouraged where the site allows. A four-car garage, a large terrace and a pool of about 13 × 6 m with a wide sun deck, a long driveway of 28–34 m, three garden zones, a gazebo and usually a guest house. Up to eight rooms per floor.",
   },
   mansion: {
     key: "mansion",
@@ -145,7 +145,7 @@ export const SCALE_PROFILES: Record<ProjectScale, ScaleProfile> = {
     door: 2,
     minTier: "estate",
     guidance:
-      "A very large multi-wing composition: a main block about 30–38 × 15–19 m and three or four storeys, flanked by two large connected wings (10–13 m out) with a further lower service wing beyond one of them. A six-car garage, a grand terrace, a pool of about 16 × 7 m with a large deck, a driveway of 36–40 m, four large garden zones, a guest house, a gazebo and a pool house. Up to ten rooms per floor. It must read as genuinely large from any angle — never as a suburban house.",
+      "Large multi-wing composition with a clear hierarchy: a dominant main block about 30–38 × 15–19 m and three or four storeys, with multiple connected masses (wings 10–13 m out, lower service or garden wings) stepping down from it, and major outdoor rooms (courtyard, grand terrace, loggia). Avoid one dominant rectangle; the arrangement may be U, L, H or staggered. A six-car garage, a pool of about 16 × 7 m with a large deck, a driveway of 36–40 m, four large garden zones, a guest house, a gazebo and a pool house. Up to ten rooms per floor. It must read as genuinely large from any angle — never as a suburban house.",
   },
 };
 

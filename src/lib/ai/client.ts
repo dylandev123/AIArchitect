@@ -21,6 +21,12 @@ export type HouseEditResult =
   | { ok: true; summary: string; generated: boolean }
   | { ok: false; error: string; status: number; stale?: boolean };
 
+function fallbackError(status: number): string {
+  if (status === 504 || status === 408) return "The AI took too long to respond. Try again, or start with a shorter brief and add detail afterwards.";
+  if (status >= 500) return `The server had a problem handling that request (HTTP ${status}). Please try again.`;
+  return "AI edit failed.";
+}
+
 /**
  * POSTs one request to /api/ai/house against the project's current JSON and applies the result
  * only if nothing else changed the project in the meantime (optimistic revision check).
@@ -49,10 +55,11 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
       assets: useAssetStore.getState().getPBRMaterials().map((a) => ({ id: a.id, name: a.name })),
     }),
   });
-  const data = (await res.json()) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string };
+  // A gateway timeout or crash answers with a non-JSON page: report what happened instead of a parse error.
+  const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string };
 
   if (!res.ok || typeof data.json !== "string") {
-    return { ok: false, error: data.error ?? "AI edit failed.", status: res.status };
+    return { ok: false, error: data.error ?? fallbackError(res.status), status: res.status };
   }
 
   const live = useProjectStore.getState().getProject(req.projectId);

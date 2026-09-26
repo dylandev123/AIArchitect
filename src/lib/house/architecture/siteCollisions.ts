@@ -43,6 +43,12 @@ export interface SiteCollisionResult {
   ops: PatchOp[];
   /** Human-readable, model-actionable reasons a feature could not be placed. Empty = the design is clear. */
   errors: string[];
+  /**
+   * Op indices (into the input `ops`) of features that could not be placed, one entry per error in the same order;
+   * empty when the blocked feature is not an op (the house or an existing feature), i.e. it cannot be dropped.
+   * Lets a caller with no one to ask (initial generation) drop them instead of failing.
+   */
+  unplaced: number[][];
   /** What was moved, for logging and tests. */
   relocated: string[];
 }
@@ -574,13 +580,14 @@ function collect(input: SiteCollisionInput, asNew = false): Item[] {
  */
 export function resolveSiteCollisions(input: SiteCollisionInput): SiteCollisionResult {
   // Most edits add nothing that stands on the ground: leave them exactly as they are.
-  if (!input.ops.some((op) => op.op in KEYS && isRecord(op.value))) return { ops: [...input.ops], errors: [], relocated: [] };
+  if (!input.ops.some((op) => op.op in KEYS && isRecord(op.value))) return { ops: [...input.ops], errors: [], unplaced: [], relocated: [] };
   const items = collect(input);
   const house = shellOf(input);
   const ops = [...input.ops];
   /** Sections of a trimmed wall beyond the first: new features, appended after the design's own ops. */
   const added: PatchOp[] = [];
   const errors: string[] = [];
+  const unplaced: number[][] = [];
   const relocated: string[] = [];
   const settled: Item[] = items.filter((i) => i.fixed || i.existing);
   const pending = groupItems(items).sort((a, b) => Math.max(...b.map((i) => i.priority)) - Math.max(...a.map((i) => i.priority)));
@@ -645,6 +652,7 @@ export function resolveSiteCollisions(input: SiteCollisionInput): SiteCollisionR
     if (!found) {
       const why = first ? explain(group[0], first.with, first.gap, first.need) : `${group[0].label} collides`;
       errors.push(`${why}, and there is no clear position for it${group.some((g) => g.slide && !g.freeFallback) ? " along its wall" : ` within ${SEARCH_RADIUS} m`}. Move it, shrink it or remove it.`);
+      unplaced.push(group.every((m) => m.op !== undefined) ? group.map((m) => m.op as number) : []);
       settled.push(...group);
       continue;
     }
@@ -672,7 +680,7 @@ export function resolveSiteCollisions(input: SiteCollisionInput): SiteCollisionR
       settled.push(after ? { ...m, shape: after.shape } : m);
     }
   }
-  return { ops: [...ops, ...added], errors, relocated };
+  return { ops: [...ops, ...added], errors, unplaced, relocated };
 }
 
 /**
