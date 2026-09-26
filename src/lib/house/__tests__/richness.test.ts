@@ -51,8 +51,9 @@ const count = (root: Record<string, unknown>, key: string) => (Array.isArray(roo
 
 // ── Silhouette ────────────────────────────────────────────────────────────────────────────────────────────────
 
-const BINS = 64;
-const RANGE = 30;
+// Wide enough to hold a planned mansion's whole site (the curved terrace wall stands past the pool garden), at the same ~0.94 m a bin.
+const BINS = 102;
+const RANGE = 48;
 
 /** Highest point of the *building* (not the site) in each horizontal slice seen from the front (x) or side (z). */
 function skyline(primitives: readonly HousePrimitive[], axis: "x" | "z"): number[] {

@@ -1,4 +1,4 @@
-import type { SiteConfig } from "@/types/house";
+import type { SiteConfig, WallSide } from "@/types/house";
 import { getWallAnchor, offsetOutward, pointOnWall } from "@/lib/house/wallAnchor";
 import { getPoolDeckFootprint } from "@/lib/house/features/pools";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
@@ -15,6 +15,20 @@ export interface Footprint {
 }
 
 const CLEARANCE = 1;
+
+/** Half-extents of the axis-aligned box around a `width` × `depth` rectangle turned `degrees` about its centre. */
+function rotatedHalfExtents(width: number, depth: number, degrees = 0): { halfW: number; halfD: number } {
+  const t = (degrees * Math.PI) / 180;
+  const c = Math.abs(Math.cos(t));
+  const s = Math.abs(Math.sin(t));
+  return { halfW: (width * c + depth * s) / 2, halfD: (width * s + depth * c) / 2 };
+}
+
+/** A rectangle at a centre, optionally turned; the box grows only as much as the turn requires. */
+function turnedFootprint(cx: number, cz: number, width: number, depth: number, rotation?: number, margin = CLEARANCE): Footprint {
+  const { halfW, halfD } = rotatedHalfExtents(width, depth, rotation);
+  return { cx, cz, halfW: halfW + margin, halfD: halfD + margin };
+}
 
 function pointInRect(x: number, z: number, f: Footprint): boolean {
   return Math.abs(x - f.cx) < f.halfW && Math.abs(z - f.cz) < f.halfD;
@@ -76,9 +90,20 @@ export function collectOccupiedFootprints(site: SiteConfig): Footprint[] {
     });
   }
 
-  for (const b of site.buildings) {
-    footprints.push({ cx: b.x, cz: b.z, halfW: b.width / 2 + CLEARANCE, halfD: b.depth / 2 + CLEARANCE });
-  }
+  for (const b of site.buildings) footprints.push(turnedFootprint(b.x, b.z, b.width, b.depth, b.rotation));
+
+  // Things that stand against the house and reach onto the lawn: each covers the ground it is built on.
+  const againstWall = (wall: WallSide, offset: number, width: number, depth: number) => {
+    const anchor = getWallAnchor(house, wall, 0);
+    const center = offsetOutward(pointOnWall(anchor, offset + width / 2), anchor, depth / 2);
+    const isNS = wall === "north" || wall === "south";
+    footprints.push({ cx: center[0], cz: center[2], halfW: (isNS ? width : depth) / 2 + CLEARANCE, halfD: (isNS ? depth : width) / 2 + CLEARANCE });
+  };
+  for (const porch of site.porches ?? []) againstWall(porch.wall, porch.offset, porch.width, porch.depth);
+  for (const bay of site.bays ?? []) againstWall(bay.wall, bay.offset, bay.width, bay.depth);
+  // A flight of stairs runs out about as far as it climbs at a comfortable tread: rise ÷ 0.17 risers × 0.28 m.
+  for (const stairs of site.stairs ?? []) againstWall(stairs.wall, stairs.offset, stairs.width, Math.max(1.4, (stairs.rise / 0.17) * 0.28));
+  for (const deck of site.decks ?? []) footprints.push(turnedFootprint(deck.x, deck.z, deck.width, deck.depth, deck.rotation));
 
   for (const p of site.parking) {
     footprints.push({ cx: p.x, cz: p.z, halfW: p.width / 2 + CLEARANCE, halfD: p.depth / 2 + CLEARANCE });

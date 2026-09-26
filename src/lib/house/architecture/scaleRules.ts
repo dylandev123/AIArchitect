@@ -3,7 +3,9 @@ import type { PatchOp } from "../applyPatch";
 import { DOOR_LIMITS, DRIVEWAY_LIMITS, GARAGE_LIMITS, POOL_LIMITS, WALL_THICKNESS } from "../constants";
 import { briefChance, floorRangeFor, pickInRange, SCALE_PROFILES, scaleRank } from "../scale";
 import { SIDE_VECTORS } from "./profiles";
-import { wallPoint } from "./siteRules";
+import { groundRects, wallPoint, wallRect, type Rect, type Vec } from "./siteGeometry";
+import { reconcileDetached } from "./siteReconcile";
+import { APRON, deriveSitePlan, poolOnViewFront, type SitePlan, viewPoint, GARAGE_BAY, GAZEBO_SIZE, guestSizeFor, insideZone, OUTDOOR_BAR_SIZE, overlaps, placeInZone, reservedRects, SHED_SIZE } from "./sitePlan";
 
 /**
  * Project-scale rules for a freshly generated design.
@@ -12,6 +14,9 @@ import { wallPoint } from "./siteRules";
  * big, so these rules make it so — without ever just multiplying dimensions. A larger scale changes the *composition*:
  * more floors, connected wings that step down from the main block, a garage row, a pool and deck sized to the house,
  * a longer drive, more garden zones and detached buildings spread over the site.
+ *
+ * Placement follows the site plan (see sitePlan.ts): the property is composed once as zones around the view and
+ * arrival axes, and each feature below is set down in the zone that owns it instead of wherever is free.
  *
  * They run in three passes around the style and tier rules (see assembleGeneratedProject):
  *   1. fitShellToScale     — bring the model's shell into the scale's envelope and carry its ops with it;
@@ -23,8 +28,6 @@ import { wallPoint } from "./siteRules";
 
 type Shell = { width: number; depth: number; floors: number; roof: string };
 type Rec = Record<string, unknown>;
-type Vec = [number, number];
-interface Rect { x: number; z: number; w: number; d: number }
 
 const isRecord = (v: unknown): v is Rec => typeof v === "object" && v !== null && !Array.isArray(v);
 const valueOf = (op: PatchOp): Rec => (isRecord(op.value) ? op.value : {});
@@ -55,6 +58,8 @@ export interface ScaleInput {
   house: Shell;
   site: SiteSettings;
   ops: readonly PatchOp[];
+  /** Buildings in `ops` the style rules added at stand-in coordinates: the plan sets them into their zones (see reconcileDetached). */
+  placeholders?: ReadonlySet<PatchOp>;
 }
 
 // ── 1. Shell ────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -142,63 +147,6 @@ export function fitShellToScale(input: ScaleInput): { house: Shell; ops: PatchOp
 
 // ── Layout helpers ──────────────────────────────────────────────────────────────────────────────────────────────
 
-const overlap = (a: Rect, b: Rect, margin = 0) => Math.abs(a.x - b.x) < (a.w + b.w) / 2 + margin && Math.abs(a.z - b.z) < (a.d + b.d) / 2 + margin;
-
-/** Ground rectangle of a wall-mounted item, `out0`…`out1` metres out from the wall. */
-function wallRect(h: Shell, wall: WallSide, offset: number, width: number, out0: number, out1: number): Rect {
-  const [x1, z1] = wallPoint(h, wall, offset, out0);
-  const [x2, z2] = wallPoint(h, wall, offset + width, out1);
-  return { x: (x1 + x2) / 2, z: (z1 + z2) / 2, w: Math.abs(x2 - x1), d: Math.abs(z2 - z1) };
-}
-
-/** Everything already occupying the ground, as rectangles. */
-function groundRects(house: Shell, ops: readonly PatchOp[]): Rect[] {
-  const rects: Rect[] = [{ x: 0, z: 0, w: house.width, d: house.depth }];
-  for (const op of ops) {
-    const v = valueOf(op);
-    const wall = v.wall as WallSide;
-    switch (op.op) {
-      case "addBuilding": case "addDeck": case "addParking": case "addLandscape":
-        rects.push({ x: num(v.x), z: num(v.z), w: num(v.width), d: num(v.depth) });
-        break;
-      case "addPatio": case "addGarage": case "addPorch":
-        rects.push(wallRect(house, wall, num(v.offset), num(v.width), 0, num(v.depth)));
-        break;
-      case "addPool":
-        if (typeof v.siteX === "number") rects.push({ x: v.siteX, z: num(v.siteZ), w: num(v.width), d: num(v.depth) });
-        else rects.push(wallRect(house, wall, num(v.offset), num(v.width), num(v.distance), num(v.distance) + num(v.depth)));
-        break;
-      case "addDriveway":
-        rects.push(wallRect(house, wall, num(v.offset), num(v.width), 0, num(v.length)));
-        break;
-    }
-  }
-  return rects;
-}
-
-/** Sets a wall-mounted or ground rectangle down where nothing else is, searching outward along the given directions. */
-function makePlacer(house: Shell, rects: Rect[]) {
-  return (w: number, d: number, dirs: readonly Vec[], margin = 2): Rect => {
-    let last: Rect = { x: 0, z: 0, w, d };
-    for (const [rx, rz] of dirs) {
-      const len = Math.hypot(rx, rz) || 1;
-      const dx = rx / len;
-      const dz = rz / len;
-      const base = Math.abs(dx) * (house.width / 2 + w / 2) + Math.abs(dz) * (house.depth / 2 + d / 2) + 3;
-      for (let k = 0; k < 40; k++) {
-        const t = base + k * 3;
-        last = { x: round(dx * t), z: round(dz * t), w, d };
-        if (!rects.some((r) => overlap(last, r, margin))) {
-          rects.push(last);
-          return last;
-        }
-      }
-    }
-    rects.push(last);
-    return last;
-  };
-}
-
 /** The widest free stretch between `from` and `to`, given the [from, to] intervals already `taken`. */
 function freeSpanIn(taken: readonly [number, number][], from: number, to: number): [number, number] | undefined {
   const sorted = [...taken].filter(([a, b]) => b > from && a < to).sort((a, b) => a[0] - b[0]);
@@ -247,8 +195,13 @@ function wingContacts(house: Shell, ops: readonly PatchOp[]): WingContact[] {
 }
 
 export function applyScaleRules(input: ScaleInput): PatchOp[] {
+  return planScale(input).ops;
+}
+
+/** The scale rules, and the site plan they placed everything by (undefined for a project without a scale, which is never planned). */
+export function planScale(input: ScaleInput): { ops: PatchOp[]; plan: SitePlan | undefined } {
   const scale = input.site.projectScale;
-  if (!scale) return [...input.ops];
+  if (!scale) return { ops: [...input.ops], plan: undefined };
   const { brief, house, site } = input;
   const profile = SCALE_PROFILES[scale];
   const rank = scaleRank(scale);
@@ -344,12 +297,8 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
   }
 
   // Everything below places things on the ground, around what is already there.
-  const rects = groundRects(house, ops);
-  const place = makePlacer(house, rects);
-  const unit = (a: Vec, b: Vec, wa = 1, wb = 1): Vec => [a[0] * wa + b[0] * wb, a[1] * wa + b[1] * wb];
-  const neg = (v: Vec): Vec => [-v[0], -v[1]];
-  // Keep the door's line and the drive's clear, so gardens and buildings never sit on the way in.
-  rects.push({ ...wallRect(house, approachWall, wallLen(house, approachWall) / 2 - 3, 6, 0, 24) });
+  // The site plan: the whole property composed as zones before any of it is placed. Every placement below is into a zone.
+  const plan = deriveSitePlan({ brief, house, site, ops })!;
 
   // ── Driveway: as long as the scale's site is wide ──
   const [dmin, dmax] = profile.driveway.length;
@@ -372,18 +321,21 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
   } else if (rank >= 2) {
     const len = wallLen(house, approachWall);
     const width = profile.driveway.width;
-    const garage = ops.find((op) => op.op === "addGarage" && valueOf(op).wall === approachWall);
-    const door = ops.find((op) => op.op === "addDoor" && valueOf(op).wall === approachWall && num(valueOf(op).level) === 0);
-    // From the attached garage if there is one; otherwise off to one side of the door.
-    const doorCentre = door ? num(valueOf(door).offset) + num(valueOf(door).width) / 2 : len / 2;
-    const centre = garage
-      ? num(valueOf(garage).offset) + num(valueOf(garage).width) / 2
-      : clamp(doorCentre + (chance("drive-side") < 0.5 ? -1 : 1) * len * 0.3, width / 2 + 1, len - width / 2 - 1);
+    // On the plan's arrival axis: from the attached garage if there is one; otherwise off to one side of the door.
+    const centre = plan.arrival.centre;
     ops.push({ op: "addDriveway", value: { wall: approachWall, offset: round(clamp(centre - width / 2, 0, Math.max(0, len - width))), width, length: driveLen } });
   }
 
+  // ── Detached buildings the style or the model already placed: onto the plan, before anything is set beside them ──
+  // The style rules could not know the zones, and the model's coordinates are only a suggestion: a building the plan
+  // accepts stays where it is, the rest go to the zone that owns them (a garage to the garage court, a gazebo to the
+  // outdoor-living zone). Only x, z and the turn change, so ids and order hold.
+  ops.splice(0, ops.length, ...reconcileDetached(plan, house, ops, input.placeholders ?? new Set()));
+
+  // The drive is added to these once it is settled; the garages set beside it must be able to meet its edge.
+  const rects = groundRects(house, ops, false);
+
   // ── The drive's frame: where it starts on its wall, which way it runs and which way is across it ──
-  const APRON = 4.6;
   const driveAt = ops.findIndex((op) => op.op === "addDriveway" && valueOf(op).wall === approachWall);
   const frame = driveAt >= 0 ? (() => {
     const v = valueOf(ops[driveAt]);
@@ -427,16 +379,16 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
             // Beside the drive: doors turn across it, and an apron joins them to its edge.
             face = [-frame.across[0] * side, -frame.across[1] * side];
             let gap = Math.abs(lateral) - gd / 2 - frame.width / 2;
-            // Too far from the drive to be part of it: draw the garage in to a normal apron's distance, if that spot is free.
+            // Too far from the drive to be part of it: draw the garage into the garage court, at a normal apron's distance.
             if (gap > 8 && along > 0) {
               const own = rects.findIndex((r) => r.x === gx && r.z === gz && r.w === gw && r.d === gd);
-              search: for (const s2 of [side, -side]) {
+              const court = plan.zones.garageCourt!;
+              search: for (const s2 of [plan.arrival.garageSide]) {
                 const reach = s2 * (frame.width / 2 + APRON + gd / 2);
-                for (const slide of [0, 3, 6, 9, -3, 12]) {
-                  const a = along + slide;
-                  if (a < gw / 2 + 1) continue;
+                for (let a = gw / 2 + 1; a <= DRIVEWAY_LIMITS.length.max; a += 1.5) {
                   const moved: Rect = { x: round(frame.start[0] + frame.dir[0] * a + frame.across[0] * reach), z: round(frame.start[1] + frame.dir[1] * a + frame.across[1] * reach), w: runsX ? gw : gd, d: runsX ? gd : gw };
-                  if (rects.some((r, k) => k !== own && overlap(moved, r, 1))) continue;
+                  if (!insideZone(court, moved)) continue;
+                  if (rects.some((r, k) => k !== own && overlaps(moved, r, 1)) || reservedRects(plan, "garageCourt").some((r) => overlaps(moved, r, 1))) continue;
                   if (own >= 0) rects[own] = moved;
                   next.x = moved.x;
                   next.z = moved.z;
@@ -469,6 +421,8 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
     }
     ops[i] = { ...ops[i], value: next };
   }
+  // Those buildings may have moved and turned: read the ground again.
+  rects.splice(0, rects.length, ...groundRects(house, ops, false));
 
   // ── Garage capacity: attached garages count; the rest is a row of two-car garages beside the drive ──
   // Each garage turns its doors to face the drive, and a paved apron joins the doors to the drive's edge.
@@ -480,8 +434,8 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
     if (short > 0 && frame) {
       const { dir, across, width: driveW, start } = frame;
       const bays = Math.ceil(short / 2);
-      const bw = 6.8;
-      const bd = 6.4;
+      const bw = GARAGE_BAY.width;
+      const bd = GARAGE_BAY.depth;
       const rowLen = bays * bw;
       const reach = driveW / 2 + APRON + bd / 2;
       const at = (along: number, lateral: number): Vec => [round(start[0] + dir[0] * along + across[0] * lateral), round(start[1] + dir[1] * along + across[1] * lateral)];
@@ -493,27 +447,33 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
         const c = at(along, side * (driveW / 2 + APRON / 2));
         return { x: c[0], z: c[1], w: runsX ? rowLen : APRON, d: runsX ? APRON : rowLen };
       };
-      const first: 1 | -1 = chance("garage-side") < 0.5 ? 1 : -1;
+      // The garage court on the plan's side of the drive: the row slides along it only as far as something in the way demands.
+      const side = plan.arrival.garageSide;
+      const court = plan.zones.garageCourt!;
+      const held = reservedRects(plan, "garageCourt");
       let spot: { along: number; side: 1 | -1 } | undefined;
       const last = DRIVEWAY_LIMITS.length.max - rowLen / 2 - 1;
-      for (let along = rowLen / 2 + 2; along <= last && !spot; along += 2) {
-        for (const side of [first, -first as 1 | -1]) {
-          if (![rectAt(along, side), apronAt(along, side)].some((r) => rects.some((o) => overlap(r, o, 1)))) { spot = { along, side }; break; }
+      for (let along = rowLen / 2; along <= last && !spot; along += 1) {
+        const row = rectAt(along, side);
+        const apron = apronAt(along, side);
+        if (!insideZone(court, row) || !insideZone(court, apron)) continue;
+        if (![row, apron].some((r) => rects.some((o) => overlaps(r, o, 1)) || held.some((o) => overlaps(r, o, 1)))) spot = { along, side };
+      }
+      // No room in the court: the garages are left out rather than set down somewhere arbitrary.
+      if (spot) {
+        // Doors face across the drive, toward its centreline.
+        const turn = yawOf([-across[0] * spot.side, -across[1] * spot.side]);
+        const garageRoof = wingRoof(house.roof);
+        for (let i = 0; i < bays; i++) {
+          const c = at(spot.along - rowLen / 2 + bw / 2 + i * bw, spot.side * reach);
+          ops.push({ op: "addBuilding", value: { kind: "detached_garage", x: c[0], z: c[1], width: bw, depth: bd, floors: 1, roof: garageRoof, matchHouse: true, ...(turn !== 0 ? { rotation: turn } : {}) } });
         }
+        const pad = apronAt(spot.along, spot.side);
+        ops.push({ op: "addParking", value: { x: pad.x, z: pad.z, width: round(pad.w), depth: round(pad.d), stripes: false } });
+        rects.push(rectAt(spot.along, spot.side), pad);
+        // The drive runs on past the last bay so the apron always meets it.
+        driveTo(spot.along + rowLen / 2 + 1);
       }
-      spot ??= { along: rowLen / 2 + 2, side: first };
-      // Doors face across the drive, toward its centreline.
-      const turn = yawOf([-across[0] * spot.side, -across[1] * spot.side]);
-      const garageRoof = wingRoof(house.roof);
-      for (let i = 0; i < bays; i++) {
-        const c = at(spot.along - rowLen / 2 + bw / 2 + i * bw, spot.side * reach);
-        ops.push({ op: "addBuilding", value: { kind: "detached_garage", x: c[0], z: c[1], width: bw, depth: bd, floors: 1, roof: garageRoof, matchHouse: true, ...(turn !== 0 ? { rotation: turn } : {}) } });
-      }
-      const pad = apronAt(spot.along, spot.side);
-      ops.push({ op: "addParking", value: { x: pad.x, z: pad.z, width: round(pad.w), depth: round(pad.d), stripes: false } });
-      rects.push(rectAt(spot.along, spot.side), pad);
-      // The drive runs on past the last bay so the apron always meets it.
-      driveTo(spot.along + rowLen / 2 + 1);
     }
   }
 
@@ -526,7 +486,12 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
   // ── Outdoor living: patio, pool and a sun deck sized to the house ──
   if (profile.patio) {
     const len = wallLen(house, viewWall);
-    const pw = round(Math.min(profile.patio.width, len * 0.75));
+    // The terrace and pool garden stand on the plan's view front: the whole wall, or the free side of it when the drive shares it.
+    const front = plan.viewFront;
+    const frontLen = front.to - front.from;
+    const fitOffset = (width: number) => round(clamp(front.centre - width / 2, 0, Math.max(0, len - width)));
+    const horizontal = isHorizontal(viewWall);
+    const pw = round(Math.min(profile.patio.width, frontLen * 0.75));
     const pd = profile.patio.depth;
     const existingPatio = ops.findIndex((op) => op.op === "addPatio" && valueOf(op).wall === viewWall);
     if (existingPatio >= 0) {
@@ -535,14 +500,16 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
       const centre = num(v.offset) + num(v.width) / 2;
       ops[existingPatio] = { ...ops[existingPatio], value: { ...v, width: round(width), depth: round(Math.max(num(v.depth), pd)), offset: round(clamp(centre - width / 2, 0, Math.max(0, len - width))) } };
     } else {
-      ops.push({ op: "addPatio", value: { wall: viewWall, offset: round((len - pw) / 2), width: pw, depth: pd } });
+      ops.push({ op: "addPatio", value: { wall: viewWall, offset: fitOffset(pw), width: pw, depth: pd } });
     }
     const patio = valueOf(ops.find((op) => op.op === "addPatio" && valueOf(op).wall === viewWall)!);
 
     let pool: Rec | undefined;
+    /** How far the water's far edge is from the view wall. */
+    let poolReach = 0;
     if (profile.pool && !urban) {
       const [wr, dr] = [profile.pool.width, profile.pool.depth];
-      const width = round(Math.min(pickInRange(wr, brief, "pool-w"), len - 2));
+      const width = round(front.freePool ? pickInRange(wr, brief, "pool-w") : Math.min(pickInRange(wr, brief, "pool-w"), frontLen - 2));
       const depth = round(pickInRange(dr, brief, "pool-d"));
       const at = ops.findIndex((op) => op.op === "addPool" && typeof valueOf(op).siteX !== "number");
       const distance = round(Math.min(POOL_LIMITS.distance.max, num(patio.depth) + 0.5));
@@ -553,66 +520,97 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
         const centre = num(v.offset) + num(v.width) / 2;
         ops[at] = { ...ops[at], value: { ...v, width: round(w), depth: round(dd), distance: round(Math.max(num(v.distance), distance)), offset: round(clamp(centre - w / 2, 0, Math.max(0, len - w))) } };
         pool = valueOf(ops[at]);
+        poolReach = num(pool.distance) + num(pool.depth);
       } else if (!has("addPool")) {
-        pool = { wall: viewWall, offset: round((len - width) / 2), distance, width, depth, waterDepth: 1.5 };
+        // With the drive on the view wall the pool stands free in the pool garden; otherwise it hangs on the wall.
+        pool = poolOnViewFront(plan, house, width, depth, distance);
         ops.push({ op: "addPool", value: pool });
+        poolReach = distance + depth;
       }
     }
 
     // A sun deck beyond the pool, or straight off the patio when there is none.
     if (profile.deck && !has("addDeck")) {
-      const along = round(Math.min(profile.deck.width, len));
-      const out = pool ? num(pool.distance) + num(pool.depth) + 0.6 : num(patio.depth) + 0.4;
-      const centre = wallPoint(house, viewWall, len / 2, out + profile.deck.depth / 2);
-      ops.push({ op: "addDeck", value: { x: round(centre[0]), z: round(centre[1]), level: 0, width: isHorizontal(viewWall) ? along : profile.deck.depth, depth: isHorizontal(viewWall) ? profile.deck.depth : along } });
+      const along = round(front.freePool ? profile.deck.width : Math.min(profile.deck.width, frontLen));
+      const out = pool ? poolReach + 0.6 : num(patio.depth) + 0.4;
+      // Beyond the pool, on the pool garden's own axis.
+      const centre = viewPoint(plan, hv + out + profile.deck.depth / 2, front.poolQ);
+      ops.push({ op: "addDeck", value: { x: round(centre[0]), z: round(centre[1]), level: 0, width: horizontal ? along : profile.deck.depth, depth: horizontal ? profile.deck.depth : along } });
     }
     rects.length = 0;
-    rects.push(...groundRects(house, ops), wallRect(house, approachWall, wallLen(house, approachWall) / 2 - 3, 6, 0, 24));
-  }
-
-  // ── Gardens: zones set beyond the wings ──
-  if (profile.gardens.count > 0) {
-    const want = profile.gardens.count - ops.filter((op) => op.op === "addLandscape" && valueOf(op).kind === "garden").length;
-    const dirs: Vec[][] = [
-      [unit(approach, lat, 0.6, 1), unit(approach, neg(lat), 0.6, 1), unit(approach, lat, 1, 0.4), unit(approach, neg(lat), 1, 0.4)],
-      [unit(view, lat, 0.6, 1), unit(view, neg(lat), 0.6, 1), unit(neg(approach), lat, 1, 0.5), unit(neg(approach), neg(lat), 1, 0.5)],
-    ];
-    for (let i = 0; i < want; i++) {
-      const at = place(profile.gardens.width, profile.gardens.depth, dirs[i % 2].slice((i >> 1) % 2), 1);
-      ops.push({ op: "addLandscape", value: { kind: "garden", x: at.x, z: at.z, width: profile.gardens.width, depth: profile.gardens.depth } });
-    }
+    rects.push(...groundRects(house, ops));
   }
 
   // ── Detached buildings: how many, and how likely, depends on the scale ──
   const ob = profile.outbuildings;
   const roof = wingRoof(house.roof);
-  const guestSize = scale === "mansion" ? { width: 13, depth: 10, floors: 2 } : scale === "estate" ? { width: 9, depth: 8, floors: 1 } : { width: 8, depth: 7, floors: 1 };
+  const guestSize = guestSizeFor(scale);
+  const yawTo = (face: Vec) => Math.round((Math.atan2(face[0], face[1]) * 180) / Math.PI);
+  const toward = (zone: { center: Vec }, along: Vec, by: number): Vec => [zone.center[0] + along[0] * by, zone.center[1] + along[1] * by];
   if (!urban) {
     if (!has("addBuilding", "villa") && !has("addBuilding", "restaurant") && chance("guest") < ob.guestHouse) {
-      // Turned toward the house, so the footprint may swap its sides: give it a square of room.
+      // In its own zone, private on the flank away from the arrival and turned toward the house: give it a square of room.
+      const zone = plan.zones.guest!;
       const room = Math.max(guestSize.width, guestSize.depth);
-      const at = place(room, room, [unit(view, lat, 0.4, 1), unit(view, neg(lat), 0.4, 1), unit(neg(approach), lat, 1, 0.6), unit(neg(approach), neg(lat), 1, 0.6)], 3);
-      // Built like the main house, with its door turned toward it.
-      const toHouse: Vec = Math.abs(at.x) > Math.abs(at.z) ? [-Math.sign(at.x), 0] : [0, -Math.sign(at.z) || 1];
-      const turn = Math.round((Math.atan2(toHouse[0], toHouse[1]) * 180) / Math.PI);
-      ops.push({ op: "addBuilding", value: { kind: "villa", x: at.x, z: at.z, ...guestSize, roof, matchHouse: true, ...(turn !== 0 ? { rotation: turn } : {}) } });
+      const at = placeInZone(plan, zone, "villa", room, room, rects, { anchor: toward(zone, zone.orientation, 4) });
+      if (at) {
+        rects.push(at);
+        // Built like the main house, with its door turned toward it, and joined to it by a path.
+        const turn = yawTo(zone.orientation);
+        ops.push({ op: "addBuilding", value: { kind: "villa", x: at.x, z: at.z, ...guestSize, roof, matchHouse: true, ...(turn !== 0 ? { rotation: turn } : {}) } });
+        const edge = (r: Rect): Vec => [clamp(at.x, r.x - r.w / 2, r.x + r.w / 2), clamp(at.z, r.z - r.d / 2, r.z + r.d / 2)];
+        const masses = [{ x: 0, z: 0, w: house.width, d: house.depth }, ...ops.filter((op) => op.op === "addBuilding" && valueOf(op).kind === "wing").map((op) => ({ x: num(valueOf(op).x), z: num(valueOf(op).z), w: num(valueOf(op).width), d: num(valueOf(op).depth) }))];
+        const from = masses.map(edge).reduce((a, b) => (Math.hypot(a[0] - at.x, a[1] - at.z) <= Math.hypot(b[0] - at.x, b[1] - at.z) ? a : b));
+        const to: Vec = [at.x - zone.orientation[0] * (room / 2), at.z - zone.orientation[1] * (room / 2)].map(round) as Vec;
+        if (Math.hypot(to[0] - from[0], to[1] - from[1]) > 3) ops.push({ op: "addPath", value: { x1: round(from[0]), z1: round(from[1]), x2: to[0], z2: to[1], width: 1.4, bend: 0, surface: rank >= 3 ? "flagstone" : "gravel" } });
+      }
     }
+    const living = plan.zones.outdoorLiving!;
     if (!has("addBuilding", "gazebo") && chance("gazebo") < ob.gazebo) {
-      const size = rank >= 3 ? 6 : 5;
-      const at = place(size, size, [unit(view, lat, 1, 0.5), unit(view, neg(lat), 1, 0.5), view, unit(view, lat, 0.4, 1), unit(view, neg(lat), 0.4, 1)], 3);
-      ops.push({ op: "addBuilding", value: { kind: "gazebo", x: at.x, z: at.z, width: size, depth: size, floors: 1, roof: "hip" } });
+      // The view pavilion, out at the far end of the living zone where the garden looks back at the house.
+      const size = GAZEBO_SIZE(rank);
+      const at = placeInZone(plan, living, "gazebo", size, size, rects, { anchor: toward(living, plan.viewAxis, 40) });
+      if (at) {
+        rects.push(at);
+        ops.push({ op: "addBuilding", value: { kind: "gazebo", x: at.x, z: at.z, width: size, depth: size, floors: 1, roof: "hip" } });
+      }
     }
     if (!has("addBuilding", "outdoor_bar") && has("addPool") && chance("poolhouse") < ob.poolHouse) {
-      const at = place(7, 3.5, [unit(view, lat, 0.6, 1), unit(view, neg(lat), 0.6, 1), unit(view, lat, 1, 0.3), unit(view, neg(lat), 1, 0.3)], 3);
-      ops.push({ op: "addBuilding", value: { kind: "outdoor_bar", x: at.x, z: at.z, width: 7, depth: 3.5, floors: 1, roof: "flat" } });
+      // Beside the pool, its long side turned to the water.
+      const facesX = Math.abs(living.orientation[0]) > 0.5;
+      const w = facesX ? OUTDOOR_BAR_SIZE.depth : OUTDOOR_BAR_SIZE.width;
+      const d = facesX ? OUTDOOR_BAR_SIZE.width : OUTDOOR_BAR_SIZE.depth;
+      const at = placeInZone(plan, living, "outdoor_bar", w, d, rects, { anchor: plan.zones.poolGarden!.center });
+      if (at) {
+        rects.push(at);
+        const turn = yawTo(living.orientation);
+        ops.push({ op: "addBuilding", value: { kind: "outdoor_bar", x: at.x, z: at.z, width: OUTDOOR_BAR_SIZE.width, depth: OUTDOOR_BAR_SIZE.depth, floors: 1, roof: "flat", ...(turn !== 0 ? { rotation: turn } : {}) } });
+      }
     }
     const rural = ["forest", "farm", "countryside", "hillside"].includes(site.environment);
     if (rank < 2 && !has("addBuilding", "shed") && (rural || rank === 1) && chance("shed") < ob.shed) {
-      const at = place(4, 3.5, [unit(neg(approach), lat, 0.6, 1), unit(neg(approach), neg(lat), 0.6, 1), lat, neg(lat)], 3);
-      ops.push({ op: "addBuilding", value: { kind: "shed", x: at.x, z: at.z, width: 4, depth: 3.5, floors: 1, roof: "gable" } });
+      // In the service zone, beside the garage side of the house and out of sight of the view.
+      const at = placeInZone(plan, plan.zones.service!, "shed", SHED_SIZE.width, SHED_SIZE.depth, rects);
+      if (at) {
+        rects.push(at);
+        ops.push({ op: "addBuilding", value: { kind: "shed", x: at.x, z: at.z, width: SHED_SIZE.width, depth: SHED_SIZE.depth, floors: 1, roof: "gable" } });
+      }
     }
   }
-  return ops;
+  // ── Gardens: the plan's lawns in priority order, the first ones that fit around what is already placed ──
+  if (profile.gardens.count > 0) {
+    let want = profile.gardens.count - ops.filter((op) => op.op === "addLandscape" && valueOf(op).kind === "garden").length;
+    for (const zone of plan.gardens) {
+      if (want <= 0) break;
+      const at = placeInZone(plan, zone, "garden", profile.gardens.width, profile.gardens.depth, rects);
+      if (!at) continue;
+      rects.push(at);
+      ops.push({ op: "addLandscape", value: { kind: "garden", x: at.x, z: at.z, width: profile.gardens.width, depth: profile.gardens.depth } });
+      want--;
+    }
+  }
+
+  return { ops, plan };
 }
 
 // ── 3. Settling ─────────────────────────────────────────────────────────────────────────────────────────────────

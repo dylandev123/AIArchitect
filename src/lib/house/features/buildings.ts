@@ -62,6 +62,7 @@ export function validateBuilding(raw: unknown): FeatureValidation<BuildingConfig
   // Only written when given, so an unrotated building's JSON stays exactly as it was.
   if (typeof o.rotation === "number" && Number.isFinite(o.rotation)) value.rotation = clampNumber(o.rotation, -360, 360, "rotation", warnings);
   if (o.matchHouse === true) value.matchHouse = true;
+  if (typeof o.assetId === "string" && o.assetId.length > 0 && o.assetId.length <= 80) value.assetId = o.assetId;
   return { value, errors: [], warnings };
 }
 

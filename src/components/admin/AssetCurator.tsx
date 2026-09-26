@@ -3,14 +3,23 @@
 import { useState, useEffect, useRef } from "react";
 import { X, Search, Upload, CheckCircle, XCircle, Trash2, AlertTriangle } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
-import { useAssetStore } from "@/store/useAssetStore";
+import { approvalBlocker, useAssetStore } from "@/store/useAssetStore";
+import { useLibraryStore } from "@/store/useLibraryStore";
 import { useLearnStore } from "@/store/useLearnStore";
+import { ingestGlb } from "@/lib/assets/glbIngest";
+import { getGlbStore } from "@/lib/assets/glbStorage";
+import { GlbPreview } from "./GlbPreview";
+import { GlbReport } from "./GlbReport";
 import { inferPBR, inferCompatibleStyles, makeAssetId, detectAssetType, hashContent } from "@/lib/assets/processor";
 import { SOURCE_LABELS } from "@/lib/assets/sources";
 import { LearnWorkspace } from "./LearnWorkspace";
 import { UsageTab } from "./UsageTab";
+import { NeedsTab } from "./NeedsTab";
+import { RecipesTab } from "./RecipesTab";
 import { ModalPortal } from "./ModalPortal";
-import type { BrowseAsset, AssetSource, PBRValues } from "@/types/assets";
+import { categoryLabel } from "@/lib/library/taxonomy";
+import { ASSET_CATEGORIES, type AssetCategory, type Need } from "@/types/library";
+import type { BrowseAsset, AssetSource, CuratedAsset, PBRValues } from "@/types/assets";
 
 // ── PBR Editor ──────────────────────────────────────────────────────────────
 
@@ -55,15 +64,29 @@ function PBREditor({ pbr, onChange }: { pbr: PBRValues; onChange: (pbr: PBRValue
 
 type PolyHavenType = "textures" | "hdris" | "models";
 
-function BrowseTab() {
+/** Set when the admin jumps here from a Need: which source to open, what to search, and the need being served. */
+interface BrowseIntent {
+  source: AssetSource;
+  need: Need;
+}
+
+const needSearchText = (need: Need) => `${need.styleTags[0] ?? ""} ${categoryLabel(need.category)}`.trim();
+
+/** Library metadata a queued asset inherits from the Need it was found or uploaded for. */
+function needMetadata(need: Need | undefined): Partial<CuratedAsset> {
+  return need ? { family: need.category, styleTags: need.styleTags, contextTags: need.contextTags, dimensions: need.dimensions, needId: need.id } : {};
+}
+
+function BrowseTab({ intent }: { intent?: BrowseIntent }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const addToQueue = useAssetStore((s) => s.addToQueue);
   const isDuplicate = useAssetStore((s) => s.isDuplicate);
 
-  const [source, setSource] = useState<AssetSource>("polyhaven");
-  const [polyType, setPolyType] = useState<PolyHavenType>("textures");
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
+  const [source, setSource] = useState<AssetSource>(intent?.source ?? "polyhaven");
+  const [polyType, setPolyType] = useState<PolyHavenType>(intent ? "models" : "textures");
+  const [search, setSearch] = useState(intent && intent.source !== "upload" ? needSearchText(intent.need) : "");
+  const [query, setQuery] = useState(intent && intent.source !== "upload" ? needSearchText(intent.need) : "");
+  const setNeedStatus = useLibraryStore((s) => s.act);
   const [assets, setAssets] = useState<BrowseAsset[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -114,7 +137,9 @@ function BrowseTab() {
       compatibleStyles: styles,
       status: "pending",
       importedAt: new Date().toISOString(),
+      ...(polyType === "models" && intent ? { ...needMetadata(intent.need), type: "glb-model" as const } : {}),
     });
+    if (intent && polyType === "models") void setNeedStatus(adminEmail, { action: "setNeedStatus", id: intent.need.id, status: "review" });
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,8 +153,11 @@ function BrowseTab() {
       const slugified = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]+/gi, "_").toLowerCase();
       const pbr = inferPBR([], [slugified]);
       const styles = inferCompatibleStyles([], [slugified]);
+      const id = makeAssetId();
+      // A GLB goes through the shared validator (and its bytes are kept so the viewport can render it after approval).
+      const glb = assetType === "glb-model" ? await ingestGlb(id, buffer, { family: intent?.need.category, expectedDimensions: intent?.need.dimensions }) : null;
       addToQueue({
-        id: makeAssetId(),
+        id,
         sourceSlug: slugified,
         source: "upload",
         type: assetType,
@@ -142,7 +170,12 @@ function BrowseTab() {
         contentHash: hash,
         status: "pending",
         importedAt: new Date().toISOString(),
+        ...needMetadata(intent?.need),
+        ...glb?.derived,
       });
+      // The queue ignores a repeat of the same file; don't leave its bytes behind.
+      if (glb && !useAssetStore.getState().queue.some((a) => a.id === id)) void getGlbStore().delete(id).catch(() => {});
+      if (intent) void setNeedStatus(adminEmail, { action: "setNeedStatus", id: intent.need.id, status: "review" });
     }
     e.target.value = "";
   };
@@ -172,6 +205,12 @@ function BrowseTab() {
           </button>
         ))}
       </div>
+
+      {intent && (
+        <p className="shrink-0 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[11px] text-amber-300">
+          Finding an asset for need: <span className="font-medium">{intent.need.title}</span> — queued assets inherit its category, style and size.
+        </p>
+      )}
 
       {source !== "upload" && (
         <>
@@ -308,6 +347,79 @@ function BrowseTab() {
   );
 }
 
+// ── Metadata Editor ──────────────────────────────────────────────────────────
+
+const csv = (s: string) => s.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
+const dimOf = (v: string) => (Number.isFinite(parseFloat(v)) && parseFloat(v) > 0 ? parseFloat(v) : undefined);
+const fieldCls = "rounded-md border border-white/8 bg-neutral-800/60 px-2 py-1 text-[11px] text-neutral-200 outline-none focus:border-amber-500/40";
+
+/** Library metadata for placeable objects (family, style/context tags, real-world size, license). Materials don't need it. */
+function MetadataEditor({ asset }: { asset: CuratedAsset }) {
+  const update = useAssetStore((s) => s.updateAssetMeta);
+  const d = asset.dimensions ?? {};
+  return (
+    <div className="flex flex-col gap-1.5 rounded-lg border border-white/5 bg-white/[0.03] p-2.5 text-[11px]">
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-neutral-500">Category</span>
+        <select
+          value={asset.family ?? ""}
+          onChange={(e) => update(asset.id, { family: (e.target.value || undefined) as AssetCategory | undefined })}
+          className={`${fieldCls} flex-1`}
+        >
+          <option value="">— none (not retrievable) —</option>
+          {ASSET_CATEGORIES.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
+        </select>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-neutral-500">Style tags</span>
+        <input defaultValue={(asset.styleTags ?? []).join(", ")} onBlur={(e) => update(asset.id, { styleTags: csv(e.target.value) })} placeholder="modern, tropical" className={`${fieldCls} flex-1`} />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-neutral-500">Context</span>
+        <input defaultValue={(asset.contextTags ?? []).join(", ")} onBlur={(e) => update(asset.id, { contextTags: csv(e.target.value) })} placeholder="poolside, terrace" className={`${fieldCls} flex-1`} />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-neutral-500">Size (m)</span>
+        {(["width", "depth", "height"] as const).map((k) => (
+          <input
+            key={k}
+            defaultValue={d[k] ?? ""}
+            onBlur={(e) => update(asset.id, { dimensions: { ...asset.dimensions, [k]: dimOf(e.target.value) } })}
+            placeholder={k[0].toUpperCase()}
+            title={k}
+            className={`${fieldCls} w-14`}
+          />
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-neutral-500">License</span>
+        <input
+          defaultValue={asset.license?.name ?? ""}
+          onBlur={(e) => update(asset.id, { license: e.target.value.trim() ? { ...asset.license, name: e.target.value.trim() } : undefined })}
+          placeholder="CC0, CC-BY 4.0, commercial…"
+          className={`${fieldCls} flex-1`}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Validation report plus an on-demand 3D preview (one WebGL context at a time, opened only when asked for). */
+function GlbReview({ asset }: { asset: CuratedAsset }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-2 flex flex-col gap-2">
+      <GlbReport asset={asset} />
+      <button onClick={() => setOpen((v) => !v)} className="self-start rounded border border-white/8 px-2 py-1 text-[11px] text-neutral-400 hover:text-neutral-200">
+        {open ? "Hide 3D preview" : "Show 3D preview"}
+      </button>
+      {open && <GlbPreview asset={asset} />}
+    </div>
+  );
+}
+
+const isObjectAsset = (a: CuratedAsset) => a.type !== "pbr-material" && a.type !== "hdri";
+
 // ── Queue Tab ────────────────────────────────────────────────────────────────
 
 function QueueTab() {
@@ -315,6 +427,19 @@ function QueueTab() {
   const approve = useAssetStore((s) => s.approve);
   const reject = useAssetStore((s) => s.reject);
   const updateAssetPBR = useAssetStore((s) => s.updateAssetPBR);
+  const adminEmail = useAdminStore((s) => s.adminEmail);
+  const act = useLibraryStore((s) => s.act);
+  const generation = useLibraryStore((s) => s.generation);
+
+  const approveAsset = (asset: CuratedAsset) => {
+    approve(asset.id);
+    // A need is satisfied only once its asset is in the global library.
+    if (asset.needId && !approvalBlocker(asset)) void act(adminEmail, { action: "completeNeed", id: asset.needId, assetId: asset.id });
+  };
+  const rejectAsset = (asset: CuratedAsset) => {
+    reject(asset.id);
+    if (asset.needId) void act(adminEmail, { action: "setNeedStatus", id: asset.needId, status: "needed" });
+  };
 
   if (queue.length === 0) {
     return (
@@ -371,23 +496,48 @@ function QueueTab() {
               </div>
             )}
 
-            <div className="mt-2">
-              <p className="mb-1 text-[11px] text-neutral-500">Inferred PBR values (edit before approving)</p>
-              <PBREditor
-                pbr={asset.pbr}
-                onChange={(pbr) => updateAssetPBR(asset.id, pbr)}
-              />
-            </div>
+            {isObjectAsset(asset) ? (
+              <div className="mt-2">
+                <p className="mb-1 text-[11px] text-neutral-500">Library metadata (set a category so generation can find it)</p>
+                <MetadataEditor asset={asset} />
+              </div>
+            ) : (
+              <div className="mt-2">
+                <p className="mb-1 text-[11px] text-neutral-500">Inferred PBR values (edit before approving)</p>
+                <PBREditor
+                  pbr={asset.pbr}
+                  onChange={(pbr) => updateAssetPBR(asset.id, pbr)}
+                />
+              </div>
+            )}
+
+            {asset.type === "glb-model" && <GlbReview asset={asset} />}
+
+            {approvalBlocker(asset) && (
+              <div className="mt-2 flex items-center gap-1.5 rounded-lg bg-red-500/10 px-2.5 py-1.5 text-[11px] text-red-400">
+                <AlertTriangle size={12} /> {approvalBlocker(asset)}
+              </div>
+            )}
 
             <div className="mt-2.5 flex gap-2">
               <button
-                onClick={() => approve(asset.id)}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-500/15 py-1.5 text-xs font-medium text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25 transition"
+                onClick={() => approveAsset(asset)}
+                disabled={approvalBlocker(asset) !== null}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-500/15 py-1.5 text-xs font-medium text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25 transition disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <CheckCircle size={13} /> Approve
               </button>
+              {asset.source === "generated" && (
+                <button
+                  disabled
+                  title={generation?.available === false ? generation.message : "Regeneration is not wired up yet."}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/8 py-1.5 text-xs font-medium text-neutral-600 cursor-not-allowed"
+                >
+                  Regenerate
+                </button>
+              )}
               <button
-                onClick={() => reject(asset.id)}
+                onClick={() => rejectAsset(asset)}
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-500/10 py-1.5 text-xs font-medium text-red-400 border border-red-500/15 hover:bg-red-500/20 transition"
               >
                 <XCircle size={13} /> Reject
@@ -441,7 +591,10 @@ function LibraryTab() {
             <div className="flex items-start justify-between gap-1 p-2">
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-medium text-neutral-200">{asset.name}</p>
-                <p className="text-[10px] text-neutral-600">{SOURCE_LABELS[asset.source]}</p>
+                <p className="text-[10px] text-neutral-600">
+                  {SOURCE_LABELS[asset.source]}
+                  {asset.family && <> · {categoryLabel(asset.family)}</>}
+                </p>
               </div>
               <button
                 onClick={() => removeFromCatalog(asset.id)}
@@ -469,7 +622,7 @@ function LibraryTab() {
 
 // ── Shell ────────────────────────────────────────────────────────────────────
 
-type CuratorTab = "browse" | "queue" | "library" | "learn" | "usage";
+type CuratorTab = "browse" | "needs" | "queue" | "library" | "recipes" | "learn" | "usage";
 
 interface AssetCuratorProps {
   onClose: () => void;
@@ -478,6 +631,19 @@ interface AssetCuratorProps {
 
 export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
   const [tab, setTab] = useState<CuratorTab>("learn");
+  const [browseIntent, setBrowseIntent] = useState<BrowseIntent | undefined>();
+  const adminEmail = useAdminStore((s) => s.adminEmail);
+  const openNeeds = useLibraryStore((s) => s.needs.filter((n) => n.status === "needed").length);
+  const refreshLibrary = useLibraryStore((s) => s.refresh);
+
+  useEffect(() => {
+    void refreshLibrary(adminEmail);
+  }, [adminEmail, refreshLibrary]);
+
+  const goToBrowse = (source: AssetSource) => (need: Need) => {
+    setBrowseIntent({ source, need });
+    setTab("browse");
+  };
   const queueLength = useAssetStore((s) => s.queue.length);
   const catalogLength = useAssetStore((s) => s.catalog.length);
   const pendingLearn = useLearnStore((s) => s.proposals.filter((p) => p.status === "pending").length);
@@ -486,8 +652,10 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
   const TABS: { id: CuratorTab; label: string; count?: number }[] = [
     { id: "learn",   label: "Learn",   count: pendingLearn },
     { id: "browse",  label: "Assets" },
+    { id: "needs",   label: "Needs",   count: openNeeds },
     { id: "queue",   label: "Queue",   count: queueLength },
     { id: "library", label: "Library", count: catalogLength },
+    { id: "recipes", label: "Recipes" },
     { id: "usage",   label: "Usage" },
   ];
 
@@ -506,7 +674,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
           {TABS.map(({ id, label, count }) => (
             <button
               key={id}
-              onClick={() => setTab(id)}
+              onClick={() => { if (id === "browse") setBrowseIntent(undefined); setTab(id); }}
               className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
                 tab === id
                   ? "bg-neutral-700 text-neutral-100"
@@ -545,9 +713,11 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
       <div className="flex flex-1 overflow-hidden">
         <div className={`mx-auto flex w-full flex-col overflow-hidden p-4 ${tab === "usage" ? "max-w-6xl" : "max-w-4xl"}`}>
           {tab === "learn"   && <LearnWorkspace projectId={projectId} />}
-          {tab === "browse"  && <BrowseTab />}
+          {tab === "browse"  && <BrowseTab key={browseIntent?.need.id ?? "browse"} intent={browseIntent} />}
+          {tab === "needs"   && <NeedsTab onSearch={goToBrowse("polyhaven")} onUpload={goToBrowse("upload")} />}
           {tab === "queue"   && <QueueTab />}
           {tab === "library" && <LibraryTab />}
+          {tab === "recipes" && <RecipesTab />}
           {tab === "usage"   && <UsageTab />}
         </div>
       </div>

@@ -1,15 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FolderOpen, Trash2 } from "lucide-react";
 import { Modal } from "@/components/Modal";
 import { useProjectStore } from "@/store/useProjectStore";
 import { formatRelativeTime } from "@/lib/format";
+import { DeleteProjectDialog } from "./DeleteProjectDialog";
 
 export function OpenProjectDialog({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const projects = useProjectStore((s) => s.projects);
-  const deleteProject = useProjectStore((s) => s.deleteProject);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
 
   const sorted = [...projects].sort((a, b) => b.updatedAt - a.updatedAt);
 
@@ -41,7 +43,7 @@ export function OpenProjectDialog({ onClose }: { onClose: () => void }) {
                 </span>
               </button>
               <button
-                onClick={() => deleteProject(project.id)}
+                onClick={() => setPendingDelete({ id: project.id, name: project.name })}
                 className="shrink-0 rounded-md p-1.5 text-neutral-600 opacity-0 hover:bg-red-500/10 hover:text-red-400 group-hover:opacity-100"
                 aria-label={`Delete ${project.name}`}
               >
@@ -50,6 +52,9 @@ export function OpenProjectDialog({ onClose }: { onClose: () => void }) {
             </li>
           ))}
         </ul>
+      )}
+      {pendingDelete && (
+        <DeleteProjectDialog project={pendingDelete} onClose={() => setPendingDelete(null)} />
       )}
     </Modal>
   );

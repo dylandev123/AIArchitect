@@ -1,4 +1,5 @@
 import { useAssetStore } from "@/store/useAssetStore";
+import { toAssetIndex } from "@/lib/library/retrieval";
 import { useProjectStore } from "@/store/useProjectStore";
 import { revisionOf } from "@/lib/house/revision";
 import { needsInitialGeneration } from "@/lib/house/blank";
@@ -53,6 +54,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
       history: generate ? [] : (req.history ?? []),
       scope: req.scope,
       assets: useAssetStore.getState().getPBRMaterials().map((a) => ({ id: a.id, name: a.name })),
+      libraryAssets: generate ? toAssetIndex(useAssetStore.getState().catalog) : undefined,
     }),
   });
   // A gateway timeout or crash answers with a non-JSON page: report what happened instead of a parse error.

@@ -9,12 +9,15 @@ function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
   return { id: crypto.randomUUID(), createdAt: Date.now(), summary, houseConfigJson };
 }
 
+const STORAGE_KEY = "ai-architect-projects";
+
 interface ProjectStore {
   projects: Project[];
   createProject: (name: string, projectType?: ProjectType) => Project;
   renameProject: (id: string, name: string) => void;
   setProjectType: (id: string, projectType: ProjectType) => void;
-  deleteProject: (id: string) => void;
+  /** Permanently removes a project. Returns false (and leaves it in place) if it couldn't be removed from storage. */
+  deleteProject: (id: string) => boolean;
   touchProject: (id: string) => void;
   getProject: (id: string) => Project | undefined;
   /** Granular live-JSON edit (manual textarea/inspector/add-buttons) — does not touch version history. */
@@ -66,8 +69,24 @@ export const useProjectStore = create<ProjectStore>()(
           ),
         })),
 
-      deleteProject: (id) =>
-        set((state) => ({ projects: state.projects.filter((p) => p.id !== id) })),
+      deleteProject: (id) => {
+        const previous = get().projects;
+        try {
+          set((state) => ({ projects: state.projects.filter((p) => p.id !== id) }));
+          // Confirm the removal actually reached storage, not just memory.
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const stored = raw ? (JSON.parse(raw).state?.projects as Project[] | undefined) : [];
+          if (stored?.some((p) => p.id === id)) throw new Error("not persisted");
+          return true;
+        } catch {
+          try {
+            set({ projects: previous });
+          } catch {
+            // storage is failing; in-memory state is restored regardless
+          }
+          return false;
+        }
+      },
 
       touchProject: (id) =>
         set((state) => ({
@@ -149,7 +168,7 @@ export const useProjectStore = create<ProjectStore>()(
         })),
     }),
     {
-      name: "ai-architect-projects",
+      name: STORAGE_KEY,
       version: 5,
       migrate: (persisted) => {
         const state = persisted as { projects?: Project[] };
@@ -173,3 +192,11 @@ export const useProjectStore = create<ProjectStore>()(
     }
   )
 );
+
+// Keep other open tabs in sync so a project deleted here can't be re-saved (resurrected)
+// by a stale tab; the workspace page redirects home once its project disappears.
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    if (e.key === STORAGE_KEY) void useProjectStore.persist.rehydrate();
+  });
+}

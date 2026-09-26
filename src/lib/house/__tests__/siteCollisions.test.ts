@@ -271,7 +271,8 @@ describe("generated estates and mansions", () => {
     for (const scale of ["estate", "mansion"]) {
       const result = assembleGeneratedProject(modelOutput({ scale, view: "south", approach: "north", extra }), [], "A house with a guest house, gazebo and outdoor bar by the pool");
       if (!result.ok) throw new Error(result.errors.join("; "));
-      expect(result.adjusted.length).toBeGreaterThan(0);
+      // The site plan seats the model's buildings in their zones before the collision pass runs, so it has nothing left to move.
+      expect(result.adjusted.filter((m) => !/wall/.test(m))).toEqual([]);
       const root = JSON.parse(result.json) as Rec;
       expect(findSiteCollisions(root)).toEqual([]);
       const all = boxes(root);

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { APICallError, generateText, NoObjectGeneratedError, Output } from "ai";
 import { buildGenerationResponseSchema, buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
 import {
@@ -17,6 +17,10 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings, logTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
+import { attachLibraryAssets } from "@/lib/library/attach";
+import { noteRecipeOutcome, recipesForBrief, recordMissingAssetNeeds } from "@/lib/library/service";
+import { ASSET_CATEGORIES } from "@/types/library";
+import type { AssetIndexEntry } from "@/lib/library/retrieval";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -51,6 +55,34 @@ interface RequestBody {
   scope?: unknown;
   /** Imported PBR materials the model may reference by id. */
   assets?: AssetRef[];
+  /** Approved reusable objects (GLBs) in the admin's library, so a request one of them fits is not counted as a Need. */
+  libraryAssets?: unknown;
+}
+
+const MAX_LIBRARY_ASSETS = 500;
+
+const strings = (v: unknown, max = 8): string[] => (Array.isArray(v) ? v.filter((t): t is string => typeof t === "string").slice(0, max).map((t) => t.slice(0, 40)) : []);
+const dim = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) && v > 0 && v < 1000 ? v : undefined);
+const count = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : undefined);
+
+/** Untrusted client input: keep only what retrieval reads, in the shapes it expects. */
+function parseLibraryAssets(raw: unknown): AssetIndexEntry[] {
+  if (!Array.isArray(raw)) return [];
+  const out: AssetIndexEntry[] = [];
+  for (const a of raw.slice(0, MAX_LIBRARY_ASSETS)) {
+    if (typeof a?.id !== "string" || !(ASSET_CATEGORIES as readonly string[]).includes(a.family)) continue;
+    const d = typeof a.dimensions === "object" && a.dimensions !== null ? a.dimensions : {};
+    out.push({
+      id: a.id.slice(0, 80),
+      family: a.family,
+      styleTags: strings(a.styleTags),
+      contextTags: strings(a.contextTags),
+      dimensions: { width: dim(d.width), depth: dim(d.depth), height: dim(d.height) },
+      successCount: count(a.successCount),
+      failureCount: count(a.failureCount),
+    });
+  }
+  return out;
 }
 
 function parseAssets(raw: unknown): AssetRef[] {
@@ -133,7 +165,7 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    return generateInitialDesign(prompt, assets, baseRevision, {
+    return generateInitialDesign(prompt, assets, baseRevision, parseLibraryAssets(body.libraryAssets), {
       projectId,
       requestType: "generation",
       scope: WORLD_SCOPE.level,
@@ -223,11 +255,15 @@ export async function POST(req: NextRequest) {
 }
 
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
-async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, usageMeta: UsageMeta) {
+async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta) {
   let errors: string[] = [];
   const timings = createTimings();
   const finish = (outcome: string, attempts: number) => logTimings("generate", timings, { outcome, attempts, briefChars: brief.length });
   let lastAttemptMs = 0;
+  // Proven patterns for this brief, if the library has any. A library problem never blocks generation (see `safely`).
+  const recipes = await timings.timeAsync("recipeLookup", () => recipesForBrief(brief));
+  const recipeIds = recipes.map((r) => r.id);
+  void noteRecipeOutcome(recipeIds, "pending");
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
       // A repair pass takes about as long as the first call: don't start one that cannot finish inside the budget.
@@ -244,7 +280,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         generateText({
           model: getAiModel(),
           maxOutputTokens: MAX_OUTPUT_TOKENS.world,
-          system: buildGenerationSystemPrompt(assets),
+          system: buildGenerationSystemPrompt(assets, recipes),
           messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
           output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
           providerOptions: AI_PROVIDER_OPTIONS,
@@ -258,11 +294,19 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
       if (result.ok) {
         finish("ok", attempt + 1);
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
+        // The design is built with the procedural version of every object. Where an approved library GLB fits, the
+        // feature just references it (assetId); the procedural geometry stays as the fallback.
+        const { json } = attachLibraryAssets(result.json, library);
+        // Library work that needn't delay the response happens after it.
+        after(async () => {
+          await noteRecipeOutcome(recipeIds, "success");
+          await recordMissingAssetNeeds(json, brief, usageMeta.projectId, library);
+        });
         return NextResponse.json({
           summary: output.summary,
-          json: result.json,
+          json,
           baseRevision,
-          revision: revisionOf(result.json),
+          revision: revisionOf(json),
           timeOfDay: result.timeOfDay,
           site: result.site,
           scope: { level: WORLD_SCOPE.level, label: "New design" },
@@ -274,6 +318,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
       console.warn(`[AI] Generation attempt ${attempt + 1} failed validation:`, errors);
     }
     finish("invalid_after_retries", MAX_GENERATION_ATTEMPTS);
+    after(() => noteRecipeOutcome(recipeIds, "failure"));
     return NextResponse.json(
       { error: "I couldn't produce a valid design from that brief. Try describing it a little differently." },
       { status: 502 }

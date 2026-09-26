@@ -8,12 +8,14 @@ import type { SiteSettings } from "@/types/house";
 import { applyArchitectureRules } from "@/lib/house/architecture/generationRules";
 import { applySiteRules } from "@/lib/house/architecture/siteRules";
 import { findSiteCollisions, resolveSiteCollisions } from "@/lib/house/architecture/siteCollisions";
-import { applyScaleRules, finalizeScale, fitShellToScale } from "@/lib/house/architecture/scaleRules";
+import { finalizeScale, fitShellToScale, planScale } from "@/lib/house/architecture/scaleRules";
 import { GEOMETRY_GUIDANCE, SCALE_GUIDANCE, TERRAIN_GUIDANCE, TIER_GUIDANCE } from "./designGuidance";
 import { describeArchitectureStyles } from "@/lib/house/architecture/profiles";
 import { partitionOpsForScope, WORLD_SCOPE } from "./targeting";
 import { createTimings, type Timings } from "./timing";
 import { describeCapabilities, EXTERIOR_ENUM_OPTIONS, EXTERIOR_ASSET_OPTIONS, type AssetRef } from "./capabilities";
+import { describeRecipesForPrompt } from "@/lib/library/recipes";
+import type { DesignRecipe } from "@/types/library";
 import { describeOperationPayloads, validateGenerationOperations, type AiGenerationResponse } from "./siteSchema";
 
 const CORE = `You are a world-class residential architect. Your job is not to create JSON: it is to design beautiful homes that people would actually build. Every home should feel intentional. Think like Frank Lloyd Wright, Olson Kundig, SAOTA, McClean Design, Zaha Hadid, Foster + Partners, Studio MK27 and luxury Caribbean architects. The JSON is simply the way you communicate the design. Never create a plain box when a more believable composition is possible.
@@ -52,10 +54,12 @@ const RULES = `═══ RULES ═══
 - Do not include update or remove operations.
 - Write "summary" as one or two warm, plain sentences describing what you designed.`;
 
-export function buildGenerationSystemPrompt(assets: readonly AssetRef[]): string {
+export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = []): string {
   const capabilities = describeCapabilities({ roofs: true, materials: true, exterior: true, featureTypes: true, site: true, assets });
   const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(WORLD_SCOPE, assets.map((a) => a.id), true)}`;
-  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads].join("\n\n");
+  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeRecipesForPrompt(recipes)]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 export function buildGenerationUserMessage(brief: string, previousErrors: readonly string[] = []): string {
@@ -120,9 +124,9 @@ export function assembleGeneratedProject(
   // A named style (cabin, modern luxury, Caribbean villa) fixes the roof form, the setting and its signature parts.
   const styled = timings.time("styleRules", () => applyArchitectureRules({ brief, house: fitted.house, site, ops: layout.ops, statedEnvironment: hints.environment !== undefined }));
   // The scale adds what its size calls for: connected wings, a garage row, outdoor living, grounds and outbuildings.
-  const scaled = timings.time("scaleRules", () => applyScaleRules({ brief, house: styled.house, site: styled.site, ops: styled.ops }));
+  const scaled = timings.time("scaleRules", () => planScale({ brief, house: styled.house, site: styled.site, ops: styled.ops, placeholders: new Set(styled.placeholders) }));
   // The tier and the brief decide what richness and terrain the design still lacks (a river for "beside a river").
-  const designed = timings.time("siteRules", () => applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled, style: styled.style }));
+  const designed = timings.time("siteRules", () => applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled.ops, style: styled.style, plan: scaled.plan }));
   // With every rule run, clear the walls the wings cover and give the larger facades their window rhythm.
   const finished = timings.time("scaleRules", () => finalizeScale({ brief, house: styled.house, site: styled.site, ops: designed.ops }));
   // Nothing is committed on top of anything else: features that collide move to the nearest clear place, or fail the attempt.

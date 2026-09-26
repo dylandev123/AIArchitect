@@ -4,12 +4,14 @@ export const SOURCE_LABELS: Record<AssetSource, string> = {
   polyhaven:  "Poly Haven",
   ambientcg:  "ambientCG",
   upload:     "User Upload",
+  generated:  "Generated",
 };
 
 export const SOURCE_DESCRIPTIONS: Record<AssetSource, string> = {
   polyhaven:  "Free public-domain textures, HDRIs and 3D assets",
   ambientcg:  "Free CC0 PBR materials and textures",
   upload:     "Import your own local files",
+  generated:  "Produced by an asset-generation provider",
 };
 
 export function polyHavenThumb(slug: string): string {

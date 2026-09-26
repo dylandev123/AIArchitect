@@ -29,6 +29,11 @@ export interface ArchitectureResult {
   site: SiteSettings;
   ops: PatchOp[];
   style?: StyleKey;
+  /**
+   * The outbuildings this pass added, in `ops`. On a project with a scale their coordinates are stand-ins: the site plan
+   * does not exist yet (it needs the wings the scale rules place), and sets each into its zone. Empty without a scale.
+   */
+  placeholders: PatchOp[];
 }
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -49,7 +54,7 @@ export function resolveStyle(brief: string, ops: readonly PatchOp[]): { style?: 
 export function applyArchitectureRules(input: ArchitectureInput): ArchitectureResult {
   const { style, overridden } = resolveStyle(input.brief, input.ops);
   const profile = getArchitectureProfile(style);
-  if (!style || !profile) return { house: input.house, site: input.site, ops: [...input.ops] };
+  if (!style || !profile) return { house: input.house, site: input.site, ops: [...input.ops], placeholders: [] };
 
   const house: Shell = { ...input.house };
   if (!profile.roof.allowed.includes(house.roof as never)) house.roof = profile.roof.form;
@@ -60,8 +65,10 @@ export function applyArchitectureRules(input: ArchitectureInput): ArchitectureRe
   }
 
   let ops = withStyle([...input.ops], style, overridden);
-  ops = [...ops, ...missingSignatureParts(profile, house, site, ops)];
-  return { house, site, ops, style };
+  const added = missingSignatureParts(profile, house, site, ops);
+  ops = [...ops, ...added];
+  const placeholders = site.projectScale ? added.filter((op) => op.op === "addBuilding") : [];
+  return { house, site, ops, style, placeholders };
 }
 
 /** Makes sure exactly one setExteriorOptions carries the style; a style forced by the brief also brings its materials. */

@@ -1,11 +1,15 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSceneStore } from "@/store/useSceneStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { PrimitiveMesh } from "./PrimitiveMesh";
+import { GlbFeature } from "./GlbFeature";
+import { useAssetStore } from "@/store/useAssetStore";
+import { placementsFromBuildings, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
+import { glbModels, useGlbCacheVersion } from "@/lib/assets/glbModels";
 import type { MaterialsConfig } from "@/types/house";
 import { SURFACE_PBR, usePbrReady, type PbrSetDef, type SurfaceKey } from "@/lib/pbrLibrary";
 import type { HousePrimitive } from "@/lib/house/types";
@@ -34,6 +38,16 @@ function surfaceOf(primitive: HousePrimitive, materials: MaterialsConfig | undef
   return undefined;
 }
 
+/** Library models the project's features reference (none unless generation attached one). */
+function parsePlacements(json: string | undefined): AssetPlacement[] {
+  if (!json || !json.includes('"assetId"')) return [];
+  try {
+    return placementsFromBuildings((JSON.parse(json) as { buildings?: unknown }).buildings);
+  } catch {
+    return [];
+  }
+}
+
 export function HouseRenderer() {
   const params = useParams<{ projectId: string }>();
   const houseConfigJson = useProjectStore(
@@ -56,6 +70,19 @@ export function HouseRenderer() {
     [finished, site, cutawayLevel]
   );
 
+  // Library GLBs for features that reference one. A placement counts only while its asset is approved in the
+  // catalog; the model swaps in once loaded, and until then (or if it never loads) the procedural feature draws.
+  const catalog = useAssetStore((s) => s.catalog);
+  const placements = useMemo(() => parsePlacements(houseConfigJson), [houseConfigJson]);
+  const usable = useMemo(() => usablePlacements(placements, catalog), [placements, catalog]);
+  useEffect(() => {
+    for (const id of new Set(usable.map((p) => p.assetId))) void glbModels.load(id);
+  }, [usable]);
+  useGlbCacheVersion(); // re-render as any model finishes loading
+  const replaced = replacedFeatureIds(usable, (id) => glbModels.status(id));
+  const swapped = usable.filter((p) => replaced.has(p.featureId));
+  const replacedPrefixes = swapped.map((p) => `${p.featureId}-`);
+
   const surfaces = useMemo(
     () => finished.map((p) => surfaceOf(p, site?.materials)),
     [finished, site?.materials]
@@ -72,13 +99,17 @@ export function HouseRenderer() {
 
   if (!model || !pbrReady) return null;
 
-  const isVisible = (p: HousePrimitive) => (showRoof || p.category !== "roof") && !cutaway?.has(p.id);
+  const isVisible = (p: HousePrimitive) =>
+    (showRoof || p.category !== "roof") && !cutaway?.has(p.id) && !replacedPrefixes.some((prefix) => p.id.startsWith(prefix));
 
   return (
     <group>
       {finished.map((primitive, i) =>
         isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} /> : null
       )}
+      {swapped.map((p) => (
+        <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />
+      ))}
     </group>
   );
 }

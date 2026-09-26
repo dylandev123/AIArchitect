@@ -1,17 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Building2, Trash2 } from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useHydrated } from "@/lib/useHydrated";
 import { formatRelativeTime } from "@/lib/format";
+import { DeleteProjectDialog } from "./DeleteProjectDialog";
 
 const RECENT_LIMIT = 8;
 
 export function RecentProjects() {
   const hydrated = useHydrated();
   const projects = useProjectStore((s) => s.projects);
-  const deleteProject = useProjectStore((s) => s.deleteProject);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
 
   if (!hydrated) return null;
 
@@ -31,6 +33,7 @@ export function RecentProjects() {
   }
 
   return (
+    <>
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {recent.map((project) => (
         <Link
@@ -48,7 +51,7 @@ export function RecentProjects() {
           <button
             onClick={(e) => {
               e.preventDefault();
-              deleteProject(project.id);
+              setPendingDelete({ id: project.id, name: project.name });
             }}
             className="absolute right-2 top-2 rounded-md bg-neutral-950/60 p-1.5 text-neutral-500 opacity-0 backdrop-blur transition hover:bg-red-500/10 hover:text-red-400 group-hover:opacity-100"
             aria-label={`Delete ${project.name}`}
@@ -58,5 +61,9 @@ export function RecentProjects() {
         </Link>
       ))}
     </div>
+    {pendingDelete && (
+      <DeleteProjectDialog project={pendingDelete} onClose={() => setPendingDelete(null)} />
+    )}
+    </>
   );
 }

@@ -152,6 +152,11 @@ export interface BuildingConfig {
   rotation?: number;
   /** Built in the main house's own architectural language (walls, foundation, trim, roof). Absent = the plain kind. */
   matchHouse?: boolean;
+  /**
+   * A library GLB that stands in for this building's procedural version. Optional and advisory: the building is
+   * fully described without it, and renders procedurally whenever the model is missing or fails to load.
+   */
+  assetId?: string;
 }
 
 /**
