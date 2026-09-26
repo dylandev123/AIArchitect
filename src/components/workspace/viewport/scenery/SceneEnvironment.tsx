@@ -7,11 +7,12 @@ interface SceneEnvironmentProps {
   turbidity: number;
   rayleigh: number;
   mieCoefficient: number;
+  intensity: number;
 }
 
-export function SceneEnvironment({ sunPosition, turbidity, rayleigh, mieCoefficient }: SceneEnvironmentProps) {
+export function SceneEnvironment({ sunPosition, turbidity, rayleigh, mieCoefficient, intensity }: SceneEnvironmentProps) {
   return (
-    <Environment resolution={256} frames={1}>
+    <Environment resolution={256} frames={1} environmentIntensity={intensity}>
       <Sky
         sunPosition={sunPosition}
         turbidity={turbidity}

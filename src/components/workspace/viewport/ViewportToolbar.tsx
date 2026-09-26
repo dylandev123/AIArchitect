@@ -23,19 +23,11 @@ const CAM_BUTTONS = [
 
 const TOD_ORDER: TimeOfDay[] = ["morning", "midday", "sunset", "night"];
 
-export function ViewportToolbar({
-  onResetCamera,
-  onEnterWalk,
-}: {
-  onResetCamera: () => void;
-  onEnterWalk: () => void;
-}) {
+export function ViewportToolbar({ onEnterWalk }: { onEnterWalk: () => void }) {
   const showRoof = useSceneStore((s) => s.showRoof);
   const toggleRoof = useSceneStore((s) => s.toggleRoof);
-  const viewMode = useSceneStore((s) => s.viewMode);
-  const setViewMode = useSceneStore((s) => s.setViewMode);
+  const exitRoom = useSceneStore((s) => s.exitRoom);
   const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
-  const roomLabel = useSceneStore((s) => s.roomLabel);
   const walkMode = useSceneStore((s) => s.walkMode);
   const setWalkMode = useSceneStore((s) => s.setWalkMode);
 
@@ -46,44 +38,14 @@ export function ViewportToolbar({
   const setTimeOfDay = useProjectStore((s) => s.setTimeOfDay);
 
   const handleCameraMode = (mode: "site" | "house" | "top") => {
-    if (mode !== "top") setViewMode("site");
+    // An explicit view replaces the room view; the preset supplies the camera move, so the room's own return trip is skipped.
+    exitRoom({ camera: false });
     if (!showRoof && mode !== "top") toggleRoof();
     triggerCameraPreset(mode);
-    onResetCamera();
-  };
-
-  const handleExitRoomView = () => {
-    setViewMode("site");
-    if (!showRoof) toggleRoof();
-    triggerCameraPreset("house");
   };
 
   return (
     <>
-      {/* Room-view breadcrumb — top-left when in room mode */}
-      {viewMode === "room" && (
-        <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-2">
-          <button
-            onClick={handleExitRoomView}
-            className="pointer-events-auto flex items-center gap-2 rounded-xl border border-white/10 bg-neutral-900/90 px-3 py-1.5 text-xs font-medium text-neutral-300 shadow-lg backdrop-blur transition hover:bg-white/10 hover:text-white"
-          >
-            ← Full House View
-            {roomLabel && (
-              <>
-                <span className="text-neutral-600">/</span>
-                <span className="text-violet-300">{roomLabel}</span>
-              </>
-            )}
-          </button>
-
-          {!roomLabel && (
-            <div className="pointer-events-none rounded-xl border border-white/[0.06] bg-neutral-900/80 px-3 py-2 text-[11px] text-neutral-500 backdrop-blur">
-              Select a room in the scene to focus it
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Right-side toolbar */}
       <div className="pointer-events-none absolute right-3 top-3 flex flex-col gap-1.5">
 

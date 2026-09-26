@@ -9,6 +9,9 @@ import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { getPoolDeckOutline } from "@/lib/house/features/pools";
 import { groundRect, planTerrain } from "@/lib/landscaping/terrain";
 import { getGrassTextures, GRASS_TILE_METERS } from "@/lib/proceduralTextures";
+import { SURFACE_PBR, usePbrSet } from "@/lib/pbrLibrary";
+import { macroVariation, macroVariationCacheKey } from "@/lib/materialVariation";
+import { naturalGreen } from "./scenery/vegetation";
 
 const MIN_GROUND_HALF = 200;
 
@@ -50,29 +53,41 @@ export function GroundPlane() {
   }, [houseConfigJson]);
 
   // ShapeGeometry UVs are the shape's world-metre coordinates, so a 1/tile repeat gives a fixed-size lawn texture.
+  // The bundled grass PBR set is preferred; the procedural mown-lawn canvas is the fallback while it loads or if it fails.
+  const grassDef = SURFACE_PBR.grass!;
+  const pbr = usePbrSet(grassDef);
   const grass = useMemo(() => {
-    const { map, bump } = getGrassTextures();
-    const repeat = 1 / GRASS_TILE_METERS;
-    const m = map.clone();
-    const b = bump.clone();
-    for (const tex of [m, b]) {
-      tex.repeat.set(repeat, repeat);
-      tex.needsUpdate = true;
-    }
-    return { map: m, bump: b };
-  }, []);
+    const tile = pbr.textures ? grassDef.tile : GRASS_TILE_METERS;
+    const source = pbr.textures
+      ? { map: pbr.textures.map, normal: pbr.textures.normalMap, rough: pbr.textures.roughnessMap, bump: null }
+      : { ...(({ map, bump }) => ({ map, bump, normal: null, rough: null }))(getGrassTextures()) };
+    const clone = (tex: THREE.Texture | null) => {
+      if (!tex) return null;
+      const t = tex.clone();
+      t.repeat.set(1 / tile, 1 / tile);
+      t.needsUpdate = true;
+      return t;
+    };
+    return { map: clone(source.map)!, bump: clone(source.bump), normal: clone(source.normal), rough: clone(source.rough) };
+  }, [pbr.textures, grassDef.tile]);
+  const tint = useMemo(() => naturalGreen(color), [color]);
 
   return (
     <mesh geometry={geometry} receiveShadow>
       {/* Mown-lawn texture tinted by the environment's ground colour */}
       <meshStandardMaterial
-        color={color}
+        color={tint}
         map={grass.map}
-        bumpMap={grass.bump}
+        bumpMap={grass.bump ?? undefined}
         bumpScale={1.5}
+        normalMap={grass.normal ?? undefined}
+        normalScale={new THREE.Vector2(0.9, 0.9)}
+        roughnessMap={grass.rough ?? undefined}
         roughness={0.95}
         metalness={0.0}
         side={THREE.DoubleSide}
+        onBeforeCompile={macroVariation}
+        customProgramCacheKey={macroVariationCacheKey}
       />
     </mesh>
   );

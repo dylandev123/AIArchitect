@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import type { MaterialType } from "@/types/house";
 import { createRng, hashSeed } from "@/lib/landscaping/rng";
+import type { SurfaceKey } from "@/lib/pbrLibrary";
 
 /**
  * Small tileable canvas textures for the stylised (Sims/GTA-like) look: a greyscale colour map that the
@@ -10,7 +10,9 @@ import { createRng, hashSeed } from "@/lib/landscaping/rng";
 
 export type SurfacePattern = "brick" | "stone" | "planks" | "grain" | "tiles" | "slate" | "seam";
 
-export const SURFACE_PATTERN: Partial<Record<MaterialType, SurfacePattern>> = {
+export const SURFACE_PATTERN: Partial<Record<SurfaceKey, SurfacePattern>> = {
+  paving: "stone",
+  rock: "grain",
   brick: "brick",
   stone: "stone",
   wood: "planks",

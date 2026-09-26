@@ -2,6 +2,7 @@ import { FEATURE_JSON_KEY, FEATURE_TYPES, type FeatureType } from "@/lib/house/f
 import { ensureStableIds } from "@/lib/house/stableIds";
 import type { EditScope, TargetFilter, TargetIds } from "./targeting";
 import { mentionedRoomTypes } from "./targeting";
+import { resolveRoomTargets, type RoomGuard, type RoomTargets } from "./roomScope";
 
 type Item = Record<string, unknown>;
 
@@ -59,6 +60,10 @@ export interface ScopedContext {
   userMessage: string;
   /** Ids the model is allowed to update/remove. */
   targetIds: TargetIds;
+  /** Set when the scope's target can't be resolved safely; the request must be rejected without calling the model. */
+  blocked?: string;
+  /** Room scope only: the geometry every room-scoped op is checked against. */
+  roomGuard?: RoomGuard;
 }
 
 const json = (value: unknown) => JSON.stringify(value);
@@ -134,12 +139,19 @@ export function buildScopeContext(root: Record<string, unknown>, scope: EditScop
   const isWorld = scope.level === "world";
   const prepared = ensureStableIds(root, scope.featureTypes);
 
+  let room: RoomTargets | undefined;
+  if (scope.kind === "room") {
+    const resolved = resolveRoomTargets(prepared, scope, prompt);
+    if ("error" in resolved) return { root: prepared, targetIds: {}, userMessage: "", blocked: resolved.error };
+    room = resolved;
+  }
+
   // Select each editable array's targets once; both the model view and the id allow-list derive from it.
   const picks: Partial<Record<FeatureType, Item[]>> = {};
   const targetIds: TargetIds = {};
   for (const type of scope.featureTypes) {
     const all = itemsOf(prepared, type);
-    picks[type] = isWorld ? all : selectTargets(type, all, scope.filter);
+    picks[type] = isWorld ? all : (room?.picks[type] ?? selectTargets(type, all, scope.filter));
     targetIds[type] = new Set(picks[type]!.map((i) => String(i.id)));
   }
 
@@ -195,10 +207,11 @@ export function buildScopeContext(root: Record<string, unknown>, scope: EditScop
   const parts = [
     `Instruction: ${prompt}`,
     `EDITABLE TARGETS — address existing items only by their "id":\n${json(targets)}`,
+    room ? `ROOM GEOMETRY — openings must sit within these wall-offset ranges, on the room's own level:\n${room.geometry}` : "",
     shown.length > 0 ? `(Showing a subset of larger arrays: ${shown.join(", ")}. Other items exist but are not editable this turn.)` : "",
     Object.keys(context).length > 0 ? `READ-ONLY CONTEXT — never edit or reference by id:\n${json(context)}` : "",
     Object.keys(style).length > 0 ? `STYLE REFERENCE (read-only):\n${json(style)}` : "",
     untouched.length > 0 ? `Not shown, unchanged: ${untouched.join(", ")}.` : "",
   ];
-  return { root: prepared, targetIds, userMessage: parts.filter(Boolean).join("\n\n") };
+  return { root: prepared, targetIds, roomGuard: room?.guard, userMessage: parts.filter(Boolean).join("\n\n") };
 }

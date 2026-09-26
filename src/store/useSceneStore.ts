@@ -1,12 +1,9 @@
 "use client";
 
 import { create } from "zustand";
+import type { RoomFocus } from "@/lib/house/roomView";
 
-interface RoomFocusTarget {
-  worldX: number;
-  worldZ: number;
-  roomSize: number;
-}
+export type CameraPreset = "site" | "house" | "top" | "room" | "exterior";
 
 interface SceneStore {
   selectedKey: string | null;
@@ -18,24 +15,27 @@ interface SceneStore {
   setShowAdvanced: (show: boolean) => void;
   showAdvanced: boolean;
 
-  /** Persistent view mode — persists across selections. */
-  viewMode: "site" | "room";
-  setViewMode: (mode: "site" | "room") => void;
-
-  /** Human-readable label for the room currently in focus ("Bedroom", "Kitchen", …). */
-  roomLabel: string | null;
+  /**
+   * The room the user has stepped into, or null for the whole house. This one value drives the camera, the cutaway
+   * (roof and blocking walls hidden) and the scope of AI edits, so they can never disagree.
+   */
+  focusedRoom: RoomFocus | null;
+  /** Level whose cutaway is applied; outlives `focusedRoom` briefly on exit so walls return only once the camera is back outside. */
+  cutawayLevel: number | null;
+  setCutawayLevel: (level: number | null) => void;
+  /** Steps into a room: selects nothing, leaves walk mode, and flies the camera in. Re-entering another room just moves. */
+  enterRoom: (focus: RoomFocus) => void;
+  /** Refreshes the focus after the project changed (id backfilled, room moved in the array) without moving the camera. */
+  syncRoomFocus: (focus: RoomFocus | null) => void;
+  /** Back to the whole house. The camera returns to where it was, unless `camera: false` (another view is taking over). */
+  exitRoom: (options?: { camera?: boolean }) => void;
 
   /**
-   * One-shot camera preset trigger. Viewport.tsx watches this, applies the
-   * camera move, then resets it to null. Never persists across frames.
+   * One-shot camera preset trigger. CameraRig watches this, flies the camera there,
+   * then resets it to null. Never persists across frames.
    */
-  cameraPreset: "site" | "house" | "top" | "room" | null;
-  roomFocusTarget: RoomFocusTarget | null;
-  triggerCameraPreset: (
-    preset: "site" | "house" | "top" | "room" | null,
-    roomTarget?: RoomFocusTarget,
-    roomLabel?: string
-  ) => void;
+  cameraPreset: CameraPreset | null;
+  triggerCameraPreset: (preset: CameraPreset | null) => void;
 
   /** First-person walk mode: disables OrbitControls, activates PointerLockControls + WASD. */
   walkMode: boolean;
@@ -52,22 +52,20 @@ export const useSceneStore = create<SceneStore>((set) => ({
   showAdvanced: false,
   setShowAdvanced: (show) => set({ showAdvanced: show }),
 
-  viewMode: "site",
-  // Clear roomLabel when returning to site view
-  setViewMode: (mode) => set({ viewMode: mode, ...(mode === "site" ? { roomLabel: null } : {}) }),
-
-  roomLabel: null,
+  focusedRoom: null,
+  cutawayLevel: null,
+  setCutawayLevel: (level) => set({ cutawayLevel: level }),
+  enterRoom: (focus) =>
+    set({ focusedRoom: focus, selectedKey: null, showAdvanced: false, walkMode: false, cameraPreset: "room" }),
+  syncRoomFocus: (focus) => set({ focusedRoom: focus }),
+  exitRoom: (options) =>
+    set((state) => ({
+      focusedRoom: null,
+      ...(options?.camera === false ? {} : { cameraPreset: state.focusedRoom ? "exterior" : state.cameraPreset }),
+    })),
 
   cameraPreset: null,
-  roomFocusTarget: null,
-  triggerCameraPreset: (preset, roomTarget, roomLabel) =>
-    set((state) => ({
-      cameraPreset: preset,
-      roomFocusTarget: roomTarget ?? null,
-      // Only update roomLabel when a new label is explicitly provided; preserve it when
-      // clearing the preset (triggerCameraPreset(null)) so the breadcrumb stays visible.
-      roomLabel: roomLabel !== undefined ? roomLabel : state.roomLabel,
-    })),
+  triggerCameraPreset: (preset) => set({ cameraPreset: preset }),
 
   walkMode: false,
   setWalkMode: (active) => set({ walkMode: active }),

@@ -1,5 +1,6 @@
 import { FEATURE_LABEL, FEATURE_TYPES, type FeatureType } from "@/lib/house/features/featureTypes";
 import type { BuildingKind, MaterialZone, RoomType, WallSide } from "@/types/house";
+import { checkRoomOp, ROOM_OPENING_TYPES, type RoomGuard } from "./roomScope";
 
 /**
  * How much of the project an edit may touch — always the smallest that fits.
@@ -8,7 +9,7 @@ import type { BuildingKind, MaterialZone, RoomType, WallSide } from "@/types/hou
  *  - component: one thing (the rooms, the windows, the roof, the materials…)
  */
 export type ScopeLevel = "world" | "zone" | "component";
-export type ScopeKind = "house" | "materials" | "feature" | "zone" | "full" | "site";
+export type ScopeKind = "house" | "materials" | "feature" | "room" | "zone" | "full" | "site";
 
 /** Narrows which existing items of an editable type are shown to (and editable by) the model. */
 export interface TargetFilter {
@@ -40,6 +41,8 @@ export interface EditScope {
   /** The `site` environment block (environment / view / slope / approach) editable. */
   site: boolean;
   filter?: TargetFilter;
+  /** Room scope only: stable id of the focused room. Wins over `filter.indices` if the array has shifted. */
+  roomId?: string;
 }
 
 const ALL_MATERIAL_ZONES: MaterialZone[] = ["exterior", "roof", "trim", "decking"];
@@ -94,6 +97,22 @@ export function makeScopeForFeature(featureType: FeatureType, index?: number): E
     featureTypes: [featureType],
     filter: index !== undefined ? { indices: [index] } : undefined,
   });
+}
+
+/**
+ * One room, from the room navigator. The room itself may be updated or removed, and so may the windows,
+ * doors and balconies on its exterior walls (new ones only on those walls). Which items those are is
+ * resolved per request from the project (see resolveRoomTargets); everything else stays locked.
+ * `label` is the room's display name ("Kitchen · Ground floor"), shown to the model as the scope.
+ */
+export function makeScopeForRoom(index: number, label = "Room", roomId?: string): EditScope {
+  const featureTypes: FeatureType[] = ["room", ...ROOM_OPENING_TYPES];
+  const scope = makeScope("component", "room", label, {
+    featureType: "room",
+    featureTypes,
+    filter: { indices: [index] },
+  });
+  return { ...scope, roomId, allowedOps: scope.allowedOps.filter((op) => op !== "addRoom") };
 }
 
 // ── Rules ───────────────────────────────────────────────────────────────────
@@ -318,6 +337,14 @@ export function scopeFromHint(hint: unknown, prompt: string): EditScope {
   if (h.level === "world") return WORLD_SCOPE;
 
   const featureType = FEATURE_TYPES.find((t) => t === h.featureType);
+  if (h.kind === "room") {
+    const rawFilter = typeof h.filter === "object" && h.filter !== null ? (h.filter as Record<string, unknown>) : {};
+    const index = Array.isArray(rawFilter.indices) ? rawFilter.indices.find((n): n is number => Number.isInteger(n) && n >= 0) : undefined;
+    const roomId = typeof h.roomId === "string" && h.roomId.length > 0 && h.roomId.length <= 100 ? h.roomId : undefined;
+    const label = typeof h.label === "string" ? h.label.replace(/[^\p{L}\p{N} ·.'-]/gu, "").slice(0, 80) || undefined : undefined;
+    // A malformed room hint resolves to no room (rejected downstream) — it never widens to another scope.
+    return makeScopeForRoom(index ?? -1, label, roomId);
+  }
   if (h.kind === "feature" && featureType) {
     const rawFilter = typeof h.filter === "object" && h.filter !== null ? (h.filter as Record<string, unknown>) : {};
     const indices = Array.isArray(rawFilter.indices)
@@ -340,6 +367,7 @@ export function scopeFromHint(hint: unknown, prompt: string): EditScope {
 export interface ScopedOp {
   op: string;
   id?: string;
+  value?: Record<string, unknown>;
   fields?: Record<string, unknown>;
 }
 
@@ -355,7 +383,8 @@ export type TargetIds = Partial<Record<FeatureType, ReadonlySet<string>>>;
 export function partitionOpsForScope<T extends ScopedOp>(
   ops: readonly T[],
   scope: EditScope,
-  targetIds: TargetIds
+  targetIds: TargetIds,
+  roomGuard?: RoomGuard
 ): { allowed: T[]; rejected: string[] } {
   const allowed: T[] = [];
   const rejected: string[] = [];
@@ -364,6 +393,11 @@ export function partitionOpsForScope<T extends ScopedOp>(
     if (!scope.allowedOps.includes(op.op)) {
       rejected.push(`"${op.op}" is out of scope for "${scope.label}"`);
       continue;
+    }
+    if (scope.kind === "room") {
+      // Fails closed: without the room's geometry nothing can be placed or moved.
+      const reason = roomGuard ? checkRoomOp(op, roomGuard) : "the room's walls could not be resolved";
+      if (reason) { rejected.push(`"${op.op}" rejected in "${scope.label}": ${reason}`); continue; }
     }
     if (op.op === "setHouse") {
       const bad = Object.keys(op.fields ?? {}).filter((k) => !scope.houseFields.includes(k));

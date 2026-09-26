@@ -7,7 +7,7 @@ export const ROOF_THICKNESS = 0.25;
 export const ROOF_OVERHANG = 0.60;
 export const LEVEL_HEIGHT = WALL_HEIGHT + FLOOR_THICKNESS;
 
-export const FRAME_BORDER = 0.11;
+export const FRAME_BORDER = 0.07;
 export const FRAME_THICKNESS = 0.12;
 export const GLASS_THICKNESS = 0.04;
 export const DOOR_PANEL_THICKNESS = 0.07;

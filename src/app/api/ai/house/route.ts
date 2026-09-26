@@ -101,6 +101,7 @@ export async function POST(req: NextRequest) {
   const scope = scopeFromHint(body.scope, prompt);
   const history = Array.isArray(body.history) ? body.history.slice(-MAX_HISTORY_TURNS[scope.level]) : [];
   const context = buildScopeContext(root, scope, prompt);
+  if (context.blocked) return NextResponse.json({ error: context.blocked }, { status: 422 });
 
   try {
     const { output } = await generateText({
@@ -122,7 +123,7 @@ export async function POST(req: NextRequest) {
     const { valid, invalid } = validateOperations(output.operations, scope, assetIds);
 
     // Out-of-scope, off-target, or invented-id ops are dropped: never applied, never used as a fallback.
-    const { allowed, rejected } = partitionOpsForScope(valid, scope, context.targetIds);
+    const { allowed, rejected } = partitionOpsForScope(valid, scope, context.targetIds, context.roomGuard);
     rejected.unshift(...invalid);
     if (rejected.length > 0) {
       console.warn(`[AI] Rejected ops (${scope.level}/${scope.label}):`, rejected);

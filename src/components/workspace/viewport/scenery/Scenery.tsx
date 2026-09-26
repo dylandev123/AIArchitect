@@ -6,13 +6,13 @@ import { useParams } from "next/navigation";
 import { ContactShadows } from "@react-three/drei";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
-import { generateTrees } from "@/lib/landscaping/trees";
+import { generateShrubs, generateTrees } from "@/lib/landscaping/trees";
 import { generateGrassTufts } from "@/lib/landscaping/grass";
 import { generateCars } from "@/lib/landscaping/cars";
 import { generateFurnitureClusters } from "@/lib/landscaping/furniture";
 import { yardHalfExtent } from "@/lib/landscaping/footprints";
 import { planTerrain } from "@/lib/landscaping/terrain";
-import { Tree } from "./Tree";
+import { Shrub, Tree } from "./Tree";
 import { GrassField } from "./GrassField";
 import { Car } from "./Car";
 import { PatioFurnitureSet } from "./PatioFurnitureSet";
@@ -49,14 +49,17 @@ export function Scenery() {
     (s) => s.getProject(params.projectId)?.houseConfigJson
   );
 
-  const { trees, grassTufts, cars, furniture, halfExtent, house } = useMemo(() => {
+  const { trees, shrubs, environment, grassTufts, cars, furniture, halfExtent, house } = useMemo(() => {
     const { site } = generateHouseFromJson(houseConfigJson ?? "{}");
     if (!site) {
-      return { trees: [], grassTufts: [], cars: [], furniture: [], halfExtent: 30, house: undefined };
+      return { trees: [], shrubs: [], environment: undefined, grassTufts: [], cars: [], furniture: [], halfExtent: 30, house: undefined };
     }
     const plan = planTerrain(site);
+    const trees = generateTrees(site, plan?.yardTrees);
     return {
-      trees: generateTrees(site, plan?.yardTrees),
+      trees,
+      shrubs: generateShrubs(site, trees),
+      environment: site.settings?.environment,
       grassTufts: plan && !plan.grassTufts ? [] : generateGrassTufts(site),
       cars: generateCars(site),
       furniture: generateFurnitureClusters(site),
@@ -68,7 +71,10 @@ export function Scenery() {
   return (
     <>
       {trees.map((tree) => (
-        <Tree key={tree.id} tree={tree} />
+        <Tree key={tree.id} tree={tree} environment={environment} />
+      ))}
+      {shrubs.map((shrub) => (
+        <Shrub key={shrub.id} shrub={shrub} />
       ))}
       <GrassField tufts={grassTufts} />
       {cars.map((car) => (

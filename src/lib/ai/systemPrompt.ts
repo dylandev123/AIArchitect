@@ -25,6 +25,11 @@ const ROOMS = `═══ ROOMS ═══
 
 Rooms use x/z measured from the house's interior northwest corner. "Move the kitchen" → updateRoom changing x/z only. "Make the bedroom larger" → updateRoom changing width/depth only.`;
 
+const ROOM_FOCUS = `═══ FOCUSED ROOM ═══
+
+The user is standing inside one room. Edit only that room and the windows, doors and balconies on its exterior walls (plus a directly connected ensuite, when EDITABLE TARGETS lists one). Interior partitions follow the rooms' boxes — change a room's x/z/width/depth to move them. Rooms have no separate wall or floor finish: for finishes, materials, or anything about other rooms or the outside, make no change to them.
+New windows, doors and balconies must use a wall listed in ROOM GEOMETRY, that room's level, and an offset+width inside its range. "This window" means one of the windows in EDITABLE TARGETS; if several could match and the instruction doesn't say which, change the one closest to what it describes and no others.`;
+
 const MATERIALS = `═══ MATERIALS ═══
 
 "Make exterior white stucco" → {"op":"setMaterials","fields":{"exterior":{"material":"stucco","color":"#f5f3ee"}}}
@@ -85,6 +90,7 @@ export function buildScopedSystemPrompt(scope: EditScope, assets: readonly Asset
     hasFeatures ? OPERATIONS : "",
     hasFeatures ? COORDINATES : "",
     scope.featureTypes.includes("room") ? ROOMS : "",
+    scope.kind === "room" ? ROOM_FOCUS : "",
     editsMaterials ? MATERIALS : "",
     scope.exterior ? EXTERIOR : "",
     scope.site ? SITE : "",

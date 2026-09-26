@@ -14,10 +14,8 @@ import {
   type QuickAction,
   type QuickActionGroup,
 } from "@/lib/quickActions";
-import { ROOM_TYPE_LABELS, WALL_THICKNESS } from "@/lib/house/constants";
 import { makeScopeForFeature } from "@/lib/ai/targeting";
 import { requestHouseEdit } from "@/lib/ai/client";
-import type { RoomType } from "@/types/house";
 
 // ── Accent palette ────────────────────────────────────────────────────────────
 
@@ -102,10 +100,7 @@ export function QuickActions() {
   const selectedKey = useSceneStore((s) => s.selectedKey);
   const setShowAdvanced = useSceneStore((s) => s.setShowAdvanced);
   const selectKey = useSceneStore((s) => s.selectKey);
-  const showRoof = useSceneStore((s) => s.showRoof);
-  const setViewMode = useSceneStore((s) => s.setViewMode);
-  const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
-  const toggleRoof = useSceneStore((s) => s.toggleRoof);
+  const enterRoom = useSceneStore((s) => s.enterRoom);
 
   const params = useParams<{ projectId: string }>();
   const project = useProjectStore((s) => s.getProject(params.projectId));
@@ -160,34 +155,7 @@ export function QuickActions() {
   // ── Room View handler ────────────────────────────────────────────────────
 
   const handleViewRoom = () => {
-    if (!featureRef || featureRef.type !== "room") return;
-    const room = rawFeature;
-    let houseWidth = 12;
-    let houseDepth = 9;
-    try {
-      const parsed = JSON.parse(project.houseConfigJson);
-      if (parsed?.house) {
-        houseWidth = (parsed.house.width as number) || 12;
-        houseDepth = (parsed.house.depth as number) || 9;
-      }
-    } catch {
-      // use defaults
-    }
-
-    const rx = (room.x as number) || 0;
-    const rz = (room.z as number) || 0;
-    const rw = (room.width as number) || 3;
-    const rd = (room.depth as number) || 3;
-    const rType = (room.type as RoomType) || "bedroom";
-
-    const worldX = -houseWidth / 2 + WALL_THICKNESS + rx + rw / 2;
-    const worldZ = -houseDepth / 2 + WALL_THICKNESS + rz + rd / 2;
-    const roomSize = Math.max(rw, rd);
-    const label = ROOM_TYPE_LABELS[rType] ?? "Room";
-
-    if (showRoof) toggleRoof();
-    setViewMode("room");
-    triggerCameraPreset("room", { worldX, worldZ, roomSize }, label);
+    if (featureRef?.type === "room") enterRoom({ index: featureRef.index, id: typeof rawFeature.id === "string" ? rawFeature.id : undefined });
   };
 
   // ── Action handler ───────────────────────────────────────────────────────

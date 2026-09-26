@@ -9,9 +9,13 @@ import {
   ChevronUp,
   Send,
   Sparkles,
+  X,
 } from "lucide-react";
 import { useUIStore } from "@/store/useUIStore";
 import { useProjectStore } from "@/store/useProjectStore";
+import { useSceneStore } from "@/store/useSceneStore";
+import { useFocusedRoom } from "./useRoomFocus";
+import { makeScopeForRoom } from "@/lib/ai/targeting";
 import { requestHouseEdit, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
 import { needsInitialGeneration } from "@/lib/house/blank";
 
@@ -108,10 +112,19 @@ const QUICK_PROMPTS = [
   "Give it white stucco walls",
 ];
 
+/** Offered while a room is in focus: the edits a room actually supports (its size and position). */
+const ROOM_PROMPTS = [
+  "Make it larger",
+  "Make it narrower",
+  "Move it 1m east",
+];
+
 // ── Types ────────────────────────────────────────────────────────────────────
 interface ChatMessage {
   role: "user" | "assistant" | "error";
   content: string;
+  /** Set on a user message sent while a room was in focus: "Kitchen · Ground floor". */
+  scope?: string;
 }
 
 interface ArchitectWork {
@@ -128,6 +141,10 @@ export function ChatPanel() {
   const project = useProjectStore((s) => s.getProject(params.projectId));
   const appendVersion = useProjectStore((s) => s.appendVersion);
   const needsGeneration = !!project && needsInitialGeneration(project);
+  // While a room is in focus every edit is scoped to it; back in the whole-house view the scope is global again.
+  const focusedRoom = useFocusedRoom(params.projectId);
+  const exitRoom = useSceneStore((s) => s.exitRoom);
+  const roomScopeLabel = focusedRoom ? `${focusedRoom.name} · ${focusedRoom.floorName}` : undefined;
   const setAiWorking = useUIStore((s) => s.setAiWorking);
   const setGenerationError = useUIStore((s) => s.setGenerationError);
   const takePendingBrief = useUIStore((s) => s.takePendingBrief);
@@ -176,7 +193,8 @@ export function ChatPanel() {
     if (!prompt || isLoading || !project) return;
     const wasBlank = needsInitialGeneration(project);
 
-    setMessages((prev) => [...prev, { role: "user", content: prompt }]);
+    const roomScope = focusedRoom && !wasBlank ? focusedRoom : null;
+    setMessages((prev) => [...prev, { role: "user", content: prompt, scope: roomScope ? roomScopeLabel : undefined }]);
     setDraft("");
     setIsLoading(true);
     setAiWorking(true);
@@ -190,6 +208,7 @@ export function ChatPanel() {
         history: messages
           .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
           .map((m) => ({ role: m.role, content: m.content })),
+        scope: roomScope ? makeScopeForRoom(roomScope.index, roomScopeLabel, roomScope.id) : undefined,
         apply: (summary, json) => appendVersion(project.id, summary, json),
       });
 
@@ -264,10 +283,12 @@ export function ChatPanel() {
                 <p className="text-xs leading-relaxed text-neutral-500">
                   {needsGeneration
                     ? "Describe the house you'd like — style, size, floors, garage, pool, garden — and I'll design it from scratch."
-                    : "Tell me what you'd like to build or change, and I'll bring it to life."}
+                    : focusedRoom
+                      ? `You're in the ${focusedRoom.name}. Tell me what to change here — I'll leave the rest of the house alone.`
+                      : "Tell me what you'd like to build or change, and I'll bring it to life."}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {(needsGeneration ? BRIEF_PROMPTS : QUICK_PROMPTS).map((p) => (
+                  {(needsGeneration ? BRIEF_PROMPTS : focusedRoom ? ROOM_PROMPTS : QUICK_PROMPTS).map((p) => (
                     <button
                       key={p}
                       onClick={() => send(p)}
@@ -294,9 +315,12 @@ export function ChatPanel() {
                     )}
 
                     {m.role === "user" && (
-                      <span className="max-w-[80%] rounded-xl bg-amber-500/20 px-3 py-2 text-xs leading-relaxed text-amber-100">
-                        {m.content}
-                      </span>
+                      <div className="flex max-w-[80%] flex-col items-end gap-1">
+                        <span className="rounded-xl bg-amber-500/20 px-3 py-2 text-xs leading-relaxed text-amber-100">
+                          {m.content}
+                        </span>
+                        {m.scope && <span className="pr-1 text-[10px] text-violet-300/80">{m.scope}</span>}
+                      </div>
                     )}
 
                     {m.role === "assistant" && (
@@ -360,6 +384,24 @@ export function ChatPanel() {
 
           </div>
 
+          {/* Scope — visible whenever edits are limited to the focused room */}
+          {focusedRoom && !needsGeneration && (
+            <div className="mx-4 mb-2 flex items-center justify-between gap-2 rounded-lg border border-violet-500/20 bg-violet-500/10 px-2.5 py-1.5">
+              <span className="truncate text-[11px] text-violet-200">
+                Editing <span className="font-semibold">{roomScopeLabel}</span> only
+              </span>
+              <button
+                onClick={() => exitRoom()}
+                title="Back to the whole house"
+                aria-label="Back to the whole house"
+                className="flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium text-violet-300 transition hover:bg-white/10 hover:text-white"
+              >
+                <X size={10} />
+                Whole house
+              </button>
+            </div>
+          )}
+
           {/* Input row */}
           <div className="flex items-center gap-2 px-4 pb-3">
             <input
@@ -372,7 +414,9 @@ export function ChatPanel() {
                   ? "Your architect is designing…"
                   : needsGeneration
                     ? "Describe your project…"
-                    : "Tell your architect what to create…"
+                    : focusedRoom
+                      ? `Change the ${focusedRoom.name}…`
+                      : "Tell your architect what to create…"
               }
               className="flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-600 transition focus:border-amber-500/40 focus:bg-white/[0.06] disabled:opacity-50"
             />

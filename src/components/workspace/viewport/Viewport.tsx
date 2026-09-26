@@ -11,17 +11,20 @@ import {
 } from "@react-three/drei";
 import type { KeyboardControlsEntry } from "@react-three/drei";
 import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Scene } from "./Scene";
 import { ViewportToolbar } from "./ViewportToolbar";
+import { CameraRig } from "./CameraRig";
+import { RoomNavigator } from "./RoomNavigator";
 import { QuickActions } from "./QuickActions";
 import { GenerationOverlay } from "./GenerationOverlay";
 import { useNeedsGeneration } from "./useNeedsGeneration";
+import { useRoomFocusSync } from "../useRoomFocus";
 import { useSceneStore } from "@/store/useSceneStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
-import { computeCameraFit } from "@/lib/house/cameraFit";
+import { CAMERA_FOV, computeCameraFit } from "@/lib/house/cameraFit";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
+import { preloadPbrLibrary } from "@/lib/pbrLibrary";
 import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
 import type { TimeOfDay } from "@/types/project";
 
@@ -76,16 +79,15 @@ function toTuple(v: { x: number; y: number; z: number }): [number, number, numbe
 }
 
 export function Viewport() {
-  const controlsRef = useRef<OrbitControlsImpl>(null);
   const selectKey = useSceneStore((s) => s.selectKey);
-  const cameraPreset = useSceneStore((s) => s.cameraPreset);
-  const roomFocusTarget = useSceneStore((s) => s.roomFocusTarget);
-  const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
   const walkMode = useSceneStore((s) => s.walkMode);
   const setWalkMode = useSceneStore((s) => s.setWalkMode);
 
+  useEffect(() => preloadPbrLibrary(), []);
+
   const blank = useNeedsGeneration();
   const params = useParams<{ projectId: string }>();
+  useRoomFocusSync(params.projectId);
   const houseConfigJson = useProjectStore(
     (s) => s.getProject(params.projectId)?.houseConfigJson
   );
@@ -100,73 +102,21 @@ export function Viewport() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /** One-shot camera preset: fires when set, immediately resets to null.
-   *  Skip when controlsRef is null (OrbitControls unmounted in walk mode). */
-  useEffect(() => {
-    if (!cameraPreset || !controlsRef.current) return;
-    const controls = controlsRef.current;
-    const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
-
-    switch (cameraPreset) {
-      case "site": {
-        const bounds = site ? computeSiteBounds(site) : undefined;
-        const fit = computeCameraFit(config ?? DEFAULT_HOUSE_CONFIG, bounds);
-        controls.object.position.copy(fit.position);
-        controls.target.copy(fit.target);
-        break;
-      }
-      case "house": {
-        const fit = computeCameraFit(config ?? DEFAULT_HOUSE_CONFIG);
-        controls.object.position.copy(fit.position);
-        controls.target.copy(fit.target);
-        break;
-      }
-      case "top": {
-        const bounds = site ? computeSiteBounds(site) : { halfWidth: 15, halfDepth: 15 };
-        const extent = Math.max(bounds.halfWidth, bounds.halfDepth) + 12;
-        controls.object.position.set(0, extent * 1.6, 0.001);
-        controls.target.set(0, 0, 0);
-        break;
-      }
-      case "room": {
-        if (roomFocusTarget) {
-          const { worldX, worldZ, roomSize } = roomFocusTarget;
-          const dist = Math.max(roomSize * 1.5, 4.5);
-          controls.object.position.set(worldX + dist * 0.35, dist * 0.85, worldZ + dist);
-          controls.target.set(worldX, 0.35, worldZ);
-        }
-        break;
-      }
-    }
-
-    controls.update();
-    triggerCameraPreset(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cameraPreset]);
-
-  const handleResetCamera = () => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-    const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
-    const bounds = site ? computeSiteBounds(site) : undefined;
-    const fit = computeCameraFit(config ?? DEFAULT_HOUSE_CONFIG, bounds);
-    controls.object.position.copy(fit.position);
-    controls.target.copy(fit.target);
-    controls.update();
-  };
-
   return (
     <div className="relative h-full w-full">
       <KeyboardControls map={WALK_MAP}>
         <Canvas
           shadows="soft"
-          camera={{ position: toTuple(initialFit.position), fov: 45, near: 0.1, far: 5000 }}
+          dpr={[1, 1.75]}
+          gl={{ toneMapping: THREE.NeutralToneMapping }}
+          camera={{ position: toTuple(initialFit.position), fov: CAMERA_FOV, near: 0.1, far: 5000 }}
           className="!h-full !w-full"
           onPointerMissed={() => selectKey(null)}
         >
           <Suspense fallback={null}>
             <Scene timeOfDay={timeOfDay} />
           </Suspense>
+          <CameraRig />
 
           {walkMode ? (
             <>
@@ -175,7 +125,6 @@ export function Viewport() {
             </>
           ) : (
             <OrbitControls
-              ref={controlsRef}
               makeDefault
               enableDamping
               autoRotate={blank}
@@ -199,10 +148,8 @@ export function Viewport() {
         </div>
       )}
 
-      <ViewportToolbar
-        onResetCamera={handleResetCamera}
-        onEnterWalk={() => setWalkMode(true)}
-      />
+      <ViewportToolbar onEnterWalk={() => setWalkMode(true)} />
+      <RoomNavigator projectId={params.projectId} />
       <GenerationOverlay />
       {!blank && <QuickActions />}
     </div>

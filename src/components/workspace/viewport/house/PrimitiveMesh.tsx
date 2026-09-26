@@ -6,12 +6,14 @@ import type { ThreeEvent } from "@react-three/fiber";
 import type { HousePrimitive } from "@/lib/house/types";
 import { useSceneStore } from "@/store/useSceneStore";
 import { useAssetStore } from "@/store/useAssetStore";
-import { deriveTextureUrls } from "@/lib/textures";
+import { deriveTextureUrls, hasUsableTextures } from "@/lib/textures";
 import { featureKey, parseFeatureMeshId } from "@/lib/house/features/parseFeatureId";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { ShapedWaterSurface, WaterSurface } from "./WaterSurface";
-import type { MaterialType } from "@/types/house";
 import { getSurfaceTextures, PATTERN_TILE_METERS, SURFACE_PATTERN } from "@/lib/proceduralTextures";
+import { SURFACE_PBR, usePbrSet, type SurfaceKey } from "@/lib/pbrLibrary";
+import { macroVariation, macroVariationCacheKey } from "@/lib/materialVariation";
+import { naturalGreen } from "../scenery/vegetation";
 
 /** Box geometry whose UVs are in metres / tile, so a pattern keeps its real-world scale on any face size. */
 function worldUvBox(size: [number, number, number], tile: number): THREE.BoxGeometry {
@@ -181,62 +183,60 @@ function usePBRTextures(assetId: string | undefined, uvScale: number): TextureSe
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitive; surface?: MaterialType }) {
+export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitive; surface?: SurfaceKey }) {
   const featureRef = useMemo(() => parseFeatureMeshId(primitive.id), [primitive.id]);
   const selectionKey = featureRef ? featureKey(featureRef) : primitive.id;
 
   const isSelected = useSceneStore((s) => s.selectedKey === selectionKey);
   const selectKey = useSceneStore((s) => s.selectKey);
 
-  const assetId = primitive.assetId;
+  // An imported asset only counts when its maps resolve to a usable URL; otherwise the surface falls back to the bundled set.
+  const assetId = useAssetStore((st) => hasUsableTextures(st.catalog.find((a) => a.id === primitive.assetId))) ? primitive.assetId : undefined;
   const uvScale = primitive.uvScale ?? 1;
   const textures = usePBRTextures(assetId, uvScale);
 
-  // Procedural wall/roof detail, only when no imported PBR asset supplies the surface.
-  const pattern = !assetId && surface ? SURFACE_PATTERN[surface] : undefined;
+  // Surface detail, only when no imported PBR asset supplies the surface: the bundled PBR set first, procedural canvas
+  // patterns as the fallback (surfaces without a set, or a set that fails to load).
+  const libraryDef = !assetId && surface ? SURFACE_PBR[surface] : undefined;
+  const library = usePbrSet(libraryDef);
+  const libraryPending = !!libraryDef && !library.textures && !library.failed;
+  const pattern = !assetId && surface && !libraryPending && !library.textures ? SURFACE_PATTERN[surface] : undefined;
   const detail = useMemo(() => (pattern ? getSurfaceTextures(pattern) : null), [pattern]);
-  const tile = pattern ? PATTERN_TILE_METERS[pattern] : 1;
+  // UVs are in metres / tile so a pattern keeps its real-world scale on any face size.
+  const tile = library.textures && libraryDef ? libraryDef.tile : pattern ? PATTERN_TILE_METERS[pattern] : 1;
+  const worldUv = !!pattern || !!library.textures;
 
   const triGeometry = useMemo(() => {
     if (primitive.kind !== "triMesh") return null;
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(primitive.vertices, 3));
     // Procedural patterns tile in metres; an imported PBR set repeats once per TRI_ASSET_TILE_METERS (times its uvScale).
-    if (pattern) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, tile), 2));
+    if (worldUv) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, tile), 2));
     else if (assetId) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, TRI_ASSET_TILE_METERS), 2));
     geometry.computeVertexNormals();
     return geometry;
-  }, [primitive, pattern, tile, assetId]);
+  }, [primitive, worldUv, tile, assetId]);
 
   const boxGeometry = useMemo(() => {
     if (primitive.kind !== "box") return null;
-    if (primitive.bevel && primitive.bevel > 0) return bevelBox(primitive.size, primitive.bevel, pattern ? tile : undefined);
-    return pattern ? worldUvBox(primitive.size, tile) : null;
-  }, [primitive, pattern, tile]);
+    if (primitive.bevel && primitive.bevel > 0) return bevelBox(primitive.size, primitive.bevel, worldUv ? tile : undefined);
+    return worldUv ? worldUvBox(primitive.size, tile) : null;
+  }, [primitive, worldUv, tile]);
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    selectKey(selectionKey);
+    const store = useSceneStore.getState();
 
-    if (
-      primitive.category === "room" &&
-      primitive.kind === "box" &&
-      primitive.id.endsWith("-floor")
-    ) {
-      const store = useSceneStore.getState();
-      if (store.viewMode !== "room") {
-        const [worldX, , worldZ] = primitive.position;
-        const roomSize = Math.max(primitive.size[0], primitive.size[2]);
-        const roomLabel = primitive.label.replace(/\s*Floor$/i, "");
-        if (store.showRoof) store.toggleRoof();
-        store.setViewMode("room");
-        store.triggerCameraPreset("room", { worldX, worldZ, roomSize }, roomLabel);
-      }
+    // From the whole-house view a click on a room's floor steps into that room; inside a room it selects as usual.
+    if (featureRef?.type === "room" && primitive.id.endsWith("-floor") && !store.focusedRoom) {
+      store.enterRoom({ index: featureRef.index });
+      return;
     }
+    selectKey(selectionKey);
   };
 
   const baseMaterialProps = {
-    color: primitive.color,
+    color: surface === "grass" ? `#${naturalGreen(primitive.color).getHexString()}` : primitive.color,
     roughness: primitive.roughness ?? 0.85,
     metalness: primitive.metalness ?? 0,
     transparent: primitive.transparent ?? false,
@@ -271,16 +271,21 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
     return <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
   }
 
-  // Glass (windows, doors, glass railings, glazed roofs): tinted, clear and mirror-like, sky-lit by the environment.
+  // Glass. Windows and doors sit on a solid wall box, so plain low-opacity glass would just tint the wall pale blue.
+  // Panes never write depth: the half-res ambient occlusion pass would otherwise treat them as opaque geometry and
+  // stamp blocky darkening onto the glass. The wall box behind already supplies the occlusion. They get a deep-tinted, part-metallic pane instead — it mirrors the sky like real glazing and reads dark against the
+  // facade. Railings and glazed roofs (nothing solid behind) stay clear and tinted.
   const isGlass = !!primitive.transparent && (primitive.opacity ?? 1) < 0.95;
+  const glazing = isGlass && (primitive.category === "window" || primitive.category === "door");
+  const glassColor = glazing ? `#${new THREE.Color(primitive.color).multiplyScalar(0.42).getHexString()}` : primitive.color;
   const glass = isGlass ? (
     <meshPhysicalMaterial
-      color={primitive.color}
+      color={glassColor}
       transparent
-      opacity={Math.min(primitive.opacity ?? 0.4, 0.42)}
-      roughness={0.03}
-      metalness={0.1}
-      envMapIntensity={2.4}
+      opacity={glazing ? 0.86 : Math.min(primitive.opacity ?? 0.4, 0.42)}
+      roughness={glazing ? 0.02 : 0.03}
+      metalness={glazing ? 0.62 : 0.1}
+      envMapIntensity={glazing ? 2.2 : 2.4}
       clearcoat={1}
       clearcoatRoughness={0.02}
       ior={1.5}
@@ -291,9 +296,22 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
     />
   ) : null;
 
-  const detailProps = detail
-    ? { map: detail.map, bumpMap: detail.bump, bumpScale: 2.2 }
-    : {};
+  const lib = library.textures;
+  const detailProps = lib && libraryDef
+    ? {
+        map: lib.map,
+        normalMap: lib.normalMap,
+        normalScale: new THREE.Vector2(libraryDef.normalScale, libraryDef.normalScale),
+        roughnessMap: lib.roughnessMap,
+        roughness: Math.min(1, (primitive.roughness ?? 0.85) * libraryDef.roughnessGain * 1.15),
+      }
+    : detail
+      ? { map: detail.map, bumpMap: detail.bump, bumpScale: 2.2 }
+      : {};
+  // Tone patchiness and grounding only where a surface carries real detail — plain trim and floors stay clean.
+  // Map presence changes the shader program, so the material is remounted when detail arrives (R3F won't flag needsUpdate).
+  const materialKey = lib ? "pbr" : detail ? "pattern" : textures ? "asset" : "plain";
+  const variation = worldUv ? { onBeforeCompile: macroVariation, customProgramCacheKey: macroVariationCacheKey } : {};
 
   if (primitive.kind === "box") {
     return (
@@ -301,12 +319,12 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
         position={primitive.position}
         rotation={primitive.rotation}
         castShadow={!isGlass}
-        receiveShadow
+        receiveShadow={!isGlass}
         onClick={handleClick}
         userData={{ id: primitive.id }}
       >
         {boxGeometry ? <primitive object={boxGeometry} attach="geometry" /> : <boxGeometry args={primitive.size} />}
-        {glass ?? <meshStandardMaterial {...texturedProps} {...(textures ? {} : detailProps)} />}
+        {glass ?? <meshStandardMaterial key={materialKey} {...texturedProps} {...(textures ? {} : detailProps)} {...variation} />}
       </mesh>
     );
   }
@@ -315,11 +333,11 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
     <mesh
       geometry={triGeometry!}
       castShadow={!isGlass}
-      receiveShadow
+      receiveShadow={!isGlass}
       onClick={handleClick}
       userData={{ id: primitive.id }}
     >
-      {glass ?? <meshStandardMaterial {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} side={THREE.DoubleSide} />}
+      {glass ?? <meshStandardMaterial key={materialKey} {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} {...variation} side={THREE.DoubleSide} />}
     </mesh>
   );
 }

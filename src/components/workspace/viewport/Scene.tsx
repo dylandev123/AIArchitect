@@ -4,6 +4,7 @@ import { Sky } from "@react-three/drei";
 import type { TimeOfDay } from "@/types/project";
 import { TIME_OF_DAY } from "@/lib/timeOfDay";
 import { SunLight } from "./SunLight";
+import { PostFx } from "./PostFx";
 import { GroundPlane } from "./GroundPlane";
 import { SceneGrid } from "./SceneGrid";
 import { HouseRenderer } from "./house/HouseRenderer";
@@ -18,7 +19,7 @@ interface SceneProps {
 
 export function Scene({ timeOfDay }: SceneProps) {
   const cfg = TIME_OF_DAY[timeOfDay];
-  const { sky, sun, ambient, hemi, fills, fog } = cfg;
+  const { sky, sun, ambient, hemi, fills, fog, exposure, envIntensity } = cfg;
   // A never-designed project shows only the site, terrain and horizon — no placeholder house.
   const blank = useNeedsGeneration();
 
@@ -40,6 +41,7 @@ export function Scene({ timeOfDay }: SceneProps) {
         turbidity={sky.turbidity}
         rayleigh={sky.rayleigh}
         mieCoefficient={sky.mieCoefficient}
+        intensity={envIntensity}
       />
 
       <ambientLight intensity={ambient.intensity} color={ambient.color} />
@@ -61,6 +63,7 @@ export function Scene({ timeOfDay }: SceneProps) {
       <Terrain />
       {!blank && <HouseRenderer />}
       {!blank && <Scenery />}
+      <PostFx exposure={exposure} />
     </>
   );
 }

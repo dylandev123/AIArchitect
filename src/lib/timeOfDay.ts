@@ -20,6 +20,9 @@ export interface TimeOfDayConfig {
   hemi: { sky: string; ground: string; intensity: number };
   fills: FillLight[];
   fog: { color: string; near: number; far: number };
+  /** Renderer tone-mapping exposure, and how strongly the sky environment lights PBR surfaces. */
+  exposure: number;
+  envIntensity: number;
 }
 
 export const TIME_OF_DAY: Record<TimeOfDay, TimeOfDayConfig> = {
@@ -32,6 +35,8 @@ export const TIME_OF_DAY: Record<TimeOfDay, TimeOfDayConfig> = {
     hemi:  { sky: "#ddaaff", ground: "#5a8830", intensity: 0.30 },
     fills: [{ position: [-22, 18, -14], intensity: 0.18, color: "#ffd0a0" }],
     fog:   { color: "#f0c8a0", near: 120, far: 320 },
+    exposure: 0.78,
+    envIntensity: 0.9,
   },
   midday: {
     label: "Midday",
@@ -45,6 +50,8 @@ export const TIME_OF_DAY: Record<TimeOfDay, TimeOfDayConfig> = {
       { position: [ 20, 10,  18], intensity: 0.10, color: "#ffe8c0" },
     ],
     fog:   { color: "#c4dff0", near: 160, far: 380 },
+    exposure: 0.68,
+    envIntensity: 0.85,
   },
   sunset: {
     label: "Sunset",
@@ -55,6 +62,8 @@ export const TIME_OF_DAY: Record<TimeOfDay, TimeOfDayConfig> = {
     hemi:  { sky: "#ff4020", ground: "#301008", intensity: 0.25 },
     fills: [{ position: [-15, 12, -10], intensity: 0.14, color: "#ff9060" }],
     fog:   { color: "#b84020", near: 80, far: 260 },
+    exposure: 1.05,
+    envIntensity: 1.0,
   },
   night: {
     label: "Night",
@@ -65,5 +74,7 @@ export const TIME_OF_DAY: Record<TimeOfDay, TimeOfDayConfig> = {
     hemi:  { sky: "#101840", ground: "#050505", intensity: 0.12 },
     fills: [{ position: [0, 25, 0], intensity: 0.14, color: "#8090d0" }],
     fog:   { color: "#050810", near: 55, far: 180 },
+    exposure: 1.25,
+    envIntensity: 0.8,
   },
 };

@@ -5,10 +5,13 @@ import type { BoxPrimitive, HousePrimitive, PrimitiveCategory } from "../types";
  * framing a small radius, so light catches their edges. Big flat surfaces (wall faces, floors, paving) stay sharp,
  * and so does glass. The radius is capped by each box's thinnest dimension so slender parts are never swallowed.
  */
-const BEVELLED_CATEGORIES = new Set<PrimitiveCategory>(["porch", "balcony", "chimney", "foundation", "stairs", "arch", "deck", "garage"]);
-const BEVELLED_LABEL = /trim|cornice|pillar|quoin|belt|plinth|fieldstone|column|fascia|beam|frame|sill|lintel|coping|cap\b|post|pier|buttress|threshold|drip|crown|soffit/i;
+const BEVELLED_CATEGORIES = new Set<PrimitiveCategory>(["porch", "balcony", "chimney", "foundation", "stairs", "arch", "deck", "garage", "window", "door"]);
+const BEVELLED_LABEL = /trim|cornice|pillar|quoin|belt|plinth|fieldstone|column|fascia|beam|frame|sill|lintel|coping|cap\b|post|pier|buttress|threshold|drip|crown|soffit|roof slab|parapet|shutter/i;
 const MIN_THICKNESS = 0.04;
 const MAX_FRACTION = 0.3;
+
+/** Radius the viewport gives every trim-like box even when a design's tier asks for none (crisp, not razor-sharp). */
+export const RENDER_BASE_BEVEL = 0.022;
 
 export function applyEdgeDetail(primitives: HousePrimitive[], bevel: number): HousePrimitive[] {
   if (bevel <= 0) return primitives;

@@ -81,3 +81,45 @@ export function generateTrees(site: SiteConfig, style?: TreeStyle): TreePlacemen
 
   return placed;
 }
+
+export interface ShrubPlacement {
+  id: string;
+  position: [number, number];
+  y?: number;
+  height: number;
+  color: string;
+  flowering: boolean;
+  variant: number;
+  rotationY: number;
+}
+
+const SHRUB_COLORS = ["#4f9a3c", "#5aa640", "#468c38", "#62ad48"] as const;
+
+/** Understorey planting: a shrub (sometimes flowering) tucked beside about two thirds of the trees, clear of every footprint. */
+export function generateShrubs(site: SiteConfig, trees: TreePlacement[]): ShrubPlacement[] {
+  const rng = createRng(hashSeed("shrubs", site.house.width, site.house.depth, trees.length));
+  const footprints = collectOccupiedFootprints(site);
+  const shrubs: ShrubPlacement[] = [];
+  for (const tree of trees) {
+    if (rng() > 0.66) continue;
+    const count = rng() > 0.6 ? 2 : 1;
+    for (let i = 0; i < count; i++) {
+      const angle = rng() * Math.PI * 2;
+      const dist = tree.foliageRadius * rngRange(rng, 0.9, 1.5);
+      const x = tree.position[0] + Math.cos(angle) * dist;
+      const z = tree.position[1] + Math.sin(angle) * dist;
+      if (isInsideAnyFootprint(x, z, footprints)) continue;
+      shrubs.push({
+        id: `shrub-${shrubs.length}`,
+        position: [x, z],
+        y: tree.y,
+        height: rngRange(rng, 0.7, 1.35),
+        color: rngPick(rng, SHRUB_COLORS),
+        flowering: rng() > 0.72,
+        variant: Math.floor(rng() * 4),
+        rotationY: rng() * Math.PI * 2,
+      });
+    }
+  }
+  return shrubs;
+}

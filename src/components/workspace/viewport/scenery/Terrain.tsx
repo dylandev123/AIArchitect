@@ -3,7 +3,9 @@
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { useParams } from "next/navigation";
 import * as THREE from "three";
+import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useProjectStore } from "@/store/useProjectStore";
+import { macroVariation, macroVariationCacheKey } from "@/lib/materialVariation";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import {
   buildApproachRoad,
@@ -17,15 +19,34 @@ import {
 } from "@/lib/landscaping/terrain";
 
 /** Unit shapes shared by every instance; boxes and cones sit on y=0, blobs are centred. */
+/** Smooth, lumpy sphere (welded + displaced icosphere) — tree crowns and shrubs; `facets` keeps it angular for boulders. */
+function lumpy(detail: number, amp: number, seed: number, flat: boolean): THREE.BufferGeometry {
+  let geo: THREE.BufferGeometry = new THREE.IcosahedronGeometry(0.5, detail);
+  geo.deleteAttribute("uv");
+  geo.deleteAttribute("normal");
+  geo = mergeVertices(geo, 1e-4);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    const n = Math.sin(v.x * 9 + seed) * Math.cos(v.y * 8 - seed) + Math.sin(v.z * 11 + seed * 2) * 0.6;
+    v.multiplyScalar(1 + n * amp);
+    pos.setXYZ(i, v.x, v.y * (flat ? 0.72 : 1), v.z);
+  }
+  geo.computeVertexNormals();
+  return flat ? geo.toNonIndexed() : geo;
+}
+
 const GEOMETRY = {
   box: () => new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0),
   trunk: () => new THREE.CylinderGeometry(0.6, 1, 1, 6).translate(0, 0.5, 0),
-  cone: () => new THREE.ConeGeometry(0.5, 1, 6).translate(0, 0.5, 0),
+  cone: () => new THREE.ConeGeometry(0.5, 1, 8, 3).translate(0, 0.5, 0),
   roof: () => new THREE.ConeGeometry(0.72, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0),
-  blob: () => new THREE.IcosahedronGeometry(0.5, 0),
+  blob: () => lumpy(2, 0.09, 1.3, false),
+  rock: () => lumpy(1, 0.2, 4.1, true),
 };
 
-function Instanced({ shapes, geometry, castShadow = true }: { shapes: SceneryShape[]; geometry: keyof typeof GEOMETRY; castShadow?: boolean }) {
+function Instanced({ shapes, geometry, castShadow = true, faceted = false }: { shapes: SceneryShape[]; geometry: keyof typeof GEOMETRY; castShadow?: boolean; faceted?: boolean }) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const geo = useMemo(() => GEOMETRY[geometry](), [geometry]);
 
@@ -50,7 +71,7 @@ function Instanced({ shapes, geometry, castShadow = true }: { shapes: ScenerySha
   return (
     // Remount when the count changes: an InstancedMesh's capacity is fixed at creation.
     <instancedMesh key={shapes.length} ref={ref} args={[geo, undefined, shapes.length]} castShadow={castShadow} receiveShadow frustumCulled={false}>
-      <meshStandardMaterial roughness={0.9} flatShading />
+      <meshStandardMaterial roughness={0.92} flatShading={faceted} />
     </instancedMesh>
   );
 }
@@ -112,12 +133,12 @@ export function Terrain() {
     <>
       {relief && (
         <mesh geometry={relief} receiveShadow castShadow>
-          <meshStandardMaterial vertexColors roughness={0.95} flatShading side={THREE.DoubleSide} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
+          <meshStandardMaterial vertexColors roughness={0.95} side={THREE.DoubleSide} onBeforeCompile={macroVariation} customProgramCacheKey={macroVariationCacheKey} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
         </mesh>
       )}
       {rolling && (
         <mesh geometry={rolling} receiveShadow castShadow>
-          <meshStandardMaterial vertexColors roughness={0.95} flatShading side={THREE.DoubleSide} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
+          <meshStandardMaterial vertexColors roughness={0.95} side={THREE.DoubleSide} onBeforeCompile={macroVariation} customProgramCacheKey={macroVariationCacheKey} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
         </mesh>
       )}
       {water && (
@@ -131,12 +152,12 @@ export function Terrain() {
           <meshStandardMaterial color={road.color} roughness={0.95} side={THREE.DoubleSide} polygonOffset polygonOffsetFactor={-3} polygonOffsetUnits={-3} />
         </mesh>
       )}
-      <Instanced shapes={scenery.boxes} geometry="box" />
-      <Instanced shapes={scenery.roofs} geometry="roof" />
-      <Instanced shapes={scenery.rocks} geometry="blob" />
+      <Instanced shapes={scenery.boxes} geometry="box" faceted />
+      <Instanced shapes={scenery.roofs} geometry="roof" faceted />
+      <Instanced shapes={scenery.rocks} geometry="rock" faceted />
       <Instanced shapes={scenery.trees.trunks} geometry="trunk" />
       <Instanced shapes={scenery.trees.round} geometry="blob" />
-      <Instanced shapes={scenery.trees.conifer} geometry="cone" />
+      <Instanced shapes={scenery.trees.conifer} geometry="cone" faceted />
     </>
   );
 }

@@ -11,14 +11,9 @@ export interface TextureUrls {
 export function deriveTextureUrls(asset: CuratedAsset): TextureUrls {
   const { source, sourceSlug } = asset;
 
-  if (source === "ambientcg") {
-    return {
-      mapUrl:          `https://cdn.ambientcg.com/AmbientCG-Raw/${sourceSlug}_1K-JPG_Color.jpg`,
-      normalMapUrl:    `https://cdn.ambientcg.com/AmbientCG-Raw/${sourceSlug}_1K-JPG_NormalGL.jpg`,
-      roughnessMapUrl: `https://cdn.ambientcg.com/AmbientCG-Raw/${sourceSlug}_1K-JPG_Roughness.jpg`,
-      aoMapUrl:        `https://cdn.ambientcg.com/AmbientCG-Raw/${sourceSlug}_1K-JPG_AmbientOcclusion.jpg`,
-    };
-  }
+  // ambientCG has no stable hotlinkable per-map CDN (the old AmbientCG-Raw paths 404), so its assets resolve to nothing
+  // rather than firing broken requests; surfaces then use the bundled PBR library. See public/textures/CREDITS.txt.
+  if (source === "ambientcg") return {};
 
   if (source === "polyhaven") {
     const s = sourceSlug;
@@ -31,4 +26,9 @@ export function deriveTextureUrls(asset: CuratedAsset): TextureUrls {
   }
 
   return {};
+}
+
+/** True when the asset's maps resolve to real URLs. Assets that don't should be treated as absent by the renderer. */
+export function hasUsableTextures(asset: CuratedAsset | undefined): boolean {
+  return !!asset && !!deriveTextureUrls(asset).mapUrl;
 }
