@@ -115,6 +115,7 @@ export function AssetPlanDialog({ target, planId: initialPlanId, onClose }: Prop
     }
     setPlanId(res.plan.id);
     setDraft((d) => (d ? { ...d, assets: d.assets.map((a) => ({ ...a, approved: approve ? selected.has(a.id) || a.approved : a.approved })) } : d));
+    setMessage(planId ? "Asset plan saved" : "Asset plan created");
     return res.plan.id;
   };
 

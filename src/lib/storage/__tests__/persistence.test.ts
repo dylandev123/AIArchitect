@@ -86,6 +86,40 @@ describe("survives a restart", () => {
     expect([lib.knowledge.length, lib.needs.length, lib.recipes.length, lib.plans.length]).toEqual([1, 1, 1, 1]);
   });
 
+  it("makes a generated Asset Need immediately available through the Asset Plan lookup after a module reload", async () => {
+    const writer = await import("@/lib/library/store");
+    await writer.mutateLibrary(() => ({
+      put: [{ kind: "need", data: { id: "need-from-generation", title: "Outdoor Dining Furniture", category: "furniture", styleTags: [], contextTags: [], phrasings: [] } as never }],
+      result: undefined,
+    }));
+
+    // Simulates Next dev replacing the route module that owns the planner.
+    restart();
+    const { planAssets } = await import("@/lib/library/planner");
+    const generate = vi.fn(async () => ({}));
+    const result = await planAssets({ needId: "need-from-generation" }, generate);
+
+    // The invalid offline response proves the lookup succeeded without an AI call;
+    // a stale store would return 404 before invoking `generate`.
+    expect(generate).toHaveBeenCalledOnce();
+    expect(result).toMatchObject({ ok: false, status: 502 });
+  });
+
+  it("serializes writers created by separate module graphs for the same library path", async () => {
+    const first = await import("@/lib/library/store");
+    const one = first.createFileBackend(path.join(dir, "library.json"));
+    restart();
+    const second = await import("@/lib/library/store");
+    const two = second.createFileBackend(path.join(dir, "library.json"));
+
+    await Promise.all([
+      one.mutate(() => ({ put: [{ kind: "need", data: { id: "writer-one" } as never }], result: undefined })),
+      two.mutate(() => ({ put: [{ kind: "need", data: { id: "writer-two" } as never }], result: undefined })),
+    ]);
+
+    expect((await second.readLibrary()).needs.map((need) => need.id).sort()).toEqual(["writer-one", "writer-two"]);
+  });
+
   it("a file written before Knowledge Needs and Asset Plans existed still loads", async () => {
     await writeFile(path.join(dir, "library.json"), JSON.stringify({ needs: [{ id: "old" }], recipes: [{ id: "old" }] }));
     const { readLibrary } = await import("@/lib/library/store");

@@ -6,7 +6,7 @@ import { AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, LoaderCircle, M
 import { useAdminStore } from "@/store/useAdminStore";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
-import type { GenerationReport } from "@/types/library";
+import type { DesignRecipe, GenerationReport, Need } from "@/types/library";
 import { AssetPlanDialog } from "./AssetPlanDialog";
 
 /**
@@ -46,7 +46,7 @@ function Applied({ ok }: { ok: boolean }) {
 
 function ReportCard({ report, local, onNavigate }: { report: GenerationReport; local: boolean; onNavigate?: (tab: "recipes", intent?: RecipeIntent) => void }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
-  const { plans, needs, proposeRecipe } = useLibraryStore();
+  const { plans, needs, recipes, proposeRecipe } = useLibraryStore();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
@@ -65,6 +65,9 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
     onNavigate?.("recipes", { ...intent, notice: `AI proposal unavailable (${result.error}) — blank form opened.` });
   };
   const planFor = (needId: string) => plans.find((pl) => pl.needId === needId);
+  const recipeFor = (knowledgeId: string): DesignRecipe | undefined =>
+    recipes.filter((recipe) => recipe.knowledgeIds?.includes(knowledgeId)).sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
+  const currentNeed = (id: string): Need | undefined => needs.find((need) => need.id === id);
 
   return (
     <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3">
@@ -120,36 +123,50 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
 
           <Section title="New knowledge gaps" count={report.knowledgeGaps.length}>
             {report.knowledgeGaps.length === 0 && <Empty>The library already covers every area and space.</Empty>}
-            {report.knowledgeGaps.map((g) => (
-              <div key={g.id} className="flex items-start justify-between gap-3">
-                <p className="min-w-0 text-[11px] text-neutral-400">
-                  <span className="font-medium text-neutral-200">{g.name}</span> {g.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {g.requestCount}×</span>
-                  <span className="block text-neutral-600">{g.reason}</span>
-                </p>
-                <button onClick={() => void openRecipe(g.id, g.name)} disabled={busy === g.id} className={actionBtn}>
-                  {busy === g.id ? <LoaderCircle size={11} className="animate-spin" /> : <Sparkles size={11} />} Generate Recipe
-                </button>
-              </div>
-            ))}
+            {report.knowledgeGaps.map((g) => {
+              const recipe = recipeFor(g.id);
+              const recipeLabel = recipe?.approval === "approved" ? "Recipe Approved" : recipe?.approval === "proposed" ? "Recipe Proposed" : "Recipe Generated";
+              return (
+                <div key={g.id} className="flex items-start justify-between gap-3">
+                  <p className="min-w-0 text-[11px] text-neutral-400">
+                    <span className="font-medium text-neutral-200">{g.name}</span> {g.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {g.requestCount}×</span>
+                    <span className="block text-neutral-600">{g.reason}</span>
+                    {recipe && <span className="mt-1 flex items-center gap-1 text-emerald-400"><CheckCircle2 size={11} /> {recipeLabel}</span>}
+                  </p>
+                  {recipe ? (
+                    <span className="flex shrink-0 gap-1">
+                      <button onClick={() => onNavigate?.("recipes", { knowledgeId: g.id, title: g.name, recipeId: recipe.id, nonce: ++intentCounter })} className={actionBtn}>Open Recipe</button>
+                      <button onClick={() => void openRecipe(g.id, g.name)} disabled={busy === g.id} className={actionBtn}>Generate Another</button>
+                    </span>
+                  ) : (
+                    <button onClick={() => void openRecipe(g.id, g.name)} disabled={busy === g.id} className={actionBtn}>
+                      {busy === g.id ? <LoaderCircle size={11} className="animate-spin" /> : <Sparkles size={11} />} Generate Recipe
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </Section>
 
           <Section title="New asset needs" count={report.assetNeeds.length}>
             {report.assetNeeds.length === 0 && <Empty>No asset is missing.</Empty>}
             {report.assetNeeds.map((n) => {
+              const liveNeed = currentNeed(n.id);
               const plan = planFor(n.id);
               return (
                 <div key={n.id} className="flex items-start justify-between gap-3">
                   <p className="min-w-0 text-[11px] text-neutral-400">
-                    <span className="font-medium text-neutral-200">{n.name}</span> {n.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {n.requestedCount}×</span>
+                    <span className="font-medium text-neutral-200">{liveNeed?.title ?? n.name}</span> {n.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {liveNeed?.requestedCount ?? n.requestedCount}×</span>
+                    {liveNeed && <span className={`ml-1 ${chip}`}>{liveNeed.status}</span>}
                     <span className="block text-neutral-600">
                       {n.spaces.length > 0 ? <>for {n.spaces.join(", ")}</> : "asked for by the brief"}
                       {n.components.length > 0 && <> · missing {n.components.join(", ")}</>}
                     </span>
                   </p>
                   {plan ? (
-                    <button onClick={() => setPlanning({ needId: n.id, title: needs.find((x) => x.id === n.id)?.title ?? n.name, planId: plan.id })} className={actionBtn}>Open Asset Plan</button>
+                    <button onClick={() => setPlanning({ needId: n.id, title: liveNeed?.title ?? n.name, planId: plan.id })} className={actionBtn}><CheckCircle2 size={11} /> Asset Plan Created · Open Plan</button>
                   ) : (
-                    <button onClick={() => setPlanning({ needId: n.id, title: needs.find((x) => x.id === n.id)?.title ?? n.name, planId: "" })} className={actionBtn}><Sparkles size={11} /> Generate Asset Plan</button>
+                    <button onClick={() => setPlanning({ needId: n.id, title: liveNeed?.title ?? n.name, planId: "" })} className={actionBtn}><Sparkles size={11} /> Generate Asset Plan</button>
                   )}
                 </div>
               );

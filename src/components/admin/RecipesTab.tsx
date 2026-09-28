@@ -159,16 +159,24 @@ export function RecipesTab({ intent }: { intent?: RecipeIntent }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const { recipes, loaded, error, refresh, act, proposeRecipe } = useLibraryStore();
   const [filter, setFilter] = useState<RecipeApproval | "all">("all");
-  const [editing, setEditing] = useState<DesignRecipe | "new" | null>(intent ? "new" : null);
+  const [editing, setEditing] = useState<DesignRecipe | "new" | null>(intent?.recipeId ? null : intent ? "new" : null);
+  const [dismissedRecipeId, setDismissedRecipeId] = useState<string>();
   const [proposal, setProposal] = useState(intent?.recipe ? { recipe: intent.recipe, adjustments: intent.adjustments ?? [], nonce: 0 } : undefined);
   const [actionError, setActionError] = useState("");
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     void refresh(adminEmail);
   }, [adminEmail, refresh]);
 
   const shown = recipes.filter((r) => filter === "all" || r.approval === filter);
-  const run = async (action: Parameters<typeof act>[1]) => setActionError((await act(adminEmail, action)) ?? "");
+  const intendedRecipe = intent?.recipeId === dismissedRecipeId ? undefined : recipes.find((item) => item.id === intent?.recipeId);
+  const activeEditing = intendedRecipe ?? editing;
+  const run = async (action: Parameters<typeof act>[1]) => {
+    const err = await act(adminEmail, action);
+    setActionError(err ?? "");
+    if (!err) setNotice(action.action === "setRecipeApproval" && action.approval === "approved" ? "Recipe approved" : "Recipe updated");
+  };
 
   return (
     <div className="flex h-full flex-col gap-3 overflow-hidden">
@@ -176,16 +184,17 @@ export function RecipesTab({ intent }: { intent?: RecipeIntent }) {
         {(["all", ...RECIPE_APPROVALS] as const).map((f) => (
           <button key={f} onClick={() => setFilter(f)} className={`rounded-md px-2.5 py-1 text-[11px] capitalize transition ${filter === f ? "bg-neutral-700 text-neutral-100" : "text-neutral-500 hover:text-neutral-300"}`}>{f}</button>
         ))}
-        <button onClick={() => setEditing("new")} className="ml-auto flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/20 px-3 py-1 text-xs font-medium text-amber-300 transition hover:bg-amber-500/30">
+        <button onClick={() => { if (intent?.recipeId) setDismissedRecipeId(intent.recipeId); setEditing("new"); }} className="ml-auto flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/20 px-3 py-1 text-xs font-medium text-amber-300 transition hover:bg-amber-500/30">
           <Plus size={12} /> New recipe
         </button>
       </div>
 
       {(error || actionError) && <p className="shrink-0 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">{error || actionError}</p>}
+      {notice && <p className="shrink-0 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300">✓ {notice}</p>}
 
       <div className="flex-1 overflow-y-auto">
         <div className="flex flex-col gap-3 pb-2">
-          {editing === "new" && (
+          {activeEditing === "new" && (
             <RecipeForm
               key={proposal?.nonce ?? "blank"}
               draft={proposal?.recipe}
@@ -205,26 +214,26 @@ export function RecipesTab({ intent }: { intent?: RecipeIntent }) {
               onCancel={() => { setEditing(null); setProposal(undefined); }}
               onSave={async (recipe, approve) => {
                 const err = await act(adminEmail, { action: "saveRecipe", recipe, ...(approve ? { approve: true } : {}) });
-                if (!err) { setEditing(null); setProposal(undefined); }
+                if (!err) { setEditing(null); setProposal(undefined); setNotice(approve ? "Recipe approved" : "Recipe proposed"); }
                 return err;
               }}
             />
           )}
-          {loaded && shown.length === 0 && editing !== "new" && (
+          {loaded && shown.length === 0 && activeEditing !== "new" && (
             <div className="flex flex-col items-center gap-2 py-16 text-center">
               <p className="text-sm text-neutral-500">No recipes here</p>
               <p className="max-w-sm text-xs text-neutral-600">Recipes are reusable architectural logic — roof compositions, pool layouts, planting schemes. Approved ones guide every matching generation.</p>
             </div>
           )}
           {shown.map((r) =>
-            editing && editing !== "new" && editing.id === r.id ? (
+            activeEditing && activeEditing !== "new" && activeEditing.id === r.id ? (
               <RecipeForm
                 key={r.id}
                 recipe={r}
-                onCancel={() => setEditing(null)}
+                onCancel={() => { if (intendedRecipe?.id === r.id) setDismissedRecipeId(r.id); setEditing(null); }}
                 onSave={async (recipe) => {
                   const err = await act(adminEmail, { action: "saveRecipe", id: r.id, recipe });
-                  if (!err) setEditing(null);
+                  if (!err) { setEditing(null); setNotice("Recipe updated"); }
                   return err;
                 }}
               />

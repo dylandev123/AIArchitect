@@ -1,4 +1,5 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Pool } from "pg";
@@ -68,7 +69,12 @@ function applyChange(snapshot: LibrarySnapshot, change: LibraryChange<unknown>):
 // ── File backend (local dev, tests) ─────────────────────────────────────────
 
 export function createFileBackend(file: string): LibraryBackend {
-  let queue: Promise<unknown> = Promise.resolve();
+  // This state deliberately lives on globalThis instead of this module. Next dev can
+  // briefly retain more than one module graph during hot replacement; module-local
+  // queues then permit two read-modify-write operations for the same JSON file to
+  // race. All graphs in a Node process instead coordinate by canonical file path.
+  const canonicalFile = path.resolve(file);
+  const coordinator = fileCoordinator(canonicalFile);
 
   /**
    * A file that does not exist yet is an empty library. Anything else (unreadable, corrupt) throws: `mutate` writes back what it
@@ -77,7 +83,8 @@ export function createFileBackend(file: string): LibraryBackend {
   async function load(): Promise<LibrarySnapshot> {
     let text: string;
     try {
-      text = await readFile(file, "utf8");
+      console.debug(`[library-store] read ${canonicalFile}`);
+      text = await readFile(canonicalFile, "utf8");
     } catch (err) {
       if (isMissingFile(err)) return emptySnapshot();
       throw err;
@@ -87,22 +94,41 @@ export function createFileBackend(file: string): LibraryBackend {
   }
 
   return {
-    read: () => queue.then(load, load),
+    read: () => coordinator.queue.then(load, load),
     mutate<T>(fn: (s: LibrarySnapshot) => LibraryChange<T>): Promise<T> {
       const run = async () => {
         const snapshot = await load();
         const change = fn(snapshot);
-        await mkdir(path.dirname(file), { recursive: true });
-        const tmp = `${file}.${process.pid}.tmp`;
+        await mkdir(path.dirname(canonicalFile), { recursive: true });
+        // A unique sibling keeps the replace atomic even if a second Node process is
+        // present. The shared coordinator serializes writers inside this process.
+        const tmp = `${canonicalFile}.${process.pid}.${randomUUID()}.tmp`;
         await writeFile(tmp, JSON.stringify(applyChange(snapshot, change)), "utf8");
-        await rename(tmp, file);
+        await rename(tmp, canonicalFile);
+        console.debug(`[library-store] write ${canonicalFile}`);
         return change.result;
       };
-      const next = queue.then(run, run);
-      queue = next.catch(() => undefined);
+      const next = coordinator.queue.then(run, run);
+      coordinator.queue = next.catch(() => undefined);
       return next;
     },
   };
+}
+
+interface FileCoordinator {
+  queue: Promise<unknown>;
+}
+
+const globalForFileCoordinators = globalThis as unknown as { __libraryFileCoordinators?: Map<string, FileCoordinator> };
+
+function fileCoordinator(file: string): FileCoordinator {
+  const coordinators = (globalForFileCoordinators.__libraryFileCoordinators ??= new Map());
+  let coordinator = coordinators.get(file);
+  if (!coordinator) {
+    coordinator = { queue: Promise.resolve() };
+    coordinators.set(file, coordinator);
+  }
+  return coordinator;
 }
 
 // ── Postgres backend ────────────────────────────────────────────────────────
@@ -193,8 +219,8 @@ export function createPostgresBackend(url: string): LibraryBackend {
 // ── Selection ───────────────────────────────────────────────────────────────
 
 export function libraryFilePath(): string {
-  if (process.env.AI_LIBRARY_PATH) return process.env.AI_LIBRARY_PATH;
-  return process.env.VERCEL ? path.join(tmpdir(), "ai-library.json") : path.join(process.cwd(), ".data", "ai-library.json");
+  if (process.env.AI_LIBRARY_PATH) return path.resolve(process.env.AI_LIBRARY_PATH);
+  return path.resolve(process.env.VERCEL ? path.join(tmpdir(), "ai-library.json") : path.join(process.cwd(), ".data", "ai-library.json"));
 }
 
 let fileBackend: { file: string; backend: LibraryBackend } | undefined;

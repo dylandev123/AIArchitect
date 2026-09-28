@@ -1,5 +1,7 @@
 import { useAssetStore } from "@/store/useAssetStore";
 import { useGenerationStore } from "@/store/useGenerationStore";
+import { useLibraryStore } from "@/store/useLibraryStore";
+import { useAdminStore } from "@/store/useAdminStore";
 import type { GenerationReport } from "@/types/library";
 import { toAssetIndex } from "@/lib/library/retrieval";
 import { useProjectStore } from "@/store/useProjectStore";
@@ -73,7 +75,13 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
 
   const summary = data.summary ?? "AI edit";
   // What the learning loop found and stored for this generation: kept here too, for the admin (see useGenerationStore).
-  if (generate && data.intelligence) useGenerationStore.getState().record(data.intelligence);
+  if (generate && data.intelligence) {
+    useGenerationStore.getState().record(data.intelligence);
+    // The report is history; the persisted library is the live Admin state. Refresh
+    // it as soon as the completed post-generation write reaches this browser.
+    const adminEmail = useAdminStore.getState().adminEmail;
+    if (data.intelligence.persistence.ok && adminEmail) void useLibraryStore.getState().refresh(adminEmail);
+  }
   req.apply(summary, data.json);
   if (generate && data.timeOfDay) useProjectStore.getState().setTimeOfDay(req.projectId, data.timeOfDay);
   return { ok: true, summary, generated: generate };

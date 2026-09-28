@@ -66,6 +66,8 @@ export type NativeOutcome =
 export interface RecipeIntent extends Partial<RecipeProposal> {
   knowledgeId: string;
   title: string;
+  /** Opens this persisted recipe rather than creating a new draft. */
+  recipeId?: string;
   /** Why there is no draft (generation failed and the blank form was opened instead). */
   notice?: string;
   nonce: number;
@@ -78,6 +80,7 @@ export interface RecipeProposal {
 }
 
 const headers = (email: string) => ({ "Content-Type": "application/json", "x-admin-email": email });
+let latestRefresh = 0;
 
 export const useLibraryStore = create<LibraryStore>((set, get) => ({
   needs: [],
@@ -91,16 +94,18 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
   error: "",
 
   refresh: async (adminEmail) => {
+    const refreshId = ++latestRefresh;
     set({ loading: true });
     try {
       const res = await fetch("/api/admin/library", { headers: headers(adminEmail), cache: "no-store" });
       const data = (await res.json()) as { needs?: Need[]; recipes?: DesignRecipe[]; knowledge?: KnowledgeNeed[]; plans?: AssetPlan[]; generations?: GenerationReport[]; generation?: GenerationAvailability; error?: string };
       if (!res.ok || !data.needs || !data.recipes) throw new Error(data.error ?? `Library request failed (HTTP ${res.status}).`);
-      set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generations: data.generations ?? [], generation: data.generation ?? null, loaded: true, error: "" });
+      // A slower response must not overwrite a newer post-mutation refresh.
+      if (refreshId === latestRefresh) set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generations: data.generations ?? [], generation: data.generation ?? null, loaded: true, error: "" });
     } catch (err) {
-      set({ error: (err as Error).message });
+      if (refreshId === latestRefresh) set({ error: (err as Error).message });
     } finally {
-      set({ loading: false });
+      if (refreshId === latestRefresh) set({ loading: false });
     }
   },
 
