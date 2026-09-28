@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-export type LeftPanelTab = "projects" | "houseJson" | "parts" | "materials" | "history";
+export type LeftPanelTab = "projects" | "houseJson" | "parts" | "materials" | "history" | "architecture";
 export type MobileSheet = "design" | "elements" | "materials" | "properties" | null;
 
 interface UIStore {

@@ -27,6 +27,8 @@ import { INITIAL_CAPABILITIES } from "@/lib/library/capabilities";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 import { architecturalAssetRequests, architecturalCapabilityRequests, designArchitecture } from "@/lib/architecture/designEngine";
+import { buildArchitecturalDesignDocument } from "@/lib/architecture/bridge";
+import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -283,6 +285,11 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     environment: hints.environment ?? "suburban", viewDirection: hints.viewDirection ?? "south", approachSide: hints.approachSide ?? "north", scale: hints.projectScale,
     recipes, availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id), variationSeed: usageMeta.projectId ?? brief,
   });
+  // Built alongside the prompt-guidance design so the live path can save real mass/roof/capability
+  // geometry, not just the prose-level ArchitecturalDesign. Kept separate from `design` (below).
+  const architecturalDesignDocument = buildArchitecturalDesignDocument(design, brief, { projectId: usageMeta.projectId });
+  const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
+  if (docErrors.length) console.warn("[architecture-bridge] invalid document, falling back to legacy shell:", docErrors);
   void noteRecipeOutcome(recipeIds, "pending");
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
@@ -318,7 +325,11 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         // feature just references it (assetId); the procedural geometry stays as the fallback.
         // The architectural concept is structured project data, not a prose note or a GLB. It makes the design intent
         // available to rendering, review and learning while the proven scene JSON remains the source of geometry.
-        const conceivedJson = JSON.stringify({ ...JSON.parse(result.json), architecture: design });
+        const conceivedJson = JSON.stringify({
+          ...JSON.parse(result.json),
+          architecture: design,
+          ...(docErrors.length ? {} : { architecturalDesignDocument }),
+        });
         const attachedResult = attachLibraryAssets(conceivedJson, library);
         const attached = attachedResult.attached;
         const json = attachOutdoorAssets(attachedResult.json, brief, library);

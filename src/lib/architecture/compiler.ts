@@ -10,10 +10,19 @@ import { buildButterflyRoof } from "@/lib/house/roof/butterflyRoof";
 import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { LEVEL_HEIGHT } from "@/lib/house/constants";
 import type { RoofType } from "@/types/house";
-import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassVolume, RoofRecipe } from "./document";
+import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassRole, MassVolume, RoofRecipe, RoofRecipeKind } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
 import "@/lib/capabilities/plugins";
 import { requestCapability } from "@/lib/capabilities/engine";
+import type { CapabilityOutcome } from "@/lib/capabilities/types";
+
+/** Additive, dev-diagnostics-only view of a compile: never required by rendering. */
+export interface ArchitectureDiagnostics {
+  massCount: number;
+  masses: { id: string; name: string; role: MassRole; position: { x: number; z: number }; rotation: number; elevation: number }[];
+  roofs: { massId: string; kind: RoofRecipeKind }[];
+  capabilities: { id: string; massId: string; status: CapabilityOutcome["status"]; note?: string }[];
+}
 
 function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
   const byId = new Map<string, MassVolume>();
@@ -58,9 +67,10 @@ function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, options: Architect
   return out.map((p) => rotatePrimitiveY(translatePrimitive(p, mass.position.x, mass.position.z), mass.position.x, mass.position.z, yaw));
 }
 
-export function compileArchitecture(doc: ArchitecturalDesignDocument, options: ArchitectureCompileOptions): { model: HouseModel; errors: string[] } {
+export function compileArchitecture(doc: ArchitecturalDesignDocument, options: ArchitectureCompileOptions): { model: HouseModel; errors: string[]; diagnostics?: ArchitectureDiagnostics } {
   const errors = validateArchitecturalDesignDocument(doc); if (errors.length) return { model: { id: "architecture-invalid", primitives: [] }, errors };
   const masses = resolveMasses(doc); const primitives: HousePrimitive[] = [];
+  const capabilityDiagnostics: ArchitectureDiagnostics["capabilities"] = [];
   for (const mass of masses) {
     if (options.mode !== "roofs-only") {
       const shell = generateHouseModel({ width: mass.width, depth: mass.depth, floors: mass.floors, roof: "flat" }, options.materials)
@@ -78,9 +88,16 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     for (const intent of doc.capabilities?.filter((request) => request.parameters?.massId === mass.id) ?? []) {
       const outcome = requestCapability(intent, { primitives, target: mass });
       primitives.push(...outcome.primitives);
+      capabilityDiagnostics.push({ id: outcome.id, massId: mass.id, status: outcome.status, note: outcome.note });
     }
   }
-  return { model: { id: "architectural-design-document", primitives }, errors: [] };
+  const diagnostics: ArchitectureDiagnostics = {
+    massCount: masses.length,
+    masses: masses.map((m) => ({ id: m.id, name: m.name, role: m.role, position: m.position, rotation: m.rotation, elevation: m.elevation })),
+    roofs: doc.roofs.recipes.map((r) => ({ massId: r.massId, kind: r.kind })),
+    capabilities: capabilityDiagnostics,
+  };
+  return { model: { id: "architectural-design-document", primitives }, errors: [], diagnostics };
 }
 
 /** Compatibility projection intentionally selects a primary mass; it does not flatten the new composition. */

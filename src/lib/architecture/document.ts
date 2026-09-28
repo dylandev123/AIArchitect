@@ -21,7 +21,7 @@ export interface ArchitecturalDesignDocument {
 }
 
 export interface StagePlaceholder { status: "pending"; notes?: string[] }
-export interface DesignProvenance { createdAt: string; source: "fixture" | "stage-pipeline"; compiler: "procedural-architecture-v1"; }
+export interface DesignProvenance { createdAt: string; source: "fixture" | "stage-pipeline" | "live-generation"; compiler: "procedural-architecture-v1"; }
 export interface SiteStrategy { environment: SiteEnvironment; viewDirection: CompassSide; arrivalDirection: CompassSide; terrain: "level" | "stepped"; }
 
 export type MassRole = "main-living" | "bedroom-wing" | "guest-pavilion" | "garage" | "service" | "connector" | "terrace";

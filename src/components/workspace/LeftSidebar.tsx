@@ -2,13 +2,14 @@
 
 import type { ComponentType } from "react";
 import { useParams } from "next/navigation";
-import { Boxes, Braces, Building2, History, Palette } from "lucide-react";
+import { Boxes, Braces, Building2, History, Layers, Palette } from "lucide-react";
 import { useUIStore, type LeftPanelTab } from "@/store/useUIStore";
 import { ProjectsPanel } from "./panels/ProjectsPanel";
 import { HouseJsonPanel } from "./panels/HouseJsonPanel";
 import { ElementsPanel } from "./panels/HousePartsPanel";
 import { MaterialsPanel } from "./panels/MaterialsPanel";
 import { HistoryPanel } from "./panels/HistoryPanel";
+import { ArchitectureDebugPanel } from "./panels/ArchitectureDebugPanel";
 
 const TABS: { id: LeftPanelTab; label: string; icon: ComponentType<{ size?: number }> }[] = [
   { id: "projects", label: "Projects", icon: Building2 },
@@ -16,6 +17,7 @@ const TABS: { id: LeftPanelTab; label: string; icon: ComponentType<{ size?: numb
   { id: "parts", label: "Elements", icon: Boxes },
   { id: "materials", label: "Materials", icon: Palette },
   { id: "history", label: "History", icon: History },
+  { id: "architecture", label: "Architecture", icon: Layers },
 ];
 
 export function LeftSidebar() {
@@ -58,6 +60,7 @@ export function LeftSidebar() {
           {activeTab === "parts" && <ElementsPanel />}
           {activeTab === "materials" && <MaterialsPanel />}
           {activeTab === "history" && <HistoryPanel />}
+          {activeTab === "architecture" && <ArchitectureDebugPanel key={params.projectId} />}
         </div>
       </div>
     </aside>
