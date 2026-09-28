@@ -1,4 +1,6 @@
 import { useAssetStore } from "@/store/useAssetStore";
+import { useGenerationStore } from "@/store/useGenerationStore";
+import type { GenerationReport } from "@/types/library";
 import { toAssetIndex } from "@/lib/library/retrieval";
 import { useProjectStore } from "@/store/useProjectStore";
 import { revisionOf } from "@/lib/house/revision";
@@ -58,7 +60,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
     }),
   });
   // A gateway timeout or crash answers with a non-JSON page: report what happened instead of a parse error.
-  const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string };
+  const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string; intelligence?: GenerationReport };
 
   if (!res.ok || typeof data.json !== "string") {
     return { ok: false, error: data.error ?? fallbackError(res.status), status: res.status };
@@ -70,6 +72,8 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
   }
 
   const summary = data.summary ?? "AI edit";
+  // What the learning loop found and stored for this generation: kept here too, for the admin (see useGenerationStore).
+  if (generate && data.intelligence) useGenerationStore.getState().record(data.intelligence);
   req.apply(summary, data.json);
   if (generate && data.timeOfDay) useProjectStore.getState().setTimeOfDay(req.projectId, data.timeOfDay);
   return { ok: true, summary, generated: generate };

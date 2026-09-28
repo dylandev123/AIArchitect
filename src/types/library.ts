@@ -55,6 +55,10 @@ export interface Need {
   status: NeedStatus;
   /** Set once a candidate asset was produced (queued for review) or approved. */
   assetId?: string;
+  /** Outdoor spaces (see `lib/outdoor/spaces`) whose designs asked for this: "Outdoor Dining", "Pool Lounge". Absent on older needs. */
+  spaces?: string[];
+  /** The specific objects still missing ("dining-table", "sun-lounger") under this family. Absent on older needs. */
+  components?: string[];
 }
 
 /** A request for a visual asset, before it is matched against needs or the library. */
@@ -65,6 +69,9 @@ export interface AssetRequest {
   contextTags: string[];
   dimensions?: NeedDimensions;
   projectId?: string | null;
+  /** The outdoor spaces that want it, and the specific objects (component keys), when the request came from them. */
+  spaces?: string[];
+  components?: string[];
 }
 
 // ── Recipes ─────────────────────────────────────────────────────────────────
@@ -168,8 +175,8 @@ export interface KnowledgeProjectRef {
   at: string;
   /** Start of the brief, so the admin can see what kind of request exposed the gap. */
   brief: string;
-  /** The areas of that project that scored low, with their scores in [0,1]. */
-  areas: { area: DesignArea; score: number; reason: string }[];
+  /** The areas of that project that scored low, with their scores in [0,1]. `space` is set when an outdoor space, not an area score, exposed it. */
+  areas: { area: DesignArea; score: number; reason: string; space?: string }[];
 }
 
 export interface KnowledgeNeed {
@@ -276,4 +283,112 @@ export interface AssetPlan {
   created_at: string;
   updated_at: string;
   assets: PlannedAsset[];
+}
+
+
+// ── Generation reports ──────────────────────────────────────────────────────
+//
+// One record per successful initial generation: what the outdoor-space planner found, what the library could and could not
+// supply, and what the learning loop wrote back. It is the admin's evidence that the loop ran (or where it stopped), and the
+// proof that approved Recipes and Assets were actually retrieved by the next generation.
+
+export interface ReportSpace {
+  kind: string;
+  name: string;
+  /** The brief asked for it by name (as opposed to the planner adding it for the scale and site). */
+  requested: boolean;
+  /** The design has something standing for it (a patio, a pool, a garden zone…). */
+  realized: boolean;
+  realizedBy: string[];
+  side: string;
+  footprint: { width: number; depth: number };
+  reasons: string[];
+  /** Components (objects) the space wants that no approved asset supplies. */
+  missing: string[];
+  /** Components an approved library asset supplies. */
+  supplied: string[];
+}
+
+export interface ReportRecipe {
+  id: string;
+  name: string;
+  spaces: string[];
+  reason: string;
+  applied: boolean;
+  /** Why it counts as applied, or why it does not. */
+  note: string;
+}
+
+export interface ReportAsset {
+  id: string;
+  name: string;
+  family: string;
+  component: string;
+  space: string;
+  /** The project feature it was attached to, when it was. */
+  feature?: string;
+  applied: boolean;
+  note: string;
+}
+
+export interface ReportKnowledge {
+  id: string;
+  name: string;
+  reason: string;
+  isNew: boolean;
+  requestCount: number;
+}
+
+export interface ReportAssetNeed {
+  id: string;
+  name: string;
+  spaces: string[];
+  components: string[];
+  isNew: boolean;
+  requestedCount: number;
+}
+
+export interface ReportPlan {
+  id: string;
+  title: string;
+  needId?: string;
+  assets: number;
+}
+
+export interface ReportStep {
+  name: string;
+  ok: boolean;
+  ms: number;
+  error?: string;
+}
+
+export interface GenerationReport {
+  id: string;
+  at: string;
+  projectId: string | null;
+  brief: string;
+  spaces: ReportSpace[];
+  areas: { area: DesignArea; relevant: boolean; score: number; reason: string; weak: boolean }[];
+  recipes: ReportRecipe[];
+  assets: ReportAsset[];
+  knowledgeGaps: ReportKnowledge[];
+  assetNeeds: ReportAssetNeed[];
+  plansCreated: ReportPlan[];
+  /** Existing plans that already cover a Need this generation touched. */
+  plansExisting: ReportPlan[];
+  placement: {
+    arrivalSide: string;
+    viewSide: string;
+    pools: { side: string; wall: string }[];
+    garages: { side: string }[];
+    issues: string[];
+  };
+  persistence: {
+    ok: boolean;
+    backend: "postgres" | "local-json";
+    location: string;
+    error?: string;
+    wrote: { knowledge: number; needs: number; plans: number; recipes: number };
+  };
+  steps: ReportStep[];
 }

@@ -5,6 +5,7 @@ import { briefChance, floorRangeFor, pickInRange, SCALE_PROFILES, scaleRank } fr
 import { SIDE_VECTORS } from "./profiles";
 import { groundRects, wallPoint, wallRect, type Rect, type Vec } from "./siteGeometry";
 import { reconcileDetached } from "./siteReconcile";
+import { reseatPools } from "./poolPlacement";
 import { APRON, deriveSitePlan, poolOnViewFront, type SitePlan, viewPoint, GARAGE_BAY, GAZEBO_SIZE, guestSizeFor, insideZone, OUTDOOR_BAR_SIZE, overlaps, placeInZone, reservedRects, SHED_SIZE } from "./sitePlan";
 
 /**
@@ -199,9 +200,9 @@ export function applyScaleRules(input: ScaleInput): PatchOp[] {
 }
 
 /** The scale rules, and the site plan they placed everything by (undefined for a project without a scale, which is never planned). */
-export function planScale(input: ScaleInput): { ops: PatchOp[]; plan: SitePlan | undefined } {
+export function planScale(input: ScaleInput): { ops: PatchOp[]; plan: SitePlan | undefined; notes: string[] } {
   const scale = input.site.projectScale;
-  if (!scale) return { ops: [...input.ops], plan: undefined };
+  if (!scale) return { ops: [...input.ops], plan: undefined, notes: [] };
   const { brief, house, site } = input;
   const profile = SCALE_PROFILES[scale];
   const rank = scaleRank(scale);
@@ -299,6 +300,15 @@ export function planScale(input: ScaleInput): { ops: PatchOp[]; plan: SitePlan |
   // Everything below places things on the ground, around what is already there.
   // The site plan: the whole property composed as zones before any of it is placed. Every placement below is into a zone.
   const plan = deriveSitePlan({ brief, house, site, ops })!;
+
+  // ── The pool belongs on the private, view side. One the model hung on the entrance wall or set in the front court is re-seated
+  // on the plan's view front before anything is placed around it (the collision pass only ever nudges a pool clear of the drive). ──
+  const notes: string[] = [];
+  const seated = reseatPools({ house, site, ops, brief, plan, cap: profile.cap.pool, distance: (profile.patio?.depth ?? 3) + 0.5 });
+  if (seated.notes.length > 0) {
+    ops.splice(0, ops.length, ...seated.ops);
+    notes.push(...seated.notes);
+  }
 
   // ── Driveway: as long as the scale's site is wide ──
   const [dmin, dmax] = profile.driveway.length;
@@ -610,7 +620,7 @@ export function planScale(input: ScaleInput): { ops: PatchOp[]; plan: SitePlan |
     }
   }
 
-  return { ops, plan };
+  return { ops, plan, notes };
 }
 
 // ── 3. Settling ─────────────────────────────────────────────────────────────────────────────────────────────────

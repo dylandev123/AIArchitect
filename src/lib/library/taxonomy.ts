@@ -130,6 +130,8 @@ export function dedupeRequests(requests: readonly AssetRequest[]): AssetRequest[
     same.styleTags = unique([...same.styleTags, ...req.styleTags]);
     same.contextTags = unique([...same.contextTags, ...req.contextTags]);
     same.dimensions = maxDimensions(same.dimensions, req.dimensions);
+    same.spaces = unique([...(same.spaces ?? []), ...(req.spaces ?? [])]);
+    same.components = unique([...(same.components ?? []), ...(req.components ?? [])]);
   }
   return out;
 }

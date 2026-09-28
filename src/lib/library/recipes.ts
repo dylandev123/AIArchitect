@@ -90,10 +90,11 @@ function formatParam(p: RecipeParameter): string {
 }
 
 /** Prompt text for the recipes generation will lean on. Empty when there are none, so a bare library changes nothing. */
-export function describeRecipesForPrompt(recipes: readonly DesignRecipe[]): string {
+export function describeRecipesForPrompt(recipes: readonly DesignRecipe[], spacesFor: (recipeId: string) => readonly string[] = () => []): string {
   if (recipes.length === 0) return "";
   const blocks = recipes.map((r) => {
-    const lines = [`- ${r.name} (${r.category}${r.styleTags.length ? `, ${r.styleTags.join("/")}` : ""})`];
+    const forSpaces = spacesFor(r.id);
+    const lines = [`- ${r.name} (${r.category}${r.styleTags.length ? `, ${r.styleTags.join("/")}` : ""})${forSpaces.length ? ` — for ${forSpaces.join(", ")}` : ""}`];
     for (const g of r.guidance) lines.push(`    • ${g}`);
     for (const p of r.parameters) lines.push(`    • ${formatParam(p)}`);
     for (const rel of r.relationships) lines.push(`    • ${rel.kind} ${rel.target}${rel.note ? ` — ${rel.note}` : ""}`);

@@ -438,7 +438,10 @@ export interface SiteSettings {
 
 export interface SiteConfig {
   house: HouseConfig;
-  /** Land/environment settings; undefined for projects that predate them. */
+  /**
+   * Land/environment settings; undefined for projects that predate them. NOTE: the project JSON stores this block under `site`
+   * (see `parseSiteSettings`, `applyPatch`); code that reads the raw JSON must read `site`, not `settings`.
+   */
   settings?: SiteSettings;
   materials: MaterialsConfig;
   windows: WindowConfig[];

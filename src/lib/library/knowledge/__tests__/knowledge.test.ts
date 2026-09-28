@@ -67,10 +67,39 @@ describe("design area scoring", () => {
     expect(by.driveway.score).toBeGreaterThanOrEqual(0.5);
   });
 
-  it("lets approved library assets lift a thin area, and only then", () => {
-    const empty = scoreDesignAreas(weakBackyard, "", []).find((s) => s.area === "outdoor-living")!;
-    const stocked = scoreDesignAreas(weakBackyard, "", ["gazebo", "pergola", "outdoor-bar", "fire-pit", "cabana", "hot-tub", "outdoor-kitchen"].map((family) => ({ ...gazebo, id: family, family: family as never }))).find((s) => s.area === "outdoor-living")!;
-    expect(stocked.score).toBeGreaterThan(empty.score);
+  it("lifts a thin area by real coverage, never by one token asset per family", () => {
+    const families = ["gazebo", "pergola", "outdoor-bar", "fire-pit", "cabana", "hot-tub", "outdoor-kitchen"] as const;
+    const scoreWith = (library: Parameters<typeof scoreDesignAreas>[2], recipes: Parameters<typeof scoreDesignAreas>[3] = []) =>
+      scoreDesignAreas(weakBackyard, "", library, recipes).find((s) => s.area === "outdoor-living")!;
+    const empty = scoreWith([]);
+    // One approved asset of every family the area could use: the old family-presence test called this "served".
+    const token = scoreWith(families.map((family) => ({ ...gazebo, id: family, family })));
+    expect(token.score).toBe(empty.score);
+    // A library that meets the Knowledge Need's targets (assets, lights, plants and approved recipes) does lift it.
+    const rich = [
+      ...Array.from({ length: 24 }, (_, i) => ({ ...gazebo, id: `a${i}`, family: families[i % families.length] })),
+      ...Array.from({ length: 6 }, (_, i) => ({ ...gazebo, id: `l${i}`, family: "light" as const })),
+      ...Array.from({ length: 4 }, (_, i) => ({ ...gazebo, id: `v${i}`, family: "vegetation" as const })),
+    ];
+    const recipes = Array.from({ length: 8 }, (_, i) => ({ id: `r${i}`, name: `Recipe ${i}`, category: "outdoor-living", styleTags: [], compatibleScales: [], environmentTags: [], parameters: [], relationships: [], guidance: [], usageCount: 0, successCount: 0, failureCount: 0, approval: "approved", version: 1, created_at: "", updated_at: "" })) as unknown as DesignRecipe[];
+    expect(scoreWith(rich, recipes).score).toBeGreaterThan(empty.score);
+  });
+
+  it("reads the site block from where the project stores it (`site`), so tier and scale set the demand", () => {
+    // What generation stores: the site block under `site` (see applyPatch). Read from the wrong key, an estate is judged against the
+    // bare baseline and its thin outdoor living and arrival look fine, so no Knowledge Need is ever recorded for them.
+    const project = { house: { width: 20, depth: 14, floors: 2, roof: "hip" }, exteriorOptions: { style: "modern-luxury" }, windows: [{ wall: "south" }], pools: [{ wall: "south" }], driveways: [{}], landscaping: [{ kind: "garden" }], paths: [{}], patios: [{}], buildings: [] };
+    const by = (root: object) => Object.fromEntries(scoreDesignAreas(JSON.stringify(root), "a modern beach estate", []).map((s) => [s.area, s]));
+    const stored = by({ ...project, site: settings });
+    const legacy = by({ ...project, settings });
+    const missing = by(project);
+    expect(stored["outdoor-living"].score).toBeLessThan(0.5);
+    expect(weakAreas(Object.values(stored)).map((s) => s.area)).toEqual(expect.arrayContaining(["outdoor-living", "arrival"]));
+    expect(missing["outdoor-living"].score).toBeGreaterThanOrEqual(0.5);
+    expect(legacy["outdoor-living"].score).toBe(stored["outdoor-living"].score);
+    // The view is only scored when the site says which way it faces.
+    expect(stored.views.relevant).toBe(true);
+    expect(missing.views.relevant).toBe(false);
   });
 
   it("returns nothing for unreadable output", () => {

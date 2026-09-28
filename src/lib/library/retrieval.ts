@@ -15,7 +15,11 @@ const SCALE_LIMITS = [0.5, 2] as const;
 const overlap = (a: readonly string[], b: readonly string[]) => a.filter((t) => b.includes(t)).length;
 
 /** The part of an asset that retrieval reads. This is also what the client sends to the server with a generation request. */
-export type AssetIndexEntry = Pick<CuratedAsset, "id" | "family" | "styleTags" | "contextTags" | "dimensions" | "successCount" | "failureCount">;
+export type AssetIndexEntry = Pick<CuratedAsset, "id" | "family" | "styleTags" | "contextTags" | "dimensions" | "successCount" | "failureCount"> & {
+  /** Read by outdoor-space matching (is this the dining table the space wants?) and the reuse report; absent on entries from older clients. */
+  name?: string;
+  tags?: string[];
+};
 
 /** Assets that can satisfy a global lookup: approved, a placeable object (not a material), and not project-local. */
 export function isRetrievableAsset(a: CuratedAsset): boolean {
@@ -27,7 +31,7 @@ export function isRetrievableAsset(a: CuratedAsset): boolean {
 }
 
 export function toAssetIndex(catalog: readonly CuratedAsset[]): AssetIndexEntry[] {
-  return catalog.filter(isRetrievableAsset).map(({ id, family, styleTags, contextTags, dimensions, successCount, failureCount }) => ({ id, family, styleTags, contextTags, dimensions, successCount, failureCount }));
+  return catalog.filter(isRetrievableAsset).map(({ id, name, tags, family, styleTags, contextTags, dimensions, successCount, failureCount }) => ({ id, name, tags, family, styleTags, contextTags, dimensions, successCount, failureCount }));
 }
 
 function dimensionFit(asset: NeedDimensions | undefined, want: NeedDimensions | undefined): { ok: boolean; bonus: number } {

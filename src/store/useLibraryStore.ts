@@ -4,7 +4,7 @@ import { create } from "zustand";
 import type { AssetSpec } from "@/lib/assets/native/spec";
 import type { CuratedAsset } from "@/types/assets";
 import type { PlanInput } from "@/lib/library/plans";
-import type { AssetPlan, DesignRecipe, KnowledgeNeed, KnowledgeStatus, Need, PlannedAsset } from "@/types/library";
+import type { AssetPlan, DesignRecipe, GenerationReport, KnowledgeNeed, KnowledgeStatus, Need, PlannedAsset } from "@/types/library";
 import type { RecipeInput } from "@/lib/library/recipes";
 import type { GenerationAvailability } from "@/lib/assetGeneration/providers";
 
@@ -16,7 +16,7 @@ import type { GenerationAvailability } from "@/lib/assetGeneration/providers";
 type Action =
   | { action: "setNeedStatus"; id: string; status: Exclude<Need["status"], "approved"> }
   | { action: "completeNeed"; id: string; assetId: string }
-  | { action: "saveRecipe"; id?: string; recipe: RecipeInput }
+  | { action: "saveRecipe"; id?: string; recipe: RecipeInput; approve?: boolean }
   | { action: "setRecipeApproval"; id: string; approval: DesignRecipe["approval"] }
   | { action: "deleteRecipe"; id: string }
   | { action: "setKnowledgeStatus"; id: string; status: KnowledgeStatus }
@@ -32,6 +32,8 @@ interface LibraryStore {
   recipes: DesignRecipe[];
   knowledge: KnowledgeNeed[];
   plans: AssetPlan[];
+  /** One report per generation, newest first: what the learning loop found and stored. */
+  generations: GenerationReport[];
   generation: GenerationAvailability | null;
   loaded: boolean;
   loading: boolean;
@@ -82,6 +84,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
   recipes: [],
   knowledge: [],
   plans: [],
+  generations: [],
   generation: null,
   loaded: false,
   loading: false,
@@ -91,9 +94,9 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     set({ loading: true });
     try {
       const res = await fetch("/api/admin/library", { headers: headers(adminEmail), cache: "no-store" });
-      const data = (await res.json()) as { needs?: Need[]; recipes?: DesignRecipe[]; knowledge?: KnowledgeNeed[]; plans?: AssetPlan[]; generation?: GenerationAvailability; error?: string };
+      const data = (await res.json()) as { needs?: Need[]; recipes?: DesignRecipe[]; knowledge?: KnowledgeNeed[]; plans?: AssetPlan[]; generations?: GenerationReport[]; generation?: GenerationAvailability; error?: string };
       if (!res.ok || !data.needs || !data.recipes) throw new Error(data.error ?? `Library request failed (HTTP ${res.status}).`);
-      set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generation: data.generation ?? null, loaded: true, error: "" });
+      set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generations: data.generations ?? [], generation: data.generation ?? null, loaded: true, error: "" });
     } catch (err) {
       set({ error: (err as Error).message });
     } finally {

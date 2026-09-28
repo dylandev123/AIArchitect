@@ -15,6 +15,8 @@ import { partitionOpsForScope, WORLD_SCOPE } from "./targeting";
 import { createTimings, type Timings } from "./timing";
 import { describeCapabilities, EXTERIOR_ENUM_OPTIONS, EXTERIOR_ASSET_OPTIONS, type AssetRef } from "./capabilities";
 import { describeRecipesForPrompt } from "@/lib/library/recipes";
+import { describeSpacesForPrompt, type OutdoorSpace } from "@/lib/outdoor/spaces";
+import { briefAllowsFrontPool, describePlacement, reseatPools } from "@/lib/house/architecture/poolPlacement";
 import type { DesignRecipe } from "@/types/library";
 import { describeOperationPayloads, validateGenerationOperations, type AiGenerationResponse } from "./siteSchema";
 
@@ -54,10 +56,10 @@ const RULES = `═══ RULES ═══
 - Do not include update or remove operations.
 - Write "summary" as one or two warm, plain sentences describing what you designed.`;
 
-export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = []): string {
+export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = [], spaces: readonly OutdoorSpace[] = []): string {
   const capabilities = describeCapabilities({ roofs: true, materials: true, exterior: true, featureTypes: true, site: true, assets });
   const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(WORLD_SCOPE, assets.map((a) => a.id), true)}`;
-  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeRecipesForPrompt(recipes)]
+  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeSpacesForPrompt(spaces), describeRecipesForPrompt(recipes, (id) => spaces.filter((sp) => sp.recipeIds.includes(id)).map((sp) => sp.name))]
     .filter(Boolean)
     .join("\n\n");
 }
@@ -82,7 +84,7 @@ export function buildGenerationUserMessage(brief: string, previousErrors: readon
 const ADVISORY_WARNING = /will render fine/;
 
 export type GenerationOutcome =
-  | { ok: true; json: string; timeOfDay?: AiGenerationResponse["timeOfDay"]; site: SiteSettings; skipped: string[]; adjusted: string[] }
+  | { ok: true; json: string; timeOfDay?: AiGenerationResponse["timeOfDay"]; site: SiteSettings; skipped: string[]; adjusted: string[]; /** Rule corrections (a pool set on the private side), as opposed to `adjusted`, which is only what the collision pass moved. */ notes: string[] }
   | { ok: false; errors: string[] };
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -129,8 +131,11 @@ export function assembleGeneratedProject(
   const designed = timings.time("siteRules", () => applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled.ops, style: styled.style, plan: scaled.plan }));
   // With every rule run, clear the walls the wings cover and give the larger facades their window rhythm.
   const finished = timings.time("scaleRules", () => finalizeScale({ brief, house: styled.house, site: styled.site, ops: designed.ops }));
+  // The pool belongs on the private side. Scaled projects were seated by the plan; this also covers a project with no scale, and
+  // any pool a later rule added.
+  const seated = reseatPools({ house: styled.house, site: styled.site, ops: finished, brief });
   // Nothing is committed on top of anything else: features that collide move to the nearest clear place, or fail the attempt.
-  const spatial = timings.time("collisionResolution", () => resolveSiteCollisionsOrDrop(styled.house, finished, repairLocally));
+  const spatial = timings.time("collisionResolution", () => resolveSiteCollisionsOrDrop(styled.house, seated.ops, repairLocally));
   if (spatial.errors.length > 0) return { ok: false, errors: spatial.errors };
   rejected.push(...spatial.dropped);
   const ops: PatchOp[] = [{ op: "setHouse", fields: { ...styled.house } }, { op: "setSite", fields: { ...styled.site } }, ...spatial.ops];
@@ -152,7 +157,25 @@ export function assembleGeneratedProject(
   // The last gate looks at the committed JSON itself, independent of how the ops got there.
   const overlaps = timings.time("collisionGate", () => findSiteCollisions(JSON.parse(json) as Record<string, unknown>));
   if (overlaps.length > 0) return { ok: false, errors: overlaps };
-  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected, adjusted: spatial.relocated };
+  // Collisions may still have pushed a pool toward the drive on a crowded lot: a pool with nowhere private to go is left out.
+  const placed = dropArrivalPools(json, brief);
+  json = placed.json;
+  rejected.push(...placed.dropped);
+  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected, adjusted: spatial.relocated, notes: [...scaled.notes, ...seated.notes] };
+}
+
+/** The last word on the pool rule: a pool still on the arrival side after every rule and the collision pass is removed and reported. */
+function dropArrivalPools(json: string, brief: string): { json: string; dropped: string[] } {
+  if (briefAllowsFrontPool(brief)) return { json, dropped: [] };
+  const report = describePlacement(json, brief);
+  if (!report || !report.pools.some((p) => p.side === "arrival")) return { json, dropped: [] };
+  const root = JSON.parse(json) as Record<string, unknown>;
+  const pools = Array.isArray(root.pools) ? (root.pools as unknown[]) : [];
+  const keep = pools.filter((_, i) => report.pools[i]?.side !== "arrival");
+  const dropped = pools.length - keep.length;
+  if (dropped === 0) return { json, dropped: [] };
+  root.pools = keep;
+  return { json: JSON.stringify(root), dropped: [`${dropped} pool${dropped === 1 ? "" : "s"} could not be kept off the arrival side and ${dropped === 1 ? "was" : "were"} left out.`] };
 }
 
 /**

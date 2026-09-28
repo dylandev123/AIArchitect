@@ -18,6 +18,7 @@ import { LearnWorkspace } from "./LearnWorkspace";
 import { UsageTab } from "./UsageTab";
 import { NeedsTab } from "./NeedsTab";
 import { RecipesTab } from "./RecipesTab";
+import { GenerationsTab } from "./GenerationsTab";
 import { ModalPortal } from "./ModalPortal";
 import { categoryLabel } from "@/lib/library/taxonomy";
 import { ASSET_CATEGORIES, type AssetCategory, type Need } from "@/types/library";
@@ -665,7 +666,7 @@ function LibraryTab() {
 
 // ── Shell ────────────────────────────────────────────────────────────────────
 
-type CuratorTab = "browse" | "needs" | "queue" | "library" | "recipes" | "learn" | "usage";
+type CuratorTab = "browse" | "needs" | "queue" | "library" | "recipes" | "learn" | "generations" | "usage";
 
 interface AssetCuratorProps {
   onClose: () => void;
@@ -695,6 +696,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
 
   const TABS: { id: CuratorTab; label: string; count?: number }[] = [
     { id: "learn",   label: "Learn",   count: pendingLearn },
+    { id: "generations", label: "Generations" },
     { id: "browse",  label: "Assets" },
     { id: "needs",   label: "Asset Needs", count: openNeeds },
     { id: "queue",   label: "Queue",   count: queueLength },
@@ -757,6 +759,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
       <div className="flex flex-1 overflow-hidden">
         <div className={`mx-auto flex w-full flex-col overflow-hidden p-4 ${tab === "usage" ? "max-w-6xl" : "max-w-4xl"}`}>
           {tab === "learn"   && <LearnWorkspace projectId={projectId} onNavigate={(next, intent) => { if (next === "recipes") setRecipeIntent(intent); setTab(next); }} />}
+          {tab === "generations" && <GenerationsTab onNavigate={(next, intent) => { setRecipeIntent(intent); setTab(next); }} />}
           {tab === "browse"  && <BrowseTab key={browseIntent?.need.id ?? "browse"} intent={browseIntent} />}
           {tab === "needs"   && <NeedsTab onSearch={goToBrowse("polyhaven")} onUpload={goToBrowse("upload")} />}
           {tab === "queue"   && <QueueTab />}

@@ -9,6 +9,7 @@ import { planStats, plansFor } from "@/lib/library/plans";
 import { AssetPlanDialog } from "./AssetPlanDialog";
 import { categoryLabel } from "@/lib/library/taxonomy";
 import { knowledgeForFamily } from "@/lib/library/knowledge/catalog";
+import { COMPONENTS } from "@/lib/outdoor/components";
 import { NEED_STATUSES, type Need, type NeedStatus } from "@/types/library";
 
 type Filter = "open" | NeedStatus | "all";
@@ -89,6 +90,12 @@ export function NeedsTab({ onSearch, onUpload }: NeedsTabProps) {
                       {need.styleTags.length > 0 && <> · Style: {need.styleTags.join(", ")}</>}
                       {need.contextTags.length > 0 && <> · Context: {need.contextTags.join(", ")}</>}
                     </p>
+                    {(need.spaces?.length ?? 0) > 0 && (
+                      <p className="text-[11px] text-neutral-500">
+                        For outdoor spaces: <span className="text-neutral-300">{need.spaces!.join(", ")}</span>
+                        {(need.components?.length ?? 0) > 0 && <> · still missing: <span className="text-neutral-300">{need.components!.map((c) => COMPONENTS[c]?.name ?? c).join(", ")}</span></>}
+                      </p>
+                    )}
                     {need.dimensions && (need.dimensions.width || need.dimensions.depth || need.dimensions.height) && (
                       <p className="text-[11px] text-neutral-600">
                         Requested size: {[need.dimensions.width, need.dimensions.depth, need.dimensions.height].map((d) => (d ? `${d.toFixed(1)}` : "–")).join(" × ")} m

@@ -12,6 +12,8 @@ import { createRecipe, recordRecipeUse, setRecipeApproval, updateRecipe, type Re
 import { requestsFromProject } from "./requests";
 import { findRecipes, resolveAsset, type AssetIndexEntry } from "./retrieval";
 import { extractStyleTags } from "./taxonomy";
+import { retrieveRecipes, type RetrievedRecipe } from "./spaceRecipes";
+import type { OutdoorSpace } from "@/lib/outdoor/spaces";
 import { mutateLibrary, readLibrary, type LibraryDoc } from "./store";
 
 /** Server-side library operations used by generation and the admin API. Everything here is best-effort for generation callers: see `safely`. */
@@ -47,6 +49,19 @@ export function recipesForBrief(brief: string, limit = 3): Promise<DesignRecipe[
   }, []);
 }
 
+/**
+ * The approved recipes generation should lean on, retrieved per outdoor space (each space asks for the recipes that describe how
+ * to build it), plus a couple for what no space covers. Every pick carries the reason it was chosen. Empty when none fit or the
+ * library is unreachable — a library problem never blocks generation (see `safely`).
+ */
+export function recipesForSpaces(brief: string, spaces: readonly OutdoorSpace[]): Promise<RetrievedRecipe[]> {
+  return safely("recipe lookup", async () => {
+    const { recipes } = await readLibrary();
+    if (recipes.length === 0) return [];
+    return retrieveRecipes(recipes, spaces, { brief, styles: extractStyleTags(brief), scale: inferScaleFromBrief(brief), environment: inferSiteHints(brief).environment });
+  }, []);
+}
+
 /** Notes that generation used these recipes (`pending`), and later how it turned out. */
 export function noteRecipeOutcome(ids: readonly string[], outcome: "pending" | "success" | "failure"): Promise<void> {
   if (ids.length === 0) return Promise.resolve();
@@ -61,6 +76,9 @@ export function noteRecipeOutcome(ids: readonly string[], outcome: "pending" | "
  * After a design is built: for each reusable object it asks for, keep the procedural version (already in the
  * project) and — unless an approved library asset already fits — count the request against a Need.
  * Returns the requests that had no suitable asset.
+ *
+ * Generation no longer calls this: `runPostGeneration` (generationLoop) records the same requests, plus each outdoor space's
+ * missing components, in one transaction with everything else. It stays as the standalone, brief-and-buildings-only recorder.
  */
 export function recordMissingAssetNeeds(json: string, brief: string, projectId: string | null, library: readonly AssetIndexEntry[]): Promise<AssetRequest[]> {
   return safely("need recording", async () => {
@@ -86,6 +104,9 @@ export function recordMissingAssetNeeds(json: string, brief: string, projectId: 
  * After a design is built: scores its design areas and, for each weak one, creates or increments the Knowledge
  * Need it belongs to ("Luxury Outdoor Living", not "Gazebo"). Best-effort like every other library write.
  * Returns the ids of the Knowledge Needs that were touched.
+ *
+ * Superseded in the generation path by `runPostGeneration` (which also scores outdoor spaces and reports failures); kept as the
+ * standalone area-only recorder.
  */
 export function recordKnowledgeNeeds(json: string, brief: string, projectId: string | null, library: readonly AssetIndexEntry[]): Promise<string[]> {
   return safely("knowledge recording", async () => {
@@ -113,12 +134,14 @@ export function setNeedStatus(id: string, status: NeedStatus, assetId?: string):
   });
 }
 
-export function saveRecipe(input: RecipeInput, id?: string): Promise<AdminResult<DesignRecipe>> {
+export function saveRecipe(input: RecipeInput, id?: string, opts: { approve?: boolean } = {}): Promise<AdminResult<DesignRecipe>> {
   return mutateLibrary<AdminResult<DesignRecipe>>((s) => {
     const existing = id ? s.recipes.find((r) => r.id === id) : undefined;
     if (id && !existing) return { result: { ok: false, status: 404, error: "Recipe not found." } };
-    // Without an id this always creates a new "proposed" recipe; it never replaces another one.
-    const saved = existing ? updateRecipe(existing, input) : createRecipe(input);
+    // Without an id this always creates a new "proposed" recipe; it never replaces another one. An admin who has reviewed the
+    // draft can save and approve in one step; nothing else ever approves a recipe.
+    const written = existing ? updateRecipe(existing, input) : createRecipe(input);
+    const saved = opts.approve ? setRecipeApproval(written, "approved") : written;
     const put: LibraryDoc[] = [{ kind: "recipe", data: saved }];
     // Filing a recipe under a Knowledge Need also lists it there, in the same write.
     for (const knowledgeId of saved.knowledgeIds ?? []) {
@@ -211,9 +234,34 @@ export function deletePlan(id: string): Promise<AdminResult<null>> {
   });
 }
 
-/** Records that an asset produced for a planned asset reached the queue or library (called when the admin approves it). */
-export function completePlannedAsset(planId: string, plannedAssetId: string, assetId: string) {
-  return withPlannedAsset(planId, plannedAssetId, (a) => ({ asset: { ...a, generated: true, assetId, spec: undefined }, result: null }));
+/**
+ * Records that an asset produced for a planned asset reached the library (called when the admin approves it), and rolls that up:
+ * the component it supplies leaves its Asset Need's missing list, the Need moves to "generating" on the first one, and to
+ * "approved" once every required asset of its plans is in the library — so the Need's completion follows the admin's work.
+ */
+export function completePlannedAsset(planId: string, plannedAssetId: string, assetId: string): Promise<AdminResult<null>> {
+  return mutateLibrary<AdminResult<null>>((s) => {
+    const plan = s.plans.find((p) => p.id === planId);
+    const asset = plan?.assets.find((a) => a.id === plannedAssetId);
+    if (!plan || !asset) return { result: { ok: false, status: 404, error: "Planned asset not found." } };
+    const at = new Date().toISOString();
+    const next: AssetPlan = { ...plan, assets: plan.assets.map((a) => (a.id === plannedAssetId ? { ...a, generated: true, assetId, spec: undefined } : a)), updated_at: at };
+    const put: LibraryDoc[] = [{ kind: "plan", data: next }];
+
+    const need = plan.needId ? s.needs.find((n) => n.id === plan.needId) : undefined;
+    if (need && need.status !== "ignored") {
+      const mine = s.plans.map((p) => (p.id === planId ? next : p)).filter((p) => p.needId === need.id);
+      const required = mine.flatMap((p) => p.assets).filter((a) => a.priority === "required");
+      const allRequiredDone = required.length > 0 && required.every((a) => a.generated);
+      const component = asset.tags.find((t) => t.startsWith("component:"))?.slice("component:".length);
+      const status: NeedStatus = allRequiredDone ? "approved" : need.status === "needed" ? "generating" : need.status;
+      put.push({
+        kind: "need",
+        data: { ...need, status, ...(allRequiredDone ? { assetId } : {}), ...(component && need.components ? { components: need.components.filter((c) => c !== component) } : {}) },
+      });
+    }
+    return { put, result: { ok: true, value: null } };
+  });
 }
 
 /** The native generator's output for a planned asset: a spec awaiting review, or a verdict that it needs an external provider. */

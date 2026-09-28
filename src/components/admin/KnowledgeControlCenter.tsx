@@ -136,6 +136,10 @@ function KnowledgeCard({ m, onNavigate }: CardProps) {
           {def && def.families.length > 0 && (
             <p className="text-[11px] text-neutral-500">Contains: {def.families.map(categoryLabel).join(", ")}</p>
           )}
+          {(() => {
+            const spaces = [...new Set(need.projectExamples.flatMap((ex) => ex.areas.flatMap((a) => (a.space ? [a.space.replace(/-/g, " ")] : []))))];
+            return spaces.length > 0 ? <p className="text-[11px] text-neutral-500">Outdoor spaces that exposed it: {spaces.join(", ")}</p> : null;
+          })()}
           {children.length > 0 && (
             <p className="text-[11px] text-neutral-500">Object needs: {children.map((c) => `${c.title} (${c.requestedCount}×)`).join(", ")}</p>
           )}

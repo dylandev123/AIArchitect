@@ -17,7 +17,7 @@ const actionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("setNeedStatus"), id, status: z.enum(NEED_STATUSES).exclude(["approved"]) }),
   // Called when an admin approves an asset that was made for a need.
   z.object({ action: z.literal("completeNeed"), id, assetId: id }),
-  z.object({ action: z.literal("saveRecipe"), id: id.optional(), recipe: recipeInputSchema }),
+  z.object({ action: z.literal("saveRecipe"), id: id.optional(), recipe: recipeInputSchema, approve: z.boolean().optional() }),
   z.object({ action: z.literal("setRecipeApproval"), id, approval: z.enum(RECIPE_APPROVALS) }),
   z.object({ action: z.literal("deleteRecipe"), id }),
   z.object({ action: z.literal("setKnowledgeStatus"), id, status: z.enum(KNOWLEDGE_STATUSES) }),
@@ -36,12 +36,13 @@ const unauthorized = () => NextResponse.json({ error: "Unauthorized" }, { status
 export async function GET(req: NextRequest) {
   if (!isAdminRequest(req)) return unauthorized();
   try {
-    const { needs, recipes, knowledge, plans } = await readLibrary();
+    const { needs, recipes, knowledge, plans, generations } = await readLibrary();
     needs.sort((a, b) => b.requestedCount - a.requestedCount || b.lastRequested.localeCompare(a.lastRequested));
     recipes.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
     knowledge.sort((a, b) => b.requestCount - a.requestCount || b.lastSeen.localeCompare(a.lastSeen));
     plans.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
-    return NextResponse.json({ needs, recipes, knowledge, plans, generation: generationAvailability() });
+    generations.sort((a, b) => b.at.localeCompare(a.at));
+    return NextResponse.json({ needs, recipes, knowledge, plans, generations, generation: generationAvailability() });
   } catch (err) {
     console.error("[library] read failed:", err);
     return NextResponse.json({ error: "The library store is unavailable." }, { status: 503 });
@@ -72,7 +73,7 @@ export async function POST(req: NextRequest) {
       case "completeNeed":
         return respond(await setNeedStatus(a.id, "approved", a.assetId));
       case "saveRecipe":
-        return respond(await saveRecipe(a.recipe, a.id));
+        return respond(await saveRecipe(a.recipe, a.id, { approve: a.approve }));
       case "setRecipeApproval":
         return respond(await changeRecipeApproval(a.id, a.approval));
       case "deleteRecipe":

@@ -34,6 +34,8 @@ export function recordRequest(needs: readonly Need[], req: AssetRequest, now: Da
       projectRefs: ref,
       phrasings: [req.text],
       status: "needed",
+      ...(req.spaces?.length ? { spaces: unique(req.spaces) } : {}),
+      ...(req.components?.length ? { components: unique(req.components) } : {}),
     };
   }
   return {
@@ -45,6 +47,8 @@ export function recordRequest(needs: readonly Need[], req: AssetRequest, now: Da
     lastRequested: at,
     projectRefs: [...existing.projectRefs, ...ref].slice(-MAX_PROJECT_REFS),
     phrasings: existing.phrasings.includes(req.text) ? existing.phrasings : [...existing.phrasings, req.text].slice(-MAX_PHRASINGS),
+    ...(req.spaces?.length || existing.spaces ? { spaces: unique([...(existing.spaces ?? []), ...(req.spaces ?? [])]) } : {}),
+    ...(req.components?.length || existing.components ? { components: unique([...(existing.components ?? []), ...(req.components ?? [])]) } : {}),
   };
 }
 

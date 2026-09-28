@@ -18,7 +18,9 @@ import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelI
 import { createTimings, logTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
 import { attachLibraryAssets } from "@/lib/library/attach";
-import { noteRecipeOutcome, recipesForBrief, recordKnowledgeNeeds, recordMissingAssetNeeds } from "@/lib/library/service";
+import { noteRecipeOutcome, recipesForSpaces } from "@/lib/library/service";
+import { runPostGeneration } from "@/lib/library/generationLoop";
+import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 
@@ -74,6 +76,8 @@ function parseLibraryAssets(raw: unknown): AssetIndexEntry[] {
     const d = typeof a.dimensions === "object" && a.dimensions !== null ? a.dimensions : {};
     out.push({
       id: a.id.slice(0, 80),
+      name: typeof a.name === "string" ? a.name.slice(0, 80) : undefined,
+      tags: strings(a.tags, 12),
       family: a.family,
       styleTags: strings(a.styleTags),
       contextTags: strings(a.contextTags),
@@ -260,9 +264,13 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   const timings = createTimings();
   const finish = (outcome: string, attempts: number) => logTimings("generate", timings, { outcome, attempts, briefChars: brief.length });
   let lastAttemptMs = 0;
-  // Proven patterns for this brief, if the library has any. A library problem never blocks generation (see `safely`).
-  const recipes = await timings.timeAsync("recipeLookup", () => recipesForBrief(brief));
+  // The outdoor spaces this brief calls for, and the approved recipes that describe how to build each (a proven pattern per space,
+  // not one lookup for the whole brief). A library problem never blocks generation (see `safely`).
+  const planned = planOutdoorSpaces({ brief });
+  const retrieved = await timings.timeAsync("recipeLookup", () => recipesForSpaces(brief, planned));
+  const recipes = retrieved.map((r) => r.recipe);
   const recipeIds = recipes.map((r) => r.id);
+  const spaces = planned.map((sp) => ({ ...sp, recipeIds: retrieved.filter((r) => r.spaces.includes(sp.kind)).map((r) => r.recipe.id) }));
   void noteRecipeOutcome(recipeIds, "pending");
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
@@ -280,7 +288,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         generateText({
           model: getAiModel(),
           maxOutputTokens: MAX_OUTPUT_TOKENS.world,
-          system: buildGenerationSystemPrompt(assets, recipes),
+          system: buildGenerationSystemPrompt(assets, recipes, spaces),
           messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
           output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
           providerOptions: AI_PROVIDER_OPTIONS,
@@ -296,13 +304,10 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         // The design is built with the procedural version of every object. Where an approved library GLB fits, the
         // feature just references it (assetId); the procedural geometry stays as the fallback.
-        const { json } = attachLibraryAssets(result.json, library);
-        // Library work that needn't delay the response happens after it.
-        after(async () => {
-          await noteRecipeOutcome(recipeIds, "success");
-          await recordMissingAssetNeeds(json, brief, usageMeta.projectId, library);
-          await recordKnowledgeNeeds(json, brief, usageMeta.projectId, library);
-        });
+        const { json, attached } = attachLibraryAssets(result.json, library);
+        // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
+        // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
+        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached }));
         return NextResponse.json({
           summary: output.summary,
           json,
@@ -312,7 +317,8 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
           site: result.site,
           scope: { level: WORLD_SCOPE.level, label: "New design" },
           skipped: result.skipped,
-          adjusted: result.adjusted,
+          adjusted: [...result.notes, ...result.adjusted],
+          intelligence,
         });
       }
       errors = result.errors;

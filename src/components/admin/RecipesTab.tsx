@@ -52,7 +52,8 @@ interface RecipeFormProps {
   /** Notes shown above the form: what validation adjusted, or why the form is blank. */
   notes?: string[];
   onRegenerate?: () => Promise<void>;
-  onSave: (input: RecipeInput) => Promise<string | null>;
+  /** `approve` saves it approved in one step, for a draft the admin has just reviewed. */
+  onSave: (input: RecipeInput, approve?: boolean) => Promise<string | null>;
   onCancel: () => void;
 }
 
@@ -72,7 +73,7 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
 
   const knowledgeIds = recipe?.knowledgeIds ?? (knowledgeId ? [knowledgeId] : undefined);
 
-  const submit = async () => {
+  const submit = async (approve = false) => {
     const parsed = parseParameterLines(params);
     if (parsed.errors.length > 0) return setError(parsed.errors[0]);
     const result = recipeInputSchema.safeParse({
@@ -89,7 +90,7 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
     });
     if (!result.success) return setError(`${result.error.issues[0]?.path.join(".") || "recipe"}: ${result.error.issues[0]?.message}`);
     setSaving(true);
-    setError((await onSave(result.data)) ?? "");
+    setError((await onSave(result.data, approve)) ?? "");
     setSaving(false);
   };
 
@@ -135,9 +136,14 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
       </div>
       {error && <p className="text-xs text-red-400">{error}</p>}
       <div className="flex gap-2">
-        <button onClick={submit} disabled={saving} className="rounded-lg border border-amber-500/30 bg-amber-500/20 px-4 py-1.5 text-xs font-medium text-amber-300 transition hover:bg-amber-500/30 disabled:opacity-50">
+        <button onClick={() => void submit()} disabled={saving} className="rounded-lg border border-amber-500/30 bg-amber-500/20 px-4 py-1.5 text-xs font-medium text-amber-300 transition hover:bg-amber-500/30 disabled:opacity-50">
           {recipe ? "Save changes" : "Save as proposed"}
         </button>
+        {!recipe && (
+          <button onClick={() => void submit(true)} disabled={saving} title="Save and approve in one step: the next generation retrieves it" className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/15 px-3 py-1.5 text-xs font-medium text-emerald-400 transition hover:bg-emerald-500/25 disabled:opacity-50">
+            <CheckCircle size={12} /> Save & approve
+          </button>
+        )}
         {onRegenerate && (
           <button onClick={regenerate} disabled={regenerating || saving} className="flex items-center gap-1.5 rounded-lg border border-violet-500/25 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-300 transition hover:bg-violet-500/20 disabled:opacity-50">
             {regenerating ? <LoaderCircle size={12} className="animate-spin" /> : <Sparkles size={12} />} {regenerating ? "Regenerating…" : "Regenerate"}
@@ -197,8 +203,8 @@ export function RecipesTab({ intent }: { intent?: RecipeIntent }) {
                   : undefined
               }
               onCancel={() => { setEditing(null); setProposal(undefined); }}
-              onSave={async (recipe) => {
-                const err = await act(adminEmail, { action: "saveRecipe", recipe });
+              onSave={async (recipe, approve) => {
+                const err = await act(adminEmail, { action: "saveRecipe", recipe, ...(approve ? { approve: true } : {}) });
                 if (!err) { setEditing(null); setProposal(undefined); }
                 return err;
               }}

@@ -1,7 +1,12 @@
+import { inferSiteHints } from "@/lib/house/siteSettings";
 import { scaleRank } from "@/lib/house/scale";
-import type { AssetCategory, DesignArea } from "@/types/library";
+import type { SiteEnvironment } from "@/types/house";
+import type { AssetCategory, DesignArea, DesignRecipe } from "@/types/library";
+import { styleTagsForProjectStyle } from "../requests";
 import type { AssetIndexEntry } from "../retrieval";
-import { extractRequestsFromBrief } from "../taxonomy";
+import { extractRequestsFromBrief, extractStyleTags } from "../taxonomy";
+import { pickKnowledge } from "./catalog";
+import { factsFromIndex, knowledgeProgress } from "./progress";
 
 /**
  * Scores the major design areas of a generated design independently, 0 (missing) … 1 (well served). An area
@@ -10,6 +15,11 @@ import { extractRequestsFromBrief } from "../taxonomy";
  * are scored purely on library coverage, and only when the design has surfaces that call for them.
  *
  * This is a heuristic read of the generated JSON, deliberately cheap and pure: it runs after every generation.
+ *
+ * What "the library has something to enrich it with" means is the same thing the control center shows: the completion of the
+ * Knowledge Need the area belongs to (approved assets of its families, approved recipes of its categories against the need's
+ * targets). One approved chair does not make furniture "served"; a Need stays open, and keeps counting demand, until the
+ * library really covers it.
  */
 
 /** Below this an area counts as weak and feeds a Knowledge Need. */
@@ -55,11 +65,21 @@ export const AREA_FAMILIES: Partial<Record<DesignArea, AssetCategory[]>> = {
   landscape: ["vegetation", "rock", "decorative"],
 };
 
-/** Share of an area's families that have an approved asset in the library. */
-function coverage(area: DesignArea, library: readonly AssetIndexEntry[]): number {
-  const families = AREA_FAMILIES[area];
-  if (!families || families.length === 0) return 0;
-  return families.filter((f) => library.some((a) => a.family === f)).length / families.length;
+/** What the scorer needs to know about the project to find an area's Knowledge Need. */
+interface AreaContext {
+  brief: string;
+  styles: string[];
+  environment?: SiteEnvironment;
+}
+
+/**
+ * How well the library already covers an area, 0…1: the completion of the Knowledge Need the area belongs to for this project.
+ * Materials are ignored, because the server only sees the object assets a generation request sends with it, not PBR materials.
+ */
+function coverage(area: DesignArea, facts: { assets: ReturnType<typeof factsFromIndex>; recipes: readonly DesignRecipe[] }, ctx: AreaContext): number {
+  const def = pickKnowledge(area, ctx);
+  if (!def) return 0;
+  return knowledgeProgress({ id: def.id, assetIds: [], recipeIds: [] }, facts, { ignore: ["materials"] }).completion;
 }
 
 interface Read {
@@ -68,7 +88,7 @@ interface Read {
   reason: string;
 }
 
-export function scoreDesignAreas(json: string, brief: string, library: readonly AssetIndexEntry[]): AreaScore[] {
+export function scoreDesignAreas(json: string, brief: string, library: readonly AssetIndexEntry[], recipes: readonly DesignRecipe[] = []): AreaScore[] {
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
@@ -77,8 +97,17 @@ export function scoreDesignAreas(json: string, brief: string, library: readonly 
   }
   if (!isRecord(parsed)) return [];
   const root = parsed;
-  const settings = isRecord(root.settings) ? root.settings : undefined;
+  // The site block is stored under `site` (that is what the renderer and `applyPatch` read and write). `settings` is the name the
+  // type once had and older fixtures still use, so it is read as a fallback.
+  const settings = isRecord(root.site) ? root.site : isRecord(root.settings) ? root.settings : undefined;
   const opts = isRecord(root.exteriorOptions) ? root.exteriorOptions : {};
+  const styleKey = typeof opts.style === "string" ? opts.style : "";
+  const ctx: AreaContext = {
+    brief: `${brief} ${styleKey.replace(/-/g, " ")}`,
+    styles: [...new Set([...extractStyleTags(brief), ...styleTagsForProjectStyle(styleKey)])],
+    environment: (typeof settings?.environment === "string" ? settings.environment : inferSiteHints(brief).environment) as SiteEnvironment | undefined,
+  };
+  const facts = { assets: factsFromIndex(library), recipes };
   const d = demandOf(settings);
 
   const n = (key: string) => list(root, key).length;
@@ -172,7 +201,7 @@ export function scoreDesignAreas(json: string, brief: string, library: readonly 
 
   return (Object.keys(reads) as DesignArea[]).map((area) => {
     const { proc, relevant = true, reason } = reads[area];
-    const lib = coverage(area, library);
+    const lib = coverage(area, facts, ctx);
     // The library can only lift a thin procedural result, never lower a rich one.
     const score = proc === null ? lib : clamp01(proc + LIBRARY_WEIGHT * Math.max(0, lib - proc));
     return { area, relevant, score: Math.round(score * 100) / 100, reason };

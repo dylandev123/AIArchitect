@@ -1,13 +1,14 @@
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { inferScaleFromBrief, isProjectScale } from "@/lib/house/scale";
 import type { SiteEnvironment } from "@/types/house";
-import type { CuratedAsset } from "@/types/assets";
-import type { DesignRecipe, KnowledgeNeed, KnowledgeSignal, KnowledgeTargets } from "@/types/library";
+import type { DesignArea, DesignRecipe, KnowledgeNeed, KnowledgeSignal } from "@/types/library";
+import { spaceName, type OutdoorSpace, type OutdoorSpaceKind } from "@/lib/outdoor/spaces";
 import { styleTagsForProjectStyle } from "../requests";
 import type { AssetIndexEntry } from "../retrieval";
 import { extractStyleTags } from "../taxonomy";
-import { knowledgeDefinition, pickKnowledge, type KnowledgeDefinition } from "./catalog";
+import { pickKnowledge, pickKnowledgeForSpace } from "./catalog";
 import { scoreDesignAreas, weakAreas } from "./areas";
+import { factsFromIndex, knowledgeProgress, type KnowledgeFacts, type KnowledgeProgress } from "./progress";
 
 const MAX_PROJECT_EXAMPLES = 12;
 const MAX_RECENT_REQUESTS = 60;
@@ -19,14 +20,40 @@ const unique = <T>(items: readonly T[]): T[] => [...new Set(items)];
 
 // ── Detection (generation side) ─────────────────────────────────────────────
 
+/** The design area an outdoor space is filed under, for display. */
+const SPACE_AREA: Partial<Record<OutdoorSpaceKind, DesignArea>> = {
+  "arrival-court": "arrival",
+  "main-outdoor-living": "outdoor-living",
+  "outdoor-dining": "outdoor-living",
+  "outdoor-kitchen": "outdoor-living",
+  "pool-lounge": "pool",
+  "pool-bar": "pool",
+  "fire-pit-lounge": "outdoor-living",
+  garden: "gardens",
+  "quiet-retreat": "landscape",
+  "guest-outdoor": "landscape",
+  "view-terrace": "views",
+};
+
+/** What the library holds for detection: object assets from the request's index and every recipe. Materials are not visible here. */
+export interface DetectionFacts {
+  recipes?: readonly DesignRecipe[];
+  /** The outdoor spaces the design contains (see `realizeSpaces`); each one whose Knowledge Need is not yet covered is a gap. */
+  spaces?: readonly OutdoorSpace[];
+}
+
 /**
- * Scores the design's areas and turns each weak one into the Knowledge Need it belongs to. Several weak areas that
- * point at the same need (a bare terrace *and* empty furniture → Luxury Outdoor Living) become one signal, so a
- * single generation counts once per need. Empty when the JSON is unreadable or every area is well served.
+ * Scores the design's areas and its outdoor spaces, and turns each weak one into the Knowledge Need it belongs to. Several
+ * weak areas that point at the same need (a bare terrace *and* empty furniture → Luxury Outdoor Living) become one signal, so a
+ * single generation counts once per need. An outdoor space the design contains (or the brief asked for) whose Knowledge Need
+ * the library does not yet cover is a gap in its own right, filed under the need that is that space's home ("Outdoor Dining",
+ * not "Luxury Outdoor Living"). Empty when the JSON is unreadable or everything is well served.
  */
-export function detectKnowledgeSignals(json: string, brief: string, projectId: string | null, library: readonly AssetIndexEntry[]): KnowledgeSignal[] {
-  const weak = weakAreas(scoreDesignAreas(json, brief, library));
-  if (weak.length === 0) return [];
+export function detectKnowledgeSignals(json: string, brief: string, projectId: string | null, library: readonly AssetIndexEntry[], facts: DetectionFacts = {}): KnowledgeSignal[] {
+  const recipes = facts.recipes ?? [];
+  const weak = weakAreas(scoreDesignAreas(json, brief, library, recipes));
+  const spaces = (facts.spaces ?? []).filter((sp) => sp.realized || sp.requested);
+  if (weak.length === 0 && spaces.length === 0) return [];
 
   let root: Record<string, unknown> = {};
   try {
@@ -35,7 +62,8 @@ export function detectKnowledgeSignals(json: string, brief: string, projectId: s
   } catch {
     /* scoreDesignAreas already returned [] for unreadable JSON */
   }
-  const settings = typeof root.settings === "object" && root.settings !== null ? (root.settings as Record<string, unknown>) : {};
+  // `site` is the stored key (see applyPatch); `settings` is what older fixtures call it.
+  const settings = typeof root.site === "object" && root.site !== null ? (root.site as Record<string, unknown>) : typeof root.settings === "object" && root.settings !== null ? (root.settings as Record<string, unknown>) : {};
   const opts = typeof root.exteriorOptions === "object" && root.exteriorOptions !== null ? (root.exteriorOptions as Record<string, unknown>) : {};
   const styleKey = typeof opts.style === "string" ? opts.style : "";
   const styles = unique([...extractStyleTags(brief), ...styleTagsForProjectStyle(styleKey)]);
@@ -45,17 +73,35 @@ export function detectKnowledgeSignals(json: string, brief: string, projectId: s
   const ctx = { brief: `${brief} ${styleKey.replace(/-/g, " ")}`, styles, environment };
 
   const byNeed = new Map<string, KnowledgeSignal>();
-  for (const w of weak) {
-    const def = pickKnowledge(w.area, ctx);
-    if (!def) continue;
-    const detail = { area: w.area, score: w.score, reason: w.reason };
+  const add = (def: { id: string; title: string }, area: DesignArea, detail: KnowledgeSignal["details"][number]) => {
     const seen = byNeed.get(def.id);
     if (seen) {
-      seen.areas.push(w.area);
+      if (!seen.areas.includes(area)) seen.areas.push(area);
       seen.details.push(detail);
-      continue;
+      return;
     }
-    byNeed.set(def.id, { knowledgeId: def.id, title: def.title, areas: [w.area], weakness: 0, styles, scale, environment, projectId, brief: brief.trim().slice(0, BRIEF_EXCERPT), details: [detail] });
+    byNeed.set(def.id, { knowledgeId: def.id, title: def.title, areas: [area], weakness: 0, styles, scale, environment, projectId, brief: brief.trim().slice(0, BRIEF_EXCERPT), details: [detail] });
+  };
+
+  for (const w of weak) {
+    const def = pickKnowledge(w.area, ctx);
+    if (def) add(def, w.area, { area: w.area, score: w.score, reason: w.reason });
+  }
+
+  const libraryFacts: KnowledgeFacts = { assets: factsFromIndex(library), recipes };
+  for (const sp of spaces) {
+    const def = pickKnowledgeForSpace(sp.kind, ctx);
+    if (!def) continue;
+    const progress = knowledgeProgress({ id: def.id, assetIds: [], recipeIds: [] }, libraryFacts, { ignore: ["materials"] });
+    if (progress.completion >= COMPLETE_AT) continue;
+    const f = progress.facets;
+    const parts = [`${f.assets.have} of ${f.assets.target} assets`, `${f.recipes.have} of ${f.recipes.target} recipes`].filter((_, i) => (i === 0 ? f.assets.target > 0 : f.recipes.target > 0));
+    add(def, SPACE_AREA[sp.kind] ?? "outdoor-living", {
+      area: SPACE_AREA[sp.kind] ?? "outdoor-living",
+      score: Math.round(progress.completion * 100) / 100,
+      reason: `${spaceName(sp.kind)} ${sp.realized ? "is in the design" : "was asked for"}; the library has ${parts.join(", ")} approved for ${def.title}.`,
+      space: sp.kind,
+    });
   }
   for (const s of byNeed.values()) s.weakness = s.details.reduce((sum, d) => sum + (1 - d.score), 0) / s.details.length;
   return [...byNeed.values()];
@@ -100,67 +146,8 @@ export function recordKnowledgeSignal(existing: KnowledgeNeed | undefined, signa
 
 // ── Completion ──────────────────────────────────────────────────────────────
 
-/** What the library holds, as far as completion cares. Assets live in the admin's browser, recipes on the server, so this is assembled where both are known. */
-export interface KnowledgeFacts {
-  assets: readonly CuratedAsset[];
-  recipes: readonly DesignRecipe[];
-}
-
-export interface FacetProgress {
-  have: number;
-  target: number;
-}
-
-export interface KnowledgeProgress {
-  facets: Record<keyof KnowledgeTargets, FacetProgress>;
-  /** Ids of the approved assets / recipes counted, for "related assets/recipes". */
-  assetIds: string[];
-  recipeIds: string[];
-  /** 0…1: mean fill of every tracked facet. */
-  completion: number;
-}
-
-const styleFits = (def: KnowledgeDefinition, tags: readonly string[] | undefined): boolean =>
-  !def.styles || def.styles.length === 0 || !tags || tags.length === 0 || tags.some((t) => def.styles!.includes(t));
-
-/**
- * An approved asset that could be used at all: a GLB must have a validated file behind it. An older version that a newer one
- * replaced is not counted a second time (an upgrade is the same asset, not more coverage).
- */
-const usable = (a: CuratedAsset) => a.status === "approved" && !a.supersededBy && a.scope !== "project" && (a.type !== "glb-model" || a.validation?.passed === true);
-
-export function knowledgeProgress(need: Pick<KnowledgeNeed, "id" | "assetIds" | "recipeIds">, facts: KnowledgeFacts): KnowledgeProgress {
-  const def = knowledgeDefinition(need.id);
-  const facets = { assets: 0, recipes: 0, materials: 0, lighting: 0, plants: 0 };
-  const assetIds: string[] = [];
-  for (const a of facts.assets) {
-    if (!usable(a)) continue;
-    const linked = need.assetIds.includes(a.id) || !!a.knowledgeIds?.includes(need.id);
-    const isMaterial = a.type === "pbr-material";
-    const byFamily = !!def && !!a.family && def.families.includes(a.family) && styleFits(def, a.styleTags);
-    if (!linked && !byFamily) continue;
-    assetIds.push(a.id);
-    if (isMaterial) facets.materials++;
-    else if (a.family === "light") facets.lighting++;
-    else if (a.family === "vegetation") facets.plants++;
-    else facets.assets++;
-  }
-  const recipeIds: string[] = [];
-  for (const r of facts.recipes) {
-    if (r.approval !== "approved") continue;
-    const linked = need.recipeIds.includes(r.id) || !!r.knowledgeIds?.includes(need.id);
-    const byCategory = !!def && def.recipeCategories.includes(r.category) && styleFits(def, r.styleTags);
-    if (!linked && !byCategory) continue;
-    recipeIds.push(r.id);
-    facets.recipes++;
-  }
-  const targets = def?.targets ?? { assets: 10, recipes: 3, materials: 0, lighting: 0, plants: 0 };
-  const keys = Object.keys(facets) as (keyof KnowledgeTargets)[];
-  const out = Object.fromEntries(keys.map((k) => [k, { have: facets[k], target: targets[k] }])) as KnowledgeProgress["facets"];
-  const tracked = keys.filter((k) => targets[k] > 0);
-  const completion = tracked.length === 0 ? 0 : tracked.reduce((sum, k) => sum + Math.min(1, facets[k] / targets[k]), 0) / tracked.length;
-  return { facets: out, assetIds, recipeIds, completion };
-}
+export { knowledgeProgress, factsFromIndex } from "./progress";
+export type { AssetFact, FacetProgress, KnowledgeFacts, KnowledgeProgress } from "./progress";
 
 // ── Metrics and ranking ─────────────────────────────────────────────────────
 

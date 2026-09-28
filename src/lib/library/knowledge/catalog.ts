@@ -1,5 +1,6 @@
 import type { SiteEnvironment } from "@/types/house";
 import type { AssetCategory, DesignArea, KnowledgeTargets, RecipeCategory } from "@/types/library";
+import type { OutdoorSpaceKind } from "@/lib/outdoor/spaces";
 
 /**
  * The map of design knowledge AI Architect can be missing. Each entry is a parent category that will eventually
@@ -13,6 +14,8 @@ export interface KnowledgeDefinition {
   title: string;
   /** Design areas whose weakness can point here. */
   areas: DesignArea[];
+  /** Outdoor spaces (see `lib/outdoor/spaces`) this knowledge is the home of: a design that contains one and lacks what it needs points here. */
+  spaces?: OutdoorSpaceKind[];
   /** Style tags (see taxonomy) that make this entry the better home for a weak area. */
   styles?: string[];
   environments?: SiteEnvironment[];
@@ -31,6 +34,7 @@ const T = (t: Partial<KnowledgeTargets>): KnowledgeTargets => ({ assets: 12, rec
 export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   {
     id: "luxury-outdoor-living",
+    spaces: ["main-outdoor-living"],
     title: "Luxury Outdoor Living",
     areas: ["outdoor-living", "furniture"],
     families: ["outdoor-bar", "pergola", "gazebo", "fire-pit", "cabana", "outdoor-kitchen", "hot-tub", "furniture", "light", "vegetation"],
@@ -39,6 +43,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "outdoor-dining",
+    spaces: ["outdoor-dining"],
     title: "Outdoor Dining",
     areas: ["outdoor-living", "furniture"],
     keywords: /\b(?:dining|alfresco|al fresco|supper|banquet)\b/i,
@@ -49,6 +54,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "luxury-terrace",
+    spaces: ["view-terrace"],
     title: "Luxury Terrace",
     areas: ["views", "outdoor-living"],
     keywords: /\b(?:terrace|veranda|loggia|lanai|balustrade)\b/i,
@@ -58,6 +64,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "luxury-pool-area",
+    spaces: ["pool-lounge", "pool-bar"],
     title: "Luxury Pool Area",
     areas: ["pool"],
     families: ["cabana", "hot-tub", "outdoor-bar", "furniture", "light", "vegetation"],
@@ -66,6 +73,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "modern-pool-area",
+    spaces: ["pool-lounge"],
     title: "Modern Pool Area",
     areas: ["pool"],
     styles: ["modern", "nordic", "mid-century"],
@@ -75,6 +83,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "estate-arrival-court",
+    spaces: ["arrival-court"],
     title: "Estate Arrival Court",
     areas: ["arrival"],
     families: ["vehicle", "decorative", "light", "vegetation"],
@@ -117,6 +126,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "estate-gardens",
+    spaces: ["garden"],
     title: "Estate Gardens",
     areas: ["gardens", "landscape"],
     families: ["decorative", "vegetation", "rock", "light"],
@@ -125,6 +135,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "tropical-garden",
+    spaces: ["garden"],
     title: "Tropical Garden",
     areas: ["gardens", "vegetation", "landscape"],
     styles: ["tropical"],
@@ -136,6 +147,7 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
   },
   {
     id: "caribbean-landscaping",
+    spaces: ["garden"],
     title: "Caribbean Landscaping",
     areas: ["landscape", "gardens", "vegetation"],
     keywords: /\b(?:caribbean|bahamas|west indies|antigua|st\.? lucia)\b/i,
@@ -203,6 +215,33 @@ export const KNOWLEDGE_CATALOG: KnowledgeDefinition[] = [
     targets: T({ assets: 5, recipes: 6, materials: 3, lighting: 2, plants: 4 }),
   },
   {
+    id: "outdoor-kitchen",
+    title: "Outdoor Kitchen",
+    areas: [],
+    spaces: ["outdoor-kitchen"],
+    families: ["outdoor-kitchen", "furniture", "light"],
+    recipeCategories: ["outdoor-living"],
+    targets: T({ assets: 8, recipes: 3, materials: 1, lighting: 2 }),
+  },
+  {
+    id: "fire-pit-lounge",
+    title: "Fire Pit Lounge",
+    areas: [],
+    spaces: ["fire-pit-lounge"],
+    families: ["fire-pit", "furniture", "light"],
+    recipeCategories: ["outdoor-living"],
+    targets: T({ assets: 6, recipes: 3, materials: 0, lighting: 3 }),
+  },
+  {
+    id: "quiet-retreat",
+    title: "Quiet Retreat",
+    areas: [],
+    spaces: ["quiet-retreat", "guest-outdoor"],
+    families: ["furniture", "decorative", "vegetation", "light"],
+    recipeCategories: ["courtyard", "planting"],
+    targets: T({ assets: 5, recipes: 3, materials: 0, lighting: 2, plants: 4 }),
+  },
+  {
     id: "exterior-lighting",
     title: "Exterior Lighting",
     areas: ["lighting"],
@@ -245,6 +284,26 @@ export function pickKnowledge(area: DesignArea, ctx: KnowledgeContext): Knowledg
     if (def.requiresMatch && !styleHit && !envHit && !keywordHit) continue;
     // A generic entry that names a style/environment/keyword it did not match is still valid; it just ranks lower.
     const score = 1 + (styleHit ? 2 : 0) + (envHit ? 2 : 0) + (keywordHit ? 2 : 0) - (def.styles && !styleHit ? 0.25 : 0);
+    if (!best || score > best.score) best = { def, score };
+  }
+  return best?.def ?? null;
+}
+
+/**
+ * The Knowledge Need an outdoor space belongs to, for this project: the most specific catalog entry that lists the space (a
+ * tropical garden for a tropical project, else the estate gardens). A space is itself a match, so a narrow entry that names it
+ * needs no style or keyword hit to be eligible; a style, environment or keyword hit still makes it the better home.
+ */
+export function pickKnowledgeForSpace(space: OutdoorSpaceKind, ctx: KnowledgeContext): KnowledgeDefinition | null {
+  let best: { def: KnowledgeDefinition; score: number } | null = null;
+  for (const def of KNOWLEDGE_CATALOG) {
+    if (!def.spaces?.includes(space)) continue;
+    const styleHit = !!def.styles?.some((s) => ctx.styles.includes(s));
+    const envHit = !!ctx.environment && !!def.environments?.includes(ctx.environment);
+    const keywordHit = !!def.keywords && def.keywords.test(ctx.brief);
+    // An entry that names a style, environment or keyword this project lacks is a poorer fit for the space than a general one.
+    const narrow = def.requiresMatch && !styleHit && !envHit && !keywordHit;
+    const score = 1 + (styleHit ? 2 : 0) + (envHit ? 2 : 0) + (keywordHit ? 2 : 0) - (narrow ? 0.9 : 0) - (def.styles && !styleHit ? 0.25 : 0);
     if (!best || score > best.score) best = { def, score };
   }
   return best?.def ?? null;

@@ -1,0 +1,242 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, LoaderCircle, MinusCircle, Sparkles } from "lucide-react";
+import { useAdminStore } from "@/store/useAdminStore";
+import { useGenerationStore } from "@/store/useGenerationStore";
+import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
+import type { GenerationReport } from "@/types/library";
+import { AssetPlanDialog } from "./AssetPlanDialog";
+
+/**
+ * The learning loop, made visible: for each generation, the outdoor spaces found, what the library supplied and did not, the
+ * Knowledge and Asset Needs that were opened, the starter plans written, and whether the write reached the store. Every gap is a
+ * button: Generate Recipe for a Knowledge gap, Open Plan for an Asset Need — so Admin is where the next step starts.
+ */
+
+/** Distinguishes one "open the recipe form" request from the next, so the form remounts on a fresh draft. */
+let intentCounter = 0;
+const time = (iso: string) => new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+const pct = (n: number) => `${Math.round(n * 100)}%`;
+const chip = "rounded bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-neutral-400";
+const actionBtn = "flex items-center gap-1 rounded-md border border-violet-500/25 bg-violet-500/15 px-2 py-1 text-[11px] font-medium text-violet-300 transition hover:bg-violet-500/25 disabled:cursor-wait disabled:opacity-60";
+
+function Section({ title, count, children }: { title: string; count?: number; children: React.ReactNode }) {
+  return (
+    <section className="flex flex-col gap-1.5">
+      <h4 className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+        {title}
+        {count !== undefined && <span className="ml-1.5 font-normal text-neutral-600">{count}</span>}
+      </h4>
+      {children}
+    </section>
+  );
+}
+
+const Empty = ({ children }: { children: React.ReactNode }) => <p className="text-[11px] text-neutral-600">{children}</p>;
+
+function Applied({ ok }: { ok: boolean }) {
+  return ok ? (
+    <span className="flex items-center gap-1 text-emerald-400"><CheckCircle2 size={11} /> applied</span>
+  ) : (
+    <span className="flex items-center gap-1 text-neutral-500"><MinusCircle size={11} /> not applied</span>
+  );
+}
+
+function ReportCard({ report, local, onNavigate }: { report: GenerationReport; local: boolean; onNavigate?: (tab: "recipes", intent?: RecipeIntent) => void }) {
+  const adminEmail = useAdminStore((s) => s.adminEmail);
+  const { plans, needs, proposeRecipe } = useLibraryStore();
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState("");
+  const [error, setError] = useState("");
+  const [planning, setPlanning] = useState<{ needId: string; title: string; planId: string } | null>(null);
+  const p = report.persistence;
+  const failed = report.steps.filter((s) => !s.ok);
+  const realized = report.spaces.filter((s) => s.realized);
+
+  const openRecipe = async (id: string, title: string) => {
+    setBusy(id);
+    setError("");
+    const result = await proposeRecipe(adminEmail, id);
+    setBusy("");
+    const intent = { knowledgeId: id, title, nonce: ++intentCounter };
+    if (!("error" in result)) return onNavigate?.("recipes", { ...intent, ...result });
+    onNavigate?.("recipes", { ...intent, notice: `AI proposal unavailable (${result.error}) — blank form opened.` });
+  };
+  const planFor = (needId: string) => plans.find((pl) => pl.needId === needId);
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3">
+      <button onClick={() => setOpen(!open)} className="flex w-full items-start gap-1.5 text-left">
+        {open ? <ChevronDown size={13} className="mt-0.5 shrink-0 text-neutral-500" /> : <ChevronRight size={13} className="mt-0.5 shrink-0 text-neutral-500" />}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-medium text-neutral-100">{report.brief || "(no brief)"}</span>
+          <span className="block text-[11px] text-neutral-500">
+            {time(report.at)} · {realized.length} outdoor spaces · {report.knowledgeGaps.length} knowledge gaps · {report.assetNeeds.length} asset needs · {report.plansCreated.length} plans created · {report.recipes.length} recipes / {report.assets.length} assets retrieved
+          </span>
+        </span>
+        <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${p.ok ? "bg-emerald-500/15 text-emerald-300" : "bg-red-500/15 text-red-300"}`}>{p.ok ? `stored · ${p.backend}` : "NOT STORED"}</span>
+      </button>
+
+      {!p.ok && (
+        <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-red-500/10 px-2.5 py-1.5 text-[11px] text-red-400">
+          <AlertTriangle size={12} className="mt-0.5 shrink-0" /> The library write failed ({p.error}). {local ? "This is the copy from this browser; " : ""}nothing below was saved, so the next generation will not learn from it.
+        </p>
+      )}
+      {failed.length > 0 && (
+        <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1.5 text-[11px] text-amber-400">
+          <AlertTriangle size={12} className="mt-0.5 shrink-0" /> Step failed: {failed.map((s) => `${s.name} (${s.error})`).join("; ")}
+        </p>
+      )}
+
+      {open && (
+        <div className="mt-3 flex flex-col gap-4 border-t border-white/5 pt-3">
+          <Section title="Placement">
+            <p className="text-[11px] text-neutral-400">
+              Arrival {report.placement.arrivalSide || "—"} · view {report.placement.viewSide || "—"} · pools: {report.placement.pools.map((x) => x.side).join(", ") || "none"} · garages: {report.placement.garages.map((x) => x.side).join(", ") || "none"}
+            </p>
+            {report.placement.issues.length > 0 ? report.placement.issues.map((i) => <p key={i} className="text-[11px] text-red-400">{i}</p>) : <p className="text-[11px] text-emerald-400/80">Pool on the private side, garage on the arrival side.</p>}
+          </Section>
+
+          <Section title="Outdoor spaces" count={report.spaces.length}>
+            <div className="flex flex-col gap-1">
+              {report.spaces.map((s) => (
+                <div key={s.kind} className="text-[11px] text-neutral-400">
+                  <span className="font-medium text-neutral-200">{s.name}</span>{" "}
+                  <span className={chip}>{s.side}</span> <span className={chip}>~{s.footprint.width}×{s.footprint.depth} m</span>{" "}
+                  {s.requested && <span className={`${chip} text-sky-300`}>asked for</span>} {!s.realized && <span className={`${chip} text-amber-300`}>not in design</span>}
+                  <span className="text-neutral-600"> — {s.realizedBy.join(", ") || s.reasons[0]}</span>
+                  {(s.supplied.length > 0 || s.missing.length > 0) && (
+                    <span className="block pl-3 text-neutral-600">
+                      {s.supplied.length > 0 && <>has {s.supplied.join(", ")} · </>}
+                      {s.missing.length > 0 ? <>missing {s.missing.join(", ")}</> : "nothing missing"}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="New knowledge gaps" count={report.knowledgeGaps.length}>
+            {report.knowledgeGaps.length === 0 && <Empty>The library already covers every area and space.</Empty>}
+            {report.knowledgeGaps.map((g) => (
+              <div key={g.id} className="flex items-start justify-between gap-3">
+                <p className="min-w-0 text-[11px] text-neutral-400">
+                  <span className="font-medium text-neutral-200">{g.name}</span> {g.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {g.requestCount}×</span>
+                  <span className="block text-neutral-600">{g.reason}</span>
+                </p>
+                <button onClick={() => void openRecipe(g.id, g.name)} disabled={busy === g.id} className={actionBtn}>
+                  {busy === g.id ? <LoaderCircle size={11} className="animate-spin" /> : <Sparkles size={11} />} Generate Recipe
+                </button>
+              </div>
+            ))}
+          </Section>
+
+          <Section title="New asset needs" count={report.assetNeeds.length}>
+            {report.assetNeeds.length === 0 && <Empty>No asset is missing.</Empty>}
+            {report.assetNeeds.map((n) => {
+              const plan = planFor(n.id);
+              return (
+                <div key={n.id} className="flex items-start justify-between gap-3">
+                  <p className="min-w-0 text-[11px] text-neutral-400">
+                    <span className="font-medium text-neutral-200">{n.name}</span> {n.isNew && <span className={`${chip} text-sky-300`}>new</span>} <span className="text-neutral-600">requested {n.requestedCount}×</span>
+                    <span className="block text-neutral-600">
+                      {n.spaces.length > 0 ? <>for {n.spaces.join(", ")}</> : "asked for by the brief"}
+                      {n.components.length > 0 && <> · missing {n.components.join(", ")}</>}
+                    </span>
+                  </p>
+                  {plan ? (
+                    <button onClick={() => setPlanning({ needId: n.id, title: needs.find((x) => x.id === n.id)?.title ?? n.name, planId: plan.id })} className={actionBtn}>Open Asset Plan</button>
+                  ) : (
+                    <button onClick={() => setPlanning({ needId: n.id, title: needs.find((x) => x.id === n.id)?.title ?? n.name, planId: "" })} className={actionBtn}><Sparkles size={11} /> Generate Asset Plan</button>
+                  )}
+                </div>
+              );
+            })}
+          </Section>
+
+          <Section title="Asset plans created" count={report.plansCreated.length}>
+            {report.plansCreated.length === 0 ? <Empty>None this time{report.plansExisting.length > 0 ? ` (${report.plansExisting.length} needs already have a plan)` : ""}.</Empty> : report.plansCreated.map((pl) => <p key={pl.id} className="text-[11px] text-neutral-400">{pl.title} <span className="text-neutral-600">· {pl.assets} planned assets</span></p>)}
+          </Section>
+
+          <Section title="Recipes retrieved" count={report.recipes.length}>
+            {report.recipes.length === 0 && <Empty>No approved recipe matched. Approve recipes from the Learn tab and they are retrieved here automatically.</Empty>}
+            {report.recipes.map((r) => (
+              <p key={r.id} className="text-[11px] text-neutral-400">
+                <span className="font-medium text-neutral-200">{r.name}</span> <Applied ok={r.applied} />
+                <span className="block text-neutral-600">{r.reason}</span>
+                <span className="block text-neutral-600">{r.note}</span>
+              </p>
+            ))}
+          </Section>
+
+          <Section title="Assets retrieved" count={report.assets.length}>
+            {report.assets.length === 0 && <Empty>No approved library asset fit a space or feature.</Empty>}
+            {report.assets.map((a) => (
+              <p key={`${a.id}-${a.component}-${a.space}`} className="text-[11px] text-neutral-400">
+                <span className="font-medium text-neutral-200">{a.name}</span> <span className="text-neutral-600">— {a.space}{a.feature ? ` · ${a.feature}` : ` · ${a.component}`}</span> <Applied ok={a.applied} />
+                <span className="block text-neutral-600">{a.note}</span>
+              </p>
+            ))}
+          </Section>
+
+          <Section title="Areas scored">
+            <div className="flex flex-wrap gap-1">
+              {report.areas.map((a) => (
+                <span key={a.area} title={a.reason} className={`rounded px-1.5 py-0.5 text-[10px] ${!a.relevant ? "bg-white/[0.03] text-neutral-700" : a.weak ? "bg-red-500/15 text-red-300" : "bg-emerald-500/10 text-emerald-300/80"}`}>
+                  {a.area} {a.relevant ? pct(a.score) : "n/a"}
+                </span>
+              ))}
+            </div>
+          </Section>
+
+          <p className="text-[10px] text-neutral-700">
+            Steps: {report.steps.map((s) => `${s.name} ${s.ok ? "✓" : "✗"} ${s.ms}ms`).join(" · ")} · wrote {p.wrote.knowledge} knowledge, {p.wrote.needs} needs, {p.wrote.plans} plans, {p.wrote.recipes} recipe counters
+          </p>
+          {error && <p className="text-[11px] text-red-400">{error}</p>}
+        </div>
+      )}
+      {planning && <AssetPlanDialog key={planning.planId || planning.needId} target={{ needId: planning.needId, title: planning.title }} planId={planning.planId || undefined} onClose={() => setPlanning(null)} />}
+    </div>
+  );
+}
+
+export function GenerationsTab({ onNavigate }: { onNavigate?: (tab: "recipes", intent?: RecipeIntent) => void }) {
+  const adminEmail = useAdminStore((s) => s.adminEmail);
+  const { generations, loaded, loading, error, refresh } = useLibraryStore();
+  const local = useGenerationStore((s) => s.reports);
+
+  useEffect(() => {
+    void refresh(adminEmail);
+  }, [adminEmail, refresh]);
+
+  // This browser's copy of a generation the server could not store (or has not listed yet) comes first.
+  const shown = useMemo(() => {
+    const known = new Set(generations.map((g) => g.id));
+    return [...local.filter((r) => !known.has(r.id)).map((r) => ({ report: r, local: true })), ...generations.map((r) => ({ report: r, local: false }))];
+  }, [generations, local]);
+
+  return (
+    <div className="flex h-full flex-col gap-3 overflow-hidden">
+      <div className="flex shrink-0 items-center justify-between">
+        <p className="text-[11px] text-neutral-500">What each generation found, what the library could supply, and what was written back. Newest first.</p>
+        <button onClick={() => void refresh(adminEmail)} className="text-[11px] text-neutral-600 hover:text-neutral-300">{loading ? "Refreshing…" : "Refresh"}</button>
+      </div>
+      {error && <p className="shrink-0 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">{error}</p>}
+      {loaded && shown.length === 0 ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
+          <p className="text-sm text-neutral-500">No generations recorded yet</p>
+          <p className="max-w-sm text-xs text-neutral-600">Generate a property from a brief. Its outdoor spaces, knowledge gaps, asset needs and plans appear here, each one actionable.</p>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-y-auto">
+          <div className="flex flex-col gap-3 pb-2">
+            {shown.map(({ report, local: isLocal }) => (
+              <ReportCard key={report.id} report={report} local={isLocal} onNavigate={onNavigate} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

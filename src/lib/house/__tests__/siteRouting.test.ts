@@ -334,5 +334,6 @@ describe("the collision pass is only a safety net", () => {
     }
     expect(count).toBe(960);
     expect(moves).toBe(0);
-  });
+    // 960 complete generations: well over the default 5 s when the whole suite is running in parallel.
+  }, 60_000);
 });
