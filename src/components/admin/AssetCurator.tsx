@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, Search, Upload, CheckCircle, XCircle, Trash2, AlertTriangle } from "lucide-react";
+import { X, Search, Upload, CheckCircle, XCircle, Trash2, AlertTriangle, ArrowUpCircle } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
 import { approvalBlocker, useAssetStore } from "@/store/useAssetStore";
 import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
@@ -10,6 +10,8 @@ import { ingestGlb } from "@/lib/assets/glbIngest";
 import { getGlbStore } from "@/lib/assets/glbStorage";
 import { GlbPreview } from "./GlbPreview";
 import { GlbReport } from "./GlbReport";
+import { AssetUpgradeDialog } from "./AssetUpgradeDialog";
+import { canUpgrade, findPendingUpgrade } from "@/lib/assets/versions";
 import { inferPBR, inferCompatibleStyles, makeAssetId, detectAssetType, hashContent } from "@/lib/assets/processor";
 import { SOURCE_LABELS } from "@/lib/assets/sources";
 import { LearnWorkspace } from "./LearnWorkspace";
@@ -430,6 +432,9 @@ function QueueTab() {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const act = useLibraryStore((s) => s.act);
   const generation = useLibraryStore((s) => s.generation);
+  const catalog = useAssetStore((s) => s.catalog);
+  // The approved asset whose upgrade candidate is being reviewed side by side (upgrades are never approved from the list).
+  const [reviewing, setReviewing] = useState<string | null>(null);
 
   const approveAsset = (asset: CuratedAsset) => {
     approve(asset.id);
@@ -491,6 +496,13 @@ function QueueTab() {
               </div>
             </div>
 
+            {asset.upgradeOf && (
+              <div className="mt-2 flex items-center gap-1.5 rounded-lg bg-violet-500/10 px-2.5 py-1.5 text-[11px] text-violet-300">
+                <ArrowUpCircle size={12} />
+                Upgrade candidate for {catalog.find((a) => a.id === asset.upgradeOf)?.name ?? "a removed asset"} v{catalog.find((a) => a.id === asset.upgradeOf)?.version ?? 1}. The approved version is untouched until you review this.
+              </div>
+            )}
+
             {asset.isDuplicate && (
               <div className="mt-2 flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1.5 text-[11px] text-amber-400">
                 <AlertTriangle size={12} />
@@ -515,20 +527,29 @@ function QueueTab() {
 
             {asset.type === "glb-model" && <GlbReview asset={asset} />}
 
-            {approvalBlocker(asset) && (
+            {approvalBlocker(asset) && !asset.upgradeOf && (
               <div className="mt-2 flex items-center gap-1.5 rounded-lg bg-red-500/10 px-2.5 py-1.5 text-[11px] text-red-400">
                 <AlertTriangle size={12} /> {approvalBlocker(asset)}
               </div>
             )}
 
             <div className="mt-2.5 flex gap-2">
-              <button
-                onClick={() => approveAsset(asset)}
-                disabled={approvalBlocker(asset) !== null}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-500/15 py-1.5 text-xs font-medium text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25 transition disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <CheckCircle size={13} /> Approve
-              </button>
+              {asset.upgradeOf ? (
+                <button
+                  onClick={() => setReviewing(asset.upgradeOf!)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-violet-500/15 py-1.5 text-xs font-medium text-violet-300 border border-violet-500/25 hover:bg-violet-500/25 transition"
+                >
+                  <ArrowUpCircle size={13} /> Review upgrade
+                </button>
+              ) : (
+                <button
+                  onClick={() => approveAsset(asset)}
+                  disabled={approvalBlocker(asset) !== null}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-500/15 py-1.5 text-xs font-medium text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25 transition disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <CheckCircle size={13} /> Approve
+                </button>
+              )}
               {asset.source === "generated" && (
                 <button
                   disabled
@@ -542,12 +563,13 @@ function QueueTab() {
                 onClick={() => rejectAsset(asset)}
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-500/10 py-1.5 text-xs font-medium text-red-400 border border-red-500/15 hover:bg-red-500/20 transition"
               >
-                <XCircle size={13} /> Reject
+                <XCircle size={13} /> {asset.upgradeOf ? "Discard" : "Reject"}
               </button>
             </div>
           </div>
         ))}
       </div>
+      {reviewing && <AssetUpgradeDialog baseId={reviewing} onClose={() => setReviewing(null)} />}
     </div>
   );
 }
@@ -556,7 +578,9 @@ function QueueTab() {
 
 function LibraryTab() {
   const catalog = useAssetStore((s) => s.catalog);
+  const queue = useAssetStore((s) => s.queue);
   const removeFromCatalog = useAssetStore((s) => s.removeFromCatalog);
+  const [upgrading, setUpgrading] = useState<string | null>(null);
 
   if (catalog.length === 0) {
     return (
@@ -592,11 +616,19 @@ function LibraryTab() {
             </div>
             <div className="flex items-start justify-between gap-1 p-2">
               <div className="min-w-0">
-                <p className="truncate text-[11px] font-medium text-neutral-200">{asset.name}</p>
+                <p className="truncate text-[11px] font-medium text-neutral-200">
+                  {asset.name}
+                  {asset.version !== undefined && <span className="ml-1 font-normal text-neutral-500">v{asset.version}</span>}
+                </p>
                 <p className="text-[10px] text-neutral-600">
                   {SOURCE_LABELS[asset.source]}
                   {asset.family && <> · {categoryLabel(asset.family)}</>}
                 </p>
+                {asset.supersededBy && (
+                  <p className="text-[10px] text-amber-500/80">
+                    Replaced by v{asset.supersededBy.version} · {asset.supersededBy.rollout === "all-projects" ? "projects follow v" + asset.supersededBy.version : "kept by existing projects"}
+                  </p>
+                )}
               </div>
               <button
                 onClick={() => removeFromCatalog(asset.id)}
@@ -606,6 +638,14 @@ function LibraryTab() {
                 <Trash2 size={12} />
               </button>
             </div>
+            {canUpgrade(asset) && (
+              <button
+                onClick={() => setUpgrading(asset.id)}
+                className="mx-2 mb-2 flex items-center justify-center gap-1 rounded-md border border-violet-500/25 bg-violet-500/10 py-1 text-[10px] font-medium text-violet-300 transition hover:bg-violet-500/20"
+              >
+                <ArrowUpCircle size={11} /> {asset.stableAssetId && findPendingUpgrade(queue, asset.stableAssetId) ? "Review upgrade" : "Upgrade"}
+              </button>
+            )}
             {/* PBR pills */}
             <div className="flex gap-1 px-2 pb-2">
               <span className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[9px] text-neutral-600">
@@ -618,6 +658,7 @@ function LibraryTab() {
           </div>
         ))}
       </div>
+      {upgrading && <AssetUpgradeDialog baseId={upgrading} onClose={() => setUpgrading(null)} />}
     </div>
   );
 }

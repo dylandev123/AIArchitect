@@ -8,6 +8,8 @@ export interface GlbBlobStore {
   put(id: string, data: ArrayBuffer): Promise<void>;
   get(id: string): Promise<ArrayBuffer | null>;
   delete(id: string): Promise<void>;
+  /** Ids of every stored file (read-only; used by the admin diagnostics). */
+  keys(): Promise<string[]>;
 }
 
 export function createMemoryGlbStore(): GlbBlobStore {
@@ -16,6 +18,7 @@ export function createMemoryGlbStore(): GlbBlobStore {
     put: async (id, data) => void files.set(id, data),
     get: async (id) => files.get(id) ?? null,
     delete: async (id) => void files.delete(id),
+    keys: async () => [...files.keys()],
   };
 }
 
@@ -45,6 +48,7 @@ export function createIndexedDbGlbStore(): GlbBlobStore {
     put: async (id, data) => void (await request((await store("readwrite")).put(data, id))),
     get: async (id) => ((await request((await store("readonly")).get(id))) as ArrayBuffer | undefined) ?? null,
     delete: async (id) => void (await request((await store("readwrite")).delete(id))),
+    keys: async () => (await request((await store("readonly")).getAllKeys())).map(String),
   };
 }
 

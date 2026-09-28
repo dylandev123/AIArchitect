@@ -1,5 +1,5 @@
 import { FAMILY_DEFAULTS } from "./families";
-import { latticeLayout, type PrimitiveContext } from "./primitives";
+import { latticeLayout, sphereLayout, torusLayout, type PrimitiveContext } from "./primitives";
 import { minThickness, type AssetPart, type AssetSpec } from "./spec";
 import { bevelRadius, DETAIL_LEVELS, STYLE_PROFILE, type DetailLevel } from "./styleProfile";
 
@@ -43,6 +43,16 @@ export function partTriangles(part: AssetPart, ctx: Pick<PrimitiveContext, "deta
     case "cushion": return boxCost(s + (ctx.leanCushion ? 0 : 2));
     case "slatArray": return part.count * box(part.slatSize);
     case "cylinder": case "taperedCylinder": return (2 * s + 5) * radialSegs(ctx.detail) * 2;
+    case "sphere": {
+      const { w, h } = sphereLayout(ctx);
+      return 2 * w * (h - 1);
+    }
+    // Base rim arc (edge segments) plus the slant, around the radial segments; the axis-collapsed halves are dropped by the builder.
+    case "cone": return 2 * radialSegs(ctx.detail) * (s + 1);
+    case "torus": {
+      const { radial, ring } = torusLayout(ctx);
+      return 2 * radial * ring;
+    }
     case "roundedRect": {
       // The builder rounds the outline by the corner radius minus the edge bevel; nothing is left to round below 1 mm.
       const rounded = part.cornerRadius - bevelRadius(Math.min(part.width, part.depth, part.height)) >= 1e-3;
@@ -168,6 +178,9 @@ export function costGuidance(): string {
   const flat = partTriangles(probe({ primitive: "box", size: [0.02, 0.06, 0.5] }), { detail: "medium", flatBelow: FLAT_BELOW, leanCushion: false });
   const cushion = cost({ primitive: "cushion", size: [0.5, 0.1, 0.5] });
   const cyl = cost({ primitive: "cylinder", radius: 0.1, height: 0.2 });
+  const ball = cost({ primitive: "sphere", radius: 0.1 });
+  const cne = cost({ primitive: "cone", radius: 0.1, height: 0.2 });
+  const ring = cost({ primitive: "torus", radius: 0.2, tubeRadius: 0.02 });
   const round = cost({ primitive: "roundedRect", width: 0.6, depth: 0.4, height: 0.05, cornerRadius: 0.06 });
   const tube = cost({ primitive: "tube", path: [[0, 0, 0], [0, 0.3, 0]], radius: 0.015 });
   const curved = cost({ primitive: "curvedSurface", radius: 0.3, arcDegrees: 90, height: 0.4, thickness: 0.03 });
@@ -177,6 +190,8 @@ export function costGuidance(): string {
   return `TRIANGLE COSTS per part at "medium" [low/high] — your asset must fit ${STYLE_PROFILE.triangleBudget.medium} at medium (${STYLE_PROFILE.triangleBudget.low} low, ${STYLE_PROFILE.triangleBudget.high} high):
 - beveled box / panel ${at(box)} (an edge under ${FLAT_BELOW * 100} cm is built square-edged at ${flat} when the budget is tight)
 - slatArray = count × box (24 slats ≈ ${24 * flat}-${24 * box("medium")}); cushion ${at(cushion)}; cylinder / taperedCylinder ${at(cyl)}
+- sphere ${at(ball)}; cone ${at(cne)}; torus ${at(ring)} — round parts: use them small (bulbs, finials, rims), not for big blocks
+- a scene light (point / spot) costs no triangles, only a little runtime: give one per fixture, never one per bulb
 - roundedRect ≈ ${at(round)}; tube ≈ ${at(tube)} per 2 points; curvedSurface ≈ ${at(curved)}
 - lattice: dome shade ≈ ${at(shade)}, basket / drum ≈ ${at(basket)}, flat woven panel ≈ ${at(panel)}
 - multiply by repeat count and by mirror (x or z ×2, xz ×4). A bare frame is ~500-1,500; each cushion adds ~240.

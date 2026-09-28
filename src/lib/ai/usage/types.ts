@@ -1,4 +1,4 @@
-export type AiRequestType = "generation" | "scoped_edit" | "learn" | "recipe_proposal" | "asset_plan" | "native_asset";
+export type AiRequestType = "generation" | "scoped_edit" | "learn" | "recipe_proposal" | "asset_plan" | "native_asset" | "native_asset_retry";
 export type AiScope = "world" | "zone" | "component";
 
 /** One provider call. Deliberately holds no prompt, response, or error text — only metadata and counts. */

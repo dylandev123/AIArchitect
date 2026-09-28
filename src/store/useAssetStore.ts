@@ -2,16 +2,24 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { AssetValidationReport, CuratedAsset, PBRValues } from "@/types/assets";
+import type { AssetValidationReport, CuratedAsset, PBRValues, UpgradeRollout } from "@/types/assets";
 import { getGlbStore } from "@/lib/assets/glbStorage";
+import { applyUpgradeApproval, nextVersion, upgradeBlocker, withoutVersion } from "@/lib/assets/versions";
 
 export type AssetMetaPatch = Partial<Pick<CuratedAsset, "name" | "family" | "styleTags" | "contextTags" | "dimensions" | "license" | "needId" | "validation">>;
 
 /**
  * Why an asset may not be approved yet, or null. Generated GLBs must pass validation first; an uploaded GLB is
- * validated on upload and may not be approved once that validation has failed.
+ * validated on upload and may not be approved once that validation has failed. An upgrade candidate is never approved
+ * with a bare "Approve": it replaces a version other projects may use, so it goes through `approveUpgrade`.
  */
 export function approvalBlocker(asset: CuratedAsset): string | null {
+  if (asset.upgradeOf) return "This is an upgrade candidate: review it against the current version and choose New Projects Only or Make Current.";
+  return validationBlocker(asset);
+}
+
+/** The GLB gate alone (what an upgrade candidate must also pass before it can be approved). */
+export function validationBlocker(asset: CuratedAsset): string | null {
   if (asset.type !== "glb-model") return null;
   const validation = asset.validation as AssetValidationReport | undefined;
   if (asset.source === "generated" && !validation?.passed) {
@@ -33,6 +41,11 @@ interface AssetStore {
   catalog: CuratedAsset[];
   addToQueue: (asset: CuratedAsset) => void;
   approve: (id: string) => void;
+  /**
+   * Approves an upgrade candidate as the next version of its asset. The version it upgrades is left exactly as it was, apart
+   * from being marked superseded; `rollout` decides whether existing projects follow. Resolves to why it was refused, or null.
+   */
+  approveUpgrade: (id: string, rollout: UpgradeRollout) => string | null;
   reject: (id: string) => void;
   removeFromCatalog: (id: string) => void;
   /** Records that an approved model rendered ("success") or could not be loaded ("failure"), for retrieval ranking. */
@@ -64,10 +77,22 @@ export const useAssetStore = create<AssetStore>()(
         const { queue, catalog } = get();
         const asset = queue.find((a) => a.id === id);
         if (!asset || approvalBlocker(asset)) return;
+        // A native asset is numbered when it is approved, not when it is generated.
+        const version = asset.stableAssetId ? nextVersion(catalog, asset.stableAssetId) : asset.version;
         set({
           queue: queue.filter((a) => a.id !== id),
-          catalog: [...catalog, { ...asset, status: "approved" as const }],
+          catalog: [...catalog, { ...asset, status: "approved" as const, ...(version !== undefined ? { version } : {}) }],
         });
+      },
+
+      approveUpgrade: (id, rollout) => {
+        const { queue, catalog } = get();
+        const candidate = queue.find((a) => a.id === id);
+        if (!candidate) return "That upgrade candidate is no longer in the queue.";
+        const blocker = validationBlocker(candidate) ?? upgradeBlocker(candidate, catalog);
+        if (blocker) return blocker;
+        set({ queue: queue.filter((a) => a.id !== id), catalog: applyUpgradeApproval(candidate, catalog, rollout, new Date().toISOString()) });
+        return null;
       },
 
       reject: (id) => {
@@ -78,7 +103,7 @@ export const useAssetStore = create<AssetStore>()(
 
       removeFromCatalog: (id) => {
         const asset = get().catalog.find((a) => a.id === id);
-        set((s) => ({ catalog: s.catalog.filter((a) => a.id !== id) }));
+        set((s) => ({ catalog: withoutVersion(s.catalog, id) }));
         if (asset?.type === "glb-model") discardModel(id);
       },
 

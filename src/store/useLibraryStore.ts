@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import type { AssetSpec } from "@/lib/assets/native/spec";
+import type { CuratedAsset } from "@/types/assets";
 import type { PlanInput } from "@/lib/library/plans";
 import type { AssetPlan, DesignRecipe, KnowledgeNeed, KnowledgeStatus, Need, PlannedAsset } from "@/types/library";
 import type { RecipeInput } from "@/lib/library/recipes";
@@ -46,6 +47,8 @@ interface LibraryStore {
   savePlan: (adminEmail: string, plan: PlanInput) => Promise<{ plan: AssetPlan } | { error: string }>;
   /** Native generate / regenerate / refine for one planned asset. */
   generateNative: (adminEmail: string, planId: string, plannedAssetId: string, instruction?: string) => Promise<NativeOutcome | { error: string }>;
+  /** A candidate spec for upgrading an approved native asset. Nothing is saved server-side; the caller stages the candidate for review. */
+  upgradeNative: (adminEmail: string, asset: CuratedAsset, instruction?: string) => Promise<NativeOutcome | { error: string }>;
 }
 
 export interface PlanDraft {
@@ -54,7 +57,7 @@ export interface PlanDraft {
 }
 
 export type NativeOutcome =
-  | { kind: "spec"; spec: AssetSpec; stats: { triangles: number; detail: string; notes: string[] } }
+  | { kind: "spec"; spec: AssetSpec; stats: { triangles: number; detail: string; notes: string[]; /** The validation error the one automatic repair retry fixed. */ retry?: { firstError: string } } }
   | { kind: "external"; reason: string };
 
 /** Hands the Recipes tab a Knowledge Need to file a new recipe under, with the AI draft when there is one. */
@@ -150,6 +153,19 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
       const data = (await res.json().catch(() => ({}))) as Partial<NativeOutcome> & { error?: string };
       if (!res.ok || !data.kind) return { error: data.error ?? `Native generation failed (HTTP ${res.status}).` };
       await get().refresh(adminEmail);
+      return data as NativeOutcome;
+    } catch (err) {
+      return { error: (err as Error).message };
+    }
+  },
+
+  upgradeNative: async (adminEmail, asset, instruction) => {
+    if (!asset.sourceSpec || !asset.family) return { error: "This asset has no native spec to upgrade." };
+    try {
+      const body = { name: asset.name, category: asset.family, style: asset.styleTags ?? [], dimensions: asset.dimensions, generationPrompt: asset.generationPrompt, current: asset.sourceSpec, instruction };
+      const res = await fetch("/api/admin/learn/native/upgrade", { method: "POST", headers: headers(adminEmail), body: JSON.stringify(body) });
+      const data = (await res.json().catch(() => ({}))) as Partial<NativeOutcome> & { error?: string };
+      if (!res.ok || !data.kind) return { error: data.error ?? `Upgrade failed (HTTP ${res.status}).` };
       return data as NativeOutcome;
     } catch (err) {
       return { error: (err as Error).message };

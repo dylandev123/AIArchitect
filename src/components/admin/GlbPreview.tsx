@@ -3,15 +3,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Line, OrbitControls } from "@react-three/drei";
-import { Box3, Vector3 } from "three";
+import { Box3, Vector3, type Light } from "three";
 import { glbModels, instantiateGlb, useGlbStatus } from "@/lib/assets/glbModels";
 import type { AssetValidationReport, CuratedAsset } from "@/types/assets";
 
-/** Interactive review viewer for a queued GLB: orbit, ground grid, bounding box and collision footprint. */
+/**
+ * Interactive review viewer for a queued GLB: orbit, ground grid, bounding box and collision footprint. A model that carries a
+ * scene light (KHR_lights_punctual, which loads as a three.js light and travels with every clone) also gets a "night light test":
+ * the daylight is turned right down over a floor and back wall, so what the light actually illuminates can be judged.
+ */
 export function GlbPreview({ asset }: { asset: CuratedAsset }) {
   const status = useGlbStatus(asset.id);
   const [showBox, setShowBox] = useState(true);
   const [showFootprint, setShowFootprint] = useState(true);
+  const [night, setNight] = useState(false);
 
   useEffect(() => {
     void glbModels.load(asset.id);
@@ -19,6 +24,13 @@ export function GlbPreview({ asset }: { asset: CuratedAsset }) {
 
   const instance = useMemo(() => (status === "ready" ? instantiateGlb(asset.id) : null), [status, asset.id]);
   const size = status === "ready" ? glbModels.peek(asset.id)?.size : undefined;
+  const hasLight = useMemo(() => {
+    let found = false;
+    instance?.traverse((o) => {
+      if ((o as Light).isLight) found = true;
+    });
+    return found;
+  }, [instance]);
 
   if (status === "failed") {
     return <div className="rounded-lg bg-red-500/10 px-3 py-6 text-center text-[11px] text-red-400">Could not load this model: {glbModels.error(asset.id)}</div>;
@@ -32,10 +44,10 @@ export function GlbPreview({ asset }: { asset: CuratedAsset }) {
     <div className="flex flex-col gap-1.5">
       <div className="h-64 overflow-hidden rounded-lg border border-white/8 bg-neutral-900">
         <Canvas shadows camera={{ position: [reach * 1.6, reach * 1.1, reach * 1.6], fov: 40, near: 0.05, far: reach * 40 }} dpr={[1, 2]}>
-          <color attach="background" args={["#171717"]} />
-          <hemisphereLight args={["#ffffff", "#404040", 1.1]} />
-          <directionalLight position={[reach * 2, reach * 3, reach]} intensity={2.2} castShadow />
-          <gridHelper args={[Math.ceil(reach * 3), Math.ceil(reach * 3), "#555555", "#2a2a2a"]} />
+          <color attach="background" args={[night ? "#08090c" : "#171717"]} />
+          <hemisphereLight args={["#ffffff", "#404040", night ? 0.05 : 1.1]} />
+          <directionalLight position={[reach * 2, reach * 3, reach]} intensity={night ? 0.05 : 2.2} castShadow />
+          {night ? <NightSet reach={reach} /> : <gridHelper args={[Math.ceil(reach * 3), Math.ceil(reach * 3), "#555555", "#2a2a2a"]} />}
           <primitive object={instance} />
           {showBox && <BoundsBox size={size} />}
           {showFootprint && <Footprint size={size} footprint={asset.validation?.footprint} />}
@@ -49,9 +61,30 @@ export function GlbPreview({ asset }: { asset: CuratedAsset }) {
         <label className="flex items-center gap-1.5">
           <input type="checkbox" checked={showFootprint} onChange={(e) => setShowFootprint(e.target.checked)} /> Collision footprint
         </label>
+        {hasLight && (
+          <label className="flex items-center gap-1.5 text-amber-300/90">
+            <input type="checkbox" checked={night} onChange={(e) => setNight(e.target.checked)} /> Night light test
+          </label>
+        )}
         <span className="ml-auto text-neutral-600">Model is shown grounded and centred, as it is placed.</span>
       </div>
     </div>
+  );
+}
+
+/** A floor and a back wall to catch the model's light, so its reach and cone are visible. */
+function NightSet({ reach }: { reach: number }) {
+  return (
+    <group>
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[reach * 8, reach * 8]} />
+        <meshStandardMaterial color="#9a9a94" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, reach, -reach * 1.8]}>
+        <planeGeometry args={[reach * 8, reach * 2]} />
+        <meshStandardMaterial color="#9a9a94" roughness={0.9} />
+      </mesh>
+    </group>
   );
 }
 

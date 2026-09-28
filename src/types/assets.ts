@@ -6,6 +6,14 @@ export type AssetType = "pbr-material" | "hdri" | "glb-model" | "vegetation" | "
 export type AssetSource = "polyhaven" | "ambientcg" | "upload" | "generated";
 export type AssetStatus = "pending" | "approved" | "rejected";
 
+/**
+ * What approving an upgrade means for projects that already use the old version. "new-projects": they keep it (its file is
+ * preserved and still renders) and only projects made afterwards use the new one. "all-projects": the new version is now
+ * the one every project draws, the old id resolving to it.
+ */
+export const UPGRADE_ROLLOUTS = ["new-projects", "all-projects"] as const;
+export type UpgradeRollout = (typeof UPGRADE_ROLLOUTS)[number];
+
 export interface PBRValues {
   baseColor: string;
   roughness: number;
@@ -113,14 +121,25 @@ export interface CuratedAsset {
   successCount?: number;
   failureCount?: number;
 
-  // ── Versioning foundation (native-generated assets only; nothing reads or writes "version" yet beyond 1) ──
+  // ── Versioning (native-generated assets only; see `lib/assets/versions.ts`) ──
   /**
-   * Identity that survives regeneration: stable across versions of "the same" asset (e.g. every native spec produced
-   * for one planned asset), unlike `id`, which names this one build. Lets a future Upgrade find prior versions.
+   * Identity that survives regeneration and upgrade: stable across versions of "the same" asset (every version of one planned
+   * asset shares it), unlike `id`, which names this one build. Upgrading creates a new asset under the same stableAssetId.
    */
   stableAssetId?: string;
-  /** 1-based version under `stableAssetId`. Always 1 until something actually regenerates in place (Upgrade). */
+  /**
+   * 1-based version under `stableAssetId`, given when the asset is approved into the library (the next number after the
+   * highest already there). A pending candidate, including an upgrade candidate, has none yet: a version is never spent on
+   * something that has not been approved.
+   */
   version?: number;
+  /** An upgrade candidate (pending) or approved upgrade: the id of the version it was generated from. Lineage only. */
+  upgradeOf?: string;
+  /**
+   * Set on a version once a newer one was approved over it. The old version stays in the library, untouched, but is no longer
+   * offered to new projects; `rollout` says whether existing projects follow to the new one.
+   */
+  supersededBy?: { id: string; version: number; rollout: UpgradeRollout; at: string };
   /** The generator pipeline that produced this asset ("native-1"), so old versions can be told apart from a rewritten builder. */
   generatorVersion?: string;
   /** `STYLE_PROFILE.version` at generation time, so an asset can be told apart from one made under a since-changed look. */

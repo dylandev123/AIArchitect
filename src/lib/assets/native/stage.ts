@@ -2,7 +2,7 @@ import type { AssetValidationReport, CuratedAsset } from "@/types/assets";
 import type { AssetPlan, PlannedAsset } from "@/types/library";
 import { ingestGlb } from "../glbIngest";
 import { getGlbStore } from "../glbStorage";
-import { buildAsset, geometryHash, NATIVE_GENERATOR_VERSION } from "./build";
+import { assetHash, buildAsset, NATIVE_GENERATOR_VERSION } from "./build";
 import { exportGlb } from "./glb";
 import { resolveSurface, STYLE_PROFILE } from "./styleProfile";
 
@@ -23,14 +23,36 @@ const swatch = (hex: string) => `data:image/svg+xml;utf8,${encodeURIComponent(`<
 
 export const nativeAssetId = () => `native-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
-export async function stageNativeAsset(spec: unknown, planned: PlannedAsset, plan: Pick<AssetPlan, "id" | "needId" | "knowledgeId">, id: string = nativeAssetId()): Promise<{ ok: true; staged: StagedNative } | { ok: false; error: string }> {
+/** The parts of a planned asset staging reads. An upgrade has no planned asset any more, so it builds this from the approved asset. */
+export type StagedFrom = Pick<PlannedAsset, "id" | "name" | "category" | "tags" | "style" | "contexts" | "generationPrompt">;
+type PlanRef = Pick<AssetPlan, "id" | "needId" | "knowledgeId">;
+
+/**
+ * What staging needs to make an upgrade candidate of an approved native asset: its identity carried over (so the candidate
+ * shares `stableAssetId`) and nothing new. Undefined when the asset has no native lineage.
+ */
+export function upgradeStagingInputs(base: CuratedAsset): { planned: StagedFrom; plan: PlanRef } | null {
+  if (!base.stableAssetId || !base.family) return null;
+  return {
+    planned: { id: base.plannedAssetId ?? base.stableAssetId.replace(/^native:/, ""), name: base.name, category: base.family, tags: base.tags, style: base.styleTags ?? [], contexts: (base.contextTags ?? []) as StagedFrom["contexts"], generationPrompt: base.generationPrompt ?? base.name },
+    plan: { id: base.planId ?? "", knowledgeId: base.knowledgeIds?.[0] },
+  };
+}
+
+/**
+ * Stages a spec as a pending library candidate. With `upgradeOf`, the candidate is an upgrade of that approved asset: same
+ * `stableAssetId`, linked back to it by `upgradeOf`, and NO version yet: it is numbered only when approved, and the approved
+ * version is not touched here or by anything the candidate does before review.
+ */
+export async function stageNativeAsset(spec: unknown, planned: StagedFrom, plan: PlanRef, id: string = nativeAssetId(), options: { upgradeOf?: CuratedAsset } = {}): Promise<{ ok: true; staged: StagedNative } | { ok: false; error: string }> {
   const built = buildAsset(spec);
   if (!built.ok) return built;
   const { asset: model } = built;
   try {
     const ingest = await ingestGlb(id, exportGlb(model), { family: planned.category, expectedDimensions: model.spec.dimensions });
     const primary = resolveSurface(model.spec.materials[0]);
-    const hash = geometryHash(model);
+    // The whole asset, not just its mesh: a version that only changes the colours or the light is still a different asset.
+    const hash = assetHash(model);
     const asset: CuratedAsset = {
       id,
       sourceSlug: `native:${planned.id}:${hash}`,
@@ -49,12 +71,12 @@ export async function stageNativeAsset(spec: unknown, planned: PlannedAsset, pla
       styleTags: planned.style,
       contextTags: planned.contexts,
       // No needId: one asset of a pack must not mark the whole Need approved (the plan link below tracks progress).
-      planId: plan.id,
+      planId: plan.id || undefined,
       plannedAssetId: planned.id,
-      knowledgeIds: plan.knowledgeId ? [plan.knowledgeId] : undefined,
-      // Versioning foundation: stable across regenerations of this planned asset; version stays 1 until Upgrade exists.
-      stableAssetId: `native:${planned.id}`,
-      version: 1,
+      knowledgeIds: options.upgradeOf?.knowledgeIds ?? (plan.knowledgeId ? [plan.knowledgeId] : undefined),
+      // Stable across regenerations and upgrades of this asset. The version number is given on approval, never here.
+      stableAssetId: options.upgradeOf?.stableAssetId ?? `native:${planned.id}`,
+      ...(options.upgradeOf ? { upgradeOf: options.upgradeOf.id } : {}),
       generatorVersion: NATIVE_GENERATOR_VERSION,
       styleProfileVersion: STYLE_PROFILE.version,
       generationPrompt: planned.generationPrompt,

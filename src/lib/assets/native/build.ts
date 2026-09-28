@@ -2,7 +2,7 @@ import { BufferGeometry, Box3, Euler, Matrix4, Quaternion, Vector3 } from "three
 import { buildLadder, describePlan, effectiveDetail, estimateTriangles, thinParts, type BuildPlan } from "./budget";
 import { FAMILY_DEFAULTS } from "./families";
 import * as P from "./primitives";
-import { validateSpec, type AssetPart, type AssetSpec } from "./spec";
+import { validateSpec, type AssetLight, type AssetPart, type AssetSpec } from "./spec";
 import { resolveSurface, STYLE_PROFILE, type DetailLevel, type MaterialSlot, type ResolvedSurface } from "./styleProfile";
 
 /** Deterministic geometry from an AssetSpec. Same spec in, same triangles out: nothing here is random or model-driven. */
@@ -12,6 +12,9 @@ export interface BuiltMesh {
   geometry: BufferGeometry;
 }
 
+/** A scene light placed on the finished asset: `position` is in the asset's final grounded, centred frame (metres). */
+export type BuiltLight = Omit<AssetLight, "position"> & { position: [number, number, number] };
+
 export interface BuiltAsset {
   spec: AssetSpec;
   /** One merged mesh per material, grounded (base on y=0) and centred on the footprint. */
@@ -19,16 +22,19 @@ export interface BuiltAsset {
   /** Final size in metres (matches the spec's declared dimensions). */
   size: { width: number; depth: number; height: number };
   triangles: number;
+  /** Scene-light metadata, positioned (lamps and pendants only). Emissive materials are separate and live in `meshes`. */
+  light?: BuiltLight;
   /** The detail level actually used (drops a step only after slat density and small-part bevels have been spent). */
   detail: DetailLevel;
   /** Everything repaired or reduced on the way (spec repairs, family caps, budget reductions), for the review UI. */
   notes: string[];
 }
 
-export type BuildResult = { ok: true; asset: BuiltAsset } | { ok: false; error: string };
+/** `repairable`: the message names something the spec's author can change (see `SpecCheck`); a retry with it is worthwhile. */
+export type BuildResult = { ok: true; asset: BuiltAsset } | { ok: false; error: string; repairable: boolean };
 
 /** Bump when the prompt, spec schema or deterministic builders change in a way that makes old output distinguishable. */
-export const NATIVE_GENERATOR_VERSION = "native-2";
+export const NATIVE_GENERATOR_VERSION = "native-3";
 
 const DEG = Math.PI / 180;
 
@@ -66,6 +72,9 @@ function partGeometry(part: AssetPart, ctx: P.PrimitiveContext): BufferGeometry 
     case "box": return P.beveledBox(part.size, ctx, { ...opts, taper: part.taper });
     case "cylinder": return P.cylinder(part.radius, part.height, ctx, opts);
     case "taperedCylinder": return P.taperedCylinder(part.radiusBottom, part.radiusTop, part.height, ctx, opts);
+    case "sphere": return P.sphere(part.radius, ctx);
+    case "cone": return P.cone(part.radius, part.height, ctx, opts);
+    case "torus": return P.torus(part.radius, part.tubeRadius, ctx);
     case "roundedRect": return P.roundedRect(part.width, part.depth, part.height, part.cornerRadius, ctx, opts);
     case "tube": return P.tube(part.path, part.radius, ctx);
     case "cushion": return P.cushion(part.size, part.puff, ctx);
@@ -131,7 +140,7 @@ export function buildAsset(input: unknown): BuildResult {
     const parts = planParts(spec, plan);
     if (parts.length > STYLE_PROFILE.maxExpandedParts) {
       lastError = `Too many parts after mirror/repeat (${parts.length}; limit ${STYLE_PROFILE.maxExpandedParts}).`;
-      if (last) return { ok: false, error: lastError };
+      if (last) return { ok: false, error: lastError, repairable: true };
       continue;
     }
     const budget = STYLE_PROFILE.triangleBudget[plan.detail];
@@ -151,7 +160,7 @@ export function buildAsset(input: unknown): BuildResult {
     const { min, max } = STYLE_PROFILE.fitRatio;
     if (ratio.some((r) => !Number.isFinite(r) || r < min || r > max)) {
       meshes.forEach((m) => m.geometry.dispose());
-      return { ok: false, error: `The parts build to ${size.x.toFixed(2)}×${size.z.toFixed(2)}×${size.y.toFixed(2)} m, too far from the declared ${want.width}×${want.depth}×${want.height} m.` };
+      return { ok: false, repairable: true, error: `The parts build to ${size.x.toFixed(2)}×${size.z.toFixed(2)}×${size.y.toFixed(2)} m, too far from the declared ${want.width}×${want.depth}×${want.height} m.` };
     }
     const reduction = describePlan(plan, requested);
     if (reduction) notes.push(reduction);
@@ -167,9 +176,42 @@ export function buildAsset(input: unknown): BuildResult {
       m.geometry.applyMatrix4(ground);
       m.geometry.computeBoundingBox();
     }
-    return { ok: true, asset: { spec, meshes, size: { width: want.width, depth: want.depth, height: want.height }, triangles: Math.round(triangles), detail: plan.detail, notes } };
+    const light = spec.light ? placeLight(spec.light, meshes, want, center, ratio, notes) : undefined;
+    return { ok: true, asset: { spec, meshes, size: { width: want.width, depth: want.depth, height: want.height }, triangles: Math.round(triangles), ...(light ? { light } : {}), detail: plan.detail, notes } };
   }
-  return { ok: false, error: lastError };
+  return { ok: false, error: lastError, repairable: true };
+}
+
+const round4 = (n: number) => Math.round(n * 1e4) / 1e4;
+
+/**
+ * Puts the spec's light into the asset's final frame: the same transform the geometry got (centre, scale to the declared size,
+ * ground). A light with no position sits at the glowing part, else near the top; one placed far outside the asset is pulled
+ * back to within 15 cm of it, since a lamp's light belongs to the lamp.
+ */
+function placeLight(light: AssetLight, meshes: BuiltMesh[], want: AssetSpec["dimensions"], center: Vector3, ratio: number[], notes: string[]): BuiltLight {
+  const { position: at, ...rest } = light;
+  let position: Vector3;
+  if (at) {
+    position = new Vector3((at[0] - center.x) * ratio[0], (at[1] - center.y) * ratio[1] + want.height / 2, (at[2] - center.z) * ratio[2]);
+    const roomy = new Box3(new Vector3(-want.width / 2, 0, -want.depth / 2), new Vector3(want.width / 2, want.height, want.depth / 2)).expandByScalar(0.15);
+    const held = roomy.clampPoint(position, new Vector3());
+    if (!held.equals(position)) {
+      notes.push("Scene light moved back to within 15 cm of the asset.");
+      position = held;
+    }
+  } else {
+    const glow = new Box3();
+    for (const m of meshes) if (m.surface.emissive) glow.union(m.geometry.boundingBox!);
+    if (glow.isEmpty()) {
+      position = new Vector3(0, want.height * 0.9, 0);
+      notes.push("Scene light placed near the top of the asset (nothing glows to attach it to).");
+    } else {
+      position = glow.getCenter(new Vector3());
+      notes.push("Scene light placed at the glowing part.");
+    }
+  }
+  return { ...rest, position: [round4(position.x), round4(position.y), round4(position.z)] };
 }
 
 /** Order-independent-of-nothing stable fingerprint of the built geometry (1 mm quantised), for regression tests and change detection. */
@@ -181,6 +223,20 @@ export function geometryHash(asset: BuiltAsset): string {
       h ^= Math.round(pos.array[i] * 1000);
       h = Math.imul(h, 16777619);
     }
+  }
+  return (h >>> 0).toString(16);
+}
+
+/**
+ * Fingerprint of everything that makes a built asset look or behave differently: its geometry, its surfaces (colour, roughness,
+ * glow) and its scene light. `geometryHash` alone ignores the last two on purpose (a recolour keeps the same mesh), but two
+ * versions of an asset that differ only in colour or light are different assets to the library.
+ */
+export function assetHash(asset: BuiltAsset): string {
+  let h = 2166136261;
+  for (const ch of `${geometryHash(asset)}|${JSON.stringify(asset.meshes.map((m) => m.surface))}|${JSON.stringify(asset.light ?? null)}`) {
+    h ^= ch.charCodeAt(0);
+    h = Math.imul(h, 16777619);
   }
   return (h >>> 0).toString(16);
 }

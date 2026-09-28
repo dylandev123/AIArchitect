@@ -18,7 +18,14 @@ export async function GET(req: NextRequest) {
   const tz = Number(req.nextUrl.searchParams.get("tz"));
   const tzOffsetMinutes = Number.isFinite(tz) && Math.abs(tz) <= 14 * 60 ? tz : 0;
 
-  const records = await readUsageRecords();
+  let records;
+  try {
+    records = await readUsageRecords();
+  } catch (err) {
+    // Reported, not shown as "0 requests": an unreadable store is not an empty one.
+    console.error("[usage] read failed:", err);
+    return NextResponse.json({ error: "The usage store is unavailable." }, { status: 503 });
+  }
   return NextResponse.json({
     summary: summarizeUsage(records, new Date(), tzOffsetMinutes),
     recent: records.slice(-RECENT_LIMIT).reverse(),

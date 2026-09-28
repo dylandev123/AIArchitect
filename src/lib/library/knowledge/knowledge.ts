@@ -123,8 +123,11 @@ export interface KnowledgeProgress {
 const styleFits = (def: KnowledgeDefinition, tags: readonly string[] | undefined): boolean =>
   !def.styles || def.styles.length === 0 || !tags || tags.length === 0 || tags.some((t) => def.styles!.includes(t));
 
-/** An approved asset that could be used at all: a GLB must have a validated file behind it. */
-const usable = (a: CuratedAsset) => a.status === "approved" && a.scope !== "project" && (a.type !== "glb-model" || a.validation?.passed === true);
+/**
+ * An approved asset that could be used at all: a GLB must have a validated file behind it. An older version that a newer one
+ * replaced is not counted a second time (an upgrade is the same asset, not more coverage).
+ */
+const usable = (a: CuratedAsset) => a.status === "approved" && !a.supersededBy && a.scope !== "project" && (a.type !== "glb-model" || a.validation?.passed === true);
 
 export function knowledgeProgress(need: Pick<KnowledgeNeed, "id" | "assetIds" | "recipeIds">, facts: KnowledgeFacts): KnowledgeProgress {
   const def = knowledgeDefinition(need.id);

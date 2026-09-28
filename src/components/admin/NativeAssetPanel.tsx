@@ -33,6 +33,8 @@ export function NativeAssetPanel({ plan, asset, ensureSaved }: Props) {
   const [instruction, setInstruction] = useState("");
   const [staged, setStaged] = useState<StagedNative | null>(null);
   const [stageError, setStageError] = useState("");
+  /** The validation error the one automatic repair retry fixed for the current draft, if it took one. */
+  const [retried, setRetried] = useState("");
   const keep = useRef(false);
 
   // Stage (build → GLB → validate → store) whenever the spec changes. Replaced or abandoned stagings are deleted.
@@ -62,6 +64,7 @@ export function NativeAssetPanel({ plan, asset, ensureSaved }: Props) {
 
   const generate = async (text?: string) => {
     setError("");
+    setRetried("");
     setBusy(text ? "refine" : "generate");
     const planId = await ensureSaved();
     if (!planId) {
@@ -73,6 +76,7 @@ export function NativeAssetPanel({ plan, asset, ensureSaved }: Props) {
     if ("error" in result) return setError(result.error);
     if (result.kind === "external") return setError(`Not buildable natively — external generation recommended: ${result.reason}`);
     setInstruction("");
+    setRetried(result.stats.retry?.firstError ?? "");
   };
 
   const approveStaged = async () => {
@@ -132,6 +136,7 @@ export function NativeAssetPanel({ plan, asset, ensureSaved }: Props) {
       <p className="flex items-center gap-1.5 text-[11px] font-medium text-violet-300">
         <Sparkles size={12} /> Native draft — {asset.spec.family} · {asset.spec.parts.length} part specs · {asset.spec.materials.map((m) => m.key).join(", ")}
       </p>
+      {retried && <p className="text-[11px] text-neutral-500">The first attempt failed validation (“{retried}”), so it was retried once automatically and that fixed it.</p>}
       {stageError && <p className="text-[11px] text-red-400">Could not build a preview: {stageError}</p>}
       {!staged && !stageError && <div className="rounded-lg bg-white/[0.03] px-3 py-6 text-center text-[11px] text-neutral-500">Building preview…</div>}
       {staged && (

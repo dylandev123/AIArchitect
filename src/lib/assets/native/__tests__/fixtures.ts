@@ -74,3 +74,38 @@ export const counterModule: AssetSpec = {
 };
 
 export const SAMPLES = { deckChair, diningTable, modernPlanter, barStool, counterModule } as const;
+
+const iron = { key: "iron", material: "metal", color: "#2c2f33", roughness: 0.5 } as const;
+const bulb = { key: "bulb", material: "glass", color: "#ffe2a8", emissiveColor: "#ffcf7a", emissiveIntensity: 3 } as const;
+
+/** A lantern using the round primitives (sphere bulb, cone cap, torus rings) and a point light. */
+export const lantern: AssetSpec = {
+  family: "lamp", name: "Iron Garden Lantern", style: "rustic", bevel: 1, detailLevel: "medium",
+  dimensions: { width: 0.32, depth: 0.32, height: 0.56 },
+  materials: [iron, bulb],
+  parts: [
+    { primitive: "cylinder", role: "base", material: "iron", radius: 0.11, height: 0.03, position: [0, 0.015, 0] },
+    { primitive: "box", role: "frame-post", material: "iron", size: [0.02, 0.3, 0.02], position: [0.1, 0.19, 0.1], mirror: "xz" },
+    { primitive: "sphere", role: "bulb", material: "bulb", radius: 0.07, position: [0, 0.2, 0] },
+    { primitive: "torus", role: "upper-ring", material: "iron", radius: 0.12, tubeRadius: 0.012, position: [0, 0.35, 0] },
+    { primitive: "cone", role: "cap", material: "iron", radius: 0.16, height: 0.12, position: [0, 0.41, 0] },
+    { primitive: "torus", role: "handle", material: "iron", radius: 0.05, tubeRadius: 0.008, position: [0, 0.5, 0], rotation: [90, 0, 0] },
+  ],
+  light: { type: "point", color: "#ffcf7a", intensity: 8, range: 6, position: [0, 0.2, 0] },
+};
+
+/** A pole floodlight with a spot light aimed down. */
+export const floodlight: AssetSpec = {
+  family: "lamp", name: "Pole Floodlight", style: "modern", bevel: 1, detailLevel: "medium",
+  dimensions: { width: 0.2, depth: 0.2, height: 1.2 },
+  materials: [iron, { key: "lens", material: "glass", color: "#fff4d6", emissiveColor: "#fff1c9", emissiveIntensity: 3 }],
+  parts: [
+    { primitive: "cylinder", role: "base", material: "iron", radius: 0.09, height: 0.03, position: [0, 0.015, 0] },
+    { primitive: "cylinder", role: "pole", material: "iron", radius: 0.018, height: 1.05, position: [0, 0.55, 0] },
+    { primitive: "box", role: "head", material: "iron", size: [0.18, 0.1, 0.16], position: [0, 1.13, 0] },
+    { primitive: "sphere", role: "lens", material: "lens", radius: 0.045, position: [0, 1.07, 0.02] },
+  ],
+  light: { type: "spot", color: "#fff1c9", intensity: 30, range: 8, position: [0, 1.06, 0.02], coneAngle: 50, direction: "down" },
+};
+
+export const LIGHT_SAMPLES = { lantern, floodlight } as const;

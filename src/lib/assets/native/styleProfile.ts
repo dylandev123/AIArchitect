@@ -38,6 +38,12 @@ export const STYLE_PROFILE = {
   /** Nothing thinner than this (m): paper-thin parts shimmer and vanish at distance. */
   minPartThickness: 0.012,
   emissiveIntensity: { min: 0, max: 8 },
+  /**
+   * Scene-light metadata (a light asset that also illuminates its surroundings). Intensity is candela at three's physical
+   * units (a candle ≈ 1, a lantern ≈ 8, a floodlight ≈ 40); range is the distance (m) beyond which the light contributes
+   * nothing, which is what keeps a site with dozens of lamps affordable. `penumbra` softens a spot's edge (fixed: one look).
+   */
+  light: { intensity: { min: 0.5, max: 60 }, range: { min: 0.5, max: 25 }, coneAngle: { min: 15, max: 120 }, defaultConeAngle: 60, penumbra: 0.35 },
   /** A built asset may be rescaled to its declared size within these ratios; further off means the spec is wrong. */
   fitRatio: { min: 0.6, max: 1.6 },
   maxParts: 48,

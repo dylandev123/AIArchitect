@@ -1,5 +1,6 @@
-import { Color } from "three";
-import type { BuiltAsset } from "./build";
+import { Color, Quaternion, Vector3 } from "three";
+import type { BuiltAsset, BuiltLight } from "./build";
+import { STYLE_PROFILE } from "./styleProfile";
 
 /**
  * Minimal glTF 2.0 binary writer for a BuiltAsset: one mesh per material, PBR metallic-roughness materials (named by
@@ -8,6 +9,26 @@ import type { BuiltAsset } from "./build";
  */
 
 const pad4 = (n: number) => (n + 3) & ~3;
+
+const DIRECTION: Record<NonNullable<BuiltLight["direction"]>, [number, number, number]> = { down: [0, -1, 0], up: [0, 1, 0], forward: [0, 0, 1], back: [0, 0, -1], left: [-1, 0, 0], right: [1, 0, 0] };
+const round6 = (n: number) => Math.round(n * 1e6) / 1e6;
+
+/**
+ * The glTF punctual light for a BuiltLight (KHR_lights_punctual): intensity in candela, `range` in metres, colour linear. glTF
+ * lights shine down their node's -Z, so a spot's node is rotated to face its `direction`. A point light needs no rotation.
+ */
+function lightExport(light: BuiltLight, name: string) {
+  const c = new Color(light.color);
+  const def: Record<string, unknown> = { name, type: light.type, color: [round6(c.r), round6(c.g), round6(c.b)], intensity: light.intensity, range: light.range };
+  const node: Record<string, unknown> = { name, translation: light.position };
+  if (light.type === "spot") {
+    const outer = ((light.coneAngle ?? STYLE_PROFILE.light.defaultConeAngle) / 2) * (Math.PI / 180);
+    def.spot = { innerConeAngle: round6(outer * (1 - STYLE_PROFILE.light.penumbra)), outerConeAngle: round6(outer) };
+    const q = new Quaternion().setFromUnitVectors(new Vector3(0, 0, -1), new Vector3(...DIRECTION[light.direction ?? "down"]));
+    node.rotation = [round6(q.x), round6(q.y), round6(q.z), round6(q.w)];
+  }
+  return { def, node };
+}
 
 export function exportGlb(asset: BuiltAsset): ArrayBuffer {
   const bufferViews: object[] = [];
@@ -59,12 +80,20 @@ export function exportGlb(asset: BuiltAsset): ArrayBuffer {
     return { attributes };
   });
 
+  // A scene light is one extra child node carrying the light; it adds no geometry, so grounding and size checks are unaffected.
+  const light = asset.light ? lightExport(asset.light, "scene-light") : null;
+  const extensionsUsed = [...(usesEmissiveStrength ? ["KHR_materials_emissive_strength"] : []), ...(light ? ["KHR_lights_punctual"] : [])];
   const json = {
     asset: { version: "2.0", generator: "AI Architect native asset generator" },
-    ...(usesEmissiveStrength ? { extensionsUsed: ["KHR_materials_emissive_strength"] } : {}),
+    ...(extensionsUsed.length ? { extensionsUsed } : {}),
+    ...(light ? { extensions: { KHR_lights_punctual: { lights: [light.def] } } } : {}),
     scene: 0,
     scenes: [{ nodes: [0] }],
-    nodes: [{ name: asset.spec.name ?? asset.spec.family, children: meshes.map((_, i) => i + 1) }, ...meshes.map((_, i) => ({ name: asset.meshes[i].surface.key, mesh: i }))],
+    nodes: [
+      { name: asset.spec.name ?? asset.spec.family, children: [...meshes.map((_, i) => i + 1), ...(light ? [meshes.length + 1] : [])] },
+      ...meshes.map((_, i) => ({ name: asset.meshes[i].surface.key, mesh: i })),
+      ...(light ? [{ ...light.node, extensions: { KHR_lights_punctual: { light: 0 } } }] : []),
+    ],
     meshes: meshes.map((m, i) => ({ name: asset.meshes[i].surface.key, primitives: [{ ...m, material: i, mode: 4 }] })),
     materials,
     accessors,

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText, NoObjectGeneratedError, Output } from "ai";
+import { NoObjectGeneratedError } from "ai";
 import { z } from "zod";
 import { isAdminRequest } from "@/lib/admin/auth";
-import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
-import { withUsageLogging } from "@/lib/ai/usage/track";
-import { generateNativeSpec, specOutputSchema } from "@/lib/library/nativeAi";
+import { AI_NOT_CONFIGURED_MESSAGE, isAiConfigured } from "@/lib/ai/model";
+import { generateNativeSpec } from "@/lib/library/nativeAi";
+import { callNativeModel } from "@/lib/library/nativeModel";
 
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
@@ -18,7 +18,8 @@ const bodySchema = z.object({
 
 /**
  * Native Generate / Regenerate / Refine for ONE planned asset: the AI returns an AssetSpec, it is validated and built
- * deterministically, then stored on that asset for review. Usage is logged as "native_asset". Other assets are untouched.
+ * deterministically, then stored on that asset for review. Usage is logged as "native_asset"; the one automatic repair retry
+ * (see `generateSpecWithRepair`) is logged separately as "native_asset_retry". Other assets are untouched.
  */
 export async function POST(req: NextRequest) {
   if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -27,24 +28,7 @@ export async function POST(req: NextRequest) {
   if (!body.success) return NextResponse.json({ error: "planId and plannedAssetId are required" }, { status: 400 });
 
   try {
-    const result = await generateNativeSpec(
-      body.data.planId,
-      body.data.plannedAssetId,
-      async ({ system, prompt }) => {
-        const { output } = await withUsageLogging({ projectId: null, requestType: "native_asset", scope: "component", model: getAiModelId() }, () =>
-          generateText({
-            model: getAiModel(),
-            maxOutputTokens: 6000,
-            system,
-            messages: [{ role: "user", content: prompt }],
-            output: Output.object({ schema: specOutputSchema }),
-            providerOptions: AI_PROVIDER_OPTIONS,
-          })
-        );
-        return output;
-      },
-      { instruction: body.data.instruction }
-    );
+    const result = await generateNativeSpec(body.data.planId, body.data.plannedAssetId, callNativeModel, { instruction: body.data.instruction });
     if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status });
     return NextResponse.json(result.kind === "spec" ? { kind: "spec", spec: result.spec, stats: result.stats } : { kind: "external", reason: result.reason });
   } catch (err) {

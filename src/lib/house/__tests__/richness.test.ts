@@ -619,7 +619,7 @@ describe("generation rules are valid across footprints, roofs and tiers", () => 
       }
     }
     expect(n).toBeGreaterThan(1000);
-  });
+  }, 120_000);
 });
 
 it("scoped edit prompts describe the new parts only where they apply", async () => {

@@ -8,6 +8,9 @@ export const NATIVE_FAMILIES = [
 ] as const;
 export type NativeFamily = (typeof NATIVE_FAMILIES)[number];
 
+/** Families that may carry scene-light metadata. Emissive materials work on any family; only these are light *fixtures*. */
+export const LIGHT_FAMILIES: readonly NativeFamily[] = ["lamp", "pendant-light"];
+
 /** Realistic overall size range per family, metres: the declared dimensions must sit inside it. */
 export const FAMILY_LIMITS: Record<NativeFamily, { width: [number, number]; depth: [number, number]; height: [number, number] }> = {
   "deck-chair": { width: [0.5, 1.0], depth: [0.6, 1.9], height: [0.6, 1.3] },

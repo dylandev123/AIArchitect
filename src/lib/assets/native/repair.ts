@@ -1,14 +1,16 @@
 import { Color } from "three";
 import { MATERIAL_TYPES } from "@/lib/house/materials";
-import { FAMILY_LIMITS, FAMILY_SIBLINGS, NATIVE_FAMILIES, type NativeFamily } from "./families";
+import { FAMILY_LIMITS, FAMILY_SIBLINGS, LIGHT_FAMILIES, NATIVE_FAMILIES, type NativeFamily } from "./families";
 import { DETAIL_LEVELS, STYLE_PROFILE } from "./styleProfile";
 
 /**
  * Spec repair: the difference between "the model formatted something oddly" and "this asset cannot be built".
  *
- * HARD FAILURES (returned as errors, never guessed at): not an object, non-finite numbers, unknown family or primitive,
+ * REJECTIONS (returned as errors, never guessed at): not an object, non-finite numbers, unknown family or primitive,
  * unknown material, a part that references a material that is not a slot, missing or non-positive dimensions, unusable
- * positions or paths, too many parts. These make geometry impossible or unsafe.
+ * positions or paths, too many parts. These make geometry impossible or unsafe. Each carries `repairable`: true when the
+ * message tells the model exactly what to change (the one automatic retry in `nativeAi.ts` sends it back); false for garbage
+ * (not an object, non-finite numbers) and for a family the generator does not build, where a retry would only guess.
  *
  * AUTO-REPAIR (fixed and reported in `notes`): over-long or untidy labels, a long `style` sentence, colours written as
  * #rgb / rgb() / a CSS name, material synonyms ("fabric", "rattan"), out-of-range rotations, bevels and puff, mirror/axis
@@ -20,11 +22,16 @@ import { DETAIL_LEVELS, STYLE_PROFILE } from "./styleProfile";
  */
 
 type Rec = Record<string, unknown>;
-export type Repair = { ok: true; spec: unknown; notes: string[] } | { ok: false; error: string };
+export type Repair = { ok: true; spec: unknown; notes: string[] } | { ok: false; error: string; repairable: boolean };
 
-class Hard extends Error {}
-const hard = (message: string): never => {
-  throw new Hard(message);
+class Rejected extends Error {
+  constructor(message: string, readonly repairable: boolean) {
+    super(message);
+  }
+}
+/** Stops repair with the exact reason. `repairable` (the default): the model can fix it from the message; false: garbage or out of scope. */
+const reject = (message: string, repairable = true): never => {
+  throw new Rejected(message, repairable);
 };
 
 const isRec = (v: unknown): v is Rec => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -102,12 +109,15 @@ function tidyLabel(v: unknown, max: number): string | undefined {
 }
 
 const PRIMITIVE_ALIASES: Record<string, string> = {
-  "rounded-rect": "roundedRect", roundedrect: "roundedRect", "rounded-rectangle": "roundedRect", "tapered-cylinder": "taperedCylinder", taperedcylinder: "taperedCylinder", cone: "taperedCylinder", frustum: "taperedCylinder",
+  "rounded-rect": "roundedRect", roundedrect: "roundedRect", "rounded-rectangle": "roundedRect", "tapered-cylinder": "taperedCylinder", taperedcylinder: "taperedCylinder", frustum: "taperedCylinder",
+  ball: "sphere", orb: "sphere", globe: "sphere", bulb: "sphere", ellipsoid: "sphere", "tube-ring": "torus", ring: "torus", donut: "torus", doughnut: "torus", hoop: "torus", "torus-ring": "torus",
   "slat-array": "slatArray", slatarray: "slatArray", slats: "slatArray", "curved-surface": "curvedSurface", curvedsurface: "curvedSurface", curved: "curvedSurface", shell: "curvedSurface",
   cube: "box", block: "box", pillow: "cushion", pad: "cushion", rod: "tube", pipe: "tube", cable: "tube", cord: "tube",
   weave: "lattice", woven: "lattice", wicker: "lattice", rattan: "lattice", mesh: "lattice", grid: "lattice", latticework: "lattice", basket: "lattice",
 };
-const PRIMITIVES = new Set(["box", "cylinder", "taperedCylinder", "roundedRect", "tube", "cushion", "panel", "slatArray", "curvedSurface", "lattice"]);
+const PRIMITIVES = new Set(["box", "cylinder", "taperedCylinder", "sphere", "cone", "torus", "roundedRect", "tube", "cushion", "panel", "slatArray", "curvedSurface", "lattice"]);
+
+const LIGHT_DIRECTION_LIST: readonly string[] = ["down", "up", "forward", "back", "left", "right"];
 
 const wrapDegrees = (d: number) => (((d % 360) + 540) % 360) - 180;
 
@@ -116,15 +126,15 @@ export function repairSpec(input: unknown): Repair {
   try {
     return run(input);
   } catch (err) {
-    if (err instanceof Hard) return { ok: false, error: err.message };
+    if (err instanceof Rejected) return { ok: false, error: err.message, repairable: err.repairable };
     throw err;
   }
 }
 
 function run(input: unknown): Repair {
-  if (!isRec(input)) return hard("Invalid asset spec (spec: expected an object).");
+  if (!isRec(input)) return reject("Invalid asset spec (spec: expected an object).", false);
   const nonFinite = findNonFinite(input);
-  if (nonFinite) return hard(`Invalid asset spec (${nonFinite}: not a finite number).`);
+  if (nonFinite) return reject(`Invalid asset spec (${nonFinite}: not a finite number).`, false);
 
   const notes: string[] = [];
   const note = (m: string) => {
@@ -134,14 +144,14 @@ function run(input: unknown): Repair {
   // ── Family and size ──
   const rawFamily = typeof input.family === "string" ? slug(input.family) : "";
   let family = (NATIVE_FAMILIES as readonly string[]).includes(rawFamily) ? (rawFamily as NativeFamily) : FAMILY_ALIASES[rawFamily];
-  if (!family) return hard(`Invalid asset spec (family: unknown family "${String(input.family).slice(0, 40)}").`);
+  if (!family) return reject(`Invalid asset spec (family: unknown family "${String(input.family).slice(0, 40)}").`, false);
   if (family !== input.family) note(`Family "${String(input.family).slice(0, 40)}" read as "${family}".`);
 
   const d = isRec(input.dimensions) ? input.dimensions : {};
   const dimensions = { width: num(d.width) ?? NaN, depth: num(d.depth) ?? NaN, height: num(d.height) ?? NaN };
   for (const axis of ["width", "depth", "height"] as const) {
-    if (!(dimensions[axis] > 0)) return hard(`Invalid asset spec (dimensions.${axis}: must be a positive number of metres).`);
-    if (dimensions[axis] > 8) return hard(`Invalid asset spec (dimensions.${axis}: ${dimensions[axis]} m is too large for a prop).`);
+    if (!(dimensions[axis] > 0)) return reject(`Invalid asset spec (dimensions.${axis}: must be a positive number of metres).`);
+    if (dimensions[axis] > 8) return reject(`Invalid asset spec (dimensions.${axis}: ${dimensions[axis]} m is too large for a prop).`);
   }
   // The stated family if the size fits, else a sibling it fits (a 2 m "deck chair" is a lounger), else clamp a small excess.
   const fits = (f: NativeFamily, tol: number) => (["width", "depth", "height"] as const).every((a) => {
@@ -168,24 +178,24 @@ function run(input: unknown): Repair {
       // Report the first offending axis of the stated family, as the strict check always did.
       for (const a of ["width", "depth", "height"] as const) {
         const [lo, hi] = FAMILY_LIMITS[family][a];
-        if (dimensions[a] < lo || dimensions[a] > hi) return hard(`${family} ${a} of ${dimensions[a]} m is outside the realistic ${lo}–${hi} m.`);
+        if (dimensions[a] < lo || dimensions[a] > hi) return reject(`${family} ${a} of ${dimensions[a]} m is outside the realistic ${lo}–${hi} m.`);
       }
     }
   }
 
   // ── Materials ──
-  if (!Array.isArray(input.materials) || input.materials.length === 0) return hard("Invalid asset spec (materials: at least one material is required).");
+  if (!Array.isArray(input.materials) || input.materials.length === 0) return reject("Invalid asset spec (materials: at least one material is required).");
   let materials = input.materials.map((raw, i) => {
-    if (!isRec(raw)) return hard(`Invalid asset spec (materials.${i}: expected an object).`);
+    if (!isRec(raw)) return reject(`Invalid asset spec (materials.${i}: expected an object).`);
     const key = tidyLabel(raw.key, 30);
-    if (!key) return hard(`Invalid asset spec (materials.${i}.key: required).`);
+    if (!key) return reject(`Invalid asset spec (materials.${i}.key: required).`);
     if (key !== raw.key) note("Material keys tidied.");
     const named = typeof raw.material === "string" ? slug(raw.material) : "";
     const material = (MATERIAL_TYPES as readonly string[]).includes(named) ? named : MATERIAL_ALIASES[named];
-    if (!material) return hard(`Invalid asset spec (materials.${i}.material: unknown material "${String(raw.material).slice(0, 30)}").`);
+    if (!material) return reject(`Invalid asset spec (materials.${i}.material: unknown material "${String(raw.material).slice(0, 30)}").`);
     if (material !== raw.material) note(`Material "${String(raw.material).slice(0, 30)}" read as "${material}".`);
     const color = normalizeHex(raw.color);
-    if (!color) return hard(`Invalid asset spec (materials.${i}.color: must be a 6-digit hex colour).`);
+    if (!color) return reject(`Invalid asset spec (materials.${i}.color: must be a 6-digit hex colour).`);
     if (color !== raw.color) note("Colours normalised to #rrggbb.");
     const slot: Rec = { key, material, color };
     for (const f of ["roughness", "metalness"] as const) {
@@ -216,11 +226,12 @@ function run(input: unknown): Repair {
   for (const [type, keys] of byType) if (keys.length === 1 && !slotKey.has(type)) slotKey.set(type, keys[0]);
 
   // ── Parts ──
-  if (!Array.isArray(input.parts)) return hard("Invalid asset spec (parts: expected a list).");
-  if (input.parts.length > STYLE_PROFILE.maxParts) return hard(`Too many parts (${input.parts.length}; limit ${STYLE_PROFILE.maxParts}). Use mirror and repeat.`);
+  if (!Array.isArray(input.parts)) return reject("Invalid asset spec (parts: expected a list).");
+  if (input.parts.length > STYLE_PROFILE.maxParts) return reject(`Too many parts (${input.parts.length}; limit ${STYLE_PROFILE.maxParts}). Use mirror and repeat.`);
   const parts = input.parts.map((raw, i) => repairPart(raw, i, slotKey, note));
 
   if (family === "lamp" || family === "pendant-light") addGlowIfMissing(materials, parts, note);
+  const light = repairLight(input.light, family, materials, note);
 
   // More than the schema's slot limit: unused slots are the harmless surplus.
   if (materials.length > 8) {
@@ -250,6 +261,7 @@ function run(input: unknown): Repair {
       style: style && style.length >= 2 ? style : family,
       materials,
       parts,
+      ...(light ? { light } : {}),
       bevel: clamp(bevel ?? 1, STYLE_PROFILE.bevel.multiplier.min, STYLE_PROFILE.bevel.multiplier.max),
       detailLevel: (DETAIL_LEVELS as readonly string[]).includes(detail ?? "") ? detail : "medium",
       ...(target !== undefined && target >= 200 && target <= STYLE_PROFILE.triangleBudget.high ? { targetTriangles: Math.round(target) } : {}),
@@ -279,22 +291,78 @@ function addGlowIfMissing(materials: Rec[], parts: Rec[], note: (m: string) => v
   note(`"${String(source.key)}" is the light source, so it was made to glow.`);
 }
 
+const LIGHT_DIRECTION_ALIASES: Record<string, string> = { downward: "down", downwards: "down", floor: "down", ground: "down", upward: "up", upwards: "up", ceiling: "up", front: "forward", "+z": "forward", rear: "back", backward: "back", "-z": "back", "-x": "left", "+x": "right" };
+const SPOT_NAMES = new Set(["spotlight", "spot-light", "spot_light", "beam", "downlight", "uplight", "floodlight", "flood"]);
+
+/**
+ * Scene-light metadata is optional and never blocks a build: a light that cannot be read is dropped (the asset still glows
+ * through its emissive slots) and every value that is missing or out of range is defaulted or clamped, all reported in the notes.
+ */
+function repairLight(raw: unknown, family: NativeFamily, materials: Rec[], note: (m: string) => void): Rec | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  if (!(LIGHT_FAMILIES as readonly string[]).includes(family)) {
+    note(`Scene light dropped: only lamps and pendants carry one, not a ${family}.`);
+    return undefined;
+  }
+  if (!isRec(raw)) {
+    note("An unreadable scene light was dropped.");
+    return undefined;
+  }
+  const L = STYLE_PROFILE.light;
+  const named = typeof raw.type === "string" ? raw.type.trim().toLowerCase() : "";
+  const type = named === "spot" || SPOT_NAMES.has(named) ? "spot" : "point";
+  if (named !== type) note(named ? `Scene light type "${named.slice(0, 20)}" read as ${type}.` : "Scene light type defaulted to point.");
+
+  const fromSlot = materials.find((m) => typeof m.emissiveColor === "string")?.emissiveColor as string | undefined;
+  const color = normalizeHex(raw.color) ?? fromSlot ?? "#ffd27a";
+  if (color !== raw.color) note(normalizeHex(raw.color) ? "Scene light colour normalised to #rrggbb." : "Scene light colour taken from the glowing material.");
+
+  const bounded = (label: string, v: number | undefined, fallback: number, lo: number, hi: number) => {
+    if (v === undefined) {
+      note(`Scene light ${label} defaulted to ${fallback}.`);
+      return fallback;
+    }
+    const c = clamp(v, lo, hi);
+    if (c !== v) note(`Scene light ${label} brought into ${lo}–${hi}.`);
+    return c;
+  };
+  const out: Rec = {
+    type,
+    color,
+    intensity: bounded("intensity", num(raw.intensity), type === "spot" ? 20 : 8, L.intensity.min, L.intensity.max),
+    range: bounded("range", num(raw.range), type === "spot" ? 10 : 6, L.range.min, L.range.max),
+  };
+  if (raw.position !== undefined && raw.position !== null) {
+    const position = vec(raw.position, 3);
+    if (position) out.position = position;
+    else note("An unreadable scene light position was dropped (the light sits at the glowing part).");
+  }
+  if (type === "spot") {
+    out.coneAngle = bounded("cone angle", num(raw.coneAngle), L.defaultConeAngle, L.coneAngle.min, L.coneAngle.max);
+    const dir = typeof raw.direction === "string" ? raw.direction.trim().toLowerCase() : "";
+    const direction = LIGHT_DIRECTION_LIST.includes(dir) ? dir : LIGHT_DIRECTION_ALIASES[dir] ?? "down";
+    if (direction !== raw.direction) note(dir ? `Spot direction "${dir.slice(0, 12)}" read as ${direction}.` : "Spot direction defaulted to down.");
+    out.direction = direction;
+  } else if (raw.coneAngle != null || raw.direction != null) note("Cone settings were ignored: a point light shines all around.");
+  return out;
+}
+
 function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note: (m: string) => void): Rec {
-  if (!isRec(raw)) return hard(`Invalid asset spec (parts.${i}: expected an object).`);
+  if (!isRec(raw)) return reject(`Invalid asset spec (parts.${i}: expected an object).`);
   const named = typeof raw.primitive === "string" ? raw.primitive.trim() : "";
   const primitive = PRIMITIVES.has(named) ? named : PRIMITIVE_ALIASES[slug(named)] ?? PRIMITIVE_ALIASES[named.toLowerCase()];
-  if (!primitive || !PRIMITIVES.has(primitive)) return hard(`Invalid asset spec (parts.${i}.primitive: unknown primitive "${named.slice(0, 30)}").`);
+  if (!primitive || !PRIMITIVES.has(primitive)) return reject(`Invalid asset spec (parts.${i}.primitive: unknown primitive "${named.slice(0, 30)}").`);
   if (primitive !== raw.primitive) note(`Primitive "${named.slice(0, 30)}" read as "${primitive}".`);
 
   const role = tidyLabel(raw.role, 40) || primitive;
   if (role !== raw.role) note("Part role labels tidied.");
   const matName = typeof raw.material === "string" ? raw.material.trim() : "";
   const material = slotKey.get(matName) ?? slotKey.get(matName.toLowerCase()) ?? slotKey.get(matName.slice(0, 30));
-  if (!material) return hard(`Part "${role}" uses unknown material "${matName.slice(0, 30)}".`);
+  if (!material) return reject(`Part "${role}" uses unknown material "${matName.slice(0, 30)}".`);
   if (material !== raw.material) note("Part material references matched to their slots (case, spacing, or a material type with one slot).");
 
   const position = vec(raw.position, 3);
-  if (!position) return hard(`Invalid asset spec (parts.${i}.position: expected [x, y, z] in metres).`);
+  if (!position) return reject(`Invalid asset spec (parts.${i}.position: expected [x, y, z] in metres).`);
   const base: Rec = { primitive, role, material, position };
 
   const rot = raw.rotation === undefined || raw.rotation === null ? undefined : vec(raw.rotation, 3, 0);
@@ -329,7 +397,7 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
   }
 
   const positive = (label: string, v: number | undefined): number => {
-    if (v === undefined || !(v > 0)) return hard(`Part "${role}": ${label} must be a positive number of metres.`);
+    if (v === undefined || !(v > 0)) return reject(`Part "${role}": ${label} must be a positive number of metres.`);
     return v;
   };
   const floor = (v: number, min = MIN) => {
@@ -341,7 +409,7 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
     const s = vec(raw.size, 3);
     const alt = [num(raw.width), num(raw.height), num(raw.depth) ?? num(raw.thickness)];
     const size = s ?? (alt.every((v) => v !== undefined) ? (alt as number[]) : undefined);
-    if (!size) return hard(`Invalid asset spec (parts.${i}.size: expected [w, h, d]).`);
+    if (!size) return reject(`Invalid asset spec (parts.${i}.size: expected [w, h, d]).`);
     if (!s) note("Sizes given as width/height/depth were read as a size list.");
     return size.map((v, k) => floor(positive(`size[${k}]`, v)));
   };
@@ -369,6 +437,32 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
       const rt = num(raw.radiusTop) ?? num(raw.radius) ?? rb;
       return { ...base, radiusBottom: floor(positive("radiusBottom", rb), MIN / 2), radiusTop: floor(positive("radiusTop", rt), MIN / 2), height: floor(positive("height", num(raw.height))) };
     }
+    case "sphere": {
+      const s = vec(raw.size, 3);
+      const radius = num(raw.radius) ?? (num(raw.diameter) !== undefined ? num(raw.diameter)! / 2 : undefined) ?? (num(raw.width) !== undefined ? num(raw.width)! / 2 : undefined) ?? (s ? s[0] / 2 : undefined);
+      if (s && s.some((v) => Math.abs(v - s[0]) > 1e-6)) note("A sphere is round: an uneven size was read as its first (width) value.");
+      return { ...base, radius: floor(positive("radius", radius), MIN / 2) };
+    }
+    case "cone": {
+      // A cone that also gives a top radius is a frustum: build it as one rather than dropping the top.
+      const top = num(raw.radiusTop);
+      if (top !== undefined && top > 0) {
+        note("A cone with a top radius was read as a tapered cylinder.");
+        const bottom = num(raw.radiusBottom) ?? num(raw.radius);
+        return { ...base, primitive: "taperedCylinder", radiusBottom: floor(positive("radiusBottom", bottom), MIN / 2), radiusTop: floor(top, MIN / 2), height: floor(positive("height", num(raw.height))) };
+      }
+      const s = vec(raw.size, 3);
+      const radius = num(raw.radius) ?? num(raw.radiusBottom) ?? (num(raw.diameter) !== undefined ? num(raw.diameter)! / 2 : undefined) ?? (num(raw.width) !== undefined ? num(raw.width)! / 2 : undefined) ?? (s ? s[0] / 2 : undefined);
+      return { ...base, radius: floor(positive("radius", radius), MIN / 2), height: floor(positive("height", num(raw.height) ?? s?.[1])) };
+    }
+    case "torus": {
+      const radius = positive("radius", num(raw.radius) ?? (num(raw.diameter) !== undefined ? num(raw.diameter)! / 2 : undefined));
+      const tube = floor(positive("tubeRadius", num(raw.tubeRadius) ?? (num(raw.thickness) !== undefined ? num(raw.thickness)! / 2 : undefined) ?? (num(raw.tube) !== undefined ? num(raw.tube) : undefined)), MIN / 2);
+      // A tube as fat as the ring closes the hole and self-intersects: keep a visible opening.
+      const tubeRadius = Math.min(tube, radius * 0.9);
+      if (tubeRadius !== tube) note("A torus tube as thick as its ring was thinned so the ring keeps an opening.");
+      return { ...base, radius, tubeRadius };
+    }
     case "roundedRect": {
       const s = vec(raw.size, 3);
       const width = floor(positive("width", num(raw.width) ?? s?.[0]));
@@ -380,9 +474,9 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
       return { ...base, width, depth, height, cornerRadius };
     }
     case "tube": {
-      if (!Array.isArray(raw.path)) return hard(`Part "${role}": a tube needs a path of 2-12 points.`);
+      if (!Array.isArray(raw.path)) return reject(`Part "${role}": a tube needs a path of 2-12 points.`);
       let path = raw.path.map((p) => vec(p, 3));
-      if (path.some((p) => !p) || path.length < 2) return hard(`Part "${role}": a tube path needs at least two [x, y, z] points.`);
+      if (path.some((p) => !p) || path.length < 2) return reject(`Part "${role}": a tube path needs at least two [x, y, z] points.`);
       if (path.length > 12) {
         path = Array.from({ length: 12 }, (_, k) => path[Math.round((k * (path.length - 1)) / 11)]);
         note("Long tube paths were thinned to 12 points.");
@@ -393,11 +487,11 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
     }
     case "slatArray": {
       const slatSize = vec(raw.slatSize, 3) ?? vec(raw.size, 3);
-      if (!slatSize) return hard(`Invalid asset spec (parts.${i}.slatSize: expected [w, h, d]).`);
+      if (!slatSize) return reject(`Invalid asset spec (parts.${i}.slatSize: expected [w, h, d]).`);
       const axis = typeof raw.axis === "string" ? raw.axis.trim().toLowerCase() : "";
-      if (axis !== "x" && axis !== "y" && axis !== "z") return hard(`Invalid asset spec (parts.${i}.axis: expected "x", "y" or "z").`);
+      if (axis !== "x" && axis !== "y" && axis !== "z") return reject(`Invalid asset spec (parts.${i}.axis: expected "x", "y" or "z").`);
       const count = Math.round(num(raw.count) ?? 0);
-      if (count < 2) return hard(`Part "${role}": a slat array needs at least 2 slats (use a box for one).`);
+      if (count < 2) return reject(`Part "${role}": a slat array needs at least 2 slats (use a box for one).`);
       if (count > 24) note("Slat counts capped at 24.");
       const gap = num(raw.gap);
       return { ...base, count: Math.min(24, count), slatSize: slatSize.map((v, k) => floor(positive(`slatSize[${k}]`, v))), gap: clamp(gap ?? 0.02, 0, 1), axis };
@@ -411,7 +505,7 @@ function repairPart(raw: unknown, i: number, slotKey: Map<string, string>, note:
     case "lattice":
       return { ...base, ...repairLattice(raw, role, positive, floor, note) };
   }
-  return hard(`Invalid asset spec (parts.${i}.primitive: unknown primitive "${primitive}").`);
+  return reject(`Invalid asset spec (parts.${i}.primitive: unknown primitive "${primitive}").`);
 }
 
 function repairLattice(raw: Rec, role: string, positive: (l: string, v: number | undefined) => number, floor: (v: number, min?: number) => number, note: (m: string) => void): Rec {

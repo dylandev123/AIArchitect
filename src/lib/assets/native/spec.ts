@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { AssetRoute } from "@/types/library";
 import { MATERIAL_TYPES } from "@/lib/house/materials";
-import { FAMILY_LIMITS, NATIVE_FAMILIES } from "./families";
+import { FAMILY_LIMITS, LIGHT_FAMILIES, NATIVE_FAMILIES } from "./families";
 import { repairSpec } from "./repair";
 import { DETAIL_LEVELS, STYLE_PROFILE } from "./styleProfile";
 
@@ -12,7 +12,7 @@ import { DETAIL_LEVELS, STYLE_PROFILE } from "./styleProfile";
  * finished model, so the origin only needs to be consistent).
  */
 
-export { FAMILY_LIMITS, NATIVE_FAMILIES, type NativeFamily } from "./families";
+export { FAMILY_LIMITS, LIGHT_FAMILIES, NATIVE_FAMILIES, type NativeFamily } from "./families";
 
 const num = z.number().finite();
 const positive = z.number().finite().positive().max(8);
@@ -42,6 +42,13 @@ export const partSchema = z.discriminatedUnion("primitive", [
   z.object({ primitive: z.literal("taperedCylinder"), ...common, radiusBottom: positive, radiusTop: positive, height: positive }),
   /** Rounded rectangle plate/block, extruded upward. */
   z.object({ primitive: z.literal("roundedRect"), ...common, width: positive, depth: positive, height: positive, cornerRadius: z.number().min(0).max(4) }),
+  /** Smooth ball (bulb, finial, knob, orb). Cheap and round: `radius` only. */
+  z.object({ primitive: z.literal("sphere"), ...common, radius: positive }),
+  /** Cone, base down, apex up (lamp caps, pointed roofs, finials); the base rim is beveled. Rotate 180° about x for a funnel. */
+  z.object({ primitive: z.literal("cone"), ...common, radius: positive, height: positive }),
+  /** A ring lying flat, its axis +y (rotate to stand it up): rims, hoops, rope coils. `radius` reaches the tube's centre. */
+  z.object({ primitive: z.literal("torus"), ...common, radius: positive, tubeRadius: z.number().positive().max(2) })
+    .refine((p) => p.tubeRadius < p.radius, { message: "a torus needs tubeRadius smaller than radius" }),
   /** A rail/tube swept along `path` (2-12 points, smoothed) with round end caps. */
   z.object({ primitive: z.literal("tube"), ...common, path: z.array(vec3).min(2).max(12), radius: z.number().positive().max(0.3) }),
   /** Soft, pillowy block. `puff` 0 = tight, 1 = very round. */
@@ -69,7 +76,7 @@ export const partSchema = z.discriminatedUnion("primitive", [
 ]);
 export type AssetPart = z.infer<typeof partSchema>;
 export type PartPrimitive = AssetPart["primitive"];
-export const PART_PRIMITIVES = ["box", "cylinder", "taperedCylinder", "roundedRect", "tube", "cushion", "panel", "slatArray", "curvedSurface", "lattice"] as const satisfies readonly PartPrimitive[];
+export const PART_PRIMITIVES = ["box", "cylinder", "taperedCylinder", "sphere", "cone", "torus", "roundedRect", "tube", "cushion", "panel", "slatArray", "curvedSurface", "lattice"] as const satisfies readonly PartPrimitive[];
 
 const hex = z.string().regex(/^#[0-9a-fA-F]{6}$/, "must be a 6-digit hex colour");
 
@@ -84,6 +91,32 @@ export const materialSlotSchema = z.object({
   emissiveIntensity: z.number().min(STYLE_PROFILE.emissiveIntensity.min).max(STYLE_PROFILE.emissiveIntensity.max).optional(),
 });
 
+export const LIGHT_TYPES = ["point", "spot"] as const;
+/** Where a spot faces, in the asset's own frame (+z is the front). */
+export const LIGHT_DIRECTIONS = ["down", "up", "forward", "back", "left", "right"] as const;
+const LIGHT = STYLE_PROFILE.light;
+
+/**
+ * Optional scene light for a light *fixture* (lamp, pendant): the asset can also illuminate its surroundings. Separate from
+ * the emissive materials, which only make a surface glow: a bulb can glow without lighting anything, and one light serves
+ * the whole fixture. Exported to GLB as KHR_lights_punctual.
+ */
+export const lightSchema = z.object({
+  type: z.enum(LIGHT_TYPES),
+  color: hex,
+  /** Candela (see STYLE_PROFILE.light). */
+  intensity: z.number().min(LIGHT.intensity.min).max(LIGHT.intensity.max),
+  /** Metres: the light contributes nothing beyond it. */
+  range: z.number().min(LIGHT.range.min).max(LIGHT.range.max),
+  /** In the same frame as part positions. Omitted: at the glowing part, else near the top of the asset. */
+  position: vec3.optional(),
+  /** Spot only: full outer cone angle, degrees. */
+  coneAngle: z.number().min(LIGHT.coneAngle.min).max(LIGHT.coneAngle.max).optional(),
+  /** Spot only. */
+  direction: z.enum(LIGHT_DIRECTIONS).optional(),
+}).refine((l) => l.type !== "spot" || l.coneAngle !== undefined, { message: "a spot light needs coneAngle" });
+export type AssetLight = z.infer<typeof lightSchema>;
+
 export const assetSpecSchema = z.object({
   family: z.enum(NATIVE_FAMILIES),
   name: z.string().trim().min(3).max(80).optional(),
@@ -92,6 +125,8 @@ export const assetSpecSchema = z.object({
   style: z.string().trim().min(2).max(40),
   materials: z.array(materialSlotSchema).min(1).max(8),
   parts: z.array(partSchema).min(2).max(STYLE_PROFILE.maxParts),
+  /** Only lamps and pendants (`LIGHT_FAMILIES`). Absent: the asset does not light its surroundings (it may still glow). */
+  light: lightSchema.optional(),
   /** Multiplier on the profile's bevel for the whole asset. */
   bevel: z.number().min(STYLE_PROFILE.bevel.multiplier.min).max(STYLE_PROFILE.bevel.multiplier.max).default(1),
   detailLevel: z.enum(DETAIL_LEVELS).default("medium"),
@@ -100,13 +135,19 @@ export const assetSpecSchema = z.object({
 });
 export type AssetSpec = z.infer<typeof assetSpecSchema>;
 
-export type SpecCheck = { ok: true; spec: AssetSpec; notes: string[] } | { ok: false; error: string };
+/**
+ * `repairable`: the failure is a correctable mistake against the schema or limits, and `error` says exactly what to change, so
+ * sending it back to the model once is worthwhile. Not repairable: garbage (not an object, non-finite numbers) or a family
+ * this generator does not build, where a second attempt would only guess.
+ */
+export type SpecCheck = { ok: true; spec: AssetSpec; notes: string[] } | { ok: false; error: string; repairable: boolean };
 
 /**
  * Cleans, then checks, a spec. Cosmetic and formatting slips a model makes (long labels, out-of-range rotations, a slightly
  * excessive bevel, a size given as width/height/depth, a 2 m chaise filed under "deck-chair") are repaired and reported in
  * `notes` (see `repair.ts`); anything that would make geometry impossible or unsafe (unknown primitive, missing material,
- * non-finite or non-positive dimensions, nothing buildable) is a hard failure. Building (`build.ts`) adds the measured checks.
+ * non-finite or non-positive dimensions, nothing buildable) is rejected with the exact reason, flagged `repairable` when the
+ * model can fix it from that message (the caller's one retry). Building (`build.ts`) adds the measured checks.
  */
 export function validateSpec(raw: unknown): SpecCheck {
   const repaired = repairSpec(raw);
@@ -114,21 +155,22 @@ export function validateSpec(raw: unknown): SpecCheck {
   const parsed = assetSpecSchema.safeParse(repaired.spec);
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
-    return { ok: false, error: `Invalid asset spec (${issue?.path.join(".") || "spec"}: ${issue?.message}).` };
+    return { ok: false, repairable: true, error: `Invalid asset spec (${issue?.path.join(".") || "spec"}: ${issue?.message}).` };
   }
   const spec = parsed.data;
   const limits = FAMILY_LIMITS[spec.family];
   for (const axis of ["width", "depth", "height"] as const) {
     const [lo, hi] = limits[axis];
     const v = spec.dimensions[axis];
-    if (v < lo || v > hi) return { ok: false, error: `${spec.family} ${axis} of ${v} m is outside the realistic ${lo}–${hi} m.` };
+    if (v < lo || v > hi) return { ok: false, repairable: true, error: `${spec.family} ${axis} of ${v} m is outside the realistic ${lo}–${hi} m.` };
   }
   const keys = new Set(spec.materials.map((m) => m.key));
-  if (keys.size !== spec.materials.length) return { ok: false, error: "Duplicate material keys." };
+  if (keys.size !== spec.materials.length) return { ok: false, repairable: true, error: "Duplicate material keys." };
   const unknown = spec.parts.find((p) => !keys.has(p.material));
-  if (unknown) return { ok: false, error: `Part "${unknown.role}" uses unknown material "${unknown.material}".` };
+  if (unknown) return { ok: false, repairable: true, error: `Part "${unknown.role}" uses unknown material "${unknown.material}".` };
   const thin = spec.parts.find((p) => minThickness(p) < STYLE_PROFILE.minPartThickness - 1e-9);
-  if (thin) return { ok: false, error: `Part "${thin.role}" is thinner than ${STYLE_PROFILE.minPartThickness * 1000} mm.` };
+  if (thin) return { ok: false, repairable: true, error: `Part "${thin.role}" is thinner than ${STYLE_PROFILE.minPartThickness * 1000} mm.` };
+  if (spec.light && !LIGHT_FAMILIES.includes(spec.family)) return { ok: false, repairable: true, error: `Only ${LIGHT_FAMILIES.join(" and ")} assets can carry a scene light, not ${spec.family}.` };
   return { ok: true, spec, notes: repaired.notes };
 }
 
@@ -136,7 +178,9 @@ export function validateSpec(raw: unknown): SpecCheck {
 export function minThickness(p: AssetPart): number {
   switch (p.primitive) {
     case "box": case "cushion": case "panel": return Math.min(...p.size);
-    case "cylinder": return Math.min(p.radius * 2, p.height);
+    case "cylinder": case "cone": return Math.min(p.radius * 2, p.height);
+    case "sphere": return p.radius * 2;
+    case "torus": return p.tubeRadius * 2;
     case "taperedCylinder": return Math.min(p.radiusBottom * 2, p.radiusTop * 2, p.height);
     case "roundedRect": return Math.min(p.width, p.depth, p.height);
     case "tube": return p.radius * 2;
@@ -164,6 +208,7 @@ const loosePart = z.object({
   taper: opt(z.number()),
   puff: opt(z.number()),
   radius: opt(z.number()),
+  tubeRadius: opt(z.number()),
   height: opt(z.number()),
   radiusBottom: opt(z.number()),
   radiusTop: opt(z.number()),
@@ -194,6 +239,8 @@ export const specOutputSchema = z.object({
   style: z.string(),
   materials: z.array(z.object({ key: z.string(), material: z.string(), color: z.string(), roughness: opt(z.number()), metalness: opt(z.number()), emissiveColor: opt(z.string()), emissiveIntensity: opt(z.number()) })),
   parts: z.array(loosePart),
+  /** Only for a lamp or pendant that should light its surroundings; null / absent otherwise. */
+  light: opt(z.object({ type: z.string(), color: opt(z.string()), intensity: opt(z.number()), range: opt(z.number()), position: opt(z.array(z.number())), coneAngle: opt(z.number()), direction: opt(z.string()) })),
   bevel: opt(z.number()),
   detailLevel: opt(z.string()),
   targetTriangles: opt(z.number()),
@@ -211,6 +258,7 @@ export function cleanLooseSpec(raw: SpecOutput): unknown {
   return {
     ...dropEmpty({ ...raw, unsupported: undefined }),
     materials: raw.materials.map(dropEmpty),
+    ...(raw.light ? { light: dropEmpty(raw.light) } : {}),
     parts: raw.parts.map((p) => ({ ...dropEmpty(p), ...(p.repeat ? { repeat: dropEmpty(p.repeat) } : {}) })),
   };
 }

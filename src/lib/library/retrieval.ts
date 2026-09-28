@@ -20,6 +20,8 @@ export type AssetIndexEntry = Pick<CuratedAsset, "id" | "family" | "styleTags" |
 /** Assets that can satisfy a global lookup: approved, a placeable object (not a material), and not project-local. */
 export function isRetrievableAsset(a: CuratedAsset): boolean {
   if (a.status !== "approved" || a.family === undefined || a.scope === "project" || a.type === "pbr-material" || a.type === "hdri") return false;
+  // An older version stays in the library for the projects that use it, but new projects are only offered the current one.
+  if (a.supersededBy) return false;
   // A GLB only counts once it has a validated file behind it: an entry with nothing to render must not satisfy a request.
   return a.type !== "glb-model" || a.validation?.passed === true;
 }

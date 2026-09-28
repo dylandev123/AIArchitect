@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
+import { StorageDiagnostics } from "./StorageDiagnostics";
 import type { ModelPricing } from "@/lib/ai/pricing";
 import type { Bucket, UsageSummary } from "@/lib/ai/usage/summary";
 import type { AiUsageRecord } from "@/lib/ai/usage/types";
@@ -15,7 +16,7 @@ interface UsageResponse {
 
 const usd = (n: number | null, digits = 4) => (n === null ? "—" : `$${n.toFixed(digits)}`);
 const int = (n: number | null) => (n === null ? "—" : Math.round(n).toLocaleString());
-const TYPE_LABEL: Record<string, string> = { generation: "Generation", scoped_edit: "Scoped edit", learn: "Learn", recipe_proposal: "Recipe Proposal", asset_plan: "Asset Plan", native_asset: "Native Asset" };
+const TYPE_LABEL: Record<string, string> = { generation: "Generation", scoped_edit: "Scoped edit", learn: "Learn", recipe_proposal: "Recipe Proposal", asset_plan: "Asset Plan", native_asset: "Native Asset", native_asset_retry: "Native Asset (retry)" };
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
@@ -111,6 +112,8 @@ export function UsageTab() {
 
       {error && <p className="text-xs text-red-400">{error}</p>}
       {!data && !error && <p className="text-xs text-neutral-500">Loading…</p>}
+
+      <StorageDiagnostics reloadKey={reloadKey} />
 
       {data && s && (
         <>

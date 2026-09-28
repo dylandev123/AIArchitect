@@ -27,6 +27,9 @@ describe("triangle estimator matches the real builders", () => {
     cushion: { primitive: "cushion", role: "c", material: "m", position: [0, 0, 0], size: [0.5, 0.1, 0.5], puff: 0.6 },
     cylinder: { primitive: "cylinder", role: "c", material: "m", position: [0, 0, 0], radius: 0.1, height: 0.2 },
     tapered: { primitive: "taperedCylinder", role: "c", material: "m", position: [0, 0, 0], radiusBottom: 0.1, radiusTop: 0.2, height: 0.3 },
+    sphere: { primitive: "sphere", role: "s", material: "m", position: [0, 0, 0], radius: 0.1 },
+    cone: { primitive: "cone", role: "c", material: "m", position: [0, 0, 0], radius: 0.12, height: 0.25 },
+    torus: { primitive: "torus", role: "t", material: "m", position: [0, 0, 0], radius: 0.2, tubeRadius: 0.02 },
     roundedRect: { primitive: "roundedRect", role: "r", material: "m", position: [0, 0, 0], width: 0.6, depth: 0.4, height: 0.05, cornerRadius: 0.06 },
     squareRect: { primitive: "roundedRect", role: "r", material: "m", position: [0, 0, 0], width: 0.6, depth: 0.4, height: 0.05, cornerRadius: 0 },
     tube: { primitive: "tube", role: "t", material: "m", position: [0, 0, 0], path: [[0, 0, 0], [0, 0.3, 0.1], [0.2, 0.5, 0.1]], radius: 0.015 },
@@ -48,6 +51,9 @@ describe("triangle estimator matches the real builders", () => {
         case "cushion": return P.cushion(part.size, part.puff, ctx);
         case "cylinder": return P.cylinder(part.radius, part.height, ctx);
         case "taperedCylinder": return P.taperedCylinder(part.radiusBottom, part.radiusTop, part.height, ctx);
+        case "sphere": return P.sphere(part.radius, ctx);
+        case "cone": return P.cone(part.radius, part.height, ctx);
+        case "torus": return P.torus(part.radius, part.tubeRadius, ctx);
         case "roundedRect": return P.roundedRect(part.width, part.depth, part.height, part.cornerRadius, ctx);
         case "tube": return P.tube(part.path, part.radius, ctx);
         case "slatArray": return P.slatArray(part.count, part.slatSize, part.gap, part.axis, ctx);

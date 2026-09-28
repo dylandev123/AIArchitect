@@ -2,6 +2,7 @@ import type { BuildingKind } from "@/types/house";
 import type { CuratedAsset } from "@/types/assets";
 import type { AssetCategory } from "@/types/library";
 import type { ModelStatus } from "./modelCache";
+import { resolveCurrentAssetId } from "./versions";
 import { validateBuilding } from "@/lib/house/features/buildings";
 
 /**
@@ -79,9 +80,17 @@ export function isRenderableAsset(asset: CuratedAsset | undefined): asset is Cur
   return !!asset && asset.status === "approved" && asset.type === "glb-model" && asset.validation?.passed !== false;
 }
 
-/** Placements whose asset is (still) an approved model in the catalog. Everything else is simply procedural. */
+/**
+ * Placements whose asset is (still) an approved model in the catalog. Everything else is simply procedural. A placement whose
+ * asset was upgraded with "Make Current" is drawn with the newer version; one upgraded "New Projects Only" keeps its own.
+ */
 export function usablePlacements(placements: readonly AssetPlacement[], catalog: readonly CuratedAsset[]): AssetPlacement[] {
-  return placements.filter((p) => isRenderableAsset(catalog.find((a) => a.id === p.assetId)));
+  return placements
+    .map((p) => {
+      const assetId = resolveCurrentAssetId(catalog, p.assetId);
+      return assetId === p.assetId ? p : { ...p, assetId };
+    })
+    .filter((p) => isRenderableAsset(catalog.find((a) => a.id === p.assetId)));
 }
 
 /**

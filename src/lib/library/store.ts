@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { Pool } from "pg";
 import { usageDatabaseUrl } from "@/lib/ai/usage/db";
+import { databaseHost, isMissingFile, noteStorageError, type StorageInfo } from "@/lib/storage/diagnostics";
 import type { AssetPlan, DesignRecipe, KnowledgeNeed, Need } from "@/types/library";
 
 /**
@@ -60,13 +61,20 @@ function applyChange(snapshot: LibrarySnapshot, change: LibraryChange<unknown>):
 export function createFileBackend(file: string): LibraryBackend {
   let queue: Promise<unknown> = Promise.resolve();
 
+  /**
+   * A file that does not exist yet is an empty library. Anything else (unreadable, corrupt) throws: `mutate` writes back what it
+   * loaded, so treating a failed read as empty would overwrite the real file with a fresh one.
+   */
   async function load(): Promise<LibrarySnapshot> {
+    let text: string;
     try {
-      const parsed = JSON.parse(await readFile(file, "utf8")) as Partial<LibrarySnapshot>;
-      return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [] };
-    } catch {
-      return { needs: [], recipes: [], knowledge: [], plans: [] };
+      text = await readFile(file, "utf8");
+    } catch (err) {
+      if (isMissingFile(err)) return { needs: [], recipes: [], knowledge: [], plans: [] };
+      throw err;
     }
+    const parsed = JSON.parse(text) as Partial<LibrarySnapshot>;
+    return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [] };
   }
 
   return {
@@ -181,11 +189,31 @@ export function libraryFilePath(): string {
 
 let fileBackend: { file: string; backend: LibraryBackend } | undefined;
 
+/** Which backend is live right now. Selection is deterministic: a database URL wins, otherwise the local file. */
+export function libraryStorageInfo(): StorageInfo {
+  const url = usageDatabaseUrl();
+  if (url) return { kind: "postgres", location: databaseHost(url), ephemeral: false };
+  return { kind: "local-json", location: libraryFilePath(), ephemeral: !!process.env.VERCEL && !process.env.AI_LIBRARY_PATH };
+}
+
+/** Records a failed read or write (log + admin diagnostics) and rethrows it: callers decide what to do, none get a silent empty store. */
+function withErrorTracking(backend: LibraryBackend): LibraryBackend {
+  return {
+    read: () => backend.read().catch((err) => Promise.reject(noteAndReturn("read", err))),
+    mutate: (fn) => backend.mutate(fn).catch((err) => Promise.reject(noteAndReturn("write", err))),
+  };
+}
+
+function noteAndReturn(op: "read" | "write", err: unknown): unknown {
+  noteStorageError("library", op, err);
+  return err;
+}
+
 export function libraryBackend(): LibraryBackend {
   const url = usageDatabaseUrl();
-  if (url) return createPostgresBackend(url);
+  if (url) return withErrorTracking(createPostgresBackend(url));
   const file = libraryFilePath();
-  if (fileBackend?.file !== file) fileBackend = { file, backend: createFileBackend(file) };
+  if (fileBackend?.file !== file) fileBackend = { file, backend: withErrorTracking(createFileBackend(file)) };
   return fileBackend.backend;
 }
 

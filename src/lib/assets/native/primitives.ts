@@ -1,4 +1,4 @@
-import { BufferGeometry, CatmullRomCurve3, ExtrudeGeometry, Float32BufferAttribute, LatheGeometry, Shape, SphereGeometry, TubeGeometry, Vector2, Vector3 } from "three";
+import { BufferGeometry, CatmullRomCurve3, ExtrudeGeometry, Float32BufferAttribute, LatheGeometry, Shape, SphereGeometry, TorusGeometry, TubeGeometry, Vector2, Vector3 } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { arcPoints, roundedRectOutline } from "@/lib/house/geometry/mesh";
 import { bevelRadius, STYLE_PROFILE, type DetailLevel } from "./styleProfile";
@@ -165,6 +165,29 @@ export function beveledBox(size: readonly [number, number, number], c: Primitive
   return finalize(g);
 }
 
+/** Triangles with (numerically) zero area, e.g. a lathe's collapsed quads at the axis, cost draw budget and shade nothing. */
+function dropDegenerate(g: BufferGeometry): BufferGeometry {
+  const pos = g.getAttribute("position");
+  const nor = g.getAttribute("normal");
+  const keepPos: number[] = [];
+  const keepNor: number[] = [];
+  for (let t = 0; t < pos.count; t += 3) {
+    const [ax, ay, az, bx, by, bz, cx, cy, cz] = [pos.getX(t), pos.getY(t), pos.getZ(t), pos.getX(t + 1), pos.getY(t + 1), pos.getZ(t + 1), pos.getX(t + 2), pos.getY(t + 2), pos.getZ(t + 2)];
+    const [ux, uy, uz, vx, vy, vz] = [bx - ax, by - ay, bz - az, cx - ax, cy - ay, cz - az];
+    const [nx, ny, nz] = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx];
+    if (nx * nx + ny * ny + nz * nz < 1e-20) continue;
+    for (let k = t; k < t + 3; k++) {
+      keepPos.push(pos.getX(k), pos.getY(k), pos.getZ(k));
+      keepNor.push(nor.getX(k), nor.getY(k), nor.getZ(k));
+    }
+  }
+  const out = new BufferGeometry();
+  out.setAttribute("position", new Float32BufferAttribute(keepPos, 3));
+  out.setAttribute("normal", new Float32BufferAttribute(keepNor, 3));
+  g.dispose();
+  return out;
+}
+
 /** Cylinder and tapered cylinder in one: a lathe of a profile whose rims are beveled the same way boxes are. */
 export function taperedCylinder(radiusBottom: number, radiusTop: number, height: number, c: PrimitiveContext, opts: { bevel?: number } = {}): BufferGeometry {
   const edge = Math.min(radiusBottom * 2, radiusTop * 2, height);
@@ -184,6 +207,49 @@ export function taperedCylinder(radiusBottom: number, radiusTop: number, height:
 }
 
 export const cylinder = (radius: number, height: number, c: PrimitiveContext, opts: { bevel?: number } = {}) => taperedCylinder(radius, radius, height, c, opts);
+
+/**
+ * UV-sphere segment counts per detail level. The rings are half the radial segments, so it reads round from every angle at
+ * `2·w·(h−1)` triangles: 80 / 224 / 728, about the price of a cylinder. Shared with the triangle estimator (`budget.ts`).
+ */
+export const sphereLayout = (c: Pick<PrimitiveContext, "detail">) => {
+  const w = STYLE_PROFILE.radialSegments[c.detail];
+  return { w, h: Math.max(4, Math.round(w / 2)) };
+};
+
+/** Smooth ball: bulbs, finials, knobs, globes, orb lights. */
+export function sphere(radius: number, c: PrimitiveContext): BufferGeometry {
+  const { w, h } = sphereLayout(c);
+  return finalize(new SphereGeometry(radius, w, h));
+}
+
+/**
+ * A cone (base on the bottom, apex on top). The base rim is beveled the way a tapered cylinder's is: the profile reaches the
+ * full `radius` one bevel above the base and runs straight to the apex, so the bounding box is exactly `radius` × `height`
+ * (the builder fits assets to their declared size by it). `2·w·(edge segments + 1)` triangles.
+ */
+export function cone(radius: number, height: number, c: PrimitiveContext, opts: { bevel?: number } = {}): BufferGeometry {
+  const r = Math.min(bevelRadius(Math.min(radius * 2, height), c.bevel * (opts.bevel ?? 1)), radius * 0.5, height * 0.25);
+  const steps = segs(c);
+  const pts: Vector2[] = [new Vector2(0, -height / 2)];
+  for (let i = 0; i <= steps; i++) {
+    const a = -Math.PI / 2 + (Math.PI / 2) * (i / steps);
+    pts.push(new Vector2(radius - r + Math.cos(a) * r, -height / 2 + r + Math.sin(a) * r));
+  }
+  pts.push(new Vector2(0, height / 2));
+  return finalize(dropDegenerate(new LatheGeometry(pts, radial(c)).toNonIndexed()));
+}
+
+/** Tube-ring segment counts of a torus (the `tube` primitive's ring sizes), shared with the estimator: `2·radial·ring` triangles. */
+export const torusLayout = (c: Pick<PrimitiveContext, "detail">) => ({ radial: STYLE_PROFILE.radialSegments[c.detail], ring: c.detail === "low" ? 5 : c.detail === "medium" ? 8 : 12 });
+
+/** A ring lying flat (its axis is +y; rotate the part to stand it up): rims, hoops, rings, rope coils. `radius` is to the tube's centre. */
+export function torus(radius: number, tubeRadius: number, c: PrimitiveContext): BufferGeometry {
+  const { radial: around, ring } = torusLayout(c);
+  const g = new TorusGeometry(radius, tubeRadius, ring, around);
+  g.rotateX(-Math.PI / 2);
+  return finalize(g);
+}
 
 /** Rounded-rectangle plate/block extruded upward, with beveled top and bottom edges. */
 export function roundedRect(width: number, depth: number, height: number, cornerRadius: number, c: PrimitiveContext, opts: { bevel?: number } = {}): BufferGeometry {
