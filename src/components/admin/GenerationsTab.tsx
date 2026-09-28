@@ -7,6 +7,7 @@ import { useAdminStore } from "@/store/useAdminStore";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
 import type { DesignRecipe, GenerationReport, Need } from "@/types/library";
+import { resolveLiveNeed } from "@/lib/library/liveNeed";
 import { AssetPlanDialog } from "./AssetPlanDialog";
 
 /**
@@ -67,7 +68,7 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
   const planFor = (needId: string) => plans.find((pl) => pl.needId === needId);
   const recipeFor = (knowledgeId: string): DesignRecipe | undefined =>
     recipes.filter((recipe) => recipe.knowledgeIds?.includes(knowledgeId)).sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
-  const currentNeed = (id: string): Need | undefined => needs.find((need) => need.id === id);
+  const currentNeed = (historical: GenerationReport["assetNeeds"][number]): Need | undefined => resolveLiveNeed(historical, needs);
 
   return (
     <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3">
@@ -151,8 +152,12 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
           <Section title="New asset needs" count={report.assetNeeds.length}>
             {report.assetNeeds.length === 0 && <Empty>No asset is missing.</Empty>}
             {report.assetNeeds.map((n) => {
-              const liveNeed = currentNeed(n.id);
-              const plan = planFor(n.id);
+              const liveNeed = currentNeed(n);
+              // A generation report is historical evidence, not the planner's source
+              // of truth. Its legacy ID is preferred when it survives, otherwise its
+              // normalized semantic family resolves the live Need. Never start a plan
+              // from a report-only record.
+              const plan = liveNeed ? planFor(liveNeed.id) : undefined;
               return (
                 <div key={n.id} className="flex items-start justify-between gap-3">
                   <p className="min-w-0 text-[11px] text-neutral-400">
@@ -164,9 +169,11 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
                     </span>
                   </p>
                   {plan ? (
-                    <button onClick={() => setPlanning({ needId: n.id, title: liveNeed?.title ?? n.name, planId: plan.id })} className={actionBtn}><CheckCircle2 size={11} /> Asset Plan Created · Open Plan</button>
+                    <button onClick={() => setPlanning({ needId: liveNeed!.id, title: liveNeed!.title, planId: plan.id })} className={actionBtn}><CheckCircle2 size={11} /> Asset Plan Created · Open Plan</button>
+                  ) : !liveNeed ? (
+                    <span className="shrink-0 text-[10px] text-amber-400">This historical Need is no longer present in the current library.</span>
                   ) : (
-                    <button onClick={() => setPlanning({ needId: n.id, title: liveNeed?.title ?? n.name, planId: "" })} className={actionBtn}><Sparkles size={11} /> Generate Asset Plan</button>
+                    <button onClick={() => setPlanning({ needId: liveNeed.id, title: liveNeed.title, planId: "" })} className={actionBtn}><Sparkles size={11} /> Generate Asset Plan</button>
                   )}
                 </div>
               );

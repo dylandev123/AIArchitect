@@ -387,7 +387,7 @@ export interface GenerationReport {
   };
   persistence: {
     ok: boolean;
-    backend: "postgres" | "local-json";
+    backend: "postgres" | "local-json" | "unavailable";
     location: string;
     error?: string;
     wrote: { knowledge: number; needs: number; plans: number; recipes: number };

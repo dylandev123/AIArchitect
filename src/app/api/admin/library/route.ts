@@ -6,6 +6,7 @@ import { recipeInputSchema } from "@/lib/library/recipes";
 import { planInputSchema } from "@/lib/library/plans";
 import { changeRecipeApproval, completePlannedAsset, deletePlan, deleteRecipe, discardNativeSpec, generateExternal, linkKnowledge, savePlan, saveRecipe, setKnowledgeStatus, setNeedStatus, type AdminResult } from "@/lib/library/service";
 import { readLibrary } from "@/lib/library/store";
+import { SharedPersistenceUnavailableError } from "@/lib/storage/diagnostics";
 import { KNOWLEDGE_STATUSES, NEED_STATUSES, RECIPE_APPROVALS } from "@/types/library";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ needs, recipes, knowledge, plans, generations, generation: generationAvailability() });
   } catch (err) {
     console.error("[library] read failed:", err);
-    return NextResponse.json({ error: "The library store is unavailable." }, { status: 503 });
+    return NextResponse.json({ error: err instanceof SharedPersistenceUnavailableError ? err.message : "The library store is unavailable." }, { status: 503 });
   }
 }
 
@@ -95,6 +96,6 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     console.error("[library] write failed:", err);
-    return NextResponse.json({ error: "The library store is unavailable." }, { status: 503 });
+    return NextResponse.json({ error: err instanceof SharedPersistenceUnavailableError ? err.message : "The library store is unavailable." }, { status: 503 });
   }
 }

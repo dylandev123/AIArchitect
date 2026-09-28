@@ -48,14 +48,17 @@ describe("storage selection", () => {
     expect(JSON.stringify([usageStorageInfo(), libraryStorageInfo()])).not.toContain("secret");
   });
 
-  it("flags the temp-dir fallback on serverless hosts as ephemeral", async () => {
+  it("does not use a temp-dir fallback on production/serverless hosts", async () => {
     vi.stubEnv("VERCEL", "1");
     vi.stubEnv("AI_LIBRARY_PATH", "");
     vi.stubEnv("AI_USAGE_LOG_PATH", "");
     const { usageStorageInfo } = await import("@/lib/ai/usage/store");
-    const { libraryStorageInfo } = await import("@/lib/library/store");
-    expect(usageStorageInfo().ephemeral).toBe(true);
-    expect(libraryStorageInfo().ephemeral).toBe(true);
+    const { readUsageRecords } = await import("@/lib/ai/usage/store");
+    const { libraryStorageInfo, readLibrary } = await import("@/lib/library/store");
+    expect(usageStorageInfo().kind).toBe("unavailable");
+    expect(libraryStorageInfo().kind).toBe("unavailable");
+    await expect(readUsageRecords()).rejects.toThrow("Production shared persistence is not configured.");
+    await expect(readLibrary()).rejects.toThrow("Production shared persistence is not configured.");
   });
 });
 

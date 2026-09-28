@@ -55,8 +55,8 @@ export async function GET(req: NextRequest) {
     (err) => ({ records: null, error: errorText(err) })
   );
   const library = await readLibrary().then(
-    (l) => ({ needs: l.needs.length as number | null, knowledge: l.knowledge.length as number | null, recipes: l.recipes.length as number | null, plans: l.plans.length as number | null, error: null as string | null }),
-    (err) => ({ needs: null, knowledge: null, recipes: null, plans: null, error: errorText(err) })
+    (l) => ({ needs: l.needs.length as number | null, knowledge: l.knowledge.length as number | null, recipes: l.recipes.length as number | null, plans: l.plans.length as number | null, generations: l.generations.length as number | null, error: null as string | null }),
+    (err) => ({ needs: null, knowledge: null, recipes: null, plans: null, generations: null, error: errorText(err) })
   );
 
   const usagePath = usageLogPath();
@@ -74,6 +74,7 @@ export async function GET(req: NextRequest) {
     cwd: process.cwd(),
     usage: { storage: usageStorage, ...usage },
     library: { storage: libraryStorage, ...library },
+    databaseConnected: usageStorage.kind === "postgres" && libraryStorage.kind === "postgres" && !usage.error && !library.error,
     localFiles,
     errors: recentStorageErrors(),
   });

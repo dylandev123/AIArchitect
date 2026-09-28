@@ -1,7 +1,7 @@
 import { appendFile, mkdir, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { databaseHost, isMissingFile, noteStorageError, type StorageInfo } from "@/lib/storage/diagnostics";
+import { databaseHost, isMissingFile, noteStorageError, requiresSharedPersistence, SharedPersistenceUnavailableError, type StorageInfo } from "@/lib/storage/diagnostics";
 import { insertUsageRecordDb, readUsageRecordsDb, usageDatabaseUrl } from "./db";
 import type { AiUsageRecord } from "./types";
 
@@ -22,12 +22,14 @@ export function usageLogPath(): string {
 export function usageStorageInfo(): StorageInfo {
   const url = usageDatabaseUrl();
   if (url) return { kind: "postgres", location: databaseHost(url), ephemeral: false };
-  return { kind: "local-json", location: usageLogPath(), ephemeral: !!process.env.VERCEL && !process.env.AI_USAGE_LOG_PATH };
+  if (requiresSharedPersistence()) return { kind: "unavailable", location: "not configured", ephemeral: false };
+  return { kind: "local-json", location: usageLogPath(), ephemeral: false };
 }
 
 export async function appendUsageRecord(record: AiUsageRecord): Promise<void> {
   try {
     if (usageDatabaseUrl()) return await insertUsageRecordDb(record);
+    if (requiresSharedPersistence()) throw new SharedPersistenceUnavailableError();
     const file = usageLogPath();
     await mkdir(path.dirname(file), { recursive: true });
     await appendFile(file, JSON.stringify(record) + "\n", "utf8");
@@ -41,6 +43,7 @@ export async function appendUsageRecord(record: AiUsageRecord): Promise<void> {
 export async function readUsageRecords(): Promise<AiUsageRecord[]> {
   try {
     if (usageDatabaseUrl()) return await readUsageRecordsDb();
+    if (requiresSharedPersistence()) throw new SharedPersistenceUnavailableError();
     return await readUsageFile();
   } catch (err) {
     noteStorageError("usage", "read", err);

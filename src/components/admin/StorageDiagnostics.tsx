@@ -10,7 +10,8 @@ import type { StorageErrorEntry, StorageInfo } from "@/lib/storage/diagnostics";
 interface Diagnostics {
   cwd: string;
   usage: { storage: StorageInfo; records: number | null; error: string | null };
-  library: { storage: StorageInfo; needs: number | null; knowledge: number | null; recipes: number | null; plans: number | null; error: string | null };
+  library: { storage: StorageInfo; needs: number | null; knowledge: number | null; recipes: number | null; plans: number | null; generations: number | null; error: string | null };
+  databaseConnected: boolean;
   localFiles: { path: string; bytes: number; modified: string; records: number | null; inUse: boolean }[];
   errors: StorageErrorEntry[];
 }
@@ -27,7 +28,7 @@ interface BrowserState {
   glbMissing: number | null;
 }
 
-const storageLabel = (s: StorageInfo) => `${s.kind === "postgres" ? "Postgres" : "Local JSON"} (${s.location})${s.ephemeral ? " — temporary, lost between deployments" : ""}`;
+const storageLabel = (s: StorageInfo) => `${s.kind === "postgres" ? "Postgres" : s.kind === "local-json" ? "Local JSON" : "Unavailable"}${s.kind === "unavailable" ? "" : ` (${s.location})`}${s.ephemeral ? " — temporary, lost between deployments" : ""}`;
 const count = (n: number | null) => (n === null ? "unreadable" : n.toLocaleString());
 
 function Row({ label, value, bad }: { label: string; value: string; bad?: boolean }) {
@@ -110,16 +111,21 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
         <dl className="text-xs">
           <Row label="Usage storage" value={storageLabel(data.usage.storage)} />
           <Row label="Library storage" value={storageLabel(data.library.storage)} />
+          <Row label="Database connected" value={data.databaseConnected ? "Yes" : "No"} bad={!data.databaseConnected && (data.usage.storage.kind === "postgres" || data.library.storage.kind === "postgres")} />
           <Row label="Asset catalog" value="Browser Local (this browser only)" />
           <Row label="Usage records" value={count(data.usage.records)} bad={data.usage.records === null} />
           <Row label="Knowledge Needs" value={count(data.library.knowledge)} bad={data.library.knowledge === null} />
           <Row label="Asset Needs" value={count(data.library.needs)} bad={data.library.needs === null} />
           <Row label="Recipes" value={count(data.library.recipes)} bad={data.library.recipes === null} />
           <Row label="Asset Plans" value={count(data.library.plans)} bad={data.library.plans === null} />
+          <Row label="Generation reports" value={count(data.library.generations)} bad={data.library.generations === null} />
           <Row label="Curated assets in browser" value={curated.toLocaleString()} />
           {data.usage.error && <Row label="Usage read error" value={data.usage.error} bad />}
           {data.library.error && <Row label="Library read error" value={data.library.error} bad />}
         </dl>
+      )}
+      {data && (data.library.storage.kind === "unavailable" || data.usage.storage.kind === "unavailable") && (
+        <p className="mt-2 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">Production shared persistence is not configured.</p>
       )}
       {browser && (
         <dl className="mt-2 border-t border-white/8 pt-2 text-xs">

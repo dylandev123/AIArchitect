@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { Pool } from "pg";
 import { usageDatabaseUrl } from "@/lib/ai/usage/db";
-import { databaseHost, isMissingFile, noteStorageError, type StorageInfo } from "@/lib/storage/diagnostics";
+import { databaseHost, isMissingFile, noteStorageError, requiresSharedPersistence, SharedPersistenceUnavailableError, type StorageInfo } from "@/lib/storage/diagnostics";
 import type { AssetPlan, DesignRecipe, GenerationReport, KnowledgeNeed, Need } from "@/types/library";
 
 /**
@@ -229,7 +229,8 @@ let fileBackend: { file: string; backend: LibraryBackend } | undefined;
 export function libraryStorageInfo(): StorageInfo {
   const url = usageDatabaseUrl();
   if (url) return { kind: "postgres", location: databaseHost(url), ephemeral: false };
-  return { kind: "local-json", location: libraryFilePath(), ephemeral: !!process.env.VERCEL && !process.env.AI_LIBRARY_PATH };
+  if (requiresSharedPersistence()) return { kind: "unavailable", location: "not configured", ephemeral: false };
+  return { kind: "local-json", location: libraryFilePath(), ephemeral: false };
 }
 
 /** Records a failed read or write (log + admin diagnostics) and rethrows it: callers decide what to do, none get a silent empty store. */
@@ -248,6 +249,10 @@ function noteAndReturn(op: "read" | "write", err: unknown): unknown {
 export function libraryBackend(): LibraryBackend {
   const url = usageDatabaseUrl();
   if (url) return withErrorTracking(createPostgresBackend(url));
+  if (requiresSharedPersistence()) {
+    const unavailable = () => Promise.reject(new SharedPersistenceUnavailableError());
+    return { read: unavailable, mutate: unavailable };
+  }
   const file = libraryFilePath();
   if (fileBackend?.file !== file) fileBackend = { file, backend: withErrorTracking(createFileBackend(file)) };
   return fileBackend.backend;
