@@ -15,6 +15,9 @@ import { SURFACE_PBR, usePbrReady, type PbrSetDef, type SurfaceKey } from "@/lib
 import type { HousePrimitive } from "@/lib/house/types";
 import { applyEdgeDetail, RENDER_BASE_BEVEL } from "@/lib/house/architecture/edgeDetail";
 import { cutawayHiddenIds } from "@/lib/house/roomView";
+import { compileArchitecture } from "@/lib/architecture/compiler";
+import { isArchitecturalDesignDocument } from "@/lib/architecture/document";
+import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -56,11 +59,19 @@ export function HouseRenderer() {
   );
   const showRoof = useSceneStore((s) => s.showRoof);
   const cutawayLevel = useSceneStore((s) => s.cutawayLevel);
+  const architectureDebug = useSceneStore((s) => s.architectureDebug);
 
-  const { model, site } = useMemo(
-    () => generateHouseFromJson(houseConfigJson ?? "{}"),
-    [houseConfigJson]
-  );
+  const { model, site } = useMemo(() => {
+    try {
+      const raw = JSON.parse(houseConfigJson ?? "{}");
+      const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
+      if (isArchitecturalDesignDocument(document)) {
+        const legacy = generateHouseFromJson(houseConfigJson ?? "{}");
+        return { model: compileArchitecture(document, { materials: legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG, mode: architectureDebug }).model, site: legacy.site };
+      }
+    } catch { /* legacy generator exposes JSON errors normally */ }
+    return generateHouseFromJson(houseConfigJson ?? "{}");
+  }, [architectureDebug, houseConfigJson]);
 
   // Render-time finishing: a small bevel on trim-like boxes the design's tier left sharp (the model itself is unchanged).
   const finished = useMemo(() => (model ? applyEdgeDetail(model.primitives, RENDER_BASE_BEVEL) : []), [model]);

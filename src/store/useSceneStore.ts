@@ -14,6 +14,8 @@ interface SceneStore {
   toggleRoof: () => void;
   setShowAdvanced: (show: boolean) => void;
   showAdvanced: boolean;
+  architectureDebug: "full" | "massing-only" | "roofs-only";
+  cycleArchitectureDebug: () => void;
 
   /**
    * The room the user has stepped into, or null for the whole house. This one value drives the camera, the cutaway
@@ -51,6 +53,8 @@ export const useSceneStore = create<SceneStore>((set) => ({
   toggleRoof: () => set((state) => ({ showRoof: !state.showRoof })),
   showAdvanced: false,
   setShowAdvanced: (show) => set({ showAdvanced: show }),
+  architectureDebug: "full",
+  cycleArchitectureDebug: () => set((state) => ({ architectureDebug: state.architectureDebug === "full" ? "massing-only" : state.architectureDebug === "massing-only" ? "roofs-only" : "full" })),
 
   focusedRoom: null,
   cutawayLevel: null,

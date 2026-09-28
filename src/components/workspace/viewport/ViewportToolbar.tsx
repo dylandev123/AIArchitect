@@ -9,6 +9,7 @@ import {
   LayoutGrid,
   PersonStanding,
   Square,
+  Boxes,
 } from "lucide-react";
 import { useSceneStore } from "@/store/useSceneStore";
 import { useProjectStore } from "@/store/useProjectStore";
@@ -30,6 +31,8 @@ export function ViewportToolbar({ onEnterWalk }: { onEnterWalk: () => void }) {
   const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
   const walkMode = useSceneStore((s) => s.walkMode);
   const setWalkMode = useSceneStore((s) => s.setWalkMode);
+  const architectureDebug = useSceneStore((s) => s.architectureDebug);
+  const cycleArchitectureDebug = useSceneStore((s) => s.cycleArchitectureDebug);
 
   const params = useParams<{ projectId: string }>();
   const timeOfDay: TimeOfDay = useProjectStore(
@@ -64,6 +67,14 @@ export function ViewportToolbar({ onEnterWalk }: { onEnterWalk: () => void }) {
         </div>
 
         <div className="mx-auto w-5 border-b border-white/[0.08]" />
+
+        <button
+          onClick={cycleArchitectureDebug}
+          title={`Architecture debug: ${architectureDebug}`}
+          className={`pointer-events-auto flex h-9 w-9 items-center justify-center rounded-xl border shadow-lg backdrop-blur transition hover:scale-105 active:scale-95 ${architectureDebug === "full" ? "border-white/10 bg-neutral-900/90 text-neutral-400" : "border-amber-500/40 bg-amber-500/20 text-amber-300"}`}
+        >
+          <Boxes size={15} />
+        </button>
 
         {/* Roof toggle */}
         <button
