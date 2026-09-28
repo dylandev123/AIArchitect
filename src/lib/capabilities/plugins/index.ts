@@ -3,3 +3,4 @@
  * Next bundles static modules, so this is the single discovery boundary rather than a filesystem scan at runtime.
  */
 import "./corner-glazing/plugin";
+import "./roof-expression/plugin";

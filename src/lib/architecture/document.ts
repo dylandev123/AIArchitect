@@ -1,5 +1,6 @@
 import type { CompassSide, MaterialsConfig, SiteEnvironment } from "@/types/house";
 import type { CapabilityIntent } from "@/lib/capabilities/types";
+import type { RoofExpressionParameters } from "@/lib/house/roof/expression";
 
 /** The durable, stage-owned source of truth for new architecture projects. */
 export interface ArchitecturalDesignDocument {
@@ -36,7 +37,8 @@ export interface MassVolume {
 export interface MassingPlan { composition: "rectangular-pavilion" | "l-shaped" | "u-shaped" | "h-shaped" | "courtyard" | "pavilion-cluster" | "rotated-wings" | "stepped-terraces"; masses: readonly MassVolume[]; }
 
 export type RoofRecipeKind = "flat" | "floating-flat" | "shed" | "mono-pitch" | "gable" | "hip" | "butterfly" | "pavilion" | "cross-gable" | "mixed";
-export interface RoofRecipe { id: string; massId: string; kind: RoofRecipeKind; overhang?: number; pitch?: number; orientation?: number; }
+/** Recipe-level roof intent is deterministic geometry, not an AI-generated mesh. */
+export interface RoofRecipe { id: string; massId: string; kind: RoofRecipeKind; overhang?: number; pitch?: number; orientation?: number; expression?: RoofExpressionParameters; }
 export interface RoofComposition { recipes: readonly RoofRecipe[]; }
 
 export interface ArchitectureStage<I, O> { readonly name: string; run(input: Readonly<I>): O; validate(output: O): readonly string[]; }

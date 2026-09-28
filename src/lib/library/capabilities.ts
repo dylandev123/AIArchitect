@@ -26,10 +26,10 @@ const SEEDS: Seed[] = [
   cap("courtyard-cut", "Courtyard Cut", "voids", "missing", "No boolean cut in the main shell."),
   cap("atrium", "Atrium", "voids", "missing", "No interior void operation."), cap("light-well", "Light Well", "voids", "missing", "No shaft cut operation."),
   cap("double-height-void", "Double-height Void", "voids", "missing", "Floors cannot be removed selectively."), cap("breezeway", "Breezeway", "voids", "partial", "Separated wings can leave open space, without a purpose-built connector."),
-  cap("deep-overhang", "Deep Overhang", "roofs", "partial", "Roof forms include fixed procedural eaves; overhang is not parameterized per project.", ["overhang"]),
-  cap("floating-roof", "Floating Roof", "roofs", "missing", "No elevated roof plane or shadow-gap assembly." , ["offsetHeight", "overhang", "thickness"]),
-  cap("roof-offset", "Roof Offset", "roofs", "partial", "Independent wing roofs can offset; the primary roof cannot."), cap("roof-extension", "Roof Extension", "roofs", "partial", "Porches provide covered extensions; roof planes cannot extend independently."),
-  cap("split-roof", "Split Roof", "roofs", "partial", "Different roof types can be composed across separate masses."), cap("clerestory-roof", "Clerestory Roof", "roofs", "missing", "No raised glazing band between roof planes."),
+  cap("deep-overhang", "Deep Overhang", "roofs", "supported", "Shared Roof Expression geometry parameterizes eave projection per mass.", ["overhang"]),
+  cap("floating-roof", "Floating Roof", "roofs", "supported", "Shared Roof Expression builds elevated planes and a closed reveal assembly." , ["verticalGap", "overhang", "thickness", "fasciaDepth", "supportStyle", "soffitMaterial"]),
+  cap("roof-offset", "Roof Offset", "roofs", "supported", "Shared Roof Expression offsets a roof plane from its mass datum.", ["horizontalOffset"]), cap("roof-extension", "Roof Extension", "roofs", "partial", "Porches provide covered extensions; roof planes cannot extend independently."),
+  cap("split-roof", "Split Roof", "roofs", "supported", "Shared Roof Expression coordinates primary and secondary roof planes on one mass.", ["secondary"]), cap("clerestory-roof", "Clerestory Roof", "roofs", "supported", "Shared Roof Expression builds a raised roof with a recessed architectural glazing band.", ["verticalGap", "clerestoryHeight"]),
   cap("curved-roof", "Curved Roof", "roofs", "missing", "No curved roof form."), cap("barrel-roof", "Barrel Roof", "roofs", "missing", "No barrel roof form."),
   cap("corner-glazing", "Corner Glazing", "openings", "supported", "Plugin: procedural glazing panels and shared corner mullion.", ["massId", "corner", "width", "height", "sill"]),
   cap("ribbon-glazing", "Ribbon Glazing", "openings", "partial", "Multiple aligned windows approximate a ribbon; continuous structural opening is unavailable."),
@@ -38,7 +38,7 @@ const SEEDS: Seed[] = [
   cap("framed-opening", "Framed Opening", "openings", "partial", "Door and window trim is procedural, without independent frame geometry."),
   cap("screen-layer", "Screen Layer", "facade", "missing", "Requires a reusable screen asset, not a geometric capability."),
   cap("brise-soleil", "Brise Soleil", "facade", "missing", "Requires a reusable shading asset or a future louver operation."),
-  cap("shadow-gap", "Shadow Gap", "facade", "missing", "No reveal geometry between facade planes."),
+  cap("shadow-gap", "Shadow Gap", "facade", "supported", "Shared Roof Expression creates a reusable roof-to-wall reveal assembly.", ["verticalGap", "supportStyle"]),
   cap("carve-terrace", "Carve Terrace", "terraces", "partial", "Decks and patios can define outdoor terraces but do not carve the building mass."),
   cap("balcony", "Balcony", "terraces", "supported", "Wall-mounted balconies with railings are procedural.", ["wall", "level", "width", "depth"]),
   cap("roof-terrace", "Roof Terrace", "terraces", "missing", "No accessible flat-roof terrace assembly."), cap("sunken-lounge", "Sunken Lounge", "terraces", "missing", "No terrain or deck excavation operation."),
@@ -60,7 +60,7 @@ export function capabilityRequestsForRecipes(recipes: readonly DesignRecipe[]): 
   return recipes.flatMap((r) => [...(r.requiredCapabilities ?? []), ...(r.preferredCapabilities ?? [])].map((operation) => ({ operation, stage: "recipe", recipeId: r.id })));
 }
 export function fallbackFor(capability: ArchitecturalCapability): string {
-  const fallbacks: Partial<Record<string, string>> = { "corner-glazing": "Use aligned view-side windows on each facade.", "floating-roof": "Use the closest flat or shed roof with its normal fascia.", "recessed-entry": "Use a sheltered porch at the entry wall.", "courtyard-composition": "Arrange separate wings around an outdoor patio.", "deep-overhang": "Use the renderer's standard roof eaves.", "ribbon-glazing": "Use aligned individual windows.", "carve-terrace": "Use a deck or patio beside the mass." };
+  const fallbacks: Partial<Record<string, string>> = { "corner-glazing": "Use aligned view-side windows on each facade.", "floating-roof": "Use the closest flat or shed roof with its normal fascia.", "shadow-gap": "Use a flush fascia at the wall plate.", "roof-offset": "Center the roof plane on its mass.", "split-roof": "Use one roof plane for the mass.", "clerestory-roof": "Use a closed dark reveal below the roof plane.", "recessed-entry": "Use a sheltered porch at the entry wall.", "courtyard-composition": "Arrange separate wings around an outdoor patio.", "deep-overhang": "Use the renderer's standard roof eaves.", "ribbon-glazing": "Use aligned individual windows.", "carve-terrace": "Use a deck or patio beside the mass." };
   return fallbacks[capability.id] ?? "Continue with the closest supported massing and facade composition.";
 }
 export function priorityForNeed(need: Pick<CapabilityNeed, "requestedCount" | "projectRefs" | "recipeIds" | "status">, capability?: ArchitecturalCapability): number {

@@ -17,4 +17,12 @@ describe("capability engine", () => {
     expect(result.primitives).toEqual([]);
     expect(result.fallback).toMatch(/adjacent windows/i);
   });
+
+  it("registers roof-expression capabilities and preserves safe fallback on an unsupported target", () => {
+    const applied = requestCapability({ id: "clerestory-roof", stage: "roof-composition", parameters: { massId: "living", overhang: 1.8 } }, { primitives: [], target: mass });
+    expect(applied.status).toBe("applied");
+    expect(applied.primitives.map((p) => p.id)).toEqual(expect.arrayContaining(["capability-clerestory-roof-living-plane", "capability-clerestory-roof-living-clerestory-band"]));
+    const fallback = requestCapability({ id: "floating-roof", stage: "roof-composition", parameters: {} }, { primitives: [] });
+    expect(fallback.status).toBe("fallback");
+  });
 });

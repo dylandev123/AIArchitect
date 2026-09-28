@@ -7,6 +7,7 @@ import { buildShedRoof } from "@/lib/house/roof/shedRoof";
 import { buildGableRoof } from "@/lib/house/roof/gableRoof";
 import { buildHipRoof } from "@/lib/house/roof/hipRoof";
 import { buildButterflyRoof } from "@/lib/house/roof/butterflyRoof";
+import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { LEVEL_HEIGHT } from "@/lib/house/constants";
 import type { RoofType } from "@/types/house";
 import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassVolume, RoofRecipe } from "./document";
@@ -43,7 +44,11 @@ function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, options: Architect
   const prefix = `architecture-${mass.id}-roof`;
   const kind = recipe.kind === "mono-pitch" ? "shed" : recipe.kind === "pavilion" ? "hip" : recipe.kind;
   let out: HousePrimitive[];
-  if (kind === "flat" || kind === "floating-flat") out = buildFlatRoof(mass.width, mass.depth, base + (kind === "floating-flat" ? 0.18 : 0), prefix, roof, exterior);
+  // Flat recipes share a parameterized plane, fascia, soffit and closure assembly.
+  if (kind === "flat" || kind === "floating-flat") out = buildRoofExpression({
+    id: prefix, width: mass.width, depth: mass.depth, wallPlateY: base, roofMaterial: roof, exteriorMaterial: exterior,
+    parameters: { ...recipe.expression, overhang: recipe.overhang ?? recipe.expression?.overhang, verticalGap: kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap },
+  });
   else if (kind === "shed") out = buildShedRoof(mass.width, mass.depth, base, prefix, roof, exterior);
   else if (kind === "gable" || kind === "cross-gable") out = buildGableRoof(mass.width, mass.depth, base, prefix, roof, exterior);
   else if (kind === "hip") out = buildHipRoof(mass.width, mass.depth, base, prefix, roof, exterior);
