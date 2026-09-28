@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle, XCircle, Trash2, Pencil, Plus, Archive } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Pencil, Plus, Archive, Sparkles, LoaderCircle } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
-import { useLibraryStore } from "@/store/useLibraryStore";
+import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
 import { PROJECT_SCALES } from "@/lib/house/scale";
 import { formatParameterLines, formatRelationshipLines, parseParameterLines, parseRelationshipLines, recipeInputSchema, type RecipeInput } from "@/lib/library/recipes";
 import { RECIPE_APPROVALS, RECIPE_CATEGORIES, type DesignRecipe, type RecipeApproval } from "@/types/library";
@@ -41,17 +41,36 @@ function Chips<T extends string>({ all, on, onToggle }: { all: readonly T[]; on:
   );
 }
 
-function RecipeForm({ recipe, onSave, onCancel }: { recipe?: DesignRecipe; onSave: (input: RecipeInput) => Promise<string | null>; onCancel: () => void }) {
-  const [name, setName] = useState(recipe?.name ?? "");
-  const [category, setCategory] = useState(recipe?.category ?? RECIPE_CATEGORIES[0]);
-  const [styles, setStyles] = useState(recipe?.styleTags.join(", ") ?? "");
-  const [scales, setScales] = useState<ProjectScale[]>(recipe?.compatibleScales ?? []);
-  const [envs, setEnvs] = useState<SiteEnvironment[]>(recipe?.environmentTags ?? []);
-  const [params, setParams] = useState(formatParameterLines(recipe?.parameters ?? []));
-  const [rels, setRels] = useState(formatRelationshipLines(recipe?.relationships ?? []));
-  const [guidance, setGuidance] = useState(recipe?.guidance.join("\n") ?? "");
+interface RecipeFormProps {
+  /** Editing this saved recipe. */
+  recipe?: DesignRecipe;
+  /** Prefill for a new recipe (an AI draft); nothing is saved until the admin submits. */
+  draft?: RecipeInput;
+  /** Files a new recipe under this Knowledge Need on save. */
+  knowledgeId?: string;
+  aiProposed?: boolean;
+  /** Notes shown above the form: what validation adjusted, or why the form is blank. */
+  notes?: string[];
+  onRegenerate?: () => Promise<void>;
+  onSave: (input: RecipeInput) => Promise<string | null>;
+  onCancel: () => void;
+}
+
+function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRegenerate, onSave, onCancel }: RecipeFormProps) {
+  const src = recipe ?? draft;
+  const [name, setName] = useState(src?.name ?? "");
+  const [category, setCategory] = useState(src?.category ?? RECIPE_CATEGORIES[0]);
+  const [styles, setStyles] = useState(src?.styleTags.join(", ") ?? "");
+  const [scales, setScales] = useState<ProjectScale[]>(src?.compatibleScales ?? []);
+  const [envs, setEnvs] = useState<SiteEnvironment[]>(src?.environmentTags ?? []);
+  const [params, setParams] = useState(formatParameterLines(src?.parameters ?? []));
+  const [rels, setRels] = useState(formatRelationshipLines(src?.relationships ?? []));
+  const [guidance, setGuidance] = useState(src?.guidance.join("\n") ?? "");
+  const [regenerating, setRegenerating] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const knowledgeIds = recipe?.knowledgeIds ?? (knowledgeId ? [knowledgeId] : undefined);
 
   const submit = async () => {
     const parsed = parseParameterLines(params);
@@ -65,7 +84,8 @@ function RecipeForm({ recipe, onSave, onCancel }: { recipe?: DesignRecipe; onSav
       parameters: parsed.params,
       relationships: parseRelationshipLines(rels),
       guidance: guidance.split("\n").map((g) => g.trim()).filter(Boolean),
-      origin: recipe?.origin ?? { kind: "admin" },
+      origin: recipe?.origin ?? draft?.origin ?? { kind: "admin" },
+      ...(knowledgeIds && { knowledgeIds }),
     });
     if (!result.success) return setError(`${result.error.issues[0]?.path.join(".") || "recipe"}: ${result.error.issues[0]?.message}`);
     setSaving(true);
@@ -73,8 +93,25 @@ function RecipeForm({ recipe, onSave, onCancel }: { recipe?: DesignRecipe; onSav
     setSaving(false);
   };
 
+  const regenerate = async () => {
+    if (!window.confirm("Replace this draft with a new AI proposal? Your edits will be lost.")) return;
+    setRegenerating(true);
+    await onRegenerate?.();
+    setRegenerating(false);
+  };
+
   return (
-    <div className="flex flex-col gap-2.5 rounded-xl border border-amber-500/20 bg-white/[0.02] p-3">
+    <div className={`flex flex-col gap-2.5 rounded-xl border bg-white/[0.02] p-3 ${aiProposed ? "border-violet-500/30" : "border-amber-500/20"}`}>
+      {(aiProposed || notes.length > 0) && (
+        <div className="flex flex-col gap-1 rounded-lg bg-violet-500/10 px-3 py-2">
+          {aiProposed && (
+            <p className="flex items-center gap-1.5 text-[11px] font-medium text-violet-300">
+              <Sparkles size={12} /> AI-proposed draft — review and edit before saving. It saves as Proposed; approval stays manual.
+            </p>
+          )}
+          {notes.map((n) => <p key={n} className="text-[11px] text-violet-300/70">{n}</p>)}
+        </div>
+      )}
       <input className={inputCls} placeholder="Name — e.g. Caribbean Estate Hip 03" value={name} onChange={(e) => setName(e.target.value)} />
       <div className="flex gap-2">
         <select className={inputCls} value={category} onChange={(e) => setCategory(e.target.value as typeof category)}>
@@ -101,17 +138,23 @@ function RecipeForm({ recipe, onSave, onCancel }: { recipe?: DesignRecipe; onSav
         <button onClick={submit} disabled={saving} className="rounded-lg border border-amber-500/30 bg-amber-500/20 px-4 py-1.5 text-xs font-medium text-amber-300 transition hover:bg-amber-500/30 disabled:opacity-50">
           {recipe ? "Save changes" : "Save as proposed"}
         </button>
+        {onRegenerate && (
+          <button onClick={regenerate} disabled={regenerating || saving} className="flex items-center gap-1.5 rounded-lg border border-violet-500/25 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-300 transition hover:bg-violet-500/20 disabled:opacity-50">
+            {regenerating ? <LoaderCircle size={12} className="animate-spin" /> : <Sparkles size={12} />} {regenerating ? "Regenerating…" : "Regenerate"}
+          </button>
+        )}
         <button onClick={onCancel} className="px-3 py-1.5 text-xs text-neutral-500 hover:text-neutral-300">Cancel</button>
       </div>
     </div>
   );
 }
 
-export function RecipesTab() {
+export function RecipesTab({ intent }: { intent?: RecipeIntent }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
-  const { recipes, loaded, error, refresh, act } = useLibraryStore();
+  const { recipes, loaded, error, refresh, act, proposeRecipe } = useLibraryStore();
   const [filter, setFilter] = useState<RecipeApproval | "all">("all");
-  const [editing, setEditing] = useState<DesignRecipe | "new" | null>(null);
+  const [editing, setEditing] = useState<DesignRecipe | "new" | null>(intent ? "new" : null);
+  const [proposal, setProposal] = useState(intent?.recipe ? { recipe: intent.recipe, adjustments: intent.adjustments ?? [], nonce: 0 } : undefined);
   const [actionError, setActionError] = useState("");
 
   useEffect(() => {
@@ -138,10 +181,25 @@ export function RecipesTab() {
         <div className="flex flex-col gap-3 pb-2">
           {editing === "new" && (
             <RecipeForm
-              onCancel={() => setEditing(null)}
+              key={proposal?.nonce ?? "blank"}
+              draft={proposal?.recipe}
+              knowledgeId={intent?.knowledgeId}
+              aiProposed={!!proposal}
+              notes={proposal ? [`For Knowledge Need: ${intent?.title}`, ...proposal.adjustments] : [intent?.notice, intent && `Filing under Knowledge Need: ${intent.title}`].filter((n): n is string => !!n)}
+              onRegenerate={
+                intent
+                  ? async () => {
+                      const result = await proposeRecipe(adminEmail, intent.knowledgeId, proposal ? [proposal.recipe.name] : undefined);
+                      if ("error" in result) return setActionError(result.error);
+                      setActionError("");
+                      setProposal({ ...result, nonce: (proposal?.nonce ?? 0) + 1 });
+                    }
+                  : undefined
+              }
+              onCancel={() => { setEditing(null); setProposal(undefined); }}
               onSave={async (recipe) => {
                 const err = await act(adminEmail, { action: "saveRecipe", recipe });
-                if (!err) setEditing(null);
+                if (!err) { setEditing(null); setProposal(undefined); }
                 return err;
               }}
             />

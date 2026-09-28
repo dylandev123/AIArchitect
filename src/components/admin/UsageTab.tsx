@@ -15,7 +15,7 @@ interface UsageResponse {
 
 const usd = (n: number | null, digits = 4) => (n === null ? "—" : `$${n.toFixed(digits)}`);
 const int = (n: number | null) => (n === null ? "—" : Math.round(n).toLocaleString());
-const TYPE_LABEL: Record<string, string> = { generation: "Generation", scoped_edit: "Scoped edit", learn: "Learn" };
+const TYPE_LABEL: Record<string, string> = { generation: "Generation", scoped_edit: "Scoped edit", learn: "Learn", recipe_proposal: "Recipe Proposal", asset_plan: "Asset Plan", native_asset: "Native Asset" };
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (

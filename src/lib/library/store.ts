@@ -3,10 +3,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { Pool } from "pg";
 import { usageDatabaseUrl } from "@/lib/ai/usage/db";
-import type { DesignRecipe, Need } from "@/types/library";
+import type { AssetPlan, DesignRecipe, KnowledgeNeed, Need } from "@/types/library";
 
 /**
- * Server-only persistence for the reusable library (Needs and Recipes). Same deployment story as AI usage:
+ * Server-only persistence for the reusable library (Needs, Knowledge Needs and Recipes). Same deployment story as AI usage:
  * Postgres (`library_docs`) when DATABASE_URL / POSTGRES_URL is set, otherwise a JSON file for local dev — which
  * on serverless hosts is ephemeral, so production needs the database. Set AI_LIBRARY_PATH to relocate the file.
  *
@@ -20,9 +20,17 @@ import type { DesignRecipe, Need } from "@/types/library";
 export interface LibrarySnapshot {
   needs: Need[];
   recipes: DesignRecipe[];
+  /** Knowledge Needs. Absent in files written before they existed, and read back as empty. */
+  knowledge: KnowledgeNeed[];
+  /** Asset Plans (AI-designed asset packs). Absent in files written before they existed, and read back as empty. */
+  plans: AssetPlan[];
 }
 
-export type LibraryDoc = { kind: "need"; data: Need } | { kind: "recipe"; data: DesignRecipe };
+export type LibraryDoc =
+  | { kind: "need"; data: Need }
+  | { kind: "recipe"; data: DesignRecipe }
+  | { kind: "knowledge"; data: KnowledgeNeed }
+  | { kind: "plan"; data: AssetPlan };
 
 export interface LibraryChange<T> {
   put?: LibraryDoc[];
@@ -39,12 +47,12 @@ export interface LibraryBackend {
 function applyChange(snapshot: LibrarySnapshot, change: LibraryChange<unknown>): LibrarySnapshot {
   const needs = new Map(snapshot.needs.map((n) => [n.id, n]));
   const recipes = new Map(snapshot.recipes.map((r) => [r.id, r]));
-  for (const doc of change.put ?? []) {
-    if (doc.kind === "need") needs.set(doc.data.id, doc.data);
-    else recipes.set(doc.data.id, doc.data);
-  }
-  for (const rm of change.remove ?? []) (rm.kind === "need" ? needs : recipes).delete(rm.id);
-  return { needs: [...needs.values()], recipes: [...recipes.values()] };
+  const knowledge = new Map(snapshot.knowledge.map((k) => [k.id, k]));
+  const plans = new Map(snapshot.plans.map((p) => [p.id, p]));
+  const tables = { need: needs, recipe: recipes, knowledge, plan: plans } as const;
+  for (const doc of change.put ?? []) (tables[doc.kind] as Map<string, unknown>).set(doc.data.id, doc.data);
+  for (const rm of change.remove ?? []) tables[rm.kind].delete(rm.id);
+  return { needs: [...needs.values()], recipes: [...recipes.values()], knowledge: [...knowledge.values()], plans: [...plans.values()] };
 }
 
 // ── File backend (local dev, tests) ─────────────────────────────────────────
@@ -55,9 +63,9 @@ export function createFileBackend(file: string): LibraryBackend {
   async function load(): Promise<LibrarySnapshot> {
     try {
       const parsed = JSON.parse(await readFile(file, "utf8")) as Partial<LibrarySnapshot>;
-      return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [] };
+      return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [] };
     } catch {
-      return { needs: [], recipes: [] };
+      return { needs: [], recipes: [], knowledge: [], plans: [] };
     }
   }
 
@@ -118,12 +126,14 @@ async function pgReady(url: string): Promise<Pool> {
 
 interface DocRow {
   kind: string;
-  data: Need | DesignRecipe;
+  data: Need | DesignRecipe | KnowledgeNeed | AssetPlan;
 }
 
 const toSnapshot = (rows: DocRow[]): LibrarySnapshot => ({
   needs: rows.filter((r) => r.kind === "need").map((r) => r.data as Need),
   recipes: rows.filter((r) => r.kind === "recipe").map((r) => r.data as DesignRecipe),
+  knowledge: rows.filter((r) => r.kind === "knowledge").map((r) => r.data as KnowledgeNeed),
+  plans: rows.filter((r) => r.kind === "plan").map((r) => r.data as AssetPlan),
 });
 
 export function createPostgresBackend(url: string): LibraryBackend {

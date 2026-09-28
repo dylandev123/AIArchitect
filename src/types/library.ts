@@ -1,3 +1,4 @@
+import type { AssetSpec } from "@/lib/assets/native/spec";
 import type { ProjectScale, SiteEnvironment } from "./house";
 
 /**
@@ -119,6 +120,8 @@ export interface DesignRecipe {
   updated_at: string;
   /** Where it came from: an admin, or a generated project it was proposed from. */
   origin?: { kind: "admin" | "learn" | "generation"; projectId?: string };
+  /** Knowledge Needs this recipe was explicitly filed under. Absent on older recipes, which are matched by category instead. */
+  knowledgeIds?: string[];
 }
 
 /** What generation asks the library for. Every field is optional; more fields only narrow the ranking. */
@@ -133,4 +136,144 @@ export interface Scored<T> {
   item: T;
   score: number;
   reasons: string[];
+}
+
+// ── Knowledge Needs ─────────────────────────────────────────────────────────
+//
+// A Need (above) is one missing *object*. A Knowledge Need is a missing *area of design knowledge* ("Luxury Outdoor
+// Living") that parents assets, recipes, materials and lighting. Needs stay as they are and remain the children:
+// every asset family maps to the Knowledge Needs that contain it (see `lib/library/knowledge/catalog`).
+
+/** The major design areas generation scores independently. */
+export const DESIGN_AREAS = [
+  "architecture", "roofing", "landscape", "outdoor-living", "pool", "arrival", "driveway", "facade",
+  "gardens", "lighting", "vegetation", "materials", "views", "terrain", "furniture",
+] as const;
+export type DesignArea = (typeof DESIGN_AREAS)[number];
+
+export const KNOWLEDGE_STATUSES = ["open", "ignored"] as const;
+export type KnowledgeStatus = (typeof KNOWLEDGE_STATUSES)[number];
+
+/** How much of each facet a Knowledge Need wants before it counts as complete. A facet with target 0 is not tracked. */
+export interface KnowledgeTargets {
+  assets: number;
+  recipes: number;
+  materials: number;
+  lighting: number;
+  plants: number;
+}
+
+export interface KnowledgeProjectRef {
+  projectId: string | null;
+  at: string;
+  /** Start of the brief, so the admin can see what kind of request exposed the gap. */
+  brief: string;
+  /** The areas of that project that scored low, with their scores in [0,1]. */
+  areas: { area: DesignArea; score: number; reason: string }[];
+}
+
+export interface KnowledgeNeed {
+  /** The catalog slug ("luxury-outdoor-living"); stable, so the same gap always lands on the same record. */
+  id: string;
+  title: string;
+  areas: DesignArea[];
+  requestCount: number;
+  firstSeen: string;
+  lastSeen: string;
+  /** Timestamps of the latest requests (capped), for "recently growing". */
+  recentRequests: string[];
+  /** Latest projects that exposed the gap (capped, oldest dropped). */
+  projectExamples: KnowledgeProjectRef[];
+  styles: string[];
+  scales: ProjectScale[];
+  environments: SiteEnvironment[];
+  /** Sum over requests of (1 − area score): how badly the design fell short, on average = weaknessTotal / requestCount. */
+  weaknessTotal: number;
+  /** Curated assets / recipes an admin explicitly filed under this need, on top of those matched by family/category. */
+  assetIds: string[];
+  recipeIds: string[];
+  status: KnowledgeStatus;
+  version: 1;
+}
+
+/** One generation's evidence that an area is weak, before it is merged into a Knowledge Need. */
+export interface KnowledgeSignal {
+  knowledgeId: string;
+  title: string;
+  areas: DesignArea[];
+  /** Mean shortfall (1 − score) across the areas that pointed here. */
+  weakness: number;
+  styles: string[];
+  scale?: ProjectScale;
+  environment?: SiteEnvironment;
+  projectId: string | null;
+  brief: string;
+  details: KnowledgeProjectRef["areas"];
+}
+
+// ── Asset Plans ─────────────────────────────────────────────────────────────
+//
+// A Need is never satisfied by one giant GLB. The AI planner first designs an Asset Pack: a set of small reusable
+// objects (kitchen island, sink, BBQ, stool…). Each planned asset later becomes its own generation job, and then goes
+// through the normal Queue → validation → Library path like any other asset.
+
+export const ASSET_PRIORITIES = ["required", "recommended", "optional"] as const;
+export type AssetPriority = (typeof ASSET_PRIORITIES)[number];
+
+export const PLAN_STATUSES = ["draft", "approved"] as const;
+export type PlanStatus = (typeof PLAN_STATUSES)[number];
+
+/**
+ * How a planned asset should be made. Native is the default: the AI writes an AssetSpec and deterministic builders make the
+ * model. Objects the primitives cannot express (organic, carved, figurative) are flagged for an external 3D provider instead.
+ */
+export const ASSET_ROUTES = ["native", "external-generation-recommended"] as const;
+export type AssetRoute = (typeof ASSET_ROUTES)[number];
+
+/** A generation job already submitted to a provider for a planned asset. */
+export interface PlannedAssetJob {
+  providerId: string;
+  jobId: string;
+  submittedAt: string;
+}
+
+export interface PlannedAsset {
+  id: string;
+  name: string;
+  category: AssetCategory;
+  description: string;
+  style: string[];
+  material: string;
+  /** Target size in metres. */
+  dimensions?: NeedDimensions;
+  tags: string[];
+  priority: AssetPriority;
+  /** 0–100: how likely future projects are to reuse it. Higher-reuse assets are generated first. */
+  estimatedReuse: number;
+  contexts: UsageContext[];
+  /** The exact, provider-independent text a generator is given for this one object. */
+  generationPrompt: string;
+  /** Approved for generation by the admin. */
+  approved: boolean;
+  /** An asset produced for it has reached the queue or library. */
+  generated: boolean;
+  /** The curated asset produced for it (see `CuratedAsset.plannedAssetId`). */
+  assetId?: string;
+  job?: PlannedAssetJob;
+  route?: AssetRoute;
+  /** The latest native spec awaiting review (set by the native generator; cleared on reject). Server-owned. */
+  spec?: AssetSpec;
+}
+
+export interface AssetPlan {
+  id: string;
+  title: string;
+  /** The Knowledge Need this pack belongs to (looked up from the Need's family when planned from an Asset Need). */
+  knowledgeId?: string;
+  /** The Asset Need this pack was planned for, if any. */
+  needId?: string;
+  status: PlanStatus;
+  created_at: string;
+  updated_at: string;
+  assets: PlannedAsset[];
 }

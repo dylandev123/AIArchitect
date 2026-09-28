@@ -18,7 +18,7 @@ import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelI
 import { createTimings, logTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
 import { attachLibraryAssets } from "@/lib/library/attach";
-import { noteRecipeOutcome, recipesForBrief, recordMissingAssetNeeds } from "@/lib/library/service";
+import { noteRecipeOutcome, recipesForBrief, recordKnowledgeNeeds, recordMissingAssetNeeds } from "@/lib/library/service";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 
@@ -301,6 +301,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         after(async () => {
           await noteRecipeOutcome(recipeIds, "success");
           await recordMissingAssetNeeds(json, brief, usageMeta.projectId, library);
+          await recordKnowledgeNeeds(json, brief, usageMeta.projectId, library);
         });
         return NextResponse.json({
           summary: output.summary,

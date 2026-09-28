@@ -36,6 +36,8 @@ export const recipeInputSchema = z.object({
     .default([]),
   guidance: z.array(z.string().trim().min(1).max(240)).max(20).default([]),
   origin: z.object({ kind: z.enum(["admin", "learn", "generation"]), projectId: z.string().max(64).optional() }).optional(),
+  /** Knowledge Needs to file the recipe under on save (see `saveRecipe`). */
+  knowledgeIds: z.array(z.string().min(1).max(80)).max(10).optional(),
 });
 
 export type RecipeInput = z.infer<typeof recipeInputSchema>;

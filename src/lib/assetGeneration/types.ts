@@ -5,8 +5,13 @@ export type QualityLevel = "draft" | "standard" | "high";
 /** Everything a provider needs to produce one GLB for a Need. Provider-neutral: adapters translate it to their own API. */
 export interface AssetGenerationRequest {
   needId: string;
+  /** Set when the request is for one planned asset of an Asset Plan (one object, never a whole scene). */
+  planId?: string;
+  plannedAssetId?: string;
   category: AssetCategory;
   description: string;
+  /** The exact prompt to give a text-to-3D provider; falls back to `description` for adapters that only take that. */
+  prompt?: string;
   style: string[];
   context: string[];
   /** Target size in metres; the finished model is validated against it. */

@@ -1,3 +1,4 @@
+import type { AssetSpec } from "@/lib/assets/native/spec";
 import type { StyleKey } from "./house";
 import type { AssetCategory, NeedDimensions } from "./library";
 
@@ -94,6 +95,11 @@ export interface CuratedAsset {
   scope?: AssetScope;
   /** The Need this asset was produced to satisfy. */
   needId?: string;
+  /** The planned asset (in an Asset Plan) this asset was produced for. */
+  planId?: string;
+  plannedAssetId?: string;
+  /** Knowledge Needs this asset is explicitly filed under (materials have no family, so this is how they count). */
+  knowledgeIds?: string[];
   validation?: AssetValidationReport;
   /**
    * Remote GLB to load instead of the locally stored file (future generated assets). Uploaded GLBs need none:
@@ -106,6 +112,25 @@ export interface CuratedAsset {
   usageCount?: number;
   successCount?: number;
   failureCount?: number;
+
+  // ── Versioning foundation (native-generated assets only; nothing reads or writes "version" yet beyond 1) ──
+  /**
+   * Identity that survives regeneration: stable across versions of "the same" asset (e.g. every native spec produced
+   * for one planned asset), unlike `id`, which names this one build. Lets a future Upgrade find prior versions.
+   */
+  stableAssetId?: string;
+  /** 1-based version under `stableAssetId`. Always 1 until something actually regenerates in place (Upgrade). */
+  version?: number;
+  /** The generator pipeline that produced this asset ("native-1"), so old versions can be told apart from a rewritten builder. */
+  generatorVersion?: string;
+  /** `STYLE_PROFILE.version` at generation time, so an asset can be told apart from one made under a since-changed look. */
+  styleProfileVersion?: number;
+  /** The exact prompt text this generation was given (see `PlannedAsset.generationPrompt`). */
+  generationPrompt?: string;
+  /** The AssetSpec this build came from, native assets only: what an Upgrade would re-run or diff against. */
+  sourceSpec?: AssetSpec;
+  /** When this version was generated (native assets only; distinct from `importedAt`, which every asset has). */
+  createdAt?: string;
 }
 
 /** Normalised shape returned by the /api/admin/sources proxy for both Poly Haven and ambientCG */

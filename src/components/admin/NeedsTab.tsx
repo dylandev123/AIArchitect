@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { Search, Sparkles, Upload, EyeOff, RotateCcw } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
+import { useAssetStore } from "@/store/useAssetStore";
 import { useLibraryStore } from "@/store/useLibraryStore";
+import { planStats, plansFor } from "@/lib/library/plans";
+import { AssetPlanDialog } from "./AssetPlanDialog";
 import { categoryLabel } from "@/lib/library/taxonomy";
+import { knowledgeForFamily } from "@/lib/library/knowledge/catalog";
 import { NEED_STATUSES, type Need, type NeedStatus } from "@/types/library";
 
 type Filter = "open" | NeedStatus | "all";
@@ -28,7 +32,9 @@ interface NeedsTabProps {
 
 export function NeedsTab({ onSearch, onUpload }: NeedsTabProps) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
-  const { needs, generation, loaded, loading, error, refresh, act } = useLibraryStore();
+  const { needs, plans, loaded, loading, error, refresh, act } = useLibraryStore();
+  const catalog = useAssetStore((s) => s.catalog);
+  const [planning, setPlanning] = useState<{ need: Need; planId?: string } | null>(null);
   const [filter, setFilter] = useState<Filter>("open");
   const [actionError, setActionError] = useState("");
 
@@ -70,13 +76,16 @@ export function NeedsTab({ onSearch, onUpload }: NeedsTabProps) {
       ) : (
         <div className="flex-1 overflow-y-auto">
           <div className="flex flex-col gap-3 pb-2">
-            {shown.map((need) => (
+            {shown.map((need) => {
+              const mine = plansFor(plans, { needId: need.id });
+              const stats = planStats(mine, catalog);
+              return (
               <div key={need.id} className="rounded-xl border border-white/8 bg-white/[0.02] p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-neutral-100">{need.title}</p>
                     <p className="mt-0.5 text-[11px] text-neutral-500">
-                      Category: {categoryLabel(need.category)}
+                      Part of: {knowledgeForFamily(need.category, need.styleTags)[0]?.title ?? "—"} · Category: {categoryLabel(need.category)}
                       {need.styleTags.length > 0 && <> · Style: {need.styleTags.join(", ")}</>}
                       {need.contextTags.length > 0 && <> · Context: {need.contextTags.join(", ")}</>}
                     </p>
@@ -99,12 +108,17 @@ export function NeedsTab({ onSearch, onUpload }: NeedsTabProps) {
 
                 <div className="mt-2.5 flex flex-wrap gap-2">
                   <button
-                    disabled
-                    title={generation?.available === false ? generation.message : "Provider ready — the generation workflow is not wired up yet."}
-                    className="flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-neutral-600 cursor-not-allowed"
+                    onClick={() => setPlanning({ need })}
+                    title="Have the AI plan a pack of reusable assets for this need, then generate them one by one"
+                    className="flex items-center gap-1.5 rounded-lg border border-violet-500/25 bg-violet-500/15 px-3 py-1.5 text-xs font-medium text-violet-300 transition hover:bg-violet-500/25"
                   >
                     <Sparkles size={12} /> Generate
                   </button>
+                  {mine.length > 0 && (
+                    <button onClick={() => setPlanning({ need, planId: mine[0].id })} className="flex items-center gap-1.5 rounded-lg border border-white/8 px-3 py-1.5 text-xs font-medium text-neutral-400 transition hover:text-neutral-200">
+                      View Plan
+                    </button>
+                  )}
                   <button onClick={() => onSearch(need)} className="flex items-center gap-1.5 rounded-lg border border-amber-500/20 bg-amber-500/15 px-3 py-1.5 text-xs font-medium text-amber-300 transition hover:bg-amber-500/25">
                     <Search size={12} /> Search Assets
                   </button>
@@ -123,11 +137,24 @@ export function NeedsTab({ onSearch, onUpload }: NeedsTabProps) {
                     )
                   )}
                 </div>
-                {generation?.available === false && <p className="mt-1.5 text-[10px] text-neutral-600">{generation.message}</p>}
+                {stats.planned > 0 && (
+                  <p className="mt-1.5 text-[11px] text-neutral-500">
+                    Assets planned <span className="text-neutral-300">{stats.planned}</span> · generated <span className="text-neutral-300">{stats.generated}</span> · approved <span className="text-neutral-300">{stats.approved}</span> · completion <span className="font-medium text-neutral-300">{Math.round(stats.completion * 100)}%</span>
+                  </p>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
+      )}
+      {planning && (
+        <AssetPlanDialog
+          key={planning.planId ?? planning.need.id}
+          target={{ needId: planning.need.id, title: planning.need.title }}
+          planId={planning.planId}
+          onClose={() => setPlanning(null)}
+        />
       )}
     </div>
   );

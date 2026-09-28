@@ -1,12 +1,18 @@
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { inferScaleFromBrief } from "@/lib/house/scale";
-import type { AssetRequest, DesignRecipe, Need, NeedStatus } from "@/types/library";
+import type { AssetSpec } from "@/lib/assets/native/spec";
+import { buildPlannedAssetRequest, PROVIDERS } from "@/lib/assetGeneration/providers";
+import type { AssetGenerationProvider } from "@/lib/assetGeneration/types";
+import type { AssetPlan, AssetRequest, DesignRecipe, KnowledgeNeed, KnowledgeStatus, Need, NeedStatus, PlannedAsset } from "@/types/library";
+import { matchKnowledge } from "./knowledge/catalog";
+import { detectKnowledgeSignals, recordKnowledgeSignal } from "./knowledge/knowledge";
 import { canTransition, recordRequest } from "./needs";
+import { byGenerationOrder, createPlan, updatePlan, type PlanInput } from "./plans";
 import { createRecipe, recordRecipeUse, setRecipeApproval, updateRecipe, type RecipeInput } from "./recipes";
 import { requestsFromProject } from "./requests";
 import { findRecipes, resolveAsset, type AssetIndexEntry } from "./retrieval";
 import { extractStyleTags } from "./taxonomy";
-import { mutateLibrary, readLibrary } from "./store";
+import { mutateLibrary, readLibrary, type LibraryDoc } from "./store";
 
 /** Server-side library operations used by generation and the admin API. Everything here is best-effort for generation callers: see `safely`. */
 
@@ -20,14 +26,24 @@ export async function safely<T>(label: string, work: () => Promise<T>, fallback:
   }
 }
 
-/** Approved recipes worth leaning on for this brief, best first. Empty when none fit (or the library is unreachable). */
+/**
+ * Approved recipes worth leaning on for this brief, best first. Empty when none fit (or the library is unreachable).
+ * Retrieval order is Knowledge → Recipes: a recipe filed under a Knowledge Need the brief speaks to
+ * ("Mediterranean Roof Collection" for a Tuscan villa) outranks an equally good recipe that is not.
+ */
 export function recipesForBrief(brief: string, limit = 3): Promise<DesignRecipe[]> {
   return safely("recipe lookup", async () => {
     const { recipes } = await readLibrary();
     if (recipes.length === 0) return [];
     const hints = inferSiteHints(brief);
-    const query = { styleTags: extractStyleTags(brief), scale: inferScaleFromBrief(brief), environment: hints.environment };
-    return findRecipes(recipes, query, limit).map((s) => s.item);
+    const styles = extractStyleTags(brief);
+    const query = { styleTags: styles, scale: inferScaleFromBrief(brief), environment: hints.environment };
+    const knowledgeIds = matchKnowledge({ brief, styles, environment: hints.environment }).map((d) => d.id);
+    const filed = (r: DesignRecipe) => (r.knowledgeIds?.some((id) => knowledgeIds.includes(id)) ? 1 : 0);
+    return findRecipes(recipes, query, recipes.length)
+      .sort((a, b) => filed(b.item) - filed(a.item) || b.score - a.score)
+      .slice(0, limit)
+      .map((s) => s.item);
   }, []);
 }
 
@@ -66,6 +82,23 @@ export function recordMissingAssetNeeds(json: string, brief: string, projectId: 
   }, []);
 }
 
+/**
+ * After a design is built: scores its design areas and, for each weak one, creates or increments the Knowledge
+ * Need it belongs to ("Luxury Outdoor Living", not "Gazebo"). Best-effort like every other library write.
+ * Returns the ids of the Knowledge Needs that were touched.
+ */
+export function recordKnowledgeNeeds(json: string, brief: string, projectId: string | null, library: readonly AssetIndexEntry[]): Promise<string[]> {
+  return safely("knowledge recording", async () => {
+    const signals = detectKnowledgeSignals(json, brief, projectId, library);
+    if (signals.length === 0) return [];
+    await mutateLibrary((s) => {
+      const put = signals.map((signal) => ({ kind: "knowledge" as const, data: recordKnowledgeSignal(s.knowledge.find((k) => k.id === signal.knowledgeId), signal) }));
+      return { put, result: undefined };
+    });
+    return signals.map((s) => s.knowledgeId);
+  }, []);
+}
+
 // ── Admin operations ────────────────────────────────────────────────────────
 
 export type AdminResult<T> = { ok: true; value: T } | { ok: false; status: number; error: string };
@@ -82,14 +115,17 @@ export function setNeedStatus(id: string, status: NeedStatus, assetId?: string):
 
 export function saveRecipe(input: RecipeInput, id?: string): Promise<AdminResult<DesignRecipe>> {
   return mutateLibrary<AdminResult<DesignRecipe>>((s) => {
-    if (!id) {
-      const created = createRecipe(input);
-      return { put: [{ kind: "recipe", data: created }], result: { ok: true, value: created } };
+    const existing = id ? s.recipes.find((r) => r.id === id) : undefined;
+    if (id && !existing) return { result: { ok: false, status: 404, error: "Recipe not found." } };
+    // Without an id this always creates a new "proposed" recipe; it never replaces another one.
+    const saved = existing ? updateRecipe(existing, input) : createRecipe(input);
+    const put: LibraryDoc[] = [{ kind: "recipe", data: saved }];
+    // Filing a recipe under a Knowledge Need also lists it there, in the same write.
+    for (const knowledgeId of saved.knowledgeIds ?? []) {
+      const need = s.knowledge.find((k) => k.id === knowledgeId);
+      if (need && !need.recipeIds.includes(saved.id)) put.push({ kind: "knowledge", data: { ...need, recipeIds: [...need.recipeIds, saved.id] } });
     }
-    const existing = s.recipes.find((r) => r.id === id);
-    if (!existing) return { result: { ok: false, status: 404, error: "Recipe not found." } };
-    const updated = updateRecipe(existing, input);
-    return { put: [{ kind: "recipe", data: updated }], result: { ok: true, value: updated } };
+    return { put, result: { ok: true, value: saved } };
   });
 }
 
@@ -107,4 +143,112 @@ export function deleteRecipe(id: string): Promise<AdminResult<null>> {
     if (!s.recipes.some((r) => r.id === id)) return { result: { ok: false, status: 404, error: "Recipe not found." } };
     return { remove: [{ kind: "recipe", id }], result: { ok: true, value: null } };
   });
+}
+
+export function setKnowledgeStatus(id: string, status: KnowledgeStatus): Promise<AdminResult<KnowledgeNeed>> {
+  return mutateLibrary<AdminResult<KnowledgeNeed>>((s) => {
+    const need = s.knowledge.find((k) => k.id === id);
+    if (!need) return { result: { ok: false, status: 404, error: "Knowledge need not found." } };
+    const next: KnowledgeNeed = { ...need, status };
+    return { put: [{ kind: "knowledge", data: next }], result: { ok: true, value: next } };
+  });
+}
+
+/** Files a curated asset or recipe under a Knowledge Need (or takes it back out). Recipes are validated here; assets live client-side, so their id is taken as given. */
+export function linkKnowledge(id: string, link: { kind: "asset" | "recipe"; targetId: string; linked: boolean }): Promise<AdminResult<KnowledgeNeed>> {
+  return mutateLibrary<AdminResult<KnowledgeNeed>>((s) => {
+    const need = s.knowledge.find((k) => k.id === id);
+    if (!need) return { result: { ok: false, status: 404, error: "Knowledge need not found." } };
+    const put: LibraryDoc[] = [];
+    if (link.kind === "recipe") {
+      const recipe = s.recipes.find((r) => r.id === link.targetId);
+      if (!recipe) return { result: { ok: false, status: 404, error: "Recipe not found." } };
+      const ids = new Set(recipe.knowledgeIds ?? []);
+      if (link.linked) ids.add(id);
+      else ids.delete(id);
+      put.push({ kind: "recipe", data: { ...recipe, knowledgeIds: [...ids] } });
+    }
+    const key = link.kind === "asset" ? "assetIds" : "recipeIds";
+    const ids = new Set(need[key]);
+    if (link.linked) ids.add(link.targetId);
+    else ids.delete(link.targetId);
+    const next: KnowledgeNeed = { ...need, [key]: [...ids] };
+    put.push({ kind: "knowledge", data: next });
+    return { put, result: { ok: true, value: next } };
+  });
+}
+
+// ── Asset plans ─────────────────────────────────────────────────────────────
+
+/** Changes one planned asset inside one plan; the store write is a single transaction. */
+function withPlannedAsset<T>(planId: string, assetId: string, change: (asset: PlannedAsset, plan: AssetPlan) => { asset: PlannedAsset; result: T } | AdminResult<never>) {
+  return mutateLibrary<AdminResult<T>>((s) => {
+    const plan = s.plans.find((p) => p.id === planId);
+    const asset = plan?.assets.find((a) => a.id === assetId);
+    if (!plan || !asset) return { result: { ok: false, status: 404, error: "Planned asset not found." } };
+    const out = change(asset, plan);
+    if ("ok" in out) return { result: out };
+    const next: AssetPlan = { ...plan, assets: plan.assets.map((a) => (a.id === assetId ? out.asset : a)), updated_at: new Date().toISOString() };
+    return { put: [{ kind: "plan", data: next }], result: { ok: true, value: out.result } };
+  });
+}
+
+/** Creates a plan, or (with an id) updates the one already saved: title, status and the admin's edits to its assets. Never creates twice. */
+export function savePlan(input: PlanInput): Promise<AdminResult<AssetPlan>> {
+  return mutateLibrary<AdminResult<AssetPlan>>((s) => {
+    if (input.needId && !s.needs.some((n) => n.id === input.needId)) return { result: { ok: false, status: 404, error: "Need not found." } };
+    const existing = input.id ? s.plans.find((p) => p.id === input.id) : undefined;
+    if (input.id && !existing) return { result: { ok: false, status: 404, error: "Plan not found." } };
+    const saved = existing ? updatePlan(existing, input) : createPlan(input);
+    return { put: [{ kind: "plan", data: saved }], result: { ok: true, value: saved } };
+  });
+}
+
+export function deletePlan(id: string): Promise<AdminResult<null>> {
+  return mutateLibrary<AdminResult<null>>((s) => {
+    if (!s.plans.some((p) => p.id === id)) return { result: { ok: false, status: 404, error: "Plan not found." } };
+    return { remove: [{ kind: "plan", id }], result: { ok: true, value: null } };
+  });
+}
+
+/** Records that an asset produced for a planned asset reached the queue or library (called when the admin approves it). */
+export function completePlannedAsset(planId: string, plannedAssetId: string, assetId: string) {
+  return withPlannedAsset(planId, plannedAssetId, (a) => ({ asset: { ...a, generated: true, assetId, spec: undefined }, result: null }));
+}
+
+/** The native generator's output for a planned asset: a spec awaiting review, or a verdict that it needs an external provider. */
+export function saveNativeSpec(planId: string, plannedAssetId: string, outcome: { spec: AssetSpec } | { route: "external-generation-recommended" }) {
+  return withPlannedAsset(planId, plannedAssetId, (a) => ({ asset: "spec" in outcome ? { ...a, spec: outcome.spec, route: "native" as const } : { ...a, spec: undefined, route: outcome.route }, result: null }));
+}
+
+/** Rejecting a native draft discards the spec; the planned asset itself stays. */
+export function discardNativeSpec(planId: string, plannedAssetId: string) {
+  return withPlannedAsset(planId, plannedAssetId, (a) => ({ asset: { ...a, spec: undefined }, result: null }));
+}
+
+/**
+ * Sends approved, not-yet-generated assets to an external provider (the fallback for objects the native generator cannot
+ * make), highest reuse first. Native-route assets are skipped: those go through the native generator.
+ */
+export async function generateExternal(planId: string, assetIds: readonly string[] | undefined, providers: readonly AssetGenerationProvider[] = PROVIDERS): Promise<AdminResult<{ submitted: string[]; failed: { id: string; error: string }[] }>> {
+  const provider = providers.find((p) => p.isConfigured());
+  if (!provider) return { ok: false, status: 409, error: "No external 3D provider is configured. Native assets can still be generated." };
+  const { plans } = await readLibrary();
+  const plan = plans.find((p) => p.id === planId);
+  if (!plan) return { ok: false, status: 404, error: "Plan not found." };
+  const todo = plan.assets
+    .filter((a) => a.approved && !a.generated && !a.job && a.route === "external-generation-recommended" && (!assetIds || assetIds.includes(a.id)))
+    .sort(byGenerationOrder);
+  const submitted: string[] = [];
+  const failed: { id: string; error: string }[] = [];
+  for (const asset of todo) {
+    try {
+      const job = await provider.submit(buildPlannedAssetRequest(plan, asset));
+      const noted = await withPlannedAsset(planId, asset.id, (a) => ({ asset: { ...a, job: { ...job, submittedAt: new Date().toISOString() } }, result: null }));
+      if (noted.ok) submitted.push(asset.id);
+    } catch (err) {
+      failed.push({ id: asset.id, error: err instanceof Error ? err.message : "Submission failed." });
+    }
+  }
+  return { ok: true, value: { submitted, failed } };
 }

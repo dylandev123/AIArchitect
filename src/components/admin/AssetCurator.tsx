@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Search, Upload, CheckCircle, XCircle, Trash2, AlertTriangle } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
 import { approvalBlocker, useAssetStore } from "@/store/useAssetStore";
-import { useLibraryStore } from "@/store/useLibraryStore";
+import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
 import { useLearnStore } from "@/store/useLearnStore";
 import { ingestGlb } from "@/lib/assets/glbIngest";
 import { getGlbStore } from "@/lib/assets/glbStorage";
@@ -435,6 +435,8 @@ function QueueTab() {
     approve(asset.id);
     // A need is satisfied only once its asset is in the global library.
     if (asset.needId && !approvalBlocker(asset)) void act(adminEmail, { action: "completeNeed", id: asset.needId, assetId: asset.id });
+    // Likewise a planned asset (from an Asset Plan) is done once its asset is in the library.
+    if (asset.planId && asset.plannedAssetId && !approvalBlocker(asset)) void act(adminEmail, { action: "completePlannedAsset", planId: asset.planId, plannedAssetId: asset.plannedAssetId, assetId: asset.id });
   };
   const rejectAsset = (asset: CuratedAsset) => {
     reject(asset.id);
@@ -632,6 +634,7 @@ interface AssetCuratorProps {
 export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
   const [tab, setTab] = useState<CuratorTab>("learn");
   const [browseIntent, setBrowseIntent] = useState<BrowseIntent | undefined>();
+  const [recipeIntent, setRecipeIntent] = useState<RecipeIntent | undefined>();
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const openNeeds = useLibraryStore((s) => s.needs.filter((n) => n.status === "needed").length);
   const refreshLibrary = useLibraryStore((s) => s.refresh);
@@ -652,7 +655,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
   const TABS: { id: CuratorTab; label: string; count?: number }[] = [
     { id: "learn",   label: "Learn",   count: pendingLearn },
     { id: "browse",  label: "Assets" },
-    { id: "needs",   label: "Needs",   count: openNeeds },
+    { id: "needs",   label: "Asset Needs", count: openNeeds },
     { id: "queue",   label: "Queue",   count: queueLength },
     { id: "library", label: "Library", count: catalogLength },
     { id: "recipes", label: "Recipes" },
@@ -674,7 +677,7 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
           {TABS.map(({ id, label, count }) => (
             <button
               key={id}
-              onClick={() => { if (id === "browse") setBrowseIntent(undefined); setTab(id); }}
+              onClick={() => { if (id === "browse") setBrowseIntent(undefined); if (id === "recipes") setRecipeIntent(undefined); setTab(id); }}
               className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition ${
                 tab === id
                   ? "bg-neutral-700 text-neutral-100"
@@ -712,12 +715,12 @@ export function AssetCurator({ onClose, projectId }: AssetCuratorProps) {
       {/* Body */}
       <div className="flex flex-1 overflow-hidden">
         <div className={`mx-auto flex w-full flex-col overflow-hidden p-4 ${tab === "usage" ? "max-w-6xl" : "max-w-4xl"}`}>
-          {tab === "learn"   && <LearnWorkspace projectId={projectId} />}
+          {tab === "learn"   && <LearnWorkspace projectId={projectId} onNavigate={(next, intent) => { if (next === "recipes") setRecipeIntent(intent); setTab(next); }} />}
           {tab === "browse"  && <BrowseTab key={browseIntent?.need.id ?? "browse"} intent={browseIntent} />}
           {tab === "needs"   && <NeedsTab onSearch={goToBrowse("polyhaven")} onUpload={goToBrowse("upload")} />}
           {tab === "queue"   && <QueueTab />}
           {tab === "library" && <LibraryTab />}
-          {tab === "recipes" && <RecipesTab />}
+          {tab === "recipes" && <RecipesTab key={recipeIntent?.nonce ?? "recipes"} intent={recipeIntent} />}
           {tab === "usage"   && <UsageTab />}
         </div>
       </div>

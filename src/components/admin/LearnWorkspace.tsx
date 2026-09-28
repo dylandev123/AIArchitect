@@ -7,7 +7,9 @@ import {
 } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
 import { useLearnStore } from "@/store/useLearnStore";
+import type { RecipeIntent } from "@/store/useLibraryStore";
 import { useProjectStore } from "@/store/useProjectStore";
+import { KnowledgeControlCenter } from "./KnowledgeControlCenter";
 import { setMaterialZone } from "@/lib/house/jsonEdit";
 import type { LearnedStylePreset, LearnProposal } from "@/types/learn";
 import type { MaterialZone } from "@/types/house";
@@ -321,9 +323,10 @@ function KBStatus() {
 
 interface LearnWorkspaceProps {
   projectId?: string;
+  onNavigate?: (tab: "browse" | "recipes", intent?: RecipeIntent) => void;
 }
 
-export function LearnWorkspace({ projectId }: LearnWorkspaceProps) {
+export function LearnWorkspace({ projectId, onNavigate }: LearnWorkspaceProps) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const { proposals, addProposal, updateProposal } = useLearnStore();
 
@@ -403,6 +406,11 @@ export function LearnWorkspace({ projectId }: LearnWorkspaceProps) {
 
   return (
     <div className="flex h-full flex-col gap-3 overflow-hidden">
+      {/* Control center: what the engine is missing, ranked */}
+      <div className="max-h-[55%] shrink-0 overflow-y-auto pr-1">
+        <KnowledgeControlCenter onNavigate={onNavigate} />
+      </div>
+
       {/* Knowledge base status bar */}
       <KBStatus />
 

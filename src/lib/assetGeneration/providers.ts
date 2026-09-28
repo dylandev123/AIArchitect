@@ -1,4 +1,4 @@
-import type { Need } from "@/types/library";
+import type { AssetPlan, Need, PlannedAsset } from "@/types/library";
 import { categoryLabel } from "@/lib/library/taxonomy";
 import type { AssetGenerationProvider, AssetGenerationRequest, QualityLevel } from "./types";
 
@@ -36,6 +36,25 @@ export function buildGenerationRequest(need: Need, opts: { quality?: QualityLeve
     style: need.styleTags,
     context: need.contextTags,
     dimensions: need.dimensions,
+    quality,
+    webReady: true,
+    polygonBudget: opts.polygonBudget ?? POLYGON_BUDGETS[quality],
+  };
+}
+
+/** The provider-neutral request for one planned asset. Its `generationPrompt` is passed through untouched. */
+export function buildPlannedAssetRequest(plan: Pick<AssetPlan, "id" | "needId" | "knowledgeId">, asset: PlannedAsset, opts: { quality?: QualityLevel; polygonBudget?: number } = {}): AssetGenerationRequest {
+  const quality = opts.quality ?? "standard";
+  return {
+    needId: plan.needId ?? plan.knowledgeId ?? plan.id,
+    planId: plan.id,
+    plannedAssetId: asset.id,
+    category: asset.category,
+    description: asset.description,
+    prompt: asset.generationPrompt,
+    style: asset.style,
+    context: asset.contexts,
+    dimensions: asset.dimensions,
     quality,
     webReady: true,
     polygonBudget: opts.polygonBudget ?? POLYGON_BUDGETS[quality],
