@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSceneStore } from "@/store/useSceneStore";
@@ -8,8 +8,8 @@ import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { PrimitiveMesh } from "./PrimitiveMesh";
 import { GlbFeature } from "./GlbFeature";
 import { useAssetStore } from "@/store/useAssetStore";
-import { placementsFromBuildings, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
-import { glbModels, useGlbCacheVersion } from "@/lib/assets/glbModels";
+import { placementsFromBuildings, placementsFromOutdoor, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
+import { glbModels, loadPlacedAssets, useGlbCacheVersion } from "@/lib/assets/glbModels";
 import type { MaterialsConfig } from "@/types/house";
 import { SURFACE_PBR, usePbrReady, type PbrSetDef, type SurfaceKey } from "@/lib/pbrLibrary";
 import type { HousePrimitive } from "@/lib/house/types";
@@ -42,7 +42,8 @@ function surfaceOf(primitive: HousePrimitive, materials: MaterialsConfig | undef
 function parsePlacements(json: string | undefined): AssetPlacement[] {
   if (!json || !json.includes('"assetId"')) return [];
   try {
-    return placementsFromBuildings((JSON.parse(json) as { buildings?: unknown }).buildings);
+    const root = JSON.parse(json);
+    return [...placementsFromBuildings(root.buildings), ...placementsFromOutdoor(root.outdoorAssetPlacements)];
   } catch {
     return [];
   }
@@ -75,12 +76,15 @@ export function HouseRenderer() {
   const catalog = useAssetStore((s) => s.catalog);
   const placements = useMemo(() => parsePlacements(houseConfigJson), [houseConfigJson]);
   const usable = useMemo(() => usablePlacements(placements, catalog), [placements, catalog]);
+  const [checked, setChecked] = useState<{placements: readonly AssetPlacement[]; blocked: Set<string>} | null>(null);
   useEffect(() => {
-    for (const id of new Set(usable.map((p) => p.assetId))) void glbModels.load(id);
-  }, [usable]);
+    let active = true;
+    void loadPlacedAssets(params.projectId, placements, usable).then(blocked => { if (active) setChecked({placements,blocked}); });
+    return () => {active=false;};
+  }, [usable, placements, params.projectId]);
   useGlbCacheVersion(); // re-render as any model finishes loading
   const replaced = replacedFeatureIds(usable, (id) => glbModels.status(id));
-  const swapped = usable.filter((p) => replaced.has(p.featureId));
+  const swapped = usable.filter((p) => replaced.has(p.featureId) && (p.kind || (checked?.placements === placements && !checked.blocked.has(p.featureId))) && (!p.supportId || replaced.has(p.supportId)));
   const replacedPrefixes = swapped.map((p) => `${p.featureId}-`);
 
   const surfaces = useMemo(

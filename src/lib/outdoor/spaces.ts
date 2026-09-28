@@ -29,6 +29,8 @@ export type OutdoorSpaceKind = (typeof OUTDOOR_SPACE_KINDS)[number];
 export type SpaceSide = "arrival" | "view" | "flank" | "rear";
 
 export interface OutdoorSpace {
+  /** Realized placement frame, in metres and radians, derived from the generated site. */
+  layout?: { center: [number, number, number]; width: number; depth: number; yaw: number };
   id: OutdoorSpaceKind;
   kind: OutdoorSpaceKind;
   name: string;

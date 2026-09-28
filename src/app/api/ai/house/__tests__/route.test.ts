@@ -37,7 +37,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const asset = (id: string, name: string, family: string, tags: string[]) => ({ id, name, family, tags, styleTags: ["tropical"], contextTags: [], dimensions: {} });
+const asset = (id: string, name: string, family: string, tags: string[]) => ({ id, name, family, tags, styleTags: ["tropical"], contextTags: [], dimensions: family === "pergola" ? {width:4.5,depth:3.5,height:2.8} : {width:2.4,depth:1,height:0.76} });
 
 async function generate(libraryAssets: unknown[] = []) {
   const { POST } = await import("../route");

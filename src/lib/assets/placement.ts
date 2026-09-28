@@ -1,6 +1,6 @@
 import type { BuildingKind } from "@/types/house";
 import type { CuratedAsset } from "@/types/assets";
-import type { AssetCategory } from "@/types/library";
+import { ASSET_CATEGORIES, type AssetCategory } from "@/types/library";
 import type { ModelStatus } from "./modelCache";
 import { resolveCurrentAssetId } from "./versions";
 import { validateBuilding } from "@/lib/house/features/buildings";
@@ -13,8 +13,7 @@ import { validateBuilding } from "@/lib/house/features/buildings";
 
 /**
  * Which library family stands in for which feature kind. Only kinds the generator already builds procedurally can
- * appear here: a GLB replaces an existing feature, it never creates one. Pergola, cabana and fire pit have no
- * feature kind yet (their procedural parts exist only inside other features), so they have no entry to wire.
+ * appear here. Freestanding outdoor components use the separate outdoorAssetPlacements collection.
  */
 export const GLB_BUILDING_CATEGORY: Partial<Record<BuildingKind, AssetCategory>> = {
   gazebo: "gazebo",
@@ -26,8 +25,13 @@ export const GLB_WIRED_CATEGORIES: readonly AssetCategory[] = Object.values(GLB_
 export interface AssetPlacement {
   /** The feature's id in the scene (`building-2`): the same key selection and editing use. */
   featureId: string;
+  trackingId?: string;
+  supportId?: string;
   assetId: string;
-  kind: BuildingKind;
+  kind?: BuildingKind;
+  y?: number;
+  scale?: number;
+  height?: number;
   category: AssetCategory;
   x: number;
   z: number;
@@ -100,3 +104,14 @@ export function usablePlacements(placements: readonly AssetPlacement[], catalog:
 export function replacedFeatureIds(usable: readonly AssetPlacement[], statusOf: (assetId: string) => ModelStatus): Set<string> {
   return new Set(usable.filter((p) => statusOf(p.assetId) === "ready").map((p) => p.featureId));
 }
+
+/** Decorative placements never replace procedural architecture. */
+export function placementsFromOutdoor(raw: unknown): AssetPlacement[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((p) => {
+    if (!p || typeof p.id !== 'string' || !p.id.startsWith('outdoor-') || typeof p.assetId !== 'string' || !ASSET_CATEGORIES.includes(p.category) || !Array.isArray(p.position) || p.position.length !== 3 || !Array.isArray(p.rotation) || p.rotation.length !== 3 || ![...p.position,...p.rotation,p.scale,p.dimensions?.width,p.dimensions?.depth,p.dimensions?.height].every(Number.isFinite) || p.scale <= 0 || p.dimensions.width <= 0 || p.dimensions.depth <= 0 || p.dimensions.height <= 0) return [];
+    return [{ featureId:p.id,trackingId:outdoorTrackingId(p),supportId:p.relationship?.type === "above" ? p.relationship.targetId : undefined,assetId:p.assetId,category:p.category,x:p.position[0],y:p.position[1],z:p.position[2],yaw:p.rotation[1],scale:p.scale,height:p.dimensions.height,width:p.dimensions.width,depth:p.dimensions.depth }];
+  });
+}
+
+export const outdoorTrackingId = (p: {id:string;assetId:string;position:number[];rotation:number[]}) => `${p.id}:${p.assetId}:${p.position.join(",")}:${p.rotation.join(",")}`;

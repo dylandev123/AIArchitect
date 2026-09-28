@@ -1,6 +1,8 @@
 "use client";
 
-import { Box3, Group, Mesh, Vector3 } from "three";
+import { useGenerationStore } from "@/store/useGenerationStore";
+
+import { Box3, Group, Mesh, Vector3, Triangle } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { clone as cloneSkinned } from "three/examples/jsm/utils/SkeletonUtils.js";
 import { useSyncExternalStore } from "react";
@@ -76,7 +78,7 @@ export const glbModels = createModelCache<LoadedGlb>(
   {
     // A model that fails to load counts against the asset (once per session per asset) so retrieval can demote it.
     onFailed: (id, error) => {
-      console.warn(`[glb] ${id} failed to load, using the procedural version:`, error);
+      console.warn(`[glb] ${id} failed to load; omitting the model:`, error);
       useAssetStore.getState().recordAssetOutcome(id, "failure");
     },
   }
@@ -92,7 +94,8 @@ useAssetStore.subscribe((state, prev) => {
  * Notes that a placed model rendered. Counted once per (project, feature, asset) per session, so re-renders and
  * remounts don't inflate use counts.
  */
-export function noteGlbRendered(projectId: string, featureId: string, assetId: string): void {
+export function noteGlbRendered(projectId: string, featureId: string, assetId: string, trackingId = featureId): void {
+  useGenerationStore.getState().noteAsset(projectId, trackingId, "Rendered");
   const key = `${projectId}:${featureId}:${assetId}`;
   if (usedThisSession.has(key)) return;
   usedThisSession.add(key);
@@ -134,4 +137,47 @@ export function useGlbCacheVersion(): number {
 export function useGlbStatus(id: string | undefined): ModelStatus {
   useGlbCacheVersion();
   return id ? glbModels.status(id) : "idle";
+}
+
+/** Loading never rejects a house render; each absent decoration records its own failure. */
+export async function loadPlacedAssets(projectId: string, placements: readonly import('./placement').AssetPlacement[], usable: readonly import('./placement').AssetPlacement[]): Promise<Set<string>> {
+  const blocked = new Set<string>();
+  await Promise.all(placements.map(async p => {
+    const valid = usable.find(u => u.featureId === p.featureId);
+    const loaded = valid ? await glbModels.load(valid.assetId) : null;
+    if (!loaded) {
+      blocked.add(p.featureId);
+      useGenerationStore.getState().noteAsset(projectId, p.trackingId ?? p.featureId, 'Failed', valid ? glbModels.error(valid.assetId) ?? 'Asset failed to load.' : 'Asset is missing or no longer approved.');
+    }
+  }));
+  // A library pergola need not have the planner's standard four-post geometry. Check its
+  // actual GLB triangles against the occupied bounds underneath before showing it.
+  for (const p of usable.filter(p=>!p.kind && p.category==='pergola' && !blocked.has(p.featureId))) {
+    const instance=instantiateGlb(p.assetId)!;
+    const size=glbModels.peek(p.assetId)!.size;
+    instance.scale.setScalar(Math.min(p.scale??1,p.width/size.x,p.depth/size.z,(p.height??size.y)/size.y));
+    instance.position.set(p.x,p.y??0,p.z); instance.rotation.y=p.yaw; instance.updateMatrixWorld(true);
+    const boxes=usable.filter(q=>!q.kind && q.featureId!==p.featureId && !blocked.has(q.featureId)).map(q=>{
+      const c=Math.abs(Math.cos(q.yaw)),s=Math.abs(Math.sin(q.yaw));
+      const w=q.width*c+q.depth*s,d=q.depth*c+q.width*s;
+      return new Box3(new Vector3(q.x-w/2+0.02,q.y??0,q.z-d/2+0.02),new Vector3(q.x+w/2-0.02,(q.y??0)+(q.height??1),q.z+d/2-0.02));
+    });
+    let collision=false;
+    instance.traverse(o=>{
+      if(collision || !(o as Mesh).isMesh) return;
+      const mesh=o as Mesh, geometry=mesh.geometry, positions=geometry.getAttribute('position'), indices=geometry.index;
+      const triangle=new Triangle();
+      for(let i=0;i<(indices?.count??positions.count);i+=3) {
+        for(const [n,v] of [triangle.a,triangle.b,triangle.c].entries()) v.fromBufferAttribute(positions,indices?indices.getX(i+n):i+n).applyMatrix4(mesh.matrixWorld);
+        if(boxes.some(box=>box.intersectsTriangle(triangle))) {collision=true;break;}
+      }
+    });
+    if(collision) {blocked.add(p.featureId);useGenerationStore.getState().noteAsset(projectId,p.trackingId??p.featureId,'Failed','The model geometry intersects another outdoor asset.');}
+  }
+  for (const p of usable) {
+    if (!p.supportId) continue;
+    const support=usable.find(s=>s.featureId===p.supportId);
+    if (!support || blocked.has(support.featureId) || glbModels.status(support.assetId)!=='ready') {blocked.add(p.featureId);useGenerationStore.getState().noteAsset(projectId,p.trackingId??p.featureId,'Failed','The supporting asset could not be rendered.');}
+  }
+  return blocked;
 }

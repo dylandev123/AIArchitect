@@ -114,7 +114,7 @@ describe("one successful generation, end to end", () => {
     const furniture = report.assetNeeds.find((n) => n.name.endsWith("Furniture"))!;
     // The chair supplies the lounger only: the dining table, chairs and side tables are still missing.
     expect(furniture.components).toEqual(expect.arrayContaining(["Outdoor Dining Table", "Outdoor Dining Chair"]));
-    expect(furniture.components).not.toContain("Pool Sun Lounger");
+    expect(furniture.components).toContain("Pool Sun Lounger");
     expect(report.assets.map((a) => a.name)).toEqual(expect.arrayContaining(["Tropical Deck Chair", "Garden Lantern"]));
   });
 
@@ -196,7 +196,7 @@ describe("reuse on the next generation", () => {
     expect(report.persistence.wrote.recipes).toBe(retrieved.length);
   });
 
-  it("retrieves approved assets per component, stops asking for what they supply, and says what was not applied", async () => {
+  it("keeps Needs open for retrieved assets without placement dimensions", async () => {
     const library = [
       asset("t1", "Tropical Teak Dining Table", "furniture", ["dining", "table"]),
       asset("c1", "Tropical Dining Chair", "furniture", ["dining", "chair"]),
@@ -210,16 +210,16 @@ describe("reuse on the next generation", () => {
     expect(names).toEqual(expect.arrayContaining(["Tropical Teak Dining Table", "Tropical Dining Chair", "Teak Pergola", "Teak Sun Lounger"]));
     const table = withLibrary.assets.find((a) => a.name === "Tropical Teak Dining Table")!;
     expect(table).toMatchObject({ space: "Outdoor Dining", component: "dining-table", applied: false });
-    expect(table.note).toMatch(/no placement slot/);
+    expect(table.note).toMatch(/no safe supported placement/);
 
     const dinSpace = withLibrary.spaces.find((s) => s.name === "Outdoor Dining")!;
-    expect(dinSpace.supplied).toEqual(expect.arrayContaining(["dining-table", "dining-chair", "pergola"]));
-    expect(dinSpace.missing).not.toContain("dining-table");
-    // The furniture need no longer lists the pieces the library now has; the pergola need is gone altogether.
+    expect(dinSpace.supplied).toEqual([]);
+    expect(dinSpace.missing).toContain("dining-table");
+    // A retrieved candidate without usable dimensions cannot clear a Need.
     const furniture = withLibrary.assetNeeds.find((n) => n.name.endsWith("Furniture"))!;
-    expect(furniture.components).not.toContain("Outdoor Dining Table");
+    expect(furniture.components).toContain("Outdoor Dining Table");
     expect(before.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(true);
-    expect(withLibrary.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(false);
+    expect(withLibrary.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(true);
   });
 
   it("applies a library asset to the feature it stands in for, and says so", async () => {

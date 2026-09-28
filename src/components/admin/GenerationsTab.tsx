@@ -1,5 +1,6 @@
 "use client";
 
+import { withAssetOutcomes } from "@/lib/assets/outcomes";
 import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, LoaderCircle, MinusCircle, Sparkles } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
@@ -174,7 +175,7 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
             {report.assets.length === 0 && <Empty>No approved library asset fit a space or feature.</Empty>}
             {report.assets.map((a) => (
               <p key={`${a.id}-${a.component}-${a.space}`} className="text-[11px] text-neutral-400">
-                <span className="font-medium text-neutral-200">{a.name}</span> <span className="text-neutral-600">— {a.space}{a.feature ? ` · ${a.feature}` : ` · ${a.component}`}</span> <Applied ok={a.applied} />
+                <span className="font-medium text-neutral-200">{a.name}</span> <span className="text-neutral-600">— {a.space}{a.feature ? ` · ${a.feature}` : ` · ${a.component}`}</span> <span>{a.status ?? (a.applied ? "Applied" : "Retrieved")}</span>
                 <span className="block text-neutral-600">{a.note}</span>
               </p>
             ))}
@@ -204,6 +205,7 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
 export function GenerationsTab({ onNavigate }: { onNavigate?: (tab: "recipes", intent?: RecipeIntent) => void }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const { generations, loaded, loading, error, refresh } = useLibraryStore();
+  const outcomes = useGenerationStore(s => s.outcomes);
   const local = useGenerationStore((s) => s.reports);
 
   useEffect(() => {
@@ -213,8 +215,8 @@ export function GenerationsTab({ onNavigate }: { onNavigate?: (tab: "recipes", i
   // This browser's copy of a generation the server could not store (or has not listed yet) comes first.
   const shown = useMemo(() => {
     const known = new Set(generations.map((g) => g.id));
-    return [...local.filter((r) => !known.has(r.id)).map((r) => ({ report: r, local: true })), ...generations.map((r) => ({ report: r, local: false }))];
-  }, [generations, local]);
+    return [...local.filter((r) => !known.has(r.id)).map((r) => ({ report: r, local: true })), ...generations.map((r) => ({ report: r, local: false }))].map(entry => ({...entry, report: withAssetOutcomes(entry.report,outcomes)}));
+  }, [generations, local, outcomes]);
 
   return (
     <div className="flex h-full flex-col gap-3 overflow-hidden">

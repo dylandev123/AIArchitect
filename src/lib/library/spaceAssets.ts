@@ -1,3 +1,4 @@
+import { outdoorTrackingId } from "@/lib/assets/placement";
 import type { AssetRequest, ReportAsset } from "@/types/library";
 import { COMPONENTS, componentDef, type ComponentDef } from "@/lib/outdoor/components";
 import { spaceName, type OutdoorSpace, type OutdoorSpaceKind } from "@/lib/outdoor/spaces";
@@ -24,7 +25,7 @@ export function matchComponent(library: readonly AssetIndexEntry[], def: Compone
 }
 
 export interface SpaceAssetResult {
-  /** Approved assets that supply a component a space wants. */
+  /** Retrieved candidates; bySpace.supplied contains only successfully placed components. */
   supplied: { space: OutdoorSpaceKind; component: string; asset: AssetIndexEntry }[];
   /** Components no approved asset supplies, as requests carrying their parent space. */
   requests: AssetRequest[];
@@ -33,7 +34,7 @@ export interface SpaceAssetResult {
 }
 
 /** Every component of every space the design contains (or the brief asked for), matched against the library. */
-export function resolveSpaceAssets(spaces: readonly OutdoorSpace[], library: readonly AssetIndexEntry[], ctx: { styles: readonly string[]; projectId: string | null }): SpaceAssetResult {
+export function resolveSpaceAssets(spaces: readonly OutdoorSpace[], library: readonly AssetIndexEntry[], ctx: { styles: readonly string[]; projectId: string | null; placements?: readonly import("@/lib/outdoor/placements").OutdoorAssetPlacement[] }): SpaceAssetResult {
   const supplied: SpaceAssetResult["supplied"] = [];
   const requests: AssetRequest[] = [];
   const bySpace: SpaceAssetResult["bySpace"] = new Map();
@@ -46,8 +47,10 @@ export function resolveSpaceAssets(spaces: readonly OutdoorSpace[], library: rea
       const asset = matchComponent(library, def, ctx.styles);
       if (asset) {
         supplied.push({ space: space.kind, component: key, asset });
-        mine.supplied.push(key);
-        continue;
+        if (ctx.placements?.some(p => p.parentSpaceId === space.id && p.role === key && p.assetId === asset.id)) {
+          mine.supplied.push(key);
+          continue;
+        }
       }
       mine.missing.push(key);
       requests.push({ text: def.name, category: def.category, styleTags: [...ctx.styles], contextTags: [...def.contexts], projectId: ctx.projectId, spaces: [spaceName(space.kind)], components: [key] });
@@ -57,12 +60,13 @@ export function resolveSpaceAssets(spaces: readonly OutdoorSpace[], library: rea
   return { supplied, requests, bySpace };
 }
 
-/** The report's asset rows: what the library supplied, and whether it reached the design. Only assets wired to a feature are applied. */
+/** The report's asset rows: what the library supplied, and whether it reached the design. Only assets with a concrete feature or outdoor placement are applied. */
 export function reportAssets(
   result: SpaceAssetResult,
   attached: readonly { index: number; assetId: string; request: AssetRequest }[],
   library: readonly AssetIndexEntry[],
-  spaces: readonly OutdoorSpace[]
+  spaces: readonly OutdoorSpace[],
+  placements: readonly import("@/lib/outdoor/placements").OutdoorAssetPlacement[] = []
 ): ReportAsset[] {
   const rows: ReportAsset[] = [];
   const nameOf = (id: string) => library.find((a) => a.id === id)?.name ?? id;
@@ -75,18 +79,21 @@ export function reportAssets(
     const category = a.request.category;
     const kinds = home[category] ?? [];
     const space = spaces.find((s) => kinds.includes(s.kind) && s.realized) ?? spaces.find((s) => kinds.includes(s.kind));
-    rows.push({ id: a.assetId, name: nameOf(a.assetId), family: category, component: category, space: space ? spaceName(space.kind) : "site", feature: `building ${a.index + 1}`, applied: true, note: `Attached to building ${a.index + 1}; the library model draws in place of the procedural ${category}.` });
+    rows.push({ id: a.assetId, name: nameOf(a.assetId), family: category, component: category, space: space ? spaceName(space.kind) : "site", feature: `building ${a.index + 1}`, applied: true, status: "Applied", placementIds: [`building-${a.index}`], note: `Attached to building ${a.index + 1}; the library model draws in place of the procedural ${category}.` });
   }
   for (const s of result.supplied) {
     const def = COMPONENTS[s.component];
+    const placed = placements.filter(p => p.parentSpaceId === s.space && p.role === s.component && p.assetId === s.asset.id);
     rows.push({
       id: s.asset.id,
       name: s.asset.name ?? s.asset.id,
       family: s.asset.family ?? def?.category ?? "",
       component: s.component,
       space: spaceName(s.space),
-      applied: false,
-      note: `Retrieved for ${def?.name ?? s.component}; the generator has no placement slot for ${s.asset.family ?? "these"} assets yet, so the procedural scenery draws.`,
+      applied: placed.length > 0,
+      status: placed.length ? "Applied" : "Retrieved",
+      placementIds: placed.map(outdoorTrackingId),
+      note: placed.length ? `${placed.length} placements for ${def?.name ?? s.component}.` : `Retrieved, but no safe supported placement for ${def?.name ?? s.component}; Need remains open.`,
     });
   }
   return rows;

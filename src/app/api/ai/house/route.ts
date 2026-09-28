@@ -17,6 +17,7 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings, logTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
+import { attachOutdoorAssets } from "@/lib/outdoor/placements";
 import { attachLibraryAssets } from "@/lib/library/attach";
 import { noteRecipeOutcome, recipesForSpaces } from "@/lib/library/service";
 import { runPostGeneration } from "@/lib/library/generationLoop";
@@ -76,6 +77,7 @@ function parseLibraryAssets(raw: unknown): AssetIndexEntry[] {
     const d = typeof a.dimensions === "object" && a.dimensions !== null ? a.dimensions : {};
     out.push({
       id: a.id.slice(0, 80),
+      placementReady: typeof a.placementReady === "boolean" ? a.placementReady : undefined,
       name: typeof a.name === "string" ? a.name.slice(0, 80) : undefined,
       tags: strings(a.tags, 12),
       family: a.family,
@@ -304,7 +306,9 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         // The design is built with the procedural version of every object. Where an approved library GLB fits, the
         // feature just references it (assetId); the procedural geometry stays as the fallback.
-        const { json, attached } = attachLibraryAssets(result.json, library);
+        const attachedResult = attachLibraryAssets(result.json, library);
+        const attached = attachedResult.attached;
+        const json = attachOutdoorAssets(attachedResult.json, brief, library);
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
         // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
         const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached }));

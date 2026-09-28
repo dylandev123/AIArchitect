@@ -1,5 +1,6 @@
 "use client";
 
+import { withAssetOutcomes, type AssetRenderOutcomes } from "@/lib/assets/outcomes";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { GenerationReport } from "@/types/library";
@@ -13,6 +14,8 @@ const KEEP = 5;
 
 interface GenerationStore {
   reports: GenerationReport[];
+  outcomes: AssetRenderOutcomes;
+  noteAsset: (projectId: string, placementId: string, status: "Rendered" | "Failed", note?: string) => void;
   record: (report: GenerationReport) => void;
 }
 
@@ -20,7 +23,12 @@ export const useGenerationStore = create<GenerationStore>()(
   persist(
     (set) => ({
       reports: [],
-      record: (report) => set((s) => ({ reports: [report, ...s.reports.filter((r) => r.id !== report.id)].slice(0, KEEP) })),
+      outcomes: {},
+      noteAsset: (projectId, placementId, status, note) => set(s => {
+        const outcomes = {...s.outcomes, [`${projectId}:${placementId}`]: {status,note}};
+        return {outcomes, reports:s.reports.map(r=>withAssetOutcomes(r,outcomes))};
+      }),
+      record: (report) => set((s) => ({ reports: [withAssetOutcomes(report,s.outcomes), ...s.reports.filter((r) => r.id !== report.id)].slice(0, KEEP) })),
     }),
     { name: "ai-architect-generations" }
   )

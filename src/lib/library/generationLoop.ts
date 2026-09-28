@@ -130,7 +130,8 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
   }, []);
 
   // 4. Asset Needs: what the brief and buildings ask for that no approved asset fits, and each outdoor space's missing components.
-  const spaceAssets = step("space-assets", () => resolveSpaceAssets(spaces, library, { styles, projectId }), { supplied: [], requests: [], bySpace: new Map() });
+  const placements: import("@/lib/outdoor/placements").OutdoorAssetPlacement[] = Array.isArray(root.outdoorAssetPlacements) ? root.outdoorAssetPlacements : [];
+  const spaceAssets = step("space-assets", () => resolveSpaceAssets(spaces, library, { styles, projectId, placements }), { supplied: [], requests: [], bySpace: new Map() });
   const touchedNeeds = new Map<string, Need>();
   /** Needs whose missing components the library now supplies (and which no request touched): rewritten without them. */
   const satisfied = new Map<string, Need>();
@@ -149,7 +150,7 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     }
     // What the library supplies is no longer missing: drop those components from every Need that lists them. A Need whose
     // every component is now supplied has been answered by the library, without a plan.
-    const supplied = new Set(spaceAssets.supplied.map((s) => s.component));
+    const supplied = new Set(spaceAssets.supplied.filter(s => spaceAssets.bySpace.get(s.space)?.supplied.includes(s.component) && ![...spaceAssets.bySpace.values()].some(v => v.missing.includes(s.component))).map(s => s.component));
     const supplier = (key: string) => spaceAssets.supplied.find((s) => s.component === key)?.asset.id;
     for (const need of needs) {
       if (!need.components?.some((c) => supplied.has(c))) continue;
@@ -208,7 +209,11 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
   // 7. Placement: did the property read correctly (pool private, garage on the arrival side)?
   const placement = step("placement", () => describePlacement(root, brief) ?? emptyPlacement(), emptyPlacement());
 
-  const assets = step("reuse", () => reportAssets(spaceAssets, attached, library, spaces), []);
+  const assets = step("reuse", () => reportAssets(spaceAssets, attached, library, spaces, placements), []);
+  if (typeof root.outdoorAssetPlacementFailure === "string") {
+    steps.push({name:"outdoor-asset-placement",ok:false,ms:0,error:root.outdoorAssetPlacementFailure});
+    for (const asset of assets) if (!asset.applied) { asset.status="Failed"; asset.note=root.outdoorAssetPlacementFailure; }
+  }
 
   const info = libraryStorageInfo();
   const report: GenerationReport = {

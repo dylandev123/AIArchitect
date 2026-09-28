@@ -320,6 +320,8 @@ export interface ReportRecipe {
 }
 
 export interface ReportAsset {
+  status?: "Retrieved" | "Applied" | "Rendered" | "Failed";
+  placementIds?: string[];
   id: string;
   name: string;
   family: string;

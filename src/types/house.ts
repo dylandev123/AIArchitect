@@ -437,6 +437,8 @@ export interface SiteSettings {
 }
 
 export interface SiteConfig {
+  outdoorSpaces?: import("@/lib/outdoor/spaces").OutdoorSpace[];
+  outdoorAssetPlacements?: import("@/lib/outdoor/placements").OutdoorAssetPlacement[];
   house: HouseConfig;
   /**
    * Land/environment settings; undefined for projects that predate them. NOTE: the project JSON stores this block under `site`

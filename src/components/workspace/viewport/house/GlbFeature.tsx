@@ -18,12 +18,13 @@ export function GlbFeature({ placement, projectId, footprint }: { placement: Ass
   // The stored collision footprint sizes the fit; without one the model's measured size does.
   const scale = useMemo(() => {
     const size = glbModels.peek(assetId)?.size;
+    if (placement.scale !== undefined && size) return Math.min(placement.scale, width / size.x, depth / size.z, (placement.height ?? size.y) / size.y);
     return fitScale({ width, depth }, footprint ?? (size ? { width: size.x, depth: size.z } : undefined));
-  }, [assetId, footprint, width, depth]);
+  }, [assetId, footprint, width, depth, placement.scale, placement.height]);
 
   useEffect(() => {
-    if (instance) noteGlbRendered(projectId, featureId, assetId);
-  }, [instance, projectId, featureId, assetId]);
+    if (instance) noteGlbRendered(projectId, featureId, assetId, placement.trackingId);
+  }, [instance, projectId, featureId, assetId, placement.trackingId]);
 
   if (!instance) return null;
 
@@ -33,7 +34,7 @@ export function GlbFeature({ placement, projectId, footprint }: { placement: Ass
   };
 
   return (
-    <group name={featureId} userData={{ id: featureId, assetId }} position={[x, 0, z]} rotation={[0, yaw, 0]} scale={scale} onClick={select}>
+    <group name={featureId} userData={{ id: featureId, assetId }} position={[x, placement.y ?? 0, z]} rotation={[0, yaw, 0]} scale={scale} onClick={select}>
       <primitive object={instance} />
     </group>
   );
