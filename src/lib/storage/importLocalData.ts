@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { appendUsageRecord } from "@/lib/ai/usage/store";
 import type { AiUsageRecord } from "@/lib/ai/usage/types";
-import { mutateLibrary, type LibraryDoc, type LibrarySnapshot } from "@/lib/library/store";
+import { emptySnapshot, mutateLibrary, type LibraryDoc, type LibrarySnapshot } from "@/lib/library/store";
 
 export interface LocalImportResult {
   library: { needs: number; knowledge: number; recipes: number; plans: number; generations: number };
@@ -19,7 +19,7 @@ const source = (name: string) => path.join(process.cwd(), ".data", name);
 export async function importLocalData(includeUsage = true): Promise<LocalImportResult> {
   const raw = JSON.parse(await readFile(source("ai-library.json"), "utf8")) as Partial<LibrarySnapshot>;
   const snapshot: LibrarySnapshot = {
-    needs: raw.needs ?? [], recipes: raw.recipes ?? [], knowledge: raw.knowledge ?? [], plans: raw.plans ?? [], generations: raw.generations ?? [],
+    needs: raw.needs ?? [], recipes: raw.recipes ?? [], knowledge: raw.knowledge ?? [], plans: raw.plans ?? [], generations: raw.generations ?? [], capabilities: raw.capabilities ?? emptySnapshot().capabilities, capabilityNeeds: raw.capabilityNeeds ?? [],
   };
   const docs: LibraryDoc[] = [
     ...snapshot.needs.map((data) => ({ kind: "need" as const, data })),
@@ -27,6 +27,8 @@ export async function importLocalData(includeUsage = true): Promise<LocalImportR
     ...snapshot.recipes.map((data) => ({ kind: "recipe" as const, data })),
     ...snapshot.plans.map((data) => ({ kind: "plan" as const, data })),
     ...snapshot.generations.map((data) => ({ kind: "generation" as const, data })),
+    ...snapshot.capabilities.map((data) => ({ kind: "capability" as const, data })),
+    ...snapshot.capabilityNeeds.map((data) => ({ kind: "capabilityNeed" as const, data })),
   ];
   await mutateLibrary(() => ({ put: docs, result: undefined }));
 

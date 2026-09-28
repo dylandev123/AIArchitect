@@ -18,6 +18,7 @@ import { describeRecipesForPrompt } from "@/lib/library/recipes";
 import { describeSpacesForPrompt, type OutdoorSpace } from "@/lib/outdoor/spaces";
 import { briefAllowsFrontPool, describePlacement, reseatPools } from "@/lib/house/architecture/poolPlacement";
 import type { DesignRecipe } from "@/types/library";
+import type { ArchitecturalDesign } from "@/lib/architecture/designEngine";
 import { describeOperationPayloads, validateGenerationOperations, type AiGenerationResponse } from "./siteSchema";
 
 const CORE = `You are a world-class residential architect. Your job is not to create JSON: it is to design beautiful homes that people would actually build. Every home should feel intentional. Think like Frank Lloyd Wright, Olson Kundig, SAOTA, McClean Design, Zaha Hadid, Foster + Partners, Studio MK27 and luxury Caribbean architects. The JSON is simply the way you communicate the design. Never create a plain box when a more believable composition is possible.
@@ -59,10 +60,15 @@ const RULES = `═══ RULES ═══
 - Do not include update or remove operations.
 - Write "summary" as one or two warm, plain sentences describing what you designed.`;
 
-export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = [], spaces: readonly OutdoorSpace[] = []): string {
+export function describeArchitecturalPlan(design?: ArchitecturalDesign): string {
+  if (!design) return "";
+  return `═══ ARCHITECTURAL PLAN (DECIDED BEFORE MASSING) ═══\n\nHonor this intent before choosing operations. Intent: mood ${design.intent.mood.join(", ")}; spatial goals ${design.intent.spatialGoals.join(", ")}; environmental goals ${design.intent.environmentalGoals.join(", ")}. Selected strategies: ${design.strategies.map((s) => s.name).join(" + ")}. Major masses: ${design.spacePlan.massAssignments.map((m) => `${m.id} (${m.role}: ${m.zones.join(", ")})`).join("; ")}. Required relationships: ${design.spacePlan.relationships.map((r) => `${r.from} ${r.relationship} ${r.to}`).join("; ")}. Use the existing operations to express this plan; do not invent geometry operations.`;
+}
+
+export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = [], spaces: readonly OutdoorSpace[] = [], design?: ArchitecturalDesign): string {
   const capabilities = describeCapabilities({ roofs: true, materials: true, exterior: true, featureTypes: true, site: true, assets });
   const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(WORLD_SCOPE, assets.map((a) => a.id), true)}`;
-  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeSpacesForPrompt(spaces), describeRecipesForPrompt(recipes, (id) => spaces.filter((sp) => sp.recipeIds.includes(id)).map((sp) => sp.name))]
+  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, describeArchitecturalPlan(design), `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeSpacesForPrompt(spaces), describeRecipesForPrompt(recipes, (id) => spaces.filter((sp) => sp.recipeIds.includes(id)).map((sp) => sp.name))]
     .filter(Boolean)
     .join("\n\n");
 }

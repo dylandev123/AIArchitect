@@ -3,8 +3,10 @@ import { inferScaleFromBrief, isProjectScale } from "@/lib/house/scale";
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { COMPONENTS, plannedAssetFor } from "@/lib/outdoor/components";
 import { planOutdoorSpaces, realizeSpaces, type OutdoorSpace } from "@/lib/outdoor/spaces";
-import type { AssetPlan, AssetRequest, GenerationReport, KnowledgeNeed, Need, ReportKnowledge, ReportPlan, ReportStep } from "@/types/library";
+import type { ArchitecturalCapability, ArchitectureReview, AssetPlan, AssetRequest, CapabilityNeed, CapabilityRequest, GenerationReport, KnowledgeNeed, Need, ReportKnowledge, ReportPlan, ReportStep } from "@/types/library";
 import type { SiteEnvironment } from "@/types/house";
+import type { ArchitecturalDesign } from "@/lib/architecture/designEngine";
+import { reviewCapabilityRequests, scoreArchitecture } from "@/lib/architecture/critic";
 import { libraryStorageInfo, MAX_REPORTS, emptySnapshot, mutateLibrary, type LibraryChange, type LibraryDoc, type LibrarySnapshot } from "./store";
 import { detectKnowledgeSignals, recordKnowledgeSignal } from "./knowledge/knowledge";
 import { scoreDesignAreas, weakAreas } from "./knowledge/areas";
@@ -17,6 +19,7 @@ import { resolveAsset, type AssetIndexEntry } from "./retrieval";
 import { evaluateRecipes, type RetrievedRecipe } from "./spaceRecipes";
 import { reportAssets, resolveSpaceAssets } from "./spaceAssets";
 import { dedupeRequests, extractStyleTags } from "./taxonomy";
+import { capabilityById, capabilityRequestsForRecipes, fallbackFor, normalizeCapability, priorityForNeed } from "./capabilities";
 
 /**
  * The learning loop, run after every successful initial generation:
@@ -56,6 +59,10 @@ export interface LoopInput {
   attached: readonly AttachedAsset[];
   /** Mesh-free architectural components the concept selected. Missing ones use the normal Need → Plan → Review flow. */
   architecturalRequests?: readonly AssetRequest[];
+  /** Mesh-free operations requested by architectural stages; never routed to Asset Needs. */
+  capabilityRequests?: readonly CapabilityRequest[];
+  /** The structured design the critic reviews. Absent generations (e.g. a patch, not a fresh design) skip the review step. */
+  architecturalDesign?: ArchitecturalDesign;
 }
 
 export interface Analysis {
@@ -83,7 +90,7 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     }
   };
 
-  const { json, brief, projectId, library, retrieved, attached, architecturalRequests = [] } = input;
+  const { json, brief, projectId, library, retrieved, attached, architecturalRequests = [], capabilityRequests = [] } = input;
   let root: Rec = {};
   try {
     const parsed: unknown = JSON.parse(json);
@@ -210,7 +217,54 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     return fresh ? [recordRecipeUse(fresh, "success")] : [];
   });
 
-  // 7. Placement: did the property read correctly (pool private, garage on the arrival side)?
+  // 7. The critic: every completed design reviews itself against architectural judgment (composition, hierarchy, roof
+  // expression, ...), independent of asset/library coverage. A weak score names a recommended strategy and, where the
+  // fix is geometric, a missing capability — fed into capability requests below so the review raises its priority
+  // exactly as a design stage's own request would.
+  const review: ArchitectureReview | undefined = step("architecture-review", () => {
+    if (!input.architecturalDesign) return undefined;
+    const scored = scoreArchitecture(input.architecturalDesign, json, brief);
+    return { id: makeId(), projectId, at: now.toISOString(), brief: brief.trim().slice(0, BRIEF_EXCERPT), ...scored };
+  }, undefined);
+
+  // 8. Capabilities: resolve geometric requests independently from assets. Missing/partial operations record a single
+  // normalized Need and keep the generation alive with the documented fallback.
+  const capabilities = new Map<string, ArchitecturalCapability>();
+  const capabilityNeeds = new Map<string, CapabilityNeed>();
+  const capabilitiesUsed: GenerationReport["capabilitiesUsed"] = [];
+  const capabilityGaps: GenerationReport["capabilityGaps"] = [];
+  step("capabilities", () => {
+    const recipeRequests = capabilityRequestsForRecipes(retrieved.map((r) => r.recipe));
+    const reviewRequests = review ? reviewCapabilityRequests(review) : [];
+    for (const request of [...capabilityRequests, ...recipeRequests, ...reviewRequests]) {
+      const id = normalizeCapability(request.operation);
+      if (!id) continue; // Unknown prose stays advisory; only registry families become Needs.
+      const capability = capabilityById(id, snapshot.capabilities);
+      if (!capability) continue;
+      const fallback = request.fallback ?? fallbackFor(capability);
+      const nextCapability = { ...capability, usageCount: capability.usageCount + 1, ...(capability.status === "supported" ? { successCount: capability.successCount + 1 } : { failureCount: capability.failureCount + 1 }), updated_at: now.toISOString() };
+      capabilities.set(id, nextCapability);
+      if (capability.status === "supported") {
+        capabilitiesUsed.push({ id, name: capability.name, stage: request.stage, status: "supported" });
+        continue;
+      }
+      capabilitiesUsed.push({ id, name: capability.name, stage: request.stage, status: "partial", note: fallback });
+      capabilityGaps.push({ id, name: capability.name, stage: request.stage, fallback, status: capability.status });
+      const existing = capabilityNeeds.get(id) ?? snapshot.capabilityNeeds.find((n) => n.capabilityId === id);
+      const refs = [...(existing?.projectRefs ?? []), { projectId, at: now.toISOString(), brief: brief.slice(0, BRIEF_EXCERPT), stage: request.stage }].slice(-12);
+      const need: CapabilityNeed = {
+        id: existing?.id ?? `capability-${id}`, capabilityId: id, name: capability.name, category: capability.category,
+        desiredBehaviour: request.desiredBehaviour ?? existing?.desiredBehaviour ?? capability.description,
+        parameters: [...new Set([...(existing?.parameters ?? []), ...(request.parameters ?? []), ...capability.parameters.map((p) => p.key)])],
+        requestedCount: (existing?.requestedCount ?? 0) + 1, firstRequested: existing?.firstRequested ?? now.toISOString(), lastRequested: now.toISOString(),
+        projectRefs: refs, recipeIds: [...new Set([...(existing?.recipeIds ?? []), ...(request.recipeId ? [request.recipeId] : [])])], stages: [...new Set([...(existing?.stages ?? []), request.stage])],
+        priority: 0, fallback, status: capability.status, phrasings: [...new Set([...(existing?.phrasings ?? []), request.operation])].slice(-12),
+      };
+      capabilityNeeds.set(id, { ...need, priority: priorityForNeed(need, capability) });
+    }
+  }, undefined);
+
+  // 9. Placement: did the property read correctly (pool private, garage on the arrival side)?
   const placement = step("placement", () => describePlacement(root, brief) ?? emptyPlacement(), emptyPlacement());
 
   const assets = step("reuse", () => reportAssets(spaceAssets, attached, library, spaces, placements), []);
@@ -239,6 +293,20 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     })),
     areas: areas.map((a) => ({ area: a.area, relevant: a.relevant, score: a.score, reason: a.reason, weak: a.weak })),
     recipes,
+    capabilitiesUsed,
+    capabilityGaps,
+    ...(input.architecturalDesign ? {
+      architecturalIntent: {
+        mood: input.architecturalDesign.intent.mood,
+        spatialGoals: input.architecturalDesign.intent.spatialGoals,
+        environmentalGoals: input.architecturalDesign.intent.environmentalGoals,
+        hierarchyGoals: input.architecturalDesign.intent.hierarchyGoals,
+        compositionBias: input.architecturalDesign.intent.compositionBias,
+      },
+      designStrategies: input.architecturalDesign.strategies.map((strategy) => ({ name: strategy.name, requiredCapabilities: strategy.requiredCapabilities, spatialConsequences: strategy.spatialConsequences })),
+      spaceRelationships: input.architecturalDesign.spacePlan.relationships,
+    } : {}),
+    ...(review ? { review } : {}),
     assets,
     knowledgeGaps,
     assetNeeds: [...touchedNeeds.values()].map((n) => ({
@@ -261,6 +329,8 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     ...[...touchedNeeds.values(), ...satisfied.values()].map((data) => ({ kind: "need" as const, data })),
     ...newPlans.map((data) => ({ kind: "plan" as const, data })),
     ...usedRecipes.map((data) => ({ kind: "recipe" as const, data })),
+    ...[...capabilities.values()].map((data) => ({ kind: "capability" as const, data })),
+    ...[...capabilityNeeds.values()].map((data) => ({ kind: "capabilityNeed" as const, data })),
     { kind: "generation" as const, data: report },
   ];
   // Reports are evidence, not history: keep the newest few.

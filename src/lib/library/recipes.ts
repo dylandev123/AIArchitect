@@ -35,6 +35,8 @@ export const recipeInputSchema = z.object({
     .max(20)
     .default([]),
   guidance: z.array(z.string().trim().min(1).max(240)).max(20).default([]),
+  requiredCapabilities: z.array(z.string().trim().regex(/^[a-z][a-z0-9-]*$/).max(60)).max(20).default([]),
+  preferredCapabilities: z.array(z.string().trim().regex(/^[a-z][a-z0-9-]*$/).max(60)).max(20).default([]),
   origin: z.object({ kind: z.enum(["admin", "learn", "generation"]), projectId: z.string().max(64).optional() }).optional(),
   /** Knowledge Needs to file the recipe under on save (see `saveRecipe`). */
   knowledgeIds: z.array(z.string().min(1).max(80)).max(10).optional(),
@@ -98,6 +100,8 @@ export function describeRecipesForPrompt(recipes: readonly DesignRecipe[], space
     for (const g of r.guidance) lines.push(`    • ${g}`);
     for (const p of r.parameters) lines.push(`    • ${formatParam(p)}`);
     for (const rel of r.relationships) lines.push(`    • ${rel.kind} ${rel.target}${rel.note ? ` — ${rel.note}` : ""}`);
+    if (r.requiredCapabilities?.length) lines.push(`    • requires capabilities: ${r.requiredCapabilities.join(", ")}`);
+    if (r.preferredCapabilities?.length) lines.push(`    • prefers capabilities: ${r.preferredCapabilities.join(", ")}`);
     return lines.join("\n");
   });
   return `═══ PROVEN DESIGN PATTERNS ═══

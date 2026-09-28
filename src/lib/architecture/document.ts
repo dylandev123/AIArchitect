@@ -1,4 +1,5 @@
 import type { CompassSide, MaterialsConfig, SiteEnvironment } from "@/types/house";
+import type { CapabilityIntent } from "@/lib/capabilities/types";
 
 /** The durable, stage-owned source of truth for new architecture projects. */
 export interface ArchitecturalDesignDocument {
@@ -7,6 +8,8 @@ export interface ArchitecturalDesignDocument {
   siteStrategy: SiteStrategy;
   massing: MassingPlan;
   roofs: RoofComposition;
+  /** Stage intent, not geometry. The compiler resolves these through the capability engine. */
+  capabilities?: readonly CapabilityIntent[];
   facade: StagePlaceholder;
   architecturalStyle: StagePlaceholder;
   outdoorPlan: StagePlaceholder;

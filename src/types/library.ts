@@ -118,6 +118,10 @@ export interface DesignRecipe {
   relationships: RecipeRelationship[];
   /** Free-text rules the generator is told to honour ("deep eaves", "cupola optional"). */
   guidance: string[];
+  /** Geometric operations the recipe cannot deliver through an asset. */
+  requiredCapabilities?: string[];
+  /** Desirable operations; generation may use a fallback when unavailable. */
+  preferredCapabilities?: string[];
   usageCount: number;
   successCount: number;
   failureCount: number;
@@ -357,11 +361,60 @@ export interface ReportPlan {
   assets: number;
 }
 
+// ── Architectural capabilities ─────────────────────────────────────────────
+
+export const CAPABILITY_STATUSES = ["supported", "partial", "missing", "deprecated"] as const;
+export type CapabilityStatus = (typeof CAPABILITY_STATUSES)[number];
+export const CAPABILITY_CATEGORIES = ["massing", "walls", "voids", "roofs", "facade", "openings", "terraces", "circulation", "structure", "site"] as const;
+export type CapabilityCategory = (typeof CAPABILITY_CATEGORIES)[number];
+
+export interface CapabilityParameter { key: string; description?: string; required?: boolean; }
+export interface ArchitecturalCapability {
+  id: string; name: string; category: CapabilityCategory; description: string;
+  parameters: CapabilityParameter[]; constraints: string[]; compatibleMassTypes: string[];
+  compatibleRoofTypes?: string[]; compatibleFacadeTypes?: string[];
+  status: CapabilityStatus; version: number; usageCount: number; successCount: number; failureCount: number;
+  /** Stable roadmap inputs supplied by a plugin (0–10). */
+  visualImpact?: number; implementationDifficulty?: number; performanceCost?: number; architecturalImportance?: number;
+  created_at: string; updated_at: string; implementationNotes: string;
+}
+export interface CapabilityProjectRef { projectId: string | null; at: string; brief: string; stage: string; }
+export interface CapabilityNeed {
+  id: string; capabilityId: string; name: string; category: CapabilityCategory; desiredBehaviour: string;
+  parameters: string[]; requestedCount: number; firstRequested: string; lastRequested: string;
+  projectRefs: CapabilityProjectRef[]; recipeIds: string[]; stages: string[]; priority: number;
+  fallback: string; status: CapabilityStatus; phrasings: string[];
+}
+export interface CapabilityRequest {
+  operation: string; stage: string; desiredBehaviour?: string; parameters?: string[];
+  recipeId?: string; fallback?: string;
+}
+
 export interface ReportStep {
   name: string;
   ok: boolean;
   ms: number;
   error?: string;
+}
+
+// ── Architecture review (the critic) ────────────────────────────────────────
+
+export const ARCHITECTURE_CRITERIA = [
+  "composition", "hierarchy", "roof-expression", "facade-rhythm", "entry-sequence", "views",
+  "privacy", "indoor-outdoor", "massing", "structural-realism", "material-consistency",
+  "originality", "balance", "quality",
+] as const;
+export type ArchitectureCriterion = (typeof ARCHITECTURE_CRITERIA)[number];
+
+export interface ArchitectureCriterionScore { criterion: ArchitectureCriterion; score: number; reason: string; }
+/** The learning loop's link from a weak score to what would fix it. `missingCapability`, when present, is an id the capability engine recognizes. */
+export interface ArchitectureRecommendation { criterion: ArchitectureCriterion; issue: string; recommendedStrategy: string; missingCapability?: string; }
+export interface ArchitectureReview {
+  id: string; projectId: string | null; at: string; brief: string;
+  overallScore: number; criteria: ArchitectureCriterionScore[];
+  strengths: ArchitectureCriterion[]; weaknesses: ArchitectureCriterion[]; recommendations: ArchitectureRecommendation[];
+  /** Goal-level evidence keeps critique tied to the pre-massing architectural intent. */
+  intentAchieved: string[]; intentMissed: string[];
 }
 
 export interface GenerationReport {
@@ -372,6 +425,14 @@ export interface GenerationReport {
   spaces: ReportSpace[];
   areas: { area: DesignArea; relevant: boolean; score: number; reason: string; weak: boolean }[];
   recipes: ReportRecipe[];
+  capabilitiesUsed: { id: string; name: string; stage: string; status: "supported" | "partial"; note?: string }[];
+  capabilityGaps: { id: string; name: string; stage: string; fallback: string; status: CapabilityStatus }[];
+  /** Pre-massing intelligence retained with the generation so future analysis can learn strategy/site fit. */
+  architecturalIntent?: { mood: string[]; spatialGoals: string[]; environmentalGoals: string[]; hierarchyGoals: string[]; compositionBias: string };
+  designStrategies?: { name: string; requiredCapabilities: string[]; spatialConsequences: string[] }[];
+  spaceRelationships?: { from: string; to: string; relationship: string; reason: string }[];
+  /** The architectural critic's self-review of this generation. Absent when no design document was available to score. */
+  review?: ArchitectureReview;
   assets: ReportAsset[];
   knowledgeGaps: ReportKnowledge[];
   assetNeeds: ReportAssetNeed[];

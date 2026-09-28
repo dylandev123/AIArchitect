@@ -11,6 +11,8 @@ import { LEVEL_HEIGHT } from "@/lib/house/constants";
 import type { RoofType } from "@/types/house";
 import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassVolume, RoofRecipe } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
+import "@/lib/capabilities/plugins";
+import { requestCapability } from "@/lib/capabilities/engine";
 
 function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
   const byId = new Map<string, MassVolume>();
@@ -67,6 +69,11 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
       if (options.mode === "massing-only") primitives.push({ kind: "box", id: `architecture-${mass.id}-debug-footprint`, category: "floor", label: `${mass.name} · rot ${(mass.rotation * 180 / Math.PI).toFixed(0)}° · elev ${mass.elevation}m`, position: [mass.position.x, mass.elevation + 0.025, mass.position.z], rotation: [0, mass.rotation, 0], size: [mass.width, 0.05, mass.depth], color: "#ff9d2e", roughness: .65 });
     }
     if (options.mode !== "massing-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) primitives.push(...roofPrimitives(recipe, mass, options));
+    // Architectural stages declare intent. Only the capability engine chooses and invokes geometry plugins.
+    for (const intent of doc.capabilities?.filter((request) => request.parameters?.massId === mass.id) ?? []) {
+      const outcome = requestCapability(intent, { primitives, target: mass });
+      primitives.push(...outcome.primitives);
+    }
   }
   return { model: { id: "architectural-design-document", primitives }, errors: [] };
 }

@@ -37,13 +37,15 @@ const unauthorized = () => NextResponse.json({ error: "Unauthorized" }, { status
 export async function GET(req: NextRequest) {
   if (!isAdminRequest(req)) return unauthorized();
   try {
-    const { needs, recipes, knowledge, plans, generations } = await readLibrary();
+    const { needs, recipes, knowledge, plans, generations, capabilities, capabilityNeeds } = await readLibrary();
     needs.sort((a, b) => b.requestedCount - a.requestedCount || b.lastRequested.localeCompare(a.lastRequested));
     recipes.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
     knowledge.sort((a, b) => b.requestCount - a.requestCount || b.lastSeen.localeCompare(a.lastSeen));
     plans.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
     generations.sort((a, b) => b.at.localeCompare(a.at));
-    return NextResponse.json({ needs, recipes, knowledge, plans, generations, generation: generationAvailability() });
+    capabilities.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+    capabilityNeeds.sort((a, b) => b.priority - a.priority || b.lastRequested.localeCompare(a.lastRequested));
+    return NextResponse.json({ needs, recipes, knowledge, plans, generations, capabilities, capabilityNeeds, generation: generationAvailability() });
   } catch (err) {
     console.error("[library] read failed:", err);
     return NextResponse.json({ error: err instanceof SharedPersistenceUnavailableError ? err.message : "The library store is unavailable." }, { status: 503 });

@@ -67,6 +67,8 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
   const [params, setParams] = useState(formatParameterLines(src?.parameters ?? []));
   const [rels, setRels] = useState(formatRelationshipLines(src?.relationships ?? []));
   const [guidance, setGuidance] = useState(src?.guidance.join("\n") ?? "");
+  const [requiredCapabilities, setRequiredCapabilities] = useState(src?.requiredCapabilities?.join(", ") ?? "");
+  const [preferredCapabilities, setPreferredCapabilities] = useState(src?.preferredCapabilities?.join(", ") ?? "");
   const [regenerating, setRegenerating] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -85,6 +87,8 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
       parameters: parsed.params,
       relationships: parseRelationshipLines(rels),
       guidance: guidance.split("\n").map((g) => g.trim()).filter(Boolean),
+      requiredCapabilities: requiredCapabilities.split(",").map((x) => x.trim()).filter(Boolean),
+      preferredCapabilities: preferredCapabilities.split(",").map((x) => x.trim()).filter(Boolean),
       origin: recipe?.origin ?? draft?.origin ?? { kind: "admin" },
       ...(knowledgeIds && { knowledgeIds }),
     });
@@ -133,6 +137,10 @@ function RecipeForm({ recipe, draft, knowledgeId, aiProposed, notes = [], onRege
       <div>
         <p className="mb-1 text-[11px] text-neutral-500">Guidance for the generator — one rule per line</p>
         <textarea className={`${inputCls} h-16`} value={guidance} onChange={(e) => setGuidance(e.target.value)} placeholder="Deep eaves and a veranda roof on the view side" />
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <div><p className="mb-1 text-[11px] text-neutral-500">Required capabilities (slugs, comma separated)</p><input className={inputCls} value={requiredCapabilities} onChange={(e) => setRequiredCapabilities(e.target.value)} placeholder="recessed-entry, deep-overhang" /></div>
+        <div><p className="mb-1 text-[11px] text-neutral-500">Preferred capabilities</p><input className={inputCls} value={preferredCapabilities} onChange={(e) => setPreferredCapabilities(e.target.value)} placeholder="shadow-gap, corner-glazing" /></div>
       </div>
       {error && <p className="text-xs text-red-400">{error}</p>}
       <div className="flex gap-2">

@@ -4,7 +4,7 @@ import { create } from "zustand";
 import type { AssetSpec } from "@/lib/assets/native/spec";
 import type { CuratedAsset } from "@/types/assets";
 import type { PlanInput } from "@/lib/library/plans";
-import type { AssetPlan, DesignRecipe, GenerationReport, KnowledgeNeed, KnowledgeStatus, Need, PlannedAsset } from "@/types/library";
+import type { ArchitecturalCapability, AssetPlan, CapabilityNeed, DesignRecipe, GenerationReport, KnowledgeNeed, KnowledgeStatus, Need, PlannedAsset } from "@/types/library";
 import type { RecipeInput } from "@/lib/library/recipes";
 import type { GenerationAvailability } from "@/lib/assetGeneration/providers";
 
@@ -34,6 +34,8 @@ interface LibraryStore {
   plans: AssetPlan[];
   /** One report per generation, newest first: what the learning loop found and stored. */
   generations: GenerationReport[];
+  capabilities: ArchitecturalCapability[];
+  capabilityNeeds: CapabilityNeed[];
   generation: GenerationAvailability | null;
   loaded: boolean;
   loading: boolean;
@@ -88,6 +90,8 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
   knowledge: [],
   plans: [],
   generations: [],
+  capabilities: [],
+  capabilityNeeds: [],
   generation: null,
   loaded: false,
   loading: false,
@@ -98,10 +102,10 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     set({ loading: true });
     try {
       const res = await fetch("/api/admin/library", { headers: headers(adminEmail), cache: "no-store" });
-      const data = (await res.json()) as { needs?: Need[]; recipes?: DesignRecipe[]; knowledge?: KnowledgeNeed[]; plans?: AssetPlan[]; generations?: GenerationReport[]; generation?: GenerationAvailability; error?: string };
+      const data = (await res.json()) as { needs?: Need[]; recipes?: DesignRecipe[]; knowledge?: KnowledgeNeed[]; plans?: AssetPlan[]; generations?: GenerationReport[]; capabilities?: ArchitecturalCapability[]; capabilityNeeds?: CapabilityNeed[]; generation?: GenerationAvailability; error?: string };
       if (!res.ok || !data.needs || !data.recipes) throw new Error(data.error ?? `Library request failed (HTTP ${res.status}).`);
       // A slower response must not overwrite a newer post-mutation refresh.
-      if (refreshId === latestRefresh) set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generations: data.generations ?? [], generation: data.generation ?? null, loaded: true, error: "" });
+      if (refreshId === latestRefresh) set({ needs: data.needs, recipes: data.recipes, knowledge: data.knowledge ?? [], plans: data.plans ?? [], generations: data.generations ?? [], capabilities: data.capabilities ?? [], capabilityNeeds: data.capabilityNeeds ?? [], generation: data.generation ?? null, loaded: true, error: "" });
     } catch (err) {
       if (refreshId === latestRefresh) set({ error: (err as Error).message });
     } finally {

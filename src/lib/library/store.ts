@@ -5,7 +5,8 @@ import path from "node:path";
 import { Pool } from "pg";
 import { usageDatabaseUrl } from "@/lib/ai/usage/db";
 import { databaseHost, isMissingFile, noteStorageError, requiresSharedPersistence, SharedPersistenceUnavailableError, type StorageInfo } from "@/lib/storage/diagnostics";
-import type { AssetPlan, DesignRecipe, GenerationReport, KnowledgeNeed, Need } from "@/types/library";
+import type { ArchitecturalCapability, AssetPlan, CapabilityNeed, DesignRecipe, GenerationReport, KnowledgeNeed, Need } from "@/types/library";
+import { INITIAL_CAPABILITIES } from "./capabilities";
 
 /**
  * Server-only persistence for the reusable library (Needs, Knowledge Needs and Recipes). Same deployment story as AI usage:
@@ -28,6 +29,8 @@ export interface LibrarySnapshot {
   plans: AssetPlan[];
   /** One report per successful generation (newest kept, see `MAX_REPORTS`). Absent in files written before they existed. */
   generations: GenerationReport[];
+  capabilities: ArchitecturalCapability[];
+  capabilityNeeds: CapabilityNeed[];
 }
 
 export type LibraryDoc =
@@ -35,12 +38,14 @@ export type LibraryDoc =
   | { kind: "recipe"; data: DesignRecipe }
   | { kind: "knowledge"; data: KnowledgeNeed }
   | { kind: "plan"; data: AssetPlan }
-  | { kind: "generation"; data: GenerationReport };
+  | { kind: "generation"; data: GenerationReport }
+  | { kind: "capability"; data: ArchitecturalCapability }
+  | { kind: "capabilityNeed"; data: CapabilityNeed };
 
 /** Generation reports are evidence, not history: only this many of the newest are kept. */
 export const MAX_REPORTS = 40;
 
-export const emptySnapshot = (): LibrarySnapshot => ({ needs: [], recipes: [], knowledge: [], plans: [], generations: [] });
+export const emptySnapshot = (): LibrarySnapshot => ({ needs: [], recipes: [], knowledge: [], plans: [], generations: [], capabilities: INITIAL_CAPABILITIES, capabilityNeeds: [] });
 
 export interface LibraryChange<T> {
   put?: LibraryDoc[];
@@ -60,10 +65,12 @@ function applyChange(snapshot: LibrarySnapshot, change: LibraryChange<unknown>):
   const knowledge = new Map(snapshot.knowledge.map((k) => [k.id, k]));
   const plans = new Map(snapshot.plans.map((p) => [p.id, p]));
   const generations = new Map(snapshot.generations.map((g) => [g.id, g]));
-  const tables = { need: needs, recipe: recipes, knowledge, plan: plans, generation: generations } as const;
+  const capabilities = new Map(snapshot.capabilities.map((c) => [c.id, c]));
+  const capabilityNeeds = new Map(snapshot.capabilityNeeds.map((n) => [n.id, n]));
+  const tables = { need: needs, recipe: recipes, knowledge, plan: plans, generation: generations, capability: capabilities, capabilityNeed: capabilityNeeds } as const;
   for (const doc of change.put ?? []) (tables[doc.kind] as Map<string, unknown>).set(doc.data.id, doc.data);
   for (const rm of change.remove ?? []) tables[rm.kind].delete(rm.id);
-  return { needs: [...needs.values()], recipes: [...recipes.values()], knowledge: [...knowledge.values()], plans: [...plans.values()], generations: [...generations.values()] };
+  return { needs: [...needs.values()], recipes: [...recipes.values()], knowledge: [...knowledge.values()], plans: [...plans.values()], generations: [...generations.values()], capabilities: [...capabilities.values()], capabilityNeeds: [...capabilityNeeds.values()] };
 }
 
 // ── File backend (local dev, tests) ─────────────────────────────────────────
@@ -90,7 +97,7 @@ export function createFileBackend(file: string): LibraryBackend {
       throw err;
     }
     const parsed = JSON.parse(text) as Partial<LibrarySnapshot>;
-    return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [], generations: parsed.generations ?? [] };
+    return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [], generations: parsed.generations ?? [], capabilities: parsed.capabilities?.length ? parsed.capabilities : INITIAL_CAPABILITIES, capabilityNeeds: parsed.capabilityNeeds ?? [] };
   }
 
   return {
@@ -169,7 +176,7 @@ async function pgReady(url: string): Promise<Pool> {
 
 interface DocRow {
   kind: string;
-  data: Need | DesignRecipe | KnowledgeNeed | AssetPlan | GenerationReport;
+  data: Need | DesignRecipe | KnowledgeNeed | AssetPlan | GenerationReport | ArchitecturalCapability | CapabilityNeed;
 }
 
 const toSnapshot = (rows: DocRow[]): LibrarySnapshot => ({
@@ -178,6 +185,8 @@ const toSnapshot = (rows: DocRow[]): LibrarySnapshot => ({
   knowledge: rows.filter((r) => r.kind === "knowledge").map((r) => r.data as KnowledgeNeed),
   plans: rows.filter((r) => r.kind === "plan").map((r) => r.data as AssetPlan),
   generations: rows.filter((r) => r.kind === "generation").map((r) => r.data as GenerationReport),
+  capabilities: (() => { const value = rows.filter((r) => r.kind === "capability").map((r) => r.data as ArchitecturalCapability); return value.length ? value : INITIAL_CAPABILITIES; })(),
+  capabilityNeeds: rows.filter((r) => r.kind === "capabilityNeed").map((r) => r.data as CapabilityNeed),
 });
 
 export function createPostgresBackend(url: string): LibraryBackend {

@@ -195,6 +195,42 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
             ))}
           </Section>
 
+          <Section title="Capabilities used" count={report.capabilitiesUsed?.length ?? 0}>
+            {(report.capabilitiesUsed ?? []).length === 0 && <Empty>No architectural capability was requested.</Empty>}
+            {(report.capabilitiesUsed ?? []).map((c) => <p key={`${c.id}-${c.stage}`} className="text-[11px] text-neutral-400"><span className={c.status === "supported" ? "text-emerald-400" : "text-amber-300"}>{c.status === "supported" ? "✓" : "◐"}</span> <span className="font-medium text-neutral-200">{c.name}</span> <span className="text-neutral-600">· {c.stage}{c.note ? ` · ${c.note}` : ""}</span></p>)}
+          </Section>
+
+          <Section title="Capability gaps" count={report.capabilityGaps?.length ?? 0}>
+            {(report.capabilityGaps ?? []).length === 0 && <Empty>No capability gaps recorded.</Empty>}
+            {(report.capabilityGaps ?? []).map((c) => <p key={`${c.id}-${c.stage}`} className="text-[11px] text-neutral-400"><span className="text-amber-300">○</span> <span className="font-medium text-neutral-200">{c.name}</span> <span className={c.status === "missing" ? "text-red-300" : "text-amber-300"}> · {c.status}</span><span className="block pl-3 text-neutral-600">{c.stage} — fallback: {c.fallback}</span></p>)}
+          </Section>
+
+          {report.review && (
+            <Section title="Architecture review" count={report.review.criteria.length}>
+              <p className="text-[11px] text-neutral-400">
+                Overall <span className="font-medium text-neutral-200">{pct(report.review.overallScore)}</span>
+                {report.review.strengths.length > 0 && <span className="text-neutral-600"> · strong: {report.review.strengths.join(", ")}</span>}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {report.review.criteria.map((c) => (
+                  <span key={c.criterion} title={c.reason} className={`rounded px-1.5 py-0.5 text-[10px] ${c.score < 0.5 ? "bg-red-500/15 text-red-300" : c.score >= 0.75 ? "bg-emerald-500/10 text-emerald-300/80" : "bg-amber-500/10 text-amber-300/80"}`}>
+                    {c.criterion} {pct(c.score)}
+                  </span>
+                ))}
+              </div>
+              {report.review.recommendations.length > 0 && (
+                <div className="flex flex-col gap-1 pt-1">
+                  {report.review.recommendations.map((r) => (
+                    <p key={r.criterion} className="text-[11px] text-neutral-400">
+                      <span className="font-medium text-amber-300">{r.criterion}</span> <span className="text-neutral-600">{r.issue}</span>
+                      <span className="block text-neutral-600">recommend: {r.recommendedStrategy}{r.missingCapability ? ` · missing capability: ${r.missingCapability}` : ""}</span>
+                    </p>
+                  ))}
+                </div>
+              )}
+            </Section>
+          )}
+
           <Section title="Assets retrieved" count={report.assets.length}>
             {report.assets.length === 0 && <Empty>No approved library asset fit a space or feature.</Empty>}
             {report.assets.map((a) => (
