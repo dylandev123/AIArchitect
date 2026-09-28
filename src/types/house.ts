@@ -13,7 +13,8 @@ export type RoomType =
 
 export type MaterialType =
   | "concrete" | "stone" | "wood" | "glass" | "metal" | "stucco" | "tile"
-  | "brick" | "timber" | "render" | "cedar" | "slate" | "copper" | "terracotta" | "marble" | "zinc" | "corten";
+  | "brick" | "timber" | "render" | "cedar" | "slate" | "copper" | "terracotta" | "marble" | "zinc" | "corten"
+  | "travertine" | "limestone" | "basalt" | "board-formed-concrete" | "charcoal-stucco" | "coral-render" | "teak" | "black-aluminum" | "standing-seam-metal";
 export type MaterialZone = "exterior" | "roof" | "trim" | "decking";
 
 export interface MaterialAssignment {
@@ -437,6 +438,8 @@ export interface SiteSettings {
 }
 
 export interface SiteConfig {
+  /** Mesh-free architectural intent generated before massing; optional for every existing project. */
+  architecture?: import("@/lib/architecture/designEngine").ArchitecturalDesign;
   outdoorSpaces?: import("@/lib/outdoor/spaces").OutdoorSpace[];
   outdoorAssetPlacements?: import("@/lib/outdoor/placements").OutdoorAssetPlacement[];
   house: HouseConfig;

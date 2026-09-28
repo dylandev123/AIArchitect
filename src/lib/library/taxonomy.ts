@@ -51,6 +51,8 @@ const CONTEXT_SYNONYMS: Record<UsageContext, RegExp> = {
   waterfront: /\b(?:waterfront|lakeside|lake|oceanfront|ocean|shoreline|seafront|dock|jetty)\b/i,
   rooftop: /\b(?:rooftop|roof\s+terrace|roof\s+deck|sky\s+deck)\b/i,
   courtyard: /\b(?:courtyard|atrium|cloister)\b/i,
+  facade: /\b(?:facade|façade|window|door|louver|screen|glazing)\b/i,
+  interior: /\b(?:interior|inside|stair|kitchen|bedroom)\b/i,
 };
 
 const STYLE_ORDER = Object.keys(STYLE_SYNONYMS);
@@ -161,7 +163,7 @@ export function maxDimensions(a?: NeedDimensions, b?: NeedDimensions): NeedDimen
 const CATEGORY_LABEL: Record<AssetCategory, string> = {
   gazebo: "Gazebo", pergola: "Pergola", "outdoor-bar": "Outdoor Bar", "outdoor-kitchen": "Outdoor Kitchen", cabana: "Cabana",
   "fire-pit": "Fire Pit", "hot-tub": "Hot Tub", furniture: "Furniture", vehicle: "Vehicle", light: "Light",
-  vegetation: "Vegetation", rock: "Rock", decorative: "Decorative Object",
+  vegetation: "Vegetation", rock: "Rock", decorative: "Decorative Object", "architectural-component": "Architectural Component",
 };
 
 export const categoryLabel = (c: AssetCategory): string => CATEGORY_LABEL[c];

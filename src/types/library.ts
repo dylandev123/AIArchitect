@@ -14,11 +14,11 @@ import type { ProjectScale, SiteEnvironment } from "./house";
 /** Object families that are best served by a reusable GLB (see the procedural/GLB split in the design brief). */
 export const ASSET_CATEGORIES = [
   "gazebo", "pergola", "outdoor-bar", "outdoor-kitchen", "cabana", "fire-pit", "hot-tub",
-  "furniture", "vehicle", "light", "vegetation", "rock", "decorative",
+  "furniture", "vehicle", "light", "vegetation", "rock", "decorative", "architectural-component",
 ] as const;
 export type AssetCategory = (typeof ASSET_CATEGORIES)[number];
 
-export type UsageContext = "poolside" | "terrace" | "garden" | "entry" | "driveway" | "waterfront" | "rooftop" | "courtyard";
+export type UsageContext = "poolside" | "terrace" | "garden" | "entry" | "driveway" | "waterfront" | "rooftop" | "courtyard" | "facade" | "interior";
 
 // ── Needs ───────────────────────────────────────────────────────────────────
 
@@ -78,7 +78,7 @@ export interface AssetRequest {
 
 export const RECIPE_CATEGORIES = [
   "roof", "pool", "outdoor-living", "terrace", "courtyard", "motor-court", "facade",
-  "planting", "retaining-wall", "entry-sequence",
+  "planting", "retaining-wall", "entry-sequence", "massing", "space-planning", "material-palette", "lighting-strategy",
 ] as const;
 export type RecipeCategory = (typeof RECIPE_CATEGORIES)[number];
 

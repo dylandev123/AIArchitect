@@ -4,6 +4,7 @@ import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 export const MATERIAL_TYPES: MaterialType[] = [
   "concrete", "stone", "wood", "glass", "metal", "stucco", "tile",
   "brick", "timber", "render", "cedar", "slate", "copper", "terracotta", "marble", "zinc", "corten",
+  "travertine", "limestone", "basalt", "board-formed-concrete", "charcoal-stucco", "coral-render", "teak", "black-aluminum", "standing-seam-metal",
 ];
 export const MATERIAL_ZONES: MaterialZone[] = ["exterior", "roof", "trim", "decking"];
 
@@ -25,6 +26,15 @@ export const MATERIAL_LABELS: Record<MaterialType, string> = {
   marble:     "Marble",
   zinc:       "Zinc",
   corten:     "Corten Steel",
+  travertine: "Travertine",
+  limestone: "Limestone",
+  basalt: "Basalt",
+  "board-formed-concrete": "Board Formed Concrete",
+  "charcoal-stucco": "Charcoal Stucco",
+  "coral-render": "White Coral Render",
+  teak: "Natural Teak",
+  "black-aluminum": "Black Aluminum",
+  "standing-seam-metal": "Standing Seam Metal",
 };
 
 export const MATERIAL_ZONE_LABELS: Record<MaterialZone, string> = {
@@ -64,6 +74,15 @@ export const MATERIAL_PROPERTIES: Record<MaterialType, MaterialPhysicalPropertie
   marble:     { roughness: 0.15, metalness: 0.0,  defaultColor: "#e8e4dc" },
   zinc:       { roughness: 0.72, metalness: 0.55, defaultColor: "#8a9298" },
   corten:     { roughness: 0.85, metalness: 0.30, defaultColor: "#8c4828" },
+  travertine: { roughness: 0.68, metalness: 0.0, defaultColor: "#d5c3a5" },
+  limestone: { roughness: 0.72, metalness: 0.0, defaultColor: "#d8d0bd" },
+  basalt: { roughness: 0.83, metalness: 0.02, defaultColor: "#36383a" },
+  "board-formed-concrete": { roughness: 0.84, metalness: 0.02, defaultColor: "#9c9a94" },
+  "charcoal-stucco": { roughness: 0.79, metalness: 0.0, defaultColor: "#3e4140" },
+  "coral-render": { roughness: 0.78, metalness: 0.0, defaultColor: "#f1ede2" },
+  teak: { roughness: 0.62, metalness: 0.0, defaultColor: "#8b5a2b" },
+  "black-aluminum": { roughness: 0.28, metalness: 0.82, defaultColor: "#17191a" },
+  "standing-seam-metal": { roughness: 0.36, metalness: 0.72, defaultColor: "#3f474d" },
 };
 
 export interface ResolvedMaterial {

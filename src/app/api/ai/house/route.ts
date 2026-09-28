@@ -24,6 +24,7 @@ import { runPostGeneration } from "@/lib/library/generationLoop";
 import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
+import { architecturalAssetRequests, designArchitecture } from "@/lib/architecture/designEngine";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -306,12 +307,16 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         // The design is built with the procedural version of every object. Where an approved library GLB fits, the
         // feature just references it (assetId); the procedural geometry stays as the fallback.
-        const attachedResult = attachLibraryAssets(result.json, library);
+        // The architectural concept is structured project data, not a prose note or a GLB. It makes the design intent
+        // available to rendering, review and learning while the proven scene JSON remains the source of geometry.
+        const design = designArchitecture(brief, result.site);
+        const conceivedJson = JSON.stringify({ ...JSON.parse(result.json), architecture: design });
+        const attachedResult = attachLibraryAssets(conceivedJson, library);
         const attached = attachedResult.attached;
         const json = attachOutdoorAssets(attachedResult.json, brief, library);
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
         // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
-        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached }));
+        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId) }));
         return NextResponse.json({
           summary: output.summary,
           json,

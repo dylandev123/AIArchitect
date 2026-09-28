@@ -54,6 +54,8 @@ export interface LoopInput {
   retrieved: readonly RetrievedRecipe[];
   /** Library assets attached to project features. */
   attached: readonly AttachedAsset[];
+  /** Mesh-free architectural components the concept selected. Missing ones use the normal Need → Plan → Review flow. */
+  architecturalRequests?: readonly AssetRequest[];
 }
 
 export interface Analysis {
@@ -81,7 +83,7 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     }
   };
 
-  const { json, brief, projectId, library, retrieved, attached } = input;
+  const { json, brief, projectId, library, retrieved, attached, architecturalRequests = [] } = input;
   let root: Rec = {};
   try {
     const parsed: unknown = JSON.parse(json);
@@ -136,7 +138,7 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
   /** Needs whose missing components the library now supplies (and which no request touched): rewritten without them. */
   const satisfied = new Map<string, Need>();
   step("asset-needs", () => {
-    const fromProject = requestsFromProject(json, brief, projectId).filter((req) => resolveAsset(library, req).kind === "fallback");
+    const fromProject = [...requestsFromProject(json, brief, projectId), ...architecturalRequests].filter((req) => resolveAsset(library, req).kind === "fallback");
     const needs = [...snapshot.needs];
     for (const req of dedupeRequests([...fromProject, ...spaceAssets.requests])) {
       const before = findMatchingNeed(needs, req);
@@ -178,6 +180,8 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     };
     for (const need of touchedNeeds.values()) {
       const keys = (need.components ?? []).filter((k) => COMPONENTS[k]?.category === need.category);
+      // Architectural components enter the same Need queue. The existing asset-pack planner then creates the
+      // editable plan during curator review; outdoor components have deterministic starter packs here.
       if (keys.length === 0) continue;
       const mine = plansFor(snapshot.plans, { needId: need.id });
       if (mine.length > 0) {

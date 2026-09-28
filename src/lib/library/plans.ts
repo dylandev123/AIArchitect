@@ -5,7 +5,7 @@ import { ASSET_CATEGORIES, ASSET_PRIORITIES, ASSET_ROUTES, PLAN_STATUSES, type A
 
 /** Asset Plans: pure model helpers shared by the planner, the admin API and the UI. */
 
-export const USAGE_CONTEXTS = ["poolside", "terrace", "garden", "entry", "driveway", "waterfront", "rooftop", "courtyard"] as const satisfies readonly UsageContext[];
+export const USAGE_CONTEXTS = ["poolside", "terrace", "garden", "entry", "driveway", "waterfront", "rooftop", "courtyard", "facade", "interior"] as const satisfies readonly UsageContext[];
 
 /** Largest edge (m) a single planned object may have. Anything bigger is a scene, not a reusable building block. */
 export const MAX_ASSET_EDGE = 12;
