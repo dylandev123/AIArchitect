@@ -5,6 +5,15 @@ import type { RoomFocus } from "@/lib/house/roomView";
 
 export type CameraPreset = "site" | "house" | "top" | "room" | "exterior";
 
+export const ARCHITECTURE_DEBUG_MODES = ["massing-only", "geometry-only", "roofs-only", "openings-only", "full"] as const;
+export const ARCHITECTURE_DEBUG_MODE_LABEL: Record<(typeof ARCHITECTURE_DEBUG_MODES)[number], string> = {
+  "massing-only": "Massing",
+  "geometry-only": "Articulated Geometry",
+  "roofs-only": "Roofs",
+  "openings-only": "Openings",
+  full: "Full",
+};
+
 interface SceneStore {
   selectedKey: string | null;
   selectKey: (key: string | null) => void;
@@ -14,8 +23,22 @@ interface SceneStore {
   toggleRoof: () => void;
   setShowAdvanced: (show: boolean) => void;
   showAdvanced: boolean;
-  architectureDebug: "full" | "massing-only" | "roofs-only";
+  architectureDebug: "full" | "massing-only" | "geometry-only" | "roofs-only" | "openings-only";
   cycleArchitectureDebug: () => void;
+  setArchitectureDebug: (mode: SceneStore["architectureDebug"]) => void;
+  /** DEV-only end-to-end geometry inspection. Never persisted or used by production generation. */
+  geometryXRay: boolean;
+  setGeometryXRay: (enabled: boolean) => void;
+  isolateArchitectureMassId: string | null;
+  setIsolateArchitectureMassId: (id: string | null) => void;
+  /**
+   * DEV-only diagnostic: when true and the project has a valid `architecturalDesignDocument`, the V2
+   * compiled model is the sole source of building geometry (legacy house/building primitives cannot
+   * leak into the visible building) while genuine legacy site features (pools, driveways, landscaping,
+   * terrain-adjacent walls) are still merged in. See src/lib/architecture/v2OnlyMode.ts.
+   */
+  v2OnlyMode: boolean;
+  setV2OnlyMode: (enabled: boolean) => void;
 
   /**
    * The room the user has stepped into, or null for the whole house. This one value drives the camera, the cutaway
@@ -54,7 +77,17 @@ export const useSceneStore = create<SceneStore>((set) => ({
   showAdvanced: false,
   setShowAdvanced: (show) => set({ showAdvanced: show }),
   architectureDebug: "full",
-  cycleArchitectureDebug: () => set((state) => ({ architectureDebug: state.architectureDebug === "full" ? "massing-only" : state.architectureDebug === "massing-only" ? "roofs-only" : "full" })),
+  // Massing → Articulated Geometry → Roofs → Openings → Full, matching the debug panel's mode selector.
+  cycleArchitectureDebug: () => set((state) => ({
+    architectureDebug: ARCHITECTURE_DEBUG_MODES[(ARCHITECTURE_DEBUG_MODES.indexOf(state.architectureDebug) + 1) % ARCHITECTURE_DEBUG_MODES.length],
+  })),
+  setArchitectureDebug: (mode) => set({ architectureDebug: mode }),
+  geometryXRay: false,
+  setGeometryXRay: (geometryXRay) => set({ geometryXRay }),
+  isolateArchitectureMassId: null,
+  setIsolateArchitectureMassId: (isolateArchitectureMassId) => set({ isolateArchitectureMassId }),
+  v2OnlyMode: false,
+  setV2OnlyMode: (v2OnlyMode) => set({ v2OnlyMode }),
 
   focusedRoom: null,
   cutawayLevel: null,

@@ -211,7 +211,7 @@ export function ChatPanel() {
         ? await requestStagedGeneration({
             projectId: project.id,
             prompt,
-            apply: (summary, json) => appendVersion(project.id, summary, json),
+            apply: (summary, json) => appendVersion(project.id, summary, json, "ai-staged-generation"),
           })
         : await requestHouseEdit({
             projectId: project.id,
@@ -220,7 +220,7 @@ export function ChatPanel() {
               .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
               .map((m) => ({ role: m.role, content: m.content })),
             scope: roomScope ? makeScopeForRoom(roomScope.index, roomScopeLabel, roomScope.id) : undefined,
-            apply: (summary, json) => appendVersion(project.id, summary, json),
+            apply: (summary, json, debugWriter) => appendVersion(project.id, summary, json, debugWriter),
           });
 
       const failure = result.ok ? undefined : humanizeError(result.error);

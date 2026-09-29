@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSceneStore } from "@/store/useSceneStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
-import { PrimitiveMesh } from "./PrimitiveMesh";
+import { PrimitiveMesh, type RenderedMeshAudit } from "./PrimitiveMesh";
 import { GlbFeature } from "./GlbFeature";
 import { useAssetStore } from "@/store/useAssetStore";
 import { placementsFromBuildings, placementsFromOutdoor, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
@@ -18,6 +18,10 @@ import { cutawayHiddenIds } from "@/lib/house/roomView";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { isArchitecturalDesignDocument } from "@/lib/architecture/document";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
+import { auditHash, documentAudit, massIdOf, primitiveBounds, primitiveSignature } from "@/lib/architecture/renderAudit";
+import { revisionOf } from "@/lib/house/revision";
+import { useRenderFlightStore } from "@/store/useRenderFlightStore";
+import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib/architecture/v2OnlyMode";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -57,35 +61,59 @@ export function HouseRenderer() {
   const houseConfigJson = useProjectStore(
     (s) => s.getProject(params.projectId)?.houseConfigJson
   );
+  const frozen = useRenderFlightStore((s) => s.frozen);
+  const viewed = useRenderFlightStore((s) => s.viewed);
+  const recordFlight = useRenderFlightStore((s) => s.record);
+  const noteRenderWriter = useRenderFlightStore((s) => s.noteWrite);
+  const lastWriter = useRenderFlightStore((s) => s.lastWriter);
   const showRoof = useSceneStore((s) => s.showRoof);
   const cutawayLevel = useSceneStore((s) => s.cutawayLevel);
   const architectureDebug = useSceneStore((s) => s.architectureDebug);
+  const geometryXRay = useSceneStore((s) => s.geometryXRay);
+  const isolateMassId = useSceneStore((s) => s.isolateArchitectureMassId);
+  const v2OnlyMode = useSceneStore((s) => s.v2OnlyMode);
+  const priorBranch = useRef<"v2" | "legacy" | null>(null);
+  useEffect(() => { noteRenderWriter("HouseRenderer-mount-or-fast-refresh"); }, [noteRenderWriter]);
 
-  const { model, site } = useMemo(() => {
+  const renderJson = frozen?.configJson ?? viewed?.configJson ?? houseConfigJson;
+  const { model, site, document, violations } = useMemo(() => {
     try {
-      const raw = JSON.parse(houseConfigJson ?? "{}");
+      const raw = JSON.parse(renderJson ?? "{}");
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
       if (isArchitecturalDesignDocument(document)) {
-        const legacy = generateHouseFromJson(houseConfigJson ?? "{}");
-        return { model: compileArchitecture(document, { materials: legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG, mode: architectureDebug }).model, site: legacy.site };
+        const legacy = generateHouseFromJson(renderJson ?? "{}");
+        const v2Model = compileArchitecture(document, { materials: legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG, mode: architectureDebug }).model;
+        const resolved = applyV2OnlyMode({ legacy, v2Model, v2OnlyMode, cutawayActive: cutawayLevel !== null });
+        return { ...resolved, document };
       }
     } catch { /* legacy generator exposes JSON errors normally */ }
-    return generateHouseFromJson(houseConfigJson ?? "{}");
-  }, [architectureDebug, houseConfigJson]);
+    return { ...generateHouseFromJson(renderJson ?? "{}"), document: undefined, violations: [] as V2OnlyViolation[] };
+  }, [architectureDebug, renderJson, v2OnlyMode, cutawayLevel]);
+  useEffect(() => {
+    violations.forEach(logV2OnlyViolation);
+  }, [violations]);
+  const branch = document ? "v2" : "legacy";
+  const configRevision = revisionOf(renderJson ?? "{}");
+  const audit = document ? documentAudit(document) : undefined;
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && priorBranch.current && priorBranch.current !== branch) console.warn("[V2 RENDER] branch-switch", { from: priorBranch.current, to: branch, configRevision });
+    priorBranch.current = branch;
+  }, [branch, configRevision]);
 
   // Render-time finishing: a small bevel on trim-like boxes the design's tier left sharp (the model itself is unchanged).
   const finished = useMemo(() => (model ? applyEdgeDetail(model.primitives, RENDER_BASE_BEVEL) : []), [model]);
+  const isolated = useMemo(() => isolateMassId ? finished.filter((p) => p.id.startsWith(`architecture-${isolateMassId}-`)) : finished, [finished, isolateMassId]);
 
   // Stepping into a room hides the roof and whatever would block the view of it; the model is untouched.
   const cutaway = useMemo(
-    () => (site && cutawayLevel !== null ? cutawayHiddenIds(finished, site.house, cutawayLevel) : null),
-    [finished, site, cutawayLevel]
+    () => (site && cutawayLevel !== null ? cutawayHiddenIds(isolated, site.house, cutawayLevel) : null),
+    [isolated, site, cutawayLevel]
   );
 
   // Library GLBs for features that reference one. A placement counts only while its asset is approved in the
   // catalog; the model swaps in once loaded, and until then (or if it never loads) the procedural feature draws.
   const catalog = useAssetStore((s) => s.catalog);
-  const placements = useMemo(() => parsePlacements(houseConfigJson), [houseConfigJson]);
+  const placements = useMemo(() => parsePlacements(renderJson), [renderJson]);
   const usable = useMemo(() => usablePlacements(placements, catalog), [placements, catalog]);
   const [checked, setChecked] = useState<{placements: readonly AssetPlacement[]; blocked: Set<string>} | null>(null);
   useEffect(() => {
@@ -99,8 +127,8 @@ export function HouseRenderer() {
   const replacedPrefixes = swapped.map((p) => `${p.featureId}-`);
 
   const surfaces = useMemo(
-    () => finished.map((p) => surfaceOf(p, site?.materials)),
-    [finished, site?.materials]
+    () => isolated.map((p) => surfaceOf(p, site?.materials)),
+    [isolated, site?.materials]
   );
   const pbrDefs = useMemo(() => {
     const defs = new Set<PbrSetDef>();
@@ -111,16 +139,38 @@ export function HouseRenderer() {
     return [...defs];
   }, [surfaces]);
   const pbrReady = usePbrReady(pbrDefs);
+  const mounted = useRef(new Map<string, RenderedMeshAudit>());
+  const onAuditMesh = useCallback((entry: RenderedMeshAudit) => { mounted.current.set(entry.id, entry); }, []);
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !document) return;
+    const byKind = Object.fromEntries(["box", "triMesh"].map((kind) => [kind, isolated.filter((p) => p.kind === kind).length]));
+    const representedMassIds = [...new Set(isolated.map(massIdOf).filter(Boolean))];
+    console.info("[V2 RENDER]", { configRevision, documentHash: audit!.hash, compiledPrimitiveCount: isolated.length, primitiveCountsByType: byKind, massIds: representedMassIds, bounds: primitiveBounds(isolated), signatures: isolated.map(primitiveSignature) });
+    queueMicrotask(() => {
+      const meshes = [...mounted.current.values()];
+      const expected = new Set(isolated.map(primitiveSignature));
+      const actual = new Set(meshes.map((m) => m.signature));
+      console.info("[V2 R3F]", { configRevision, meshCount: meshes.length, missing: [...expected].filter((s) => !actual.has(s)), unexpected: [...actual].filter((s) => !expected.has(s)), meshes });
+    });
+  }, [audit, configRevision, document, isolated]);
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !document || !lastWriter.startsWith("ai-")) return;
+    console.info("[EDIT RENDER]", { configRevision, documentHash: audit!.hash, writer: lastWriter, primitiveCount: isolated.length, primitiveHash: auditHash(isolated.map(primitiveSignature)), bounds: primitiveBounds(isolated) });
+  }, [audit, configRevision, document, isolated, lastWriter]);
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !model) return;
+    recordFlight({ projectId: params.projectId, configJson: renderJson ?? "{}", configHash: auditHash(renderJson ?? "{}"), documentHash: audit?.hash, v2: !!document, primitiveCount: isolated.length, primitiveHash: auditHash(isolated.map(primitiveSignature)), massIds: [...new Set(isolated.map(massIdOf).filter((id): id is string => !!id))], bounds: primitiveBounds(isolated) }, frozen ? "frozen" : viewed ? "viewed" : "live-render");
+  }, [audit?.hash, document, frozen, isolated, model, params.projectId, recordFlight, renderJson, viewed]);
 
   if (!model || !pbrReady) return null;
 
   const isVisible = (p: HousePrimitive) =>
-    (showRoof || p.category !== "roof") && !cutaway?.has(p.id) && !replacedPrefixes.some((prefix) => p.id.startsWith(prefix));
+    (showRoof || p.category !== "roof") && (!geometryXRay || p.category !== "roof") && !cutaway?.has(p.id) && !replacedPrefixes.some((prefix) => p.id.startsWith(prefix));
 
   return (
     <group>
-      {finished.map((primitive, i) =>
-        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} /> : null
+      {isolated.map((primitive, i) =>
+        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} /> : null
       )}
       {swapped.map((p) => (
         <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />

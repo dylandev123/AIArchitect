@@ -223,6 +223,8 @@ export type LandscapeKind = "garden" | "lawn" | "clearing";
 /** A deliberate, named landscaping area (vs. the site's ambient automatic trees/grass). */
 export interface LandscapeZoneConfig {
   kind: LandscapeKind;
+  /** Architectural purpose supplied by the Site Plan; ambient planting uses it as a placement cue. */
+  purpose?: "privacy" | "entrance-planting" | "pool-planting" | "view-framing";
   x: number;
   z: number;
   width: number;

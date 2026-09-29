@@ -250,7 +250,8 @@ function waterRects(ops: readonly PatchOp[]): Rect[] {
 const STARTER_EXCLUDED = new Set(["addArch", "addCurvedWall", "addCrossGable"]);
 
 function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): PatchOp[] {
-  const { house, site, ops, style, plan } = input;
+  const { house, site, style, plan } = input;
+  const ops = [...input.ops];
   const rank = tierRank(tier);
   if (rank < 2) return [];
   const out: PatchOp[] = [];
@@ -414,11 +415,18 @@ function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): Patch
   }
 
   // Outdoor living and grounds.
+  // A pool is an outdoor room, not an isolated object. Establish its view-side terrace first so a pool
+  // supplied by the model and one added below both have a direct relationship to the living volume.
+  if (ops.some((op) => op.op === "addPool") && !ops.some((op) => op.op === "addPatio" && valueOf(op).wall === view) && !out.some((op) => op.op === "addPatio" && valueOf(op).wall === view)) {
+    const len = wallLen(house, view);
+    const width = round(Math.min(len * 0.78, Math.max(5, len * 0.62)));
+    out.push({ op: "addPatio", value: { wall: view, offset: round((len - width) / 2), width, depth: 3.2 } });
+  }
   if (!has("addPool") && site.environment !== "urban" && house.floors <= 3) {
     const len = wallLen(house, view);
     const width = Math.min(9, Math.max(5, len * 0.7));
     const patio = ops.find((op) => op.op === "addPatio" && valueOf(op).wall === view);
-    const distance = patio ? Math.min(30, Number(valueOf(patio).depth) + 0.5) : 2.5;
+    const distance = patio ? Math.min(30, Number(valueOf(patio).depth) + 2.5) : 5.7;
     const shape = rank >= 3 ? "kidney" : "rounded";
     if (plan) {
       // On the plan's view front: the free side of the wall when the drive shares it, standing free in the pool garden then.
@@ -429,8 +437,28 @@ function tierOps(input: SiteRulesInput, tier: DesignTier, roof: RoofType): Patch
       out.push({ op: "addPool", value: { wall: view, offset: round(Math.max(0, (len - width) / 2)), distance, width: round(width), depth: 3.6, waterDepth: 1.5, shape } });
     }
   }
-  if (!has("addPath") && doorSpan(approach)) {
-    const door = doorSpan(approach)!;
+  // The pool may have been added immediately above rather than supplied by the model.
+  if ((ops.some((op) => op.op === "addPool") || out.some((op) => op.op === "addPool")) && !ops.some((op) => op.op === "addPatio" && valueOf(op).wall === view) && !out.some((op) => op.op === "addPatio" && valueOf(op).wall === view)) {
+    const len = wallLen(house, view);
+    const width = round(Math.min(len * 0.78, Math.max(5, len * 0.62)));
+    out.push({ op: "addPatio", value: { wall: view, offset: round((len - width) / 2), width, depth: 3.2 } });
+  }
+  // Maintain a walkable separation; otherwise collision resolution correctly removes the terrace as overlapping water.
+  const viewPatio = [...ops, ...out].find((op) => op.op === "addPatio" && valueOf(op).wall === view);
+  if (viewPatio) {
+    const minimumPoolDistance = Number(valueOf(viewPatio).depth) + 2.5;
+    const adjustedPools = ops.map((op) => {
+      const pool = valueOf(op);
+      return op.op === "addPool" && pool.wall === view && typeof pool.siteX !== "number" && Number(pool.distance) < minimumPoolDistance
+        ? { ...op, value: { ...pool, distance: round(minimumPoolDistance) } }
+        : op;
+    });
+    ops.splice(0, ops.length, ...adjustedPools);
+  }
+  if (!has("addPath")) {
+    // V2 entrances are compiled from the architectural document rather than duplicated as legacy addDoor
+    // operations. The approach-side centre is therefore the authoritative entry axis when no legacy door exists.
+    const door = doorSpan(approach) ?? [wallLen(house, approach) / 2 - 0.6, wallLen(house, approach) / 2 + 0.6] as [number, number];
     const u = (door[0] + door[1]) / 2;
     const porch = ops.find((op) => op.op === "addPorch" && valueOf(op).wall === approach);
     const gap = (porch ? Number(valueOf(porch).depth) : 0) + 0.8;

@@ -6,3 +6,6 @@ import "./corner-glazing/plugin";
 import "./roof-expression/plugin";
 import "./bridge-masses/plugin";
 import "./courtyard-edge-wall/plugin";
+import "./entry-canopy/plugin";
+import "./brise-soleil/plugin";
+import "./pilotis/plugin";

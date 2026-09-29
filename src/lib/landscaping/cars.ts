@@ -1,6 +1,5 @@
-import type { SiteConfig, WallSide } from "@/types/house";
+import type { SiteConfig } from "@/types/house";
 import { createRng, hashSeed, rngPick, rngRange } from "./rng";
-import { getWallAnchor, offsetOutward, pointOnWall } from "@/lib/house/wallAnchor";
 
 export interface CarPlacement {
   id: string;
@@ -11,34 +10,15 @@ export interface CarPlacement {
 
 const CAR_COLORS = ["#b91c1c", "#1d4ed8", "#f8fafc", "#18181b", "#71717a"] as const;
 
-const WALL_ROTATION_Y: Record<WallSide, number> = {
-  south: 0,
-  north: Math.PI,
-  east: Math.PI / 2,
-  west: -Math.PI / 2,
-};
-
 const CARS_PER_PARKING_ROW = 3;
 const PARKING_STALL_WIDTH = 2.5;
 const PARKING_STALL_DEPTH = 4.5;
 
-/** Parks one car on each driveway, and several in each parking lot. */
+/** Cars are only placed inside explicit parking lots; a driveway remains a circulation route. */
 export function generateCars(site: SiteConfig): CarPlacement[] {
   const seed = hashSeed("cars", site.house.width, site.house.depth, site.driveways.length, site.parking.length);
   const rng = createRng(seed);
   const cars: CarPlacement[] = [];
-
-  site.driveways.forEach((driveway, i) => {
-    const anchor = getWallAnchor(site.house, driveway.wall, 0);
-    const base = pointOnWall(anchor, driveway.offset + driveway.width / 2);
-    const center = offsetOutward(base, anchor, driveway.length * 0.6);
-    cars.push({
-      id: `car-driveway-${i}`,
-      position: [center[0], center[2]],
-      rotationY: WALL_ROTATION_Y[driveway.wall],
-      color: rngPick(rng, CAR_COLORS),
-    });
-  });
 
   site.parking.forEach((lot, li) => {
     const cols = Math.min(CARS_PER_PARKING_ROW, Math.max(1, Math.floor(lot.width / PARKING_STALL_WIDTH)));

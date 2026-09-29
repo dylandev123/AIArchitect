@@ -183,7 +183,12 @@ function usePBRTextures(assetId: string | undefined, uvScale: number): TextureSe
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitive; surface?: SurfaceKey }) {
+export interface RenderedMeshAudit {
+  id: string; signature: string; kind: HousePrimitive["kind"]; position: number[]; scale: number[]; rotation: number[]; visible: boolean; parent: string; opacity: number; depthWrite: boolean;
+}
+
+export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh }: { primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void }) {
+  const meshRef = useRef<THREE.Mesh>(null);
   const featureRef = useMemo(() => parseFeatureMeshId(primitive.id), [primitive.id]);
   const selectionKey = featureRef ? featureKey(featureRef) : primitive.id;
 
@@ -260,17 +265,6 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
       }
     : baseMaterialProps;
 
-  if (primitive.kind === "box" && primitive.id.endsWith("-water")) {
-    return (
-      <WaterSurface position={primitive.position} width={primitive.size[0]} depth={primitive.size[2]} />
-    );
-  }
-
-  // Water over an arbitrary outline (curved pools, rivers) gets the animated ripple shader.
-  if (primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
-    return <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
-  }
-
   // Glass. Windows and doors sit on a solid wall box, so plain low-opacity glass would just tint the wall pale blue.
   // Panes never write depth: the half-res ambient occlusion pass would otherwise treat them as opaque geometry and
   // stamp blocky darkening onto the glass. The wall box behind already supplies the occlusion. They get a deep-tinted, part-metallic pane instead — it mirrors the sky like real glazing and reads dark against the
@@ -312,32 +306,51 @@ export function PrimitiveMesh({ primitive, surface }: { primitive: HousePrimitiv
   // Map presence changes the shader program, so the material is remounted when detail arrives (R3F won't flag needsUpdate).
   const materialKey = lib ? "pbr" : detail ? "pattern" : textures ? "asset" : "plain";
   const variation = worldUv ? { onBeforeCompile: macroVariation, customProgramCacheKey: macroVariationCacheKey } : {};
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh || !onAuditMesh) return;
+    const material = mesh.material as THREE.Material & { opacity?: number; depthWrite?: boolean };
+    const signature = primitive.kind === "box"
+      ? `${primitive.kind}|${primitive.id}|${primitive.position.map((v) => v.toFixed(3)).join(",")}|${primitive.size.map((v) => v.toFixed(3)).join(",")}`
+      : `${primitive.kind}|${primitive.id}|triMesh`;
+    onAuditMesh({ id: primitive.id, signature, kind: primitive.kind, position: mesh.position.toArray(), scale: mesh.scale.toArray(), rotation: [mesh.rotation.x, mesh.rotation.y, mesh.rotation.z], visible: mesh.visible, parent: mesh.parent?.type ?? "none", opacity: material.opacity ?? 1, depthWrite: material.depthWrite ?? true });
+  }, [onAuditMesh, primitive]);
+
+  if (primitive.kind === "box" && primitive.id.endsWith("-water")) {
+    return <WaterSurface position={primitive.position} width={primitive.size[0]} depth={primitive.size[2]} />;
+  }
+  // Water over an arbitrary outline (curved pools, rivers) gets the animated ripple shader.
+  if (primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
+    return <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
+  }
 
   if (primitive.kind === "box") {
     return (
       <mesh
+        ref={meshRef}
         position={primitive.position}
         rotation={primitive.rotation}
         castShadow={!isGlass}
         receiveShadow={!isGlass}
         onClick={handleClick}
-        userData={{ id: primitive.id }}
+        userData={{ id: primitive.id, xRay }}
       >
         {boxGeometry ? <primitive object={boxGeometry} attach="geometry" /> : <boxGeometry args={primitive.size} />}
-        {glass ?? <meshStandardMaterial key={materialKey} {...texturedProps} {...(textures ? {} : detailProps)} {...variation} />}
+        {xRay ? <meshStandardMaterial color={primitive.id.includes("floor-") ? "#1d4ed8" : primitive.id.includes("wall-") ? "#f59e0b" : "#a855f7"} wireframe transparent opacity={0.82} depthWrite /> : glass ?? <meshStandardMaterial key={materialKey} {...texturedProps} {...(textures ? {} : detailProps)} {...variation} />}
       </mesh>
     );
   }
 
   return (
     <mesh
+      ref={meshRef}
       geometry={triGeometry!}
       castShadow={!isGlass}
       receiveShadow={!isGlass}
       onClick={handleClick}
-      userData={{ id: primitive.id }}
+      userData={{ id: primitive.id, xRay }}
     >
-      {glass ?? <meshStandardMaterial key={materialKey} {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} {...variation} side={THREE.DoubleSide} />}
+      {xRay ? <meshStandardMaterial color="#a855f7" wireframe transparent opacity={0.82} depthWrite side={THREE.DoubleSide} /> : glass ?? <meshStandardMaterial key={materialKey} {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} {...variation} side={THREE.DoubleSide} />}
     </mesh>
   );
 }

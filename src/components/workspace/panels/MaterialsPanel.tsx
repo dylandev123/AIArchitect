@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { X } from "lucide-react";
+import { useMemo } from "react";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useAssetStore } from "@/store/useAssetStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
@@ -139,7 +140,10 @@ export function MaterialsPanel() {
     (s) => s.getProject(params.projectId)?.houseConfigJson ?? "{}"
   );
   const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
-  const pbrMaterials = useAssetStore((s) => s.getPBRMaterials());
+  // Select the stable catalog reference, then derive the filtered list in React. Calling the store
+  // getter here used to create a new array for every useSyncExternalStore snapshot read.
+  const catalog = useAssetStore((s) => s.catalog);
+  const pbrMaterials = useMemo(() => catalog.filter((asset) => asset.type === "pbr-material"), [catalog]);
 
   const { site } = generateHouseFromJson(houseConfigJson);
   const materials = site?.materials ?? DEFAULT_MATERIALS_CONFIG;

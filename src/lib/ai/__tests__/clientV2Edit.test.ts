@@ -1,0 +1,74 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ARCHITECTURE_FIXTURES } from "@/lib/architecture/fixtures";
+import { compileArchitecture } from "@/lib/architecture/compiler";
+import { documentAudit, primitiveBounds } from "@/lib/architecture/renderAudit";
+import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
+
+function stubBrowser() {
+  const data = new Map<string, string>();
+  const localStorage = {
+    getItem: (key: string) => data.get(key) ?? null,
+    setItem: (key: string, value: string) => void data.set(key, value),
+    removeItem: (key: string) => void data.delete(key),
+  };
+  vi.stubGlobal("localStorage", localStorage);
+  vi.stubGlobal("window", { localStorage, addEventListener: () => {} });
+}
+
+function jsonFor(document = ARCHITECTURE_FIXTURES.luxuryTropicalCourtyardVillaV2) {
+  // A non-empty legacy array makes this an existing project, as it is in the workspace after V2 generation.
+  return JSON.stringify({ house: { width: 18, depth: 10, floors: 1, roof: "flat" }, decks: [{ id: "legacy-deck", x: 0, z: 0, width: 3, depth: 2 }], architecturalDesignDocument: document });
+}
+
+async function load() {
+  vi.resetModules();
+  const { useProjectStore } = await import("@/store/useProjectStore");
+  const { requestHouseEdit, V2_EDIT_UNCHANGED_MESSAGE } = await import("../client");
+  return { useProjectStore, requestHouseEdit, V2_EDIT_UNCHANGED_MESSAGE };
+}
+
+beforeEach(stubBrowser);
+afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+
+describe("requestHouseEdit V2 commit boundary", () => {
+  it("rejects a legacy-only rooftop-deck response rather than claiming the active V2 architecture changed", async () => {
+    const { useProjectStore, requestHouseEdit, V2_EDIT_UNCHANGED_MESSAGE } = await load();
+    const project = useProjectStore.getState().createProject("Luxury V2");
+    const base = jsonFor();
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    const legacyOnly = JSON.stringify({ ...JSON.parse(base), decks: [{ id: "legacy-deck", x: 0, z: 8, width: 9, depth: 6, shape: "rounded" }] });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "I made a rooftop terrace.", json: legacyOnly }) }));
+
+    const apply = vi.fn();
+    const result = await requestHouseEdit({ projectId: project.id, prompt: "Design a rooftop terrace", apply });
+
+    expect(result).toEqual({ ok: false, error: V2_EDIT_UNCHANGED_MESSAGE, status: 422 });
+    expect(apply).not.toHaveBeenCalled();
+    expect(useProjectStore.getState().getProject(project.id)!.houseConfigJson).toBe(base);
+  });
+
+  it("commits a deterministic V2 mass move and resize through the same follow-up client path", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const project = useProjectStore.getState().createProject("Luxury V2");
+    const base = jsonFor();
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    const original = ARCHITECTURE_FIXTURES.luxuryTropicalCourtyardVillaV2;
+    const moved = {
+      ...original,
+      massing: { ...original.massing, masses: original.massing.masses.map((mass) => mass.id === "living" ? { ...mass, position: { ...mass.position, x: mass.position.x + 15 }, width: mass.width + 8, depth: mass.depth + 4 } : mass) },
+    };
+    const next = jsonFor(moved);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "Moved and enlarged the main living pavilion.", json: next }) }));
+
+    const result = await requestHouseEdit({ projectId: project.id, prompt: "Move the main living pavilion 15m east and enlarge it", apply: (summary, json, writer) => useProjectStore.getState().appendVersion(project.id, summary, json, writer) });
+
+    const persisted = useProjectStore.getState().getProject(project.id)!;
+    const beforePrimitives = compileArchitecture(original, { materials: DEFAULT_MATERIALS_CONFIG }).model.primitives;
+    const afterPrimitives = compileArchitecture(moved, { materials: DEFAULT_MATERIALS_CONFIG }).model.primitives;
+    expect(result).toMatchObject({ ok: true, generated: false });
+    expect(documentAudit(original).hash).not.toBe(documentAudit(moved).hash);
+    expect(persisted.houseConfigJson).toBe(next);
+    expect(primitiveBounds(beforePrimitives)).not.toEqual(primitiveBounds(afterPrimitives));
+    expect(persisted.versions.at(-1)?.summary).toContain("Moved and enlarged");
+  });
+});

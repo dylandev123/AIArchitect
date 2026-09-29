@@ -19,7 +19,7 @@ import { describeSpacesForPrompt, type OutdoorSpace } from "@/lib/outdoor/spaces
 import { briefAllowsFrontPool, describePlacement, reseatPools } from "@/lib/house/architecture/poolPlacement";
 import type { DesignRecipe } from "@/types/library";
 import type { ArchitecturalDesign } from "@/lib/architecture/designEngine";
-import { describeOperationPayloads, validateGenerationOperations, type AiGenerationResponse } from "./siteSchema";
+import { describeOperationPayloads, normalizeOversizedWindowOps, scopeForV2Generation, validateGenerationOperations, type AiGenerationResponse } from "./siteSchema";
 
 const CORE = `You are a world-class residential architect. Your job is not to create JSON: it is to design beautiful homes that people would actually build. Every home should feel intentional. Think like Frank Lloyd Wright, Olson Kundig, SAOTA, McClean Design, Zaha Hadid, Foster + Partners, Studio MK27 and luxury Caribbean architects. The JSON is simply the way you communicate the design. Never create a plain box when a more believable composition is possible.
 
@@ -65,10 +65,20 @@ export function describeArchitecturalPlan(design?: ArchitecturalDesign): string 
   return `═══ ARCHITECTURAL PLAN (DECIDED BEFORE MASSING) ═══\n\nHonor this intent before choosing operations. Intent: mood ${design.intent.mood.join(", ")}; spatial goals ${design.intent.spatialGoals.join(", ")}; environmental goals ${design.intent.environmentalGoals.join(", ")}. Selected strategies: ${design.strategies.map((s) => s.name).join(" + ")}. Major masses: ${design.spacePlan.massAssignments.map((m) => `${m.id} (${m.role}: ${m.zones.join(", ")})`).join("; ")}. Required relationships: ${design.spacePlan.relationships.map((r) => `${r.from} ${r.relationship} ${r.to}`).join("; ")}. Use the existing operations to express this plan; do not invent geometry operations.`;
 }
 
-export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = [], spaces: readonly OutdoorSpace[] = [], design?: ArchitecturalDesign): string {
+/**
+ * For a V2 project, the architecture stages already decided the massing, roof and window/door layout —
+ * `floors` is what the caller will synthesize into the legacy `house.floors` room-packing rooms are still
+ * bounded by (see finalAssembly.ts), so it's surfaced here rather than left for the model to guess.
+ */
+function v2MassingNote(floors: number): string {
+  return `═══ THIS PROJECT'S MASSING AND SITE PLAN ARE ALREADY DECIDED ═══\n\nThe building's footprint, floor count (${floors}), roof form and window/door openings were already designed by the architecture system and are fixed. The Site Plan separately owns driveway, parking, pool, terrace/deck, paths and landscape geometry. Do NOT include a "house" field in your output — there is none in the schema. Do NOT use addWindow, addDoor, addDormer, addCrossGable, addDriveway, addParking, addPool, addPatio, addDeck, addPath or addLandscape — they are not offered here and any attempt is ignored. Skip step 2 (house shell), the windows/front-door part of step 5, and site geometry. Everything else — exterior character, materials, extra structures, and rooms (use level < ${floors}) — is still yours to decide.`;
+}
+
+export function buildGenerationSystemPrompt(assets: readonly AssetRef[], recipes: readonly DesignRecipe[] = [], spaces: readonly OutdoorSpace[] = [], design?: ArchitecturalDesign, v2?: { floors: number }): string {
+  const scope = v2 ? scopeForV2Generation(WORLD_SCOPE) : WORLD_SCOPE;
   const capabilities = describeCapabilities({ roofs: true, materials: true, exterior: true, featureTypes: true, site: true, assets });
-  const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(WORLD_SCOPE, assets.map((a) => a.id), true)}`;
-  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, describeArchitecturalPlan(design), `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeSpacesForPrompt(spaces), describeRecipesForPrompt(recipes, (id) => spaces.filter((sp) => sp.recipeIds.includes(id)).map((sp) => sp.name))]
+  const payloads = `═══ OPERATION PAYLOADS ═══\n\nEach operation is { "op", "value"?, "fields"? }. "value" is the full item for add* ops (every required field); "fields" holds the changed fields for set* ops. Payloads are validated strictly — a wrong field name, missing required field or out-of-range number is rejected. Shapes ("?" = optional):\n${describeOperationPayloads(scope, assets.map((a) => a.id), true)}`;
+  return [CORE, WORLD, SCALE_GUIDANCE, TIER_GUIDANCE, GEOMETRY_GUIDANCE, TERRAIN_GUIDANCE, ARCHITECTURE, RULES, v2 ? v2MassingNote(v2.floors) : "", describeArchitecturalPlan(design), `═══ RENDERER CAPABILITIES ═══\n\n${capabilities}`, payloads, describeSpacesForPrompt(spaces), describeRecipesForPrompt(recipes, (id) => spaces.filter((sp) => sp.recipeIds.includes(id)).map((sp) => sp.name))]
     .filter(Boolean)
     .join("\n\n");
 }
@@ -115,11 +125,19 @@ export function assembleGeneratedProject(
    * reported in `skipped`. Everything still passes the same validation gates afterwards.
    */
   repairLocally = false,
-  timings: Timings = createTimings()
+  timings: Timings = createTimings(),
+  /** A valid V2 Site Plan owns site geometry. Legacy rules remain the recovery path when absent. */
+  authoredSiteOps?: readonly PatchOp[]
 ): GenerationOutcome {
   // The site block comes from `output.site` resolved against the brief below, never from a free-form op.
+  // Oversized "addWindow" requests (ribbon glazing, a sliding glass wall) are split into valid panels
+  // before validation, since there's no dedicated curtain-wall op and the intent shouldn't be dropped.
+  const SITE_OP = /^(?:addDriveway|addParking|addPool|addPatio|addDeck|addPath|addLandscape|addGarage)$/;
+  const sourceOps = authoredSiteOps ? [...output.operations.filter((op) => !SITE_OP.test(op.op)), ...authoredSiteOps] : output.operations;
+  const windowSplit = repairLocally ? normalizeOversizedWindowOps(sourceOps) : { operations: sourceOps, notes: [] };
+  if (windowSplit.notes.length > 0) console.info("[AI] Window normalization:", windowSplit.notes);
   // Payloads are validated locally; an invalid one fails the attempt so the repair pass can fix it.
-  const { valid, invalid } = timings.time("validateOps", () => validateGenerationOperations(output.operations, WORLD_SCOPE, assets.map((a) => a.id)));
+  const { valid, invalid } = timings.time("validateOps", () => validateGenerationOperations(windowSplit.operations, WORLD_SCOPE, assets.map((a) => a.id)));
   if (invalid.length > 0 && !repairLocally) return { ok: false, errors: invalid };
   const { allowed: scoped, rejected } = partitionOpsForScope(valid, WORLD_SCOPE, {});
   rejected.unshift(...invalid);
@@ -128,23 +146,27 @@ export function assembleGeneratedProject(
   const hints: SiteHints = inferSiteHints(brief);
   const site = resolveSiteSettings(output.site as Partial<SiteSettings>, hints);
   // The scale brings the shell into its size envelope (a mansion is never a suburban box) and carries the ops with it.
-  const fitted = timings.time("scaleRules", () => fitShellToScale({ brief, house: output.house, site, ops: allowed }));
+  const fitted = authoredSiteOps ? { house: output.house, ops: allowed } : timings.time("scaleRules", () => fitShellToScale({ brief, house: output.house, site, ops: allowed }));
   const layout = timings.time("roomNormalization", () => normalizeGeneratedRooms(fitted.ops, fitted.house, repairLocally));
   if (layout.errors.length > 0) return { ok: false, errors: layout.errors };
   rejected.push(...layout.dropped);
   // A named style (cabin, modern luxury, Caribbean villa) fixes the roof form, the setting and its signature parts.
-  const styled = timings.time("styleRules", () => applyArchitectureRules({ brief, house: fitted.house, site, ops: layout.ops, statedEnvironment: hints.environment !== undefined }));
+  const styled = authoredSiteOps ? { house: fitted.house, site, ops: layout.ops, style: undefined, placeholders: new Set<PatchOp>() } : timings.time("styleRules", () => applyArchitectureRules({ brief, house: fitted.house, site, ops: layout.ops, statedEnvironment: hints.environment !== undefined }));
   // The scale adds what its size calls for: connected wings, a garage row, outdoor living, grounds and outbuildings.
-  const scaled = timings.time("scaleRules", () => planScale({ brief, house: styled.house, site: styled.site, ops: styled.ops, placeholders: new Set(styled.placeholders) }));
+  const scaled = authoredSiteOps ? { ops: styled.ops, plan: undefined, notes: [] } : timings.time("scaleRules", () => planScale({ brief, house: styled.house, site: styled.site, ops: styled.ops, placeholders: new Set(styled.placeholders) }));
   // The tier and the brief decide what richness and terrain the design still lacks (a river for "beside a river").
-  const designed = timings.time("siteRules", () => applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled.ops, style: styled.style, plan: scaled.plan }));
+  const designed = authoredSiteOps ? { ops: scaled.ops } : timings.time("siteRules", () => applySiteRules({ brief, house: styled.house, site: styled.site, ops: scaled.ops, style: styled.style, plan: scaled.plan }));
   // With every rule run, clear the walls the wings cover and give the larger facades their window rhythm.
-  const finished = timings.time("scaleRules", () => finalizeScale({ brief, house: styled.house, site: styled.site, ops: designed.ops }));
+  const finished = authoredSiteOps ? designed.ops : timings.time("scaleRules", () => finalizeScale({ brief, house: styled.house, site: styled.site, ops: designed.ops }));
   // The pool belongs on the private side. Scaled projects were seated by the plan; this also covers a project with no scale, and
   // any pool a later rule added.
-  const seated = reseatPools({ house: styled.house, site: styled.site, ops: finished, brief });
-  // Nothing is committed on top of anything else: features that collide move to the nearest clear place, or fail the attempt.
-  const spatial = timings.time("collisionResolution", () => resolveSiteCollisionsOrDrop(styled.house, seated.ops, repairLocally));
+  const seated = authoredSiteOps ? { ops: finished, notes: [] } : reseatPools({ house: styled.house, site: styled.site, ops: finished, brief });
+  // An accepted Site Plan is executable geometry, not a placement suggestion.  Legacy
+  // collision resolution is recovery only: it may relocate, resize, or drop features,
+  // so never run it over authored coordinates.
+  const spatial = authoredSiteOps
+    ? { ops: seated.ops as PatchOp[], errors: [] as string[], unplaced: [] as number[][], relocated: [] as string[], dropped: [] as string[] }
+    : timings.time("collisionResolution", () => resolveSiteCollisionsOrDrop(styled.house, seated.ops, repairLocally));
   if (spatial.errors.length > 0) return { ok: false, errors: spatial.errors };
   rejected.push(...spatial.dropped);
   const ops: PatchOp[] = [{ op: "setHouse", fields: { ...styled.house } }, { op: "setSite", fields: { ...styled.site } }, ...spatial.ops];
@@ -164,13 +186,13 @@ export function assembleGeneratedProject(
   }
   if (errors.length > 0) return { ok: false, errors };
   // The last gate looks at the committed JSON itself, independent of how the ops got there.
-  const overlaps = timings.time("collisionGate", () => findSiteCollisions(JSON.parse(json) as Record<string, unknown>));
+  const overlaps = authoredSiteOps ? [] : timings.time("collisionGate", () => findSiteCollisions(JSON.parse(json) as Record<string, unknown>));
   if (overlaps.length > 0) return { ok: false, errors: overlaps };
   // Collisions may still have pushed a pool toward the drive on a crowded lot: a pool with nowhere private to go is left out.
-  const placed = dropArrivalPools(json, brief);
+  const placed = authoredSiteOps ? { json, dropped: [] as string[] } : dropArrivalPools(json, brief);
   json = placed.json;
   rejected.push(...placed.dropped);
-  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected, adjusted: spatial.relocated, notes: [...scaled.notes, ...seated.notes] };
+  return { ok: true, json, timeOfDay: output.timeOfDay ?? hints.timeOfDay, site: styled.site, skipped: rejected, adjusted: spatial.relocated, notes: [...windowSplit.notes, ...scaled.notes, ...seated.notes] };
 }
 
 /** The last word on the pool rule: a pool still on the arrival side after every rule and the collision pass is removed and reported. */

@@ -4,10 +4,12 @@ import { useLibraryStore } from "@/store/useLibraryStore";
 import { useAdminStore } from "@/store/useAdminStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
+import { useArchitectureDebugStore } from "@/store/useArchitectureDebugStore";
 import { toAssetIndex } from "@/lib/library/retrieval";
 import { revisionOf } from "@/lib/house/revision";
 import type { TimeOfDay } from "@/types/project";
-import type { GenerationReport } from "@/types/library";
+import type { CapabilityRequest, GenerationReport } from "@/types/library";
+import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
 import type { HouseEditResult } from "./client";
 
 /** Mirrors `PipelineStageEvent` in `@/lib/architecture/stages/pipeline` on the wire; kept structurally loose here since this is untrusted network data. */
@@ -82,6 +84,12 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
 
   const baseJson = project.houseConfigJson;
   const baseRevision = revisionOf(baseJson);
+  // Every "stage" frame below writes its own growing preview into the project via updateHouseConfig, which
+  // moves the project's revision away from baseRevision on purpose. The final staleness check must compare
+  // against the revision *this stream itself* last wrote, not the pre-generation baseline — otherwise a
+  // generation that streamed even one mass would always look "changed" and be reported as failed, despite
+  // completing successfully server-side.
+  let lastWrittenRevision = baseRevision;
   let baseParsed: Record<string, unknown> = {};
   try {
     baseParsed = JSON.parse(baseJson) as Record<string, unknown>;
@@ -122,19 +130,25 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
         const event = frame.data as StageEventPayload;
         setProgress({ label: progressLabel(event), massesSoFar: event.massesSoFar ?? event.totalMasses, totalMasses: event.totalMasses });
         const merged = { ...baseParsed, architecturalDesignDocument: event.document };
-        useProjectStore.getState().updateHouseConfig(req.projectId, JSON.stringify(merged));
+        const mergedJson = JSON.stringify(merged);
+        useProjectStore.getState().updateHouseConfig(req.projectId, mergedJson, `staged-generation:${event.stage}`);
+        lastWrittenRevision = revisionOf(mergedJson);
         continue;
       }
       if (frame.event === "error") {
-        const data = frame.data as { error?: string; status?: number };
+        // Dev-only: which stage actually failed and how the whole staged run traced, for the Architecture debug panel.
+        // The live preview above is untouched — the last successfully streamed "stage" document stays on screen.
+        const data = frame.data as { error?: string; status?: number; stage?: string; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
+        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, data.stage, data.capabilityRequests);
         return { ok: false, error: data.error ?? "AI request failed. Please try again.", status: data.status ?? 502 };
       }
       if (frame.event === "done") {
-        const data = frame.data as { summary?: string; json?: string; timeOfDay?: TimeOfDay; intelligence?: GenerationReport };
+        const data = frame.data as { summary?: string; json?: string; timeOfDay?: TimeOfDay; intelligence?: GenerationReport; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
+        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, undefined, data.capabilityRequests);
         if (typeof data.json !== "string") return { ok: false, error: "AI request failed. Please try again.", status: 502 };
 
         const live = useProjectStore.getState().getProject(req.projectId);
-        if (!live || revisionOf(live.houseConfigJson) !== baseRevision) {
+        if (!live || revisionOf(live.houseConfigJson) !== lastWrittenRevision) {
           return { ok: false, error: "The project changed while the AI was working, so its result wasn't applied. Please ask again.", status: 409, stale: true };
         }
         const summary = data.summary ?? "AI design";
@@ -151,5 +165,53 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
     return { ok: false, error: "The connection ended before the design finished. Please try again.", status: 502 };
   } finally {
     setProgress(null);
+  }
+}
+
+/**
+ * Dev-only: reruns exactly one architecture-pipeline stage (or the mandatory final assembly call) via
+ * `/api/ai/house/replay`, reusing the server's cached upstream output for every stage before it instead of
+ * paying for the whole pipeline again. The server 404s outside development. On success, an architecture
+ * stage replay merges the new document into the live preview the same way a "stage" SSE frame does; a
+ * final-assembly replay applies the whole regenerated project, same as a fresh generation would.
+ */
+export async function replayArchitectureStage(projectId: string, stage: "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "final-assembly", apply: (summary: string, json: string) => void): Promise<{ ok: boolean; error?: string }> {
+  const debugStore = useArchitectureDebugStore.getState();
+  debugStore.setReplaying(stage);
+  try {
+    const res = await fetch("/api/ai/house/replay", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectId, stage }),
+    });
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string; document?: unknown; diagnostics?: StageDiagnostics[];
+      summary?: string; json?: string; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[];
+    };
+    if (!res.ok) return { ok: false, error: data.error ?? "Replay failed." };
+
+    if (typeof data.json === "string") {
+      // A final-assembly replay returns a whole regenerated project, same shape as a fresh generation.
+      if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, undefined, data.capabilityRequests);
+      apply(data.summary ?? "AI design", data.json);
+      return { ok: true };
+    }
+
+    // An architecture-stage replay returns just the updated document; merge it into the live preview.
+    const project = useProjectStore.getState().getProject(projectId);
+    if (!project) return { ok: false, error: "Project not found." };
+    let baseParsed: Record<string, unknown> = {};
+    try {
+      baseParsed = JSON.parse(project.houseConfigJson) as Record<string, unknown>;
+    } catch {
+      // A blank project's JSON is always valid; this only guards a hand-edited or corrupt project file.
+    }
+    useProjectStore.getState().updateHouseConfig(projectId, JSON.stringify({ ...baseParsed, architecturalDesignDocument: data.document }), `architecture-replay:${stage}`);
+    if (data.diagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.diagnostics, undefined, data.capabilityRequests);
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "network error" };
+  } finally {
+    debugStore.setReplaying(null);
   }
 }

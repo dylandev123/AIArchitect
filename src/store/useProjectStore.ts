@@ -4,12 +4,26 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
 import { BLANK_HOUSE_JSON } from "@/types/house";
+import { documentAudit } from "@/lib/architecture/renderAudit";
+import { useRenderFlightStore } from "./useRenderFlightStore";
 
 function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
   return { id: crypto.randomUUID(), createdAt: Date.now(), summary, houseConfigJson };
 }
 
 const STORAGE_KEY = "ai-architect-projects";
+let devConfigRevision = 0;
+
+function logConfigChange(id: string, houseConfigJson: string, source: string): void {
+  useRenderFlightStore.getState().noteWrite(source);
+  if (process.env.NODE_ENV === "production") return;
+  try {
+    const raw = JSON.parse(houseConfigJson) as Record<string, unknown>;
+    const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
+    const audit = document && typeof document === "object" && "massing" in document ? documentAudit(document as Parameters<typeof documentAudit>[0]) : undefined;
+    console.info("[V2 CONFIG]", { revision: ++devConfigRevision, source, projectId: id, hasArchitecturalDesignDocument: !!raw.architecturalDesignDocument, documentHash: audit?.hash, massCount: audit?.massCount ?? 0, operationCount: audit?.operationCount ?? 0 });
+  } catch { console.info("[V2 CONFIG]", { revision: ++devConfigRevision, source, projectId: id, invalidJson: true }); }
+}
 
 interface ProjectStore {
   projects: Project[];
@@ -23,9 +37,9 @@ interface ProjectStore {
   touchProject: (id: string) => void;
   getProject: (id: string) => Project | undefined;
   /** Granular live-JSON edit (manual textarea/inspector/add-buttons) — does not touch version history. */
-  updateHouseConfig: (id: string, houseConfigJson: string) => void;
+  updateHouseConfig: (id: string, houseConfigJson: string, debugWriter?: string) => void;
   /** Appends a new, permanent version (used after a successful AI edit) and jumps the cursor to it. */
-  appendVersion: (id: string, summary: string, houseConfigJson: string) => void;
+  appendVersion: (id: string, summary: string, houseConfigJson: string, debugWriter?: string) => void;
   /** Moves the cursor one version back, if possible. Nothing is deleted. */
   undo: (id: string) => void;
   /** Moves the cursor one version forward, if possible. */
@@ -114,15 +128,13 @@ export const useProjectStore = create<ProjectStore>()(
 
       getProject: (id) => get().projects.find((p) => p.id === id),
 
-      updateHouseConfig: (id, houseConfigJson) =>
-        set((state) => ({
-          projects: state.projects.map((p) =>
-            p.id === id ? { ...p, houseConfigJson, updatedAt: Date.now() } : p
-          ),
-        })),
+      updateHouseConfig: (id, houseConfigJson, debugWriter = "updateHouseConfig") => {
+        logConfigChange(id, houseConfigJson, debugWriter);
+        set((state) => ({ projects: state.projects.map((p) => p.id === id ? { ...p, houseConfigJson, updatedAt: Date.now() } : p) }));
+      },
 
-      appendVersion: (id, summary, houseConfigJson) =>
-        set((state) => ({
+      appendVersion: (id, summary, houseConfigJson, debugWriter = "appendVersion") =>
+        (logConfigChange(id, houseConfigJson, debugWriter), set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id) return p;
             const versions = [...p.versions, makeVersion(summary, houseConfigJson)];
@@ -134,13 +146,14 @@ export const useProjectStore = create<ProjectStore>()(
               updatedAt: Date.now(),
             };
           }),
-        })),
+        }))),
 
       undo: (id) =>
         set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex <= 0) return p;
             const nextIndex = p.currentVersionIndex - 1;
+            logConfigChange(id, p.versions[nextIndex].houseConfigJson, "undo");
             return {
               ...p,
               currentVersionIndex: nextIndex,
@@ -155,6 +168,7 @@ export const useProjectStore = create<ProjectStore>()(
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex >= p.versions.length - 1) return p;
             const nextIndex = p.currentVersionIndex + 1;
+            logConfigChange(id, p.versions[nextIndex].houseConfigJson, "redo");
             return {
               ...p,
               currentVersionIndex: nextIndex,
@@ -168,6 +182,7 @@ export const useProjectStore = create<ProjectStore>()(
         set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id || versionIndex < 0 || versionIndex >= p.versions.length) return p;
+            logConfigChange(id, p.versions[versionIndex].houseConfigJson, "restoreVersion");
             return {
               ...p,
               currentVersionIndex: versionIndex,
@@ -205,6 +220,9 @@ export const useProjectStore = create<ProjectStore>()(
             return { ...p, houseConfigJson, versions, currentVersionIndex, projectType };
           }),
         };
+      },
+      onRehydrateStorage: () => (state) => {
+        state?.projects.forEach((project) => logConfigChange(project.id, project.houseConfigJson, "storage-rehydrate"));
       },
     }
   )

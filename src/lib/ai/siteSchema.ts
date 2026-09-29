@@ -17,6 +17,7 @@ import {
   WATERWAY_LIMITS,
   DECK_LIMITS,
   DOOR_LIMITS,
+  FRAME_BORDER,
   DRIVEWAY_LIMITS,
   GARAGE_LIMITS,
   HOUSE_LIMITS,
@@ -195,6 +196,7 @@ const parkingSchema = z.object({
 
 const landscapeSchema = z.object({
   kind: z.enum(LANDSCAPE_KINDS).describe("Garden is a planted area; lawn is open grass; clearing is an oval opening among trees (use it in forest or woodland sites)."),
+  purpose: z.enum(["privacy", "entrance-planting", "pool-planting", "view-framing"]).optional().describe("Why this planting zone exists; use Site Plan purposes when supplied."),
   x: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max),
   z: z.number().min(SITE_POSITION_LIMIT.min).max(SITE_POSITION_LIMIT.max),
   width: z.number().min(LANDSCAPE_LIMITS.width.min).max(LANDSCAPE_LIMITS.width.max),
@@ -590,6 +592,39 @@ export function validateGenerationOperations(operations: readonly AiOperation[],
   return validateAgainst(operations, generationOperationSchemas(scope, assetIds));
 }
 
+/** Gap left between split window panels for a shared mullion pier, reusing the frame's own thickness. */
+const WINDOW_SPLIT_GAP = FRAME_BORDER * 2;
+
+/**
+ * The model has no op for a curtain-wall-like opening (ribbon glazing, a sliding glass wall): it expresses
+ * that intent as one oversized "addWindow". Rather than reject it and lose the intent, split it into the
+ * fewest same-size panels that each fit WINDOW_LIMITS.width, separated by a mullion, so the total opening
+ * width is preserved. Runs before validation, so the split panels are what gets validated and applied.
+ */
+export function normalizeOversizedWindowOps(operations: readonly AiOperation[]): { operations: AiOperation[]; notes: string[] } {
+  const maxWidth = WINDOW_LIMITS.width.max;
+  const result: AiOperation[] = [];
+  const notes: string[] = [];
+  for (const op of operations) {
+    const width = op.value?.width;
+    if (op.op !== "addWindow" || typeof width !== "number" || width <= maxWidth) {
+      result.push(op);
+      continue;
+    }
+    const panels = Math.max(2, Math.ceil((width + WINDOW_SPLIT_GAP) / (maxWidth + WINDOW_SPLIT_GAP)));
+    const panelWidth = (width - (panels - 1) * WINDOW_SPLIT_GAP) / panels;
+    const baseOffset = typeof op.value?.offset === "number" ? op.value.offset : 0;
+    for (let i = 0; i < panels; i++) {
+      result.push({
+        ...op,
+        value: { ...op.value, width: panelWidth, offset: baseOffset + i * (panelWidth + WINDOW_SPLIT_GAP) },
+      });
+    }
+    notes.push(`Converted ${width}m glazing request into ${panels} panels`);
+  }
+  return { operations: result, notes };
+}
+
 /**
  * Builds the structured-output schema for one request. The model-facing schema is flat (see
  * flatOperationSchema); scope is enforced by the closed `op` enum here and again, with full
@@ -620,19 +655,38 @@ export interface AiGenerationResponse {
 }
 
 /**
- * Schema for the initial generation. The house shell is a required top-level object (so a
- * result without footprint, floors or roof cannot exist); everything else is expressed with
- * the same typed add/set ops as scoped edits (flat on the wire, validated locally).
+ * Feature types that only ever became geometry through the legacy single-shell `house`/`windows`/`doors`
+ * renderer (`generateHouseFromJson`) — for a V2 project (a valid `ArchitecturalDesignDocument` already
+ * exists), that renderer's output is discarded outright in favor of `compileArchitecture`'s own massing,
+ * roof and facade-opening system, so asking the model to author these is pure wasted tokens/latency with no
+ * possible visual effect. Everything else (rooms, site, materials, pools, patios, buildings, etc.) still
+ * feeds real downstream logic even for V2 (room/outdoor placement math, collision avoidance) and stays
+ * offered exactly as today — see finalAssembly.ts's V2 trim for the full reasoning.
  */
-export function buildGenerationResponseSchema(scope: EditScope, assetIds: readonly string[] = []) {
+const V2_DEAD_FEATURE_TYPES: readonly FeatureType[] = ["window", "door", "dormer", "crossGable"];
+
+/** The scope a V2 generation actually needs: everything `scope` already offers, minus the dead feature types above. */
+export function scopeForV2Generation(scope: EditScope): EditScope {
+  return { ...scope, featureTypes: scope.featureTypes.filter((t) => !V2_DEAD_FEATURE_TYPES.includes(t)) };
+}
+
+/**
+ * Schema for the initial generation. `forV2` drops the `house` field entirely (a V2 project's real
+ * massing/roof already exists in its `ArchitecturalDesignDocument` — the caller synthesizes a legacy
+ * `house` object from it afterwards, see finalAssembly.ts) and narrows the offered operations to
+ * `scopeForV2Generation`. For a legacy project (no valid document), `house` stays a required top-level
+ * object exactly as before, so a result without footprint, floors or roof still cannot exist there.
+ */
+export function buildGenerationResponseSchema(scope: EditScope, assetIds: readonly string[] = [], forV2 = false) {
+  const effectiveScope = forV2 ? scopeForV2Generation(scope) : scope;
   const schema = z.object({
     summary: z.string().describe("One or two plain-language sentences describing the design you created."),
     timeOfDay: z.enum(["morning", "midday", "sunset", "night"]).optional()
       .describe("Lighting that best shows off the design or matches the brief. Omit if the brief doesn't imply one."),
-    house: z.object(houseShape).describe("The main building's footprint (meters), number of floors and roof form."),
+    ...(forV2 ? {} : { house: z.object(houseShape).describe("The main building's footprint (meters), number of floors and roof form.") }),
     site: z.object(siteShape).describe("The land around the house: environment, view direction, slope and approach side."),
     operations: z
-      .array(flatOperationSchema(generationOperationSchemas(scope, assetIds).map(opName)))
+      .array(flatOperationSchema(generationOperationSchemas(effectiveScope, assetIds).map(opName)))
       .min(1)
       .describe("setMaterials, setExteriorOptions and add* operations that build out the design."),
   });

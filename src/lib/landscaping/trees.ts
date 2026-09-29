@@ -35,12 +35,27 @@ export function generateTrees(site: SiteConfig, style?: TreeStyle): TreePlacemen
   const trunk = style?.trunk ?? [1.8, 3.2];
   const seed = hashSeed("trees", site.house.width, site.house.depth, site.house.floors, site.house.roof);
   const rng = createRng(seed);
-  const footprints = collectOccupiedFootprints(site);
+  // Planting zones are destinations for trees, not obstacles to them; every built/circulation footprint
+  // remains a keep-out.
+  const footprints = collectOccupiedFootprints({ ...site, landscaping: [] });
   const half = yardHalfExtent(site);
 
   const placed: TreePlacement[] = [];
 
-  for (let i = 0; i < TREE_COUNT; i++) {
+  // Site Plan zones establish the first planting moves. They are intentionally deterministic, but their
+  // meaning comes from the authored plan rather than a generic radial scatter.
+  for (const zone of site.landscaping.filter((z) => z.purpose && z.kind !== "clearing")) {
+    const count = zone.purpose === "privacy" ? 3 : 2;
+    for (let i = 0; i < count && placed.length < TREE_COUNT; i++) {
+      const along = i / (count - 1) - 0.5;
+      const x = zone.x + along * Math.max(0, zone.width - 2);
+      const z = zone.z + (zone.purpose === "view-framing" ? (i % 2 ? 1 : -1) * Math.min(1.2, zone.depth / 4) : 0);
+      if (isInsideAnyFootprint(x, z, footprints)) continue;
+      placed.push({ id: `tree-${placed.length}`, position: [x, z], trunkHeight: rngRange(rng, trunk[0], trunk[1]), trunkRadius: rngRange(rng, 0.12, 0.22), foliageRadius: rngRange(rng, 1.1, 1.9), foliageColor: rngPick(rng, colors), rotationY: rng() * Math.PI * 2 });
+    }
+  }
+
+  for (let i = placed.length; i < TREE_COUNT; i++) {
     for (let attempt = 0; attempt < MAX_ATTEMPTS_PER_TREE; attempt++) {
       let x: number, z: number;
 

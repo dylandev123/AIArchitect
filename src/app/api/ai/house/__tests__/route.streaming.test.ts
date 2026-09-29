@@ -28,16 +28,18 @@ beforeEach(async () => {
   vi.spyOn(console, "info").mockImplementation(() => {});
   generateText.mockReset();
   generateText
-    // intent
-    .mockResolvedValueOnce({ output: { mood: ["drama"], spatialGoals: ["views"], environmentalGoals: ["shelter"], hierarchyGoals: ["dominant living pavilion"], compositionBias: "asymmetrical", style: "modern tropical" }, totalUsage: {} })
-    // site strategy
-    .mockResolvedValueOnce({ output: { environment: "beach", viewDirection: "south", arrivalDirection: "north", terrain: "level", terrainResponse: "Keep the composition level and open to the beach." }, totalUsage: {} })
-    // primary mass
-    .mockResolvedValueOnce({ output: { name: "Main Living Pavilion", width: 18, depth: 10, floors: 1, reasoning: "Anchors the composition toward the beach view." }, totalUsage: {} })
+    // foundation: intent + site strategy + primary mass in one call
+    .mockResolvedValueOnce({ output: {
+      intent: { mood: ["drama"], spatialGoals: ["views"], environmentalGoals: ["shelter"], hierarchyGoals: ["dominant living pavilion"], compositionBias: "asymmetrical", style: "modern tropical" },
+      siteStrategy: { environment: "beach", viewDirection: "south", arrivalDirection: "north", terrain: "level", terrainResponse: "Keep the composition level and open to the beach." },
+      primaryMass: { name: "Main Living Pavilion", width: 18, depth: 10, floors: 1, reasoning: "Anchors the composition toward the beach view." },
+    }, totalUsage: {} })
     // mass expansion: done immediately, one mass total
     .mockResolvedValueOnce({ output: { decision: "done", reasoning: "One dominant pavilion fully serves this brief." }, totalUsage: {} })
-    // roof for the one mass
-    .mockResolvedValueOnce({ output: { kind: "floating-flat", overhang: 1.2, reasoning: "A floating plane suits the dominant beachfront volume." }, totalUsage: {} })
+    // architectural geometry pass: one batched call for the one mass
+    .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }] }, totalUsage: {} })
+    // roof composition: one call for the one mass
+    .mockResolvedValueOnce({ output: { roofs: [{ massId: "mass-0", kind: "floating-flat", overhang: 1.2, reasoning: "A floating plane suits the dominant beachfront volume." }] }, totalUsage: {} })
     // the legacy single-call generation
     .mockResolvedValue({ output: modelOutput({ ops: [{ op: "addPool", value: { wall: "north", offset: 4, distance: 3, width: 10, depth: 5, waterDepth: 1.5 } }] }), totalUsage: {} });
 });
@@ -75,7 +77,7 @@ describe("POST /api/ai/house (generate, streaming)", () => {
 
     // Every stage in order, each carrying a document that is valid and independently compilable — not a diff.
     const eventTypes = stageFrames.map((f) => (f.data as { type: string }).type);
-    expect(eventTypes).toEqual(["stage", "stage", "stage", "stage", "roof-added", "stage"]);
+    expect(eventTypes).toEqual(["stage", "stage", "stage", "stage", "stage", "roof-added", "stage"]);
     for (const frame of stageFrames) {
       const document = (frame.data as { document: unknown }).document as Parameters<typeof validateArchitecturalDesignDocument>[0];
       expect(validateArchitecturalDesignDocument(document)).toEqual([]);

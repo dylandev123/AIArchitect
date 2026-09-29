@@ -1,21 +1,28 @@
 import type { HouseModel, HousePrimitive } from "@/lib/house/types";
-import { generateHouseModel } from "@/lib/house/generateHouse";
-import { rotatePrimitiveY, translatePrimitive } from "@/lib/house/primitiveBuilders";
+import { rotatePrimitiveY, translatePrimitive, buildFloorSlabPrimitive } from "@/lib/house/primitiveBuilders";
+import { paintOf } from "@/lib/house/architecture/parts";
 import { resolveMaterial } from "@/lib/house/materials";
 import { buildFlatRoof } from "@/lib/house/roof/flatRoof";
-import { buildShedRoof } from "@/lib/house/roof/shedRoof";
 import { buildGableRoof } from "@/lib/house/roof/gableRoof";
 import { buildHipRoof } from "@/lib/house/roof/hipRoof";
 import { buildButterflyRoof } from "@/lib/house/roof/butterflyRoof";
 import { buildRoofExpression } from "@/lib/house/roof/expression";
-import { LEVEL_HEIGHT } from "@/lib/house/constants";
+import { FLOOR_THICKNESS, LEVEL_HEIGHT, MATERIAL_COLORS } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
-import type { RoofType } from "@/types/house";
-import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassRole, MassVolume, RoofRecipe, RoofRecipeKind } from "./document";
+import type { CompassSide, RoofType } from "@/types/house";
+import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
+import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type Point } from "./geometry/footprint";
+import { buildPolygonRoofPlate, buildPolygonShedRoof } from "./geometry/roofPlate";
+import { extrudeOutline, triMeshOf } from "@/lib/house/geometry/mesh";
+import { buildMassOpenings, buildPlainWallEdge, buildGlazedWallEdge, buildColonnadePosts } from "./geometry/openings";
+import { buildParapetPrimitives } from "./geometry/parapet";
 import "@/lib/capabilities/plugins";
 import { requestCapability } from "@/lib/capabilities/engine";
 import type { CapabilityOutcome } from "@/lib/capabilities/types";
+
+/** One resolved courtyard system: the anchor mass 2+ others enclose, the void between them, and which compass sides remain open (view, arrival, garden). */
+export interface CourtyardInfo { anchorMassId: string; bounds: Rect; enclosingMassIds: string[]; openSides: CompassSide[] }
 
 /** Additive, dev-diagnostics-only view of a compile: never required by rendering. */
 export interface ArchitectureDiagnostics {
@@ -23,19 +30,131 @@ export interface ArchitectureDiagnostics {
   masses: { id: string; name: string; role: MassRole; position: { x: number; z: number }; rotation: number; elevation: number }[];
   roofs: { massId: string; kind: RoofRecipeKind }[];
   capabilities: { id: string; massId: string; status: CapabilityOutcome["status"]; note?: string }[];
+  /** Per-mass articulation trace: what the Architectural Geometry Pass requested vs. what the deterministic compiler could actually build, plus any degradation it had to fall back on. */
+  geometry: { massId: string; operationsRequested: number; openingsRequested: number; topFloorRectCount: number; warnings: string[] }[];
+  /** Every resolved courtyard system (see `computeCourtyards`). Empty when no mass declared `surrounds-courtyard`. */
+  courtyards: CourtyardInfo[];
+  /** The mass the composition reads as dominant: `main-living` if present, else the largest footprint. */
+  dominantMassId?: string;
 }
 
-/** Exported for the stage pipeline: resolving positions incrementally as each mass is proposed reuses this unchanged. */
-export function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
-  const byId = new Map<string, MassVolume>();
-  for (const source of doc.massing.masses) {
-    const mass = { ...source, position: { ...source.position } };
+/** Yaw (radians) that turns a mass's local south facade to face `direction`. */
+function yawFacingSouthToward(direction: CompassSide): number {
+  const [wx, wz] = SIDE_VECTOR[direction];
+  return Math.atan2(wx, wz);
+}
+/** Yaw that turns a mass's local north facade (the conventional arrival/entry side) to face `direction`. */
+function yawFacingNorthToward(direction: CompassSide): number {
+  const [wx, wz] = SIDE_VECTOR[direction];
+  return Math.atan2(-wx, -wz);
+}
+
+/**
+ * The two fields `resolveMasses` actually reads. Narrower than the full `ArchitecturalDesignDocument` on
+ * purpose: `"view-facing"`/`"arrival-facing"` relationships resolve against `siteStrategy`, so any caller
+ * that only has a partial document (e.g. mass-expansion resolving positions turn-by-turn, before the rest
+ * of the document exists) is forced by the type checker to supply a real `siteStrategy` instead of reaching
+ * for an `as unknown as ArchitecturalDesignDocument` cast that would silently let it be `undefined` at
+ * runtime — see the `resolvedSoFar` incident this was written to prevent from recurring.
+ */
+export interface ResolveMassesInput { siteStrategy: SiteStrategy; massing: { masses: readonly MassVolume[] } }
+
+const OPPOSITE_SIDE: Record<CompassSide, CompassSide> = { north: "south", south: "north", east: "west", west: "east" };
+
+/**
+ * Processes masses in an order where every relationship target is already resolved, instead of raw array
+ * order. In practice mass-expansion always appends a mass after the ones it can target, so this rarely
+ * reorders anything for AI-produced input — it exists so a relationship's target being declared later in
+ * the array (a hand-authored fixture, a future AI ordering) resolves correctly instead of silently being
+ * skipped (`byId.get(rel.target)` returning undefined). A genuine cycle (should never happen — nothing
+ * upstream can produce one) falls back to original order for the unresolved remainder rather than looping
+ * forever; its dangling relationships are then skipped exactly as before.
+ */
+function resolutionOrder(masses: readonly MassVolume[]): MassVolume[] {
+  const ids = new Set(masses.map((m) => m.id));
+  const resolved = new Set<string>();
+  const order: MassVolume[] = [];
+  let pending = [...masses];
+  let progress = true;
+  while (pending.length > 0 && progress) {
+    progress = false;
+    const next: MassVolume[] = [];
+    for (const mass of pending) {
+      const deps = (mass.relationships ?? []).filter((r) => r.kind !== "view-facing" && r.kind !== "arrival-facing").map((r) => r.target);
+      if (deps.every((d) => resolved.has(d) || !ids.has(d))) { order.push(mass); resolved.add(mass.id); progress = true; }
+      else next.push(mass);
+    }
+    pending = next;
+  }
+  order.push(...pending);
+  return order;
+}
+
+/**
+ * Groups every `surrounds-courtyard` relationship by its shared target into a real courtyard system: the
+ * void between the anchor and each enclosing mass, and which compass sides are left open (a view, an
+ * arrival gap, a garden edge) because no mass claims them. Only fires for an anchor with 2+ enclosing
+ * masses — a single one is just an offset placement, not an enclosed courtyard.
+ */
+export function computeCourtyards(masses: readonly MassVolume[]): CourtyardInfo[] {
+  const byId = new Map(masses.map((m) => [m.id, m] as const));
+  const bySides = new Map<string, { mass: MassVolume; side: CompassSide }[]>();
+  for (const mass of masses) {
     for (const rel of mass.relationships ?? []) {
+      if (rel.kind !== "surrounds-courtyard" || !rel.side) continue;
+      const list = bySides.get(rel.target) ?? [];
+      list.push({ mass, side: rel.side });
+      bySides.set(rel.target, list);
+    }
+  }
+  const courtyards: CourtyardInfo[] = [];
+  for (const [anchorId, enclosing] of bySides) {
+    const anchor = byId.get(anchorId);
+    if (!anchor || enclosing.length < 2) continue;
+    const bounds: Rect = { x0: anchor.position.x - anchor.width / 2, x1: anchor.position.x + anchor.width / 2, z0: anchor.position.z - anchor.depth / 2, z1: anchor.position.z + anchor.depth / 2 };
+    const openSides = new Set<CompassSide>(["north", "south", "east", "west"]);
+    for (const { mass, side } of enclosing) {
+      openSides.delete(side);
+      const nx0 = mass.position.x - mass.width / 2, nx1 = mass.position.x + mass.width / 2;
+      const nz0 = mass.position.z - mass.depth / 2, nz1 = mass.position.z + mass.depth / 2;
+      if (side === "east" && nx0 > bounds.x1) bounds.x1 = nx0;
+      if (side === "west" && nx1 < bounds.x0) bounds.x0 = nx1;
+      if (side === "north" && nz1 < bounds.z0) bounds.z0 = nz1;
+      if (side === "south" && nz0 > bounds.z1) bounds.z1 = nz0;
+    }
+    courtyards.push({ anchorMassId: anchorId, bounds, enclosingMassIds: enclosing.map((e) => e.mass.id), openSides: [...openSides] });
+  }
+  return courtyards;
+}
+
+/** `main-living` if present, else the largest footprint — the mass the roof stage (overhang scale) and quality gate (hierarchy check) treat as dominant. */
+export function pickDominantMass(masses: readonly MassVolume[]): MassVolume | undefined {
+  const mainLiving = masses.find((m) => m.role === "main-living");
+  if (mainLiving) return mainLiving;
+  return masses.reduce<MassVolume | undefined>((best, m) => (!best || m.width * m.depth > best.width * best.depth ? m : best), undefined);
+}
+
+/**
+ * Resolves every mass's world position/rotation/elevation from its relationships (`resolutionOrder` picks a
+ * safe processing order), then applies real courtyard composition: masses that jointly `surrounds-courtyard`
+ * the same anchor get auto-oriented to face the shared void, unless a mass already carries an explicit
+ * rotation-setting relationship (`view-facing`, `arrival-facing`, or its own `rotationOffset`) — an explicit
+ * rotation intent always wins over auto-orientation. Exported for the stage pipeline: resolving positions
+ * incrementally as each mass is proposed reuses this unchanged.
+ */
+export function resolveMasses(doc: ResolveMassesInput): MassVolume[] {
+  const byId = new Map<string, MassVolume>();
+  for (const source of resolutionOrder(doc.massing.masses)) {
+    const mass = { ...source, position: { ...source.position } };
+    if (mass.placementLocked) { byId.set(mass.id, mass); continue; }
+    for (const rel of mass.relationships ?? []) {
+      if (rel.kind === "view-facing") { mass.rotation = yawFacingSouthToward(doc.siteStrategy.viewDirection); continue; }
+      if (rel.kind === "arrival-facing") { mass.rotation = yawFacingNorthToward(doc.siteStrategy.arrivalDirection); continue; }
       const target = byId.get(rel.target); if (!target) continue;
       const distance = rel.distance ?? 0;
       if (rel.kind === "stepped-above") mass.elevation = target.elevation + distance;
       if (rel.kind === "stepped-below") mass.elevation = target.elevation - distance;
-      if (["adjacent-to", "connected-to", "offset-from", "separated-from", "bridge-between"].includes(rel.kind) && rel.side) {
+      if (["adjacent-to", "connected-to", "offset-from", "separated-from", "surrounds-courtyard", "bridge-between"].includes(rel.kind) && rel.side) {
         const gap = rel.kind === "connected-to" ? 0 : distance;
         if (rel.side === "east") mass.position.x = target.position.x + target.width / 2 + mass.width / 2 + gap;
         if (rel.side === "west") mass.position.x = target.position.x - target.width / 2 - mass.width / 2 - gap;
@@ -46,55 +165,290 @@ export function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
     }
     byId.set(mass.id, mass);
   }
-  return [...byId.values()];
+  const resolvedInInputOrder = doc.massing.masses.map((m) => byId.get(m.id)!);
+  for (const courtyard of computeCourtyards(resolvedInInputOrder)) {
+    for (const massId of courtyard.enclosingMassIds) {
+      const mass = byId.get(massId)!;
+      const hasExplicitRotation = (mass.relationships ?? []).some((r) => r.kind === "view-facing" || r.kind === "arrival-facing" || r.rotationOffset !== undefined);
+      if (hasExplicitRotation) continue;
+      const side = mass.relationships?.find((r) => r.kind === "surrounds-courtyard" && r.target === courtyard.anchorMassId)?.side;
+      if (side) mass.rotation = yawFacingSouthToward(OPPOSITE_SIDE[side]);
+    }
+  }
+  return resolvedInInputOrder;
 }
 
-function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, options: ArchitectureCompileOptions): HousePrimitive[] {
+/**
+ * A mass's total height (grade to roofline) is `floors * LEVEL_HEIGHT` unless it declares an explicit
+ * `height` override — the sub-volume extension this enables: a mass whose declared height doesn't divide
+ * evenly by the standard level (a soaring double-height entry hall, a lower-ceilinged service block) without
+ * inventing a second geometry system. Floors within such a mass split that height evenly; multi-floor masses
+ * with an override are rare but not rejected.
+ */
+function massTotalHeight(mass: MassVolume): number { return mass.height ?? mass.floors * LEVEL_HEIGHT; }
+/** Per-mass level height derived from `massTotalHeight` — identical to the global `LEVEL_HEIGHT` unless the mass overrides its height. */
+function massLevelHeight(mass: MassVolume): number { return massTotalHeight(mass) / mass.floors; }
+
+interface MassShellMaterials { exterior: ReturnType<typeof resolveMaterial>; trim: ReturnType<typeof resolveMaterial>; glass: ReturnType<typeof resolveMaterial> }
+
+interface MassShellResult { primitives: HousePrimitive[]; warnings: string[]; topFloor: FloorFootprint }
+
+/**
+ * Small deterministic facade grammar. Explicit document openings always win; otherwise the role supplies
+ * a useful baseline so a living pavilion is not compiled as four blank planes and a bedroom wing reads as
+ * a rhythm of private rooms. This is intentional geometry, not random decoration.
+ */
+function roleFacadeOpenings(mass: MassVolume): readonly MassOpening[] {
+  if ((mass.openings?.length ?? 0) > 0) return mass.openings!;
+  // Articulated masses already express a deliberate facade operation. Do not add a second implicit
+  // grammar over it: that would make the fallback compete with recess/cantilever fixtures.
+  if ((mass.operations?.length ?? 0) > 0 || mass.cantilever) return [];
+  if (mass.role === "main-living") return [
+    { type: "glazing-zone", facade: "south", start: .12, end: .88, heightRatio: .88, frame: true },
+    { type: "glazing-zone", facade: "east", start: .18, end: .82, heightRatio: .8, reveal: .16 },
+  ];
+  if (mass.role === "bedroom-wing") return [{ type: "opening-rhythm", facade: "south", count: Math.max(2, Math.floor(mass.width / 2.4)), width: 1.15, height: 1.45, sill: .9 }];
+  if (mass.role === "guest-pavilion") return [{ type: "glazing-zone", facade: "south", start: .2, end: .8, heightRatio: .76, reveal: .12 }];
+  if (mass.role === "entry") return [{ type: "door", facade: "north", start: .34, end: .66, height: 2.5, frame: true }];
+  return [];
+}
+
+function openingsForDiagnostics(mass: MassVolume): readonly MassOpening[] {
+  return roleFacadeOpenings(mass);
+}
+
+/**
+ * The deterministic mass shell compiler: turns a mass's base rectangle + its `operations`/`openings` into
+ * floor slabs, walls (with facade-aware openings carved in) and a top-floor rectangle decomposition for
+ * roofs — all in local, unrotated mass space, identical in structure to the legacy `generateHouseModel`
+ * shell for a mass with no operations (same floor/wall ids), but able to produce articulated footprints for
+ * one with them. Never calls into `generateHouseModel`: that stays legacy-only.
+ */
+function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassShellResult {
+  const primitives: HousePrimitive[] = [];
+  const warnings: string[] = [];
+  let topFloor: FloorFootprint | undefined;
+  const operations: readonly MassGeometryOperation[] = mass.operations ?? [];
+  const openings = roleFacadeOpenings(mass);
+  const exteriorPaint = paintOf(materials.exterior);
+  const levelHeight = massLevelHeight(mass);
+  const wallHeight = levelHeight - FLOOR_THICKNESS;
+
+  for (let level = 0; level < mass.floors; level++) {
+    const footprint = buildFloorFootprint(mass.width, mass.depth, operations, level);
+    warnings.push(...footprint.warnings.map((w) => `floor ${level}: ${w}`));
+    const floorY = level * levelHeight;
+    footprint.rects.forEach((rect, i) => {
+      const suffix = footprint.rects.length > 1 ? `-${i}` : "";
+      primitives.push(buildFloorSlabPrimitive(
+        { center: [(rect.x0 + rect.x1) / 2, (rect.z0 + rect.z1) / 2], width: rect.x1 - rect.x0, depth: rect.z1 - rect.z0 },
+        floorY, FLOOR_THICKNESS, `floor-${level}${suffix}`, `Floor Slab ${level + 1}`, MATERIAL_COLORS.floor
+      ));
+    });
+    // A chamfered corner's slab is the triangle inside the angled wall — never the square the rects leave out.
+    footprint.wedges.forEach((wedge, i) => primitives.push(triMeshOf(
+      `floor-${level}-wedge-${i}`, "floor", `Floor Slab ${level + 1}`, extrudeOutline(wedge.map((p) => [p[0], p[1]] as [number, number]), floorY, floorY + FLOOR_THICKNESS, { bottom: true }),
+      { color: MATERIAL_COLORS.floor, roughness: .8, metalness: 0 },
+    )));
+
+    const wallBaseY = floorY + FLOOR_THICKNESS;
+    const taggedEdges = footprint.edges.filter((e) => e.facade);
+    const openEdges = footprint.edges.filter((e) => !e.facade && e.open);
+    const untaggedEdges = footprint.edges.filter((e) => !e.facade && !e.open);
+    const openingsResult = buildMassOpenings(taggedEdges, mass.width, mass.depth, openings, level, wallBaseY, wallHeight, `wall-${level}`, materials);
+    primitives.push(...openingsResult.primitives);
+    warnings.push(...openingsResult.warnings.map((w) => `floor ${level}: ${w}`));
+    untaggedEdges.forEach((edge, i) => {
+      if (edge.chamfer?.glazed) primitives.push(...buildGlazedWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, materials));
+      else primitives.push(buildPlainWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, exteriorPaint));
+    });
+    openEdges.forEach((edge, i) => primitives.push(...buildColonnadePosts(edge, wallBaseY, wallHeight, `wall-${level}-open-${i}`, exteriorPaint)));
+
+    if (level === mass.floors - 1) topFloor = footprint;
+  }
+  return { primitives, warnings, topFloor: topFloor ?? topFloorFootprintFor(mass) };
+}
+
+/** Cheap standalone top-floor footprint, for callers (e.g. roofs-only mode) that need it without building the full shell. */
+function topFloorFootprintFor(mass: MassVolume): FloorFootprint {
+  return buildFloorFootprint(mass.width, mass.depth, mass.operations ?? [], mass.floors - 1);
+}
+
+/**
+ * One roof plate per rectangle of the mass's FINAL articulated top-floor footprint — never the original
+ * width/depth rectangle blindly. A mass with no operations decomposes to exactly one rectangle, so its
+ * roof is identical to before; an articulated mass gets one plate per rectangle instead of one giant plane
+ * stretched over the whole bounding box, which is what produced the overlapping-roof look this replaces.
+ *
+ * For the flat/floating-flat family, the overhang is applied to the footprint's actual outline ONCE (see
+ * `offsetFootprintOutline`), then that grown outline is decomposed into plates — not each rectangle of the
+ * unexpanded footprint independently, which re-overlaps neighboring rectangles by up to 2×overhang and merges
+ * a stepped/notched footprint back into one visual slab (the roof was hiding the walls' own articulation).
+ * A chamfered (prow) footprint has angled edges no rectangle can follow, so its flat plate is one polygon
+ * extrusion of the grown outline instead — the roof keeps the prow's angle rather than squaring the corner.
+ *
+ * Shed roofs likewise follow the grown outline as one sloped plane, sized by the recipe's own overhang and
+ * pitch — that's how a planned thin or deep eave actually reaches a shed roof. Ridge families (gable/hip/
+ * butterfly) still build per rectangle of the square-cornered hull with their own fixed eave: they have no
+ * way to follow an angled edge, which is why roof composition keeps them off chamfered volumes.
+ */
+function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, topFloor: FloorFootprint, options: ArchitectureCompileOptions): HousePrimitive[] {
   const exterior = resolveMaterial(options.materials.exterior); const roof = resolveMaterial(options.materials.roof);
-  const base = mass.elevation + mass.floors * LEVEL_HEIGHT;
-  const prefix = `architecture-${mass.id}-roof`;
+  const base = mass.elevation + massTotalHeight(mass);
   const kind = recipe.kind === "mono-pitch" ? "shed" : recipe.kind === "pavilion" ? "hip" : recipe.kind;
-  let out: HousePrimitive[];
-  // Flat recipes share a parameterized plane, fascia, soffit and closure assembly.
-  if (kind === "flat" || kind === "floating-flat") out = buildRoofExpression({
-    id: prefix, width: mass.width, depth: mass.depth, wallPlateY: base, roofMaterial: roof, exteriorMaterial: exterior,
-    parameters: { ...recipe.expression, overhang: recipe.overhang ?? recipe.expression?.overhang, verticalGap: kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap },
-  });
-  else if (kind === "shed") out = buildShedRoof(mass.width, mass.depth, base, prefix, roof, exterior);
-  else if (kind === "gable" || kind === "cross-gable") out = buildGableRoof(mass.width, mass.depth, base, prefix, roof, exterior);
-  else if (kind === "hip") out = buildHipRoof(mass.width, mass.depth, base, prefix, roof, exterior);
-  else if (kind === "butterfly") out = buildButterflyRoof(mass.width, mass.depth, base, prefix, roof, exterior);
-  else out = buildFlatRoof(mass.width, mass.depth, base, prefix, roof, exterior);
   const yaw = mass.rotation + (recipe.orientation ?? 0);
-  return out.map((p) => rotatePrimitiveY(translatePrimitive(p, mass.position.x, mass.position.z), mass.position.x, mass.position.z, yaw));
+  const place = (p: HousePrimitive) => rotatePrimitiveY(translatePrimitive(p, mass.position.x, mass.position.z), mass.position.x, mass.position.z, yaw);
+  const fallbackRect: Rect = { x0: -mass.width / 2, x1: mass.width / 2, z0: -mass.depth / 2, z1: mass.depth / 2 };
+  const isFlatFamily = kind === "flat" || kind === "floating-flat";
+  const overhang = Math.max(0, recipe.overhang ?? .6);
+  const prefix = `architecture-${mass.id}-roof`;
+  const grownOutline = () => (overhang > 0 ? offsetFootprintOutline(topFloor, mass.width, mass.depth, overhang).polygon : topFloor.polygon);
+
+  if (kind === "shed") {
+    return buildPolygonShedRoof({
+      id: prefix, outline: grownOutline(), footprint: topFloor.polygon, wallPlateY: base, pitchDeg: recipe.pitch ?? 12, thickness: .2,
+      roof: paintOf(roof), exterior: paintOf(exterior),
+    }).map(place);
+  }
+
+  const chamfered = topFloor.chamfers.length > 0;
+  let rects: readonly Rect[];
+  let grownPolygon: readonly Point[] | undefined;
+  const result: HousePrimitive[] = [];
+  const gap = kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap ?? 0;
+  const thickness = recipe.expression?.thickness ?? .25;
+  if (isFlatFamily) {
+    grownPolygon = grownOutline();
+    rects = chamfered ? [] : decomposeToRectangles(grownPolygon);
+    if (!chamfered && rects.length === 0) rects = [fallbackRect];
+    if (chamfered) result.push(...buildPolygonRoofPlate({ id: prefix, outline: grownPolygon, footprint: topFloor.polygon, wallPlateY: base, gap, thickness, roof: paintOf(roof), exterior: paintOf(exterior) }).map(place));
+  } else {
+    const hullRects = chamfered ? decomposeToRectangles(topFloor.hullPolygon) : topFloor.rects;
+    rects = hullRects.length > 0 ? hullRects : [fallbackRect];
+  }
+  rects.forEach((rect, i) => {
+    const width = rect.x1 - rect.x0;
+    const depth = rect.z1 - rect.z0;
+    const cx = (rect.x0 + rect.x1) / 2;
+    const cz = (rect.z0 + rect.z1) / 2;
+    const rectPrefix = `${prefix}${rects.length > 1 ? `-${i}` : ""}`;
+    let out: HousePrimitive[];
+    // Flat recipes share a parameterized plane, fascia, soffit and closure assembly. `rects` here are already
+    // grown by `overhang` (see above), so the expression itself applies zero additional expansion.
+    if (isFlatFamily) out = buildRoofExpression({
+      id: rectPrefix, width, depth, wallPlateY: base, roofMaterial: roof, exteriorMaterial: exterior,
+      parameters: { ...recipe.expression, overhang: 0, verticalGap: kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap },
+    });
+    else if (kind === "gable" || kind === "cross-gable") out = buildGableRoof(width, depth, base, rectPrefix, roof, exterior);
+    else if (kind === "hip") out = buildHipRoof(width, depth, base, rectPrefix, roof, exterior);
+    else if (kind === "butterfly") out = buildButterflyRoof(width, depth, base, rectPrefix, roof, exterior);
+    else out = buildFlatRoof(width, depth, base, rectPrefix, roof, exterior);
+    // Offset to the rectangle's own local center first, then apply the mass's world placement uniformly.
+    result.push(...out.map((p) => place(translatePrimitive(p, cx, cz))));
+  });
+  // Opt-in only (see RoofRecipe.parapet doc comment): one loop around the roof's own already-grown polygon,
+  // not per rectangle — a parapet is one continuous perimeter wall, not a separate ring per roof plate.
+  if (isFlatFamily && recipe.parapet && grownPolygon) {
+    // Mirrors buildRoofExpression's own defaults (plane thickness .25, no gap unless floating-flat) so `parapet.height` is measured above the roof deck.
+    const deckTop = base + gap + thickness;
+    const parapetPrimitives = buildParapetPrimitives(grownPolygon, base, deckTop + recipe.parapet.height, recipe.parapet.thickness ?? 0.18, paintOf(exterior), `architecture-${mass.id}-parapet`);
+    result.push(...parapetPrimitives.map(place));
+  }
+  return result;
+}
+
+/** Axis-aligned footprint bounds, ignoring rotation — same approximation level the capability plugins already use (e.g. courtyard-edge-wall). */
+function footprintAABB(mass: MassVolume): Rect {
+  return { x0: mass.position.x - mass.width / 2, x1: mass.position.x + mass.width / 2, z0: mass.position.z - mass.depth / 2, z1: mass.position.z + mass.depth / 2 };
+}
+
+/** 0 when the two footprints overlap/touch on an axis; otherwise the gap along whichever axis actually separates them (the smaller of the two is a conservative floor, not the true diagonal distance in a corner case). */
+function footprintGap(a: Rect, b: Rect): number {
+  const gapX = Math.max(0, Math.max(a.x0 - b.x1, b.x0 - a.x1));
+  const gapZ = Math.max(0, Math.max(a.z0 - b.z1, b.z0 - a.z1));
+  return Math.max(gapX, gapZ);
+}
+
+const MIN_ROOF_OVERHANG = 0.3;
+/** Relationship kinds that mean two masses are DELIBERATELY touching/close — a bridge, a connected wing — so overhang overlap there is intentional, not the "accidental merge" this trim exists to prevent. */
+const INTENTIONALLY_ADJACENT_KINDS = new Set(["adjacent-to", "connected-to", "bridge-between"]);
+
+function directlyRelated(a: MassVolume, b: MassVolume): boolean {
+  const relates = (from: MassVolume, toId: string) => (from.relationships ?? []).some((r) => r.target === toId && INTENTIONALLY_ADJACENT_KINDS.has(r.kind));
+  return relates(a, b.id) || relates(b, a.id);
+}
+
+/**
+ * Shrinks a roof's overhang, per mass, only as far as needed to stop it visually merging into a
+ * DIFFERENT, unrelated mass's roof — never touches the model's own roof-family choice, and never touches a
+ * pair that's deliberately adjacent/connected/bridged (see `directlyRelated`). Two unrelated masses whose
+ * combined overhangs would reach further than the physical gap between their footprints each get capped to
+ * half that gap (floored at `MIN_ROOF_OVERHANG`), so adjacent plates stay visually separate.
+ */
+function trimOverhangsForClearance(masses: readonly MassVolume[], roofs: readonly RoofRecipe[]): Map<string, number> {
+  const overhangByMassId = new Map(roofs.map((r) => [r.massId, r.overhang ?? 0.6] as const));
+  for (let i = 0; i < masses.length; i++) {
+    for (let j = i + 1; j < masses.length; j++) {
+      const a = masses[i], b = masses[j];
+      if (directlyRelated(a, b)) continue;
+      const gap = footprintGap(footprintAABB(a), footprintAABB(b));
+      const oa = overhangByMassId.get(a.id) ?? 0.6;
+      const ob = overhangByMassId.get(b.id) ?? 0.6;
+      if (oa + ob <= gap) continue;
+      const share = Math.max(MIN_ROOF_OVERHANG, gap / 2);
+      if (oa > share) overhangByMassId.set(a.id, share);
+      if (ob > share) overhangByMassId.set(b.id, share);
+    }
+  }
+  return overhangByMassId;
 }
 
 export function compileArchitecture(doc: ArchitecturalDesignDocument, options: ArchitectureCompileOptions): { model: HouseModel; errors: string[]; diagnostics?: ArchitectureDiagnostics } {
   const errors = validateArchitecturalDesignDocument(doc); if (errors.length) return { model: { id: "architecture-invalid", primitives: [] }, errors };
   const masses = resolveMasses(doc); const primitives: HousePrimitive[] = [];
+  const clearedOverhangs = trimOverhangsForClearance(masses, doc.roofs.recipes);
   const capabilityDiagnostics: ArchitectureDiagnostics["capabilities"] = [];
+  const geometryDiagnostics: ArchitectureDiagnostics["geometry"] = [];
+  const shellMaterials: MassShellMaterials = { exterior: resolveMaterial(options.materials.exterior), trim: resolveMaterial(options.materials.trim), glass: resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass }) };
   for (const mass of masses) {
+    let topFloor: FloorFootprint;
     if (options.mode !== "roofs-only") {
-      const shell = generateHouseModel({ width: mass.width, depth: mass.depth, floors: mass.floors, roof: "flat" }, options.materials)
-        .filter((p) => p.category !== "roof")
-        .map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
+      const shell = buildMassShell(mass, shellMaterials);
+      topFloor = shell.topFloor;
+      // "Openings" mode isolates just the facade openings (plus whatever capability plugins add — see below):
+      // every other shell primitive is dropped rather than skipped at the source, since openings are carved
+      // out of the same wall pass that builds the plain solid walls.
+      const shellSource = options.mode === "openings-only" ? shell.primitives.filter((p) => p.category === "window") : shell.primitives;
+      const shellPrimitives = shellSource.map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
+      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: openingsForDiagnostics(mass).length, topFloorRectCount: shell.topFloor.rects.length, warnings: shell.warnings });
       // A cantilevered mass offsets every primitive above the ground floor along its declared side, in world space.
       const cantileverOffset = mass.cantilever ? SIDE_VECTOR[mass.cantilever.direction] : undefined;
-      primitives.push(...shell.map((p) => {
-        const floorIndex = p.kind === "box" ? Math.floor(p.position[1] / LEVEL_HEIGHT) : 0;
+      const levelHeight = massLevelHeight(mass);
+      primitives.push(...shellPrimitives.map((p) => {
+        // Shell primitives are still in un-lifted local space here, so a box's center / a mesh's lowest vertex gives its floor.
+        const localY = p.kind === "box" ? p.position[1] : Math.min(...p.vertices.filter((_, i) => i % 3 === 1));
+        const floorIndex = Math.floor((localY + 1e-6) / levelHeight);
         const lifted = p.kind === "box" ? { ...p, position: [p.position[0], p.position[1] + mass.elevation, p.position[2]] as [number, number, number] } : { ...p, vertices: p.vertices.map((v, i) => i % 3 === 1 ? v + mass.elevation : v) };
         const placed = rotatePrimitiveY(translatePrimitive(lifted, mass.position.x, mass.position.z), mass.position.x, mass.position.z, mass.rotation);
-        if (cantileverOffset && floorIndex >= 1 && placed.kind === "box") {
+        if (cantileverOffset && floorIndex >= 1) {
           const distance = mass.cantilever!.distance;
-          return { ...placed, position: [placed.position[0] + cantileverOffset[0] * distance, placed.position[1], placed.position[2] + cantileverOffset[1] * distance] as [number, number, number] };
+          return translatePrimitive(placed, cantileverOffset[0] * distance, cantileverOffset[1] * distance);
         }
         return placed;
       }));
-      // A compact marker makes mass-only inspection readable without a special renderer.
+      // A compact marker makes mass-only inspection readable without a special renderer — "massing-only" shows
+      // it alongside the real shell; "geometry-only" shows just the real articulated shell on its own.
       if (options.mode === "massing-only") primitives.push({ kind: "box", id: `architecture-${mass.id}-debug-footprint`, category: "floor", label: `${mass.name} · rot ${(mass.rotation * 180 / Math.PI).toFixed(0)}° · elev ${mass.elevation}m`, position: [mass.position.x, mass.elevation + 0.025, mass.position.z], rotation: [0, mass.rotation, 0], size: [mass.width, 0.05, mass.depth], color: "#ff9d2e", roughness: .65 });
+    } else {
+      topFloor = topFloorFootprintFor(mass);
+      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: openingsForDiagnostics(mass).length, topFloorRectCount: topFloor.rects.length, warnings: [] });
     }
-    if (options.mode !== "massing-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) primitives.push(...roofPrimitives(recipe, mass, options));
+    if (options.mode !== "massing-only" && options.mode !== "geometry-only" && options.mode !== "openings-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) {
+      const cleared = clearedOverhangs.get(mass.id);
+      primitives.push(...roofPrimitives(cleared !== undefined && cleared !== recipe.overhang ? { ...recipe, overhang: cleared } : recipe, mass, topFloor, options));
+    }
     // Architectural stages declare intent. Only the capability engine chooses and invokes geometry plugins.
+    // Always runs (even in "openings-only") — capability output like corner-glazing IS opening geometry.
     for (const intent of doc.capabilities?.filter((request) => request.parameters?.massId === mass.id) ?? []) {
       const outcome = requestCapability(intent, { primitives, target: mass, allMasses: masses });
       if (outcome.remove?.length) {
@@ -110,14 +464,60 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     masses: masses.map((m) => ({ id: m.id, name: m.name, role: m.role, position: m.position, rotation: m.rotation, elevation: m.elevation })),
     roofs: doc.roofs.recipes.map((r) => ({ massId: r.massId, kind: r.kind })),
     capabilities: capabilityDiagnostics,
+    geometry: geometryDiagnostics,
+    courtyards: computeCourtyards(masses),
+    dominantMassId: pickDominantMass(masses)?.id,
   };
   return { model: { id: "architectural-design-document", primitives }, errors: [], diagnostics };
 }
+
+/** Shared by `projectArchitectureToLegacy` and the V2 Final Assembly trim (finalAssembly.ts) — one place mapping the V2 roof vocabulary onto the legacy `RoofType` enum. */
+export const ROOF_KIND_TO_LEGACY_TYPE: Record<RoofRecipeKind, RoofType> = { flat: "flat", "floating-flat": "flat", shed: "shed", "mono-pitch": "shed", gable: "gable", hip: "hip", butterfly: "butterfly", pavilion: "hip", "cross-gable": "gable", mixed: "flat" };
 
 /** Compatibility projection intentionally selects a primary mass; it does not flatten the new composition. */
 export function projectArchitectureToLegacy(doc: ArchitecturalDesignDocument): Record<string, unknown> {
   const main = doc.massing.masses.find((m) => m.role === "main-living") ?? doc.massing.masses[0];
   const recipe = doc.roofs.recipes.find((r) => r.massId === main?.id);
-  const map: Record<string, RoofType> = { flat: "flat", "floating-flat": "flat", shed: "shed", "mono-pitch": "shed", gable: "gable", hip: "hip", butterfly: "butterfly", pavilion: "hip", "cross-gable": "gable", mixed: "flat" };
-  return { house: { width: main?.width ?? 10, depth: main?.depth ?? 8, floors: main?.floors ?? 1, roof: map[recipe?.kind ?? "flat"] }, architectureDocument: doc };
+  return { house: { width: main?.width ?? 10, depth: main?.depth ?? 8, floors: main?.floors ?? 1, roof: ROOF_KIND_TO_LEGACY_TYPE[recipe?.kind ?? "flat"] }, architectureDocument: doc };
+}
+
+/** One mass's full architectural state, for dev diagnostics/reporting and the design-quality gate — never required by rendering. */
+export interface MassReportEntry {
+  id: string; name: string; role: MassRole;
+  width: number; depth: number; floors: number;
+  position: { x: number; z: number }; rotation: number; elevation: number;
+  relationships: readonly MassRelationship[];
+  operations: readonly MassGeometryOperation[];
+  openings: readonly MassOpening[];
+  roof?: { kind: RoofRecipeKind; overhang?: number };
+  capabilities: { id: string; status: CapabilityOutcome["status"]; note?: string }[];
+  primitiveCount: number;
+}
+
+/**
+ * Turns a compiled document + its diagnostics into one full report per mass — role, dimensions, resolved
+ * placement, relationships, operations, openings, roof, capability outcomes, and how many primitives it
+ * actually produced. Built once, reused by the design-quality gate (`qualityGate.ts`) and dev-diagnostics
+ * tooling (`ArchitectureDebugPanel.tsx`), so "what did this design actually turn into" is answered in one
+ * place instead of re-read ad hoc — this is what a one-off audit of a live run would otherwise have needed.
+ */
+export function describeCompiledDesign(doc: ArchitecturalDesignDocument, model: HouseModel, diagnostics: ArchitectureDiagnostics): MassReportEntry[] {
+  const masses = resolveMasses(doc);
+  return masses.map((mass) => {
+    const roof = doc.roofs.recipes.find((r) => r.massId === mass.id);
+    const prefix = `architecture-${mass.id}-`;
+    const capabilityPattern = `-${mass.id}-`;
+    const primitiveCount = model.primitives.filter((p) => p.id.startsWith(prefix) || p.id.includes(capabilityPattern)).length;
+    return {
+      id: mass.id, name: mass.name, role: mass.role,
+      width: mass.width, depth: mass.depth, floors: mass.floors,
+      position: mass.position, rotation: mass.rotation, elevation: mass.elevation,
+      relationships: mass.relationships ?? [],
+      operations: mass.operations ?? [],
+      openings: mass.openings ?? [],
+      roof: roof ? { kind: roof.kind, overhang: roof.overhang } : undefined,
+      capabilities: diagnostics.capabilities.filter((c) => c.massId === mass.id).map((c) => ({ id: c.id, status: c.status, note: c.note })),
+      primitiveCount,
+    };
+  });
 }

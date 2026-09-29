@@ -12,6 +12,7 @@ import { SceneEnvironment } from "./scenery/SceneEnvironment";
 import { Scenery } from "./scenery/Scenery";
 import { Terrain } from "./scenery/Terrain";
 import { useNeedsGeneration } from "./useNeedsGeneration";
+import { useSceneStore } from "@/store/useSceneStore";
 
 interface SceneProps {
   timeOfDay: TimeOfDay;
@@ -22,6 +23,7 @@ export function Scene({ timeOfDay }: SceneProps) {
   const { sky, sun, ambient, hemi, fills, fog, exposure, envIntensity } = cfg;
   // A never-designed project shows only the site, terrain and horizon — no placeholder house.
   const blank = useNeedsGeneration();
+  const geometryXRay = useSceneStore((s) => s.geometryXRay);
 
   return (
     <>
@@ -58,11 +60,11 @@ export function Scene({ timeOfDay }: SceneProps) {
 
       <SunLight position={sun.position} intensity={sun.intensity} color={sun.color} />
 
-      <GroundPlane />
+      {!geometryXRay && <GroundPlane />}
       <SceneGrid />
-      <Terrain />
+      {!geometryXRay && <Terrain />}
       {!blank && <HouseRenderer />}
-      {!blank && <Scenery />}
+      {!blank && !geometryXRay && <Scenery />}
       <PostFx exposure={exposure} />
     </>
   );

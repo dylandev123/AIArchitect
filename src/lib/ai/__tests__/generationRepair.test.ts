@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { assembleGeneratedProject, clampOffsetsInJson } from "../generation";
 import { createTimings } from "../timing";
-import type { AiGenerationResponse } from "../siteSchema";
+import { normalizeOversizedWindowOps, type AiGenerationResponse } from "../siteSchema";
 
 /** A small house whose model output is broken in ways the server can repair without another model call. */
 function output(operations: unknown[], house = { width: 12, depth: 9, floors: 1, roof: "gable" }): AiGenerationResponse {
@@ -59,6 +59,53 @@ describe("assembleGeneratedProject: local repair", () => {
     expect(clampOffsetsInJson("{}", ['Window 1: "width" clamped to 2.'])).toBeNull();
   });
 
+  describe("normalizeOversizedWindowOps", () => {
+    it("splits an oversized addWindow into same-size panels that fit the width cap, preserving total width and other fields", () => {
+      const ribbon = { op: "addWindow", value: { wall: "south", level: 0, offset: 1, width: 7.2, height: 1.6, sill: 0.8 } };
+      const { operations, notes } = normalizeOversizedWindowOps([ribbon]);
+      expect(notes).toEqual(["Converted 7.2m glazing request into 2 panels"]);
+      expect(operations).toHaveLength(2);
+      const panels = operations.map((op) => op.value as { wall: string; level: number; offset: number; width: number; height: number; sill: number });
+      for (const p of panels) {
+        expect(p.width).toBeLessThanOrEqual(4);
+        expect(p.wall).toBe("south");
+        expect(p.height).toBe(1.6);
+        expect(p.sill).toBe(0.8);
+      }
+      const sorted = [...panels].sort((a, b) => a.offset - b.offset);
+      expect(sorted[0].offset).toBe(1);
+      const totalWidth = sorted[sorted.length - 1].offset + sorted[sorted.length - 1].width - sorted[0].offset;
+      expect(totalWidth).toBeCloseTo(7.2, 5);
+    });
+
+    it("leaves a window at or under the width cap untouched", () => {
+      const normal = { op: "addWindow", value: { wall: "south", level: 0, offset: 1, width: 2, height: 1.4, sill: 0.9 } };
+      const { operations, notes } = normalizeOversizedWindowOps([normal]);
+      expect(operations).toEqual([normal]);
+      expect(notes).toEqual([]);
+    });
+
+    it("leaves other op types untouched even with a large width field", () => {
+      const wideDeck = { op: "addDeck", value: { siteX: 0, siteZ: 5, width: 20, depth: 5 } };
+      const { operations, notes } = normalizeOversizedWindowOps([wideDeck]);
+      expect(operations).toEqual([wideDeck]);
+      expect(notes).toEqual([]);
+    });
+  });
+
+  it("assembles a valid design from an oversized window request instead of dropping it", () => {
+    const ribbon = { op: "addWindow", value: { wall: "south", level: 0, offset: 1, width: 7.2, height: 1.6, sill: 0.8 } };
+    const result = assembleGeneratedProject(output([ribbon]), [], "A small house", true);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.skipped.some((s) => s.includes("addWindow"))).toBe(false);
+    expect(result.notes.some((n) => /Converted 7\.2m glazing request into \d+ panels/.test(n))).toBe(true);
+    const windows = (JSON.parse(result.json) as { windows?: { wall: string; width: number }[] }).windows ?? [];
+    const southWindows = windows.filter((w) => w.wall === "south");
+    expect(southWindows.length).toBeGreaterThanOrEqual(2);
+    for (const w of southWindows) expect(w.width).toBeLessThanOrEqual(4);
+  });
+
   it("records per-stage timings", () => {
     const timings = createTimings();
     assembleGeneratedProject(output([]), [], "A small house", true, timings);
@@ -67,4 +114,5 @@ describe("assembleGeneratedProject: local repair", () => {
       expect(stages).toContain(stage);
     }
   });
+
 });

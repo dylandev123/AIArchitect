@@ -9,7 +9,7 @@ type DesignMassRole = ArchitecturalDesign["masses"][number]["role"];
 /** Inverse of `ROLE_MAP` in bridge.ts, extended for the two roles the recursive loop can propose that the legacy enum never had. */
 const DESIGN_ROLE: Record<MassRole, DesignMassRole> = {
   "main-living": "main-living", "bedroom-wing": "private-wing", "guest-pavilion": "guest-wing",
-  service: "service", terrace: "pavilion", garage: "service", connector: "pavilion",
+  service: "service", terrace: "pavilion", veranda: "pavilion", entry: "pavilion", garage: "service", connector: "pavilion",
 };
 
 /** Mirrors the map in `projectArchitectureToLegacy` (compiler.ts). */

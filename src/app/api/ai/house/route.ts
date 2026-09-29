@@ -1,11 +1,6 @@
-import { after, NextRequest, NextResponse } from "next/server";
-import { APICallError, generateText, NoObjectGeneratedError, Output } from "ai";
-import { buildGenerationResponseSchema, buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
-import {
-  assembleGeneratedProject,
-  buildGenerationSystemPrompt,
-  buildGenerationUserMessage,
-} from "@/lib/ai/generation";
+import { NextRequest, NextResponse } from "next/server";
+import { generateText, NoObjectGeneratedError, Output } from "ai";
+import { buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
 import { buildScopedSystemPrompt } from "@/lib/ai/systemPrompt";
 import { buildScopeContext } from "@/lib/ai/context";
 import { partitionOpsForScope, scopeFromHint, WORLD_SCOPE } from "@/lib/ai/targeting";
@@ -15,34 +10,42 @@ import { resolveSiteCollisions } from "@/lib/house/architecture/siteCollisions";
 import { revisionOf } from "@/lib/house/revision";
 import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
-import { createTimings, logTimings } from "@/lib/ai/timing";
+import { createTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
-import { attachOutdoorAssets } from "@/lib/outdoor/placements";
-import { attachLibraryAssets } from "@/lib/library/attach";
-import { noteRecipeOutcome, recipesForSpaces } from "@/lib/library/service";
-import { runPostGeneration } from "@/lib/library/generationLoop";
+import { recipesForSpaces } from "@/lib/library/service";
 import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { INITIAL_CAPABILITIES } from "@/lib/library/capabilities";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
-import { architecturalAssetRequests, architecturalCapabilityRequests } from "@/lib/architecture/designEngine";
-import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
-import { runArchitecturePipeline, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
+import { validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
+import { compileArchitecture } from "@/lib/architecture/compiler";
+import { runDesignQualityGate } from "@/lib/architecture/stages/qualityGate";
+import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
+import { runArchitecturePipeline, type PipelineInput, type PipelineResult, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
+import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
+import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
+import { runFinalAssembly } from "@/lib/ai/finalAssembly";
+import { providerErrorResponse } from "@/lib/ai/providerErrors";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
 /** Stop waiting for the model this long into the request, leaving room to answer before the platform kills the function. */
 const GENERATION_BUDGET_MS = 270_000;
+/**
+ * The architecture sub-pipeline (Intent/Site Strategy/Primary Mass, Mass Expansion, Roof Composition) shares
+ * this request's budget with the mandatory final design call below it — a call that decides facade,
+ * materials, openings and outdoor siting and cannot be skipped. Without a reserved floor, a slow sub-pipeline
+ * (retries, a slow provider) can eat nearly the whole budget and leave the final call under 1s, guaranteeing
+ * it times out. Reserving time up front for the piece that must run last is what actually fixes that timeout,
+ * not just running the sub-pipeline faster.
+ */
+const FINAL_ASSEMBLY_RESERVE_MS = 90_000;
+const STAGE_PIPELINE_BUDGET_MS = GENERATION_BUDGET_MS - FINAL_ASSEMBLY_RESERVE_MS;
 
 const MAX_HISTORY_TURNS = { world: 12, zone: 6, component: 4 } as const;
 const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
-/**
- * Initial generation gets one repair pass: validation errors the server cannot fix itself are fed back to the model.
- * Placement, layout and payload problems never reach it — they are repaired locally (see assembleGeneratedProject).
- */
-const MAX_GENERATION_ATTEMPTS = 2;
 
 interface ChatTurn {
   role: "user" | "assistant";
@@ -102,28 +105,6 @@ function parseAssets(raw: unknown): AssetRef[] {
     .filter((a): a is AssetRef => typeof a?.id === "string" && typeof a?.name === "string")
     .slice(0, MAX_ASSETS)
     .map((a) => ({ id: a.id, name: a.name.slice(0, 60) }));
-}
-
-const isTimeout = (e: unknown) => e instanceof Error && (e.name === "TimeoutError" || e.name === "AbortError");
-
-/** Maps a model-call failure to a clear, actionable response instead of a generic one (or a platform 504). */
-function providerErrorResponse(error: unknown) {
-  if (isTimeout(error)) {
-    return NextResponse.json(
-      { error: "The AI took too long to respond. Try again, or start with a shorter brief and add detail afterwards." },
-      { status: 504 }
-    );
-  }
-  if (APICallError.isInstance(error)) {
-    if (error.statusCode === 429) {
-      return NextResponse.json({ error: "The AI provider is rate-limiting requests right now. Please wait a moment and try again." }, { status: 429 });
-    }
-    return NextResponse.json(
-      { error: `The AI provider returned an error${error.statusCode ? ` (HTTP ${error.statusCode})` : ""}. Please try again.` },
-      { status: 502 }
-    );
-  }
-  return NextResponse.json({ error: "AI request failed. Please try again." }, { status: 500 });
 }
 
 function parseProjectId(raw: unknown): string | null {
@@ -283,9 +264,13 @@ function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: st
       try {
         const response = await generateInitialDesign(brief, assets, baseRevision, library, usageMeta, emit);
         const payload = (await response.json()) as Record<string, unknown>;
-        controller.enqueue(encoder.encode(sseFrame(response.ok ? "done" : "error", response.ok ? payload : { ...payload, status: response.status })));
+        const frameEvent = response.ok ? "done" : "error";
+        controller.enqueue(encoder.encode(sseFrame(frameEvent, response.ok ? payload : { ...payload, status: response.status })));
+        console.info(`[architecture-stages] SSE Finalization: ok — emitted "${frameEvent}" (HTTP ${response.status})`);
       } catch (error) {
-        controller.enqueue(encoder.encode(sseFrame("error", { error: error instanceof Error ? error.message : "AI request failed. Please try again.", status: 500 })));
+        const message = error instanceof Error ? error.message : "AI request failed. Please try again.";
+        controller.enqueue(encoder.encode(sseFrame("error", { error: message, status: 500 })));
+        console.error(`[architecture-stages] SSE Finalization: FAILED — stream threw before a done/error frame could be built: ${message}`);
       } finally {
         controller.close();
       }
@@ -294,12 +279,87 @@ function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: st
   return new NextResponse(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" } });
 }
 
+/**
+ * Dev-only: a deterministic dry-run of the document → geometry step (see compiler.ts) plus the deterministic
+ * design-quality gate (qualityGate.ts) over the same compile, both timed and traced like every other stage.
+ * Never changes what's returned to the renderer — compileArchitecture's output here is discarded; only
+ * whether it throws, reports errors, or fails a quality check is recorded. The quality gate never blocks or
+ * retries generation — see qualityGate.ts's own doc comment for why.
+ */
+function compilerDiagnostics(document: ArchitecturalDesignDocument): StageDiagnostics[] {
+  const start = performance.now();
+  const docErrors = validateArchitecturalDesignDocument(document);
+  if (docErrors.length) {
+    const durationMs = performance.now() - start;
+    return [{ stage: "compiler", status: "error", durationMs, modelCalls: 0, retries: 0, error: docErrors.join("; ") }];
+  }
+  try {
+    const { errors, diagnostics } = compileArchitecture(document, { materials: DEFAULT_MATERIALS_CONFIG });
+    const compilerResult: StageDiagnostics = { stage: "compiler", status: errors.length ? "error" : "ok", durationMs: performance.now() - start, modelCalls: 0, retries: 0, ...(errors.length ? { error: errors.join("; ") } : {}) };
+    if (errors.length || !diagnostics) return [compilerResult];
+    const gateStart = performance.now();
+    const gate = runDesignQualityGate(document, diagnostics);
+    const failed = gate.checks.filter((c) => !c.passed);
+    const gateResult: StageDiagnostics = {
+      stage: "quality-gate", status: gate.passed ? "ok" : "fallback", durationMs: performance.now() - gateStart, modelCalls: 0, retries: 0,
+      ...(failed.length ? { error: failed.map((c) => `${c.id}: ${c.detail}`).join("; ") } : {}),
+    };
+    return [compilerResult, gateResult];
+  } catch (error) {
+    return [{ stage: "compiler", status: "error", durationMs: performance.now() - start, modelCalls: 0, retries: 0, error: error instanceof Error ? error.message : String(error) }];
+  }
+}
+
+/**
+ * Always logs a concise final sequence for a live generation — Foundation through Final Assembly — so an
+ * HTTP 200 on the SSE transport (which succeeds as soon as headers go out, regardless of what the stream
+ * ultimately contains) never hides which stage, if any, actually failed the generation the browser sees.
+ * Unconditional, not dev-gated: this is exactly the trace needed to diagnose a live failure after the fact.
+ * None of it reaches the client — only the response's own dev-gated `architectureDiagnostics` field does
+ * (see `runFinalAssembly`).
+ */
+function logFinalSequence(pipelineResult: PipelineResult, diagnostics: StageDiagnostics[], finalAssembly: { ok: boolean; status: number; error?: string }): void {
+  const byStage = new Map(diagnostics.map((d) => [d.stage, d] as const));
+  const line = (label: string, stage: StageDiagnostics["stage"], extra?: string) => {
+    const d = byStage.get(stage);
+    if (!d) return `${label}: skipped`;
+    return `${label}: ${d.status}${extra ? ` — ${extra}` : ""}${d.error ? ` (${d.error})` : ""}`;
+  };
+  const massCount = pipelineResult.upstream.masses?.length ?? 0;
+  const opCount = (pipelineResult.upstream.articulatedMasses ?? []).reduce((sum, m) => sum + (m.operations?.length ?? 0) + (m.openings?.length ?? 0), 0);
+  const lines = [
+    line("Foundation", "foundation"),
+    line("Mass Expansion", "mass-expansion", `${massCount} mass${massCount === 1 ? "" : "es"}`),
+    line("Geometry", "architectural-geometry", `${opCount} operation${opCount === 1 ? "" : "s"}`),
+    line("Roofs", "roof-composition"),
+    line("Compiler", "compiler"),
+    line("Design Quality Gate", "quality-gate"),
+    `Final Assembly: ${finalAssembly.ok ? "ok" : `FAILED (HTTP ${finalAssembly.status})${finalAssembly.error ? ` — ${finalAssembly.error}` : ""}`}`,
+  ];
+  console.info(`[architecture-stages] final sequence:\n${lines.join("\n")}`);
+}
+
+/** Diagnostics order matches `runArchitecturePipeline`'s push order — used only to name which stage was running when a catastrophic (non-model) error interrupted it. */
+const PIPELINE_STAGE_ORDER = ["foundation", "mass-expansion", "architectural-geometry", "roof-composition"] as const;
+
+/**
+ * Logs a `[architecture-stages] CRASH` block for a genuinely unexpected throw from `runArchitecturePipeline`
+ * — a deterministic JS bug (a bad relationship resolution, a stub missing a required field), never a model
+ * failure (those are caught inside each stage and degrade to a fallback; see `runStage`). Says which stage
+ * was running and how many masses survived, without the raw stack trace — safe to run unconditionally, in
+ * production too, since only counts and the error's own message are logged, nothing from the request body.
+ */
+function logPipelineCrash(error: unknown, diagnosticsSoFar: readonly StageDiagnostics[], upstreamSoFar: PipelineResult["upstream"]): void {
+  const lastSuccessfulStage = diagnosticsSoFar.length ? diagnosticsSoFar[diagnosticsSoFar.length - 1].stage : "none";
+  const crashedStage = PIPELINE_STAGE_ORDER[diagnosticsSoFar.length] ?? "final-assembly";
+  const massesPreserved = upstreamSoFar.masses?.length ?? 0;
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`[architecture-stages] CRASH\nstage: ${crashedStage}\nerror: ${message}\nlastSuccessfulStage: ${lastSuccessfulStage}\nmassesPreserved: ${massesPreserved}`);
+}
+
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
 async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta, emit: (event: PipelineStageEvent) => void = () => {}) {
-  let errors: string[] = [];
   const timings = createTimings();
-  const finish = (outcome: string, attempts: number) => logTimings("generate", timings, { outcome, attempts, briefChars: brief.length });
-  let lastAttemptMs = 0;
   // The outdoor spaces this brief calls for, and the approved recipes that describe how to build each (a proven pattern per space,
   // not one lookup for the whole brief). A library problem never blocks generation (see `safely`).
   const planned = planOutdoorSpaces({ brief });
@@ -310,97 +370,48 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   // This happens before the model chooses operations. The model receives a plan, rather than inventing
   // a default mass trio and receiving an architectural explanation afterwards.
   const hints = inferSiteHints(brief);
-  // Stages 1-5 (Intent, Site Strategy, Primary Mass, Recursive Mass Expansion, Roof Composition) run as their own
-  // bounded model calls against the shared timing budget, producing both the real mass/roof document the renderer
-  // prefers AND a legacy-compatible `ArchitecturalDesign` that guides the single-call model below exactly as the
-  // old deterministic bridge did — critic.ts and the learning loop need no changes.
-  const pipelineResult = await runArchitecturePipeline(
-    { brief, hints, scale: hints.projectScale, recipes, availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id), variationSeed: usageMeta.projectId ?? brief, projectId: usageMeta.projectId },
-    timings, GENERATION_BUDGET_MS, usageMeta, emit
-  );
-  const design = pipelineResult.design;
-  const architecturalDesignDocument = pipelineResult.document;
-  const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
-  if (docErrors.length) console.warn("[architecture-stages] invalid document, falling back to legacy shell:", docErrors);
-  if (pipelineResult.truncated) console.info("[architecture-stages] mass expansion hit its hard cap before signaling done");
-  void noteRecipeOutcome(recipeIds, "pending");
+  const pipelineInput: PipelineInput = {
+    brief, hints, scale: hints.projectScale, recipes,
+    availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id),
+    variationSeed: usageMeta.projectId ?? brief, projectId: usageMeta.projectId,
+  };
+  // Stages 1-5 (Intent+Site Strategy+Primary Mass as one call, Recursive Mass Expansion, Roof Composition) run
+  // as their own bounded model calls against a budget that reserves time for the mandatory final call below
+  // (see STAGE_PIPELINE_BUDGET_MS), producing both the real mass/roof document the renderer prefers AND a
+  // legacy-compatible `ArchitecturalDesign` that guides the final call exactly as the old deterministic bridge
+  // did — critic.ts and the learning loop need no changes.
+  let upstreamSoFar: PipelineResult["upstream"] = {};
+  let diagnosticsSoFar: readonly StageDiagnostics[] = [];
+  let pipelineResult: PipelineResult;
   try {
-    for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
-      // A repair pass takes about as long as the first call: don't start one that cannot finish inside the budget.
-      const remainingMs = GENERATION_BUDGET_MS - timings.elapsed();
-      if (attempt > 0 && remainingMs < lastAttemptMs * 1.3) {
-        finish("budget_exhausted", attempt);
-        return NextResponse.json(
-          { error: "The AI took too long to finish that design. Try again, or start with a shorter brief and add detail afterwards." },
-          { status: 504 }
-        );
-      }
-      const callStart = performance.now();
-      const { output } = await timings.timeAsync(`openai#${attempt + 1}`, () => withUsageLogging(usageMeta, () =>
-        generateText({
-          model: getAiModel(),
-          maxOutputTokens: MAX_OUTPUT_TOKENS.world,
-          system: buildGenerationSystemPrompt(assets, recipes, spaces, design),
-          messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
-          output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id)) }),
-          providerOptions: AI_PROVIDER_OPTIONS,
-          abortSignal: AbortSignal.timeout(Math.max(Math.floor(remainingMs), 1_000)),
-          maxRetries: 1,
-        })
-      ));
-      lastAttemptMs = performance.now() - callStart;
-
-      const result = assembleGeneratedProject(output, assets, brief, true, timings);
-      if (result.ok) {
-        finish("ok", attempt + 1);
-        if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
-        // The design is built with the procedural version of every object. Where an approved library GLB fits, the
-        // feature just references it (assetId); the procedural geometry stays as the fallback.
-        // The architectural concept is structured project data, not a prose note or a GLB. It makes the design intent
-        // available to rendering, review and learning while the proven scene JSON remains the source of geometry.
-        const conceivedJson = JSON.stringify({
-          ...JSON.parse(result.json),
-          architecture: design,
-          ...(docErrors.length ? {} : { architecturalDesignDocument }),
-        });
-        const attachedResult = attachLibraryAssets(conceivedJson, library);
-        const attached = attachedResult.attached;
-        const json = attachOutdoorAssets(attachedResult.json, brief, library);
-        // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
-        // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
-        const capabilityRequests = [...architecturalCapabilityRequests(design), ...pipelineResult.capabilityRequests];
-        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId), capabilityRequests, architecturalDesign: design }));
-        return NextResponse.json({
-          summary: output.summary,
-          json,
-          baseRevision,
-          revision: revisionOf(json),
-          timeOfDay: result.timeOfDay,
-          site: result.site,
-          scope: { level: WORLD_SCOPE.level, label: "New design" },
-          skipped: result.skipped,
-          adjusted: [...result.notes, ...result.adjusted],
-          intelligence,
-        });
-      }
-      errors = result.errors;
-      console.warn(`[AI] Generation attempt ${attempt + 1} failed validation:`, errors);
-    }
-    finish("invalid_after_retries", MAX_GENERATION_ATTEMPTS);
-    after(() => noteRecipeOutcome(recipeIds, "failure"));
-    return NextResponse.json(
-      { error: "I couldn't produce a valid design from that brief. Try describing it a little differently." },
-      { status: 502 }
-    );
+    pipelineResult = await runArchitecturePipeline(pipelineInput, timings, STAGE_PIPELINE_BUDGET_MS, usageMeta, emit, (upstream, diagnostics) => {
+      upstreamSoFar = upstream;
+      diagnosticsSoFar = diagnostics;
+      // Written after every AI stage, not only once the whole pipeline finishes: if a later, purely
+      // deterministic stage then throws, Replay can still resume from here instead of repaying for the
+      // stages that already succeeded (see devSessionCache.ts and the replay route's fallback to `upstream`).
+      setDevSession(usageMeta.projectId, { input: pipelineInput, upstream, diagnostics: [...diagnostics] });
+    });
   } catch (error) {
-    finish("error", 0);
-    if (NoObjectGeneratedError.isInstance(error)) {
-      return NextResponse.json(
-        { error: "The AI's response didn't match the design schema. Try rephrasing your brief." },
-        { status: 502 }
-      );
-    }
-    console.error("AI initial generation failed:", error);
-    return providerErrorResponse(error);
+    logPipelineCrash(error, diagnosticsSoFar, upstreamSoFar);
+    return providerErrorResponse(error, "architecture-pipeline", { architectureDiagnostics: [...diagnosticsSoFar] });
   }
+  const diagnostics = [...pipelineResult.diagnostics, ...compilerDiagnostics(pipelineResult.document)];
+  if (process.env.NODE_ENV !== "production") {
+    for (const d of diagnostics) console.info(`[architecture-stages] ${d.stage}: ${d.status} (${Math.round(d.durationMs)}ms, ${d.modelCalls} call(s), ${d.retries} retr(y/ies))${d.error ? ` — ${d.error}` : ""}`);
+  }
+  setDevSession(usageMeta.projectId, {
+    input: pipelineInput,
+    result: { ...pipelineResult, diagnostics },
+    finalAssembly: { assets, recipes, retrieved, spaces, library, baseRevision },
+  });
+  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, spaces, budgetMs: GENERATION_BUDGET_MS });
+  // Peek at the response without consuming the body the caller still needs to return: `response.clone()` tees
+  // the stream, so this never affects what actually reaches the client.
+  let finalAssemblyError: string | undefined;
+  if (!response.ok) {
+    try { finalAssemblyError = ((await response.clone().json()) as { error?: string }).error; } catch { /* body already consumed/unreadable — logged without it */ }
+  }
+  logFinalSequence(pipelineResult, diagnostics, { ok: response.ok, status: response.status, error: finalAssemblyError });
+  return response;
 }

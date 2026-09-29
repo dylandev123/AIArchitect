@@ -24,7 +24,7 @@ export function NewProjectDialog({ onClose }: { onClose: () => void }) {
     updateHouseConfig(project.id, JSON.stringify({
       ...JSON.parse(BLANK_HOUSE_JSON),
       architecturalDesignDocument: ARCHITECTURE_FIXTURES.modernTropicalPavilionHouse,
-    }));
+    }), "landing-fixture");
     router.push(`/workspace/${project.id}`);
   };
 
