@@ -14,9 +14,11 @@ import {
 import { useUIStore } from "@/store/useUIStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSceneStore } from "@/store/useSceneStore";
+import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
 import { useFocusedRoom } from "./useRoomFocus";
 import { makeScopeForRoom } from "@/lib/ai/targeting";
 import { requestHouseEdit, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
+import { requestStagedGeneration } from "@/lib/ai/stagedClient";
 import { needsInitialGeneration } from "@/lib/house/blank";
 
 // ── Step generator ──────────────────────────────────────────────────────────
@@ -148,6 +150,7 @@ export function ChatPanel() {
   const setAiWorking = useUIStore((s) => s.setAiWorking);
   const setGenerationError = useUIStore((s) => s.setGenerationError);
   const takePendingBrief = useUIStore((s) => s.takePendingBrief);
+  const liveProgress = useGenerationProgressStore((s) => s.progress);
 
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -199,18 +202,26 @@ export function ChatPanel() {
     setIsLoading(true);
     setAiWorking(true);
     setGenerationError(null);
-    beginWork(prompt);
+    // The initial design streams real per-stage progress (see the "live architecture" panel below);
+    // a scoped edit is a single call, so it keeps the illustrative animated step sequence.
+    if (!wasBlank) beginWork(prompt);
 
     try {
-      const result = await requestHouseEdit({
-        projectId: project.id,
-        prompt,
-        history: messages
-          .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
-          .map((m) => ({ role: m.role, content: m.content })),
-        scope: roomScope ? makeScopeForRoom(roomScope.index, roomScopeLabel, roomScope.id) : undefined,
-        apply: (summary, json) => appendVersion(project.id, summary, json),
-      });
+      const result = wasBlank
+        ? await requestStagedGeneration({
+            projectId: project.id,
+            prompt,
+            apply: (summary, json) => appendVersion(project.id, summary, json),
+          })
+        : await requestHouseEdit({
+            projectId: project.id,
+            prompt,
+            history: messages
+              .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
+              .map((m) => ({ role: m.role, content: m.content })),
+            scope: roomScope ? makeScopeForRoom(roomScope.index, roomScopeLabel, roomScope.id) : undefined,
+            apply: (summary, json) => appendVersion(project.id, summary, json),
+          });
 
       const failure = result.ok ? undefined : humanizeError(result.error);
       setMessages((prev) => [
@@ -339,8 +350,27 @@ export function ChatPanel() {
               </div>
             )}
 
-            {/* Architect working — animated step tracker */}
-            {isLoading && work && (
+            {/* Architect working — real per-stage progress for the initial design, an illustrative step tracker for edits */}
+            {isLoading && needsGeneration && (
+              <div className="px-4 pb-3">
+                <div className="rounded-xl border border-amber-500/15 bg-gradient-to-br from-amber-500/[0.07] to-transparent p-4 space-y-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+                    </span>
+                    <span className="text-xs font-semibold text-amber-300">
+                      {liveProgress?.label ?? "Starting the design…"}
+                    </span>
+                  </div>
+                  {typeof liveProgress?.massesSoFar === "number" && (
+                    <p className="pl-4 text-[11px] text-neutral-400">Watch it grow in the viewport as each piece is placed.</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {isLoading && !needsGeneration && work && (
               <div className="px-4 pb-3">
                 <div className="rounded-xl border border-amber-500/15 bg-gradient-to-br from-amber-500/[0.07] to-transparent p-4 space-y-2.5">
 

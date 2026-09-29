@@ -24,6 +24,7 @@ const SEEDS: Seed[] = [
   cap("curved-wall", "Curved Wall", "walls", "partial", "Curved/round bay forms exist; arbitrary curved walls do not."),
   cap("floating-wall", "Floating Wall", "walls", "missing", "No detached wall geometry."),
   cap("courtyard-cut", "Courtyard Cut", "voids", "missing", "No boolean cut in the main shell."),
+  cap("courtyard-edge-wall", "Courtyard Edge Wall", "voids", "supported", "Plugin: a low garden wall along a mass's courtyard-facing edge, without a boolean cut.", ["massId", "side", "height", "thickness"]),
   cap("atrium", "Atrium", "voids", "missing", "No interior void operation."), cap("light-well", "Light Well", "voids", "missing", "No shaft cut operation."),
   cap("double-height-void", "Double-height Void", "voids", "missing", "Floors cannot be removed selectively."), cap("breezeway", "Breezeway", "voids", "partial", "Separated wings can leave open space, without a purpose-built connector."),
   cap("deep-overhang", "Deep Overhang", "roofs", "supported", "Shared Roof Expression geometry parameterizes eave projection per mass.", ["overhang"]),

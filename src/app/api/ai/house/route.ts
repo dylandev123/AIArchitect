@@ -26,9 +26,9 @@ import { inferSiteHints } from "@/lib/house/siteSettings";
 import { INITIAL_CAPABILITIES } from "@/lib/library/capabilities";
 import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
-import { architecturalAssetRequests, architecturalCapabilityRequests, designArchitecture } from "@/lib/architecture/designEngine";
-import { buildArchitecturalDesignDocument } from "@/lib/architecture/bridge";
+import { architecturalAssetRequests, architecturalCapabilityRequests } from "@/lib/architecture/designEngine";
 import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
+import { runArchitecturePipeline, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -176,12 +176,14 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    return generateInitialDesign(prompt, assets, baseRevision, parseLibraryAssets(body.libraryAssets), {
-      projectId,
-      requestType: "generation",
-      scope: WORLD_SCOPE.level,
-      model: getAiModelId(),
-    });
+    const usageMeta: UsageMeta = { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId() };
+    const library = parseLibraryAssets(body.libraryAssets);
+    // Live progressive generation: the viewport can watch masses and roofs appear one at a time. Any caller that
+    // doesn't ask for this (including every existing test) gets the exact same single JSON response as before.
+    if (req.headers.get("accept")?.includes("text/event-stream")) {
+      return streamInitialDesign(prompt, assets, baseRevision, library, usageMeta);
+    }
+    return generateInitialDesign(prompt, assets, baseRevision, library, usageMeta);
   }
 
   const scope = scopeFromHint(body.scope, prompt);
@@ -265,8 +267,35 @@ export async function POST(req: NextRequest) {
   }
 }
 
+const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+
+/**
+ * The streaming delivery mode: runs the identical `generateInitialDesign` function, differing only in that
+ * `emit` is wired to flush one SSE frame per architecture stage/mass/roof as they complete, and the final
+ * result (success or error) is delivered as one last `done`/`error` frame instead of the HTTP response
+ * itself — so the two paths can never semantically drift, only in delivery cadence.
+ */
+function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta): NextResponse {
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const emit = (event: PipelineStageEvent) => controller.enqueue(encoder.encode(sseFrame("stage", event)));
+      try {
+        const response = await generateInitialDesign(brief, assets, baseRevision, library, usageMeta, emit);
+        const payload = (await response.json()) as Record<string, unknown>;
+        controller.enqueue(encoder.encode(sseFrame(response.ok ? "done" : "error", response.ok ? payload : { ...payload, status: response.status })));
+      } catch (error) {
+        controller.enqueue(encoder.encode(sseFrame("error", { error: error instanceof Error ? error.message : "AI request failed. Please try again.", status: 500 })));
+      } finally {
+        controller.close();
+      }
+    },
+  });
+  return new NextResponse(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" } });
+}
+
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
-async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta) {
+async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta, emit: (event: PipelineStageEvent) => void = () => {}) {
   let errors: string[] = [];
   const timings = createTimings();
   const finish = (outcome: string, attempts: number) => logTimings("generate", timings, { outcome, attempts, briefChars: brief.length });
@@ -281,15 +310,19 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   // This happens before the model chooses operations. The model receives a plan, rather than inventing
   // a default mass trio and receiving an architectural explanation afterwards.
   const hints = inferSiteHints(brief);
-  const design = designArchitecture(brief, {
-    environment: hints.environment ?? "suburban", viewDirection: hints.viewDirection ?? "south", approachSide: hints.approachSide ?? "north", scale: hints.projectScale,
-    recipes, availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id), variationSeed: usageMeta.projectId ?? brief,
-  });
-  // Built alongside the prompt-guidance design so the live path can save real mass/roof/capability
-  // geometry, not just the prose-level ArchitecturalDesign. Kept separate from `design` (below).
-  const architecturalDesignDocument = buildArchitecturalDesignDocument(design, brief, { projectId: usageMeta.projectId });
+  // Stages 1-5 (Intent, Site Strategy, Primary Mass, Recursive Mass Expansion, Roof Composition) run as their own
+  // bounded model calls against the shared timing budget, producing both the real mass/roof document the renderer
+  // prefers AND a legacy-compatible `ArchitecturalDesign` that guides the single-call model below exactly as the
+  // old deterministic bridge did — critic.ts and the learning loop need no changes.
+  const pipelineResult = await runArchitecturePipeline(
+    { brief, hints, scale: hints.projectScale, recipes, availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id), variationSeed: usageMeta.projectId ?? brief, projectId: usageMeta.projectId },
+    timings, GENERATION_BUDGET_MS, usageMeta, emit
+  );
+  const design = pipelineResult.design;
+  const architecturalDesignDocument = pipelineResult.document;
   const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
-  if (docErrors.length) console.warn("[architecture-bridge] invalid document, falling back to legacy shell:", docErrors);
+  if (docErrors.length) console.warn("[architecture-stages] invalid document, falling back to legacy shell:", docErrors);
+  if (pipelineResult.truncated) console.info("[architecture-stages] mass expansion hit its hard cap before signaling done");
   void noteRecipeOutcome(recipeIds, "pending");
   try {
     for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
@@ -335,7 +368,8 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
         const json = attachOutdoorAssets(attachedResult.json, brief, library);
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
         // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
-        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId), capabilityRequests: architecturalCapabilityRequests(design), architecturalDesign: design }));
+        const capabilityRequests = [...architecturalCapabilityRequests(design), ...pipelineResult.capabilityRequests];
+        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId), capabilityRequests, architecturalDesign: design }));
         return NextResponse.json({
           summary: output.summary,
           json,

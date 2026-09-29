@@ -9,6 +9,7 @@ import { buildHipRoof } from "@/lib/house/roof/hipRoof";
 import { buildButterflyRoof } from "@/lib/house/roof/butterflyRoof";
 import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { LEVEL_HEIGHT } from "@/lib/house/constants";
+import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import type { RoofType } from "@/types/house";
 import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassRole, MassVolume, RoofRecipe, RoofRecipeKind } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
@@ -24,7 +25,8 @@ export interface ArchitectureDiagnostics {
   capabilities: { id: string; massId: string; status: CapabilityOutcome["status"]; note?: string }[];
 }
 
-function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
+/** Exported for the stage pipeline: resolving positions incrementally as each mass is proposed reuses this unchanged. */
+export function resolveMasses(doc: ArchitecturalDesignDocument): MassVolume[] {
   const byId = new Map<string, MassVolume>();
   for (const source of doc.massing.masses) {
     const mass = { ...source, position: { ...source.position } };
@@ -76,9 +78,17 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
       const shell = generateHouseModel({ width: mass.width, depth: mass.depth, floors: mass.floors, roof: "flat" }, options.materials)
         .filter((p) => p.category !== "roof")
         .map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
+      // A cantilevered mass offsets every primitive above the ground floor along its declared side, in world space.
+      const cantileverOffset = mass.cantilever ? SIDE_VECTOR[mass.cantilever.direction] : undefined;
       primitives.push(...shell.map((p) => {
+        const floorIndex = p.kind === "box" ? Math.floor(p.position[1] / LEVEL_HEIGHT) : 0;
         const lifted = p.kind === "box" ? { ...p, position: [p.position[0], p.position[1] + mass.elevation, p.position[2]] as [number, number, number] } : { ...p, vertices: p.vertices.map((v, i) => i % 3 === 1 ? v + mass.elevation : v) };
-        return rotatePrimitiveY(translatePrimitive(lifted, mass.position.x, mass.position.z), mass.position.x, mass.position.z, mass.rotation);
+        const placed = rotatePrimitiveY(translatePrimitive(lifted, mass.position.x, mass.position.z), mass.position.x, mass.position.z, mass.rotation);
+        if (cantileverOffset && floorIndex >= 1 && placed.kind === "box") {
+          const distance = mass.cantilever!.distance;
+          return { ...placed, position: [placed.position[0] + cantileverOffset[0] * distance, placed.position[1], placed.position[2] + cantileverOffset[1] * distance] as [number, number, number] };
+        }
+        return placed;
       }));
       // A compact marker makes mass-only inspection readable without a special renderer.
       if (options.mode === "massing-only") primitives.push({ kind: "box", id: `architecture-${mass.id}-debug-footprint`, category: "floor", label: `${mass.name} · rot ${(mass.rotation * 180 / Math.PI).toFixed(0)}° · elev ${mass.elevation}m`, position: [mass.position.x, mass.elevation + 0.025, mass.position.z], rotation: [0, mass.rotation, 0], size: [mass.width, 0.05, mass.depth], color: "#ff9d2e", roughness: .65 });
@@ -86,7 +96,11 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     if (options.mode !== "massing-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) primitives.push(...roofPrimitives(recipe, mass, options));
     // Architectural stages declare intent. Only the capability engine chooses and invokes geometry plugins.
     for (const intent of doc.capabilities?.filter((request) => request.parameters?.massId === mass.id) ?? []) {
-      const outcome = requestCapability(intent, { primitives, target: mass });
+      const outcome = requestCapability(intent, { primitives, target: mass, allMasses: masses });
+      if (outcome.remove?.length) {
+        const toRemove = new Set(outcome.remove);
+        for (let i = primitives.length - 1; i >= 0; i--) if (toRemove.has(primitives[i].id)) primitives.splice(i, 1);
+      }
       primitives.push(...outcome.primitives);
       capabilityDiagnostics.push({ id: outcome.id, massId: mass.id, status: outcome.status, note: outcome.note });
     }

@@ -82,7 +82,9 @@ describe("POST /api/ai/house (generate)", () => {
     if (!saved.ok) throw new Error(saved.error);
 
     const { body } = await generate();
-    const system = (generateText.mock.calls[0][0] as { system: string }).system;
+    // Several staged architecture calls now precede the main generation call; find it by its distinctive content
+    // rather than assuming it is the first `generateText` call.
+    const system = generateText.mock.calls.map((call) => (call[0] as { system: string }).system).find((s) => s.includes("OUTDOOR SPACES"))!;
     expect(system).toContain("OUTDOOR SPACES");
     expect(system).toMatch(/Outdoor Dining \(~/);
     expect(system).toContain("PROVEN DESIGN PATTERNS");

@@ -29,7 +29,7 @@ export function requestCapability(intent: CapabilityIntent, context: CapabilityG
   if (!capability.canApply(context, parameters)) { capability.recordFailure(); return { id: intent.id, status: "fallback", primitives: [], fallback: capability.fallback(), note: validation.join(", ") || "Capability cannot apply in this context." }; }
   try {
     const result = capability.apply(context, parameters); capability.recordSuccess();
-    return { id: intent.id, status: "applied", primitives: result.primitives, fallback: capability.fallback(), note: result.note };
+    return { id: intent.id, status: "applied", primitives: result.primitives, remove: result.remove, fallback: capability.fallback(), note: result.note };
   } catch (error) {
     capability.recordFailure(); return { id: intent.id, status: "fallback", primitives: [], fallback: capability.fallback(), note: error instanceof Error ? error.message : String(error) };
   }

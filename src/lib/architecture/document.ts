@@ -41,14 +41,6 @@ export type RoofRecipeKind = "flat" | "floating-flat" | "shed" | "mono-pitch" | 
 export interface RoofRecipe { id: string; massId: string; kind: RoofRecipeKind; overhang?: number; pitch?: number; orientation?: number; expression?: RoofExpressionParameters; }
 export interface RoofComposition { recipes: readonly RoofRecipe[]; }
 
-export interface ArchitectureStage<I, O> { readonly name: string; run(input: Readonly<I>): O; validate(output: O): readonly string[]; }
-export interface SiteStageInput { brief: string; site: SiteStrategy }
-export interface MassingStageInput { brief: string; siteStrategy: Readonly<SiteStrategy> }
-export interface RoofStageInput { brief: string; siteStrategy: Readonly<SiteStrategy>; massing: Readonly<MassingPlan> }
-export const siteStrategyStage: ArchitectureStage<SiteStageInput, SiteStrategy> = { name: "site-strategy", run: ({ site }) => ({ ...site }), validate: (s) => s.environment ? [] : ["siteStrategy.environment is required"] };
-export const massingStage: ArchitectureStage<MassingStageInput, MassingPlan> = { name: "building-massing", run: () => ({ composition: "rectangular-pavilion", masses: [] }), validate: (m) => m.masses.length ? [] : ["massing requires at least one mass"] };
-export const roofCompositionStage: ArchitectureStage<RoofStageInput, RoofComposition> = { name: "roof-composition", run: () => ({ recipes: [] }), validate: (r) => r.recipes.length ? [] : ["roofs requires at least one recipe"] };
-
 export function validateArchitecturalDesignDocument(doc: ArchitecturalDesignDocument): string[] {
   const errors: string[] = [];
   const ids = new Set<string>();

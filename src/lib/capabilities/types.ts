@@ -1,5 +1,6 @@
 import type { HousePrimitive } from "@/lib/house/types";
 import type { CapabilityCategory, CapabilityParameter, CapabilityStatus } from "@/types/library";
+import type { MassVolume } from "@/lib/architecture/document";
 
 /** A stage asks for intent. It never imports a geometry builder. */
 export interface CapabilityIntent {
@@ -14,10 +15,14 @@ export interface CapabilityGeometryContext {
   primitives: readonly HousePrimitive[];
   /** Kept deliberately open so plugins can receive a stage's typed target without the engine knowing its shape. */
   target?: unknown;
+  /** Every resolved mass in the document, for ops that reference a second mass via `parameters.secondaryMassId`. */
+  allMasses?: readonly MassVolume[];
 }
 
 export interface CapabilityGeometryResult {
   primitives: HousePrimitive[];
+  /** Primitive ids to strip from the accumulated set before this result's primitives are added. */
+  remove?: string[];
   note?: string;
 }
 
@@ -47,5 +52,5 @@ export interface Capability {
 }
 export interface CapabilityOutcome {
   id: string; status: "applied" | "fallback" | "unavailable";
-  primitives: HousePrimitive[]; fallback: string; note?: string;
+  primitives: HousePrimitive[]; remove?: string[]; fallback: string; note?: string;
 }

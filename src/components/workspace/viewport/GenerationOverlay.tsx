@@ -2,6 +2,7 @@
 
 import { AlertTriangle, Sparkles } from "lucide-react";
 import { useUIStore } from "@/store/useUIStore";
+import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
 import { useNeedsGeneration } from "./useNeedsGeneration";
 
 /** Status card over the empty site: generating, failed, or waiting for the first brief. */
@@ -9,6 +10,7 @@ export function GenerationOverlay() {
   const blank = useNeedsGeneration();
   const working = useUIStore((s) => s.aiWorking);
   const error = useUIStore((s) => s.generationError);
+  const progress = useGenerationProgressStore((s) => s.progress);
 
   if (!blank) return null;
 
@@ -20,7 +22,7 @@ export function GenerationOverlay() {
             <span className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-amber-500/30 border-t-amber-400" />
             <div>
               <p className="font-semibold text-neutral-100">Your architect is designing…</p>
-              <p className="text-xs text-neutral-400">Shaping the house, materials and grounds.</p>
+              <p className="text-xs text-neutral-400">{progress?.label ?? "Shaping the house, materials and grounds."}</p>
             </div>
           </>
         ) : error ? (
