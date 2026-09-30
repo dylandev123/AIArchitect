@@ -30,6 +30,8 @@ import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib
 const MASONRY_CATEGORIES = new Set<HousePrimitive["category"]>(["bay", "curvedWall", "arch", "foundation", "stairs"]);
 
 function surfaceOf(primitive: HousePrimitive, materials: MaterialsConfig | undefined): SurfaceKey | undefined {
+  // A builder that owns its finish (V2 Roof Systems) says so outright.
+  if (primitive.surface) return primitive.surface;
   if (!materials) return undefined;
   const color = primitive.color.toLowerCase();
   const is = (zone: keyof MaterialsConfig) => materials[zone].color.toLowerCase() === color;

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { createRng, hashSeed } from "@/lib/landscaping/rng";
 import type { SurfaceKey } from "@/lib/pbrLibrary";
+import type { PatternGrid } from "@/lib/roofSurfaceUv";
 
 /**
  * Small tileable canvas textures for the stylised (Sims/GTA-like) look: a greyscale colour map that the
@@ -41,6 +42,9 @@ export const PATTERN_TILE_METERS: Record<SurfacePattern, number> = {
   slate: 1.4,
   seam: 1.2,
 };
+
+/** Units × courses per repeat of the patterns a fitted roof surface can land on (they match the loops in `getSurfaceTextures`). */
+export const PATTERN_GRID: Partial<Record<SurfacePattern, PatternGrid>> = { tiles: { cols: 6, rows: 8 }, slate: { cols: 5, rows: 10 } };
 
 export interface DetailTextures {
   map: THREE.CanvasTexture;

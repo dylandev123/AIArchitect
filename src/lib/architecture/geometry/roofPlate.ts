@@ -32,19 +32,26 @@ export function buildPolygonRoofPlate(input: PolygonRoofInput & { gap: number; t
   return out;
 }
 
+export type PolygonShedInput = PolygonRoofInput & { pitchDeg: number; thickness: number };
+
+/** The shed's sloped datum: height of its underside and top surface at any plan point. */
+export function shedSlope(input: Pick<PolygonShedInput, "outline" | "wallPlateY" | "pitchDeg" | "thickness">): { zMin: number; zMax: number; underside: (x: number, z: number) => number; top: (x: number, z: number) => number } {
+  const zs = input.outline.map((p) => p[1]);
+  const zMin = Math.min(...zs), zMax = Math.max(...zs);
+  const run = Math.max(zMax - zMin, 1e-6);
+  const rise = Math.max(0.45, Math.tan((input.pitchDeg * Math.PI) / 180) * run);
+  const underside = (_x: number, z: number) => input.wallPlateY + rise * ((zMax - z) / run);
+  return { zMin, zMax, underside, top: (x, z) => underside(x, z) + input.thickness };
+}
+
 /**
  * A single-slope roof over any outline: high along the outline's north (−z) edge, low along its south edge,
  * like `buildShedRoof` — but sized by the recipe's own overhang (the outline is already grown by it) and
  * pitch instead of a fixed constant, and following the real footprint rather than one bounding rectangle.
  * The wall line is closed up to the sloped underside with an exterior-material infill band.
  */
-export function buildPolygonShedRoof(input: PolygonRoofInput & { pitchDeg: number; thickness: number }): HousePrimitive[] {
-  const zs = input.outline.map((p) => p[1]);
-  const zMin = Math.min(...zs), zMax = Math.max(...zs);
-  const run = Math.max(zMax - zMin, 1e-6);
-  const rise = Math.max(0.45, Math.tan((input.pitchDeg * Math.PI) / 180) * run);
-  const underside = (_x: number, z: number) => input.wallPlateY + rise * ((zMax - z) / run);
-  const top = (x: number, z: number) => underside(x, z) + input.thickness;
+export function buildPolygonShedRoof(input: PolygonShedInput): HousePrimitive[] {
+  const { underside, top } = shedSlope(input);
 
   const plane: number[] = [...flatPolygon(input.outline.map(P2), underside), ...flatPolygon(input.outline.map(P2), top)];
   const infill: number[] = [];

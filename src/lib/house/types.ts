@@ -1,3 +1,5 @@
+import type { MaterialType } from "@/types/house";
+
 export type PrimitiveCategory =
   | "floor"
   | "wall"
@@ -38,6 +40,8 @@ interface MaterialFields {
   assetId?: string;
   /** UV repeat scale — tiles across the face. Default 1. */
   uvScale?: number;
+  /** The surface this primitive is finished in, when its builder owns the finish (V2 Roof Systems). Absent = the renderer infers it from category and colour. */
+  surface?: MaterialType;
 }
 
 export interface BoxPrimitive extends MaterialFields {
@@ -61,6 +65,14 @@ export interface TriMeshPrimitive extends MaterialFields {
   /** Flat, world-space, non-indexed triangle vertex list: [x,y,z, x,y,z, ...] */
   vertices: number[];
   color: string;
+  /**
+   * Fitted pattern coordinates, two per vertex, in whole pattern modules: `u` counts units along the eave and `v`
+   * courses up the slope, so integers land on joints and a plane always carries a whole number of courses. Absent =
+   * the renderer projects metric planar UVs itself.
+   */
+  uvs?: number[];
+  /** Metres one `uvs` module covers: [unit width, course exposure]. */
+  uvModule?: [number, number];
 }
 
 export type HousePrimitive = BoxPrimitive | TriMeshPrimitive;

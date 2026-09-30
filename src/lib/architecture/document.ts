@@ -106,7 +106,12 @@ export interface RoofRecipe {
   /** flat/floating-flat only: a low wall around the roof's own (overhang-grown) perimeter — the classic modern-house parapet silhouette instead of a bare roof edge. `height` is meters above the roof deck. Opt-in, never a per-kind default. */
   parapet?: { height: number; thickness?: number };
 }
-export interface RoofComposition { recipes: readonly RoofRecipe[]; }
+/**
+ * The house's roof covering, as Roof System ids (see roofSystems/). Absent = derived from the roof zone's
+ * material. `counterpoint` is a deliberate second system on the named masses, with the reason for the break.
+ */
+export interface RoofSystemChoice { primary: string; counterpoint?: { system: string; massIds: readonly string[]; reason: string } }
+export interface RoofComposition { recipes: readonly RoofRecipe[]; system?: RoofSystemChoice; }
 
 export function validateArchitecturalDesignDocument(doc: ArchitecturalDesignDocument): string[] {
   const errors: string[] = [];

@@ -10,7 +10,8 @@ import { deriveTextureUrls, hasUsableTextures } from "@/lib/textures";
 import { featureKey, parseFeatureMeshId } from "@/lib/house/features/parseFeatureId";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { ShapedWaterSurface, WaterSurface } from "./WaterSurface";
-import { getSurfaceTextures, PATTERN_TILE_METERS, SURFACE_PATTERN } from "@/lib/proceduralTextures";
+import { getSurfaceTextures, PATTERN_GRID, PATTERN_TILE_METERS, SURFACE_PATTERN } from "@/lib/proceduralTextures";
+import { fittedTextureUvs } from "@/lib/roofSurfaceUv";
 import { SURFACE_PBR, usePbrSet, type SurfaceKey } from "@/lib/pbrLibrary";
 import { macroVariation, macroVariationCacheKey } from "@/lib/materialVariation";
 import { naturalGreen } from "../scenery/vegetation";
@@ -210,17 +211,20 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh }:
   // UVs are in metres / tile so a pattern keeps its real-world scale on any face size.
   const tile = library.textures && libraryDef ? libraryDef.tile : pattern ? PATTERN_TILE_METERS[pattern] : 1;
   const worldUv = !!pattern || !!library.textures;
+  const grid = library.textures && libraryDef ? libraryDef.grid : pattern ? PATTERN_GRID[pattern] : undefined;
 
   const triGeometry = useMemo(() => {
     if (primitive.kind !== "triMesh") return null;
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(primitive.vertices, 3));
     // Procedural patterns tile in metres; an imported PBR set repeats once per TRI_ASSET_TILE_METERS (times its uvScale).
-    if (worldUv) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, tile), 2));
-    else if (assetId) geometry.setAttribute("uv", new THREE.BufferAttribute(planarUvs(primitive.vertices, TRI_ASSET_TILE_METERS), 2));
+    // A roof surface with fitted pattern coordinates keeps them: whole courses per plane instead of a metric projection.
+    const fitted = primitive.uvs && primitive.uvModule ? { uvs: primitive.uvs, module: primitive.uvModule } : undefined;
+    if (worldUv) geometry.setAttribute("uv", new THREE.BufferAttribute(fitted ? fittedTextureUvs(fitted.uvs, fitted.module, tile, grid) : planarUvs(primitive.vertices, tile), 2));
+    else if (assetId) geometry.setAttribute("uv", new THREE.BufferAttribute(fitted ? fittedTextureUvs(fitted.uvs, fitted.module, TRI_ASSET_TILE_METERS) : planarUvs(primitive.vertices, TRI_ASSET_TILE_METERS), 2));
     geometry.computeVertexNormals();
     return geometry;
-  }, [primitive, worldUv, tile, assetId]);
+  }, [primitive, worldUv, tile, assetId, grid]);
 
   const boxGeometry = useMemo(() => {
     if (primitive.kind !== "box") return null;

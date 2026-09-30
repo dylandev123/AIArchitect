@@ -1,19 +1,18 @@
-import type { HouseModel, HousePrimitive } from "@/lib/house/types";
+import type { HouseModel, HousePrimitive, TriMeshPrimitive } from "@/lib/house/types";
 import { rotatePrimitiveY, translatePrimitive, buildFloorSlabPrimitive } from "@/lib/house/primitiveBuilders";
 import { paintOf } from "@/lib/house/architecture/parts";
-import { resolveMaterial } from "@/lib/house/materials";
+import { resolveMaterial, type ResolvedMaterial } from "@/lib/house/materials";
 import { buildFlatRoof } from "@/lib/house/roof/flatRoof";
-import { buildGableRoof } from "@/lib/house/roof/gableRoof";
-import { buildHipRoof } from "@/lib/house/roof/hipRoof";
-import { buildButterflyRoof } from "@/lib/house/roof/butterflyRoof";
 import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { FLOOR_THICKNESS, LEVEL_HEIGHT, MATERIAL_COLORS } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import type { CompassSide, RoofType } from "@/types/house";
 import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
-import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type Point, type WallEdge } from "./geometry/footprint";
-import { buildPolygonRoofPlate, buildPolygonShedRoof } from "./geometry/roofPlate";
+import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type WallEdge } from "./geometry/footprint";
+import { buildPolygonRoofPlate, buildPolygonShedRoof, shedSlope } from "./geometry/roofPlate";
+import { butterflyRoofGeometry, gableRoofGeometry, hipRoofGeometry, outlineEdges } from "./geometry/pitchedRoof";
+import { getRoofSystem, makePlane, planRoofSystems, resolveRoofFinish, roofShapeOf, type RoofAssembly, type RoofSystem, type RoofSystemPlan, type V3 } from "./roofSystems";
 import { extrudeOutline, triMeshOf } from "@/lib/house/geometry/mesh";
 import { buildMassOpenings, buildPlainWallEdge, buildGlazedWallEdge, buildColonnadePosts, buildEntryRecessDoor } from "./geometry/openings";
 import { buildParapetPrimitives } from "./geometry/parapet";
@@ -36,6 +35,8 @@ export interface ArchitectureDiagnostics {
   courtyards: CourtyardInfo[];
   /** The mass the composition reads as dominant: `main-living` if present, else the largest footprint. */
   dominantMassId?: string;
+  /** The house's primary Roof System, its counterpoint if any, and the system finishing each roof (see `planRoofSystems`). */
+  roofSystems: RoofSystemPlan;
 }
 
 /** Yaw (radians) that turns a mass's local south facade to face `direction`. */
@@ -312,14 +313,19 @@ function topFloorFootprintFor(mass: MassVolume): FloorFootprint {
  * extrusion of the grown outline instead — the roof keeps the prow's angle rather than squaring the corner.
  *
  * Shed roofs likewise follow the grown outline as one sloped plane, sized by the recipe's own overhang and
- * pitch — that's how a planned thin or deep eave actually reaches a shed roof. Ridge families (gable/hip/
- * butterfly) still build per rectangle of the square-cornered hull with their own fixed eave: they have no
- * way to follow an angled edge, which is why roof composition keeps them off chamfered volumes.
+ * pitch. Ridge families (gable/hip/butterfly) build per rectangle of the square-cornered hull, also from the
+ * recipe's own pitch and overhang (see geometry/pitchedRoof.ts): they have no way to follow an angled edge,
+ * which is why roof composition keeps them off chamfered volumes.
+ *
+ * Every family ends the same way: the geometry is handed to the mass's Roof System as faces + edges, and the
+ * system's `finish` hook returns the finished roof — its own finish, fitted surface pattern and edge trim.
  */
-function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, topFloor: FloorFootprint, options: ArchitectureCompileOptions): HousePrimitive[] {
-  const exterior = resolveMaterial(options.materials.exterior); const roof = resolveMaterial(options.materials.roof);
+function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, topFloor: FloorFootprint, options: ArchitectureCompileOptions, system: RoofSystem): HousePrimitive[] {
+  const exterior = resolveMaterial(options.materials.exterior);
+  const finish = resolveRoofFinish(system, options.materials.roof);
+  const roof: ResolvedMaterial = finish.paint;
   const base = mass.elevation + massTotalHeight(mass);
-  const kind = recipe.kind === "mono-pitch" ? "shed" : recipe.kind === "pavilion" ? "hip" : recipe.kind;
+  const kind = recipe.kind === "mono-pitch" ? "shed" : recipe.kind === "pavilion" ? "hip" : recipe.kind === "cross-gable" ? "gable" : recipe.kind;
   const yaw = mass.rotation + (recipe.orientation ?? 0);
   const place = (p: HousePrimitive) => rotatePrimitiveY(translatePrimitive(p, mass.position.x, mass.position.z), mass.position.x, mass.position.z, yaw);
   const fallbackRect: Rect = { x0: -mass.width / 2, x1: mass.width / 2, z0: -mass.depth / 2, z1: mass.depth / 2 };
@@ -327,58 +333,68 @@ function roofPrimitives(recipe: RoofRecipe, mass: MassVolume, topFloor: FloorFoo
   const overhang = Math.max(0, recipe.overhang ?? .6);
   const prefix = `architecture-${mass.id}-roof`;
   const grownOutline = () => (overhang > 0 ? offsetFootprintOutline(topFloor, mass.width, mass.depth, overhang).polygon : topFloor.polygon);
+  const shape = roofShapeOf(recipe);
+  const finished = (assembly: Omit<RoofAssembly, "id" | "shape">) => system.finish({ id: prefix, shape, ...assembly }, { finish, trim: paintOf(resolveMaterial(options.materials.trim)) }).map(place);
 
   if (kind === "shed") {
-    return buildPolygonShedRoof({
-      id: prefix, outline: grownOutline(), footprint: topFloor.polygon, wallPlateY: base, pitchDeg: recipe.pitch ?? 12, thickness: .2,
-      roof: paintOf(roof), exterior: paintOf(exterior),
-    }).map(place);
+    const input = { id: prefix, outline: grownOutline(), footprint: topFloor.polygon, wallPlateY: base, pitchDeg: shape.pitchDeg, thickness: .2, roof: paintOf(roof), exterior: paintOf(exterior) };
+    const built = buildPolygonShedRoof(input);
+    const slab = built.find((p): p is TriMeshPrimitive => p.kind === "triMesh" && p.id === `${prefix}-slope`);
+    // The slab becomes the system's surface face: low along the outline's south edge, rising north.
+    const { zMax, top } = shedSlope(input);
+    const xs = input.outline.map((p) => p[0]); const x0 = Math.min(...xs), x1 = Math.max(...xs);
+    const corners = input.outline.map((p): V3 => [p[0], top(p[0], p[1]), p[1]]);
+    const plane = makePlane("slope", corners, [x0, top(x0, zMax), zMax], [x1, top(x1, zMax), zMax], slab?.vertices ?? []);
+    const edges = outlineEdges(input.outline, top, (a, b, out) => (Math.abs(a[1] - b[1]) > 1e-6 ? "rake" : out[1] > 0 ? "eave" : "high-eave"));
+    return finished({ planes: [plane], edges, structure: built.filter((p) => p !== slab), slab: true });
   }
 
   const chamfered = topFloor.chamfers.length > 0;
-  let rects: readonly Rect[];
-  let grownPolygon: readonly Point[] | undefined;
-  const result: HousePrimitive[] = [];
-  const gap = kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap ?? 0;
-  const thickness = recipe.expression?.thickness ?? .25;
   if (isFlatFamily) {
-    grownPolygon = grownOutline();
-    rects = chamfered ? [] : decomposeToRectangles(grownPolygon);
-    if (!chamfered && rects.length === 0) rects = [fallbackRect];
-    if (chamfered) result.push(...buildPolygonRoofPlate({ id: prefix, outline: grownPolygon, footprint: topFloor.polygon, wallPlateY: base, gap, thickness, roof: paintOf(roof), exterior: paintOf(exterior) }).map(place));
-  } else {
-    const hullRects = chamfered ? decomposeToRectangles(topFloor.hullPolygon) : topFloor.rects;
-    rects = hullRects.length > 0 ? hullRects : [fallbackRect];
-  }
-  rects.forEach((rect, i) => {
-    const width = rect.x1 - rect.x0;
-    const depth = rect.z1 - rect.z0;
-    const cx = (rect.x0 + rect.x1) / 2;
-    const cz = (rect.z0 + rect.z1) / 2;
-    const rectPrefix = `${prefix}${rects.length > 1 ? `-${i}` : ""}`;
-    let out: HousePrimitive[];
-    // Flat recipes share a parameterized plane, fascia, soffit and closure assembly. `rects` here are already
-    // grown by `overhang` (see above), so the expression itself applies zero additional expansion.
-    if (isFlatFamily) out = buildRoofExpression({
-      id: rectPrefix, width, depth, wallPlateY: base, roofMaterial: roof, exteriorMaterial: exterior,
-      parameters: { ...recipe.expression, overhang: 0, verticalGap: kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap },
-    });
-    else if (kind === "gable" || kind === "cross-gable") out = buildGableRoof(width, depth, base, rectPrefix, roof, exterior);
-    else if (kind === "hip") out = buildHipRoof(width, depth, base, rectPrefix, roof, exterior);
-    else if (kind === "butterfly") out = buildButterflyRoof(width, depth, base, rectPrefix, roof, exterior);
-    else out = buildFlatRoof(width, depth, base, rectPrefix, roof, exterior);
-    // Offset to the rectangle's own local center first, then apply the mass's world placement uniformly.
-    result.push(...out.map((p) => place(translatePrimitive(p, cx, cz))));
-  });
-  // Opt-in only (see RoofRecipe.parapet doc comment): one loop around the roof's own already-grown polygon,
-  // not per rectangle — a parapet is one continuous perimeter wall, not a separate ring per roof plate.
-  if (isFlatFamily && recipe.parapet && grownPolygon) {
-    // Mirrors buildRoofExpression's own defaults (plane thickness .25, no gap unless floating-flat) so `parapet.height` is measured above the roof deck.
+    const grownPolygon = grownOutline();
+    const gap = kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap ?? 0;
+    const thickness = recipe.expression?.thickness ?? .25;
+    // Mirrors buildRoofExpression's own defaults (plane thickness .25, no gap unless floating-flat): the roof deck's top.
     const deckTop = base + gap + thickness;
-    const parapetPrimitives = buildParapetPrimitives(grownPolygon, base, deckTop + recipe.parapet.height, recipe.parapet.thickness ?? 0.18, paintOf(exterior), `architecture-${mass.id}-parapet`);
-    result.push(...parapetPrimitives.map(place));
+    const structure: HousePrimitive[] = [];
+    if (chamfered) structure.push(...buildPolygonRoofPlate({ id: prefix, outline: grownPolygon, footprint: topFloor.polygon, wallPlateY: base, gap, thickness, roof: paintOf(roof), exterior: paintOf(exterior) }));
+    else {
+      let rects = decomposeToRectangles(grownPolygon);
+      if (rects.length === 0) rects = [fallbackRect];
+      // Flat recipes share a parameterized plane, fascia, soffit and closure assembly. `rects` are already grown
+      // by `overhang` (see above), so the expression itself applies zero additional expansion.
+      rects.forEach((rect, i) => structure.push(...buildRoofExpression({
+        id: `${prefix}${rects.length > 1 ? `-${i}` : ""}`, width: rect.x1 - rect.x0, depth: rect.z1 - rect.z0, wallPlateY: base, roofMaterial: roof, exteriorMaterial: exterior,
+        parameters: { ...recipe.expression, overhang: 0, verticalGap: kind === "floating-flat" ? recipe.expression?.verticalGap ?? .18 : recipe.expression?.verticalGap },
+      }).map((p) => translatePrimitive(p, (rect.x0 + rect.x1) / 2, (rect.z0 + rect.z1) / 2))));
+    }
+    // Opt-in only (see RoofRecipe.parapet doc comment): one loop around the roof's own already-grown polygon,
+    // not per rectangle — a parapet is one continuous perimeter wall, not a separate ring per roof plate.
+    const parapetTop = recipe.parapet ? deckTop + recipe.parapet.height : undefined;
+    const parapetThickness = recipe.parapet?.thickness ?? 0.18;
+    if (parapetTop !== undefined) structure.push(...buildParapetPrimitives(grownPolygon, base, parapetTop, parapetThickness, paintOf(exterior), `architecture-${mass.id}-parapet`));
+    // The deck as a face with nothing to mesh (the plate is already built): pattern lines drain across its shorter side.
+    const xs = grownPolygon.map((p) => p[0]), zs = grownPolygon.map((p) => p[1]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), z0 = Math.min(...zs), z1 = Math.max(...zs);
+    const low: [V3, V3] = x1 - x0 >= z1 - z0 ? [[x0, deckTop, z1], [x1, deckTop, z1]] : [[x0, deckTop, z0], [x0, deckTop, z1]];
+    const deck = makePlane("deck", grownPolygon.map((p): V3 => [p[0], deckTop, p[1]]), low[0], low[1], []);
+    return finished({ planes: [deck], edges: outlineEdges(grownPolygon, () => deckTop, () => "perimeter"), structure, ...(parapetTop !== undefined ? { parapet: { topY: parapetTop, thickness: parapetThickness } } : {}) });
   }
-  return result;
+
+  const hullRects = chamfered ? decomposeToRectangles(topFloor.hullPolygon) : topFloor.rects;
+  const rects = hullRects.length > 0 ? hullRects : [fallbackRect];
+  if (kind === "gable" || kind === "hip" || kind === "butterfly") {
+    const build = kind === "gable" ? gableRoofGeometry : kind === "hip" ? hipRoofGeometry : butterflyRoofGeometry;
+    const parts = rects.map((rect) => build({ rect, wallPlateY: base, pitchDeg: shape.pitchDeg, overhang }));
+    const infill = parts.flatMap((p) => p.infill);
+    return finished({
+      planes: parts.flatMap((p, i) => p.planes.map((plane) => (rects.length > 1 ? { ...plane, id: `${plane.id}-${i}` } : plane))),
+      edges: parts.flatMap((p) => p.edges),
+      structure: infill.length ? [triMeshOf(`${prefix}-infill`, "roof", "Roof Wall Infill", infill, paintOf(exterior))] : [],
+    });
+  }
+  // "mixed" names no buildable family: the legacy parapet slab, in the system's finish.
+  return finished({ planes: [], edges: [], structure: rects.flatMap((rect, i) => buildFlatRoof(rect.x1 - rect.x0, rect.z1 - rect.z0, base, `${prefix}${rects.length > 1 ? `-${i}` : ""}`, roof, exterior).map((p) => translatePrimitive(p, (rect.x0 + rect.x1) / 2, (rect.z0 + rect.z1) / 2))) });
 }
 
 /** Axis-aligned footprint bounds, ignoring rotation — same approximation level the capability plugins already use (e.g. courtyard-edge-wall). */
@@ -431,6 +447,8 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
   const errors = validateArchitecturalDesignDocument(doc); if (errors.length) return { model: { id: "architecture-invalid", primitives: [] }, errors };
   const masses = resolveMasses(doc); const primitives: HousePrimitive[] = [];
   const clearedOverhangs = trimOverhangsForClearance(masses, doc.roofs.recipes);
+  const dominantMassId = pickDominantMass(masses)?.id;
+  const roofSystems = planRoofSystems(doc.roofs, dominantMassId, options.materials.roof.material);
   const capabilityDiagnostics: ArchitectureDiagnostics["capabilities"] = [];
   const geometryDiagnostics: ArchitectureDiagnostics["geometry"] = [];
   const shellMaterials: MassShellMaterials = { exterior: resolveMaterial(options.materials.exterior), trim: resolveMaterial(options.materials.trim), glass: resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass }) };
@@ -469,7 +487,8 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     }
     if (options.mode !== "massing-only" && options.mode !== "geometry-only" && options.mode !== "openings-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) {
       const cleared = clearedOverhangs.get(mass.id);
-      primitives.push(...roofPrimitives(cleared !== undefined && cleared !== recipe.overhang ? { ...recipe, overhang: cleared } : recipe, mass, topFloor, options));
+      const system = getRoofSystem(roofSystems.roofs.find((r) => r.recipeId === recipe.id && r.massId === mass.id)!.system)!;
+      primitives.push(...roofPrimitives(cleared !== undefined && cleared !== recipe.overhang ? { ...recipe, overhang: cleared } : recipe, mass, topFloor, options, system));
     }
     // Architectural stages declare intent. Only the capability engine chooses and invokes geometry plugins.
     // Always runs (even in "openings-only") — capability output like corner-glazing IS opening geometry.
@@ -490,7 +509,8 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     capabilities: capabilityDiagnostics,
     geometry: geometryDiagnostics,
     courtyards: computeCourtyards(masses),
-    dominantMassId: pickDominantMass(masses)?.id,
+    dominantMassId,
+    roofSystems,
   };
   return { model: { id: "architectural-design-document", primitives }, errors: [], diagnostics };
 }

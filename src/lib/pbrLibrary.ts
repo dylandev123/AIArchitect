@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import type { MaterialType } from "@/types/house";
+import type { PatternGrid } from "./roofSurfaceUv";
 
 /**
  * Bundled default PBR texture sets (ambientCG, CC0 — see public/textures/CREDITS.txt) for the stylised
@@ -21,12 +22,14 @@ export interface PbrSetDef {
   contrast: number;
   /** Lowest roughness the set's map may reach — stops glossy source photos glaring under a low sun. */
   roughFloor: number;
+  /** Unit/course layout of a roof covering's photo, measured from the image, for fitted roof patterns. */
+  grid?: PatternGrid;
 }
 
 const set = (dir: string, tile: number, normalScale = 1, roughnessGain = 1, contrast = 1.4, roughFloor = 0.6): PbrSetDef => ({ dir, tile, normalScale, roughnessGain, contrast, roughFloor });
 
 const PLASTER = set("plaster", 2.0, 1.1, 1, 2.4);
-const CLAY = set("roof-clay", 1.6, 1.4);
+const CLAY: PbrSetDef = { ...set("roof-clay", 1.6, 1.4), grid: { cols: 19, rows: 11, phase: [0, 0.62] } };
 const METAL = set("metal", 1.4, 0.8, 1, 1.2, 0.3);
 
 export const SURFACE_PBR: Partial<Record<SurfaceKey, PbrSetDef>> = {
@@ -40,7 +43,7 @@ export const SURFACE_PBR: Partial<Record<SurfaceKey, PbrSetDef>> = {
   cedar: set("cedar", 1.3, 1.3, 1, 1.7),
   tile: CLAY,
   terracotta: CLAY,
-  slate: set("roof-slate", 1.6, 1.6),
+  slate: { ...set("roof-slate", 1.6, 1.6), grid: { cols: 8, rows: 16, phase: [0, 0.22] } },
   metal: METAL,
   zinc: METAL,
   copper: METAL,
