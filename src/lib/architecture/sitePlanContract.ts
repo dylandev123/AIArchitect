@@ -1,6 +1,8 @@
 import { z } from "zod";
 import type { CompassSide } from "@/types/house";
-import type { MassFootprint } from "./massFootprint";
+import { insideMass, massHalfExtents, type MassFootprint } from "./massFootprint";
+import { routePathAroundMasses } from "./sitePathRouting";
+import { pathCurve } from "@/lib/house/features/paths";
 
 /** Browser-safe Site Plan contract and geometry checks. No AI, database, or stage dependencies. */
 const side = z.enum(["north", "south", "east", "west"]);
@@ -132,5 +134,64 @@ export function luxuryOutdoorCompositionErrors(plan: SitePlan, ctx: SitePlanCont
   if (terraceArea < poolArea * 0.7) errors.push(`Outdoor-living terrace must be usable with the pool: ${terraceArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
   if (deckArea < poolArea * 0.7) errors.push(`Pool deck must be usable around the pool: ${deckArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
   if (!plan.landscape.some((zone) => zone.purpose === "pool-planting") || !plan.landscape.some((zone) => zone.purpose === "view-framing")) errors.push("Luxury pool composition needs both pool-planting and view-framing landscape zones.");
+  return errors;
+}
+
+/** Every required node is reachable from arrival along the authored paths. */
+export function sitePlanConnected(plan: SitePlan): boolean {
+  const graph = new Map<string, Set<string>>();
+  for (const p of plan.paths) { if (p.from === p.to) continue; (graph.get(p.from) ?? graph.set(p.from, new Set()).get(p.from)!).add(p.to); (graph.get(p.to) ?? graph.set(p.to, new Set()).get(p.to)!).add(p.from); }
+  const seen = new Set(["arrival"]); let changed = true;
+  while (changed) { changed = false; for (const node of [...seen]) for (const next of graph.get(node) ?? []) if (!seen.has(next)) { seen.add(next); changed = true; } }
+  return ["parking", "entrance", "outdoor-living", "pool"].every((node) => seen.has(node));
+}
+
+export interface SiteRect { label: string; x0: number; x1: number; z0: number; z1: number }
+
+/** Where a wall-anchored feature lies: `offset` along the wall from its west/north corner, `out`..`out + reach` away from it. */
+function wallRect(label: string, house: SitePlanContext["house"], wall: z.infer<typeof side>, offset: number, span: number, out: number, reach: number): SiteRect {
+  const a = wallPoint(house, wall, offset, out), b = wallPoint(house, wall, offset + span, out + reach);
+  return { label, x0: Math.min(a.x, b.x), x1: Math.max(a.x, b.x), z0: Math.min(a.z, b.z), z1: Math.max(a.z, b.z) };
+}
+const centredRect = (label: string, r: { x: number; z: number; width: number; depth: number }): SiteRect => ({ label, x0: r.x - r.width / 2, x1: r.x + r.width / 2, z0: r.z - r.depth / 2, z1: r.z + r.depth / 2 });
+
+/** The ground each authored site feature occupies, in world metres — the same frame the renderer executes it in. */
+export function siteFeatureRects(plan: SitePlan, ctx: SitePlanContext): SiteRect[] {
+  return [
+    wallRect("driveway", ctx.house, plan.driveway.wall, plan.driveway.offset, plan.driveway.width, 0, plan.driveway.length),
+    ...plan.parking.map((p, i) => centredRect(`parking ${i + 1}`, p)),
+    wallRect("pool", ctx.house, plan.pool.wall, plan.pool.offset, plan.pool.width, plan.pool.distance, plan.pool.depth),
+    wallRect("terrace", ctx.house, plan.terrace.wall, plan.terrace.offset, plan.terrace.width, 0, plan.terrace.depth),
+    centredRect("pool deck", plan.poolDeck),
+  ];
+}
+
+/** A site feature this far into a building (or into the pool) is a collision, not a shared edge. */
+export const SITE_COLLISION_TOLERANCE_M = 0.5;
+const rectPenetration = (a: Omit<SiteRect, "label">, b: Omit<SiteRect, "label">) => Math.min(Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), Math.min(a.z1, b.z1) - Math.max(a.z0, b.z0));
+
+/**
+ * Major collisions in an authored plan, as executed: a feature standing inside a building mass, a pool under
+ * the cars, or a path that still runs through a building after obstacle routing. Validation only — the plan is
+ * returned to the Site Plan stage for repair (or blocks finalization); nothing is moved here.
+ */
+export function sitePlanCollisionErrors(plan: SitePlan, ctx: SitePlanContext): string[] {
+  const errors: string[] = [];
+  const masses = ctx.masses ?? [];
+  const rects = siteFeatureRects(plan, ctx);
+  for (const rect of rects) for (const mass of masses) {
+    const { halfW, halfD } = massHalfExtents(mass);
+    const depth = rectPenetration(rect, { x0: mass.cx - halfW, x1: mass.cx + halfW, z0: mass.cz - halfD, z1: mass.cz + halfD });
+    if (depth > SITE_COLLISION_TOLERANCE_M) errors.push(`The ${rect.label} runs ${depth.toFixed(1)}m into building mass "${mass.id}". Move or resize it clear of the building.`);
+  }
+  const pool = rects.find((r) => r.label === "pool")!;
+  for (const rect of rects.filter((r) => r.label === "driveway" || r.label.startsWith("parking"))) {
+    const depth = rectPenetration(rect, pool);
+    if (depth > SITE_COLLISION_TOLERANCE_M) errors.push(`The pool overlaps the ${rect.label} by ${depth.toFixed(1)}m. Keep water and vehicles apart.`);
+  }
+  for (const { from, to, ...path } of plan.paths) {
+    const crosses = routePathAroundMasses(path, masses).some((segment) => pathCurve(segment).some((p) => masses.some((mass) => insideMass(mass, p[0], p[1], -SITE_COLLISION_TOLERANCE_M))));
+    if (crosses) errors.push(`The ${from} → ${to} path cannot be carried around the building between its end points. Re-author its end points or route.`);
+  }
   return errors;
 }

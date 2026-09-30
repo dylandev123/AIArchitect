@@ -141,9 +141,18 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
       }
       if (frame.event === "error") {
         // Dev-only: which stage actually failed and how the whole staged run traced, for the Architecture debug panel.
-        // The live preview above is untouched — the last successfully streamed "stage" document stays on screen.
-        const data = frame.data as { error?: string; status?: number; stage?: string; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
+        const data = frame.data as { error?: string; code?: string; status?: number; stage?: string; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
         if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(req.projectId, data.architectureDiagnostics, data.stage, data.capabilityRequests);
+        // A V2 generation that failed or was blocked by the integrity gate is not a design: the streamed preview is
+        // an unfinished/rejected document and must not stay saved in the project as if it were one. Put the project
+        // back exactly as it was (only if this stream's preview is still what is there). Any other error keeps the
+        // last streamed "stage" document on screen, as before.
+        if (data.code === "v2-generation-failed" || data.code === "v2-integrity-blocked") {
+          const live = useProjectStore.getState().getProject(req.projectId);
+          if (live && lastWrittenRevision !== baseRevision && revisionOf(live.houseConfigJson) === lastWrittenRevision) {
+            useProjectStore.getState().updateHouseConfig(req.projectId, baseJson, "staged-generation:discarded");
+          }
+        }
         return { ok: false, error: data.error ?? "AI request failed. Please try again.", status: data.status ?? 502 };
       }
       if (frame.event === "done") {

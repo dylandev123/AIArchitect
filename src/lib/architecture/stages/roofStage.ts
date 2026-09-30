@@ -1,9 +1,11 @@
 import type { Timings } from "@/lib/ai/timing";
 import type { UsageMeta } from "@/lib/ai/usage/track";
 import type { ArchitecturalIntent } from "../designEngine";
-import type { MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy, VolumeHierarchy } from "../document";
+import type { MassVolume, RoofRecipe, SiteStrategy } from "../document";
 import type { DesignRecipe } from "@/types/library";
-import { parameterizeRoofsFromLibrary, roofRecipeCompatibility } from "../roofRecipeLibrary";
+import { roofRecipeCompatibility, roofRecipeSystem } from "../roofRecipeLibrary";
+import { roofConflicts } from "./integrityChecks";
+import { repairRequests } from "./recovery";
 import { getRoofSystem, roofShapeOf } from "../roofSystems";
 import { assessRoofLanguage, describeRoofLanguageRules, EAVE_OVERHANG_TOLERANCE, LOW_SLOPE_MAX_PITCH, PITCH_TOLERANCE, wallPlateHeight, type RoofLanguage } from "../roofLanguage";
 import { runStage, type RunStageResult } from "./runStage";
@@ -22,49 +24,16 @@ ${describeRoofLanguageRules()}
    - Orientation: sloped roofs keep their ridge/slope parallel or perpendicular to the dominant roof; \`orientation\` turns a roof relative to its own walls, so use 0 or π (π/2 only on a square mass).
    - Datums: volumes sharing a wall-plate height share one eave line (same family + same planned edge → overhangs within ${EAVE_OVERHANG_TOLERANCE}m), one parapet top, one floating reveal gap and plate thickness.
 3. Avoid unrelated gable/hip/flat/floating forms competing on one house. Break the language only when the architecture truly calls for it: then set that roof's \`counterpoint\` to the reason (at most one counterpoint family, never the dominant roof).
-4. An L-shaped or notched mass has no V2 valley geometry yet: never apply a gable or hip library recipe to it; use flat or shed guidance instead.
+4. A volume whose footprint is articulated (notched, L-shaped, recessed, with a projecting terrace) has no V2 valley geometry yet: never give it a gable, hip, butterfly, pavilion or cross-gable roof — use flat, floating-flat, shed or mono-pitch. The same holds for a chamfered prow.
+5. Keep every eave clear of the neighboring volumes: two roofs whose overhangs together exceed the gap between their volumes collide. A volume that stands against another can carry at most a 0.6m overhang. Under a volume stacked on top of it, a roof is a plain flat deck (no parapet, no floating gap).
 
-Choose family, overhang, pitch, orientation, parapet and floating expression where applicable; do not leave dimensional tuning to the compiler. Honor each volume's planned roof edge. Return exactly one roof for every mass listed, using its exact id.`;
-
-/** Failure-only defaults for an incomplete roof response. */
-const ROOF_KIND_DEFAULTS: Record<RoofRecipeKind, { overhang: number; pitch: number }> = {
-  flat: { overhang: 0.6, pitch: 2 },
-  "floating-flat": { overhang: 0.9, pitch: 2 },
-  shed: { overhang: 0.75, pitch: 12 },
-  "mono-pitch": { overhang: 0.75, pitch: 15 },
-  gable: { overhang: 0.6, pitch: 22 },
-  hip: { overhang: 0.6, pitch: 24 },
-  butterfly: { overhang: 0.9, pitch: 8 },
-  pavilion: { overhang: 0.9, pitch: 20 },
-  "cross-gable": { overhang: 0.6, pitch: 22 },
-  mixed: { overhang: 0.75, pitch: 14 },
-};
+You author the complete executable recipe for every roof — family, overhang AND pitch always, plus orientation, parapet and floating expression where applicable. Nothing is defaulted, substituted or overridden afterwards: a missing, incomplete or unbuildable roof is sent back to you, and no fallback roof is ever built in its place. Honor each volume's planned roof edge. Return exactly one roof for every mass listed, using its exact id.`;
 
 export interface RoofCompositionStageContext { intent: ArchitecturalIntent; siteStrategy: SiteStrategy; masses: readonly MassVolume[]; approvedRecipes?: readonly DesignRecipe[]; }
 
-/**
- * Scales a mass's overhang by its architectural weight instead of one flat per-kind default for every mass:
- * a dominant living volume keeps the family's full overhang; a connector/terrace/service volume — meant to
- * read as quieter, lighter infrastructure, not a second dominant form — gets a reduced one. Computed in
- * code, never asked of the model.
- */
-const ROLE_OVERHANG_SCALE: Record<MassVolume["role"], number> = {
-  "main-living": 1, "bedroom-wing": 0.85, "guest-pavilion": 0.85, garage: 0.7, service: 0.65, connector: 0.65, terrace: 0.65, veranda: 0.7, entry: 0.8,
-};
-
-/** A planned volume's hierarchy replaces the role-based scale — the plan already says how strongly it should read. */
-const HIERARCHY_OVERHANG_SCALE: Record<VolumeHierarchy, number> = { dominant: 1, supporting: 0.85, recessive: 0.65 };
-
-/** How far a `floating-flat` roof's reveal gap scales with the mass it sits on — a small mass with the flat `.18` default reads as floating fine, but a large one needs a deeper gap to read as floating at all. */
-function scaledVerticalGap(mass: MassVolume): number {
-  return Math.max(0.18, Math.min(0.4, Math.max(mass.width, mass.depth) * 0.02));
-}
-
 const hasChamfer = (m: MassVolume) => (m.operations ?? []).some((op) => op.type === "chamfer");
-const describeMass = (m: MassVolume) => `${m.id} "${m.name}", role ${m.role}, ${m.width.toFixed(1)}x${m.depth.toFixed(1)}m, ${m.floors} floor(s), wall plate at ${wallPlateHeight(m).toFixed(2)}m${m.rotation ? `, rotated ${Math.round((m.rotation * 180) / Math.PI)}°` : ""}${m.plan ? `, ${m.plan.hierarchy}, planned roof edge ${m.plan.roofEdge}` : ""}${hasChamfer(m) ? ", chamfered prow" : ""}.`;
-
-/** The families the compiler can build along an angled (chamfered) edge; any other becomes a shed there — the closest single-plane form. */
-const PROW_ROOF_KINDS = new Set<RoofRecipeKind>(["flat", "floating-flat", "shed", "mono-pitch"]);
+const isArticulated = (m: MassVolume) => (m.operations ?? []).some((op) => op.type !== "chamfer");
+const describeMass = (m: MassVolume) => `${m.id} "${m.name}", role ${m.role}, ${m.width.toFixed(1)}x${m.depth.toFixed(1)}m at (${m.position.x.toFixed(1)}, ${m.position.z.toFixed(1)}), ${m.floors} floor(s), wall plate at ${wallPlateHeight(m).toFixed(2)}m${m.rotation ? `, rotated ${Math.round((m.rotation * 180) / Math.PI)}°` : ""}${m.plan ? `, ${m.plan.hierarchy}, planned roof edge ${m.plan.roofEdge}` : ""}${hasChamfer(m) ? ", chamfered prow" : ""}${isArticulated(m) ? ", articulated footprint" : ""}.`;
 
 /** Canonical signed radians for a periodic authored roof rotation. */
 export function normalizeRoofOrientation(radians: number): number {
@@ -72,52 +41,8 @@ export function normalizeRoofOrientation(radians: number): number {
   return Math.round((((radians + Math.PI) % turn + turn) % turn - Math.PI) * 1_000_000) / 1_000_000;
 }
 
-/**
- * A floating plane reads as floating from its reveal gap and thinness, not from reach: a deep cantilever of
- * a thin plate reads as a detached lid hovering off the volume. So its overhang is proportioned to the
- * volume (≈10% of its short side, 0.45–0.9m) with only a small shelter allowance — never the deep-eave depth.
- */
-function floatingOverhang(minDim: number, shelter: boolean): number {
-  return Math.min(Math.max(0.45, Math.min(0.9, minDim * 0.1)) + (shelter ? 0.25 : 0), minDim * 0.12);
-}
-
-/**
- * Turns a chosen roof family into a recipe, honoring the volume's planned roof edge: a parapet is a crisp
- * flat box edge with no eave, a floating edge a thin plane on a glass reveal, and deep/thin eaves set the
- * overhang regardless of family. A mass without a plan keeps the family-and-role defaults.
- */
-export function roofForMass(mass: MassVolume, chosen: RoofRecipeKind, intent: ArchitecturalIntent): RoofRecipe {
-  const edge = mass.plan?.roofEdge;
-  const requested: RoofRecipeKind = edge === "parapet" ? "flat" : edge === "floating" ? "floating-flat" : chosen;
-  const kind: RoofRecipeKind = hasChamfer(mass) && !PROW_ROOF_KINDS.has(requested) ? "shed" : requested;
-  const defaults = ROOF_KIND_DEFAULTS[kind];
-  const scale = mass.plan ? HIERARCHY_OVERHANG_SCALE[mass.plan.hierarchy] : ROLE_OVERHANG_SCALE[mass.role];
-  // A shelter goal deepens every eave by the same margin `designArchitecture` uses, regardless of family.
-  const shelter = intent.environmentalGoals.includes("shelter");
-  const shelterBonus = shelter ? 0.5 : 0;
-  const base = defaults.overhang * scale;
-  const minDim = Math.min(mass.width, mass.depth);
-  const planned = edge === "parapet" ? 0
-    : edge === "thin-eave" ? Math.min(base, 0.4)
-    : edge === "deep-eave" ? Math.max(base * 1.6, 1.2) + shelterBonus
-    : edge === "floating" ? floatingOverhang(minDim, shelter)
-    : base + shelterBonus;
-  // A planned eave still stays in proportion to a small volume (the quality gate's roof-mass-proportionality limit is 40%).
-  const overhang = edge ? Math.min(planned, minDim * 0.35) : planned;
-  return {
-    id: `${mass.id}-roof`, massId: mass.id, kind, overhang: Math.round(overhang * 100) / 100, pitch: defaults.pitch,
-    ...(kind === "floating-flat" ? { expression: { verticalGap: scaledVerticalGap(mass) } } : {}),
-    ...(edge === "parapet" ? { parapet: { height: mass.plan?.hierarchy === "dominant" ? 0.55 : 0.4, thickness: 0.2 } } : {}),
-  };
-}
-
-/** What gets built when roof composition fails: every planned edge still honored, flat family otherwise. */
-export function fallbackRoofs(masses: readonly MassVolume[], intent: ArchitecturalIntent): RoofRecipe[] {
-  return masses.map((mass) => (mass.plan ? roofForMass(mass, "flat", intent) : { id: `${mass.id}-roof`, massId: mass.id, kind: "flat", overhang: 0.6 }));
-}
-
 /** The roof stage's result: the authored recipes, the declared language, and any language issues the model never repaired. */
-export type RoofCompositionStageResult = RunStageResult<RoofRecipe[]> & { language?: RoofLanguage; warnings?: string[]; libraryRecipe?: DesignRecipe };
+export type RoofCompositionStageResult = RunStageResult<RoofRecipe[]> & { language?: RoofLanguage; warnings?: string[]; libraryRecipe?: DesignRecipe; normalizations?: string[] };
 
 /** Every mass exactly once, by exact id — the only faults that make a response unbuildable. */
 function structuralRoofErrors(value: RoofCompositionStageOutput, ids: readonly string[]): string[] {
@@ -139,33 +64,45 @@ export function roofLanguageErrors(value: RoofCompositionStageOutput, masses: re
 }
 
 /**
- * Turns an authored response into recipes. The AI's valid executable recipe is authoritative — the compiler
- * will still reject impossible meshes; `roofForMass` is reserved for a missing/incomplete entry, never for
- * reinterpreting a complete one (and never for enforcing the roof language).
+ * Turns an authored response into recipes — a one-to-one conversion of what the architect returned. The only
+ * change is orientation normalization (a rotation is periodic). There is no fallback recipe: a mass the response
+ * leaves out simply has no roof here, and an entry without overhang/pitch stays incomplete — both are
+ * `roofConflicts`, repaired by this stage or fatal to the generation.
  */
-export function recipesFromAuthoredRoofs(value: RoofCompositionStageOutput, masses: readonly MassVolume[], intent: ArchitecturalIntent): RoofRecipe[] {
+export function recipesFromAuthoredRoofs(value: RoofCompositionStageOutput, masses: readonly MassVolume[]): RoofRecipe[] {
   const byId = new Map(value.roofs.map((r) => [r.massId, r] as const));
-  return masses.map((mass) => {
+  return masses.flatMap((mass) => {
     const authored = byId.get(mass.id);
-    if (!authored) return roofForMass(mass, "flat", intent);
-    if (authored.overhang === undefined || authored.pitch === undefined) return roofForMass(mass, authored.kind, intent);
-    return { id: `${mass.id}-roof`, massId: mass.id, kind: authored.kind, overhang: authored.overhang, pitch: authored.pitch,
+    if (!authored) return [];
+    return [{ id: `${mass.id}-roof`, massId: mass.id, kind: authored.kind,
+      ...(authored.overhang !== undefined ? { overhang: authored.overhang } : {}),
+      ...(authored.pitch !== undefined ? { pitch: authored.pitch } : {}),
       ...(authored.orientation !== undefined ? { orientation: normalizeRoofOrientation(authored.orientation) } : {}),
       ...(authored.expression ? { expression: authored.expression } : {}),
       ...(authored.parapet ? { parapet: authored.parapet } : {}),
-    };
+    }];
   });
+}
+
+/** Everything that makes an authored response unbuildable as authored: the id bookkeeping, then the physical roof checks. */
+export function roofAuthorityErrors(value: RoofCompositionStageOutput, masses: readonly MassVolume[]): string[] {
+  const structural = structuralRoofErrors(value, masses.map((m) => m.id));
+  return structural.length ? structural : repairRequests(roofConflicts(masses, recipesFromAuthoredRoofs(value, masses)));
 }
 
 /**
  * One model call for the whole roof composition instead of one per mass: by the time roofs are chosen every
  * mass is already placed, so the model sees the full composition and designs one roof language for it —
- * dominant family first, every other roof subordinate to it. Language incoherence drives the repair retry;
- * if the last attempt is still structurally complete, its authored roofs are kept (AI authority) and the
- * unrepaired language issues are reported as warnings rather than replaced by deterministic flat roofs.
+ * dominant family first, every other roof subordinate to it.
+ *
+ * Authority: the recipes that come out are exactly the ones the model authored. A missing, incomplete or
+ * unbuildable roof (see `roofConflicts`) and language incoherence both drive the repair retry. If the last
+ * attempt is complete and buildable but still has language issues, its authored roofs stand and the issues are
+ * reported as warnings (a subjective finding). Otherwise the stage FAILS — no deterministic roof is ever
+ * substituted. An approved library recipe is knowledge offered before authorship; citing one selects its roof
+ * system (the covering), never the roof's kind, pitch or overhang.
  */
 export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<RoofCompositionStageResult> {
-  const ids = ctx.masses.map((m) => m.id);
   const result = await runStage({
     stageName: "roof-composition",
     system: SYSTEM,
@@ -173,39 +110,37 @@ export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, 
       `Architectural intent: mood ${ctx.intent.mood.join(", ")}; environmental goals ${ctx.intent.environmentalGoals.join(", ")}.`,
       `Site: environment=${ctx.siteStrategy.environment}, terrain=${ctx.siteStrategy.terrain}, view faces ${ctx.siteStrategy.viewDirection}.`,
       `Masses (${ctx.masses.length}):\n${ctx.masses.map(describeMass).join("\n")}`,
-      ctx.approvedRecipes?.length ? `Approved procedural Roof Recipes (select at most one with libraryRecipeId; they may set system, kind, pitch and overhang, never geometry or GLBs):\n${ctx.approvedRecipes.map((r) => `- ${r.id}: ${r.name}; ${r.parameters.map((p) => `${p.key}=${p.value}`).join(", ")}; ${r.guidance.join(" ")}`).join("\n")}` : "",
-      previousErrors.length ? `Your previous attempt was rejected:\n${previousErrors.map((e) => `- ${e}`).join("\n")}` : "",
+      ctx.approvedRecipes?.length ? `Approved Roof Recipes — proven options you may draw on. If you adopt one, author its kind, pitch and overhang yourself in "roofs" and cite it with libraryRecipeId (at most one): that only selects its roof system (covering). A recipe never changes what you author.\n${ctx.approvedRecipes.map((r) => `- ${r.id}: ${r.name}; ${r.parameters.map((p) => `${p.key}=${p.value}`).join(", ")}; ${r.guidance.join(" ")}`).join("\n")}` : "",
+      previousErrors.length ? `Your previous attempt was rejected — repair exactly these and return every roof again:\n${previousErrors.map((e) => `- ${e}`).join("\n")}` : "",
     ].filter(Boolean).join("\n\n"),
     schema: roofCompositionStageOutputSchema,
     timings, remainingBudgetMs, usageMeta,
     // A language header plus one complete recipe (family, overhang, pitch, optional orientation/parapet/expression) per mass.
     maxOutputTokens: 250 + ctx.masses.length * 90,
     validate: (value) => {
-      const structural = structuralRoofErrors(value, ids);
-      return structural.length ? structural : roofLanguageErrors(value, ctx.masses);
+      const authority = roofAuthorityErrors(value, ctx.masses);
+      return authority.length ? authority : roofLanguageErrors(value, ctx.masses);
     },
   });
-  const selected = (value: RoofCompositionStageOutput, roofs: readonly RoofRecipe[]): DesignRecipe | undefined => {
+  /** The cited approved recipe, when its roof system can actually cover the dominant roof as authored. */
+  const cited = (value: RoofCompositionStageOutput, roofs: readonly RoofRecipe[]): DesignRecipe | undefined => {
     const recipe = ctx.approvedRecipes?.find((r) => r.id === value.libraryRecipeId);
-    const complex = ctx.masses.some((mass) => mass.plan?.form === "l-shape" || (mass.operations ?? []).some((op) => op.type === "notch"));
-    const parameterized = recipe ? parameterizeRoofsFromLibrary(recipe, roofs) : roofs;
-    const system = recipe ? getRoofSystem(recipe.parameters.find((p) => ["system", "roofsystem"].includes(p.key.replace(/[_.-]/g, "").toLowerCase()))?.value as string) : undefined;
-    const dominant = parameterized.find((roof) => roof.massId === value.language?.dominantMassId) ?? parameterized[0];
-    return recipe && !roofRecipeCompatibility(recipe, ctx.masses) && !(complex && parameterized.some((roof) => roof.kind === "gable" || roof.kind === "hip")) && !!system?.supports(roofShapeOf(dominant)) ? recipe : undefined;
+    if (!recipe || roofRecipeCompatibility(recipe, ctx.masses)) return undefined;
+    const system = getRoofSystem(roofRecipeSystem(recipe) ?? "");
+    const dominant = roofs.find((roof) => roof.massId === value.language?.dominantMassId) ?? roofs[0];
+    return system?.supports(roofShapeOf(dominant)) ? recipe : undefined;
   };
-  if (result.ok) {
-    const roofs = recipesFromAuthoredRoofs(result.value, ctx.masses, ctx.intent);
-    const libraryRecipe = selected(result.value, roofs);
-    return { ...result, value: libraryRecipe ? parameterizeRoofsFromLibrary(libraryRecipe, roofs) : roofs, ...(result.value.language ? { language: result.value.language } : {}), ...(libraryRecipe ? { libraryRecipe } : {}) };
-  }
-  // Only language issues left unrepaired: the authored roofs still build, so they stand.
+  const accepted = (value: RoofCompositionStageOutput, warnings: string[]): RoofCompositionStageResult => {
+    const roofs = recipesFromAuthoredRoofs(value, ctx.masses);
+    const libraryRecipe = cited(value, roofs);
+    const normalizations = value.roofs.flatMap((r) => (r.orientation !== undefined && normalizeRoofOrientation(r.orientation) !== r.orientation ? [`${r.massId}: roof orientation wrapped to ${normalizeRoofOrientation(r.orientation)} rad.`] : []));
+    return { ok: true, value: roofs, attempts: result.attempts, durationMs: result.durationMs,
+      ...(result.repairRequests ? { repairRequests: result.repairRequests } : {}),
+      ...(value.language ? { language: value.language } : {}), ...(warnings.length ? { warnings } : {}), ...(libraryRecipe ? { libraryRecipe } : {}), ...(normalizations.length ? { normalizations } : {}) };
+  };
+  if (result.ok) return accepted(result.value, []);
+  // Only language issues left unrepaired: the authored roofs are complete and buildable, so they stand.
   const last = result.rawValueTruncated ? undefined : roofCompositionStageOutputSchema.safeParse(result.rawValue);
-  if (last?.success && structuralRoofErrors(last.data, ids).length === 0) {
-    const warnings = roofLanguageErrors(last.data, ctx.masses);
-    const roofs = recipesFromAuthoredRoofs(last.data, ctx.masses, ctx.intent);
-    const libraryRecipe = selected(last.data, roofs);
-    return { ok: true, value: libraryRecipe ? parameterizeRoofsFromLibrary(libraryRecipe, roofs) : roofs, attempts: result.attempts, durationMs: result.durationMs,
-      ...(last.data.language ? { language: last.data.language } : {}), ...(warnings.length ? { warnings } : {}), ...(libraryRecipe ? { libraryRecipe } : {}) };
-  }
+  if (last?.success && roofAuthorityErrors(last.data, ctx.masses).length === 0) return accepted(last.data, roofLanguageErrors(last.data, ctx.masses));
   return result;
 }

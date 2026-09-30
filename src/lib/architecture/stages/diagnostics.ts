@@ -1,3 +1,5 @@
+import type { RecoveryOutcome } from "./recovery";
+
 /**
  * One entry per conceptual stage in the live pipeline, for dev/debug tooling only — never required by
  * rendering or by the response the renderer consumes. Intent, Site Strategy and Primary Mass are one
@@ -5,8 +7,12 @@
  */
 export interface StageDiagnostics {
   stage: "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "site-plan" | "compiler" | "quality-gate";
-  /** "fallback" = the stage produced a deterministic default instead of a model answer; the pipeline still completed. For "quality-gate", "fallback" means one or more checks failed — reporting only, never a hard failure. */
+  /** "error" = the stage failed and the generation does not finalize. "fallback" is only ever a warning-level finding (e.g. the quality gate's subjective checks, an unplaced optional volume) — never a deterministic substitute design. */
   status: "ok" | "fallback" | "error";
+  /** The stage's standardized recovery outcome (see recovery.ts). */
+  outcome?: RecoveryOutcome;
+  /** Conflicts sent back to this stage's AI as repair requests, in order — including ones a later attempt repaired. */
+  repairRequests?: string[];
   durationMs: number;
   /** Actual model calls made for this stage (0 for the deterministic compiler check and the quality gate — neither ever calls a model). */
   modelCalls: number;

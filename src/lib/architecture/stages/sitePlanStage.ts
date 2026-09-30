@@ -5,7 +5,7 @@ import { runStage, type RunStageResult } from "./runStage";
 import { routePathAroundMasses } from "@/lib/architecture/sitePathRouting";
 import type { MassFootprint } from "@/lib/architecture/massFootprint";
 import { clampNearBound } from "./numericNormalization";
-import { geometricGraphErrors, luxuryOutdoorCompositionErrors, sitePlanSchema, snapSitePlanPathEndpoints, type SitePlan, type SitePlanContext } from "@/lib/architecture/sitePlanContract";
+import { geometricGraphErrors, luxuryOutdoorCompositionErrors, sitePlanCollisionErrors, sitePlanConnected, sitePlanSchema, snapSitePlanPathEndpoints, type SitePlan, type SitePlanContext } from "@/lib/architecture/sitePlanContract";
 export { geometricGraphErrors, luxuryOutdoorCompositionErrors, sitePlanSchema, snapSitePlanPathEndpoints, type SitePlan, type SitePlanContext } from "@/lib/architecture/sitePlanContract";
 
 const SYSTEM = `You are the landscape architect for an executable residential site plan. Author exact geometry; do not leave placement to a later system. The graph MUST be connected by explicit paths: arrival → parking → entrance → outdoor-living terrace → pool. Put driveway, parking and entry on arrival; put terrace, pool and deck on the view side. For a luxury villa with strong indoor-outdoor living, compose a substantial pool proportionate to the house, a generous usable pool deck, a separate usable outdoor-living terrace, and pool-planting plus view-framing; do not make token-sized water or paving. Give every planting zone one purpose: privacy, entrance-planting, pool-planting or view-framing. Cars will be placed only inside your parking areas. Return all required objects.`;
@@ -81,21 +81,22 @@ export function sitePlanOperations(plan: SitePlan, masses: readonly MassFootprin
   ];
 }
 
-function connected(plan: SitePlan): boolean {
-  const graph = new Map<string, Set<string>>();
-  for (const p of plan.paths) { if (p.from === p.to) continue; (graph.get(p.from) ?? graph.set(p.from, new Set()).get(p.from)!).add(p.to); (graph.get(p.to) ?? graph.set(p.to, new Set()).get(p.to)!).add(p.from); }
-  const seen = new Set(["arrival"]); let changed = true;
-  while (changed) { changed = false; for (const node of [...seen]) for (const next of graph.get(node) ?? []) if (!seen.has(next)) { seen.add(next); changed = true; } }
-  return ["parking", "entrance", "outdoor-living", "pool"].every((node) => seen.has(node));
+/** Everything that makes an authored plan unusable as the canonical V2 Site Plan — the stage's repair requests, and the final gate's blocking findings. */
+export function sitePlanIntegrityErrors(plan: SitePlan, ctx: SitePlanContext): string[] {
+  const errors = sitePlanConnected(plan) ? [] : ["Paths must connect arrival, parking, entrance, outdoor-living and pool as one graph."];
+  return [...errors, ...geometricGraphErrors(plan, ctx), ...sitePlanCollisionErrors(plan, ctx)];
 }
 
+/**
+ * The canonical V2 Site Plan is authored here or not at all: a failed result (after the stage's one repair
+ * attempt) means the generation is incomplete — the caller must never fall back to legacy deterministic site
+ * design for it. Deterministic work is bounded numeric normalization, endpoint snapping (`normalizeSitePlan`)
+ * and obstacle routing at execution (`sitePlanOperations`).
+ */
 export async function runSitePlanStage(ctx: SitePlanContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<RunStageResult<SitePlan>> {
   return runStage({ stageName: "site-plan", system: SYSTEM, schema: sitePlanSchema, timings, remainingBudgetMs, usageMeta, maxOutputTokens: 1800, normalize: (raw) => normalizeSitePlan(raw, ctx),
     buildMessage: (errors) => [`BRIEF:\n${ctx.brief}`, `House: ${ctx.house.width}×${ctx.house.depth}m, ${ctx.house.floors} floor(s)${ctx.house.center ? `, centred at world (${ctx.house.center.x.toFixed(2)}, ${ctx.house.center.z.toFixed(2)}); wall offsets and distances are measured from this footprint` : ""}. View=${ctx.viewDirection}; arrival=${ctx.arrivalDirection}.`,
       ctx.masses && ctx.masses.length > 1 ? `Building masses (world centre, width×depth, yaw°) — keep all site geometry off them: ${ctx.masses.map((m) => `${m.id} (${m.cx.toFixed(1)}, ${m.cz.toFixed(1)}) ${m.width.toFixed(1)}×${m.depth.toFixed(1)} ${Math.round((m.rotation * 180) / Math.PI)}°`).join("; ")}.` : "", ctx.entrancePoints?.length ? `Actual V2 entrance door centre(s), in world x/z metres: ${ctx.entrancePoints.map((p) => `(${p.x.toFixed(2)}, ${p.z.toFixed(2)})`).join(", ")}. The entrance path must end at one of these.` : "", errors.length ? `Correct: ${errors.join("; ")}` : ""].filter(Boolean).join("\n\n"),
-    validate: (plan) => {
-      const errors = connected(plan) ? [] : ["Paths must connect arrival, parking, entrance, outdoor-living and pool as one graph."];
-      return [...errors, ...geometricGraphErrors(plan, ctx), ...luxuryOutdoorCompositionErrors(plan, ctx)];
-    },
+    validate: (plan) => [...sitePlanIntegrityErrors(plan, ctx), ...luxuryOutdoorCompositionErrors(plan, ctx)],
   });
 }

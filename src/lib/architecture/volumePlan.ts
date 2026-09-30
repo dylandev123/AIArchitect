@@ -4,32 +4,35 @@ import { LEVEL_HEIGHT } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import { computeCourtyards } from "./compiler";
 import type {
-  FacadeTreatment, FootprintScope, MassFacade, MassGeometryOperation, MassOpening, MassRole, MassVolume, SiteStrategy, VolumePlan,
+  FacadeTreatment, FootprintScope, MassFacade, MassGeometryOperation, MassOpening, MassVolume, SiteStrategy, VolumePlan,
 } from "./document";
 import { volumePlanSchema } from "./stages/schemas";
 
 /**
- * Plan → geometry. A `VolumePlan` is decided when a volume is placed; this module is the single place that
- * turns it into the existing articulated-geometry vocabulary (footprint operations, facade openings,
- * cantilever, capability intents) against the volume's FINAL orientation and neighbors. Deterministic and
- * AI-free: the Architectural Geometry Pass receives this realization as its baseline and may only refine it
- * (`conformToPlan`), and if that pass fails, this realization is what gets built — never a plain box.
+ * Plan → reference geometry. A `VolumePlan` is authored when a volume is placed (Foundation / Mass Expansion).
+ * This module turns it into the articulated-geometry vocabulary (footprint operations, facade openings,
+ * cantilever, capability intents) against the volume's FINAL orientation and neighbors — deterministic and
+ * AI-free. That realization is a REFERENCE and a VALIDATION TARGET only: the Architectural Geometry Pass is
+ * shown it as a baseline and authors the actual geometry, and `planConformance` measures what was authored
+ * against it. It is never what gets built when the AI differs or omits something — a missing planned element
+ * is a repair request to the owning stage, and an exhausted repair budget fails the generation.
  */
 
-/** What a volume's role implies when the model left a plan field out. Deliberately different per role: a garage is not a quieter living pavilion. */
-const ROLE_PLANS: Record<MassRole, VolumePlan> = {
-  "main-living": { form: "bar", height: "standard", hierarchy: "dominant", viewFacade: "framed-glass", arrivalFacade: "solid", flankFacades: "shaded-glass", courtyardFacade: "glass-wall", entry: "canopied", outdoor: "covered-terrace", outdoorSide: "view", roofEdge: "deep-eave", structure: "post-and-beam" },
-  "bedroom-wing": { form: "bar", height: "standard", hierarchy: "supporting", viewFacade: "shaded-glass", arrivalFacade: "slot", flankFacades: "solid", courtyardFacade: "glass-wall", entry: "none", outdoor: "none", outdoorSide: "view", roofEdge: "thin-eave", structure: "bearing-walls" },
-  "guest-pavilion": { form: "bar", height: "standard", hierarchy: "supporting", viewFacade: "glass-wall", arrivalFacade: "punched", flankFacades: "solid", courtyardFacade: "glass-wall", entry: "flush", outdoor: "veranda", outdoorSide: "view", roofEdge: "deep-eave", structure: "post-and-beam" },
-  garage: { form: "bar", height: "low", hierarchy: "recessive", viewFacade: "solid", arrivalFacade: "solid", flankFacades: "solid", entry: "flush", outdoor: "none", outdoorSide: "view", roofEdge: "parapet", structure: "bearing-walls" },
-  service: { form: "bar", height: "low", hierarchy: "recessive", viewFacade: "punched", arrivalFacade: "punched", flankFacades: "solid", entry: "flush", outdoor: "none", outdoorSide: "view", roofEdge: "parapet", structure: "bearing-walls" },
-  connector: { form: "bar", height: "low", hierarchy: "recessive", viewFacade: "glass-wall", arrivalFacade: "glass-wall", flankFacades: "solid", entry: "none", outdoor: "colonnade", outdoorSide: "view", roofEdge: "thin-eave", structure: "post-and-beam" },
-  terrace: { form: "bar", height: "low", hierarchy: "recessive", viewFacade: "glass-wall", arrivalFacade: "solid", flankFacades: "solid", entry: "none", outdoor: "colonnade", outdoorSide: "view", roofEdge: "deep-eave", structure: "post-and-beam" },
-  veranda: { form: "bar", height: "low", hierarchy: "recessive", viewFacade: "glass-wall", arrivalFacade: "solid", flankFacades: "solid", entry: "none", outdoor: "colonnade", outdoorSide: "view", roofEdge: "deep-eave", structure: "post-and-beam" },
-  entry: { form: "bar", height: "lofty", hierarchy: "supporting", viewFacade: "glass-wall", arrivalFacade: "solid", flankFacades: "solid", entry: "canopied", outdoor: "none", outdoorSide: "view", roofEdge: "thin-eave", structure: "post-and-beam" },
+/**
+ * What an unauthored plan field means: nothing. Role-independent on purpose — a field the architect left out
+ * must never turn into glazing, an entry, a terrace or a roof edge because of what the volume is called. The
+ * placing stages reject a plan with missing fields (`missingVolumePlanFields`) and ask for a repair; this value
+ * only keeps a plan-less fixture or pre-plan document executable as the plain volume it is.
+ */
+const UNAUTHORED_PLAN: VolumePlan = {
+  form: "bar", height: "standard", hierarchy: "supporting", viewFacade: "solid", arrivalFacade: "solid", flankFacades: "solid",
+  entry: "none", outdoor: "none", outdoorSide: "view", roofEdge: "thin-eave", structure: "bearing-walls",
 };
 
-/** Keeps only the individually valid fields of a raw model plan — an off-vocabulary value is dropped (and later defaulted from the role), never worth a repair retry. */
+/** Every plan field the architect must author; `courtyardFacade` only applies to a courtyard wing. */
+export const REQUIRED_PLAN_FIELDS = ["form", "height", "hierarchy", "viewFacade", "arrivalFacade", "flankFacades", "entry", "outdoor", "outdoorSide", "roofEdge", "structure"] as const satisfies readonly (keyof VolumePlan)[];
+
+/** Keeps only the individually valid fields of a raw model plan — an off-vocabulary value is dropped, and its absence is then reported by `missingVolumePlanFields`, never defaulted. */
 export function sanitizeVolumePlan(raw: unknown): Partial<VolumePlan> | undefined {
   if (!raw || typeof raw !== "object") return undefined;
   const source = raw as Record<string, unknown>;
@@ -42,9 +45,16 @@ export function sanitizeVolumePlan(raw: unknown): Partial<VolumePlan> | undefine
   return out as Partial<VolumePlan>;
 }
 
-export function completeVolumePlan(partial: Partial<VolumePlan> | undefined, role: MassRole): VolumePlan {
+/** The required plan fields a raw authored plan leaves out (or gave an off-vocabulary value for). */
+export function missingVolumePlanFields(raw: unknown): string[] {
+  const plan = sanitizeVolumePlan(raw) ?? {};
+  return REQUIRED_PLAN_FIELDS.filter((field) => plan[field] === undefined);
+}
+
+/** Normalizes a plan's valid fields into the full shape. Never invents architecture: an absent field stays "nothing". */
+export function completeVolumePlan(partial: Partial<VolumePlan> | undefined): VolumePlan {
   const defined = Object.fromEntries(Object.entries(partial ?? {}).filter(([, v]) => v !== undefined)) as Partial<VolumePlan>;
-  return { ...ROLE_PLANS[role], ...defined };
+  return { ...UNAUTHORED_PLAN, ...defined };
 }
 
 /** The total height a plan implies, or undefined for the standard `floors * LEVEL_HEIGHT`. Decided at placement so later volumes step against the real height. */
@@ -55,9 +65,9 @@ export function planHeight(plan: VolumePlan, floors: number): number | undefined
   return undefined;
 }
 
-/** Attaches a completed plan (and the height it implies) to a freshly placed mass. */
+/** Attaches the authored plan (valid fields only, and the height it states) to a freshly placed mass. */
 export function withVolumePlan(mass: MassVolume, rawPlan: unknown): MassVolume {
-  const plan = completeVolumePlan(sanitizeVolumePlan(rawPlan), mass.role);
+  const plan = completeVolumePlan(sanitizeVolumePlan(rawPlan));
   const height = planHeight(plan, mass.floors);
   return { ...mass, plan, ...(height !== undefined ? { height } : {}) };
 }
@@ -86,7 +96,7 @@ export function worldSideOf(facade: MassFacade, rotation: number): CompassSide {
 }
 
 /** The facade-bound capability plugins (entry-canopy, brise-soleil, pilotis) place geometry from the unrotated footprint, so they are only emitted where that is exact: rotation ≈ 0 or π. */
-const pluginAligned = (rotation: number) => Math.abs(Math.sin(rotation)) < 0.1;
+export const pluginAligned = (rotation: number) => Math.abs(Math.sin(rotation)) < 0.1;
 
 const totalHeight = (m: MassVolume) => m.height ?? m.floors * LEVEL_HEIGHT;
 const facadeLength = (f: MassFacade, m: { width: number; depth: number }) => (f === "north" || f === "south" ? m.width : m.depth);
@@ -129,6 +139,9 @@ export interface PlanFacades {
   /** The side a corner move (l-shape notch, prow) or a flank outdoor room turns toward: perpendicular to the view, away from arrival and neighbors. */
   freeSide: MassFacade;
 }
+
+/** An authored, facade-specific operation that cannot be built without changing its architecture. */
+export interface PlanRealizationConflict { code: "shared-facade" | "missing-exterior-facade" | "insufficient-geometry"; feature: string; facade?: MassFacade; detail: string }
 
 /** Resolves what each local facade of a placed mass actually faces. */
 export function resolvePlanFacades(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): PlanFacades {
@@ -173,11 +186,7 @@ function firstFreeFacade(facades: PlanFacades, candidates: readonly (MassFacade 
   return candidates.find((facade): facade is MassFacade => facade !== undefined && !facades.party.has(facade));
 }
 
-// ── Screens and privacy ──────────────────────────────────────────────────────────────────────────────
-
-const PRIVATE_ROLES = new Set<MassRole>(["bedroom-wing", "guest-pavilion"]);
-/** Sill above standing eye height: light and air without a view into the room from the drive. */
-const PRIVATE_SILL = 1.6;
+// ── Screens ──────────────────────────────────────────────────────────────────────────────────────────
 
 /** A screen-layer intent covering the glazing already on `facade`; undefined when there is no glazing to screen. */
 function screenIntent(mass: MassVolume, facade: MassFacade, openings: readonly MassOpening[]): CapabilityIntent | undefined {
@@ -190,33 +199,6 @@ function screenIntent(mass: MassVolume, facade: MassFacade, openings: readonly M
   } };
 }
 
-/**
- * A bedroom or guest volume never shows its rooms to the drive: punched/slot windows on its arrival facade
- * are lifted to a high sill, and glazing the plan put there is kept but screened. The design's own treatment
- * (how much glass, where) is unchanged — only how exposed it is.
- */
-function applyArrivalPrivacy(mass: MassVolume, facades: PlanFacades, openings: readonly MassOpening[], existing: readonly CapabilityIntent[]): { openings: MassOpening[]; capabilityIntents: CapabilityIntent[]; notes: string[] } {
-  const facade = facades.arrival;
-  if (!PRIVATE_ROLES.has(mass.role) || facade === facades.view || facade === facades.courtyard || facades.party.has(facade)) return { openings: [...openings], capabilityIntents: [], notes: [] };
-  const wallHeight = totalHeight(mass) / mass.floors - 0.2;
-  const notes: string[] = [];
-  const out = openings.map((o) => {
-    if (o.facade !== facade || o.type !== "opening-rhythm" || o.sill >= PRIVATE_SILL) return o;
-    notes.push(`${o.type} on the ${facade} arrival facade lifted to a ${PRIVATE_SILL}m privacy sill.`);
-    return { ...o, sill: PRIVATE_SILL, height: round(clamp(wallHeight - PRIVATE_SILL - 0.25, 0.5, Math.min(o.height, 0.9))) };
-  });
-  const side = worldSideOf(facade, mass.rotation);
-  const screened = existing.some((i) => (i.id === "screen-layer" || i.id === "brise-soleil") && i.parameters?.massId === mass.id && i.parameters?.facade === side);
-  const screen = screened ? undefined : screenIntent(mass, facade, out);
-  if (screen) notes.push(`glazing on the ${facade} arrival facade screened for privacy.`);
-  return { openings: out, capabilityIntents: screen ? [screen] : [], notes };
-}
-
-/** Privacy applied to an already-authored opening set (the Geometry Pass's refinement), with the intents it needs. */
-export function arrivalPrivacyFor(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, openings: readonly MassOpening[], existing: readonly CapabilityIntent[]) {
-  return applyArrivalPrivacy(mass, resolvePlanFacades(mass, masses, site), openings, existing);
-}
-
 // ── Realization ──────────────────────────────────────────────────────────────────────────────────────
 
 export interface PlanRealization {
@@ -224,7 +206,8 @@ export interface PlanRealization {
   openings: MassOpening[];
   capabilityIntents: CapabilityIntent[];
   cantilever?: MassVolume["cantilever"];
-  /** Where a plan item could not be realized as asked and what was built instead — diagnostics, never errors. */
+  conflicts?: PlanRealizationConflict[];
+  /** Where the reference realization had to express a plan item differently (e.g. fins as deep reveals) — diagnostics only. */
   notes: string[];
 }
 
@@ -293,16 +276,17 @@ function placeDoor(openings: MassOpening[], facade: MassFacade, mass: MassVolume
 }
 
 export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, planOverride?: VolumePlan): PlanRealization {
-  const plan = planOverride ?? mass.plan ?? completeVolumePlan(undefined, mass.role);
+  const plan = planOverride ?? mass.plan ?? completeVolumePlan(undefined);
   const facades = resolvePlanFacades(mass, masses, site);
   const operations: MassGeometryOperation[] = [];
   const capabilityIntents: CapabilityIntent[] = [];
   const notes: string[] = [];
+  const conflicts: PlanRealizationConflict[] = [];
   const multiStorey = mass.floors >= 2;
   const aligned = pluginAligned(mass.rotation);
   const levelHeight = totalHeight(mass) / mass.floors;
   const minDim = Math.min(mass.width, mass.depth);
-  const formFacade = firstFreeFacade(facades, [facades.view, facades.courtyard, facades.freeSide, oppositeFacade(facades.view)]);
+  const formFacade = facades.view;
   const formCompanion = formFacade === facades.freeSide ? oppositeFacade(facades.view) : facades.freeSide;
   const featureCorner = cornerOf(formFacade ?? facades.view, formCompanion);
   /** The span of each facade a footprint move already claims, so openings and later moves go around it. */
@@ -310,24 +294,23 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
 
   // 1. Form — the footprint itself, before anything is applied to its facades.
   if (plan.form === "l-shape") {
-    if (minDim < 6) notes.push(`l-shape needs a volume at least 6m deep (this one is ${minDim.toFixed(1)}m) — kept as a bar.`);
-    else if (!formFacade) notes.push("l-shape has no exterior edge to carve — kept as a bar.");
+    if (minDim < 6) conflicts.push({ code: "insufficient-geometry", feature: "l-shape", facade: formFacade, detail: `l-shape needs a volume at least 6m deep (this one is ${minDim.toFixed(1)}m).` });
+    else if (facades.party.has(formFacade)) conflicts.push({ code: "shared-facade", feature: "l-shape", facade: formFacade, detail: "l-shape's authored view facade is shared." });
     else {
-      if (formFacade !== facades.view) notes.push(`l-shape turned from the shared ${facades.view} facade onto the ${formFacade} exterior facade.`);
       const alongView = round(clamp(0.4 * facadeLength(formFacade, mass), 2.5, Math.min(8, 0.5 * facadeLength(formFacade, mass))));
       const alongSide = round(clamp(0.45 * facadeLength(formCompanion, mass), 2, Math.min(7, 0.5 * facadeLength(formCompanion, mass))));
       const viewIsNS = formFacade === "north" || formFacade === "south";
       operations.push({ type: "notch", corner: featureCorner, width: viewIsNS ? alongView : alongSide, depth: viewIsNS ? alongSide : alongView });
     }
   } else if (plan.form === "prow") {
-    if (minDim < 4) notes.push("prow needs a volume at least 4m deep — kept as a bar.");
-    else if (!formFacade) notes.push("prow has no exterior corner to express — kept as a bar.");
+    if (minDim < 4) conflicts.push({ code: "insufficient-geometry", feature: "prow", facade: formFacade, detail: "prow needs a volume at least 4m deep." });
+    else if (facades.party.has(formFacade)) conflicts.push({ code: "shared-facade", feature: "prow", facade: formFacade, detail: "prow's authored view facade is shared." });
     else {
-      if (formFacade !== facades.view) notes.push(`prow turned from the shared ${facades.view} facade onto the ${formFacade} exterior facade.`);
       operations.push({ type: "chamfer", corner: featureCorner, size: round(clamp(0.3 * minDim, 1.5, 5)), ...(GLASS_TREATMENTS.has(treatmentFor(formFacade, plan, facades)) ? { glazed: true } : {}) });
     }
   } else if (plan.form === "setback") {
-    if (!multiStorey) notes.push("setback needs 2+ floors — kept as a bar.");
+    if (!multiStorey) conflicts.push({ code: "insufficient-geometry", feature: "setback", facade: facades.view, detail: "setback needs 2+ floors." });
+    else if (facades.party.has(facades.view)) conflicts.push({ code: "shared-facade", feature: "setback", facade: facades.view, detail: "setback's authored view facade is shared." });
     else {
       const end = endToward(facades.freeSide);
       const span: Interval = end === 1 ? { start: 0.5, end: 0.94 } : { start: 0.06, end: 0.5 };
@@ -340,10 +323,8 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
   const outdoorFacade = ((): MassFacade | undefined => {
     if (plan.outdoor === "none") return undefined;
     const wanted = plan.outdoorSide === "courtyard" ? (facades.courtyard ?? facades.view) : plan.outdoorSide === "arrival" ? facades.arrival : plan.outdoorSide === "flank" ? facades.freeSide : facades.view;
-    const adapted = firstFreeFacade(facades, [wanted, facades.view, facades.courtyard, facades.freeSide, oppositeFacade(wanted)]);
-    if (adapted && adapted !== wanted) notes.push(`${plan.outdoor} moved from the shared ${wanted} facade to the ${adapted} exterior facade.`);
-    if (!adapted) notes.push(`${plan.outdoor} has no exterior edge available.`);
-    return adapted;
+    if (facades.party.has(wanted)) { conflicts.push({ code: "shared-facade", feature: plan.outdoor, facade: wanted, detail: `${plan.outdoor} cannot be moved from its authored ${wanted} facade because it is shared.` }); return undefined; }
+    return wanted;
   })();
   if (outdoorFacade) {
     const behind = depthBehind(outdoorFacade, mass);
@@ -362,9 +343,8 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
   }
 
   // 3. Entry — how the arrival side is entered; skipped where the outdoor room already is the way in.
-  const entryFacade = firstFreeFacade(facades, [facades.arrival, facades.freeSide, oppositeFacade(facades.arrival), facades.view]);
-  if (plan.entry !== "none" && entryFacade && entryFacade !== facades.arrival) notes.push(`entry moved from the shared ${facades.arrival} facade to the ${entryFacade} exterior facade.`);
-  if (plan.entry !== "none" && !entryFacade) notes.push("entry has no exterior facade available.");
+  const entryFacade = facades.party.has(facades.arrival) ? undefined : facades.arrival;
+  if (plan.entry !== "none" && !entryFacade) conflicts.push({ code: "shared-facade", feature: "entry", facade: facades.arrival, detail: "entry cannot be moved from its authored arrival facade because it is shared." });
   const entryThroughOutdoor = plan.entry !== "none" && entryFacade !== undefined && entryFacade === outdoorFacade;
   if (entryThroughOutdoor) notes.push(`entered through the ${plan.outdoor} on the arrival side instead of a separate ${plan.entry} entry.`);
   const entryActive = plan.entry !== "none" && entryFacade !== undefined && !entryThroughOutdoor;
@@ -383,17 +363,6 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
   // 4. Facades — each side's treatment from what it faces, going around the moves above.
   let openings: MassOpening[] = [];
   for (const facade of FACADES) openings.push(...facadeOpenings(facade, treatmentFor(facade, plan, facades), mass, plan, claimed[facade]));
-  if (mass.role === "main-living" && !openings.some((opening) => opening.type === "glazing-zone" && opening.heightRatio >= .65)) {
-    const glazedFacade = firstFreeFacade(facades, [facades.view, facades.courtyard, facades.freeSide, oppositeFacade(facades.arrival)]);
-    if (glazedFacade) {
-      const treatment = GLASS_TREATMENTS.has(plan.viewFacade) ? plan.viewFacade : "framed-glass";
-      const fallback = facadeOpenings(glazedFacade, treatment, mass, plan, claimed[glazedFacade]);
-      if (fallback.length) {
-        openings.push(...fallback);
-        notes.push(`substantial living glazing adapted onto the ${glazedFacade} exterior facade.`);
-      }
-    }
-  }
   // A recessed/canopied entry is still entered through a door: centred on the recess, so the compiler builds it in the recess's back wall.
   if (entryActive && recessWidth !== undefined) {
     openings = placeDoor(openings, entryFacade!, mass, { width: round(Math.min(1.8, recessWidth - 0.6)), height: round(Math.min(2.4, levelHeight - 0.3)), frame: true });
@@ -439,114 +408,70 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
     if (screen) capabilityIntents.push(screen);
   }
 
-  // 8. Privacy — a bedroom/guest volume's arrival side.
-  const privacy = applyArrivalPrivacy(mass, facades, openings, capabilityIntents);
-  openings = privacy.openings;
-  capabilityIntents.push(...privacy.capabilityIntents);
-  notes.push(...privacy.notes);
-
-  return { operations, openings, capabilityIntents, ...(cantilever ? { cantilever } : {}), notes };
+  return { operations, openings, capabilityIntents, ...(cantilever ? { cantilever } : {}), ...(conflicts.length ? { conflicts } : {}), notes };
 }
 
 // ── Conformance ──────────────────────────────────────────────────────────────────────────────────────
 
-/** Identity of a plan element, so a model's refinement can replace the baseline's version of it without duplicating it. */
+/**
+ * Identity of a planned element. What the plan decides is THAT a volume has a form move or an outdoor room;
+ * where and how large is the Geometry Pass's to author — so a notch at another corner, or a terrace on another
+ * side, is still that element. An entry belongs to the arrival facade and openings to the facade the plan gave
+ * their treatment to, so those are identified by facade.
+ */
 function opKey(op: MassGeometryOperation): string {
-  if (op.type === "notch" || op.type === "chamfer") return `corner:${op.corner}`;
+  if (op.type === "notch" || op.type === "chamfer") return `form:${op.type}`;
   if (op.type === "entry-recess") return `entry:${op.facade}`;
-  if (op.open) return `open:${op.facade}`;
-  return `${op.type}:${op.facade}:${op.floors ?? "all"}`;
+  if (op.open) return "outdoor-room";
+  return `${op.type}:${op.floors ?? "all"}`;
 }
+const opLabel = (op: MassGeometryOperation) => (op.type === "notch" || op.type === "chamfer" ? `${op.type} (reference: the ${op.corner} corner)`
+  : op.type === "entry-recess" ? `entry-recess on the ${op.facade} facade`
+  : op.open ? `open (open:true) recess or projection — the outdoor room (reference: the ${op.facade} facade)`
+  : `${op.type}${op.floors && op.floors !== "all" ? ` on floors:"${op.floors}"` : ""} (reference: the ${op.facade} facade)`);
 function openingKey(op: MassOpening): string { return `${op.facade}:${op.type === "glazing-zone" ? "glass" : op.type === "door" ? "door" : "rhythm"}`; }
+/** A capability the plan calls for on a volume (a canopy, fins, a screen, props), by id and — where it is facade-bound — world side. */
+function capabilityKey(intent: CapabilityIntent): string { return `${intent.id}:${typeof intent.parameters?.facade === "string" ? intent.parameters.facade : "*"}`; }
+const CAPABILITY_LABEL: Record<string, string> = { "entry-canopy": "canopy", "brise-soleil": "sun-fins", "screen-layer": "screen", pilotis: "pilotis" };
 
-function opInterval(op: MassGeometryOperation, mass: MassVolume): (Interval & { facade: MassFacade; floors: FootprintScope }) | undefined {
-  if (op.type === "notch" || op.type === "chamfer") return undefined;
-  if (op.type === "entry-recess") { const len = facadeLength(op.facade, mass); const half = Math.min(op.width, len) / 2 / len; return { facade: op.facade, start: 0.5 - half, end: 0.5 + half, floors: op.floors ?? "all" }; }
-  return { facade: op.facade, start: Math.min(op.start, op.end), end: Math.max(op.start, op.end), floors: op.floors ?? "all" };
-}
-const floorsIntersect = (a: FootprintScope, b: FootprintScope) => a === "all" || b === "all" || a === b;
-/** True when two footprint operations would claim the same corner, or overlapping spans of one facade on a shared floor. */
-export function conflicts(a: MassGeometryOperation, b: MassGeometryOperation, mass: MassVolume): boolean {
-  if ((a.type === "notch" || a.type === "chamfer") && (b.type === "notch" || b.type === "chamfer")) return a.corner === b.corner;
-  const ia = opInterval(a, mass), ib = opInterval(b, mass);
-  return !!ia && !!ib && ia.facade === ib.facade && floorsIntersect(ia.floors, ib.floors) && ia.start < ib.end && ib.start < ia.end;
-}
-
-/**
- * Merges the Geometry Pass's proposal with the plan's baseline realization, the plan always winning:
- * proposed moves that contradict the plan are dropped (glazing on a facade planned solid, a corner cut the
- * form doesn't have, anything on a shared wall); every plan element the proposal failed to realize is
- * added from the baseline, displacing any proposed move it would collide with.
- */
-export function conformToPlan(
-  mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, baseline: PlanRealization,
-  proposed: { operations: readonly MassGeometryOperation[]; openings: readonly MassOpening[] },
-): { operations: MassGeometryOperation[]; openings: MassOpening[]; notes: string[] } {
-  const plan = mass.plan ?? completeVolumePlan(undefined, mass.role);
-  const facades = resolvePlanFacades(mass, masses, site);
-  const notes: string[] = [];
-  const baselineOpKeys = new Set(baseline.operations.map(opKey));
-  const baselineOpeningKeys = new Set(baseline.openings.map(openingKey));
-  const glazedProw = baseline.operations.some((op) => op.type === "chamfer" && op.glazed);
-
-  const operations: MassGeometryOperation[] = [];
-  for (const op of proposed.operations) {
-    const facade = op.type === "notch" || op.type === "chamfer" ? undefined : op.facade;
-    const key = opKey(op);
-    const planOwned = key.startsWith("corner:") || key.startsWith("entry:") || key.startsWith("open:");
-    if (facade && facades.party.has(facade)) { notes.push(`dropped ${op.type} on the ${facade} shared wall.`); continue; }
-    if (planOwned && !baselineOpKeys.has(key)) { notes.push(`dropped ${op.type} (${key}) — not part of this volume's ${plan.form}/${plan.entry}/${plan.outdoor} plan.`); continue; }
-    operations.push(op.type === "chamfer" ? { ...op, ...(glazedProw ? { glazed: true } : {}) } : op);
-  }
-  const proposedOpKeys = new Set(operations.map(opKey));
-  for (const op of baseline.operations) {
-    if (proposedOpKeys.has(opKey(op))) continue;
-    for (let i = operations.length - 1; i >= 0; i--) {
-      if (conflicts(op, operations[i], mass)) { notes.push(`dropped proposed ${operations[i].type} on ${"facade" in operations[i] ? (operations[i] as { facade: string }).facade : "a corner"} — it collides with the planned ${op.type}.`); operations.splice(i, 1); }
-    }
-    operations.push(op);
-  }
-
-  const openings: MassOpening[] = [];
-  for (const op of proposed.openings) {
-    const treatment = treatmentFor(op.facade, plan, facades);
-    const isEntryDoor = op.type === "door" && baselineOpeningKeys.has(openingKey(op));
-    if (treatment === "solid" && !isEntryDoor) { notes.push(`dropped ${op.type} on the ${op.facade} facade — planned solid.`); continue; }
-    if (op.type === "glazing-zone" && (treatment === "punched" || treatment === "slot")) { notes.push(`dropped glazing-zone on the ${op.facade} facade — planned as ${treatment} windows.`); continue; }
-    if (op.type === "opening-rhythm" && (treatment === "glass-wall" || treatment === "framed-glass")) { notes.push(`dropped opening-rhythm on the ${op.facade} facade — planned as ${treatment}.`); continue; }
-    openings.push(op.type === "glazing-zone" && plan.structure === "post-and-beam" && GLASS_TREATMENTS.has(treatment) && treatment !== "ribbon" ? { ...op, frame: true } : op);
-  }
-  const proposedOpeningKeys = new Set(openings.map(openingKey));
-  let merged = [...openings];
-  for (const op of baseline.openings) {
-    if (proposedOpeningKeys.has(openingKey(op))) continue;
-    // A restored door is re-placed around the FINAL openings on its facade, which may no longer be the baseline's.
-    if (op.type === "door") merged = placeDoor(merged, op.facade, mass, { width: (op.end - op.start) * facadeLength(op.facade, mass), height: op.height ?? 2.4, frame: op.frame === true });
-    else merged.push(op);
-  }
-
-  return { operations, openings: merged, notes };
+export interface PlanConformance {
+  /** Planned elements the authored geometry does not contain. */
+  missing: string[];
+  /** Authored plan items that cannot be built where the plan puts them (owner: the stage that placed the volume). */
+  conflicts: PlanRealizationConflict[];
+  /** How the reference realization expressed the plan where it had to adapt — diagnostics only. */
+  notes: string[];
 }
 
 /**
- * Which of a volume's plan elements the built document is actually missing — the quality gate's view of plan
- * fidelity. Compares against a fresh baseline realization by the same element identity `conformToPlan` uses.
+ * Measures a volume's AUTHORED geometry (`mass.operations`/`openings`/`cantilever`, plus the document's
+ * capability intents for it) against the reference realization of its plan, by element identity. Validation
+ * only: nothing here is added to, removed from or moved on the mass. The Geometry Pass uses it to ask for a
+ * repair, the final integrity gate to block.
  */
-export function planConformance(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): { missing: string[]; notes: string[] } {
+export function planConformance(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, capabilities: readonly CapabilityIntent[] = []): PlanConformance {
   const baseline = realizeVolumePlan(mass, masses, site);
   const opKeys = new Set((mass.operations ?? []).map(opKey));
   const openingKeys = new Set((mass.openings ?? []).map(openingKey));
+  const capabilityKeys = new Set(capabilities.filter((c) => c.parameters?.massId === mass.id).flatMap((c) => [capabilityKey(c), `${c.id}:*`]));
+  const world = (key: string) => key.split(":")[1];
   const missing = [
-    ...baseline.operations.filter((op) => !opKeys.has(opKey(op))).map((op) => `${op.type} (${opKey(op)})`),
-    ...baseline.openings.filter((op) => !openingKeys.has(openingKey(op))).map((op) => `${op.type} on ${op.facade}`),
+    ...baseline.operations.filter((op) => !opKeys.has(opKey(op))).map(opLabel),
+    ...baseline.openings.filter((op) => !openingKeys.has(openingKey(op))).map((op) => `${op.type} on the ${op.facade} facade`),
+    ...baseline.capabilityIntents.filter((c) => !capabilityKeys.has(capabilityKey(c))).map((c) => `${CAPABILITY_LABEL[c.id] ?? c.id}${world(capabilityKey(c)) !== "*" ? ` on the ${localFacadeToward(world(capabilityKey(c)) as CompassSide, mass.rotation)} facade` : ""}`),
     ...(baseline.cantilever && !mass.cantilever ? ["cantilever"] : []),
   ];
-  return { missing, notes: baseline.notes };
+  return { missing, conflicts: baseline.conflicts ?? [], notes: baseline.notes };
+}
+
+/** Local facades of a mass that stand against a neighboring volume — nothing can be opened, pushed or glazed there. */
+export function sharedFacades(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): ReadonlySet<MassFacade> {
+  return resolvePlanFacades(mass, masses, site).party;
 }
 
 /** One-line plan summary with local facades resolved — what the Geometry Pass (and later volumes) read. */
 export function describeVolumePlan(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): string {
-  const plan = mass.plan ?? completeVolumePlan(undefined, mass.role);
+  const plan = mass.plan ?? completeVolumePlan(undefined);
   const f = resolvePlanFacades(mass, masses, site);
   const outdoor = plan.outdoor === "none" ? "no outdoor room" : `${plan.outdoor} on the ${plan.outdoorSide} side`;
   const flanks = FACADES.filter((x) => x !== f.view && x !== f.arrival && x !== f.courtyard);

@@ -85,12 +85,12 @@ describe("Luxury Tropical Courtyard Villa V2 (Part 8 visual-regression fixture)"
     expect(diagnostics?.dominantMassId).toBe("living");
   });
 
-  it("auto-orients both wings to face the shared courtyard", () => {
-    const { model } = compile();
-    // Auto-orientation only changes rotation; it never changes which primitives exist — this just proves the
-    // fixture actually exercises resolveMasses' courtyard branch rather than asserting an exact yaw value.
+  it("builds both courtyard wings exactly as authored — courtyard orientation is never invented", () => {
+    const { model, diagnostics } = compile();
     expect(model.primitives.some((p) => p.id.startsWith("architecture-west-wing-"))).toBe(true);
     expect(model.primitives.some((p) => p.id.startsWith("architecture-east-wing-"))).toBe(true);
+    // Neither wing authors a rotation or a rotation-setting relationship, so neither is turned toward the void.
+    for (const id of ["west-wing", "east-wing"]) expect(diagnostics?.masses.find((m) => m.id === id)?.rotation).toBe(0);
   });
 
   it("gives the living pavilion a non-rectangular top floor and a wall-less colonnade terrace", () => {
@@ -119,6 +119,7 @@ describe("Luxury Tropical Courtyard Villa V2 (Part 8 visual-regression fixture)"
     const gate = runDesignQualityGate(ARCHITECTURE_FIXTURES.luxuryTropicalCourtyardVillaV2, diagnostics!);
     expect(gate.checks.filter((c) => !c.passed)).toEqual([]);
     expect(gate.passed).toBe(true);
+    expect(gate.blocking).toEqual([]);
   });
 });
 

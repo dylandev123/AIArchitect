@@ -12,9 +12,11 @@ import { designArchitecture } from "../designEngine";
 import { compileArchitecture, resolveMasses } from "../compiler";
 import { scoreArchitecture } from "../critic";
 import type { ArchitecturalDesignDocument, MassVolume, SiteStrategy, VolumePlan } from "../document";
-import { completeComposition, MIN_COURTYARD_GAP_M } from "../stages/compositionCompletion";
+import { completeComposition } from "../stages/compositionCompletion";
 import { mergeCapabilityIntents, parameterizeCapabilityIntent, realizeVolumePlan, viewCorner, withVolumePlan, worldSideOf } from "../volumePlan";
 import { collectV2Evidence } from "../v2Evidence";
+import { runDesignQualityGate } from "../stages/qualityGate";
+import { authoredPlan, QUIET_PLAN } from "./authoredFixtures";
 
 /**
  * Regression cover for the V2 capability/authoring fixes the corrected Architecture Review surfaced. Every
@@ -33,7 +35,11 @@ const intentWith = (spatialGoals: ArchitecturalIntent["spatialGoals"]): Architec
   source: { environment: "suburban", scale: undefined, viewDirection: "south", arrivalDirection: "north", style: "modern tropical" },
 });
 const mass = (id: string, over: Partial<MassVolume> = {}): MassVolume => ({ id, name: id, role: "main-living", position: { x: 0, z: 0 }, width: 14, depth: 9, floors: 1, elevation: 0, rotation: 0, ...over });
-const planned = (m: MassVolume, plan: Partial<VolumePlan> = {}) => withVolumePlan(m, plan);
+/** A volume with a complete authored plan: the role fixture with the given decisions changed. */
+const planned = (m: MassVolume, plan: Partial<VolumePlan> = {}) => withVolumePlan(m, authoredPlan(m.role, plan));
+/** A volume whose authored plan asks for nothing but the given decisions. */
+const quiet = (m: MassVolume, plan: Partial<VolumePlan> = {}) => withVolumePlan(m, { ...QUIET_PLAN, ...plan });
+const usage = { projectId: null, requestType: "generation" as const, scope: "world" as const, model: "test" };
 
 function doc(masses: MassVolume[], capabilities: ArchitecturalDesignDocument["capabilities"] = []): ArchitecturalDesignDocument {
   return {
@@ -42,7 +48,7 @@ function doc(masses: MassVolume[], capabilities: ArchitecturalDesignDocument["ca
     metadata: { createdAt: "2026-01-01T00:00:00.000Z", source: "fixture", compiler: "procedural-architecture-v1" },
   };
 }
-/** What the pipeline builds when the Geometry Pass fails: every mass's plan realized deterministically. */
+/** Every mass's plan as its reference realization — what an architect who authors exactly the reference would build. */
 function realized(masses: MassVolume[]): ArchitecturalDesignDocument {
   const resolved = resolveMasses({ siteStrategy: site, massing: { masses } });
   const intents: NonNullable<ArchitecturalDesignDocument["capabilities"]>[number][] = [];
@@ -57,16 +63,25 @@ const score = (d: ArchitecturalDesignDocument, c: string) => review(d).criteria.
 describe("recessed and canopied entries produce a usable main door", () => {
   const recess = { type: "entry-recess" as const, facade: "north" as const, width: 3.2, depth: 1.3 };
 
-  it("builds a default door in an entry recess's back wall even when no door was authored", () => {
-    const { model } = compile(doc([mass("living", { operations: [recess] })]));
-    const panel = boxes(model.primitives).find((p) => p.label.endsWith("Glazed Door Panel"))!;
-    expect(panel.id).toMatch(/^architecture-living-wall-0-entry-\d+-door-panel$/);
-    // Set back in the recess (north face at z = -4.5, recess 1.3 deep), standing on the slab, usable size.
-    expect(panel.position[2]).toBeGreaterThan(-4.5 + 1.2);
-    expect(panel.size[0]).toBeGreaterThanOrEqual(1.4);
-    expect(panel.size[1]).toBeGreaterThanOrEqual(2.2);
-    const e = collectV2Evidence(doc([mass("living", { operations: [recess] })]))!;
-    expect(e.glass.filter((g) => g.door)).toEqual([expect.objectContaining({ side: "north", atGrade: true })]);
+  it("never builds a door the architect did not author: a door-less entry recess stays solid and is a blocking finding", () => {
+    const authored = doc([mass("living", { operations: [recess] })]);
+    const { model, diagnostics } = compile(authored);
+    expect(boxes(model.primitives).filter((p) => p.label.endsWith("Glazed Door Panel"))).toEqual([]);
+    expect(model.primitives.filter((p) => p.category === "window")).toEqual([]);
+    expect(diagnostics!.geometry[0].warnings.join(" ")).toMatch(/entry-recess on the north facade has no authored door/);
+    expect(collectV2Evidence(authored)!.glass.filter((g) => g.door)).toEqual([]);
+    const gate = runDesignQualityGate(authored, diagnostics!);
+    expect(gate.passed).toBe(false);
+    expect(gate.blocking.map((c) => c.id)).toContain("requested-geometry-survived-compilation");
+  });
+
+  it("compiles exactly the openings that were authored: no role adds glazing, windows or a door", () => {
+    for (const role of ["main-living", "bedroom-wing", "guest-pavilion", "entry"] as const) {
+      const { model, diagnostics } = compile(doc([mass("m", { role })]));
+      expect(model.primitives.filter((p) => p.category === "window"), role).toEqual([]);
+      expect(boxes(model.primitives).filter((p) => p.label.includes("Door")), role).toEqual([]);
+      expect(diagnostics!.geometry[0].openingsRequested, role).toBe(0);
+    }
   });
 
   it("moves an authored door that overlaps the recess into its back wall, with no facade slivers left beside it", () => {
@@ -78,7 +93,7 @@ describe("recessed and canopied entries produce a usable main door", () => {
   });
 
   it("keeps the upper floor of a two-storey recess solid unless a door is authored there", () => {
-    const { model } = compile(doc([mass("living", { floors: 2, operations: [recess] })]));
+    const { model } = compile(doc([mass("living", { floors: 2, operations: [recess], openings: [{ type: "door", facade: "north", start: 0.44, end: 0.56, floors: "ground" }] })]));
     expect(boxes(model.primitives).filter((p) => p.label.endsWith("Glazed Door Panel")).map((p) => p.id)).toEqual([expect.stringMatching(/wall-0-entry/)]);
   });
 
@@ -102,14 +117,11 @@ describe("recessed and canopied entries produce a usable main door", () => {
 describe("indoor-outdoor briefs author real open terraces", () => {
   const noTerrace = (m: MassVolume) => planned(m, { outdoor: "none" });
 
-  it("opens an at-grade covered terrace on the dominant volume when the model planned none", () => {
+  it("reports an unmet indoor-outdoor program instead of authoring a terrace", () => {
     const masses = resolveMasses({ siteStrategy: site, massing: { masses: [noTerrace(mass("living")), noTerrace(mass("bed", { role: "bedroom-wing", position: { x: -16, z: 0 }, width: 8, depth: 7 }))] } });
     const { masses: out, notes } = completeComposition(masses, intentWith(["indoor-outdoor"]), site);
-    expect(out.find((m) => m.id === "living")!.plan).toMatchObject({ outdoor: "covered-terrace", outdoorSide: "view" });
-    expect(notes.join(" ")).toMatch(/indoor-outdoor brief/);
-    const e = collectV2Evidence(realized(out))!;
-    expect(e.outdoorRooms.filter((r) => r.atGrade && r.massId === "living")).toEqual([expect.objectContaining({ side: "south" })]);
-    expect(score(realized(out), "indoor-outdoor").score).toBeGreaterThanOrEqual(0.75);
+    expect(out.map((m) => m.plan)).toEqual(masses.map((m) => m.plan));
+    expect(notes.join(" ")).toMatch(/no outdoor-room plan; no plan was added/);
   });
 
   it("leaves the model's own outdoor decisions alone", () => {
@@ -119,28 +131,41 @@ describe("indoor-outdoor briefs author real open terraces", () => {
     expect(completeComposition(quiet, intentWith(["privacy"]), site).masses[0].plan).toEqual(quiet[0].plan);
   });
 
-  it("restores the planned open terrace when the Geometry Pass drops every open edge", async () => {
+  it("asks the Geometry Pass to repair a dropped planned terrace, and fails rather than restoring it", async () => {
     const { runGeometryStage } = await import("../stages/geometryStage");
-    const masses = [planned(mass("mass-0"), { outdoor: "covered-terrace" })];
-    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [
-      { type: "recess", facade: "south", start: 0.1, end: 0.4, depth: 1 }, // plain recess where the terrace was planned
+    const masses = [quiet(mass("mass-0"), { outdoor: "covered-terrace" })];
+    const dropped = { output: { results: [{ massId: "mass-0", operations: [
+      { type: "recess", facade: "south", start: 0.1, end: 0.4, depth: 1 }, // a plain recess where the terrace was planned
       { type: "glazing-zone", facade: "south", start: 0.5, end: 0.9, heightRatio: 0.85 },
-    ] }] }, totalUsage: {} });
-    const result = await runGeometryStage({ brief: "An indoor-outdoor house", intent: intentWith(["indoor-outdoor"]), siteStrategy: site, masses }, createTimings(), 60_000, { projectId: null, requestType: "generation", scope: "world", model: "test" });
-    const geometry = result.byMassId.get("mass-0")!;
-    expect(geometry.operations).toContainEqual(expect.objectContaining({ type: "projection", facade: "south", open: true }));
-    expect(geometry.operations.some((op) => op.type === "recess")).toBe(false);
-    expect(geometry.planNotes.join(" ")).toMatch(/restored the planned open projection/);
+    ] }] }, totalUsage: {} };
+    generateText.mockResolvedValue(dropped);
+    const result = await runGeometryStage({ brief: "An indoor-outdoor house", intent: intentWith(["indoor-outdoor"]), siteStrategy: site, masses }, createTimings(), 60_000, usage);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect((generateText.mock.calls[1][0] as { messages: { content: string }[] }).messages[0].content).toMatch(/repair-required:missing-planned-geometry mass-0\].*outdoor room/);
+    expect(result.ok).toBe(false);
+    expect(!result.ok && result.errors.join(" ")).toMatch(/missing-planned-geometry/);
+    expect(result).not.toHaveProperty("byMassId");
+  });
+
+  it("accepts the repair when the Geometry Pass authors the terrace on its second attempt", async () => {
+    const { runGeometryStage } = await import("../stages/geometryStage");
+    const masses = [quiet(mass("mass-0"), { outdoor: "covered-terrace" })];
+    const own = { type: "projection", facade: "south", start: 0.2, end: 0.7, depth: 2.2, open: true };
+    generateText
+      .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [own] }] }, totalUsage: {} });
+    const result = await runGeometryStage({ brief: "x", intent: intentWith(["indoor-outdoor"]), siteStrategy: site, masses }, createTimings(), 60_000, usage);
+    expect(result.ok && result.byMassId.get("mass-0")!.operations).toEqual([expect.objectContaining(own)]);
+    expect(result.repairRequests?.join(" ")).toMatch(/missing-planned-geometry/);
   });
 
   it("keeps a terrace the Geometry Pass authored itself, wherever it put it", async () => {
     const { runGeometryStage } = await import("../stages/geometryStage");
-    const masses = [planned(mass("mass-0"), { outdoor: "covered-terrace" })];
+    const masses = [quiet(mass("mass-0"), { outdoor: "covered-terrace" })];
     const own = { type: "recess", facade: "east", start: 0.2, end: 0.8, depth: 2.4, open: true, postSpacing: 2.4 };
     generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [own] }] }, totalUsage: {} });
-    const result = await runGeometryStage({ brief: "x", intent: intentWith(["indoor-outdoor"]), siteStrategy: site, masses }, createTimings(), 60_000, { projectId: null, requestType: "generation", scope: "world", model: "test" });
-    const open = result.byMassId.get("mass-0")!.operations.filter((op) => (op.type === "recess" || op.type === "projection") && op.open);
-    expect(open).toEqual([expect.objectContaining({ facade: "east" })]);
+    const result = await runGeometryStage({ brief: "x", intent: intentWith(["indoor-outdoor"]), siteStrategy: site, masses }, createTimings(), 60_000, usage);
+    expect(result.ok && result.byMassId.get("mass-0")!.operations).toEqual([expect.objectContaining({ facade: "east", open: true })]);
   });
 });
 
@@ -149,23 +174,20 @@ describe("courtyard authoring and private-wing arrival privacy", () => {
   const wing = (id: string, kind: "surrounds-courtyard" | "separated-from" | "adjacent-to", side: "east" | "west" | undefined, over: Partial<MassVolume> = {}) =>
     planned(mass(id, { role: "bedroom-wing", width: 6, depth: 12, relationships: [{ kind, target: "living", ...(side ? { side } : {}), distance: 1 }], ...over }));
 
-  it("closes a one-wing courtyard with the wing already placed against the anchor, at a usable width", () => {
+  it("reports an incomplete authored courtyard without recruiting or changing wings", () => {
     const { masses, notes } = completeComposition([anchor, wing("west", "surrounds-courtyard", "west"), wing("east", "separated-from", "east", { role: "guest-pavilion" })], intentWith(["privacy"]), site);
-    for (const id of ["west", "east"]) expect(masses.find((m) => m.id === id)!.relationships![0]).toMatchObject({ kind: "surrounds-courtyard", distance: MIN_COURTYARD_GAP_M });
-    expect(notes.join(" ")).toMatch(/second wing/);
-    const e = collectV2Evidence(realized(masses))!;
-    expect(e.courtyards).toEqual([expect.objectContaining({ anchorMassId: "living", valid: true })]);
-    expect(score(realized(masses), "composition").reason).toMatch(/compiled .*courtyard enclosed by 3 volumes/);
+    expect(masses).toEqual([anchor, wing("west", "surrounds-courtyard", "west"), wing("east", "separated-from", "east", { role: "guest-pavilion" })]);
+    expect(notes.join(" ")).toMatch(/without a usable authored side\/distance/);
   });
 
-  it("infers a missing side (never the view side) and never recruits a garage or moves a locked wing", () => {
+  it("reports a missing courtyard side and preserves every authored relationship", () => {
     const locked = wing("west", "surrounds-courtyard", "west", { placementLocked: true, position: { x: -12, z: 0 } });
     const noSide = wing("east", "surrounds-courtyard", undefined);
     const garage = planned(mass("garage", { role: "garage", width: 7, depth: 6, relationships: [{ kind: "adjacent-to", target: "living", side: "north", distance: 2 }] }));
-    const { masses } = completeComposition([anchor, locked, noSide, garage], intentWith(["privacy"]), site);
+    const { masses, notes } = completeComposition([anchor, locked, noSide, garage], intentWith(["privacy"]), site);
     const inferred = masses.find((m) => m.id === "east")!.relationships![0];
-    expect(inferred.side).toBeDefined();
-    expect(inferred.side).not.toBe(site.viewDirection);
+    expect(inferred.side).toBeUndefined();
+    expect(notes.join(" ")).toMatch(/without a usable authored side/);
     expect(masses.find((m) => m.id === "west")!.relationships![0].distance).toBe(1);
     expect(masses.find((m) => m.id === "garage")!.relationships![0].kind).toBe("adjacent-to");
   });
@@ -175,23 +197,24 @@ describe("courtyard authoring and private-wing arrival privacy", () => {
     expect(completeComposition(once, intentWith(["indoor-outdoor", "privacy"]), site).masses).toEqual(once);
   });
 
-  it("lifts a private wing's arrival-side windows to a privacy sill and screens arrival glazing", () => {
+  it("does not change a private wing's authored arrival facade: no privacy sill, no added screen", () => {
     const bed = (arrivalFacade: VolumePlan["arrivalFacade"]) => planned(mass("bed", { role: "bedroom-wing", width: 10, depth: 7 }), { arrivalFacade });
     const punched = realizeVolumePlan(bed("punched"), [bed("punched")], site);
-    const rhythm = punched.openings.find((o) => o.facade === "north" && o.type === "opening-rhythm");
-    expect(rhythm).toMatchObject({ sill: 1.6 });
+    expect(punched.openings.find((o) => o.facade === "north" && o.type === "opening-rhythm")).toMatchObject({ sill: 0.9, height: 1.4 });
     const glazed = realizeVolumePlan(bed("glass-wall"), [bed("glass-wall")], site);
-    expect(glazed.capabilityIntents).toContainEqual(expect.objectContaining({ id: "screen-layer", parameters: expect.objectContaining({ massId: "bed", facade: "north" }) }));
-    // Compiled, neither leaves eye-level glass open to the drive.
-    for (const d of [realized([bed("punched")]), realized([bed("glass-wall")])]) expect(score(d, "privacy").reason).toMatch(/0\.0m² of eye-level, unscreened glass faces the north arrival/);
+    expect(glazed.openings.some((o) => o.facade === "north" && o.type === "glazing-zone")).toBe(true);
+    expect(glazed.capabilityIntents.filter((i) => i.id === "screen-layer")).toEqual([]);
+    expect([...punched.notes, ...glazed.notes].join(" ")).not.toMatch(/privacy/);
   });
 
-  it("applies the same privacy to glazing the Geometry Pass authors on a private wing's arrival side", async () => {
+  it("builds a private wing's arrival-side windows exactly as the Geometry Pass authored them", async () => {
     const { runGeometryStage } = await import("../stages/geometryStage");
-    const masses = [planned(mass("mass-0", { role: "bedroom-wing", width: 10, depth: 7 }))];
-    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [{ type: "opening-rhythm", facade: "north", count: 4, width: 1.2, height: 1.4, sill: 0.8 }] }] }, totalUsage: {} });
-    const result = await runGeometryStage({ brief: "x", intent: intentWith(["privacy"]), siteStrategy: site, masses }, createTimings(), 60_000, { projectId: null, requestType: "generation", scope: "world", model: "test" });
-    expect(result.byMassId.get("mass-0")!.openings.find((o) => o.facade === "north" && o.type === "opening-rhythm")).toMatchObject({ sill: 1.6 });
+    const masses = [quiet(mass("mass-0", { role: "bedroom-wing", width: 10, depth: 7 }), { arrivalFacade: "punched" })];
+    const authored = { type: "opening-rhythm", facade: "north", count: 4, width: 1.2, height: 1.4, sill: 0.8 };
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [authored] }] }, totalUsage: {} });
+    const result = await runGeometryStage({ brief: "x", intent: intentWith(["privacy"]), siteStrategy: site, masses }, createTimings(), 60_000, usage);
+    expect(result.ok && result.byMassId.get("mass-0")!.openings).toEqual([expect.objectContaining(authored)]);
+    expect(result.ok && result.capabilityIntents).toEqual([]);
   });
 });
 

@@ -39,6 +39,10 @@ export interface OutdoorAssetPlacement {
         depth: number;
         height: number;
     };
+    /** Resolved local model bounds used to derive this persisted world transform.  Procedural assets are [0, size]. */
+    localBounds?: { min: [number, number, number]; max: [number, number, number] };
+    /** The surface selected by the deterministic placer; y is the model-origin world coordinate, never an offset. */
+    support?: { kind: "terrain" | "deck" | "terrace" | "patio"; elevation: number };
 }
 type Bounds = {
     x: number;
@@ -60,7 +64,16 @@ function bounds(p: HousePrimitive): Bounds {
 const overlaps = (a: Bounds, b: Bounds, gap = 0.15) => Math.abs(a.x - b.x) < (a.w + b.w) / 2 + gap && Math.abs(a.z - b.z) < (a.d + b.d) / 2 + gap;
 export function placementBounds(p: OutdoorAssetPlacement): Bounds {
     const c = Math.abs(Math.cos(p.rotation[1])), s = Math.abs(Math.sin(p.rotation[1]));
-    return { x: p.position[0], z: p.position[2], y: p.position[1], h: p.dimensions.height, w: p.dimensions.width * c + p.dimensions.depth * s, d: p.dimensions.depth * c + p.dimensions.width * s };
+    const local = p.localBounds;
+    const scale = p.scale;
+    const cx = local ? (local.min[0] + local.max[0]) * scale / 2 : 0;
+    const cz = local ? (local.min[2] + local.max[2]) * scale / 2 : 0;
+    // Three's Y rotation maps local x/z this way.  `position` is the persisted model origin,
+    // while collision checks must use the transformed geometry centre.
+    const x = p.position[0] + cx * Math.cos(p.rotation[1]) + cz * Math.sin(p.rotation[1]);
+    const z = p.position[2] - cx * Math.sin(p.rotation[1]) + cz * Math.cos(p.rotation[1]);
+    const y = local ? p.position[1] + local.min[1] * scale : p.position[1];
+    return { x, z, y, h: p.dimensions.height, w: p.dimensions.width * c + p.dimensions.depth * s, d: p.dimensions.depth * c + p.dimensions.width * s };
 }
 /** Conservative solid bounds, except the known open four-post pergola envelope. */
 export function placementVolumes(q: OutdoorAssetPlacement): Bounds[] {

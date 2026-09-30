@@ -25,20 +25,11 @@ export function compileV2SiteFeatures(plan: V2SiteFeaturePlan, materials: Materi
 }
 
 export function v2SitePlanOf(root: Record<string, unknown>): V2SiteFeaturePlan | undefined {
-  // A full authored Site Plan is preferred. Older V2 projects in the workspace predate
-  // that persistence field but do retain the deck the renderer already uses; it supplies
-  // the identical pool-deck anchor required by this deliberately narrow edit surface.
+  // Follow-up V2 placement depends on the canonical, persisted Site Plan.  Reconstructing
+  // an anchor from legacy deck geometry can silently move an addition after reload.
   const parsed = v2SiteFeaturePlanSchema.safeParse(root.sitePlan);
   if (parsed.success) return parsed.data;
-  const deck = Array.isArray(root.decks) ? root.decks.find((value): value is Record<string, unknown> =>
-    typeof value === "object" && value !== null && !Array.isArray(value)
-    && ["x", "z", "width", "depth"].every((key) => typeof value[key] === "number" && Number.isFinite(value[key]))
-  ) : undefined;
-  if (!deck) return undefined;
-  const recovered = v2SiteFeaturePlanSchema.safeParse({
-    poolDeck: { x: deck.x, z: deck.z, width: deck.width, depth: deck.depth },
-  });
-  return recovered.success ? recovered.data : undefined;
+  return undefined;
 }
 
 export function applyV2SiteFeatureOperation(plan: V2SiteFeaturePlan, operation: V2SiteFeatureOperation): V2SiteFeaturePlan {

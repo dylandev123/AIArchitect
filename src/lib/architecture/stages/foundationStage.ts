@@ -4,16 +4,11 @@ import type { UsageMeta } from "@/lib/ai/usage/track";
 import type { SiteHints } from "@/lib/house/siteSettings";
 import type { ArchitecturalIntent } from "../designEngine";
 import type { MassVolume, SiteStrategy } from "../document";
-import { sanitizeVolumePlan, withVolumePlan } from "../volumePlan";
+import { missingVolumePlanFields, sanitizeVolumePlan, withVolumePlan } from "../volumePlan";
 import { runStage } from "./runStage";
-import { recoverFields } from "./partialRecovery";
-import {
-  COMPOSITION_BIAS_OPTIONS, foundationStageOutputSchema, INTENT_GOALS, VOLUME_PLAN_GUIDE,
-  intentStageOutputSchema, primaryMassStageOutputSchema, siteStrategyStageOutputSchema,
-  type FoundationStageOutput,
-} from "./schemas";
-
-const isDev = process.env.NODE_ENV !== "production";
+import { COMPOSITION_BIAS_OPTIONS, foundationStageOutputSchema, INTENT_GOALS, VOLUME_PLAN_GUIDE, type FoundationStageOutput } from "./schemas";
+import { placementConflicts } from "./integrityChecks";
+import { repairRequests } from "./recovery";
 
 /**
  * `mood`/`spatialGoals`/`environmentalGoals` are a closed enum (`INTENT_GOALS`) and `compositionBias` is a
@@ -36,34 +31,13 @@ export interface FoundationStageContext { brief: string; hints: SiteHints; envir
 export interface FoundationStageResult { intent: ArchitecturalIntent; siteStrategy: SiteStrategy; terrainResponse: string; primaryMass: MassVolume; }
 
 /**
- * `"ok"` = schema-validated within the normal attempt budget, no recovery needed. `"recovered"` = every
- * attempt failed validation, but at least one field of the model's last response was individually valid and
- * was kept — only the remaining fields were defaulted. `"fallback"` = nothing usable came back at all (e.g.
- * the model call errored outright), so every field is the deterministic default.
+ * Foundation either authors the three decisions (`ok: true`) or fails. There is no default intent, site
+ * strategy or primary mass: a response that cannot be repaired inside the stage's retry budget leaves the
+ * generation without a design, and the pipeline does not finalize (see recovery.ts).
  */
-export interface FoundationStageRunResult {
-  value: FoundationStageResult;
-  status: "ok" | "recovered" | "fallback";
-  attempts: number;
-  durationMs: number;
-  recoveredFields: string[];
-  defaultedFields: string[];
-  error?: string;
-}
-
-function defaultFoundationOutput(ctx: FoundationStageContext): FoundationStageOutput {
-  return {
-    intent: {
-      mood: ["calm"], spatialGoals: ["openness"], environmentalGoals: ["daylight"],
-      hierarchyGoals: ["legible main living volume"], compositionBias: "asymmetrical", style: "contemporary",
-    },
-    siteStrategy: {
-      environment: ctx.environment, viewDirection: ctx.viewDirection, arrivalDirection: ctx.arrivalDirection,
-      terrain: "level", terrainResponse: "Kept level; the staged foundation call was unavailable.",
-    },
-    primaryMass: { name: "Main Living Pavilion", width: 14, depth: 9, floors: 1 },
-  };
-}
+export type FoundationStageRunResult =
+  | { ok: true; value: FoundationStageResult; attempts: number; durationMs: number; repairRequests?: string[] }
+  | { ok: false; errors: string[]; attempts: number; durationMs: number; repairRequests?: string[] };
 
 /**
  * The model is only told `mood`/`spatialGoals`/`environmentalGoals`/`hierarchyGoals` have a max length in
@@ -114,6 +88,7 @@ function toResult(ctx: FoundationStageContext, output: FoundationStageOutput): F
     position: output.primaryMass.position ?? { x: 0, z: 0 }, width: output.primaryMass.width, depth: output.primaryMass.depth, floors: output.primaryMass.floors,
     elevation: output.primaryMass.elevation ?? 0, rotation: output.primaryMass.rotation ?? 0,
     ...((output.primaryMass.position || output.primaryMass.elevation !== undefined || output.primaryMass.rotation !== undefined) ? { placementLocked: true } : {}),
+    ...(output.primaryMass.cantilever ? { cantilever: output.primaryMass.cantilever } : {}),
   }, output.primaryMass.plan);
   return { intent, siteStrategy, terrainResponse: output.siteStrategy.terrainResponse, primaryMass };
 }
@@ -123,9 +98,8 @@ function toResult(ctx: FoundationStageContext, output: FoundationStageOutput): F
  * visible progress updates, not independent decisions that need their own round trip — the pipeline still
  * emits the same three "stage" events afterward, sliced from this one response.
  *
- * On failure this never falls back to an entirely generic design: it salvages every individually-valid
- * field from the last attempt's raw output (see `recoverFields`) and only defaults what's actually missing
- * or invalid, so e.g. a valid primary mass survives even if `intent.mood` used an off-vocabulary value.
+ * The primary mass must carry a complete, buildable plan: a missing plan field or a plan the volume cannot
+ * carry is sent back as a repair request inside this stage's retry budget. Nothing is defaulted on failure.
  */
 export async function runFoundationStage(ctx: FoundationStageContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<FoundationStageRunResult> {
   const result = await runStage({
@@ -140,41 +114,14 @@ export async function runFoundationStage(ctx: FoundationStageContext, timings: T
     normalize: normalizeFoundationOutput,
     timings, remainingBudgetMs, usageMeta,
     maxOutputTokens: 1150,
+    validate: (value) => {
+      const missing = missingVolumePlanFields(value.primaryMass.plan);
+      if (missing.length) return [`[repair-required:plan-incomplete] primaryMass.plan must author every field; missing or off-vocabulary: ${missing.join(", ")}.`];
+      const { siteStrategy, primaryMass } = toResult(ctx, value);
+      return repairRequests(placementConflicts([primaryMass], siteStrategy, "foundation"));
+    },
   });
-
-  if (result.ok) {
-    return { value: toResult(ctx, result.value), status: "ok", attempts: result.attempts, durationMs: result.durationMs, recoveredFields: [], defaultedFields: [] };
-  }
-
-  const raw = result.rawValue as Record<string, unknown> | undefined;
-  const fallback = defaultFoundationOutput(ctx);
-  const intentRecovery = recoverFields(intentStageOutputSchema.shape, raw?.intent);
-  const siteRecovery = recoverFields(siteStrategyStageOutputSchema.shape, raw?.siteStrategy);
-  const massRecovery = recoverFields(primaryMassStageOutputSchema.shape, raw?.primaryMass);
-  const merged: FoundationStageOutput = {
-    intent: { ...fallback.intent, ...intentRecovery.recovered },
-    siteStrategy: { ...fallback.siteStrategy, ...siteRecovery.recovered },
-    primaryMass: { ...fallback.primaryMass, ...massRecovery.recovered },
-  };
-  const recoveredFields = [
-    ...intentRecovery.recoveredKeys.map((k) => `intent.${k}`),
-    ...siteRecovery.recoveredKeys.map((k) => `siteStrategy.${k}`),
-    ...massRecovery.recoveredKeys.map((k) => `primaryMass.${k}`),
-  ];
-  const defaultedFields = [
-    ...intentRecovery.defaultedKeys.map((k) => `intent.${k}`),
-    ...siteRecovery.defaultedKeys.map((k) => `siteStrategy.${k}`),
-    ...massRecovery.defaultedKeys.map((k) => `primaryMass.${k}`),
-  ];
-  if (isDev) {
-    console.debug("[foundation] degraded result — salvaged fields individually instead of using a fully generic default", {
-      rawValue: raw, recoveredFields, defaultedFields, errors: result.errors,
-    });
-  }
-  return {
-    value: toResult(ctx, merged),
-    status: recoveredFields.length > 0 ? "recovered" : "fallback",
-    attempts: result.attempts, durationMs: result.durationMs,
-    recoveredFields, defaultedFields, error: result.errors.join("; "),
-  };
+  const repairs = result.repairRequests ? { repairRequests: result.repairRequests } : {};
+  if (!result.ok) return { ok: false, errors: result.errors, attempts: result.attempts, durationMs: result.durationMs, ...repairs };
+  return { ok: true, value: toResult(ctx, result.value), attempts: result.attempts, durationMs: result.durationMs, ...repairs };
 }

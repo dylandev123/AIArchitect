@@ -7,6 +7,7 @@ import { BLANK_HOUSE_JSON } from "@/types/house";
 import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { modelOutput, VILLA_BRIEF } from "@/lib/library/__tests__/villaFixture";
+import { v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
 
 /** Same real-handler-with-stubbed-model-call pattern as route.test.ts, exercising the streaming delivery mode instead. */
 
@@ -27,21 +28,7 @@ beforeEach(async () => {
   vi.spyOn(console, "error").mockImplementation(() => {});
   vi.spyOn(console, "info").mockImplementation(() => {});
   generateText.mockReset();
-  generateText
-    // foundation: intent + site strategy + primary mass in one call
-    .mockResolvedValueOnce({ output: {
-      intent: { mood: ["drama"], spatialGoals: ["views"], environmentalGoals: ["shelter"], hierarchyGoals: ["dominant living pavilion"], compositionBias: "asymmetrical", style: "modern tropical" },
-      siteStrategy: { environment: "beach", viewDirection: "south", arrivalDirection: "north", terrain: "level", terrainResponse: "Keep the composition level and open to the beach." },
-      primaryMass: { name: "Main Living Pavilion", width: 18, depth: 10, floors: 1, reasoning: "Anchors the composition toward the beach view." },
-    }, totalUsage: {} })
-    // mass expansion: done immediately, one mass total
-    .mockResolvedValueOnce({ output: { decision: "done", reasoning: "One dominant pavilion fully serves this brief." }, totalUsage: {} })
-    // architectural geometry pass: one batched call for the one mass
-    .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }] }, totalUsage: {} })
-    // roof composition: one call for the one mass
-    .mockResolvedValueOnce({ output: { roofs: [{ massId: "mass-0", kind: "floating-flat", overhang: 1.2, reasoning: "A floating plane suits the dominant beachfront volume." }] }, totalUsage: {} })
-    // the legacy single-call generation
-    .mockResolvedValue({ output: modelOutput({ ops: [{ op: "addPool", value: { wall: "north", offset: 4, distance: 3, width: 10, depth: 5, waterDepth: 1.5 } }] }), totalUsage: {} });
+  generateText.mockImplementation(v2StageResponder(() => modelOutput({ ops: [{ op: "addPool", value: { wall: "north", offset: 4, distance: 3, width: 10, depth: 5, waterDepth: 1.5 } }] })));
 });
 
 afterEach(() => {

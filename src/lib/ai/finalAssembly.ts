@@ -17,47 +17,19 @@ import type { RetrievedRecipe } from "@/lib/library/spaceRecipes";
 import type { OutdoorSpace } from "@/lib/outdoor/spaces";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 import { architecturalAssetRequests, architecturalCapabilityRequests } from "@/lib/architecture/designEngine";
-import { validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
-import { pickDominantMass, resolveMasses, ROOF_KIND_TO_LEGACY_TYPE } from "@/lib/architecture/compiler";
+import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
+import { pickDominantMass, ROOF_KIND_TO_LEGACY_TYPE } from "@/lib/architecture/compiler";
 import { v2SiteFrameForDocument } from "@/lib/architecture/siteFrame";
-import type { MassVolume } from "@/lib/architecture/document";
 import type { PipelineResult } from "@/lib/architecture/stages/pipeline";
 import type { DesignRecipe, ReportRecipeRejection } from "@/types/library";
 import { providerErrorResponse } from "./providerErrors";
-import { sitePlanOperations, type SitePlan, type SitePlanContext } from "@/lib/architecture/stages/sitePlanStage";
+import { sitePlanOperations, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
 import { architectureAuthorityHash } from "@/lib/architecture/stages/authority";
+import { runV2IntegrityGate } from "@/lib/architecture/stages/integrityGate";
+import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
+import { v2FailureResponse } from "./v2Failure";
 
-/** V2 opening coordinates projected into the renderer's world frame (x=east, z=south), on the masses as resolved and rendered. */
-function v2EntrancePoints(masses: readonly MassVolume[]): { x: number; z: number }[] {
-  const points: { x: number; z: number }[] = [];
-  for (const mass of masses) for (const opening of mass.openings ?? []) {
-    if (opening.type !== "door" || (opening.floors && opening.floors !== "ground" && opening.floors !== "all")) continue;
-    const u = (opening.start + opening.end) / 2;
-    let x = 0, z = 0;
-    if (opening.facade === "north") { x = (u - .5) * mass.width; z = -mass.depth / 2; }
-    if (opening.facade === "south") { x = (u - .5) * mass.width; z = mass.depth / 2; }
-    if (opening.facade === "east") { x = mass.width / 2; z = (u - .5) * mass.depth; }
-    if (opening.facade === "west") { x = -mass.width / 2; z = (u - .5) * mass.depth; }
-    const c = Math.cos(mass.rotation), s = Math.sin(mass.rotation);
-    points.push({ x: mass.position.x + x * c + z * s, z: mass.position.z - x * s + z * c });
-  }
-  return points;
-}
-
-/**
- * The Site Plan's frame is the rendered building: the dominant mass where it actually stands (the renderer anchors
- * wall/offset features to the same centre — see HouseConfig.center), every mass's footprint, and the real doors.
- */
-export function sitePlanContextForDocument(brief: string, document: ArchitecturalDesignDocument): SitePlanContext | undefined {
-  const frame = v2SiteFrameForDocument(document);
-  if (!frame) return undefined;
-  const { anchor } = frame;
-  return {
-    brief, house: { width: anchor.width, depth: anchor.depth, floors: anchor.floors, center: frame.center },
-    viewDirection: document.siteStrategy.viewDirection, arrivalDirection: document.siteStrategy.arrivalDirection,
-    entrancePoints: v2EntrancePoints(resolveMasses(document)), masses: frame.masses,
-  };
-}
+export { sitePlanContextForDocument } from "@/lib/architecture/sitePlanContext";
 
 /**
  * A repair pass takes about as long as the first call: don't start one that cannot finish inside the budget.
@@ -83,7 +55,10 @@ export interface FinalAssemblyParams {
   spaces: OutdoorSpace[];
   /** Total ms this call may spend, measured from `timings`'s own start (not from when this function was entered). */
   budgetMs: number;
-  sitePlan?: SitePlan;
+  /** The canonical V2 Site Plan as the Site Plan stage accepted it. Required: there is no legacy site design to fall back to. */
+  sitePlan: SitePlan;
+  /** `sitePlanAuthorityHash` of `sitePlan`, taken when the stage accepted it. */
+  sitePlanHash: string;
 }
 
 /**
@@ -91,6 +66,10 @@ export interface FinalAssemblyParams {
  * openings, siting of outdoor features, rooms, etc. — everything the architecture stages (Intent..Roof
  * Composition) don't decide. Split out so a dev-only Replay of just this stage can rerun it alone, reusing
  * an already-produced `pipelineResult` instead of recomputing the whole staged sub-pipeline.
+ *
+ * It reads the architecture and the canonical Site Plan and may write neither. Before anything is returned,
+ * reported or learned from, the assembled project JSON goes through the final V2 integrity gate; a blocking
+ * finding means there is no successful generation — no `json` leaves this function and nothing is persisted.
  */
 export async function runFinalAssembly(params: FinalAssemblyParams): Promise<NextResponse> {
   const { brief, assets, baseRevision, library, usageMeta, timings, pipelineResult, recipes, recipeIds, retrieved, recipeRejections = [], spaces, budgetMs } = params;
@@ -100,7 +79,8 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
   // work cannot silently turn into an architecture writer.
   const architectureAtEntry = architectureAuthorityHash(architecturalDesignDocument);
   const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
-  if (docErrors.length) console.warn("[architecture-stages] invalid document, falling back to legacy shell:", docErrors);
+  // An invalid V2 document is a failed generation. The legacy shell is never a stand-in for it.
+  if (docErrors.length) return v2FailureResponse("v2-generation-failed", "final-assembly", docErrors.map((e) => `invalid architecture document: ${e}`), pipelineResult.diagnostics);
   if (pipelineResult.massExpansionStopMessage) console.info(`[architecture-stages] ${pipelineResult.massExpansionStopMessage}`);
 
   // A valid V2 document already owns the real massing/roof/openings — compileArchitecture never reads
@@ -109,16 +89,16 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
   // instead a legacy-shaped `house` is synthesized here from the document's own dominant mass — genuinely
   // required downstream (room/outdoor placement math, collision avoidance) but never rendered, so getting it
   // from the real massing instead of a freely-invented model guess is strictly more correct, not just cheaper.
-  const dominantMass = docErrors.length === 0 ? pickDominantMass(architecturalDesignDocument.massing.masses) : undefined;
+  const dominantMass = pickDominantMass(architecturalDesignDocument.massing.masses);
   const synthesizedHouse: AiGenerationResponse["house"] | undefined = dominantMass ? {
     width: dominantMass.width, depth: dominantMass.depth, floors: dominantMass.floors,
     roof: ROOF_KIND_TO_LEGACY_TYPE[architecturalDesignDocument.roofs.recipes.find((r) => r.massId === dominantMass.id)?.kind ?? "flat"],
   } : undefined;
 
-  // Site authority mirrors V2 architecture: a complete authored plan is executed verbatim, while a failed
-  // Site Plan call leaves the established scale/site-rule system as the deterministic recovery path.
+  // Site authority mirrors V2 architecture: the accepted plan is executed verbatim (paths carried around the
+  // building between their authored end points). There is no deterministic site design behind it.
   const authoredSitePlan = params.sitePlan;
-  const authoredSiteOps = authoredSitePlan ? sitePlanOperations(authoredSitePlan, docErrors.length ? [] : v2SiteFrameForDocument(architecturalDesignDocument)?.masses) : undefined;
+  const authoredSiteOps = sitePlanOperations(authoredSitePlan, v2SiteFrameForDocument(architecturalDesignDocument)?.masses);
 
   let errors: string[] = [];
   let lastAttemptMs = 0;
@@ -162,7 +142,6 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
         if (architectureAuthorityHash(architecturalDesignDocument) !== architectureAtEntry) {
           throw new Error("[v2-authority] final-assembly mutated the architecture document.");
         }
-        finish("ok", attempt + 1);
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         // The design is built with the procedural version of every object. Where an approved library GLB fits, the
         // feature just references it (assetId); the procedural geometry stays as the fallback.
@@ -171,12 +150,28 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
         const conceivedJson = JSON.stringify({
           ...JSON.parse(result.json),
           architecture: design,
-          ...(authoredSitePlan ? { sitePlan: authoredSitePlan } : {}),
-          ...(docErrors.length ? {} : { architecturalDesignDocument }),
+          sitePlan: authoredSitePlan,
+          architecturalDesignDocument,
         });
         const attachedResult = attachLibraryAssets(conceivedJson, library);
         const attached = attachedResult.attached;
         const json = attachOutdoorAssets(attachedResult.json, brief, library);
+        // The final V2 integrity gate: the exact JSON about to be returned, after every authoritative stage and
+        // all deterministic execution, before the learning loop stores anything about it.
+        const gateStart = performance.now();
+        const gate = timings.time("integrityGate", () => runV2IntegrityGate({ json, brief, authority: { architectureHash: pipelineResult.authority.architectureHash, sitePlanHash: params.sitePlanHash } }));
+        const gateDiagnostics: StageDiagnostics = {
+          stage: "quality-gate", status: gate.passed ? "ok" : "error", outcome: gate.outcome, durationMs: performance.now() - gateStart, modelCalls: 0, retries: 0,
+          ...(gate.blocking.length ? { error: gate.blocking.map((c) => `${c.id}: ${c.detail}`).join("; ") } : {}),
+          ...(gate.warnings.length || gate.normalizations.length ? { warnings: [...gate.warnings.map((c) => `${c.id}: ${c.detail}`), ...gate.normalizations] } : {}),
+        };
+        const finalDiagnostics = [...pipelineResult.diagnostics.filter((d) => d.stage !== "quality-gate"), gateDiagnostics];
+        if (!gate.passed) {
+          finish("integrity_blocked", attempt + 1);
+          after(() => noteRecipeOutcome(recipeIds, "failure"));
+          return v2FailureResponse("v2-integrity-blocked", "integrity-gate", gate.blocking.map((c) => `${c.id}: ${c.detail}`), finalDiagnostics);
+        }
+        finish("ok", attempt + 1);
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
         // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
         const capabilityRequests = [...architecturalCapabilityRequests(design), ...pipelineResult.capabilityRequests];
@@ -192,7 +187,7 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
           skipped: result.skipped,
           adjusted: [...result.notes, ...result.adjusted],
           intelligence,
-          ...(process.env.NODE_ENV !== "production" ? { architectureDiagnostics: pipelineResult.diagnostics, capabilityRequests: pipelineResult.capabilityRequests } : {}),
+          ...(process.env.NODE_ENV !== "production" ? { architectureDiagnostics: finalDiagnostics, capabilityRequests: pipelineResult.capabilityRequests } : {}),
         });
       }
       errors = result.errors;

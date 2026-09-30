@@ -5,6 +5,7 @@ import type { OutdoorSpace } from "@/lib/outdoor/spaces";
 import type { DesignRecipe } from "@/types/library";
 import type { StageDiagnostics } from "./diagnostics";
 import type { PipelineInput, PipelineResult } from "./pipeline";
+import type { SitePlan } from "../sitePlanContract";
 
 /**
  * Dev-only, in-memory cache of the last staged-pipeline run per project, so a Replay can rerun one failed
@@ -25,7 +26,7 @@ export interface DevSession {
   upstream?: PipelineResult["upstream"];
   diagnostics?: readonly StageDiagnostics[];
   /** So a "final-assembly" replay can rerun just the mandatory tail call without recomputing stages 1-5. */
-  finalAssembly?: { assets: AssetRef[]; recipes: DesignRecipe[]; retrieved: readonly RetrievedRecipe[]; spaces: OutdoorSpace[]; library: AssetIndexEntry[]; baseRevision: string };
+  finalAssembly?: { assets: AssetRef[]; recipes: DesignRecipe[]; retrieved: readonly RetrievedRecipe[]; spaces: OutdoorSpace[]; library: AssetIndexEntry[]; baseRevision: string; sitePlan: SitePlan; sitePlanHash: string; /** The architecture the Site Plan was authored against. */ architectureHash: string };
 }
 
 const ENABLED = process.env.NODE_ENV !== "production";

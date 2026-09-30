@@ -40,6 +40,23 @@ function assetFor(object: Exclude<AdditiveObject, "bar">, assets: readonly Curat
     [asset.name, ...(asset.tags ?? []), ...(asset.categories ?? []), asset.family ?? ""].join(" ").toLowerCase().split(/\W+/).some((term) => spec.terms.some((wanted) => term === wanted || term.includes(wanted.replace(" ", "")))));
 }
 
+type LocalBounds = { min: [number, number, number]; max: [number, number, number] };
+function boundsFor(asset: CuratedAsset | undefined, spec: { width: number; depth: number; height: number }): LocalBounds {
+  const bounds = asset?.validation?.bounds;
+  if (bounds && bounds.min.every(Number.isFinite) && bounds.max.every(Number.isFinite)
+    && bounds.max[0] > bounds.min[0] && bounds.max[1] > bounds.min[1] && bounds.max[2] > bounds.min[2]) return bounds;
+  // Procedural shapes are authored around x/z zero and rest on their local y=0 plane.
+  return { min: [-spec.width / 2, 0, -spec.depth / 2], max: [spec.width / 2, spec.height, spec.depth / 2] };
+}
+function dimensionsFor(bounds: LocalBounds) {
+  return { width: bounds.max[0] - bounds.min[0], depth: bounds.max[2] - bounds.min[2], height: bounds.max[1] - bounds.min[1] };
+}
+/** Turns a desired world geometry-centre into the model-origin transform persisted in project JSON. */
+function originForCentre(centre: { x: number; z: number }, bounds: LocalBounds, scale: number, yaw: number, supportY: number) {
+  const cx = (bounds.min[0] + bounds.max[0]) * scale / 2, cz = (bounds.min[2] + bounds.max[2]) * scale / 2;
+  return [centre.x - cx * Math.cos(yaw) - cz * Math.sin(yaw), supportY - bounds.min[1] * scale, centre.z + cx * Math.sin(yaw) - cz * Math.cos(yaw)] as [number, number, number];
+}
+
 /**
  * Deterministic executor for a small semantic additive request. It deliberately never edits the V2
  * architecture document or existing Site Plan geometry; only a new loose asset placement is appended.
@@ -59,7 +76,10 @@ export function placeV2AdditiveAsset(root: Record<string, unknown>, prompt: stri
   const spec = SPEC[object], count = quantity(prompt);
   // An approved, validated GLB always wins. Its absence is intentionally not a placement failure: the
   // procedural marker below is rendered as a small, recognizable local primitive set.
-  const dimensions = { width: asset?.validation?.footprint?.width ?? asset?.dimensions?.width ?? spec.width, depth: asset?.validation?.footprint?.depth ?? asset?.dimensions?.depth ?? spec.depth, height: asset?.dimensions?.height ?? spec.height };
+  // Bounds are validator-authored model-space geometry, including a bad/off-centre pivot. They are
+  // the sole source for collision, grounding and the persisted transform — never a renderer-only fixup.
+  const localBounds = boundsFor(asset, spec);
+  const dimensions = dimensionsFor(localBounds);
   const pool = { x: plan.poolDeck.x, z: plan.poolDeck.z };
   const existing = Array.isArray(root.outdoorAssetPlacements) ? root.outdoorAssetPlacements as OutdoorAssetPlacement[] : [];
   const obstacles = [
@@ -80,7 +100,11 @@ export function placeV2AdditiveAsset(root: Record<string, unknown>, prompt: stri
     if (!candidate) return { ok: false, code: "ALL_CANDIDATES_COLLIDE", error: `No chair-sized clear, grounded position remains beside the pool deck after checking building masses, paths/features, and existing outdoor assets.` };
     // Face the pool (or view-side pool deck) rather than use a fixed world rotation.
     const yaw = Math.atan2(pool.x - candidate.x, pool.z - candidate.z);
-    additions.push({ id: `outdoor-v2-${crypto.randomUUID()}`, assetId: asset?.id ?? proceduralV2AssetId(object), parentSpaceId: "v2-poolside", category: asset?.family ?? (object === "planter" ? "decorative" : "furniture"), position: [candidate.x, 0, candidate.z], rotation: [0, yaw, 0], scale: 1, role: spec.role, relationship: { type: "around", targetId: "pool" }, dimensions });
+    const scale = 1;
+    // These candidates deliberately sit outside the authored pool deck, therefore their support is
+    // the site grade. Future deck/terrace anchors use the same explicit support contract.
+    const support = { kind: "terrain" as const, elevation: 0 };
+    additions.push({ id: `outdoor-v2-${crypto.randomUUID()}`, assetId: asset?.id ?? proceduralV2AssetId(object), parentSpaceId: "v2-poolside", category: asset?.family ?? (object === "planter" ? "decorative" : "furniture"), position: originForCentre(candidate, localBounds, scale, yaw, support.elevation), rotation: [0, yaw, 0], scale, role: spec.role, relationship: { type: "around", targetId: "pool" }, dimensions, localBounds, support });
   }
   return { ok: true, object, assetId: asset?.id ?? proceduralV2AssetId(object), usedProceduralFallback: !asset, summary: `Added ${additions.length} grounded ${object}${additions.length === 1 ? "" : "s"} by the pool, oriented toward it.`, json: JSON.stringify({ ...root, outdoorAssetPlacements: [...existing, ...additions] }) };
 }

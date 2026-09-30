@@ -54,13 +54,14 @@ export interface DoorOpening { type: "door"; facade: MassFacade; start: number; 
 export type MassOpening = GlazingZoneOpening | OpeningRhythm | DoorOpening;
 
 /**
- * The architectural plan for one volume, decided when the volume is placed (Foundation for the primary
- * mass, Mass Expansion for every other) — before any geometry exists. The compiler never reads it:
- * `realizeVolumePlan` (volumePlan.ts) turns it into `operations`/`openings`/`height`/`cantilever`, roof edge
- * and capability intents, and the Architectural Geometry Pass may only refine that realization, never
- * contradict it. Facade treatments are keyed by what a side FACES (view, arrival, courtyard, flanks), not
- * by local compass facade, so the plan survives placement/rotation and is resolved against the mass's
- * final orientation and neighbors only at realization time.
+ * The architectural plan for one volume, authored when the volume is placed (Foundation for the primary
+ * mass, Mass Expansion for every other) — before any geometry exists, and completely: a missing field is a
+ * repair request to the architect, never a role-based default. The compiler never reads it:
+ * `realizeVolumePlan` (volumePlan.ts) turns it into a REFERENCE realization that the Architectural Geometry
+ * Pass is shown and measured against; the geometry that is built (`operations`/`openings`/capabilities) is
+ * what that pass authors. Facade treatments are keyed by what a side FACES (view, arrival, courtyard,
+ * flanks), not by local compass facade, so the plan survives placement/rotation and is resolved against the
+ * mass's final orientation and neighbors only at realization time.
  */
 export type VolumeForm = "bar" | "l-shape" | "prow" | "setback";
 export type VolumeHeight = "low" | "standard" | "lofty" | "double-height";

@@ -80,9 +80,9 @@ export const ROOF_EDGES = ["parapet", "thin-eave", "deep-eave", "floating"] as c
 export const STRUCTURAL_EXPRESSIONS = ["bearing-walls", "post-and-beam", "cantilever", "pilotis"] as const;
 
 /**
- * Every field optional: a missing field is never architecturally ambiguous enough to be worth a repair
- * retry — `completeVolumePlan` (volumePlan.ts) fills it from the mass's role. An off-vocabulary value is
- * stripped by `sanitizeVolumePlan` in the stage's `normalize` hook for the same reason.
+ * Every field is optional in the SHAPE so an off-vocabulary value can be stripped (`sanitizeVolumePlan`) and
+ * reported precisely, but the placing stages require every one (`missingVolumePlanFields`): a missing plan
+ * field is a repair request to the architect, never a role-based default.
  */
 export const volumePlanSchema = z.object({
   form: z.enum(VOLUME_FORMS).optional(),
@@ -109,7 +109,8 @@ export const VOLUME_PLAN_GUIDE = `Plan every volume as architecture before it ha
 - entry: ${ENTRY_TREATMENTS.join(", ")} — how this volume is entered from the arrival side.
 - outdoor: ${OUTDOOR_TRANSITIONS.join(", ")}, with outdoorSide: ${OUTDOOR_SIDES.join(", ")} — the covered transition from inside to outside.
 - roofEdge: ${ROOF_EDGES.join(", ")} — parapet = crisp box edge with no eave; floating = a thin roof plane hovering on a glass reveal.
-- structure: ${STRUCTURAL_EXPRESSIONS.join(", ")} — cantilever = upper floor overhangs the view side (2+ floors) or a raised box on props; pilotis = columns under a raised volume.
+- structure: ${STRUCTURAL_EXPRESSIONS.join(", ")} — cantilever = upper floor overhangs the view side (2+ floors; also author "cantilever" with its direction and distance) or a raised box on props; pilotis = columns under a raised volume.
+Author EVERY plan field for every volume (courtyardFacade only for courtyard wings) — nothing is filled in for you: a missing field is rejected, and whatever you plan must be buildable where you put it (no planned terrace, entry or form move on a facade another volume stands against).
 Make the plan specific to what this volume does: contrast solid arrival faces with open view faces, and do not give every volume the same plan.`;
 
 /** No `reasoning` field: the pipeline never reads one for the primary mass, so it isn't asked for — one less thing the model can get wrong. */
@@ -121,6 +122,7 @@ export const primaryMassStageOutputSchema = z.object({
   position: z.object({ x: z.number().min(-80).max(80), z: z.number().min(-80).max(80) }).optional(),
   elevation: z.number().min(-10).max(30).optional(), rotation: z.number().min(-Math.PI).max(Math.PI).optional(),
   plan: volumePlanSchema.optional(),
+  cantilever: z.object({ direction: compassSideSchema, distance: z.number().min(0.5).max(6) }).optional().describe('Required when plan.structure is "cantilever" on a volume of 2+ floors: which side the upper floor overhangs and how far.'),
 });
 export type PrimaryMassStageOutput = z.infer<typeof primaryMassStageOutputSchema>;
 
@@ -204,14 +206,14 @@ export type MassExpansionStageOutput = z.infer<typeof massExpansionStageOutputSc
  * (which volumes should read as dominant, which should recede, which should intentionally repeat) better
  * seeing every mass at once than seeing only the neighbors decided so far.
  *
- * The architect owns the executable roof recipe; the compiler only validates it and supplies defaults on
- * a failed/partial response.
+ * The architect owns the complete executable roof recipe. `overhang`/`pitch` are optional in the SHAPE only so
+ * an incomplete recipe is reported precisely and repaired by the stage; nothing downstream defaults them.
  */
 const roofCompositionEntrySchema = z.object({
   massId: z.string().min(1).describe("Must exactly match one of the mass ids given, once each."),
   kind: z.enum(ROOF_RECIPE_KINDS),
-  overhang: z.number().min(0).max(4).optional().describe("Meters; required for an authored complete recipe, defaulted only for recovery/legacy responses."),
-  pitch: z.number().min(0).max(45).optional().describe("Degrees; required for an authored complete recipe, defaulted only for recovery/legacy responses."),
+  overhang: z.number().min(0).max(4).optional().describe("Meters. Required: every roof authors its own overhang."),
+  pitch: z.number().min(0).max(45).optional().describe("Degrees. Required: every roof authors its own pitch."),
   // A rotation is periodic. Normalize finite authored angles at the stage boundary instead of rejecting them.
   orientation: z.number().finite().optional(),
   parapet: z.object({ height: z.number().min(.1).max(1.5), thickness: z.number().min(.08).max(.5).optional() }).optional(),
@@ -228,7 +230,7 @@ const roofLanguageSchema = z.object({
 
 export const roofCompositionStageOutputSchema = z.object({
   language: roofLanguageSchema.optional(),
-  /** Optional id from the approved roof recipes supplied to this stage. */
+  /** Optional id of the approved roof recipe the architect drew on. It selects that recipe's roof system (covering) only — kind, pitch and overhang are what `roofs` authors. */
   libraryRecipeId: z.string().min(1).max(100).optional(),
   roofs: z.array(roofCompositionEntrySchema).min(1),
 });
@@ -247,7 +249,9 @@ export const FOOTPRINT_SCOPES = ["ground", "upper", "all"] as const;
  * `glazing-zone`/`opening-rhythm` place facade openings. `corner-glazing` is not part of this vocabulary —
  * it's requested the same way mass-expansion requests any other capability, via `requestedOperation`.
  */
-export const GEOMETRY_OPERATION_TYPES = ["recess", "projection", "notch", "entry-recess", "chamfer", "glazing-zone", "opening-rhythm", "door"] as const;
+export const GEOMETRY_OPERATION_TYPES = ["recess", "projection", "notch", "entry-recess", "chamfer", "glazing-zone", "opening-rhythm", "door", "canopy", "screen", "sun-fins"] as const;
+/** The freestanding facade elements the Geometry Pass authors directly; each is executed by a capability plugin with the authored parameters. */
+export const FACADE_ELEMENT_TYPES = ["canopy", "screen", "sun-fins"] as const;
 /** The known-good capability plugin ids the model may name via `requestedOperation`/mass-expansion's same field — disclosed for the same reason as every closed vocabulary here: matching against unlisted free text reliably misses. */
 export const KNOWN_CAPABILITY_IDS = ["courtyard-edge-wall", "corner-glazing", "bridge-masses", "entry-canopy", "brise-soleil", "pilotis", "screen-layer"] as const;
 
@@ -266,7 +270,7 @@ export const geometryOperationSchema = z.object({
   width: z.number().min(0.5).max(8).optional().describe("Meters. Required for notch (the corner cut's other extent) and entry-recess; for opening-rhythm, the width of each window; for chamfer, the corner cut's size (an angled cut, not an L-shaped step)."),
   floors: z.enum(FOOTPRINT_SCOPES).optional().describe('Which floors this applies to. Omit or "all" for every floor.'),
   heightRatio: z.number().min(0.2).max(0.95).optional().describe("Fraction of wall height the glazing occupies, centered vertically. Required for glazing-zone."),
-  count: z.number().int().min(2).max(6).optional().describe("Number of evenly-spaced windows. Required for opening-rhythm."),
+  count: z.number().int().min(2).max(16).optional().describe("Number of evenly-spaced windows (2-6; required for opening-rhythm) or vertical sun fins (2-16; required for sun-fins)."),
   height: z.number().min(0.6).max(3).optional().describe("Window height in meters. Required for opening-rhythm."),
   sill: z.number().min(0).max(1.5).optional().describe("Sill height above the floor in meters. Required for opening-rhythm."),
   frame: z.boolean().optional().describe("For glazing-zone or door: adds a deliberate structural surround."),
@@ -277,6 +281,10 @@ export const geometryOperationSchema = z.object({
 }).superRefine((op, ctx) => {
   const need = (cond: unknown, field: string) => { if (cond === undefined || cond === null) ctx.addIssue({ code: "custom", path: [field], message: `${field} is required for ${op.type}.` }); };
   if (op.glazed !== undefined && op.type !== "chamfer") ctx.addIssue({ code: "custom", path: ["glazed"], message: "glazed only applies to chamfer." });
+  if (op.type === "canopy") { need(op.facade, "facade"); need(op.width, "width"); need(op.depth, "depth"); return; }
+  if (op.type === "screen") { need(op.facade, "facade"); need(op.start, "start"); need(op.end, "end"); if (op.start !== undefined && op.end !== undefined && op.end <= op.start) ctx.addIssue({ code: "custom", path: ["end"], message: "end must be greater than start." }); return; }
+  if (op.type === "sun-fins") { need(op.facade, "facade"); need(op.count, "count"); return; }
+  if (op.type === "opening-rhythm" && op.count !== undefined && op.count > 6) ctx.addIssue({ code: "custom", path: ["count"], message: "opening-rhythm takes 2-6 windows." });
   if (op.type === "notch") { need(op.corner, "corner"); need(op.width, "width"); need(op.depth, "depth"); return; }
   if (op.type === "chamfer") { need(op.corner, "corner"); need(op.width, "width"); return; }
   if (op.type === "entry-recess") { need(op.facade, "facade"); need(op.width, "width"); need(op.depth, "depth"); return; }

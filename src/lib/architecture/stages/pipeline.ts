@@ -7,10 +7,12 @@ import type { SiteHints } from "@/lib/house/siteSettings";
 import type { ArchitecturalDesignDocument, MassVolume, RoofRecipe, SiteStrategy } from "../document";
 import { appliedRoofRecipe } from "../roofRecipeLibrary";
 import { runFoundationStage, type FoundationStageResult, type FoundationStageRunResult } from "./foundationStage";
+import { architectureAuthorityHash } from "./authority";
+import { finalOutcome, V2GenerationFailure, type OwningStage } from "./recovery";
 import { plannedVolumesFromSpacePlan, runMassExpansionStage, type MassExpansionResult, type MassExpansionStopReason, type PlannedVolume, type UnplacedVolume } from "./massExpansionStage";
 import { createSpacePlan, selectDesignStrategies, type ArchitecturalDesign, type ArchitecturalIntent } from "../designEngine";
 import { runGeometryStage, type GeometryStageResult, type MassGeometryResult } from "./geometryStage";
-import { fallbackRoofs, runRoofCompositionStage } from "./roofStage";
+import { runRoofCompositionStage, type RoofCompositionStageResult } from "./roofStage";
 import { mergeCapabilityIntents, parameterizeCapabilityIntent } from "../volumePlan";
 import { toArchitecturalDesign } from "./toArchitecturalDesign";
 import type { StageDiagnostics } from "./diagnostics";
@@ -23,14 +25,23 @@ export type PipelineStageEvent =
   | { type: "mass-added"; stage: "mass-expansion"; massesSoFar: number; document: ArchitecturalDesignDocument }
   | { type: "roof-added"; stage: "roof-composition"; massId: string; roofsSoFar: number; totalMasses: number; document: ArchitecturalDesignDocument };
 
-/** Applies the Architectural Geometry Pass's per-mass result onto the resolved mass list — pure data merge, no placement math (that already happened in mass-expansion). A cantilever mass expansion placed explicitly wins over the plan's. */
+/** Applies the Architectural Geometry Pass's authored per-mass geometry onto the resolved mass list — a pure data merge: no placement math, nothing added or restored. */
 function applyGeometry(masses: readonly MassVolume[], byMassId: ReadonlyMap<string, MassGeometryResult>): MassVolume[] {
   return masses.map((mass) => {
     const result = byMassId.get(mass.id);
-    if (!result || (result.operations.length === 0 && result.openings.length === 0 && !result.cantilever)) return mass;
-    const cantilever = mass.cantilever ?? result.cantilever;
-    return { ...mass, operations: result.operations, openings: result.openings, ...(cantilever ? { cantilever } : {}) };
+    return result ? { ...mass, operations: result.operations, openings: result.openings } : mass;
   });
+}
+
+/**
+ * The single exit for an authoritative stage that exhausted its retry budget: the stage's diagnostics are
+ * recorded as failed, the caller is told, and the generation stops — no stage after it runs and nothing
+ * deterministic stands in for the missing design.
+ */
+function failGeneration(stage: OwningStage, errors: readonly string[], diagnostics: StageDiagnostics[], entry: StageDiagnostics, onFailure: (diagnostics: readonly StageDiagnostics[]) => void): never {
+  diagnostics.push({ ...entry, status: "error", outcome: "failed", error: errors.join("; ") || "no usable response" });
+  onFailure(diagnostics);
+  throw new V2GenerationFailure(stage, errors, [...diagnostics]);
 }
 
 /**
@@ -43,10 +54,11 @@ function finalCapabilityIntents(intents: readonly NonNullable<ArchitecturalDesig
 
 const isDev = process.env.NODE_ENV !== "production";
 
-function completedMasses(masses: readonly MassVolume[], intent: Parameters<typeof completeComposition>[1], siteStrategy: SiteStrategy): MassVolume[] {
+/** Validation-only review of the authored composition: the masses come back exactly as authored; the notes are warnings. */
+function reviewedComposition(masses: readonly MassVolume[], intent: Parameters<typeof completeComposition>[1], siteStrategy: SiteStrategy): { masses: MassVolume[]; notes: string[] } {
   const completion = completeComposition(masses, intent, siteStrategy);
-  if (isDev && completion.notes.length) console.debug("[composition-completion]", completion.notes);
-  return completion.masses;
+  if (isDev && completion.notes.length) console.debug("[composition-review]", completion.notes);
+  return completion;
 }
 function logPlanNotes(byMassId: ReadonlyMap<string, MassGeometryResult>): void {
   if (!isDev) return;
@@ -79,6 +91,12 @@ export interface PipelineResult {
   unplacedVolumes: UnplacedVolume[];
   /** Per-stage trace (dev/debug tooling only) — start/duration/model-call-count/retry-count/status/error. */
   diagnostics: StageDiagnostics[];
+  /**
+   * Fingerprint of the architecture as its authoring stages finished it. Every later stage (Site Plan, Final
+   * Assembly, asset placement) reads the architecture only; the final integrity gate checks the saved artifact
+   * still matches this.
+   */
+  authority: { architectureHash: string };
   /** The stage outputs a same-session Replay can reuse instead of paying for them again; undefined fields mean that stage never produced a value to reuse. */
   upstream: {
     foundation?: FoundationStageResult;
@@ -99,11 +117,24 @@ function requiredVolumes(input: PipelineInput, intent: ArchitecturalIntent): Pla
   return plannedVolumesFromSpacePlan(createSpacePlan(intent, selectDesignStrategies(intent, input.recipes, input.availableCapabilities, input.variationSeed)));
 }
 
-function massExpansionDiagnostics(expansion: MassExpansionResult): StageDiagnostics {
+const repairTrace = (requests: readonly string[] | undefined) => (requests?.length ? { repairRequests: [...requests] } : {});
+
+/** An accepted composition; volumes the architect declined to place, or a hard cap, are warnings on it. */
+function massExpansionDiagnostics(expansion: MassExpansionResult, reviewNotes: readonly string[] = []): StageDiagnostics {
+  const warnings = [...(expansion.stopMessage ? [expansion.stopMessage] : []), ...reviewNotes];
   return {
-    stage: "mass-expansion", status: expansion.hadFailure ? "fallback" : "ok", durationMs: expansion.durationMs,
-    modelCalls: expansion.modelCalls, retries: expansion.retries,
-    ...(expansion.hadFailure || expansion.unplacedVolumes.length ? { error: expansion.stopMessage } : {}),
+    stage: "mass-expansion", status: "ok", outcome: "accepted", durationMs: expansion.durationMs,
+    modelCalls: expansion.modelCalls, retries: expansion.retries, ...repairTrace(expansion.repairRequests),
+    ...(warnings.length ? { warnings } : {}),
+  };
+}
+
+function roofDiagnostics(roofResult: Extract<RoofCompositionStageResult, { ok: true }>): StageDiagnostics {
+  const warnings = [...(roofResult.warnings ?? []), ...(roofResult.normalizations ?? []), ...(roofResult.libraryRecipe ? [`Applied Roof Recipe: ${roofResult.libraryRecipe.name} (${roofResult.libraryRecipe.id}).`] : [])];
+  return {
+    stage: "roof-composition", status: "ok", outcome: finalOutcome(true, roofResult.normalizations), durationMs: roofResult.durationMs,
+    modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1), ...repairTrace(roofResult.repairRequests),
+    ...(warnings.length ? { warnings } : {}),
   };
 }
 
@@ -136,7 +167,9 @@ const draftDocument = (brief: string, siteStrategy: ArchitecturalDesignDocument[
 
 /**
  * Orchestrates Stages 1-5 (Intent, Site Strategy, Primary Mass, Recursive Mass Expansion, Roof
- * Composition) as real bounded model calls, calling `onEvent` after every stage AND after every
+ * Composition) as real bounded model calls. Each stage either authors its part of the design or the pipeline
+ * throws `V2GenerationFailure` (see recovery.ts): there is no deterministic stand-in for a stage that
+ * exhausted its retry budget. Calls `onEvent` after every stage AND after every
  * individual mass/roof so a streaming caller can update the viewport as the design grows. A
  * non-streaming caller can pass a no-op `onEvent` and just use the final `document`.
  */
@@ -156,10 +189,14 @@ export async function runArchitecturePipeline(
   const viewDirection: CompassSide = input.hints.viewDirection ?? "south";
   const arrivalDirection: CompassSide = input.hints.approachSide ?? "north";
   const diagnostics: StageDiagnostics[] = [];
+  const failed = (failedDiagnostics: readonly StageDiagnostics[]) => onUpstreamProgress(upstream, failedDiagnostics);
+  let upstream: PipelineResult["upstream"] = {};
+  const progress = (next: PipelineResult["upstream"]) => { upstream = next; onUpstreamProgress(upstream, diagnostics); };
 
   // Intent, Site Strategy and Primary Mass are three visible progress updates, not three model calls: one
   // structured response decides all three, and the pipeline still emits three "stage" events from it below.
   const foundationResult = await runFoundationStage({ brief: input.brief, hints: input.hints, environment, scale: input.scale, viewDirection, arrivalDirection }, timings, budgetMs, usageMeta);
+  if (!foundationResult.ok) failGeneration("foundation", foundationResult.errors, diagnostics, foundationDiagnostics(foundationResult), failed);
   const foundation = foundationResult.value;
   const { intent, siteStrategy, terrainResponse, primaryMass } = foundation;
   // The single checked boundary: every stage from here on reads `siteStrategy.viewDirection`/`arrivalDirection`
@@ -169,44 +206,44 @@ export async function runArchitecturePipeline(
   onEvent({ type: "stage", stage: "intent", index: 1, of: TOTAL_STAGES, document: draftDocument(input.brief, { environment, viewDirection, arrivalDirection, terrain: "level" }, [], [], undefined) });
   onEvent({ type: "stage", stage: "site-strategy", index: 2, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, [], [], undefined) });
   onEvent({ type: "stage", stage: "primary-mass", index: 3, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, [primaryMass], [], undefined) });
-  onUpstreamProgress({ foundation }, diagnostics);
+  progress({ foundation });
 
   const expansion = await runMassExpansionStage({ brief: input.brief, intent, siteStrategy, primaryMass, requiredVolumes: requiredVolumes(input, intent) }, timings, budgetMs, usageMeta, (masses) => {
     onEvent({ type: "mass-added", stage: "mass-expansion", massesSoFar: masses.length, document: draftDocument(input.brief, siteStrategy, masses, [], undefined) });
   });
-  diagnostics.push(massExpansionDiagnostics(expansion));
-  // Deterministic: makes the courtyard / indoor-outdoor moves the design declared executable before articulation.
-  const placedMasses = completedMasses(expansion.masses, intent, siteStrategy);
+  if (expansion.hadFailure) failGeneration("mass-expansion", [expansion.stopMessage, ...expansion.failureErrors], diagnostics, massExpansionDiagnostics(expansion), failed);
+  // Validation only: the masses are exactly what Mass Expansion authored and resolved.
+  const review = reviewedComposition(expansion.masses, intent, siteStrategy);
+  const placedMasses = review.masses;
+  diagnostics.push(massExpansionDiagnostics(expansion, review.notes));
   onEvent({ type: "stage", stage: "mass-expansion", index: 4, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, placedMasses, [], expansion.capabilityIntents) });
-  onUpstreamProgress({ foundation, masses: placedMasses }, diagnostics);
+  progress({ foundation, masses: placedMasses });
 
-  // Batched, same reasoning as roof composition below: every mass is already placed, so one call gives every
-  // mass its articulation together instead of asking (and paying for) it per mass.
+  // Batched, same reasoning as roof composition below: every mass is already placed, so one call authors every
+  // mass's geometry together instead of asking (and paying for) it per mass.
   const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses: placedMasses }, timings, budgetMs, usageMeta);
+  if (!geometryResult.ok) failGeneration("architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
   const articulatedMasses = applyGeometry(placedMasses, geometryResult.byMassId);
   logPlanNotes(geometryResult.byMassId);
   diagnostics.push(geometryDiagnostics(geometryResult));
   const geometryCapabilityIntents = finalCapabilityIntents([...(expansion.capabilityIntents ?? []), ...geometryResult.capabilityIntents], articulatedMasses, siteStrategy);
   const geometryCapabilityRequests = [...expansion.capabilityRequests, ...geometryResult.capabilityRequests];
   onEvent({ type: "stage", stage: "architectural-geometry", index: 5, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, articulatedMasses, [], geometryCapabilityIntents) });
-  onUpstreamProgress({ foundation, masses: placedMasses, articulatedMasses }, diagnostics);
+  progress({ foundation, masses: placedMasses, articulatedMasses });
 
   // One call composes every mass's roof at once: by now every mass is placed, so nothing is gained by asking
   // sequentially, and the "roof-added" events below still fire once per mass for the same live-preview cadence.
   const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses, approvedRecipes: input.roofRecipes }, timings, budgetMs, usageMeta);
-  const roofs: RoofRecipe[] = roofResult.ok ? roofResult.value : fallbackRoofs(articulatedMasses, intent);
-  diagnostics.push({
-    stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
-    modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
-    ...(roofResult.ok ? { ...(roofResult.warnings ? { warnings: roofResult.warnings } : {}), ...(roofResult.libraryRecipe ? { warnings: [...(roofResult.warnings ?? []), `Applied Roof Recipe: ${roofResult.libraryRecipe.name} (${roofResult.libraryRecipe.id}).`] } : {}) } : { error: roofResult.errors.join("; ") }),
-  });
-  onUpstreamProgress({ foundation, masses: placedMasses, articulatedMasses, roofs }, diagnostics);
-  roofs.forEach((_, i) => {
-    onEvent({ type: "roof-added", stage: "roof-composition", massId: articulatedMasses[i].id, roofsSoFar: i + 1, totalMasses: articulatedMasses.length, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs.slice(0, i + 1), geometryCapabilityIntents) });
+  if (!roofResult.ok) failGeneration("roof-composition", roofResult.errors, diagnostics, { stage: "roof-composition", status: "error", durationMs: roofResult.durationMs, modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1), ...repairTrace(roofResult.repairRequests) }, failed);
+  const roofs: RoofRecipe[] = roofResult.value;
+  diagnostics.push(roofDiagnostics(roofResult));
+  progress({ foundation, masses: placedMasses, articulatedMasses, roofs });
+  roofs.forEach((roof, i) => {
+    onEvent({ type: "roof-added", stage: "roof-composition", massId: roof.massId, roofsSoFar: i + 1, totalMasses: articulatedMasses.length, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs.slice(0, i + 1), geometryCapabilityIntents) });
   });
   onEvent({ type: "stage", stage: "roof-composition", index: 6, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, geometryCapabilityIntents) });
 
-  const application = roofResult.ok && roofResult.libraryRecipe ? appliedRoofRecipe(roofResult.libraryRecipe) : undefined;
+  const application = roofResult.libraryRecipe ? appliedRoofRecipe(roofResult.libraryRecipe) : undefined;
   const document = { ...draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, geometryCapabilityIntents), roofs: { recipes: roofs, ...(application ?? {}) } };
   const design = toArchitecturalDesign({
     brief: input.brief, intent, siteStrategy, terrainResponse, masses: articulatedMasses, roofs,
@@ -215,7 +252,7 @@ export async function runArchitecturePipeline(
   return {
     document, design, capabilityRequests: geometryCapabilityRequests, massExpansionLog: expansion.log, truncated: expansion.truncated,
     massExpansionStopReason: expansion.stopReason, massExpansionStopMessage: expansion.stopMessage, unplacedVolumes: expansion.unplacedVolumes,
-    diagnostics, upstream: { foundation, masses: placedMasses, articulatedMasses, roofs },
+    diagnostics, authority: { architectureHash: architectureAuthorityHash(document) }, upstream: { foundation, masses: placedMasses, articulatedMasses, roofs },
   };
 }
 
@@ -244,6 +281,7 @@ export async function replayArchitectureStage(
   }
   const { intent, siteStrategy, terrainResponse, primaryMass } = cached.foundation;
   const diagnostics: StageDiagnostics[] = [{ stage: "foundation", status: "ok", durationMs: 0, modelCalls: 0, retries: 0 }];
+  const failed = () => {};
 
   let masses = cached.masses ?? [primaryMass];
   let massCapabilityIntents: ArchitecturalDesignDocument["capabilities"] = [];
@@ -257,6 +295,7 @@ export async function replayArchitectureStage(
 
   if (stage === "mass-expansion" || !cached.masses) {
     const expansion = await runMassExpansionStage({ brief: input.brief, intent, siteStrategy, primaryMass, requiredVolumes: requiredVolumes(input, intent) }, timings, budgetMs, usageMeta);
+    if (expansion.hadFailure) failGeneration("mass-expansion", [expansion.stopMessage, ...expansion.failureErrors], diagnostics, massExpansionDiagnostics(expansion), failed);
     masses = expansion.masses;
     massCapabilityIntents = expansion.capabilityIntents;
     massCapabilityRequests = expansion.capabilityRequests;
@@ -275,8 +314,9 @@ export async function replayArchitectureStage(
   let geometryCapabilityIntents: ArchitecturalDesignDocument["capabilities"] = [];
   let geometryCapabilityRequests: CapabilityRequest[] = [];
   if (stage === "architectural-geometry" || stage === "mass-expansion" || !cached.articulatedMasses) {
-    masses = completedMasses(masses, intent, siteStrategy);
+    masses = reviewedComposition(masses, intent, siteStrategy).masses;
     const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses }, timings, budgetMs, usageMeta);
+    if (!geometryResult.ok) failGeneration("architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
     articulatedMasses = applyGeometry(masses, geometryResult.byMassId);
     logPlanNotes(geometryResult.byMassId);
     geometryCapabilityIntents = geometryResult.capabilityIntents;
@@ -294,13 +334,10 @@ export async function replayArchitectureStage(
   let roofLibraryRecipe: DesignRecipe | undefined;
   if (stage === "roof-composition" || stage === "architectural-geometry" || stage === "mass-expansion" || !cached.roofs) {
     const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses, approvedRecipes: input.roofRecipes }, timings, budgetMs, usageMeta);
-    roofs = roofResult.ok ? roofResult.value : fallbackRoofs(articulatedMasses, intent);
-    roofLibraryRecipe = roofResult.ok ? roofResult.libraryRecipe : undefined;
-    diagnostics.push({
-      stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
-      modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
-      ...(roofResult.ok ? (roofResult.warnings ? { warnings: roofResult.warnings } : {}) : { error: roofResult.errors.join("; ") }),
-    });
+    if (!roofResult.ok) failGeneration("roof-composition", roofResult.errors, diagnostics, { stage: "roof-composition", status: "error", durationMs: roofResult.durationMs, modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1), ...repairTrace(roofResult.repairRequests) }, failed);
+    roofs = roofResult.value;
+    roofLibraryRecipe = roofResult.libraryRecipe;
+    diagnostics.push(roofDiagnostics(roofResult));
   } else {
     diagnostics.push({ stage: "roof-composition", status: "ok", durationMs: 0, modelCalls: 0, retries: 0 });
   }
@@ -314,31 +351,20 @@ export async function replayArchitectureStage(
   return {
     document, design, capabilityRequests, massExpansionLog, truncated,
     massExpansionStopReason, massExpansionStopMessage, unplacedVolumes,
-    diagnostics, upstream: { foundation: cached.foundation, masses, articulatedMasses, roofs },
+    diagnostics, authority: { architectureHash: architectureAuthorityHash(document) }, upstream: { foundation: cached.foundation, masses, articulatedMasses, roofs },
   };
 }
 
-/** A salvaged geometry pass still counts as "ok" (the model's refinements were used), but says what was lost. */
 function geometryDiagnostics(result: GeometryStageResult): StageDiagnostics {
-  const salvage = result.salvage;
   return {
-    stage: "architectural-geometry", status: result.hadFailure ? "fallback" : "ok", durationMs: result.durationMs,
-    modelCalls: result.attempts, retries: Math.max(0, result.attempts - 1),
-    ...(salvage ? { error: `${salvage.error} (salvaged refinements for ${salvage.salvagedMassIds.join(", ")}${salvage.baselineMassIds.length ? `; baseline for ${salvage.baselineMassIds.join(", ")}` : ""}${salvage.droppedOperations ? `; dropped ${salvage.droppedOperations} invalid operation(s)` : ""})` } : {}),
+    stage: "architectural-geometry", status: result.ok ? "ok" : "error", ...(result.ok ? { outcome: "accepted" as const } : {}), durationMs: result.durationMs,
+    modelCalls: result.attempts, retries: Math.max(0, result.attempts - 1), ...repairTrace(result.repairRequests),
   };
 }
 
-/**
- * `"recovered"` still counts as a "fallback" `StageDiagnostics` status (that type has no finer-grained
- * state) but its `error` reports which fields were salvaged vs defaulted, rather than the fully-generic
- * "unavailable" story a plain fallback implies — dev tooling can tell the two apart from this text.
- */
 function foundationDiagnostics(result: FoundationStageRunResult): StageDiagnostics {
-  if (result.status === "ok") {
-    return { stage: "foundation", status: "ok", durationMs: result.durationMs, modelCalls: result.attempts, retries: Math.max(0, result.attempts - 1) };
-  }
-  const error = result.status === "recovered"
-    ? `${result.error} (recovered: ${result.recoveredFields.join(", ")}; defaulted: ${result.defaultedFields.join(", ")})`
-    : result.error;
-  return { stage: "foundation", status: "fallback", durationMs: result.durationMs, modelCalls: result.attempts, retries: Math.max(0, result.attempts - 1), error };
+  return {
+    stage: "foundation", status: result.ok ? "ok" : "error", ...(result.ok ? { outcome: "accepted" as const } : {}), durationMs: result.durationMs,
+    modelCalls: result.attempts, retries: Math.max(0, result.attempts - 1), ...repairTrace(result.repairRequests),
+  };
 }

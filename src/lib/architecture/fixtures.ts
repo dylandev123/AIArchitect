@@ -43,7 +43,10 @@ export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> 
         { type: "entry-recess", facade: "north", width: 2.6, depth: 1.2 },
         { type: "projection", facade: "west", start: 0.1, end: 0.7, depth: 1.8 },
       ],
-      openings: [{ type: "glazing-zone", facade: "south", start: 0.1, end: 0.9, heightRatio: 0.85 }],
+      openings: [
+        { type: "glazing-zone", facade: "south", start: 0.1, end: 0.9, heightRatio: 0.85 },
+        { type: "door", facade: "north", start: 0.45, end: 0.55, height: 2.4, frame: true },
+      ],
     },
     { id: "west-wing", name: "West Bedroom Wing", role: "bedroom-wing", position: { x: -14, z: -4 }, width: 6, depth: 12, floors: 1, elevation: 0, rotation: 0,
       relationships: [{ kind: "surrounds-courtyard", target: "living", side: "west", distance: 3 }],
@@ -105,8 +108,8 @@ export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> 
   /**
    * The Part 8 visual-regression fixture: everything the design-quality pass adds, in one deterministic,
    * non-AI composition, compiled through the exact same `compileArchitecture` as live generation — a
-   * dominant floating-roofed living pavilion; a real 2-wing courtyard (auto-oriented inward, see
-   * `computeCourtyards`/`resolveMasses`); a recessed, canopied arrival; a deep open-air covered terrace
+   * dominant floating-roofed living pavilion; a real 2-wing courtyard (see `computeCourtyards`; the wings
+   * stand exactly as authored — nothing turns them toward the void); a recessed, canopied arrival; a deep open-air covered terrace
    * (projection with `open`/`postSpacing`) facing the courtyard; courtyard-facing glazing on both wings, one
    * heavily framed, one recessed; a corner-glazing detail on the untouched corner; a connector + a small
    * quiet service pavilion beyond it (roof hierarchy: dominant floating roof vs. progressively lighter
@@ -145,11 +148,11 @@ export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> 
       openings: [{ type: "opening-rhythm", facade: "south", count: 2, width: 1.0, height: 1.2, sill: 0.9 }],
     },
   ] }, roofs: { recipes: [
-    { id: "living-roof", massId: "living", kind: "floating-flat", overhang: 1.3, expression: { verticalGap: .5, supportStyle: "clerestory", clerestoryHeight: .45 } },
-    { id: "west-wing-roof", massId: "west-wing", kind: "mono-pitch", overhang: .7 },
-    { id: "east-wing-roof", massId: "east-wing", kind: "hip", overhang: .7 },
-    { id: "connector-roof", massId: "connector", kind: "flat", overhang: .35 },
-    { id: "service-roof", massId: "service", kind: "flat", overhang: .35 },
+    { id: "living-roof", massId: "living", kind: "floating-flat", overhang: 1.3, pitch: 2, expression: { verticalGap: .5, supportStyle: "clerestory", clerestoryHeight: .45 } },
+    { id: "west-wing-roof", massId: "west-wing", kind: "mono-pitch", overhang: .7, pitch: 12 },
+    { id: "east-wing-roof", massId: "east-wing", kind: "hip", overhang: .7, pitch: 24 },
+    { id: "connector-roof", massId: "connector", kind: "flat", overhang: .35, pitch: 2 },
+    { id: "service-roof", massId: "service", kind: "flat", overhang: .35, pitch: 2 },
   ] }, capabilities: [
     { id: "corner-glazing", stage: "fixture", parameters: { massId: "living" } },
     { id: "entry-canopy", stage: "fixture", parameters: { massId: "living", facade: "north", width: 3.2, depth: 1.6, height: 2.8 } },
@@ -176,7 +179,10 @@ export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> 
         { type: "recess", facade: "west", start: 0.1, end: 0.9, depth: 2.5, floors: "upper" },
         { type: "projection", facade: "south", start: 0.1, end: 0.5, depth: 3, open: true, postSpacing: 2.5, floors: "ground" },
       ],
-      openings: [{ type: "glazing-zone", facade: "east", start: 0.05, end: 0.95, heightRatio: 0.95, frame: true }],
+      openings: [
+        { type: "glazing-zone", facade: "east", start: 0.05, end: 0.95, heightRatio: 0.95, frame: true },
+        { type: "door", facade: "north", start: 0.46, end: 0.54, height: 2.4, frame: true },
+      ],
     },
     { id: "bedroom-wing", name: "Bedroom Wing", role: "bedroom-wing", position: { x: 0, z: 0 }, width: 6, depth: 16, floors: 1, elevation: 0, rotation: 0,
       relationships: [{ kind: "separated-from", target: "main", side: "east", distance: 8 }],
@@ -222,6 +228,7 @@ export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> 
         { type: "glazing-zone", facade: "south", start: 0.5, end: 0.98, heightRatio: 0.9, frame: true },
         { type: "glazing-zone", facade: "east", start: 0.1, end: 0.6, heightRatio: 0.7, reveal: 0.2 },
         { type: "opening-rhythm", facade: "west", count: 2, width: 0.7, height: 2.2, sill: 0.3 },
+        { type: "door", facade: "north", start: 0.45, end: 0.55, height: 2.4, frame: true },
       ],
     },
     { id: "upper", name: "Cantilevered Bedroom Box", role: "bedroom-wing", position: { x: -10, z: -0.75 }, width: 12, depth: 7.5, floors: 1, elevation: 0, rotation: 0,

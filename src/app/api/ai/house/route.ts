@@ -28,8 +28,12 @@ import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import { runArchitecturePipeline, type PipelineInput, type PipelineResult, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
 import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
 import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
-import { runFinalAssembly, sitePlanContextForDocument } from "@/lib/ai/finalAssembly";
-import { runSitePlanStage, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
+import { runFinalAssembly } from "@/lib/ai/finalAssembly";
+import { sitePlanContextForDocument } from "@/lib/architecture/sitePlanContext";
+import { runSitePlanStage } from "@/lib/architecture/stages/sitePlanStage";
+import { sitePlanAuthorityHash } from "@/lib/architecture/stages/authority";
+import { isV2GenerationFailure } from "@/lib/architecture/stages/recovery";
+import { v2FailureResponse } from "@/lib/ai/v2Failure";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
 import { placeV2AdditiveAsset } from "@/lib/architecture/v2AdditivePlacement";
 
@@ -286,11 +290,11 @@ function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: st
 }
 
 /**
- * Dev-only: a deterministic dry-run of the document → geometry step (see compiler.ts) plus the deterministic
- * design-quality gate (qualityGate.ts) over the same compile, both timed and traced like every other stage.
- * Never changes what's returned to the renderer — compileArchitecture's output here is discarded; only
- * whether it throws, reports errors, or fails a quality check is recorded. The quality gate never blocks or
- * retries generation — see qualityGate.ts's own doc comment for why.
+ * A deterministic dry-run of the document → geometry step (see compiler.ts) plus the design-quality gate
+ * (qualityGate.ts) over the same compile, both timed and traced like every other stage. compileArchitecture's
+ * output here is discarded; what matters is whether it throws, reports errors, or fails a BLOCKING check — any
+ * of which the architecture can no longer recover from, so the caller stops before paying for Final Assembly.
+ * The gate that decides finalization runs later, over the assembled artifact itself (integrityGate.ts).
  */
 function compilerDiagnostics(document: ArchitecturalDesignDocument): StageDiagnostics[] {
   const start = performance.now();
@@ -305,10 +309,10 @@ function compilerDiagnostics(document: ArchitecturalDesignDocument): StageDiagno
     if (errors.length || !diagnostics) return [compilerResult];
     const gateStart = performance.now();
     const gate = runDesignQualityGate(document, diagnostics);
-    const failed = gate.checks.filter((c) => !c.passed);
     const gateResult: StageDiagnostics = {
-      stage: "quality-gate", status: gate.passed ? "ok" : "fallback", durationMs: performance.now() - gateStart, modelCalls: 0, retries: 0,
-      ...(failed.length ? { error: failed.map((c) => `${c.id}: ${c.detail}`).join("; ") } : {}),
+      stage: "quality-gate", status: gate.passed ? "ok" : "error", outcome: gate.passed ? "accepted" : "failed", durationMs: performance.now() - gateStart, modelCalls: 0, retries: 0,
+      ...(gate.blocking.length ? { error: gate.blocking.map((c) => `${c.id}: ${c.detail}`).join("; ") } : {}),
+      ...(gate.warnings.length ? { warnings: gate.warnings.map((c) => `${c.id}: ${c.detail}`) } : {}),
     };
     return [compilerResult, gateResult];
   } catch (error) {
@@ -352,7 +356,7 @@ const PIPELINE_STAGE_ORDER = ["foundation", "mass-expansion", "architectural-geo
 /**
  * Logs a `[architecture-stages] CRASH` block for a genuinely unexpected throw from `runArchitecturePipeline`
  * — a deterministic JS bug (a bad relationship resolution, a stub missing a required field), never a model
- * failure (those are caught inside each stage and degrade to a fallback; see `runStage`). Says which stage
+ * failure (a stage that exhausts its retry budget throws `V2GenerationFailure`, handled separately). Says which stage
  * was running and how many masses survived, without the raw stack trace — safe to run unconditionally, in
  * production too, since only counts and the error's own message are logged, nothing from the request body.
  */
@@ -414,30 +418,47 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
       setDevSession(usageMeta.projectId, { input: pipelineInput, upstream, diagnostics: [...diagnostics] });
     });
   } catch (error) {
+    // An authoritative stage exhausted its retry budget: the generation is incomplete and does not finalize.
+    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics);
     logPipelineCrash(error, diagnosticsSoFar, upstreamSoFar);
     return providerErrorResponse(error, "architecture-pipeline", { architectureDiagnostics: [...diagnosticsSoFar] });
   }
-  let sitePlan: SitePlan | undefined;
+  // The architecture is final here. If it cannot compile, or fails a blocking integrity check, nothing later can
+  // repair it (Site Plan and Final Assembly only read it) — stop before paying for them.
+  const compilerChecks = compilerDiagnostics(pipelineResult.document);
+  const architectureFailure = compilerChecks.find((d) => d.status === "error");
+  if (architectureFailure) {
+    return v2FailureResponse("v2-integrity-blocked", "integrity-gate", [`${architectureFailure.stage}: ${architectureFailure.error ?? "failed"}`], [...pipelineResult.diagnostics, ...compilerChecks]);
+  }
+  // The canonical V2 Site Plan is authored by its stage or the generation is incomplete — there is no legacy
+  // deterministic site design (pool/deck/drive/path rules) behind a failed Site Plan.
   const siteStart = performance.now();
   const siteContext = sitePlanContextForDocument(brief, pipelineResult.document);
-  if (siteContext) {
-    // `runStage` measures against the same generation-start timer itself. Passing the
-    // fixed total budget leaves a real repair window instead of subtracting elapsed time twice.
-    const siteResult = await runSitePlanStage(siteContext, timings, GENERATION_BUDGET_MS, usageMeta);
-    if (siteResult.ok) sitePlan = siteResult.value;
-    else console.warn("[site-plan] using deterministic recovery:", siteResult.errors);
-    pipelineResult.diagnostics.push({ stage: "site-plan", status: siteResult.ok ? "ok" : "fallback", durationMs: performance.now() - siteStart, modelCalls: siteResult.attempts, retries: Math.max(0, siteResult.attempts - 1), ...(siteResult.ok ? {} : { error: siteResult.errors.join("; ") }) });
-  } else pipelineResult.diagnostics.push({ stage: "site-plan", status: "fallback", durationMs: performance.now() - siteStart, modelCalls: 0, retries: 0, error: "No V2 mass available." });
-  const diagnostics = [...pipelineResult.diagnostics, ...compilerDiagnostics(pipelineResult.document)];
+  if (!siteContext) {
+    pipelineResult.diagnostics.push({ stage: "site-plan", status: "error", outcome: "failed", durationMs: performance.now() - siteStart, modelCalls: 0, retries: 0, error: "No V2 mass available." });
+    return v2FailureResponse("v2-generation-failed", "site-plan", ["No V2 site frame: the architecture has no mass to site a plan against."], [...pipelineResult.diagnostics, ...compilerChecks]);
+  }
+  // `runStage` measures against the same generation-start timer itself. Passing the
+  // fixed total budget leaves a real repair window instead of subtracting elapsed time twice.
+  const siteResult = await runSitePlanStage(siteContext, timings, GENERATION_BUDGET_MS, usageMeta);
+  pipelineResult.diagnostics.push({
+    stage: "site-plan", status: siteResult.ok ? "ok" : "error", outcome: siteResult.ok ? "accepted" : "failed", durationMs: performance.now() - siteStart,
+    modelCalls: siteResult.attempts, retries: Math.max(0, siteResult.attempts - 1),
+    ...(siteResult.repairRequests?.length ? { repairRequests: siteResult.repairRequests } : {}), ...(siteResult.ok ? {} : { error: siteResult.errors.join("; ") }),
+  });
+  if (!siteResult.ok) return v2FailureResponse("v2-generation-failed", "site-plan", siteResult.errors, [...pipelineResult.diagnostics, ...compilerChecks]);
+  const sitePlan = siteResult.value;
+  const sitePlanHash = sitePlanAuthorityHash(sitePlan);
+  const diagnostics = [...pipelineResult.diagnostics, ...compilerChecks];
   if (process.env.NODE_ENV !== "production") {
     for (const d of diagnostics) console.info(`[architecture-stages] ${d.stage}: ${d.status} (${Math.round(d.durationMs)}ms, ${d.modelCalls} call(s), ${d.retries} retr(y/ies))${d.error ? ` — ${d.error}` : ""}`);
   }
   setDevSession(usageMeta.projectId, {
     input: pipelineInput,
     result: { ...pipelineResult, diagnostics },
-    finalAssembly: { assets, recipes, retrieved, spaces, library, baseRevision },
+    finalAssembly: { assets, recipes, retrieved, spaces, library, baseRevision, sitePlan, sitePlanHash, architectureHash: pipelineResult.authority.architectureHash },
   });
-  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, recipeRejections: recipeLookup.rejections, spaces, budgetMs: GENERATION_BUDGET_MS, sitePlan });
+  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, recipeRejections: recipeLookup.rejections, spaces, budgetMs: GENERATION_BUDGET_MS, sitePlan, sitePlanHash });
   // Peek at the response without consuming the body the caller still needs to return: `response.clone()` tees
   // the stream, so this never affects what actually reaches the client.
   let finalAssemblyError: string | undefined;

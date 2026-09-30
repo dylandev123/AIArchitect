@@ -84,10 +84,12 @@ export interface RunStageInput<T> {
  * text that failed to parse, or a value that parsed but failed semantic `validate` — so a caller can salvage
  * individual valid fields field-by-field instead of discarding the whole response. `rawValueTruncated` means
  * that value was cut off (token limit) and had to be closed up, so its LAST element may be incomplete.
+ * `repairRequests` is every rejection that was sent back to the model as a repair request (absent when the
+ * first attempt was accepted) — the "repair-required" trace of this stage's retry budget.
  */
 export type RunStageResult<T> =
-  | { ok: true; value: T; attempts: number; durationMs: number }
-  | { ok: false; errors: string[]; attempts: number; durationMs: number; rawValue?: unknown; rawValueTruncated?: boolean };
+  | { ok: true; value: T; attempts: number; durationMs: number; repairRequests?: string[] }
+  | { ok: false; errors: string[]; attempts: number; durationMs: number; rawValue?: unknown; rawValueTruncated?: boolean; repairRequests?: string[] };
 
 type Checked<T> = { ok: true; value: T } | { ok: false; errors: string[]; issues?: unknown };
 
@@ -102,6 +104,8 @@ function normalizeAndCheck<T>(input: RunStageInput<T>, raw: unknown): Checked<T>
 export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResult<T>> {
   const maxAttempts = input.maxAttempts ?? 2;
   let errors: string[] = [];
+  const repairRequests: string[] = [];
+  const repairs = () => (repairRequests.length ? { repairRequests: [...repairRequests] } : {});
   let rawValue: unknown;
   let rawValueTruncated = false;
   // Grows only after a response was cut off at the limit: a repair retry at the same budget would just be cut off again.
@@ -112,9 +116,10 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const remainingMs = input.remainingBudgetMs - input.timings.elapsed();
     if (attempt > 0 && remainingMs < lastAttemptMs * 1.3) {
-      return { ok: false, errors: [...errors, "Ran out of time budget for a repair attempt."], attempts, durationMs: totalMs, rawValue, rawValueTruncated };
+      return { ok: false, errors: [...errors, "Ran out of time budget for a repair attempt."], attempts, durationMs: totalMs, rawValue, rawValueTruncated, ...repairs() };
     }
-    if (remainingMs < 1_000) return { ok: false, errors: [...errors, "Ran out of time budget."], attempts, durationMs: totalMs, rawValue, rawValueTruncated };
+    if (remainingMs < 1_000) return { ok: false, errors: [...errors, "Ran out of time budget."], attempts, durationMs: totalMs, rawValue, rawValueTruncated, ...repairs() };
+    if (attempt > 0) repairRequests.push(...errors);
     const callStart = performance.now();
     attempts++;
     try {
@@ -140,7 +145,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
       // already throws `NoObjectGeneratedError` (caught below) before returning anything schema-invalid, so
       // this branch rarely fires against the real provider.
       const checked = normalizeAndCheck(input, output);
-      if (checked.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs };
+      if (checked.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs, ...repairs() };
       rawValue = output;
       rawValueTruncated = false;
       errors = checked.errors;
@@ -153,12 +158,12 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
       // The SDK rejected the raw value with the strict schema; normalize it before re-validating ourselves. If it
       // still fails, retry with the errors that remain AFTER normalization, never the range slips it already fixed.
       const checked = input.normalize && described.rawValue !== undefined && !described.truncated ? normalizeAndCheck(input, described.rawValue) : undefined;
-      if (checked?.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs };
+      if (checked?.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs, ...repairs() };
       errors = described.truncated ? [`${described.message} Keep the response compact: omit optional fields you don't need.`] : checked ? checked.errors : [described.message];
       if (described.truncated) maxOutputTokens = Math.round(maxOutputTokens * 1.6);
       if (described.rawValue !== undefined) { rawValue = described.rawValue; rawValueTruncated = described.truncated === true; }
       if (isDev) console.debug(`[${input.stageName}] attempt ${attempt + 1} threw`, { message: described.message, rawValue: described.rawValue });
     }
   }
-  return { ok: false, errors, attempts, durationMs: totalMs, rawValue, rawValueTruncated };
+  return { ok: false, errors, attempts, durationMs: totalMs, rawValue, rawValueTruncated, ...repairs() };
 }

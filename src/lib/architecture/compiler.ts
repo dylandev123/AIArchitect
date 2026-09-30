@@ -37,6 +37,8 @@ export interface ArchitectureDiagnostics {
   dominantMassId?: string;
   /** The house's primary Roof System, its counterpoint if any, and the system finishing each roof (see `planRoofSystems`). */
   roofSystems: RoofSystemPlan;
+  /** Every roof's eave after clearance processing (see `roofClearance`). */
+  roofClearance: RoofClearance[];
 }
 
 /** Yaw (radians) that turns a mass's local south facade to face `direction`. */
@@ -59,8 +61,6 @@ function yawFacingNorthToward(direction: CompassSide): number {
  * runtime — see the `resolvedSoFar` incident this was written to prevent from recurring.
  */
 export interface ResolveMassesInput { siteStrategy: SiteStrategy; massing: { masses: readonly MassVolume[] } }
-
-const OPPOSITE_SIDE: Record<CompassSide, CompassSide> = { north: "south", south: "north", east: "west", west: "east" };
 
 /**
  * Processes masses in an order where every relationship target is already resolved, instead of raw array
@@ -136,11 +136,11 @@ export function pickDominantMass(masses: readonly MassVolume[]): MassVolume | un
 }
 
 /**
- * Resolves every mass's world position/rotation/elevation from its relationships (`resolutionOrder` picks a
- * safe processing order), then applies real courtyard composition: masses that jointly `surrounds-courtyard`
- * the same anchor get auto-oriented to face the shared void, unless a mass already carries an explicit
- * rotation-setting relationship (`view-facing`, `arrival-facing`, or its own `rotationOffset`) — an explicit
- * rotation intent always wins over auto-orientation. Exported for the stage pipeline: resolving positions
+ * Resolves every mass's world position/rotation/elevation from its AUTHORED relationships (`resolutionOrder`
+ * picks a safe processing order). Pure execution: a rotation only ever comes from the mass's own authored
+ * `rotation` or an explicit rotation-setting relationship (`view-facing`, `arrival-facing`, `rotationOffset`).
+ * A courtyard wing is never turned toward the void on the architect's behalf — `surrounds-courtyard` places
+ * it, and how it faces is the architect's decision. Exported for the stage pipeline: resolving positions
  * incrementally as each mass is proposed reuses this unchanged.
  */
 export function resolveMasses(doc: ResolveMassesInput): MassVolume[] {
@@ -166,17 +166,7 @@ export function resolveMasses(doc: ResolveMassesInput): MassVolume[] {
     }
     byId.set(mass.id, mass);
   }
-  const resolvedInInputOrder = doc.massing.masses.map((m) => byId.get(m.id)!);
-  for (const courtyard of computeCourtyards(resolvedInInputOrder)) {
-    for (const massId of courtyard.enclosingMassIds) {
-      const mass = byId.get(massId)!;
-      const hasExplicitRotation = (mass.relationships ?? []).some((r) => r.kind === "view-facing" || r.kind === "arrival-facing" || r.rotationOffset !== undefined);
-      if (hasExplicitRotation) continue;
-      const side = mass.relationships?.find((r) => r.kind === "surrounds-courtyard" && r.target === courtyard.anchorMassId)?.side;
-      if (side) mass.rotation = yawFacingSouthToward(OPPOSITE_SIDE[side]);
-    }
-  }
-  return resolvedInInputOrder;
+  return doc.massing.masses.map((m) => byId.get(m.id)!);
 }
 
 /**
@@ -194,49 +184,25 @@ interface MassShellMaterials { exterior: ReturnType<typeof resolveMaterial>; tri
 
 interface MassShellResult { primitives: HousePrimitive[]; warnings: string[]; topFloor: FloorFootprint }
 
-/**
- * Small deterministic facade grammar. Explicit document openings always win; otherwise the role supplies
- * a useful baseline so a living pavilion is not compiled as four blank planes and a bedroom wing reads as
- * a rhythm of private rooms. This is intentional geometry, not random decoration.
- */
-function roleFacadeOpenings(mass: MassVolume): readonly MassOpening[] {
-  if ((mass.openings?.length ?? 0) > 0) return mass.openings!;
-  // Articulated masses already express a deliberate facade operation. Do not add a second implicit
-  // grammar over it: that would make the fallback compete with recess/cantilever fixtures.
-  if ((mass.operations?.length ?? 0) > 0 || mass.cantilever) return [];
-  if (mass.role === "main-living") return [
-    { type: "glazing-zone", facade: "south", start: .12, end: .88, heightRatio: .88, frame: true },
-    { type: "glazing-zone", facade: "east", start: .18, end: .82, heightRatio: .8, reveal: .16 },
-  ];
-  if (mass.role === "bedroom-wing") return [{ type: "opening-rhythm", facade: "south", count: Math.max(2, Math.floor(mass.width / 2.4)), width: 1.15, height: 1.45, sill: .9 }];
-  if (mass.role === "guest-pavilion") return [{ type: "glazing-zone", facade: "south", start: .2, end: .8, heightRatio: .76, reveal: .12 }];
-  if (mass.role === "entry") return [{ type: "door", facade: "north", start: .34, end: .66, height: 2.5, frame: true }];
-  return [];
-}
-
-const DEFAULT_ENTRY_DOOR = { width: 1.6, height: 2.4 };
 const doorOnFloor = (door: DoorOpening, level: number) => !door.floors || door.floors === "all" || (door.floors === "ground" ? level === 0 : level > 0);
+/** Height of a door the architect authored without one — a numeric default for an authored door, never a door of the compiler's own. */
+const AUTHORED_DOOR_HEIGHT = 2.4;
 
 /**
- * The door an entry recess is entered through on `level`: the authored door on that facade whose span
- * overlaps the recess, else — on the ground floor only — a default door, because an entry recess is by
- * definition where the house is entered. Upper floors of the recess stay solid unless a door is authored there.
+ * The AUTHORED door an entry recess is entered through on `level`: the door on that facade whose span overlaps
+ * the recess. The compiler never supplies one — a recess with no authored door is built as the solid recess it
+ * was authored as and reported, so the missing door is repaired by the Geometry Pass, not invented here.
  */
 function entryRecessDoor(recess: NonNullable<WallEdge["entryRecess"]>, openings: readonly MassOpening[], mass: MassVolume, level: number): { width: number; height: number; frame: boolean } | undefined {
   const len = recess.facade === "north" || recess.facade === "south" ? mass.width : mass.depth;
   const authored = openings.find((o): o is DoorOpening => o.type === "door" && o.facade === recess.facade && doorOnFloor(o, level) && Math.min(o.start, o.end) < recess.end && Math.max(o.start, o.end) > recess.start);
-  if (authored) return { width: Math.abs(authored.end - authored.start) * len, height: authored.height ?? DEFAULT_ENTRY_DOOR.height, frame: authored.frame ?? true };
-  return level === 0 ? { ...DEFAULT_ENTRY_DOOR, frame: true } : undefined;
+  return authored ? { width: Math.abs(authored.end - authored.start) * len, height: authored.height ?? AUTHORED_DOOR_HEIGHT, frame: authored.frame ?? true } : undefined;
 }
 
 /** Doors that land in an entry recess are built in its back wall, not as slivers on the facade plane beside it. */
 function withoutRecessedDoors(openings: readonly MassOpening[], recesses: readonly NonNullable<WallEdge["entryRecess"]>[]): readonly MassOpening[] {
   if (!recesses.length) return openings;
   return openings.filter((o) => o.type !== "door" || !recesses.some((r) => r.facade === o.facade && Math.min(o.start, o.end) < r.end && Math.max(o.start, o.end) > r.start));
-}
-
-function openingsForDiagnostics(mass: MassVolume): readonly MassOpening[] {
-  return roleFacadeOpenings(mass);
 }
 
 /**
@@ -251,7 +217,8 @@ function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassSh
   const warnings: string[] = [];
   let topFloor: FloorFootprint | undefined;
   const operations: readonly MassGeometryOperation[] = mass.operations ?? [];
-  const openings = roleFacadeOpenings(mass);
+  // Only what the architect authored: a mass with no openings is compiled with none.
+  const openings: readonly MassOpening[] = mass.openings ?? [];
   const exteriorPaint = paintOf(materials.exterior);
   const levelHeight = massLevelHeight(mass);
   const wallHeight = levelHeight - FLOOR_THICKNESS;
@@ -283,6 +250,7 @@ function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassSh
     warnings.push(...openingsResult.warnings.map((w) => `floor ${level}: ${w}`));
     untaggedEdges.forEach((edge, i) => {
       const entryDoor = edge.entryRecess && entryRecessDoor(edge.entryRecess, openings, mass, level);
+      if (edge.entryRecess && !entryDoor && level === 0) warnings.push(`floor 0: entry-recess on the ${edge.entryRecess.facade} facade has no authored door — built solid; author a door inside the recess.`);
       if (entryDoor) primitives.push(...buildEntryRecessDoor(edge, entryDoor, wallBaseY, wallHeight, `wall-${level}-entry-${i}`, materials));
       else if (edge.chamfer?.glazed) primitives.push(...buildGlazedWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, materials));
       else primitives.push(buildPlainWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, exteriorPaint));
@@ -410,43 +378,59 @@ function footprintGap(a: Rect, b: Rect): number {
 }
 
 const MIN_ROOF_OVERHANG = 0.3;
-/** Relationship kinds that mean two masses are DELIBERATELY touching/close — a bridge, a connected wing — so overhang overlap there is intentional, not the "accidental merge" this trim exists to prevent. */
-const INTENTIONALLY_ADJACENT_KINDS = new Set(["adjacent-to", "connected-to", "bridge-between"]);
+/** Overhang a recipe without one is compiled with (fixtures / pre-authority documents; a V2 stage roof always authors its own). */
+const UNAUTHORED_OVERHANG = 0.6;
+/** A trim keeps the authored roof language while the eave keeps at least this share of its authored reach… */
+const LANGUAGE_PRESERVING_TRIM_RATIO = 0.5;
+/** …or loses no more than this much of it (a small eave trimmed to the minimum is still the same roof). */
+const LANGUAGE_PRESERVING_TRIM_M = 0.3;
 
-function directlyRelated(a: MassVolume, b: MassVolume): boolean {
-  const relates = (from: MassVolume, toId: string) => (from.relationships ?? []).some((r) => r.target === toId && INTENTIONALLY_ADJACENT_KINDS.has(r.kind));
-  return relates(a, b.id) || relates(b, a.id);
-}
+/** One roof's eave after clearance processing, and whether the trim still reads as the roof the architect authored. */
+export interface RoofClearance { massId: string; authored: number; cleared: number; neighborId?: string; gap?: number; preservesLanguage: boolean }
+
+/** The deepest authored overhang that `cleared` would still be an intent-preserving trim of. */
+export const maxPreservedOverhang = (cleared: number) => Math.max(cleared / LANGUAGE_PRESERVING_TRIM_RATIO, cleared + LANGUAGE_PRESERVING_TRIM_M);
 
 /**
- * Shrinks a roof's overhang, per mass, only as far as needed to stop it visually merging into a
- * DIFFERENT, unrelated mass's roof — never touches the model's own roof-family choice, and never touches a
- * pair that's deliberately adjacent/connected/bridged (see `directlyRelated`). Two unrelated masses whose
- * combined overhangs would reach further than the physical gap between their footprints each get capped to
- * half that gap (floored at `MIN_ROOF_OVERHANG`), so adjacent plates stay visually separate.
+ * Collision clearance for eaves: where two neighboring roof volumes would merge, each eave is trimmed to half
+ * the gap between the footprints (never below `MIN_ROOF_OVERHANG`). It only ever shortens an eave — never the
+ * roof family, pitch, orientation or expression — and it reports, per roof, whether what is left is still the
+ * authored roof (`preservesLanguage`). A trim that is not is a Roof Composition repair / a blocking integrity
+ * failure, never a silently different roof. Relationships never exempt a collision.
  */
-function trimOverhangsForClearance(masses: readonly MassVolume[], roofs: readonly RoofRecipe[]): Map<string, number> {
-  const overhangByMassId = new Map(roofs.map((r) => [r.massId, r.overhang ?? 0.6] as const));
+export function roofClearance(masses: readonly MassVolume[], roofs: readonly RoofRecipe[]): RoofClearance[] {
+  const authored = new Map(roofs.map((r) => [r.massId, Math.max(0, r.overhang ?? UNAUTHORED_OVERHANG)] as const));
+  const cleared = new Map(authored);
+  const cause = new Map<string, { neighborId: string; gap: number }>();
   for (let i = 0; i < masses.length; i++) {
     for (let j = i + 1; j < masses.length; j++) {
       const a = masses[i], b = masses[j];
-      if (directlyRelated(a, b)) continue;
+      if (!cleared.has(a.id) || !cleared.has(b.id)) continue;
       const gap = footprintGap(footprintAABB(a), footprintAABB(b));
-      const oa = overhangByMassId.get(a.id) ?? 0.6;
-      const ob = overhangByMassId.get(b.id) ?? 0.6;
+      const oa = cleared.get(a.id)!, ob = cleared.get(b.id)!;
       if (oa + ob <= gap) continue;
       const share = Math.max(MIN_ROOF_OVERHANG, gap / 2);
-      if (oa > share) overhangByMassId.set(a.id, share);
-      if (ob > share) overhangByMassId.set(b.id, share);
+      if (oa > share) { cleared.set(a.id, share); cause.set(a.id, { neighborId: b.id, gap }); }
+      if (ob > share) { cleared.set(b.id, share); cause.set(b.id, { neighborId: a.id, gap }); }
     }
   }
-  return overhangByMassId;
+  return [...authored].map(([massId, reach]) => {
+    const kept = cleared.get(massId)!;
+    return { massId, authored: reach, cleared: kept, ...cause.get(massId), preservesLanguage: kept >= reach || reach <= maxPreservedOverhang(kept) + 1e-9 };
+  });
+}
+
+/** What the shell compiler reports for one mass (clipped/dropped operations, a recess with no authored door) — the Geometry Pass's own dry run. */
+export function massShellWarnings(mass: MassVolume): string[] {
+  const material = resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass });
+  return buildMassShell(mass, { exterior: material, trim: material, glass: material }).warnings;
 }
 
 export function compileArchitecture(doc: ArchitecturalDesignDocument, options: ArchitectureCompileOptions): { model: HouseModel; errors: string[]; diagnostics?: ArchitectureDiagnostics } {
   const errors = validateArchitecturalDesignDocument(doc); if (errors.length) return { model: { id: "architecture-invalid", primitives: [] }, errors };
   const masses = resolveMasses(doc); const primitives: HousePrimitive[] = [];
-  const clearedOverhangs = trimOverhangsForClearance(masses, doc.roofs.recipes);
+  const clearance = roofClearance(masses, doc.roofs.recipes);
+  const clearedOverhangs = new Map(clearance.map((c) => [c.massId, c.cleared] as const));
   const dominantMassId = pickDominantMass(masses)?.id;
   const roofSystems = planRoofSystems(doc.roofs, dominantMassId, options.materials.roof.material);
   const capabilityDiagnostics: ArchitectureDiagnostics["capabilities"] = [];
@@ -462,7 +446,7 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
       // out of the same wall pass that builds the plain solid walls.
       const shellSource = options.mode === "openings-only" ? shell.primitives.filter((p) => p.category === "window") : shell.primitives;
       const shellPrimitives = shellSource.map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
-      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: openingsForDiagnostics(mass).length, topFloorRectCount: shell.topFloor.rects.length, warnings: shell.warnings });
+      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: mass.openings?.length ?? 0, topFloorRectCount: shell.topFloor.rects.length, warnings: shell.warnings });
       // A cantilevered mass offsets every primitive above the ground floor along its declared side, in world space.
       const cantileverOffset = mass.cantilever ? SIDE_VECTOR[mass.cantilever.direction] : undefined;
       const levelHeight = massLevelHeight(mass);
@@ -483,7 +467,7 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
       if (options.mode === "massing-only") primitives.push({ kind: "box", id: `architecture-${mass.id}-debug-footprint`, category: "floor", label: `${mass.name} · rot ${(mass.rotation * 180 / Math.PI).toFixed(0)}° · elev ${mass.elevation}m`, position: [mass.position.x, mass.elevation + 0.025, mass.position.z], rotation: [0, mass.rotation, 0], size: [mass.width, 0.05, mass.depth], color: "#ff9d2e", roughness: .65 });
     } else {
       topFloor = topFloorFootprintFor(mass);
-      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: openingsForDiagnostics(mass).length, topFloorRectCount: topFloor.rects.length, warnings: [] });
+      geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: mass.openings?.length ?? 0, topFloorRectCount: topFloor.rects.length, warnings: [] });
     }
     if (options.mode !== "massing-only" && options.mode !== "geometry-only" && options.mode !== "openings-only") for (const recipe of doc.roofs.recipes.filter((r) => r.massId === mass.id)) {
       const cleared = clearedOverhangs.get(mass.id);
@@ -511,6 +495,7 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
     courtyards: computeCourtyards(masses),
     dominantMassId,
     roofSystems,
+    roofClearance: clearance,
   };
   return { model: { id: "architectural-design-document", primitives }, errors: [], diagnostics };
 }

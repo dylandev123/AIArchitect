@@ -7,6 +7,8 @@ import { replayArchitectureStage, type ReplayableArchitectureStage } from "@/lib
 import { getDevSession, setDevSession } from "@/lib/architecture/stages/devSessionCache";
 import { runFinalAssembly } from "@/lib/ai/finalAssembly";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
+import { isV2GenerationFailure } from "@/lib/architecture/stages/recovery";
+import { v2FailureResponse } from "@/lib/ai/v2Failure";
 
 export const maxDuration = 120;
 /** A manual, one-stage debug rerun — generous but bounded, not the full multi-stage request budget. */
@@ -60,11 +62,16 @@ export async function POST(req: NextRequest) {
       if (!session.finalAssembly || !session.result) {
         return NextResponse.json({ error: "This cached run has no final-assembly context to replay." }, { status: 404 });
       }
-      const { assets, recipes, retrieved, spaces, library, baseRevision } = session.finalAssembly;
+      const { assets, recipes, retrieved, spaces, library, baseRevision, sitePlan, sitePlanHash } = session.finalAssembly;
+      // A replayed architecture stage produced a new document; the cached Site Plan was authored against the old
+      // one, and Final Assembly never designs a site itself. Regenerate rather than assemble a mismatched pair.
+      if (session.result.authority.architectureHash !== session.finalAssembly.architectureHash) {
+        return NextResponse.json({ error: "The architecture changed since this run's Site Plan was authored. Generate again to author a Site Plan for it." }, { status: 409 });
+      }
       const response = await runFinalAssembly({
         brief: session.input.brief, assets, baseRevision, library, usageMeta, timings,
         pipelineResult: session.result, recipes, recipeIds: recipes.map((r) => r.id), retrieved, spaces,
-        budgetMs: REPLAY_BUDGET_MS,
+        budgetMs: REPLAY_BUDGET_MS, sitePlan, sitePlanHash,
       });
       return response;
     }
@@ -85,6 +92,8 @@ export async function POST(req: NextRequest) {
       capabilityRequests: result.capabilityRequests,
     });
   } catch (error) {
+    // Same rule as a live generation: a stage that exhausts its retry budget yields no design, never a fallback one.
+    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics);
     console.error(`[architecture-replay] ${stage} failed:`, error);
     return providerErrorResponse(error, stage);
   }

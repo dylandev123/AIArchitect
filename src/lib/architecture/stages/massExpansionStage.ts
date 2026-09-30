@@ -6,9 +6,11 @@ import { capabilityById, normalizeCapability } from "@/lib/library/capabilities"
 import type { ArchitecturalIntent, SpacePlan } from "../designEngine";
 import type { MassRole, MassVolume, SiteStrategy } from "../document";
 import { resolveMasses } from "../compiler";
-import { sanitizeVolumePlan, withVolumePlan } from "../volumePlan";
+import { missingVolumePlanFields, sanitizeVolumePlan, withVolumePlan } from "../volumePlan";
+import { placementConflicts } from "./integrityChecks";
+import { repairRequests } from "./recovery";
 import { runStage } from "./runStage";
-import { massExpansionStageOutputSchema, MASS_ROLES, SIDE_RESOLVED_KINDS, KNOWN_CAPABILITY_IDS, VOLUME_PLAN_GUIDE } from "./schemas";
+import { massExpansionStageOutputSchema, MASS_ROLES, SIDE_RESOLVED_KINDS, KNOWN_CAPABILITY_IDS, VOLUME_PLAN_GUIDE, type MassExpansionStageOutput } from "./schemas";
 import { clampNearBound, recoverRotationOffset } from "./numericNormalization";
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -110,7 +112,7 @@ export interface MassExpansionContext {
 function normalizeMassExpansionOutput(raw: unknown): unknown {
   if (!raw || typeof raw !== "object") return raw;
   const value = raw as Record<string, unknown>;
-  // An off-vocabulary plan value is dropped here and defaulted from the role on acceptance — see `sanitizeVolumePlan`.
+  // An off-vocabulary plan value is dropped here and then reported as a missing field (a repair request), never defaulted.
   const mass = value.mass && typeof value.mass === "object" ? value.mass as Record<string, unknown> : undefined;
   const withPlan = mass && "plan" in mass ? { ...value, mass: { ...mass, plan: sanitizeVolumePlan(mass.plan) } } : value;
   if (!Array.isArray(value.relationships)) return withPlan;
@@ -162,8 +164,12 @@ export interface MassExpansionResult {
   /** modelCalls beyond the one each decision needed. */
   retries: number;
   durationMs: number;
-  /** True if a decision call failed every retry and the loop stopped early, rather than the model signaling "done". Equivalent to `stopReason === "failed"`. */
+  /** True if a decision call failed every retry and the loop stopped early, rather than the model signaling "done". Equivalent to `stopReason === "failed"`. The composition is then incomplete and the generation does not finalize. */
   hadFailure: boolean;
+  /** Why the failed turn was rejected on its last attempt (empty unless `hadFailure`). */
+  failureErrors: string[];
+  /** Every conflict sent back to the architect as a repair request across the loop. */
+  repairRequests: string[];
   /** Required volumes (space plan + brief program) that were never placed, each with the reason. Empty when all were built. */
   unplacedVolumes: UnplacedVolume[];
 }
@@ -183,6 +189,20 @@ function resolvedSoFar(masses: readonly MassVolume[], siteStrategy: SiteStrategy
   return resolveMasses({ siteStrategy, massing: { masses } });
 }
 
+/** The mass an "add" decision authors, exactly as it will be accepted — also what `validate` checks before accepting it. */
+function authoredMass(value: MassExpansionStageOutput, id: string): MassVolume {
+  const mass_ = value.mass!;
+  // The plan (and the height it states) is fixed now, at placement — later volumes step against the real height.
+  return withVolumePlan({
+    id, name: mass_.name, role: mass_.role,
+    position: mass_.position ?? { x: 0, z: 0 }, width: mass_.width, depth: mass_.depth, floors: mass_.floors,
+    elevation: mass_.elevation ?? 0, rotation: mass_.rotation ?? 0,
+    ...((mass_.position || mass_.elevation !== undefined || mass_.rotation !== undefined) ? { placementLocked: true } : {}),
+    relationships: value.relationships!,
+    ...(value.cantilever ? { cantilever: value.cantilever } : {}),
+  }, mass_.plan);
+}
+
 export async function runMassExpansionStage(
   ctx: MassExpansionContext,
   timings: Timings,
@@ -198,6 +218,8 @@ export async function runMassExpansionStage(
   // any of the other breaks firing, this default is the true outcome — the hard cap really was hit.
   let stopReason: MassExpansionStopReason = "hard-cap";
   let failedAtTurn: number | undefined;
+  let failureErrors: string[] = [];
+  const repairRequestsSent: string[] = [];
   let decisions = 0;
   let modelCalls = 0;
   let durationMs = 0;
@@ -245,10 +267,17 @@ export async function runMassExpansionStage(
           if (!ids.has(rel.target)) errors.push(`Unknown relationship target "${rel.target}". Use one of: ${[...ids].join(", ")}.`);
           if ((SIDE_RESOLVED_KINDS as readonly string[]).includes(rel.kind) && !rel.side) errors.push(`Relationship kind "${rel.kind}" requires a "side".`);
         }
-        return errors;
+        const missingPlan = missingVolumePlanFields(value.mass?.plan);
+        if (missingPlan.length) errors.push(`[repair-required:plan-incomplete] mass.plan must author every field; missing or off-vocabulary: ${missingPlan.join(", ")}.`);
+        if (errors.length) return errors;
+        // The composition WITH this volume must still be buildable as planned: its own plan where it stands, and
+        // every earlier volume's plan now that this one is beside it. A conflict is this turn's to repair.
+        const candidate = resolvedSoFar([...masses, authoredMass(value, `mass-${masses.length}`)], ctx.siteStrategy);
+        return repairRequests(placementConflicts(candidate, ctx.siteStrategy, "mass-expansion"));
       },
     });
     decisions++;
+    repairRequestsSent.push(...(result.repairRequests ?? []));
     modelCalls += result.attempts;
     durationMs += result.durationMs;
     if (!result.ok) {
@@ -256,7 +285,8 @@ export async function runMassExpansionStage(
       failedAtTurn = i + 1;
       // Every mass accepted before this failure is kept — the loop stops one mass short of the model's
       // intent, it never discards what already succeeded (see `masses` below, only ever pushed to, never reset).
-      if (isDev) console.debug(`[mass-expansion] turn ${i + 1} gave up after retries — keeping ${masses.length} already-accepted mass(es)`, { errors: result.errors, rawValue: result.rawValue });
+      failureErrors = result.errors;
+      if (isDev) console.debug(`[mass-expansion] turn ${i + 1} gave up after retries — the composition is incomplete`, { errors: result.errors, rawValue: result.rawValue });
       break;
     }
     if (result.value.decision === "done") {
@@ -275,17 +305,8 @@ export async function runMassExpansionStage(
     // because a discriminated union would produce a non-object root schema the provider rejects (see schemas.ts).
     const value = result.value;
     const mass_ = value.mass!;
-    const relationships = value.relationships!;
     const id = `mass-${masses.length}`;
-    // The plan (and the height it implies) is fixed now, at placement — later volumes step against the real height.
-    const mass: MassVolume = withVolumePlan({
-      id, name: mass_.name, role: mass_.role,
-      position: mass_.position ?? { x: 0, z: 0 }, width: mass_.width, depth: mass_.depth, floors: mass_.floors,
-      elevation: mass_.elevation ?? 0, rotation: mass_.rotation ?? 0,
-      ...((mass_.position || mass_.elevation !== undefined || mass_.rotation !== undefined) ? { placementLocked: true } : {}),
-      relationships,
-      ...(value.cantilever ? { cantilever: value.cantilever } : {}),
-    }, mass_.plan);
+    const mass = authoredMass(value, id);
     masses.push(mass);
     log.push({ massId: id, reasoning: value.reasoning! });
     if (isDev) console.debug(`[mass-expansion] turn ${i + 1} accepted "${id}" (${mass_.role}) — ${masses.length} mass(es) accumulated so far`);
@@ -315,6 +336,6 @@ export async function runMassExpansionStage(
   return {
     masses: finalMasses, capabilityIntents, capabilityRequests, log,
     stopReason, completed, stopMessage, failedAtTurn, truncated: !completed,
-    modelCalls, retries: modelCalls - decisions, durationMs, hadFailure: stopReason === "failed", unplacedVolumes,
+    modelCalls, retries: modelCalls - decisions, durationMs, hadFailure: stopReason === "failed", failureErrors, repairRequests: repairRequestsSent, unplacedVolumes,
   };
 }

@@ -4,13 +4,16 @@ import path from "node:path";
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { BLANK_HOUSE_JSON } from "@/types/house";
+import type { CuratedAsset } from "@/types/assets";
 import type { GenerationReport } from "@/types/library";
 import { modelOutput, VILLA_BRIEF } from "@/lib/library/__tests__/villaFixture";
 import { recipeInputSchema } from "@/lib/library/recipes";
+import { v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
 
 /**
  * The real POST /api/ai/house handler, with only the model call stubbed: the same prompt building, spaces planning, recipe retrieval,
- * assembly, site planning, collision passes, library attach and learning loop that a live generation runs — at no cost.
+ * V2 stages, assembly, integrity gate, library attach and learning loop that a live generation runs — at no cost. Every V2 stage is
+ * answered with a complete authored response (see v2StageResponder), the final assembly call with the villa fixture.
  */
 
 const generateText = vi.fn();
@@ -23,13 +26,14 @@ let dir: string;
 beforeEach(async () => {
   dir = await mkdtemp(path.join(tmpdir(), "route-"));
   vi.stubEnv("AI_LIBRARY_PATH", path.join(dir, "library.json"));
+  vi.stubEnv("AI_ASSET_STORE_PATH", path.join(dir, "assets"));
   vi.stubEnv("DATABASE_URL", "");
   vi.stubEnv("POSTGRES_URL", "");
   vi.stubEnv("OPENAI_API_KEY", "test-key");
   vi.spyOn(console, "warn").mockImplementation(() => {});
   vi.spyOn(console, "error").mockImplementation(() => {});
   generateText.mockReset();
-  generateText.mockResolvedValue({ output: modelOutput({ ops: [{ op: "addPool", value: { wall: "north", offset: 4, distance: 3, width: 10, depth: 5, waterDepth: 1.5 } }] }), totalUsage: {} });
+  generateText.mockImplementation(v2StageResponder(() => modelOutput({ ops: [{ op: "addPool", value: { wall: "north", offset: 4, distance: 3, width: 10, depth: 5, waterDepth: 1.5 } }] })));
 });
 
 afterEach(() => {
@@ -37,11 +41,29 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const asset = (id: string, name: string, family: string, tags: string[]) => ({ id, name, family, tags, styleTags: ["tropical"], contextTags: [], dimensions: family === "pergola" ? {width:4.5,depth:3.5,height:2.8} : {width:2.4,depth:1,height:0.76} });
+const asset = (id: string, name: string, family: CuratedAsset["family"], tags: string[]): CuratedAsset => {
+  const dimensions = family === "pergola" ? { width: 4.5, depth: 3.5, height: 2.8 } : { width: 2.4, depth: 1, height: 0.76 };
+  return {
+    id, name, family, tags, styleTags: ["tropical"], contextTags: [], dimensions,
+    sourceSlug: id, source: "upload", type: "glb-model", categories: [], thumbnailUrl: "",
+    pbr: { baseColor: "#ffffff", roughness: 0.5, metalness: 0 }, compatibleStyles: [], status: "approved", importedAt: "",
+    validation: { checkedAt: "", passed: true, errors: [], warnings: [], dimensions },
+  };
+};
 
-async function generate(libraryAssets: unknown[] = []) {
+async function seedApprovedAssets(assets: CuratedAsset[]) {
+  const { assetBackend } = await import("@/lib/assets/serverStore");
+  const backend = assetBackend();
+  for (const entry of assets) {
+    await backend.put(entry);
+    // Retrieval requires a server-stored GLB as well as approved validation metadata.
+    await backend.putGlb(entry.id, new Uint8Array([0]));
+  }
+}
+
+async function generate() {
   const { POST } = await import("../route");
-  const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", projectId: "proj-1", prompt: VILLA_BRIEF, currentHouseJson: BLANK_HOUSE_JSON, libraryAssets }) }));
+  const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", projectId: "proj-1", prompt: VILLA_BRIEF, currentHouseJson: BLANK_HOUSE_JSON }) }));
   return { res, body: (await res.json()) as { json: string; intelligence: GenerationReport; adjusted: string[] } };
 }
 
@@ -51,11 +73,12 @@ describe("POST /api/ai/house (generate)", () => {
     expect(res.status).toBe(200);
     const report = body.intelligence;
 
-    // Exterior: the pool the model hung on the arrival wall was set on the private side.
+    // Exterior: the final assembly's own pool on the arrival wall is ignored — the authored V2 Site Plan owns the site.
     expect(report.placement).toMatchObject({ arrivalSide: "north", viewSide: "south", issues: [] });
+    expect(report.placement.pools.length).toBe(1);
     expect(report.placement.pools.every((p) => p.side !== "arrival")).toBe(true);
     expect(report.placement.garages.every((g) => g.side === "arrival")).toBe(true);
-    expect(body.adjusted.join(" ")).toMatch(/arrival side/);
+    expect(JSON.parse(body.json).sitePlan.pool).toMatchObject({ wall: "south", width: 14 });
 
     // Loop: spaces, knowledge, needs, plans — and the write.
     expect(report.steps.every((s) => s.ok)).toBe(true);
@@ -94,14 +117,17 @@ describe("POST /api/ai/house (generate)", () => {
     expect(body.intelligence.spaces.find((s) => s.name === "Outdoor Dining")).toBeDefined();
   });
 
-  it("retrieves the approved assets sent with the request and stops asking for what they supply", async () => {
+  it("retrieves approved server assets and retains needs for components the stable site plan cannot place", async () => {
     const first = await generate();
     const library = [asset("t1", "Tropical Teak Dining Table", "furniture", ["dining", "table"]), asset("g1", "Teak Pergola", "pergola", ["pergola"])];
-    const second = await generate(library);
+    await seedApprovedAssets(library);
+    const second = await generate();
     expect(second.body.intelligence.assets.map((a) => a.name)).toEqual(expect.arrayContaining(["Tropical Teak Dining Table", "Teak Pergola"]));
     const dining = second.body.intelligence.spaces.find((s) => s.name === "Outdoor Dining")!;
-    expect(dining.supplied).toEqual(expect.arrayContaining(["dining-table", "pergola"]));
-    expect(second.body.intelligence.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(false);
+    expect(dining.supplied).toEqual(expect.arrayContaining(["dining-table"]));
+    // Retrieval is authoritative and separate from placement. The stable V2 Site Plan has no safe pergola
+    // location here, so it remains a Need even though its approved server asset was retrieved.
+    expect(second.body.intelligence.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(true);
     expect(first.body.intelligence.assetNeeds.some((n) => n.name.endsWith("Pergola"))).toBe(true);
     // A second generation adds demand to the same records; it does not duplicate the plans.
     expect(second.body.intelligence.plansCreated).toEqual([]);

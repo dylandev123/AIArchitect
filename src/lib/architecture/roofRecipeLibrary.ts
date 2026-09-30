@@ -1,5 +1,5 @@
 import type { DesignRecipe, RecipeParameter } from "@/types/library";
-import type { MassVolume, RoofRecipe, RoofRecipeKind, RoofSystemChoice } from "./document";
+import type { MassVolume, RoofRecipeKind, RoofSystemChoice } from "./document";
 import { getRoofSystem } from "./roofSystems";
 
 const KINDS = new Set<RoofRecipeKind>(["flat", "floating-flat", "shed", "mono-pitch", "gable", "hip", "butterfly", "pavilion", "cross-gable", "mixed"]);
@@ -29,19 +29,11 @@ export function roofRecipeCompatibility(recipe: DesignRecipe, masses: readonly M
   return roofRecipeSystem(recipe) ? undefined : "Recipe does not select a registered Roof System.";
 }
 
-/** Apply only well-known roof inputs. V2 still builds every plane, edge and finish procedurally. */
-export function parameterizeRoofsFromLibrary(recipe: DesignRecipe, authored: readonly RoofRecipe[]): RoofRecipe[] {
-  const kind = recipeKind(recipe);
-  const pitch = value(recipe, ["pitch", "pitchdeg"]);
-  const overhang = value(recipe, ["overhang", "overhangm"]);
-  return authored.map((roof) => ({
-    ...roof,
-    ...(kind ? { kind } : {}),
-    ...(typeof pitch === "number" ? { pitch: Math.max(0, Math.min(45, pitch)) } : {}),
-    ...(typeof overhang === "number" ? { overhang: Math.max(0, Math.min(4, overhang)) } : {}),
-  }));
-}
-
+/**
+ * Durable evidence that the architect cited an approved recipe. It carries the recipe's roof system (the
+ * covering the compiler finishes the authored roofs in) and its parameters as a record — those parameters are
+ * never written onto the roofs: kind, pitch and overhang are whatever Roof Composition authored.
+ */
 export function appliedRoofRecipe(recipe: DesignRecipe): { system: RoofSystemChoice; libraryRecipe: { id: string; name: string; system: string; parameters: Record<string, number | string | boolean>; status: "applied" } } | undefined {
   const system = roofRecipeSystem(recipe);
   if (!system) return undefined;

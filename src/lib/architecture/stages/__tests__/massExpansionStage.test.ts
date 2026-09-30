@@ -2,6 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createTimings } from "@/lib/ai/timing";
 import type { ArchitecturalIntent } from "../../designEngine";
 import type { MassVolume, SiteStrategy } from "../../document";
+import { QUIET_PLAN } from "../../__tests__/authoredFixtures";
+
+/** Every added volume authors a complete plan — the stage rejects anything less (see the placement-authority tests below). */
+const plan = QUIET_PLAN;
 
 const generateText = vi.fn();
 vi.mock("ai", async (importOriginal) => ({ ...(await importOriginal<typeof import("ai")>()), generateText: (...args: unknown[]) => generateText(...args) }));
@@ -24,7 +28,7 @@ describe("mass expansion stage", () => {
   it("stops as soon as the model signals the composition is complete", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A private bedroom wing buffers from the living pavilion.", mass: { name: "Private Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1 }, relationships: [{ kind: "offset-from", target: "mass-0", side: "west", distance: 2 }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A private bedroom wing buffers from the living pavilion.", mass: { name: "Private Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1, plan }, relationships: [{ kind: "offset-from", target: "mass-0", side: "west", distance: 2 }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The living pavilion and private wing satisfy the brief." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A quiet family house", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -38,7 +42,7 @@ describe("mass expansion stage", () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText.mockImplementation(() => {
       const idx = generateText.mock.calls.length;
-      return Promise.resolve({ output: { decision: "add", reasoning: `Wing ${idx} adds service capacity.`, mass: { name: `Wing ${idx}`, role: "service", width: 5, depth: 5, floors: 1 }, relationships: [{ kind: "separated-from", target: "mass-0", side: "east", distance: 3 }] }, totalUsage: {} });
+      return Promise.resolve({ output: { decision: "add", reasoning: `Wing ${idx} adds service capacity.`, mass: { name: `Wing ${idx}`, role: "service", width: 5, depth: 5, floors: 1, plan, position: { x: 12 + idx * 8, z: 0 } }, relationships: [{ kind: "separated-from", target: "mass-0", side: "east", distance: 3 }] }, totalUsage: {} });
     });
     const result = await runMassExpansionStage({ brief: "A sprawling estate", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
     expect(result.truncated).toBe(true);
@@ -50,7 +54,7 @@ describe("mass expansion stage", () => {
   it("never blocks placement on an unsupported requested operation, and files it as a capability request instead", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "An atrium would bring light into the plan.", mass: { name: "Atrium Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "north", distance: 1 }], requestedOperation: "atrium" }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "An atrium would bring light into the plan.", mass: { name: "Atrium Wing", role: "connector", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "north", distance: 1 }], requestedOperation: "atrium" }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with an atrium", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -62,8 +66,8 @@ describe("mass expansion stage", () => {
   it("recovers from a relationship targeting an unknown mass id via the repair retry, without throwing", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Extra wing.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "not-a-real-mass", side: "east" }] }, totalUsage: {} })
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Extra wing, corrected.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Extra wing.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "not-a-real-mass", side: "east" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Extra wing, corrected.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
     // The model's own "done" remains the only normal completion signal, keeping this test isolated to
@@ -76,7 +80,7 @@ describe("mass expansion stage", () => {
   it("lets the architect explicitly complete composition after the brief's explicit program is placed", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A guest wing serves visiting family.", mass: { name: "Guest Wing", role: "guest-pavilion", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A guest wing serves visiting family.", mass: { name: "Guest Wing", role: "guest-pavilion", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The guest wing and living pavilion complete this compact composition." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with a guest wing", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -95,7 +99,7 @@ describe("mass expansion stage", () => {
     const { NoObjectGeneratedError, TypeValidationError } = await import("ai");
     const rawValue = {
       decision: "add", reasoning: "A garden wing offset from the living pavilion.",
-      mass: { name: "Garden Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1 },
+      mass: { name: "Garden Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1, plan },
       relationships: [{ kind: "offset-from", target: "mass-0", side: "east", distance: 2, rotationOffset: 90 }],
     };
     const typeValidationError = new TypeValidationError({ value: rawValue, cause: new Error("relationships.0.rotationOffset: Too big: expected number to be <=3.141592653589793") });
@@ -120,8 +124,8 @@ describe("mass expansion stage", () => {
   it("still goes through the normal repair retry (not a silent guess) for a rotationOffset far too large to be degrees or an overshoot", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A wing with a nonsensical rotation.", mass: { name: "Odd Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east", rotationOffset: 999999 }] }, totalUsage: {} })
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Corrected.", mass: { name: "Odd Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A wing with a nonsensical rotation.", mass: { name: "Odd Wing", role: "connector", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east", rotationOffset: 999999 }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Corrected.", mass: { name: "Odd Wing", role: "connector", width: 6, depth: 6, floors: 1, plan }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with an extra wing", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -136,7 +140,7 @@ describe("mass expansion stage", () => {
     // `resolvedSoFar` (internal to this module) used to resolve that relationship against a stub document
     // missing `siteStrategy` entirely, crashing the instant a mass like this was accepted.
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A bedroom wing that opens directly onto the view.", mass: { name: "Bedroom Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1 }, relationships: [{ kind: "view-facing", target: "mass-0" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A bedroom wing that opens directly onto the view.", mass: { name: "Bedroom Wing", role: "bedroom-wing", width: 9, depth: 7, floors: 1, plan }, relationships: [{ kind: "view-facing", target: "mass-0" }, { kind: "adjacent-to", target: "mass-0", side: "west", distance: 2 }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with a bedroom wing facing the view", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -149,7 +153,7 @@ describe("mass expansion stage", () => {
   it("resolves an arrival-facing relationship without crashing, using the pipeline's real site strategy", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
     generateText
-      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A garage that fronts the arrival court.", mass: { name: "Garage", role: "garage", width: 7, depth: 6, floors: 1 }, relationships: [{ kind: "arrival-facing", target: "mass-0" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A garage that fronts the arrival court.", mass: { name: "Garage", role: "garage", width: 7, depth: 6, floors: 1, plan }, relationships: [{ kind: "arrival-facing", target: "mass-0" }, { kind: "adjacent-to", target: "mass-0", side: "east", distance: 2 }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with a garage facing the arrival court", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
@@ -174,7 +178,7 @@ describe("mass expansion stage", () => {
     expect(result.stopMessage).not.toContain("hard cap");
   });
   describe("space-plan required volumes", () => {
-    const addMass = (name: string, role: string, side: string) => ({ output: { decision: "add", reasoning: `${name} serves the plan.`, mass: { name, role, width: 7, depth: 6, floors: 1 }, relationships: [{ kind: "separated-from", target: "mass-0", side, distance: 3 }] }, totalUsage: {} });
+    const addMass = (name: string, role: string, side: string) => ({ output: { decision: "add", reasoning: `${name} serves the plan.`, mass: { name, role, width: 7, depth: 6, floors: 1, plan }, relationships: [{ kind: "separated-from", target: "mass-0", side, distance: 3 }] }, totalUsage: {} });
     const done = (reasoning: string) => ({ output: { decision: "done", reasoning }, totalUsage: {} });
     const spacePlanVolumes = async () => {
       const { createSpacePlan, selectDesignStrategies } = await import("../../designEngine");
@@ -236,6 +240,34 @@ describe("mass expansion stage", () => {
       expect(result.stopReason).toBe("failed");
       expect(result.unplacedVolumes.map((v) => v.id)).toEqual(["outdoor-pavilion", "service-spine"]);
       expect(result.unplacedVolumes[0].reason).toMatch(/failed on turn 2/);
+    });
+  });
+
+  describe("placement authority", () => {
+    const add = (mass: Record<string, unknown>, relationships: unknown[]) => ({ output: { decision: "add", reasoning: "A wing.", mass: { name: "Wing", role: "bedroom-wing", width: 8, depth: 6, floors: 1, ...mass }, relationships }, totalUsage: {} });
+    const done = { output: { decision: "done", reasoning: "Complete." }, totalUsage: {} };
+
+    it("sends a volume placed inside another back as a repair request instead of accepting the collision", async () => {
+      const { runMassExpansionStage } = await import("../massExpansionStage");
+      generateText
+        .mockResolvedValueOnce(add({ plan, position: { x: 2, z: 1 } }, [{ kind: "adjacent-to", target: "mass-0", side: "east" }]))
+        .mockResolvedValueOnce(add({ plan }, [{ kind: "adjacent-to", target: "mass-0", side: "east", distance: 1 }]))
+        .mockResolvedValueOnce(done);
+      const result = await runMassExpansionStage({ brief: "A quiet house", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
+      expect(result.masses).toHaveLength(2);
+      expect(result.repairRequests.join(" ")).toMatch(/repair-required:mass-collision mass-1\]/);
+      expect(result.masses[1].position.x).toBeCloseTo(7 + 4 + 1);
+    });
+
+    it("rejects a volume that blocks an earlier volume's planned terrace, rather than moving the terrace", async () => {
+      const { runMassExpansionStage } = await import("../massExpansionStage");
+      const { withVolumePlan } = await import("../../volumePlan");
+      const living = withVolumePlan(primaryMass, { ...QUIET_PLAN, outdoor: "covered-terrace", outdoorSide: "view" });
+      generateText.mockResolvedValue(add({ plan }, [{ kind: "adjacent-to", target: "mass-0", side: "south" }]));
+      const result = await runMassExpansionStage({ brief: "A quiet house", intent, siteStrategy, primaryMass: living }, createTimings(), 60_000, usageMeta);
+      expect(result.hadFailure).toBe(true);
+      expect(result.failureErrors.join(" ")).toMatch(/repair-required:plan-unbuildable mass-0\].*covered-terrace/);
+      expect(result.masses).toHaveLength(1);
     });
   });
 });

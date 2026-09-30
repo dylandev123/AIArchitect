@@ -46,7 +46,7 @@ describe("pipeline invariants", () => {
             terrainResponse: "Kept level.",
             primaryMass,
           },
-          status: "ok", attempts: 1, durationMs: 10, recoveredFields: [], defaultedFields: [],
+          ok: true, attempts: 1, durationMs: 10,
         }),
       };
     });
@@ -72,7 +72,7 @@ describe("pipeline invariants", () => {
         terrainResponse: "Kept level.",
         primaryMass,
       },
-      status: "ok" as const, attempts: 1, durationMs: 10, recoveredFields: [], defaultedFields: [],
+      ok: true as const, attempts: 1, durationMs: 10,
     };
     const bedroomWing: MassVolume = { id: "mass-1", name: "Bedroom Wing", role: "bedroom-wing", position: { x: 10, z: 0 }, width: 9, depth: 7, floors: 1, elevation: 0, rotation: 0 };
     vi.doMock("../foundationStage", async (importOriginal) => {
@@ -86,12 +86,12 @@ describe("pipeline invariants", () => {
         runMassExpansionStage: vi.fn().mockResolvedValue({
           masses: [primaryMass, bedroomWing], capabilityIntents: [], capabilityRequests: [], log: [],
           stopReason: "model-done", completed: true, stopMessage: "", truncated: false,
-          modelCalls: 2, retries: 0, durationMs: 20, hadFailure: false, unplacedVolumes: [],
+          modelCalls: 2, retries: 0, durationMs: 20, hadFailure: false, failureErrors: [], repairRequests: [], unplacedVolumes: [],
         }),
       };
     });
-    // A genuinely deterministic bug — not a model failure (those degrade to a fallback inside the stage and
-    // never throw here) — surfacing as an uncaught throw, same shape as the real viewDirection crash was.
+    // A genuinely deterministic bug — not a model failure (those end in a typed V2GenerationFailure) —
+    // surfacing as an uncaught throw, same shape as the real viewDirection crash was.
     vi.doMock("../geometryStage", () => ({
       runGeometryStage: vi.fn().mockRejectedValue(new TypeError("Cannot read properties of undefined (reading 'someField')")),
     }));

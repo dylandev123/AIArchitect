@@ -1,53 +1,58 @@
 import type { ArchitecturalDesignDocument, MassVolume } from "../document";
 import type { ArchitectureDiagnostics } from "../compiler";
 import { resolveMasses } from "../compiler";
-import { planConformance } from "../volumePlan";
-import type { Rect } from "../geometry/footprint";
-import { SIDE_VECTOR } from "@/lib/house/siteSettings";
-import type { CompassSide } from "@/types/house";
+import { planConformance, sharedFacades } from "../volumePlan";
+import { massCollisions, roofConflicts } from "./integrityChecks";
 
-const OPPOSITE_SIDE: Record<CompassSide, CompassSide> = { north: "south", south: "north", east: "west", west: "east" };
-/** Mirrors `yawFacingSouthToward` in compiler.ts — duplicated locally rather than imported since it's a one-line trig formula and importing it would pull compiler.ts's whole private surface into this module's dependency graph for one function. */
-function yawFacingSouthToward(direction: CompassSide): number {
-  const [wx, wz] = SIDE_VECTOR[direction];
-  return Math.atan2(wx, wz);
+/**
+ * "blocking" = an objective structural-integrity failure: the artifact is not what was authored, or cannot
+ * physically be what it says. A failed blocking check stops finalization (see integrityGate.ts).
+ * "warning" = a subjective design-quality observation: reported, never blocking.
+ */
+export type QualitySeverity = "warning" | "blocking";
+export interface QualityCheck { id: string; passed: boolean; detail: string; severity: QualitySeverity }
+export interface QualityGateResult {
+  checks: QualityCheck[];
+  /** True when no BLOCKING check failed. Failed warnings do not change it. */
+  passed: boolean;
+  blocking: QualityCheck[];
+  warnings: QualityCheck[];
 }
 
-export interface QualityCheck { id: string; passed: boolean; detail: string }
-export interface QualityGateResult { checks: QualityCheck[]; passed: boolean }
-
-const INTENTIONALLY_ADJACENT_KINDS = new Set(["adjacent-to", "connected-to", "bridge-between", "stepped-above", "stepped-below"]);
-
-function footprintAABB(mass: MassVolume): Rect {
-  return { x0: mass.position.x - mass.width / 2, x1: mass.position.x + mass.width / 2, z0: mass.position.z - mass.depth / 2, z1: mass.position.z + mass.depth / 2 };
-}
-function overlaps(a: Rect, b: Rect): boolean { return a.x0 < b.x1 && a.x1 > b.x0 && a.z0 < b.z1 && a.z1 > b.z0; }
 function distanceBetween(a: MassVolume, b: MassVolume): number { return Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z); }
-function directlyRelated(a: MassVolume, b: MassVolume): boolean {
-  const relates = (from: MassVolume, toId: string) => (from.relationships ?? []).some((r) => r.target === toId && (INTENTIONALLY_ADJACENT_KINDS.has(r.kind) || r.kind === "surrounds-courtyard"));
-  return relates(a, b.id) || relates(b, a.id);
-}
 
 /** Generous — this catches a genuinely scattered/lost mass, not ordinary site-scale separation between wings. */
 const MAX_REASONABLE_DISTANCE_M = 45;
 const MIN_COURTYARD_DIMENSION_M = 3;
 const MAX_OVERHANG_RATIO = 0.4;
+/** The capabilities a volume's plan can call for; one that was authored but did not build is missing planned geometry. */
+const PLAN_CAPABILITIES = new Set(["entry-canopy", "brise-soleil", "screen-layer", "pilotis"]);
+
+/** Summarizes a check list: only failed BLOCKING checks fail the gate. */
+export function summarizeChecks(checks: QualityCheck[]): QualityGateResult {
+  const blocking = checks.filter((c) => !c.passed && c.severity === "blocking");
+  return { checks, passed: blocking.length === 0, blocking, warnings: checks.filter((c) => !c.passed && c.severity === "warning") };
+}
 
 /**
- * Deterministic, in-process checks over an already-compiled document — no AI call, ever. Each check is an
- * independent pass/fail with a human-readable reason; `passed` is true only when every check that actually
- * applied to this document passed (a check with nothing to evaluate, e.g. no courtyard in a non-courtyard
- * design, is simply not run rather than counted as a pass or failure).
+ * Deterministic, in-process checks over an already-compiled architecture document — no AI call, ever, and no
+ * correction: every check is an independent pass/fail with a human-readable reason and an explicit severity.
  *
- * This is reporting, not a gate that blocks or retries generation: there is no described corrective-action
- * loop, and wiring an automatic retry to a failed check would reintroduce exactly the extra-AI-call cost the
- * rest of this pipeline work is trying to eliminate. See `ArchitectureDebugPanel.tsx` for where this surfaces.
+ * Blocking (objective): planned geometry missing from what was authored, a plan that cannot be built where it
+ * stands, anything authored on a shared wall, geometry the compiler had to clip or drop, a planned capability
+ * that did not build, volumes occupying the same space, an unresolved relationship, and every roof integrity
+ * failure (missing/incomplete/unbuildable recipe, an eave trim that lost the authored roof, intersection,
+ * stacking, fragmentation). Everything else is a subjective design-quality warning.
+ *
+ * This function only inspects the architecture. The final integrity gate (integrityGate.ts) runs it over the
+ * artifact that will actually be saved, together with the Site Plan, scene-asset and authority checks, and is
+ * what stops a blocked generation from finalizing.
  */
 export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnostics: ArchitectureDiagnostics): QualityGateResult {
   const masses = resolveMasses(doc);
   const byId = new Map(masses.map((m) => [m.id, m] as const));
   const checks: QualityCheck[] = [];
-  const push = (id: string, passed: boolean, detail: string) => checks.push({ id, passed, detail });
+  const push = (id: string, passed: boolean, detail: string, severity: QualitySeverity = "warning") => checks.push({ id, passed, detail, severity });
 
   for (const courtyard of diagnostics.courtyards) {
     const edgeCount = courtyard.enclosingMassIds.length + 1;
@@ -56,28 +61,10 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
     const width = courtyard.bounds.x1 - courtyard.bounds.x0;
     const depth = courtyard.bounds.z1 - courtyard.bounds.z0;
     push(`courtyard-dimensions-${courtyard.anchorMassId}`, width >= MIN_COURTYARD_DIMENSION_M && depth >= MIN_COURTYARD_DIMENSION_M, `Courtyard is ${width.toFixed(1)}x${depth.toFixed(1)}m.`);
-
-    const facingIn = courtyard.enclosingMassIds.every((id) => {
-      const mass = byId.get(id);
-      if (!mass) return false;
-      const hasExplicitRotation = (mass.relationships ?? []).some((r) => r.kind === "view-facing" || r.kind === "arrival-facing" || r.rotationOffset !== undefined);
-      if (hasExplicitRotation) return true; // an explicit rotation intent always wins over auto-orientation — see resolveMasses.
-      const side = mass.relationships?.find((r) => r.kind === "surrounds-courtyard" && r.target === courtyard.anchorMassId)?.side;
-      return side !== undefined && Math.abs(mass.rotation - yawFacingSouthToward(OPPOSITE_SIDE[side])) < 1e-6;
-    });
-    push(`courtyard-faces-inward-${courtyard.anchorMassId}`, facingIn, facingIn ? "Every enclosing mass is oriented toward the courtyard or has an explicit facing relationship." : "At least one enclosing mass never got oriented toward the courtyard.");
   }
 
-  let overlapDetail = "No unrelated masses overlap.";
-  let noOverlap = true;
-  for (let i = 0; i < masses.length && noOverlap; i++) {
-    for (let j = i + 1; j < masses.length; j++) {
-      const a = masses[i], b = masses[j];
-      if (directlyRelated(a, b)) continue;
-      if (overlaps(footprintAABB(a), footprintAABB(b))) { noOverlap = false; overlapDetail = `"${a.id}" and "${b.id}" overlap without a relationship that explains it.`; break; }
-    }
-  }
-  push("no-unintentional-overlap", noOverlap, overlapDetail);
+  const collisions = massCollisions(masses);
+  push("no-unintentional-overlap", collisions.length === 0, collisions.length ? collisions.map((c) => `"${c.a}" and "${c.b}" occupy the same space (${c.penetration.toFixed(1)}m).`).join(" ") : "No two volumes occupy the same space.", "blocking");
 
   const dominant = diagnostics.dominantMassId ? byId.get(diagnostics.dominantMassId) : undefined;
   let disconnected: string | undefined;
@@ -107,27 +94,24 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
   push("minimum-facade-articulation", articulated, articulated ? "At least one mass has real footprint or facade articulation." : "Every mass is a plain, unarticulated rectangle.");
 
   const survivedCompilation = diagnostics.geometry.every((g) => g.warnings.length === 0);
-  push("requested-geometry-survived-compilation", survivedCompilation, survivedCompilation ? "No requested operation was clipped or dropped." : diagnostics.geometry.flatMap((g) => g.warnings.map((w) => `${g.massId}: ${w}`)).join("; "));
+  push("requested-geometry-survived-compilation", survivedCompilation, survivedCompilation ? "No requested operation was clipped or dropped." : diagnostics.geometry.flatMap((g) => g.warnings.map((w) => `${g.massId}: ${w}`)).join("; "), "blocking");
 
   const ids = new Set(masses.map((m) => m.id));
   const unsatisfied = masses.flatMap((m) => (m.relationships ?? []).filter((r) => !ids.has(r.target)).map((r) => `${m.id} -> ${r.target}`));
-  push("relationship-satisfaction", unsatisfied.length === 0, unsatisfied.length === 0 ? "Every relationship resolved against a real mass." : `Unresolved relationship target(s): ${unsatisfied.join(", ")}.`);
+  push("relationship-satisfaction", unsatisfied.length === 0, unsatisfied.length === 0 ? "Every relationship resolved against a real mass." : `Unresolved relationship target(s): ${unsatisfied.join(", ")}.`, "blocking");
 
-  // A long unpunctured facade is a concrete failure, not an aesthetic judgement. Roles that receive the
-  // compiler's deterministic facade grammar are exempt; all other long masses must declare openings.
+  // Observation only: a long facade with no authored opening. The compiler adds none — what is authored is what is built.
   for (const mass of masses) {
     const longSide = Math.max(mass.width, mass.depth);
-    const roleGetsGrammar = mass.role === "main-living" || mass.role === "bedroom-wing" || mass.role === "guest-pavilion" || mass.role === "entry";
-    if (longSide >= 9 && !roleGetsGrammar) {
+    if (longSide >= 9) {
       const hasOpenings = (mass.openings?.length ?? 0) > 0 || (mass.operations ?? []).some((op) => (op.type === "projection" || op.type === "recess") && op.open);
       push(`blank-facade-${mass.id}`, hasOpenings, hasOpenings ? `"${mass.id}" has intentional facade relief.` : `"${mass.id}" has a ${longSide.toFixed(1)}m facade but no opening or open facade operation.`);
     }
   }
 
   for (const mass of masses.filter((m) => m.role === "main-living")) {
-    const courtyardFacing = (mass.openings ?? []).some((op) => op.type === "glazing-zone" && op.heightRatio >= .65);
-    // The default living grammar supplies this when intent is absent; explicit opening intent must be adequate.
-    push(`living-glazing-${mass.id}`, mass.openings === undefined || courtyardFacing, mass.openings === undefined || courtyardFacing ? `"${mass.id}" has substantial living-area glazing.` : `"${mass.id}" lacks a substantial glazed living facade.`);
+    const glazed = (mass.openings ?? []).some((op) => op.type === "glazing-zone" && op.heightRatio >= .65);
+    push(`living-glazing-${mass.id}`, glazed, glazed ? `"${mass.id}" has substantial living-area glazing.` : `"${mass.id}" has no substantial authored glazing (none is added for it).`);
   }
 
   for (const mass of masses.filter((m) => m.role === "connector")) {
@@ -148,12 +132,31 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
     push(`multi-floor-articulation-${mass.id}`, changesByLevel, changesByLevel ? `"${mass.id}" changes footprint or position above ground.` : `"${mass.id}" stacks identical floor plates; add an upper/ground operation or cantilever.`);
   }
 
-  // Plan fidelity: every planned volume must have been built as planned, not decorated after the fact.
+  // Plan fidelity: what was AUTHORED must contain every planned element, and the plan must be buildable where it stands.
   for (const mass of masses.filter((m) => m.plan)) {
-    const { missing, notes } = planConformance(mass, masses, doc.siteStrategy);
+    const { missing, conflicts, notes } = planConformance(mass, masses, doc.siteStrategy, doc.capabilities ?? []);
     const detail = missing.length ? `"${mass.id}" is missing planned ${missing.join(", ")}.` : `"${mass.id}" realizes its ${mass.plan!.form}/${mass.plan!.structure} plan.`;
-    push(`plan-realized-${mass.id}`, missing.length === 0, notes.length ? `${detail} Adapted: ${notes.join(" ")}` : detail);
+    push(`plan-realized-${mass.id}`, missing.length === 0, notes.length ? `${detail} Reference notes: ${notes.join(" ")}` : detail, "blocking");
+    const shared = sharedFacades(mass, masses, doc.siteStrategy);
+    const onSharedWall = [...(mass.operations ?? []), ...(mass.openings ?? [])].filter((item) => "facade" in item && shared.has(item.facade)).map((item) => `${item.type} on the shared ${"facade" in item ? item.facade : ""} wall`);
+    const impossible = [...conflicts.map((c) => c.detail), ...onSharedWall];
+    push(`facade-realization-${mass.id}`, impossible.length === 0, impossible.length ? `Impossible authored facade intent on "${mass.id}": ${impossible.join(" ")}` : `"${mass.id}" has no facade-specific realization conflict.`, "blocking");
+  }
+  for (const capability of diagnostics.capabilities) {
+    if (capability.status === "applied") continue;
+    const planned = PLAN_CAPABILITIES.has(capability.id);
+    push(`capability-built-${capability.massId}-${capability.id}`, false, `${capability.id} on "${capability.massId}" was authored but not built (${capability.status}${capability.note ? `: ${capability.note}` : ""}).`, planned ? "blocking" : "warning");
   }
 
-  return { checks, passed: checks.every((c) => c.passed) };
+  // Roofs: one complete, buildable, physically clear recipe per volume — inspected AFTER clearance processing.
+  const roofProblems = roofConflicts(masses, doc.roofs.recipes);
+  for (const mass of masses) {
+    const own = roofProblems.filter((c) => c.massId === mass.id);
+    push(`roof-integrity-${mass.id}`, own.length === 0, own.length ? own.map((c) => `[${c.code}] ${c.detail}`).join(" ") : `"${mass.id}" carries one complete, buildable roof that clears its neighbors.`, "blocking");
+  }
+  for (const clearance of diagnostics.roofClearance.filter((c) => c.cleared < c.authored && c.preservesLanguage)) {
+    push(`roof-eave-trimmed-${clearance.massId}`, true, `Eave on "${clearance.massId}" trimmed ${clearance.authored.toFixed(2)}m → ${clearance.cleared.toFixed(2)}m to clear "${clearance.neighborId}" (roof language preserved).`);
+  }
+
+  return summarizeChecks(checks);
 }
