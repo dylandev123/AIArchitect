@@ -25,7 +25,8 @@ import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import { runArchitecturePipeline, type PipelineInput, type PipelineResult, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
 import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
 import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
-import { runFinalAssembly } from "@/lib/ai/finalAssembly";
+import { runFinalAssembly, sitePlanContextForDocument } from "@/lib/ai/finalAssembly";
+import { runSitePlanStage, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
@@ -332,6 +333,7 @@ function logFinalSequence(pipelineResult: PipelineResult, diagnostics: StageDiag
     line("Mass Expansion", "mass-expansion", `${massCount} mass${massCount === 1 ? "" : "es"}`),
     line("Geometry", "architectural-geometry", `${opCount} operation${opCount === 1 ? "" : "s"}`),
     line("Roofs", "roof-composition"),
+    line("Site Plan", "site-plan"),
     line("Compiler", "compiler"),
     line("Design Quality Gate", "quality-gate"),
     `Final Assembly: ${finalAssembly.ok ? "ok" : `FAILED (HTTP ${finalAssembly.status})${finalAssembly.error ? ` — ${finalAssembly.error}` : ""}`}`,
@@ -396,6 +398,17 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     logPipelineCrash(error, diagnosticsSoFar, upstreamSoFar);
     return providerErrorResponse(error, "architecture-pipeline", { architectureDiagnostics: [...diagnosticsSoFar] });
   }
+  let sitePlan: SitePlan | undefined;
+  const siteStart = performance.now();
+  const siteContext = sitePlanContextForDocument(brief, pipelineResult.document);
+  if (siteContext) {
+    // `runStage` measures against the same generation-start timer itself. Passing the
+    // fixed total budget leaves a real repair window instead of subtracting elapsed time twice.
+    const siteResult = await runSitePlanStage(siteContext, timings, GENERATION_BUDGET_MS, usageMeta);
+    if (siteResult.ok) sitePlan = siteResult.value;
+    else console.warn("[site-plan] using deterministic recovery:", siteResult.errors);
+    pipelineResult.diagnostics.push({ stage: "site-plan", status: siteResult.ok ? "ok" : "fallback", durationMs: performance.now() - siteStart, modelCalls: siteResult.attempts, retries: Math.max(0, siteResult.attempts - 1), ...(siteResult.ok ? {} : { error: siteResult.errors.join("; ") }) });
+  } else pipelineResult.diagnostics.push({ stage: "site-plan", status: "fallback", durationMs: performance.now() - siteStart, modelCalls: 0, retries: 0, error: "No V2 mass available." });
   const diagnostics = [...pipelineResult.diagnostics, ...compilerDiagnostics(pipelineResult.document)];
   if (process.env.NODE_ENV !== "production") {
     for (const d of diagnostics) console.info(`[architecture-stages] ${d.stage}: ${d.status} (${Math.round(d.durationMs)}ms, ${d.modelCalls} call(s), ${d.retries} retr(y/ies))${d.error ? ` — ${d.error}` : ""}`);
@@ -405,7 +418,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     result: { ...pipelineResult, diagnostics },
     finalAssembly: { assets, recipes, retrieved, spaces, library, baseRevision },
   });
-  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, spaces, budgetMs: GENERATION_BUDGET_MS });
+  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, spaces, budgetMs: GENERATION_BUDGET_MS, sitePlan });
   // Peek at the response without consuming the body the caller still needs to return: `response.clone()` tees
   // the stream, so this never affects what actually reaches the client.
   let finalAssemblyError: string | undefined;

@@ -8,7 +8,7 @@ import { clone as cloneSkinned } from "three/examples/jsm/utils/SkeletonUtils.js
 import { useSyncExternalStore } from "react";
 import { useAssetStore } from "@/store/useAssetStore";
 import type { CuratedAsset } from "@/types/assets";
-import { getGlbStore } from "./glbStorage";
+import { loadAssetGlbBytes } from "./assetSync";
 import { createModelCache, type ModelStatus } from "./modelCache";
 
 /**
@@ -34,7 +34,7 @@ const findAsset = (id: string): CuratedAsset | undefined => {
   return catalog.find((a) => a.id === id) ?? queue.find((a) => a.id === id);
 };
 
-/** Bytes for an asset: its remote `modelUrl` if it has one (generated assets), else the locally stored upload. */
+/** Bytes for an asset: its remote `modelUrl` if it has one, else the library's stored file (IndexedDB cache, then the server). */
 async function readModelBytes(id: string): Promise<ArrayBuffer> {
   const url = findAsset(id)?.modelUrl;
   if (url) {
@@ -42,9 +42,7 @@ async function readModelBytes(id: string): Promise<ArrayBuffer> {
     if (!res.ok) throw new Error(`Model download failed (HTTP ${res.status}).`);
     return res.arrayBuffer();
   }
-  const stored = await getGlbStore().get(id);
-  if (!stored) throw new Error("The GLB file is not stored on this device.");
-  return stored;
+  return loadAssetGlbBytes(id);
 }
 
 export async function parseGlb(bytes: ArrayBuffer): Promise<LoadedGlb> {

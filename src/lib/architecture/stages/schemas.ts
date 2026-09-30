@@ -216,9 +216,18 @@ const roofCompositionEntrySchema = z.object({
   orientation: z.number().finite().optional(),
   parapet: z.object({ height: z.number().min(.1).max(1.5), thickness: z.number().min(.08).max(.5).optional() }).optional(),
   expression: z.object({ verticalGap: z.number().min(0).max(1).optional(), thickness: z.number().min(.08).max(.6).optional() }).optional(),
+  counterpoint: z.string().min(12).max(200).optional().describe("Only for a roof that deliberately breaks the whole-house language: the architectural reason. Omit for every coordinated roof."),
+});
+
+/** The whole-house roof language, chosen BEFORE the individual roofs. Required (by validation) whenever there is more than one mass. */
+const roofLanguageSchema = z.object({
+  dominantMassId: z.string().min(1).describe("The mass whose roof sets the language — the planned dominant volume."),
+  family: z.enum(ROOF_RECIPE_KINDS).describe("The one dominant roof family every other roof is subordinate to."),
+  concept: z.string().max(240).optional().describe("One sentence: the whole-house roof idea (shared datums, pitch, hierarchy)."),
 });
 
 export const roofCompositionStageOutputSchema = z.object({
+  language: roofLanguageSchema.optional(),
   roofs: z.array(roofCompositionEntrySchema).min(1),
 });
 export type RoofCompositionStageOutput = z.infer<typeof roofCompositionStageOutputSchema>;

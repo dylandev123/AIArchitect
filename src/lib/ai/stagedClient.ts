@@ -1,4 +1,5 @@
 import { useAssetStore } from "@/store/useAssetStore";
+import { assetLibraryReady } from "@/lib/assets/assetSync";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import { useLibraryStore } from "@/store/useLibraryStore";
 import { useAdminStore } from "@/store/useAdminStore";
@@ -78,6 +79,11 @@ export interface StagedGenerationRequest {
  * the server decides it, via `useGenerationProgressStore` and incremental `updateHouseConfig` calls.
  */
 export async function requestStagedGeneration(req: StagedGenerationRequest): Promise<HouseEditResult> {
+  // Retrieval reads the catalog sent with the request: let the first server load land so it is the server library, not a stale cache.
+  await assetLibraryReady();
+  // Diagnostics are an in-memory dev convenience, not project data. Clear the old
+  // project's trace before a new request so timing rows can never be mistaken for it.
+  useArchitectureDebugStore.getState().clearDiagnostics(req.projectId);
   const setProgress = useGenerationProgressStore.getState().setProgress;
   const project = useProjectStore.getState().getProject(req.projectId);
   if (!project) return { ok: false, error: "Project not found.", status: 404 };
@@ -139,12 +145,12 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
         // Dev-only: which stage actually failed and how the whole staged run traced, for the Architecture debug panel.
         // The live preview above is untouched — the last successfully streamed "stage" document stays on screen.
         const data = frame.data as { error?: string; status?: number; stage?: string; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
-        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, data.stage, data.capabilityRequests);
+        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(req.projectId, data.architectureDiagnostics, data.stage, data.capabilityRequests);
         return { ok: false, error: data.error ?? "AI request failed. Please try again.", status: data.status ?? 502 };
       }
       if (frame.event === "done") {
         const data = frame.data as { summary?: string; json?: string; timeOfDay?: TimeOfDay; intelligence?: GenerationReport; architectureDiagnostics?: StageDiagnostics[]; capabilityRequests?: CapabilityRequest[] };
-        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, undefined, data.capabilityRequests);
+        if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(req.projectId, data.architectureDiagnostics, undefined, data.capabilityRequests);
         if (typeof data.json !== "string") return { ok: false, error: "AI request failed. Please try again.", status: 502 };
 
         const live = useProjectStore.getState().getProject(req.projectId);
@@ -192,7 +198,7 @@ export async function replayArchitectureStage(projectId: string, stage: "foundat
 
     if (typeof data.json === "string") {
       // A final-assembly replay returns a whole regenerated project, same shape as a fresh generation.
-      if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.architectureDiagnostics, undefined, data.capabilityRequests);
+      if (data.architectureDiagnostics) useArchitectureDebugStore.getState().setDiagnostics(projectId, data.architectureDiagnostics, undefined, data.capabilityRequests);
       apply(data.summary ?? "AI design", data.json);
       return { ok: true };
     }
@@ -207,7 +213,7 @@ export async function replayArchitectureStage(projectId: string, stage: "foundat
       // A blank project's JSON is always valid; this only guards a hand-edited or corrupt project file.
     }
     useProjectStore.getState().updateHouseConfig(projectId, JSON.stringify({ ...baseParsed, architecturalDesignDocument: data.document }), `architecture-replay:${stage}`);
-    if (data.diagnostics) useArchitectureDebugStore.getState().setDiagnostics(data.diagnostics, undefined, data.capabilityRequests);
+    if (data.diagnostics) useArchitectureDebugStore.getState().setDiagnostics(projectId, data.diagnostics, undefined, data.capabilityRequests);
     return { ok: true };
   } catch {
     return { ok: false, error: "network error" };

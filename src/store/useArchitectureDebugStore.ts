@@ -12,20 +12,25 @@ import type { CapabilityRequest } from "@/types/library";
  * debug panel.
  */
 interface ArchitectureDebugState {
+  /** Project that produced this transient server trace. Prevents a prior project's timings leaking into the current panel. */
+  projectId: string | null;
   diagnostics: StageDiagnostics[] | null;
   /** The stage named by the server as having failed the overall request (e.g. "final-assembly"), if any. */
   failedStage?: string;
   replaying: string | null;
   capabilityRequests: CapabilityRequest[];
-  setDiagnostics: (diagnostics: StageDiagnostics[] | null, failedStage?: string, capabilityRequests?: CapabilityRequest[]) => void;
+  setDiagnostics: (projectId: string, diagnostics: StageDiagnostics[] | null, failedStage?: string, capabilityRequests?: CapabilityRequest[]) => void;
+  clearDiagnostics: (projectId: string) => void;
   setReplaying: (stage: string | null) => void;
 }
 
 export const useArchitectureDebugStore = create<ArchitectureDebugState>((set) => ({
+  projectId: null,
   diagnostics: null,
   failedStage: undefined,
   replaying: null,
   capabilityRequests: [],
-  setDiagnostics: (diagnostics, failedStage, capabilityRequests) => set({ diagnostics, failedStage, ...(capabilityRequests ? { capabilityRequests } : {}) }),
+  setDiagnostics: (projectId, diagnostics, failedStage, capabilityRequests) => set({ projectId, diagnostics, failedStage, ...(capabilityRequests ? { capabilityRequests } : {}) }),
+  clearDiagnostics: (projectId) => set({ projectId, diagnostics: null, failedStage: undefined, capabilityRequests: [] }),
   setReplaying: (stage) => set({ replaying: stage }),
 }));

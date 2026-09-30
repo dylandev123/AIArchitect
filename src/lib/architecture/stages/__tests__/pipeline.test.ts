@@ -34,7 +34,7 @@ describe("architecture stage pipeline", () => {
       // architectural geometry pass: one batched call for every mass
       .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }, { massId: "mass-1", operations: [] }] }, totalUsage: {} })
       // roof composition: one call for every mass
-      .mockResolvedValueOnce({ output: { roofs: [
+      .mockResolvedValueOnce({ output: { language: { dominantMassId: "mass-0", family: "floating-flat", concept: "A floating plane over the living pavilion; low sheds beneath it." }, roofs: [
         { massId: "mass-0", kind: "floating-flat", overhang: 1.4, reasoning: "The dominant volume gets an expressive floating plane toward the view." },
         { massId: "mass-1", kind: "mono-pitch", overhang: 0.5, reasoning: "The bedroom wing gets a quieter shed roof, distinct from the main pavilion." },
       ] }, totalUsage: {} });
@@ -84,7 +84,7 @@ describe("architecture stage pipeline", () => {
       // architectural geometry pass: one batched call for every mass
       .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }, { massId: "mass-1", operations: [] }] }, totalUsage: {} })
       // roof composition: one call for every mass
-      .mockResolvedValueOnce({ output: { roofs: [
+      .mockResolvedValueOnce({ output: { language: { dominantMassId: "mass-0", family: "flat", concept: "Quiet flat planes with one low shed." }, roofs: [
         { massId: "mass-0", kind: "flat", overhang: 0.6, reasoning: "A quiet flat roof for the main pavilion." },
         { massId: "mass-1", kind: "shed", overhang: 0.5, reasoning: "A quiet shed roof for the bedroom wing." },
       ] }, totalUsage: {} });
@@ -211,7 +211,7 @@ describe("architecture stage pipeline", () => {
         .mockResolvedValueOnce({ output: { decision: "done", reasoning: "Two volumes fully serve this brief." }, totalUsage: {} })
         .mockResolvedValueOnce({ output: { decision: "done", reasoning: "Two volumes fully serve this brief." }, totalUsage: {} })
         .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }, { massId: "mass-1", operations: [] }] }, totalUsage: {} })
-        .mockResolvedValueOnce({ output: { roofs: [
+        .mockResolvedValueOnce({ output: { language: { dominantMassId: "mass-0", family: "flat" }, roofs: [
           { massId: "mass-0", kind: "flat", overhang: 0.6, reasoning: "Keep the main pavilion quiet." },
           { massId: "mass-1", kind: "shed", overhang: 0.5, reasoning: "The new guest wing gets its own shed roof." },
         ] }, totalUsage: {} });

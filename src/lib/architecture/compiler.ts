@@ -185,7 +185,7 @@ export function resolveMasses(doc: ResolveMassesInput): MassVolume[] {
  * inventing a second geometry system. Floors within such a mass split that height evenly; multi-floor masses
  * with an override are rare but not rejected.
  */
-function massTotalHeight(mass: MassVolume): number { return mass.height ?? mass.floors * LEVEL_HEIGHT; }
+export function massTotalHeight(mass: MassVolume): number { return mass.height ?? mass.floors * LEVEL_HEIGHT; }
 /** Per-mass level height derived from `massTotalHeight` — identical to the global `LEVEL_HEIGHT` unless the mass overrides its height. */
 function massLevelHeight(mass: MassVolume): number { return massTotalHeight(mass) / mass.floors; }
 

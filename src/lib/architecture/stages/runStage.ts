@@ -65,11 +65,11 @@ export interface RunStageInput<T> {
   /** Extra semantic checks beyond the schema; returning any errors triggers a repair retry. */
   validate?: (value: T) => string[];
   /**
-   * Runs once on a raw response that failed schema validation, before treating that failure as real. Fixes
-   * up an otherwise-usable response — e.g. truncating an array that overflowed its max length — so a
-   * structurally sound answer never burns a repair-retry model call just because one field had too many
-   * (still individually valid) entries. If the normalized value now passes the schema (and `validate`), it's
-   * accepted immediately; if not, the original failure proceeds to a normal retry as before.
+   * Runs on every raw response BEFORE our strict schema parse — including the raw value recovered from the
+   * SDK's own schema rejection (`NoObjectGeneratedError`). Fixes up an otherwise-usable response — e.g.
+   * clamping a harmless out-of-range number or truncating an overlong array — so a structurally sound answer
+   * never burns a repair-retry model call. Must be idempotent and must not paper over structural faults: the
+   * normalized value still goes through the full schema and `validate`, and their errors drive any retry.
    */
   normalize?: (raw: unknown) => unknown;
   maxAttempts?: number;
@@ -89,13 +89,14 @@ export type RunStageResult<T> =
   | { ok: true; value: T; attempts: number; durationMs: number }
   | { ok: false; errors: string[]; attempts: number; durationMs: number; rawValue?: unknown; rawValueTruncated?: boolean };
 
-/** Tries `input.normalize` (if given) on a raw failed response; returns a schema- and semantic-valid result if it now passes, else `undefined`. */
-function tryNormalize<T>(input: RunStageInput<T>, raw: unknown): T | undefined {
-  if (!input.normalize) return undefined;
-  const parsed = input.schema.safeParse(input.normalize(raw));
-  if (!parsed.success) return undefined;
-  if ((input.validate?.(parsed.data) ?? []).length > 0) return undefined;
-  return parsed.data;
+type Checked<T> = { ok: true; value: T } | { ok: false; errors: string[]; issues?: unknown };
+
+/** Normalizes (if the stage has a normalizer) THEN strictly validates: schema first, then semantic `validate`. */
+function normalizeAndCheck<T>(input: RunStageInput<T>, raw: unknown): Checked<T> {
+  const parsed = input.schema.safeParse(input.normalize ? input.normalize(raw) : raw);
+  if (!parsed.success) return { ok: false, errors: [`Response didn't match the expected shape: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`], issues: parsed.error.issues };
+  const semanticErrors = input.validate?.(parsed.data) ?? [];
+  return semanticErrors.length ? { ok: false, errors: semanticErrors } : { ok: true, value: parsed.data };
 }
 
 export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResult<T>> {
@@ -138,32 +139,22 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
       // quirk returning a value that was never actually schema-checked. In practice `generateText` itself
       // already throws `NoObjectGeneratedError` (caught below) before returning anything schema-invalid, so
       // this branch rarely fires against the real provider.
-      const parsed = input.schema.safeParse(output);
-      if (!parsed.success) {
-        rawValue = output;
-        rawValueTruncated = false;
-        const normalized = tryNormalize(input, output);
-        if (normalized !== undefined) return { ok: true, value: normalized, attempts, durationMs: totalMs };
-        errors = [`Response didn't match the expected shape: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`];
-        if (isDev) console.debug(`[${input.stageName}] attempt ${attempt + 1} failed schema validation`, { rawValue, issues: parsed.error.issues });
-        continue;
-      }
-      const semanticErrors = input.validate?.(parsed.data) ?? [];
-      if (semanticErrors.length === 0) return { ok: true, value: parsed.data, attempts, durationMs: totalMs };
+      const checked = normalizeAndCheck(input, output);
+      if (checked.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs };
       rawValue = output;
       rawValueTruncated = false;
-      errors = semanticErrors;
-      if (isDev) console.debug(`[${input.stageName}] attempt ${attempt + 1} failed semantic validation`, { rawValue, semanticErrors });
+      errors = checked.errors;
+      if (isDev) console.debug(`[${input.stageName}] attempt ${attempt + 1} failed validation after normalization`, { rawValue, errors, issues: checked.issues });
     } catch (error) {
       lastAttemptMs = performance.now() - callStart;
       totalMs += lastAttemptMs;
       const described = await describeGenerationError(error);
       // A truncated value is never accepted whole, even if it happens to validate: its tail is missing.
-      if (described.rawValue !== undefined && !described.truncated) {
-        const normalized = tryNormalize(input, described.rawValue);
-        if (normalized !== undefined) return { ok: true, value: normalized, attempts, durationMs: totalMs };
-      }
-      errors = [described.truncated ? `${described.message} Keep the response compact: omit optional fields you don't need.` : described.message];
+      // The SDK rejected the raw value with the strict schema; normalize it before re-validating ourselves. If it
+      // still fails, retry with the errors that remain AFTER normalization, never the range slips it already fixed.
+      const checked = input.normalize && described.rawValue !== undefined && !described.truncated ? normalizeAndCheck(input, described.rawValue) : undefined;
+      if (checked?.ok) return { ok: true, value: checked.value, attempts, durationMs: totalMs };
+      errors = described.truncated ? [`${described.message} Keep the response compact: omit optional fields you don't need.`] : checked ? checked.errors : [described.message];
       if (described.truncated) maxOutputTokens = Math.round(maxOutputTokens * 1.6);
       if (described.rawValue !== undefined) { rawValue = described.rawValue; rawValueTruncated = described.truncated === true; }
       if (isDev) console.debug(`[${input.stageName}] attempt ${attempt + 1} threw`, { message: described.message, rawValue: described.rawValue });

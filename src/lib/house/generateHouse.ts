@@ -19,7 +19,7 @@ import { buildDoor, validateDoor } from "./features/doors";
 import { buildGarage, validateGarage } from "./features/garages";
 import { buildBalcony, validateBalcony } from "./features/balconies";
 import { buildPatio, validatePatio } from "./features/patios";
-import { buildPool, validatePool } from "./features/pools";
+import { buildPool, getPoolDeckOutline, validatePool } from "./features/pools";
 import { buildDriveway, validateDriveway } from "./features/driveways";
 import { buildRoom, buildRoomPartitions, validateRoom } from "./features/rooms";
 import { buildBuilding, validateBuilding } from "./features/buildings";
@@ -41,6 +41,7 @@ import { buildWaterway, validateWaterway } from "./features/waterways";
 import { buildRockCluster, validateRockCluster } from "./features/rocks";
 import { buildSlope, validateSlope } from "./features/slopes";
 import type { BuildContext } from "./features/context";
+import { v2SiteFrame } from "@/lib/architecture/siteFrame";
 import { planTerrain, terrainHeightAt } from "@/lib/landscaping/terrain";
 import { resolveTier, TIER_PROFILES } from "./tiers";
 import { buildRoofDetail } from "./architecture/roofDetail";
@@ -323,6 +324,12 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   if (!config) return { model: null, config: null, site: null, errors, warnings };
 
   const root = raw as Record<string, unknown>;
+  // A V2 project's site respects its real massing: every mass (not the stand-in house rectangle) is what site features
+  // must keep clear of. An authored Site Plan was also measured from the dominant mass where it actually stands, so its
+  // wall-anchored features hang off that centre; a site laid out by the legacy recovery rules was planned entirely
+  // around an origin-centred house and keeps that frame, so shifting only part of it can never split it apart.
+  const frame = v2SiteFrame(root);
+  if (frame && root.sitePlan) config.center = frame.center;
   const materials = validateMaterials(root.materials, warnings);
 
   // Parse and resolve exterior options (optional; defaults applied when absent)
@@ -352,7 +359,9 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
   const roads = processFeatureArray(root, "road", validateRoad, (v, idx) => buildRoad(v, idx), errors, warnings, primitives);
   const parking = processFeatureArray(root, "parking", validateParking, (v, idx) => buildParking(v, idx), errors, warnings, primitives);
   const landscaping = processFeatureArray(root, "landscape", validateLandscapeZone, (v, idx) => buildLandscapeZone(v, idx), errors, warnings, primitives);
-  const decks = processFeatureArray(root, "deck", validateDeck, (v, idx) => buildDeck(v, materials, idx), errors, warnings, primitives);
+  // A ground-level deck laid around a pool is cut to the pool's coping, so the water is never buried under it.
+  const poolCutouts = pools.map((pool) => getPoolDeckOutline(pool, config));
+  const decks = processFeatureArray(root, "deck", validateDeck, (v, idx) => buildDeck(v, materials, idx, poolCutouts), errors, warnings, primitives);
   const porches = processFeatureArray(root, "porch", (i) => validatePorch(i, config), (v, idx) => buildPorch(v, config, materials, idx, opts), errors, warnings, primitives);
   const chimneys = processFeatureArray(root, "chimney", (i) => validateChimney(i, config), (v, idx) => buildChimney(v, config, materials, idx, opts), errors, warnings, primitives);
 
@@ -406,6 +415,7 @@ export function generateHouseFromJson(jsonText: string): HouseGenerationResult {
     rocks,
     slopes,
     exteriorOptions: opts,
+    ...(frame ? { buildingFootprints: frame.masses } : {}),
   };
 
   // Now the ground is known, build what sits on it.

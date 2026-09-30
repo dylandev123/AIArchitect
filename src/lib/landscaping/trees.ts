@@ -1,4 +1,4 @@
-import type { SiteConfig } from "@/types/house";
+import type { LandscapeZoneConfig, SiteConfig } from "@/types/house";
 import { createRng, hashSeed, rngPick, rngRange } from "./rng";
 import { collectOccupiedFootprints, isInsideAnyFootprint, yardHalfExtent } from "./footprints";
 
@@ -27,8 +27,49 @@ export interface TreeStyle {
   trunk: [number, number];
 }
 
+type Purpose = NonNullable<LandscapeZoneConfig["purpose"]>;
+
+/**
+ * Where a purposeful zone's trees stand, as fractions along the zone's long axis (-0.5…0.5 of its usable length) and
+ * across it. A privacy screen is a staggered row running the zone's full length (one tree per ~3.5 m); entrance
+ * planting and view-framing are a pair at the two ends, flanking the approach or the view; pool planting is a loose
+ * row (one per ~4 m) along the pool side.
+ */
+function zoneLayout(purpose: Purpose, long: number): { along: number; across: number }[] {
+  const row = (count: number, stagger: number) => Array.from({ length: count }, (_, i) => ({ along: count === 1 ? 0 : i / (count - 1) - 0.5, across: count > 2 ? (i % 2 ? stagger : -stagger) : 0 }));
+  switch (purpose) {
+    case "privacy": return row(Math.max(2, Math.min(8, Math.round(long / 3.5) + 1)), 0.2);
+    case "pool-planting": return row(Math.max(1, Math.min(4, Math.round(long / 4))), 0.15);
+    case "entrance-planting":
+    case "view-framing": return row(2, 0);
+  }
+}
+
+/**
+ * The planting a Site Plan zone asks for, laid along the zone's own geometry. A spot that lands on a building or a
+ * built feature slides across the zone to the nearest clear position; one with no clear position is skipped.
+ */
+function plantZone(zone: LandscapeZoneConfig & { purpose: Purpose }, footprints: ReturnType<typeof collectOccupiedFootprints>): [number, number][] {
+  const alongX = zone.width >= zone.depth;
+  const long = alongX ? zone.width : zone.depth, short = alongX ? zone.depth : zone.width;
+  const usable = Math.max(0, long - 2);
+  const out: [number, number][] = [];
+  for (const { along, across } of zoneLayout(zone.purpose, long)) {
+    const a = along * usable;
+    for (const shift of [across, 0, 0.3, -0.3]) {
+      const c = shift * Math.max(0, short - 1);
+      const [x, z] = alongX ? [zone.x + a, zone.z + c] : [zone.x + c, zone.z + a];
+      if (isInsideAnyFootprint(x, z, footprints)) continue;
+      out.push([x, z]);
+      break;
+    }
+  }
+  return out;
+}
+
 /** Scatters a stable set of trees around the yard, avoiding the house and every site feature.
- * First 8 trees are biased toward the yard perimeter; the rest scatter more freely. */
+ * Site Plan zones are planted first, by purpose and along their geometry; then `count` ambient trees are scattered,
+ * the first 8 biased toward the yard perimeter and the rest more freely. */
 export function generateTrees(site: SiteConfig, style?: TreeStyle): TreePlacement[] {
   const TREE_COUNT = style?.count ?? DEFAULT_TREE_COUNT;
   const colors = style?.colors ?? FOLIAGE_COLORS;
@@ -42,24 +83,21 @@ export function generateTrees(site: SiteConfig, style?: TreeStyle): TreePlacemen
 
   const placed: TreePlacement[] = [];
 
-  // Site Plan zones establish the first planting moves. They are intentionally deterministic, but their
-  // meaning comes from the authored plan rather than a generic radial scatter.
-  for (const zone of site.landscaping.filter((z) => z.purpose && z.kind !== "clearing")) {
-    const count = zone.purpose === "privacy" ? 3 : 2;
-    for (let i = 0; i < count && placed.length < TREE_COUNT; i++) {
-      const along = i / (count - 1) - 0.5;
-      const x = zone.x + along * Math.max(0, zone.width - 2);
-      const z = zone.z + (zone.purpose === "view-framing" ? (i % 2 ? 1 : -1) * Math.min(1.2, zone.depth / 4) : 0);
-      if (isInsideAnyFootprint(x, z, footprints)) continue;
+  // Site Plan zones establish the first planting moves: deterministic, laid along each zone's own geometry, and not
+  // counted against the ambient scatter below.
+  for (const zone of site.landscaping) {
+    if (!zone.purpose || zone.kind === "clearing") continue;
+    for (const [x, z] of plantZone(zone as LandscapeZoneConfig & { purpose: Purpose }, footprints)) {
       placed.push({ id: `tree-${placed.length}`, position: [x, z], trunkHeight: rngRange(rng, trunk[0], trunk[1]), trunkRadius: rngRange(rng, 0.12, 0.22), foliageRadius: rngRange(rng, 1.1, 1.9), foliageColor: rngPick(rng, colors), rotationY: rng() * Math.PI * 2 });
     }
   }
 
-  for (let i = placed.length; i < TREE_COUNT; i++) {
+  const planted = placed.length;
+  for (let i = planted; i < planted + TREE_COUNT; i++) {
     for (let attempt = 0; attempt < MAX_ATTEMPTS_PER_TREE; attempt++) {
       let x: number, z: number;
 
-      if (i < 8) {
+      if (i - planted < 8) {
         // Outer ring — trees near the yard perimeter for a framed, planted feel.
         const angle = rng() * Math.PI * 2;
         const dist = rngRange(rng, half * 0.48, half * 0.88);
@@ -113,7 +151,8 @@ const SHRUB_COLORS = ["#4f9a3c", "#5aa640", "#468c38", "#62ad48"] as const;
 /** Understorey planting: a shrub (sometimes flowering) tucked beside about two thirds of the trees, clear of every footprint. */
 export function generateShrubs(site: SiteConfig, trees: TreePlacement[]): ShrubPlacement[] {
   const rng = createRng(hashSeed("shrubs", site.house.width, site.house.depth, trees.length));
-  const footprints = collectOccupiedFootprints(site);
+  // Like trees, shrubs belong in planting beds: a landscape zone is a destination, not a keep-out.
+  const footprints = collectOccupiedFootprints({ ...site, landscaping: [] });
   const shrubs: ShrubPlacement[] = [];
   for (const tree of trees) {
     if (rng() > 0.66) continue;

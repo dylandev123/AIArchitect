@@ -16,8 +16,7 @@ import { INITIAL_CAPABILITIES } from "./capabilities";
  * Every write goes through `mutateLibrary`, which serialises read-modify-write so two generations recording the
  * same Need at once increment it twice instead of clobbering each other.
  *
- * Curated assets are not stored here yet: they still live in the admin's browser (`useAssetStore`). The document
- * shape is generic (`kind` + `data`) so assets can move into the same table without another registry.
+ * Curated assets (and their GLB files) have their own tables: see `lib/assets/serverStore`.
  */
 
 export interface LibrarySnapshot {

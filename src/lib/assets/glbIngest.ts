@@ -1,5 +1,6 @@
 import type { AssetValidationReport, CuratedAsset } from "@/types/assets";
 import type { AssetCategory, NeedDimensions } from "@/types/library";
+import { loadAssetGlbBytes } from "./assetSync";
 import { getGlbStore } from "./glbStorage";
 import { validateGlb } from "./glbValidator";
 
@@ -38,6 +39,6 @@ export async function ingestGlb(assetId: string, bytes: ArrayBuffer, options: In
 
 /** Re-runs validation against the stored file (e.g. after the category changed, which the orientation check reads). */
 export async function revalidateStoredGlb(asset: Pick<CuratedAsset, "id" | "family" | "dimensions">, expectedDimensions?: NeedDimensions): Promise<AssetValidationReport | null> {
-  const bytes = await getGlbStore().get(asset.id);
+  const bytes = await loadAssetGlbBytes(asset.id).catch(() => null);
   return bytes ? validateGlb(bytes, { family: asset.family, expectedDimensions }) : null;
 }

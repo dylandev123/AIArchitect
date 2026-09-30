@@ -365,3 +365,89 @@ export function loopWall(outline: readonly P2[], y0: number, y1: number): number
   }
   return out;
 }
+
+// ── Planar region difference ───────────────────────────────────────────────────────────────────────────────────
+
+/** Area enclosed by a polygon, whatever its winding. */
+export function polygonArea(poly: readonly P2[]): number {
+  return Math.abs(signedArea(poly));
+}
+
+/** Even-odd point-in-polygon test. */
+export function pointInPolygon(p: P2, poly: readonly P2[]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, zi] = poly[i], [xj, zj] = poly[j];
+    if (zi > p[1] !== zj > p[1] && p[0] < ((xj - xi) * (p[1] - zi)) / (zj - zi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+/** Convex hull (monotone chain), counter-clockwise in x/z. */
+export function convexHull(points: readonly P2[]): P2[] {
+  const pts = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  if (pts.length < 3) return pts;
+  const cross = (o: P2, a: P2, b: P2) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower: P2[] = [], upper: P2[] = [];
+  for (const p of pts) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 1e-12) lower.pop(); lower.push(p); }
+  for (const p of [...pts].reverse()) { while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 1e-12) upper.pop(); upper.push(p); }
+  return [...lower.slice(0, -1), ...upper.slice(0, -1)];
+}
+
+/** Sutherland–Hodgman: the part of `poly` where `side(p) >= 0`, `side` being affine (a half-plane). */
+function clipHalfPlane(poly: readonly P2[], side: (p: P2) => number): P2[] {
+  const out: P2[] = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length];
+    const sa = side(a), sb = side(b);
+    if (sa >= 0) out.push(a);
+    if ((sa >= 0) !== (sb >= 0)) { const t = sa / (sa - sb); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
+  }
+  return out;
+}
+
+/** Signed side functions of a convex polygon's edges, each >= 0 on the polygon's interior side. */
+function convexSides(hole: readonly P2[]): ((p: P2) => number)[] {
+  const c = centroid(hole);
+  return hole.map((a, i) => {
+    const b = hole[(i + 1) % hole.length];
+    const f = (p: P2) => (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    const s = f(c) >= 0 ? 1 : -1;
+    return (p: P2) => s * f(p);
+  });
+}
+
+/**
+ * `region` minus a convex `hole`, as disjoint pieces that together cover exactly the difference (each piece is the
+ * region clipped to lie outside one hole edge and inside all the edges before it). Works for a hole that is fully
+ * inside the region, crosses its boundary, or misses it; degenerate slivers are dropped.
+ */
+export function subtractConvex(region: readonly P2[], hole: readonly P2[]): P2[][] {
+  const sides = convexSides(hole);
+  const pieces: P2[][] = [];
+  let inside: P2[] = [...region];
+  for (const side of sides) {
+    if (inside.length < 3) break;
+    const outside = clipHalfPlane(inside, (p) => -side(p));
+    if (outside.length >= 3 && polygonArea(outside) > 1e-4) pieces.push(outside);
+    inside = clipHalfPlane(inside, side);
+  }
+  return pieces;
+}
+
+/** The parts of segment a→b that lie outside a convex polygon. */
+export function segmentOutsideConvex(a: P2, b: P2, hole: readonly P2[]): [P2, P2][] {
+  let t0 = 0, t1 = 1;
+  for (const side of convexSides(hole)) {
+    const fa = side(a), fb = side(b);
+    if (fa < 0 && fb < 0) return [[a, b]];
+    if (fa < 0) t0 = Math.max(t0, fa / (fa - fb));
+    else if (fb < 0) t1 = Math.min(t1, fa / (fa - fb));
+  }
+  if (t0 >= t1) return [[a, b]];
+  const at = (t: number): P2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const out: [P2, P2][] = [];
+  if (t0 > 1e-6) out.push([a, at(t0)]);
+  if (t1 < 1 - 1e-6) out.push([at(t1), b]);
+  return out;
+}

@@ -31,14 +31,50 @@ export function validationBlocker(asset: CuratedAsset): string | null {
   return null;
 }
 
+type AssetLists = Pick<AssetStore, "catalog" | "queue" | "localOnly">;
+
+/**
+ * The server's lists win. Whatever this browser held that the server does not know is moved to `localOnly` rather than
+ * dropped, so nothing curated before the move to the server (or lost on the way) disappears without the admin deciding.
+ * Without a server queue (not an admin) the local queue is left alone: it is only ever written by an admin.
+ */
+export function mergeServerLibrary(local: AssetLists, server: { catalog: CuratedAsset[]; queue?: CuratedAsset[] }): AssetLists {
+  const queue = server.queue ?? local.queue;
+  const known = new Set([...server.catalog, ...queue].map((a) => a.id));
+  const stranded = [...local.localOnly, ...local.catalog, ...(server.queue ? local.queue : [])].filter((a) => !known.has(a.id));
+  const localOnly = [...new Map(stranded.map((a) => [a.id, a])).values()];
+  return { catalog: server.catalog, queue, localOnly };
+}
+
 /** Removes a GLB's stored bytes (the model cache notices the asset is gone on its own). Best effort: a missing file is already the desired state. */
 function discardModel(id: string) {
   void getGlbStore().delete(id).catch(() => {});
 }
 
+/** Where the browser's copy stands against the server library (see `lib/assets/assetSync`). Never persisted. */
+export interface AssetSyncState {
+  status: "idle" | "loading" | "ready" | "error";
+  /** The last load or write failure, until the next successful load. */
+  error: string;
+  /** When the catalog was last replaced from the server. */
+  loadedAt: string | null;
+}
+
 interface AssetStore {
   queue: CuratedAsset[];
   catalog: CuratedAsset[];
+  /**
+   * Assets this browser holds that the server does not: created before the library moved to the server, or whose write never
+   * reached it. They are kept (with their GLBs in IndexedDB) until imported or discarded, but not used, since the server is
+   * the source of truth.
+   */
+  localOnly: CuratedAsset[];
+  sync: AssetSyncState;
+  /** Replaces the cached library with the server's. `queue` is undefined when the viewer may not see it (not an admin). */
+  applyServerLibrary: (server: { catalog: CuratedAsset[]; queue?: CuratedAsset[] }) => void;
+  /** Forgets browser-only assets and their cached GLBs, after the admin chose not to import them. */
+  discardLocalOnly: (ids: readonly string[]) => void;
+  setSync: (patch: Partial<AssetSyncState>) => void;
   addToQueue: (asset: CuratedAsset) => void;
   approve: (id: string) => void;
   /**
@@ -62,6 +98,17 @@ export const useAssetStore = create<AssetStore>()(
     (set, get) => ({
       queue: [],
       catalog: [],
+      localOnly: [],
+      sync: { status: "idle", error: "", loadedAt: null },
+
+      applyServerLibrary: (server) => set((s) => ({ ...mergeServerLibrary(s, server), sync: { status: "ready", error: "", loadedAt: new Date().toISOString() } })),
+
+      discardLocalOnly: (ids) => {
+        set((s) => ({ localOnly: s.localOnly.filter((a) => !ids.includes(a.id)) }));
+        for (const id of ids) discardModel(id);
+      },
+
+      setSync: (patch) => set((s) => ({ sync: { ...s.sync, ...patch } })),
 
       addToQueue: (asset) => {
         const { queue, isDuplicate } = get();
@@ -146,6 +193,6 @@ export const useAssetStore = create<AssetStore>()(
         );
       },
     }),
-    { name: "ai-architect-assets" }
+    { name: "ai-architect-assets", partialize: (s) => ({ catalog: s.catalog, queue: s.queue, localOnly: s.localOnly }) }
   )
 );

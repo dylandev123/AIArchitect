@@ -186,7 +186,7 @@ export async function runArchitecturePipeline(
   diagnostics.push({
     stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
     modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
-    ...(roofResult.ok ? {} : { error: roofResult.errors.join("; ") }),
+    ...(roofResult.ok ? (roofResult.warnings ? { warnings: roofResult.warnings } : {}) : { error: roofResult.errors.join("; ") }),
   });
   onUpstreamProgress({ foundation, masses: expansion.masses, articulatedMasses, roofs }, diagnostics);
   roofs.forEach((_, i) => {
@@ -283,7 +283,7 @@ export async function replayArchitectureStage(
     diagnostics.push({
       stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
       modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
-      ...(roofResult.ok ? {} : { error: roofResult.errors.join("; ") }),
+      ...(roofResult.ok ? (roofResult.warnings ? { warnings: roofResult.warnings } : {}) : { error: roofResult.errors.join("; ") }),
     });
   } else {
     diagnostics.push({ stage: "roof-composition", status: "ok", durationMs: 0, modelCalls: 0, retries: 0 });

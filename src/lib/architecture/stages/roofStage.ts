@@ -2,10 +2,25 @@ import type { Timings } from "@/lib/ai/timing";
 import type { UsageMeta } from "@/lib/ai/usage/track";
 import type { ArchitecturalIntent } from "../designEngine";
 import type { MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy, VolumeHierarchy } from "../document";
+import { assessRoofLanguage, describeRoofLanguageRules, EAVE_OVERHANG_TOLERANCE, LOW_SLOPE_MAX_PITCH, PITCH_TOLERANCE, wallPlateHeight, type RoofLanguage } from "../roofLanguage";
 import { runStage, type RunStageResult } from "./runStage";
-import { roofCompositionStageOutputSchema } from "./schemas";
+import { roofCompositionStageOutputSchema, type RoofCompositionStageOutput } from "./schemas";
 
-const SYSTEM = `You are a senior residential architect composing the complete executable roof recipe for every volume of a finished massing plan. Choose family, overhang, pitch, orientation, parapet and floating expression where applicable; do not leave dimensional tuning to the compiler. Return exactly one roof for every mass listed, using its exact id.`;
+const SYSTEM = `You are a senior residential architect composing ONE coherent whole-house roof language and the complete executable roof recipe for every volume of a finished massing plan.
+
+Work in this order:
+1. Choose the dominant roof family and expression for the dominant volume first, and declare it as \`language\` (dominantMassId, family, one-sentence concept). "mixed" is never a language.
+2. Author every other roof as a subordinate of that language, never as an independent design:
+   - Compatible families only (dominant → allowed subordinates):
+${describeRoofLanguageRules()}
+     A flat roof under a gable/hip language is only for a recessive link (connector, entry, terrace, veranda).
+   - Hierarchy: no subordinate may out-express the dominant roof; a floating plane only repeats under a floating-flat language.
+   - Pitch: roofs of the dominant's own family share its pitch (±${PITCH_TOLERANCE}°); a lean-to shed stays at or below a gable/hip pitch; sheds in a flat/floating/butterfly language stay at or below ${LOW_SLOPE_MAX_PITCH}°.
+   - Orientation: sloped roofs keep their ridge/slope parallel or perpendicular to the dominant roof; \`orientation\` turns a roof relative to its own walls, so use 0 or π (π/2 only on a square mass).
+   - Datums: volumes sharing a wall-plate height share one eave line (same family + same planned edge → overhangs within ${EAVE_OVERHANG_TOLERANCE}m), one parapet top, one floating reveal gap and plate thickness.
+3. Avoid unrelated gable/hip/flat/floating forms competing on one house. Break the language only when the architecture truly calls for it: then set that roof's \`counterpoint\` to the reason (at most one counterpoint family, never the dominant roof).
+
+Choose family, overhang, pitch, orientation, parapet and floating expression where applicable; do not leave dimensional tuning to the compiler. Honor each volume's planned roof edge. Return exactly one roof for every mass listed, using its exact id.`;
 
 /** Failure-only defaults for an incomplete roof response. */
 const ROOF_KIND_DEFAULTS: Record<RoofRecipeKind, { overhang: number; pitch: number }> = {
@@ -42,7 +57,7 @@ function scaledVerticalGap(mass: MassVolume): number {
 }
 
 const hasChamfer = (m: MassVolume) => (m.operations ?? []).some((op) => op.type === "chamfer");
-const describeMass = (m: MassVolume) => `${m.id} "${m.name}", role ${m.role}, ${m.width.toFixed(1)}x${m.depth.toFixed(1)}m, ${m.floors} floor(s)${m.plan ? `, ${m.plan.hierarchy}, planned roof edge ${m.plan.roofEdge}` : ""}${hasChamfer(m) ? ", chamfered prow" : ""}.`;
+const describeMass = (m: MassVolume) => `${m.id} "${m.name}", role ${m.role}, ${m.width.toFixed(1)}x${m.depth.toFixed(1)}m, ${m.floors} floor(s), wall plate at ${wallPlateHeight(m).toFixed(2)}m${m.rotation ? `, rotated ${Math.round((m.rotation * 180) / Math.PI)}°` : ""}${m.plan ? `, ${m.plan.hierarchy}, planned roof edge ${m.plan.roofEdge}` : ""}${hasChamfer(m) ? ", chamfered prow" : ""}.`;
 
 /** The families the compiler can build along an angled (chamfered) edge; any other becomes a shed there — the closest single-plane form. */
 const PROW_ROOF_KINDS = new Set<RoofRecipeKind>(["flat", "floating-flat", "shed", "mono-pitch"]);
@@ -97,12 +112,55 @@ export function fallbackRoofs(masses: readonly MassVolume[], intent: Architectur
   return masses.map((mass) => (mass.plan ? roofForMass(mass, "flat", intent) : { id: `${mass.id}-roof`, massId: mass.id, kind: "flat", overhang: 0.6 }));
 }
 
+/** The roof stage's result: the authored recipes, the declared language, and any language issues the model never repaired. */
+export type RoofCompositionStageResult = RunStageResult<RoofRecipe[]> & { language?: RoofLanguage; warnings?: string[] };
+
+/** Every mass exactly once, by exact id — the only faults that make a response unbuildable. */
+function structuralRoofErrors(value: RoofCompositionStageOutput, ids: readonly string[]): string[] {
+  const errors: string[] = [];
+  const seen = new Set<string>();
+  for (const roof of value.roofs) {
+    if (!ids.includes(roof.massId)) errors.push(`Unknown mass id "${roof.massId}". Use one of: ${ids.join(", ")}.`);
+    else if (seen.has(roof.massId)) errors.push(`Duplicate roof for mass "${roof.massId}".`);
+    seen.add(roof.massId);
+  }
+  for (const id of ids) if (!seen.has(id)) errors.push(`Missing a roof for mass "${id}".`);
+  return errors;
+}
+
+/** Whole-house roof-language coherence of an authored response (see roofLanguage.ts). */
+export function roofLanguageErrors(value: RoofCompositionStageOutput, masses: readonly MassVolume[]): string[] {
+  const roofs = value.roofs.map((r) => ({ ...r, id: `${r.massId}-roof` }));
+  return assessRoofLanguage(value.language, roofs, masses);
+}
+
+/**
+ * Turns an authored response into recipes. The AI's valid executable recipe is authoritative — the compiler
+ * will still reject impossible meshes; `roofForMass` is reserved for a missing/incomplete entry, never for
+ * reinterpreting a complete one (and never for enforcing the roof language).
+ */
+export function recipesFromAuthoredRoofs(value: RoofCompositionStageOutput, masses: readonly MassVolume[], intent: ArchitecturalIntent): RoofRecipe[] {
+  const byId = new Map(value.roofs.map((r) => [r.massId, r] as const));
+  return masses.map((mass) => {
+    const authored = byId.get(mass.id);
+    if (!authored) return roofForMass(mass, "flat", intent);
+    if (authored.overhang === undefined || authored.pitch === undefined) return roofForMass(mass, authored.kind, intent);
+    return { id: `${mass.id}-roof`, massId: mass.id, kind: authored.kind, overhang: authored.overhang, pitch: authored.pitch,
+      ...(authored.orientation !== undefined ? { orientation: normalizeRoofOrientation(authored.orientation) } : {}),
+      ...(authored.expression ? { expression: authored.expression } : {}),
+      ...(authored.parapet ? { parapet: authored.parapet } : {}),
+    };
+  });
+}
+
 /**
  * One model call for the whole roof composition instead of one per mass: by the time roofs are chosen every
- * mass is already placed, so nothing is gained by asking sequentially — the model already sees the full
- * composition and can coordinate variety across it better than seeing only the roofs decided so far.
+ * mass is already placed, so the model sees the full composition and designs one roof language for it —
+ * dominant family first, every other roof subordinate to it. Language incoherence drives the repair retry;
+ * if the last attempt is still structurally complete, its authored roofs are kept (AI authority) and the
+ * unrepaired language issues are reported as warnings rather than replaced by deterministic flat roofs.
  */
-export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<RunStageResult<RoofRecipe[]>> {
+export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<RoofCompositionStageResult> {
   const ids = ctx.masses.map((m) => m.id);
   const result = await runStage({
     stageName: "roof-composition",
@@ -115,34 +173,20 @@ export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, 
     ].filter(Boolean).join("\n\n"),
     schema: roofCompositionStageOutputSchema,
     timings, remainingBudgetMs, usageMeta,
-    // Each entry is now just a mass id and a roof-family enum — a fraction of what a reasoned, per-mass
-    // explanation used to need, so a much smaller budget already has headroom.
-    maxOutputTokens: 100 + ctx.masses.length * 40,
+    // A language header plus one complete recipe (family, overhang, pitch, optional orientation/parapet/expression) per mass.
+    maxOutputTokens: 250 + ctx.masses.length * 90,
     validate: (value) => {
-      const errors: string[] = [];
-      const seen = new Set<string>();
-      for (const roof of value.roofs) {
-        if (!ids.includes(roof.massId)) errors.push(`Unknown mass id "${roof.massId}". Use one of: ${ids.join(", ")}.`);
-        else if (seen.has(roof.massId)) errors.push(`Duplicate roof for mass "${roof.massId}".`);
-        seen.add(roof.massId);
-      }
-      for (const id of ids) if (!seen.has(id)) errors.push(`Missing a roof for mass "${id}".`);
-      return errors;
+      const structural = structuralRoofErrors(value, ids);
+      return structural.length ? structural : roofLanguageErrors(value, ctx.masses);
     },
   });
-  if (!result.ok) return result;
-  const byId = new Map(result.value.roofs.map((r) => [r.massId, r] as const));
-  const recipes: RoofRecipe[] = ctx.masses.map((mass) => {
-    const authored = byId.get(mass.id);
-    if (!authored) return roofForMass(mass, "flat", ctx.intent);
-    if (authored.overhang === undefined || authored.pitch === undefined) return roofForMass(mass, authored.kind, ctx.intent);
-    // The AI's valid executable recipe is authoritative. The compiler will still reject impossible meshes;
-    // `roofForMass` is reserved for a missing/failed stage response, not normal reinterpretation.
-    return { id: `${mass.id}-roof`, massId: mass.id, kind: authored.kind, overhang: authored.overhang, pitch: authored.pitch,
-      ...(authored.orientation !== undefined ? { orientation: normalizeRoofOrientation(authored.orientation) } : {}),
-      ...(authored.expression ? { expression: authored.expression } : {}),
-      ...(authored.parapet ? { parapet: authored.parapet } : {}),
-    };
-  });
-  return { ok: true, value: recipes, attempts: result.attempts, durationMs: result.durationMs };
+  if (result.ok) return { ...result, value: recipesFromAuthoredRoofs(result.value, ctx.masses, ctx.intent), ...(result.value.language ? { language: result.value.language } : {}) };
+  // Only language issues left unrepaired: the authored roofs still build, so they stand.
+  const last = result.rawValueTruncated ? undefined : roofCompositionStageOutputSchema.safeParse(result.rawValue);
+  if (last?.success && structuralRoofErrors(last.data, ids).length === 0) {
+    const warnings = roofLanguageErrors(last.data, ctx.masses);
+    return { ok: true, value: recipesFromAuthoredRoofs(last.data, ctx.masses, ctx.intent), attempts: result.attempts, durationMs: result.durationMs,
+      ...(last.data.language ? { language: last.data.language } : {}), ...(warnings.length ? { warnings } : {}) };
+  }
+  return result;
 }

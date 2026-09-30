@@ -9,6 +9,10 @@ import { inferSiteHints } from '@/lib/house/siteSettings';
 import { inferScaleFromBrief, isProjectScale } from '@/lib/house/scale';
 import { styleTagsForProjectStyle } from '@/lib/library/requests';
 import type { HousePrimitive } from '@/lib/house/types';
+import { SITE_FEATURE_CATEGORIES } from '@/lib/architecture/v2OnlyMode';
+import { pathCurve } from '@/lib/house/features/paths';
+import type { PathConfig } from '@/types/house';
+import { massHalfExtents } from '@/lib/architecture/massFootprint';
 export interface OutdoorAssetPlacement {
     id: string;
     assetId: string;
@@ -71,17 +75,69 @@ export function placementVolumes(q: OutdoorAssetPlacement): Bounds[] {
 export function placementsOverlap(a: OutdoorAssetPlacement, b: OutdoorAssetPlacement): boolean {
     return placementVolumes(a).some(x => placementVolumes(b).some(y => overlaps(x, y) && x.y + x.h > y.y + 0.001 && y.y + y.h > x.y + 0.001));
 }
+/** Squares a path's width wide, every ~0.4 m along its curve. */
+function pathObstacles(path: PathConfig): Bounds[] {
+    const curve = pathCurve(path), out: Bounds[] = [];
+    for (let i = 0; i < curve.length - 1; i++) {
+        const [a, b] = [curve[i], curve[i + 1]], steps = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.4));
+        for (let k = 0; k <= steps; k++)
+            out.push({ x: a[0] + (b[0] - a[0]) * k / steps, z: a[1] + (b[1] - a[1]) * k / steps, w: path.width, d: path.width, y: 0, h: 0.2 });
+    }
+    return out;
+}
+function unionBounds(all: readonly Bounds[]): Bounds {
+    const x0 = Math.min(...all.map(b => b.x - b.w / 2)), x1 = Math.max(...all.map(b => b.x + b.w / 2));
+    const z0 = Math.min(...all.map(b => b.z - b.d / 2)), z1 = Math.max(...all.map(b => b.z + b.d / 2));
+    const y0 = Math.min(...all.map(b => b.y)), y1 = Math.max(...all.map(b => b.y + b.h));
+    return { x: (x0 + x1) / 2, z: (z0 + z1) / 2, w: x1 - x0, d: z1 - z0, y: y0, h: y1 - y0 };
+}
+/** The overlap of `a` with surface `s`, standing at the surface's height. */
+function intersectBounds(a: Bounds, s: Bounds): Bounds {
+    const x0 = Math.max(a.x - a.w / 2, s.x - s.w / 2), x1 = Math.min(a.x + a.w / 2, s.x + s.w / 2);
+    const z0 = Math.max(a.z - a.d / 2, s.z - s.d / 2), z1 = Math.min(a.z + a.d / 2, s.z + s.d / 2);
+    return { x: (x0 + x1) / 2, z: (z0 + z1) / 2, w: Math.max(0, x1 - x0), d: Math.max(0, z1 - z0), y: s.y, h: s.h };
+}
+/** Room a sun lounger needs across its zone: 2 m long plus 0.2 m either side. */
+const LOUNGER_ROOM = 2.4;
+/** Kept between a seating area and a pool's coping. */
+const POOL_EDGE_GAP = 0.3;
+/**
+ * The parts of a terrace or deck a seating group can use: the whole surface when no pool reaches it, otherwise the
+ * four bands around the pools it holds (before, after, and either side of them), each at the surface's height.
+ */
+function poolFreeAreas(surface: Bounds, pools: readonly Bounds[]): Bounds[] {
+    const hit = pools.filter(p => overlaps(surface, p, 0));
+    if (!hit.length)
+        return [surface];
+    const u = unionBounds(hit);
+    const sx0 = surface.x - surface.w / 2, sx1 = surface.x + surface.w / 2, sz0 = surface.z - surface.d / 2, sz1 = surface.z + surface.d / 2;
+    const ux0 = u.x - u.w / 2 - POOL_EDGE_GAP, ux1 = u.x + u.w / 2 + POOL_EDGE_GAP, uz0 = u.z - u.d / 2 - POOL_EDGE_GAP, uz1 = u.z + u.d / 2 + POOL_EDGE_GAP;
+    const box = (x0: number, x1: number, z0: number, z1: number): Bounds => ({ x: (x0 + x1) / 2, z: (z0 + z1) / 2, w: x1 - x0, d: z1 - z0, y: surface.y, h: surface.h });
+    return [box(sx0, sx1, sz0, uz0), box(sx0, sx1, uz1, sz1), box(sx0, ux0, sz0, sz1), box(ux1, sx1, sz0, sz1)].filter(b => b.w > 0.5 && b.d > 0.5);
+}
 export const SUPPORTED_COMPONENTS = new Set(['dining-table', 'dining-chair', 'pergola', 'pendant-light', 'sun-lounger', 'side-table', 'lounge-armchair', 'outdoor-bench', 'bar-stool', 'kitchen-island', 'outdoor-fridge', 'bar-counter', 'lantern', 'path-light', 'planter', 'garden-pot', 'fire-pit', 'parasol', 'cabana']);
 /** Read-only scene geometry supplies surfaces and keep-outs; no architecture is mutated. */
 export function placeOutdoorAssets(json: string, spaces: readonly OutdoorSpace[], library: readonly AssetIndexEntry[], styles: readonly string[]): OutdoorAssetPlacement[] {
-    const { model } = generateHouseFromJson(json);
+    const { model, site } = generateHouseFromJson(json);
     if (!model)
         return [];
     const surfaces = model.primitives.filter(p => p.category === 'patio' || (p.category === 'deck' && p.id.includes('slab'))).map(bounds);
     const pools = model.primitives.filter(p => p.category === 'pool' && p.id.endsWith('-water')).map(bounds);
+    // Each pool's whole footprint, coping included: no seating group is ever laid out over it.
+    const poolKeepOuts = [...new Set(model.primitives.filter(p => p.category === 'pool').map(p => p.id.split('-').slice(0, 2).join('-')))]
+        .map(id => unionBounds(model.primitives.filter(p => p.id.startsWith(`${id}-`)).map(bounds)));
     const root = JSON.parse(json);
     const viewYaw = ({ south: 0, east: Math.PI / 2, north: Math.PI, west: -Math.PI / 2 } as Record<string, number>)[root.site?.viewDirection] ?? 0;
-    const obstacles = model.primitives.filter(p => p.category === 'deck' ? !p.id.includes('slab') : !['patio', 'landscape', 'slope'].includes(p.category)).map(bounds);
+    const center = site?.house.center ?? { x: 0, z: 0 };
+    // A V2 project's building is its document's masses, not the legacy stand-in shell (which is never rendered): keep
+    // only genuine site features from the legacy model and add every mass as a solid obstacle.
+    const masses = site?.buildingFootprints ?? [];
+    const obstacles = [
+        // A path is kept clear along its actual line, not as the box around it (a diagonal path's box would swallow a terrace).
+        ...model.primitives.filter(p => p.category !== 'path' && (!masses.length || SITE_FEATURE_CATEGORIES.has(p.category)) && (p.category === 'deck' ? !p.id.includes('slab') : !['patio', 'landscape', 'slope'].includes(p.category))).map(bounds),
+        ...(site?.paths ?? []).flatMap(pathObstacles),
+        ...masses.map(m => { const { halfW, halfD } = massHalfExtents(m); return { x: m.cx, z: m.cz, w: halfW * 2, d: halfD * 2, y: 0, h: 12 }; }),
+    ];
     const placed: OutdoorAssetPlacement[] = [];
     for (const space of [...spaces].sort((a, b) => Number(b.kind === 'outdoor-dining') - Number(a.kind === 'outdoor-dining'))) {
         if (!space.realized)
@@ -98,9 +154,17 @@ export function placeOutdoorAssets(json: string, spaces: readonly OutdoorSpace[]
                 return [true, false].flatMap(alongX => [-1, 1].map(side => {
                     const yaw = alongX ? (side === 1 ? Math.PI : 0) : (side === 1 ? -Math.PI / 2 : Math.PI / 2);
                     const b = { x: p.x + (alongX ? 0 : side * (p.w / 2 + 2.1)), z: p.z + (alongX ? side * (p.d / 2 + 2.1) : 0), w: alongX ? p.w : 3.2, d: alongX ? 3.2 : p.d, y: 0, h: 0 };
-                    return frame(b, yaw);
+                    // A strip that reaches a deck or terrace is confined to it and raised to its surface: a lounger
+                    // stands wholly on the deck, never half on it or sunk into it.
+                    const area = (s: Bounds) => { const i = intersectBounds(b, s); return i.w * i.d; };
+                    const surface = surfaces.filter(s => area(s) > 0).sort((s, t) => area(t) - area(s))[0];
+                    return frame(surface ? intersectBounds(b, surface) : b, yaw);
                 }));
             });
+            // Only strips a lounger (2 m + clearance) actually fits in, when there are any.
+            const fitting = zones.filter(z => z.localW >= LOUNGER_ROOM && z.localD >= LOUNGER_ROOM);
+            if (fitting.length)
+                zones = fitting;
         }
         else if (['garden', 'quiet-retreat', 'fire-pit-lounge'].includes(space.kind)) {
             zones = model.primitives.filter(p => p.category === 'landscape').map(p => frame(bounds(p), viewYaw));
@@ -109,7 +173,8 @@ export function placeOutdoorAssets(json: string, spaces: readonly OutdoorSpace[]
             zones = model.primitives.filter(p => p.category === 'porch' && p.id.includes('slab')).map(p => frame(bounds(p), viewYaw + Math.PI));
         }
         else if (['outdoor-dining', 'outdoor-kitchen', 'pool-bar', 'main-outdoor-living', 'view-terrace'].includes(space.kind)) {
-            zones = surfaces.filter(p => p.x * Math.sin(viewYaw) + p.z * Math.cos(viewYaw) > 0).map(p => frame(p, viewYaw));
+            zones = surfaces.filter(p => (p.x - center.x) * Math.sin(viewYaw) + (p.z - center.z) * Math.cos(viewYaw) > 0)
+                .flatMap(p => poolFreeAreas(p, poolKeepOuts)).map(p => frame(p, viewYaw));
         }
         if (!zones.length)
             continue;

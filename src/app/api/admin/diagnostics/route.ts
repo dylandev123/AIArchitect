@@ -3,6 +3,7 @@ import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin/auth";
 import { readUsageRecords, usageLogPath, usageStorageInfo } from "@/lib/ai/usage/store";
+import { assetBackend, assetStorageInfo } from "@/lib/assets/serverStore";
 import { libraryFilePath, libraryStorageInfo, readLibrary } from "@/lib/library/store";
 import { recentStorageErrors } from "@/lib/storage/diagnostics";
 
@@ -59,6 +60,12 @@ export async function GET(req: NextRequest) {
     (err) => ({ needs: null, knowledge: null, recipes: null, plans: null, generations: null, error: errorText(err) })
   );
 
+  const assetStorage = assetStorageInfo();
+  const assets = await assetBackend().list().then(
+    ({ assets, glbIds }) => ({ approved: assets.filter((a) => a.status === "approved").length as number | null, pending: assets.filter((a) => a.status === "pending").length as number | null, glbs: glbIds.length as number | null, error: null as string | null }),
+    (err) => ({ approved: null, pending: null, glbs: null, error: errorText(err) })
+  );
+
   const usagePath = usageLogPath();
   const libraryPath = libraryFilePath();
   const defaults = { usage: path.join(process.cwd(), ".data", "ai-usage.jsonl"), library: path.join(process.cwd(), ".data", "ai-library.json") };
@@ -74,7 +81,8 @@ export async function GET(req: NextRequest) {
     cwd: process.cwd(),
     usage: { storage: usageStorage, ...usage },
     library: { storage: libraryStorage, ...library },
-    databaseConnected: usageStorage.kind === "postgres" && libraryStorage.kind === "postgres" && !usage.error && !library.error,
+    assets: { storage: assetStorage, ...assets },
+    databaseConnected: usageStorage.kind === "postgres" && libraryStorage.kind === "postgres" && assetStorage.kind === "postgres" && !usage.error && !library.error && !assets.error,
     localFiles,
     errors: recentStorageErrors(),
   });

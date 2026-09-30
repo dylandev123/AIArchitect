@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/types/house";
+import { buildingFootprints } from "@/lib/landscaping/footprints";
 
 export interface SiteBounds {
   halfWidth: number;
@@ -11,13 +12,16 @@ export interface SiteBounds {
  * scattered far from the main house still fits in view by default.
  */
 export function computeSiteBounds(site: SiteConfig): SiteBounds {
-  let halfWidth = site.house.width / 2;
-  let halfDepth = site.house.depth / 2;
+  let halfWidth = 0;
+  let halfDepth = 0;
 
   const expand = (x: number, z: number, halfW: number, halfD: number) => {
     halfWidth = Math.max(halfWidth, Math.abs(x) + halfW);
     halfDepth = Math.max(halfDepth, Math.abs(z) + halfD);
   };
+
+  // The house itself: every V2 mass where there are some, else the legacy rectangle about its centre.
+  for (const f of buildingFootprints(site, 0)) expand(f.cx, f.cz, f.halfW, f.halfD);
 
   for (const b of site.buildings) expand(b.x, b.z, b.width / 2, b.depth / 2);
   for (const p of site.parking) expand(p.x, p.z, p.width / 2, p.depth / 2);

@@ -14,16 +14,17 @@ describe("readPersistedAssetCounts", () => {
 });
 
 describe("originNotice", () => {
-  it("always names the origin and says the data is origin-specific", () => {
-    const n = originNotice("http://localhost:3001", 4, true);
+  it("names the origin and says the server library is the source of truth", () => {
+    const n = originNotice("http://localhost:3001", 0);
     expect(n.text).toContain("http://localhost:3001");
-    expect(n.text).toMatch(/separate copy/);
+    expect(n.text).toMatch(/server library/);
     expect(n.severe).toBe(false);
   });
 
-  it("escalates when this origin is empty but the server library has data", () => {
-    expect(originNotice("http://localhost:3001", 0, true).severe).toBe(true);
-    expect(originNotice("http://localhost:3001", 0, false).severe).toBe(false);
+  it("escalates while this browser holds assets the server does not", () => {
+    const n = originNotice("http://localhost:3001", 3);
+    expect(n.severe).toBe(true);
+    expect(n.text).toMatch(/3 asset\(s\) exist only in this browser/);
   });
 });
 

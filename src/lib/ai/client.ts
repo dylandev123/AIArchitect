@@ -1,4 +1,5 @@
 import { useAssetStore } from "@/store/useAssetStore";
+import { assetLibraryReady } from "@/lib/assets/assetSync";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import { useLibraryStore } from "@/store/useLibraryStore";
 import { useAdminStore } from "@/store/useAdminStore";
@@ -66,6 +67,8 @@ function logEdit(stage: "INPUT" | "RESULT" | "COMPILE" | "COMMIT", details: Reco
  * only if nothing else changed the project in the meantime (optimistic revision check).
  */
 export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEditResult> {
+  // Retrieval reads the catalog sent with the request: let the first server load land so it is the server library, not a stale cache.
+  await assetLibraryReady();
   const project = useProjectStore.getState().getProject(req.projectId);
   if (!project) return { ok: false, error: "Project not found.", status: 404 };
 

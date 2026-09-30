@@ -16,7 +16,7 @@ import { DEFAULT_MATERIALS_CONFIG, BLANK_HOUSE_JSON } from "@/types/house";
 import { useRenderFlightStore } from "@/store/useRenderFlightStore";
 import { auditHash, documentAudit, primitiveBounds, primitiveSignature } from "@/lib/architecture/renderAudit";
 import { applyV2OnlyMode } from "@/lib/architecture/v2OnlyMode";
-import { geometricGraphErrors, sitePlanSchema } from "@/lib/architecture/stages/sitePlanStage";
+import { geometricGraphErrors, sitePlanSchema } from "@/lib/architecture/sitePlanContract";
 
 type JsonRecord = Record<string, unknown>;
 const isRecord = (value: unknown): value is JsonRecord => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -28,13 +28,16 @@ function SitePlanDebugPanel({ json }: { json: string | undefined }) {
     try {
       const raw = JSON.parse(json ?? BLANK_HOUSE_JSON) as JsonRecord;
       const candidate = raw.sitePlan;
-      const parsed = sitePlanSchema.safeParse(candidate);
       const legacy = generateHouseFromJson(json ?? BLANK_HOUSE_JSON);
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
       const model = isArchitecturalDesignDocument(document)
         ? applyV2OnlyMode({ legacy, v2Model: compileArchitecture(document, { materials: legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG }).model, v2OnlyMode: false, cutawayActive: false }).model
         : legacy.model;
       const ids = model?.primitives.map((p) => p.id) ?? [];
+      // Absence is the explicit fallback state, not a malformed authored object.
+      // Do not surface Zod's expected-object error as a fake Site Plan stage failure.
+      if (candidate === undefined) return { state: "no authored Site Plan — deterministic fallback was used", errors: [] as string[], plan: undefined, ids };
+      const parsed = sitePlanSchema.safeParse(candidate);
       if (!parsed.success) return { state: candidate ? "invalid Site Plan — deterministic fallback was used" : "no authored Site Plan — deterministic fallback was used", errors: parsed.success ? [] : parsed.error.issues.map((issue) => issue.message), plan: undefined, ids };
       const rootHouse = isRecord(raw.house) ? raw.house : {};
       const graphErrors = geometricGraphErrors(parsed.data, { brief: "", house: { width: Number(rootHouse.width), depth: Number(rootHouse.depth), floors: Number(rootHouse.floors) }, viewDirection: "south", arrivalDirection: "north" });
@@ -154,12 +157,13 @@ function RenderAuditControls() {
 function PipelineTrace() {
   const params = useParams<{ projectId: string }>();
   const diagnostics = useArchitectureDebugStore((s) => s.diagnostics);
+  const diagnosticsProjectId = useArchitectureDebugStore((s) => s.projectId);
   const failedStage = useArchitectureDebugStore((s) => s.failedStage);
   const replaying = useArchitectureDebugStore((s) => s.replaying);
   const capabilityRequests = useArchitectureDebugStore((s) => s.capabilityRequests);
   const appendVersion = useProjectStore((s) => s.appendVersion);
 
-  if (!diagnostics) return <p className="text-neutral-600">No staged-pipeline run recorded yet for this project.</p>;
+  if (!diagnostics || diagnosticsProjectId !== params.projectId) return <p className="text-neutral-600">No staged-pipeline run recorded yet for this project.</p>;
 
   const replay = (stage: "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "final-assembly") => {
     void replayArchitectureStage(params.projectId, stage, (summary, json) => appendVersion(params.projectId, summary, json));
@@ -189,6 +193,7 @@ function PipelineTrace() {
             {Math.round(d.durationMs)}ms &middot; {d.modelCalls} model call{d.modelCalls === 1 ? "" : "s"} &middot; {d.retries} retr{d.retries === 1 ? "y" : "ies"}
           </div>
           {d.error && <div className="mt-0.5 text-red-400">{d.error}</div>}
+          {d.warnings?.map((w) => <div key={w} className="mt-0.5 text-amber-400">{w}</div>)}
         </div>
       ))}
       {failedStage && (

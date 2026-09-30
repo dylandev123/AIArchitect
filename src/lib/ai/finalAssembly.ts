@@ -18,16 +18,18 @@ import type { OutdoorSpace } from "@/lib/outdoor/spaces";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 import { architecturalAssetRequests, architecturalCapabilityRequests } from "@/lib/architecture/designEngine";
 import { validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
-import { pickDominantMass, ROOF_KIND_TO_LEGACY_TYPE } from "@/lib/architecture/compiler";
+import { pickDominantMass, resolveMasses, ROOF_KIND_TO_LEGACY_TYPE } from "@/lib/architecture/compiler";
+import { v2SiteFrameForDocument } from "@/lib/architecture/siteFrame";
+import type { MassVolume } from "@/lib/architecture/document";
 import type { PipelineResult } from "@/lib/architecture/stages/pipeline";
 import type { DesignRecipe } from "@/types/library";
 import { providerErrorResponse } from "./providerErrors";
-import { runSitePlanStage, sitePlanOperations, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
+import { sitePlanOperations, type SitePlan, type SitePlanContext } from "@/lib/architecture/stages/sitePlanStage";
 
-/** V2 opening coordinates projected into the renderer's world frame (x=east, z=south). */
-function v2EntrancePoints(document: ArchitecturalDesignDocument): { x: number; z: number }[] {
+/** V2 opening coordinates projected into the renderer's world frame (x=east, z=south), on the masses as resolved and rendered. */
+function v2EntrancePoints(masses: readonly MassVolume[]): { x: number; z: number }[] {
   const points: { x: number; z: number }[] = [];
-  for (const mass of document.massing.masses) for (const opening of mass.openings ?? []) {
+  for (const mass of masses) for (const opening of mass.openings ?? []) {
     if (opening.type !== "door" || (opening.floors && opening.floors !== "ground" && opening.floors !== "all")) continue;
     const u = (opening.start + opening.end) / 2;
     let x = 0, z = 0;
@@ -39,6 +41,21 @@ function v2EntrancePoints(document: ArchitecturalDesignDocument): { x: number; z
     points.push({ x: mass.position.x + x * c + z * s, z: mass.position.z - x * s + z * c });
   }
   return points;
+}
+
+/**
+ * The Site Plan's frame is the rendered building: the dominant mass where it actually stands (the renderer anchors
+ * wall/offset features to the same centre — see HouseConfig.center), every mass's footprint, and the real doors.
+ */
+export function sitePlanContextForDocument(brief: string, document: ArchitecturalDesignDocument): SitePlanContext | undefined {
+  const frame = v2SiteFrameForDocument(document);
+  if (!frame) return undefined;
+  const { anchor } = frame;
+  return {
+    brief, house: { width: anchor.width, depth: anchor.depth, floors: anchor.floors, center: frame.center },
+    viewDirection: document.siteStrategy.viewDirection, arrivalDirection: document.siteStrategy.arrivalDirection,
+    entrancePoints: v2EntrancePoints(resolveMasses(document)), masses: frame.masses,
+  };
 }
 
 /**
@@ -64,6 +81,7 @@ export interface FinalAssemblyParams {
   spaces: OutdoorSpace[];
   /** Total ms this call may spend, measured from `timings`'s own start (not from when this function was entered). */
   budgetMs: number;
+  sitePlan?: SitePlan;
 }
 
 /**
@@ -94,13 +112,8 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
 
   // Site authority mirrors V2 architecture: a complete authored plan is executed verbatim, while a failed
   // Site Plan call leaves the established scale/site-rule system as the deterministic recovery path.
-  let authoredSiteOps: ReturnType<typeof sitePlanOperations> | undefined;
-  let authoredSitePlan: SitePlan | undefined;
-  if (synthesizedHouse) {
-    const siteResult = await runSitePlanStage({ brief, house: synthesizedHouse, viewDirection: architecturalDesignDocument.siteStrategy.viewDirection, arrivalDirection: architecturalDesignDocument.siteStrategy.arrivalDirection, entrancePoints: v2EntrancePoints(architecturalDesignDocument) }, timings, budgetMs - timings.elapsed(), usageMeta);
-    if (siteResult.ok) { authoredSitePlan = siteResult.value; authoredSiteOps = sitePlanOperations(siteResult.value); }
-    else console.warn("[site-plan] using deterministic recovery:", siteResult.errors);
-  }
+  const authoredSitePlan = params.sitePlan;
+  const authoredSiteOps = authoredSitePlan ? sitePlanOperations(authoredSitePlan, docErrors.length ? [] : v2SiteFrameForDocument(architecturalDesignDocument)?.masses) : undefined;
 
   let errors: string[] = [];
   let lastAttemptMs = 0;

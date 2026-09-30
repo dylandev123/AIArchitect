@@ -5,6 +5,7 @@ import { clampNumber, requireNumbers, type FeatureValidation } from "./validateH
 import { ellipseOutline, flatPolygon, translateOutline, triMeshOf } from "../geometry/mesh";
 
 const LANDSCAPE_KINDS: LandscapeKind[] = ["garden", "lawn", "clearing"];
+const LANDSCAPE_PURPOSES: NonNullable<LandscapeZoneConfig["purpose"]>[] = ["privacy", "entrance-planting", "pool-planting", "view-framing"];
 
 export function validateLandscapeZone(raw: unknown): FeatureValidation<LandscapeZoneConfig> {
   if (typeof raw !== "object" || raw === null) {
@@ -24,7 +25,13 @@ export function validateLandscapeZone(raw: unknown): FeatureValidation<Landscape
   const width = clampNumber(values.width, LANDSCAPE_LIMITS.width.min, LANDSCAPE_LIMITS.width.max, "width", warnings);
   const depth = clampNumber(values.depth, LANDSCAPE_LIMITS.depth.min, LANDSCAPE_LIMITS.depth.max, "depth", warnings);
 
-  return { value: { kind, x, z, width, depth }, errors: [], warnings };
+  // The Site Plan's reason for the zone is what decides how it is planted (see generateTrees); carry it through.
+  const value: LandscapeZoneConfig = { kind, x, z, width, depth };
+  if (o.purpose !== undefined) {
+    if (LANDSCAPE_PURPOSES.includes(o.purpose as never)) value.purpose = o.purpose as LandscapeZoneConfig["purpose"];
+    else warnings.push(`Unknown "purpose" value ${JSON.stringify(o.purpose)} — ignored.`);
+  }
+  return { value, errors: [], warnings };
 }
 
 /** A deliberate, colored ground treatment — distinct from the site's ambient automatic trees/grass. */

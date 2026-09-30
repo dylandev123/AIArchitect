@@ -25,6 +25,16 @@ export function validateParking(raw: unknown): FeatureValidation<ParkingConfig> 
 const MAX_STRIPES = 12;
 const STALL_WIDTH = 2.5;
 
+/**
+ * The lot's stall grid: `count` equal stalls across its width, divided by the painted stripes. Cars (see
+ * generateCars) park in these same stalls, so a car never straddles a stripe.
+ */
+export function parkingStalls(config: ParkingConfig): { count: number; width: number; centers: number[] } {
+  const count = Math.min(MAX_STRIPES + 1, Math.max(1, Math.floor(config.width / STALL_WIDTH)));
+  const width = config.width / count;
+  return { count, width, centers: Array.from({ length: count }, (_, i) => config.x - config.width / 2 + width * (i + 0.5)) };
+}
+
 /** A paved lot plus a handful of painted stall-divider stripes for legibility. */
 export function buildParking(config: ParkingConfig, index: number): HousePrimitive[] {
   const idPrefix = `parking-${index}`;
@@ -41,10 +51,11 @@ export function buildParking(config: ParkingConfig, index: number): HousePrimiti
     },
   ];
 
-  const stallCount = config.stripes === false ? 0 : Math.min(MAX_STRIPES, Math.max(0, Math.floor(config.width / STALL_WIDTH) - 1));
+  const stalls = parkingStalls(config);
+  const stallCount = config.stripes === false ? 0 : stalls.count - 1;
   const startX = config.x - config.width / 2;
   for (let i = 1; i <= stallCount; i++) {
-    const stripeX = startX + (config.width / (stallCount + 1)) * i;
+    const stripeX = startX + stalls.width * i;
     primitives.push({
       kind: "box",
       id: `${idPrefix}-stripe-${i}`,

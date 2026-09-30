@@ -35,6 +35,12 @@ export interface HouseConfig {
   depth: number;
   floors: number;
   roof: RoofType;
+  /**
+   * World centre of the footprint every wall-anchored feature is measured from. Absent = the origin (every legacy
+   * project). A V2 project with an authored Site Plan derives it at render time from its document's dominant mass,
+   * never from stored JSON.
+   */
+  center?: { x: number; z: number };
 }
 
 /** A window mounted on a wall: a glazed opening positioned by offset along the wall. */
@@ -480,6 +486,11 @@ export interface SiteConfig {
   rocks?: RockClusterConfig[];
   slopes?: SlopeConfig[];
   exteriorOptions?: ExteriorOptions;
+  /**
+   * Every V2 building mass's ground footprint (from the project's architecturalDesignDocument). When present it
+   * replaces the single legacy house rectangle in every site keep-out and collision check.
+   */
+  buildingFootprints?: import("@/lib/architecture/massFootprint").MassFootprint[];
 }
 
 export const DEFAULT_HOUSE_CONFIG: HouseConfig = {

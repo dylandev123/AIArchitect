@@ -40,7 +40,7 @@ export function getWallAnchorForFootprint(
 /** Locates a wall's outer face for a given house footprint, used to anchor mounted features. */
 export function getWallAnchor(house: HouseConfig, wall: WallSide, level: number): WallAnchor {
   const baseY = level * LEVEL_HEIGHT + FLOOR_THICKNESS;
-  return getWallAnchorForFootprint([0, 0], house.width, house.depth, baseY, wall);
+  return getWallAnchorForFootprint(house.center ? [house.center.x, house.center.z] : [0, 0], house.width, house.depth, baseY, wall);
 }
 
 /** Point on the wall's outer face at the given distance along its axis. */

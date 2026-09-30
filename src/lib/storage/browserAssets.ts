@@ -1,7 +1,7 @@
 /**
- * The curated-asset catalog (localStorage `ai-architect-assets`) and the GLB files (IndexedDB `ai-architect-glb`) live in the
- * browser, so they belong to one origin: http://localhost:3000 and http://localhost:3001 (or 127.0.0.1) are separate, empty-looking
- * worlds. These helpers only read and describe that state; they never write it.
+ * The browser's cache of the curated-asset library (localStorage `ai-architect-assets`) and its GLB files (IndexedDB
+ * `ai-architect-glb`). The server library is the source of truth (`lib/assets/assetSync`); these helpers only read and describe
+ * the cache; they never write it.
  */
 
 export const ASSET_STORAGE_KEY = "ai-architect-assets";
@@ -27,10 +27,10 @@ export function readPersistedAssetCounts(raw: string | null): PersistedAssetCoun
 }
 
 /** Shown whenever the admin is open: where the browser-side data lives, and what to do if it looks missing. */
-export function originNotice(origin: string, browserAssets: number, serverHasLibrary: boolean): { text: string; severe: boolean } {
-  const base = `Curated assets and GLB files are saved in this browser under ${origin} only. Another port, host (localhost vs 127.0.0.1) or browser has its own separate copy.`;
-  if (browserAssets === 0 && serverHasLibrary) {
-    return { severe: true, text: `${base} This origin holds no assets while the server library has data — if you curated assets before, open the app on the origin you used then.` };
+export function originNotice(origin: string, localOnlyAssets: number): { text: string; severe: boolean } {
+  const base = `Curated assets and GLB files are stored in the server library; this browser (${origin}) keeps only a cache.`;
+  if (localOnlyAssets > 0) {
+    return { severe: true, text: `${base} ${localOnlyAssets} asset(s) exist only in this browser. Import them to the server so other browsers and sessions can use them; other origins (another port, localhost vs 127.0.0.1) may hold more.` };
   }
   return { severe: false, text: base };
 }

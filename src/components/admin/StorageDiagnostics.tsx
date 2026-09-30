@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useAdminStore } from "@/store/useAdminStore";
 import { useAssetStore } from "@/store/useAssetStore";
 import { getGlbStore } from "@/lib/assets/glbStorage";
+import { importLocalOnlyAssets, type ImportResult } from "@/lib/assets/assetSync";
 import { ASSET_STORAGE_KEY, originNotice, readPersistedAssetCounts, type PersistedAssetCounts } from "@/lib/storage/browserAssets";
 import type { StorageErrorEntry, StorageInfo } from "@/lib/storage/diagnostics";
 
 interface Diagnostics {
   cwd: string;
   usage: { storage: StorageInfo; records: number | null; error: string | null };
+  assets: { storage: StorageInfo; approved: number | null; pending: number | null; glbs: number | null; error: string | null };
   library: { storage: StorageInfo; needs: number | null; knowledge: number | null; recipes: number | null; plans: number | null; generations: number | null; error: string | null };
   databaseConnected: boolean;
   localFiles: { path: string; bytes: number; modified: string; records: number | null; inUse: boolean }[];
@@ -45,6 +47,11 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const curated = useAssetStore((s) => s.catalog.length);
   const queued = useAssetStore((s) => s.queue.length);
+  const localOnly = useAssetStore((s) => s.localOnly);
+  const sync = useAssetStore((s) => s.sync);
+  const discardLocalOnly = useAssetStore((s) => s.discardLocalOnly);
+  const [importing, setImporting] = useState(false);
+  const [imported, setImported] = useState<ImportResult | null>(null);
   const [data, setData] = useState<Diagnostics | null>(null);
   const [error, setError] = useState("");
   const [browser, setBrowser] = useState<BrowserState | null>(null);
@@ -94,10 +101,21 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
     return () => {
       cancelled = true;
     };
-  }, [adminEmail, reloadKey]);
+  }, [adminEmail, reloadKey, imported]);
 
-  const serverHasLibrary = !!data && (data.library.needs ?? 0) + (data.library.knowledge ?? 0) + (data.library.recipes ?? 0) + (data.library.plans ?? 0) > 0;
-  const notice = browser ? originNotice(browser.origin, curated + queued + (browser.persisted?.catalog ?? 0), serverHasLibrary) : null;
+  const runImport = async () => {
+    setImporting(true);
+    try {
+      setImported(await importLocalOnlyAssets());
+    } finally {
+      setImporting(false);
+    }
+  };
+  const discard = () => {
+    if (window.confirm(`Discard ${localOnly.length} browser-only asset(s) and their cached GLB files? The server library is not affected. This cannot be undone.`)) discardLocalOnly(localOnly.map((a) => a.id));
+  };
+
+  const notice = browser ? originNotice(browser.origin, localOnly.length) : null;
   const persisted = browser?.persisted;
   const hydrationGap = !!persisted && !persisted.corrupt && (persisted.catalog > curated || persisted.queue > queued);
   const unread = data?.localFiles.filter((f) => !f.inUse && (f.records ?? 0) > 0) ?? [];
@@ -112,19 +130,44 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
           <Row label="Usage storage" value={storageLabel(data.usage.storage)} />
           <Row label="Library storage" value={storageLabel(data.library.storage)} />
           <Row label="Database connected" value={data.databaseConnected ? "Yes" : "No"} bad={!data.databaseConnected && (data.usage.storage.kind === "postgres" || data.library.storage.kind === "postgres")} />
-          <Row label="Asset catalog" value="Browser Local (this browser only)" />
+          <Row label="Asset storage" value={storageLabel(data.assets.storage)} bad={data.assets.storage.kind === "unavailable"} />
+          <Row label="Assets on server" value={data.assets.approved === null ? "unreadable" : `${data.assets.approved} approved, ${data.assets.pending} queued, ${data.assets.glbs} GLB files`} bad={data.assets.approved === null} />
           <Row label="Usage records" value={count(data.usage.records)} bad={data.usage.records === null} />
           <Row label="Knowledge Needs" value={count(data.library.knowledge)} bad={data.library.knowledge === null} />
           <Row label="Asset Needs" value={count(data.library.needs)} bad={data.library.needs === null} />
           <Row label="Recipes" value={count(data.library.recipes)} bad={data.library.recipes === null} />
           <Row label="Asset Plans" value={count(data.library.plans)} bad={data.library.plans === null} />
           <Row label="Generation reports" value={count(data.library.generations)} bad={data.library.generations === null} />
-          <Row label="Curated assets in browser" value={curated.toLocaleString()} />
+          <Row label="Curated assets loaded" value={`${curated.toLocaleString()} (${sync.status === "ready" ? "from server" : sync.status === "error" ? "browser cache — server load failed" : "loading…"})`} bad={sync.status === "error"} />
+          {data.assets.error && <Row label="Asset read error" value={data.assets.error} bad />}
           {data.usage.error && <Row label="Usage read error" value={data.usage.error} bad />}
           {data.library.error && <Row label="Library read error" value={data.library.error} bad />}
         </dl>
       )}
-      {data && (data.library.storage.kind === "unavailable" || data.usage.storage.kind === "unavailable") && (
+      {sync.error && <p className="mt-2 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">{sync.error}</p>}
+      {localOnly.length > 0 && (
+        <div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+          <p>
+            {localOnly.length} asset(s) exist only in this browser ({localOnly.filter((a) => a.status === "approved").length} approved, {localOnly.filter((a) => a.status !== "approved").length} queued). They are kept here, unused, until you import or discard them. Import keeps their ids, approvals, validation and Need/Plan links, uploads their GLB files, never overwrites a server asset and never regenerates anything.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button type="button" disabled={importing} onClick={runImport} className="rounded border border-amber-400/40 px-2 py-1 font-medium text-amber-200 hover:bg-amber-400/10 disabled:opacity-50">
+              {importing ? "Importing…" : "Import to server"}
+            </button>
+            <button type="button" disabled={importing} onClick={discard} className="rounded border border-white/10 px-2 py-1 text-neutral-400 hover:bg-white/5 disabled:opacity-50">
+              Discard
+            </button>
+          </div>
+        </div>
+      )}
+      {imported && (
+        <p className={`mt-2 rounded-md border px-3 py-2 text-xs ${imported.error || imported.glbsMissing.length ? "border-amber-500/30 bg-amber-500/10 text-amber-300" : "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"}`}>
+          Imported {imported.inserted} asset(s){imported.existing ? `, ${imported.existing} already on the server (left as they were)` : ""}; uploaded {imported.glbsUploaded} GLB file(s).
+          {imported.glbsMissing.length > 0 && ` ${imported.glbsMissing.length} GLB file(s) were not in this browser either: ${imported.glbsMissing.join(", ")}.`}
+          {imported.error && ` Stopped early: ${imported.error}`}
+        </p>
+      )}
+      {data && (data.library.storage.kind === "unavailable" || data.usage.storage.kind === "unavailable" || data.assets.storage.kind === "unavailable") && (
         <p className="mt-2 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">Production shared persistence is not configured.</p>
       )}
       {browser && (
@@ -132,7 +175,7 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
           <Row label="Browser origin" value={browser.origin} />
           <Row label="localStorage (ai-architect-assets)" value={!persisted?.present ? "not present on this origin" : persisted.corrupt ? "present but unreadable" : `${persisted.catalog} approved, ${persisted.queue} queued`} bad={!!persisted?.corrupt} />
           <Row label="Asset store hydrated" value={browser.hydrated ? "yes" : "no"} bad={!browser.hydrated} />
-          <Row label="GLB files (IndexedDB ai-architect-glb)" value={browser.glbFiles === null ? "unreadable" : `${browser.glbFiles}${browser.glbMissing ? ` — ${browser.glbMissing} asset(s) have no stored file` : ""}`} bad={browser.glbFiles === null || !!browser.glbMissing} />
+          <Row label="GLB cache (IndexedDB ai-architect-glb)" value={browser.glbFiles === null ? "unreadable" : `${browser.glbFiles}${browser.glbMissing ? ` — ${browser.glbMissing} loaded from the server on first use` : ""}`} bad={browser.glbFiles === null} />
         </dl>
       )}
       {hydrationGap && (

@@ -30,7 +30,7 @@ export class SharedPersistenceUnavailableError extends Error {
 }
 
 export interface StorageErrorEntry {
-  domain: "usage" | "library";
+  domain: "usage" | "library" | "assets";
   op: "read" | "write";
   at: string;
   message: string;

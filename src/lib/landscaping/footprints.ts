@@ -6,6 +6,7 @@ import { arcPoints, arcSegments, polylineLength, type P2 } from "@/lib/house/geo
 import { pathCurve } from "@/lib/house/features/paths";
 import { retainingWallCurve } from "@/lib/house/features/retainingWalls";
 import { waterwayCurve } from "@/lib/house/features/waterways";
+import { massHalfExtents } from "@/lib/architecture/massFootprint";
 
 export interface Footprint {
   cx: number;
@@ -34,12 +35,25 @@ function pointInRect(x: number, z: number, f: Footprint): boolean {
   return Math.abs(x - f.cx) < f.halfW && Math.abs(z - f.cz) < f.halfD;
 }
 
+/**
+ * The ground the buildings themselves stand on: every V2 mass (its turned rectangle's box) when the project has a V2
+ * document, otherwise the single legacy house rectangle at its centre.
+ */
+export function buildingFootprints(site: SiteConfig, margin = CLEARANCE): Footprint[] {
+  if (site.buildingFootprints?.length) {
+    return site.buildingFootprints.map((m) => {
+      const { halfW, halfD } = massHalfExtents(m);
+      return { cx: m.cx, cz: m.cz, halfW: halfW + margin, halfD: halfD + margin };
+    });
+  }
+  const c = site.house.center ?? { x: 0, z: 0 };
+  return [{ cx: c.x, cz: c.z, halfW: site.house.width / 2 + margin, halfD: site.house.depth / 2 + margin }];
+}
+
 /** Every ground-level footprint scenery placement must avoid. */
 export function collectOccupiedFootprints(site: SiteConfig): Footprint[] {
   const house = site.house;
-  const footprints: Footprint[] = [
-    { cx: 0, cz: 0, halfW: house.width / 2 + CLEARANCE, halfD: house.depth / 2 + CLEARANCE },
-  ];
+  const footprints: Footprint[] = buildingFootprints(site);
 
   for (const garage of site.garages) {
     const anchor = getWallAnchor(house, garage.wall, 0);
