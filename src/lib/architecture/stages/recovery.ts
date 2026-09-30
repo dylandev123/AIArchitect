@@ -11,7 +11,7 @@ import type { StageDiagnostics } from "./diagnostics";
  */
 export type RecoveryOutcome = "accepted" | "normalized" | "repair-required" | "failed";
 
-export type OwningStage = "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "site-plan" | "final-assembly" | "integrity-gate";
+export type OwningStage = "architect" | "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "site-plan" | "final-assembly" | "integrity-gate";
 
 /** One objective conflict between an authored artifact and what can be built, addressed to the stage that owns the fix. */
 export interface StageConflict { stage: OwningStage; code: string; massId?: string; detail: string }

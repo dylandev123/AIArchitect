@@ -1,4 +1,4 @@
-import type { MassVolume, SiteStrategy } from "../document";
+import type { ArchitecturalDesignDocument, MassOpening, MassVolume, SiteStrategy } from "../document";
 import { withVolumePlan } from "../volumePlan";
 import { authoredPlan, referenceGeometry } from "./authoredFixtures";
 
@@ -15,7 +15,20 @@ export const RESPONDER_PRIMARY = { name: "Main Living Pavilion", width: 18, dept
 
 const primaryMass = (): MassVolume => withVolumePlan({ id: "mass-0", name: RESPONDER_PRIMARY.name, role: "main-living", position: { x: 0, z: 0 }, width: RESPONDER_PRIMARY.width, depth: RESPONDER_PRIMARY.depth, floors: 1, elevation: 0, rotation: 0 }, RESPONDER_PRIMARY.plan);
 
+export const architectDocument = (): ArchitecturalDesignDocument => {
+  const mass = { ...primaryMass(), placementLocked: true };
+  delete mass.plan;
+  return {
+    version: 1, brief: "Test residence", siteStrategy: RESPONDER_SITE,
+    massing: { composition: "rectangular-pavilion", masses: [{ ...mass, relationships: [{ kind: "arrival-facing", target: "mass-0" }], operations: [], openings: [{ id: "mass-0:glazing", type: "glazing-zone", facade: "south", start: 2, end: 16, heightRatio: .8 } satisfies MassOpening] }] },
+    roofs: { recipes: [{ id: "roof-0", massId: "mass-0", kind: "floating-flat", overhang: 0.9, pitch: 2, expression: { verticalGap: 0.25 } }] },
+    facade: { status: "pending" }, architecturalStyle: { status: "pending" }, outdoorPlan: { status: "pending" }, materialStrategy: { status: "pending" }, components: { status: "pending" }, furnishings: { status: "pending" },
+    metadata: { createdAt: "2026-01-01T00:00:00.000Z", source: "live-generation", compiler: "procedural-architecture-v1" },
+  };
+};
+
 export const responderOutputs = {
+  architect: () => ({ document: architectDocument() }),
   foundation: () => ({
     intent: { mood: ["calm", "drama"], spatialGoals: ["indoor-outdoor", "views"], environmentalGoals: ["shelter"], hierarchyGoals: ["one dominant living pavilion"], compositionBias: "asymmetrical", style: "modern tropical" },
     siteStrategy: { ...RESPONDER_SITE, terrainResponse: "Keep the pavilion level and open to the view." },
@@ -50,6 +63,7 @@ export const responderOutputs = {
 export type ResponderStage = keyof typeof responderOutputs | "finalAssembly";
 
 export function stageOf(system: string): ResponderStage {
+  if (system.includes("sole AI Architect")) return "architect";
   if (system.includes("three foundational decisions")) return "foundation";
   if (system.includes("one volume at a time")) return "massExpansion";
   if (system.includes("authoring the built form")) return "geometry";

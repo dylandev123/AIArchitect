@@ -7,7 +7,7 @@ import { BLANK_HOUSE_JSON } from "@/types/house";
 import { validateArchitecturalDesignDocument } from "@/lib/architecture/document";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { modelOutput, VILLA_BRIEF } from "@/lib/library/__tests__/villaFixture";
-import { v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
+import { stageOf, v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
 
 /** Same real-handler-with-stubbed-model-call pattern as route.test.ts, exercising the streaming delivery mode instead. */
 
@@ -62,9 +62,10 @@ describe("POST /api/ai/house (generate, streaming)", () => {
     const stageFrames = frames.filter((f) => f.event === "stage");
     const doneFrames = frames.filter((f) => f.event === "done");
 
-    // Every stage in order, each carrying a document that is valid and independently compilable — not a diff.
+    // The accepted Architect document is the only streamed architecture artifact — not a misleading partial diff.
     const eventTypes = stageFrames.map((f) => (f.data as { type: string }).type);
-    expect(eventTypes).toEqual(["stage", "stage", "stage", "stage", "stage", "roof-added", "stage"]);
+    expect(eventTypes).toEqual(["stage"]);
+    expect((stageFrames[0].data as { stage: string }).stage).toBe("architect");
     for (const frame of stageFrames) {
       const document = (frame.data as { document: unknown }).document as Parameters<typeof validateArchitecturalDesignDocument>[0];
       expect(validateArchitecturalDesignDocument(document)).toEqual([]);
@@ -76,5 +77,9 @@ describe("POST /api/ai/house (generate, streaming)", () => {
     expect(typeof done.json).toBe("string");
     expect(typeof done.summary).toBe("string");
     expect(done.intelligence).toBeDefined();
+
+    const stages = generateText.mock.calls.map((call) => stageOf((call[0] as { system: string }).system));
+    expect(stages.filter((stage) => stage === "architect")).toHaveLength(1);
+    expect(stages).not.toEqual(expect.arrayContaining(["foundation", "massExpansion", "geometry", "roofs"]));
   });
 });

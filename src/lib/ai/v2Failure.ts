@@ -5,6 +5,7 @@ import { recordGenerationFailure } from "@/lib/ai/usage/failures";
 import type { UsageMeta } from "@/lib/ai/usage/track";
 
 const STAGE_LABEL: Record<OwningStage, string> = {
+  architect: "the Architect's executable design",
   foundation: "the foundational design decisions",
   "mass-expansion": "the massing composition",
   "architectural-geometry": "the building geometry",

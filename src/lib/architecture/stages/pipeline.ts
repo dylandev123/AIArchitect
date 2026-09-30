@@ -17,10 +17,13 @@ import { mergeCapabilityIntents, parameterizeCapabilityIntent } from "../volumeP
 import { toArchitecturalDesign } from "./toArchitecturalDesign";
 import type { StageDiagnostics } from "./diagnostics";
 import { siteStrategyInvariantSchema } from "./schemas";
+import { runArchitectStage } from "./architectStage";
+import { deriveArchitecturalIntent } from "../designEngine";
 
 const TOTAL_STAGES = 6;
 
 export type PipelineStageEvent =
+  | { type: "stage"; stage: "architect"; index: 1; of: 1; document: ArchitecturalDesignDocument }
   | { type: "stage"; stage: "intent" | "site-strategy" | "primary-mass" | "mass-expansion" | "architectural-geometry" | "roof-composition"; index: number; of: typeof TOTAL_STAGES; document: ArchitecturalDesignDocument }
   | { type: "mass-added"; stage: "mass-expansion"; massesSoFar: number; document: ArchitecturalDesignDocument }
   | { type: "roof-added"; stage: "roof-composition"; massId: string; roofsSoFar: number; totalMasses: number; document: ArchitecturalDesignDocument };
@@ -173,7 +176,7 @@ const draftDocument = (brief: string, siteStrategy: ArchitecturalDesignDocument[
  * individual mass/roof so a streaming caller can update the viewport as the design grows. A
  * non-streaming caller can pass a no-op `onEvent` and just use the final `document`.
  */
-export async function runArchitecturePipeline(
+async function runLegacyArchitecturePipeline(
   input: PipelineInput, timings: Timings, budgetMs: number, usageMeta: UsageMeta,
   onEvent: (event: PipelineStageEvent) => void = () => {},
   /**
@@ -253,6 +256,45 @@ export async function runArchitecturePipeline(
     document, design, capabilityRequests: geometryCapabilityRequests, massExpansionLog: expansion.log, truncated: expansion.truncated,
     massExpansionStopReason: expansion.stopReason, massExpansionStopMessage: expansion.stopMessage, unplacedVolumes: expansion.unplacedVolumes,
     diagnostics, authority: { architectureHash: architectureAuthorityHash(document) }, upstream: { foundation, masses: placedMasses, articulatedMasses, roofs },
+  };
+}
+
+/** The normal path has one architectural author; the legacy pipeline above remains an internal fallback boundary. */
+export async function runArchitecturePipeline(
+  input: PipelineInput, timings: Timings, budgetMs: number, usageMeta: UsageMeta,
+  onEvent: (event: PipelineStageEvent) => void = () => {},
+  onUpstreamProgress: (upstream: PipelineResult["upstream"], diagnostics: readonly StageDiagnostics[]) => void = () => {},
+): Promise<PipelineResult> {
+  // Deliberately opt-in only while the single-Architect path proves out; normal generation never enters it.
+  if (process.env.AI_ARCHITECT_LEGACY_PIPELINE === "1") {
+    return runLegacyArchitecturePipeline(input, timings, budgetMs, usageMeta, onEvent, onUpstreamProgress);
+  }
+  const architect = await runArchitectStage(input.brief, timings, budgetMs, usageMeta);
+  const architectDiagnostic: StageDiagnostics = {
+    stage: "architect", status: architect.ok ? "ok" : "error", outcome: architect.ok ? "accepted" : "failed",
+    durationMs: architect.durationMs, modelCalls: architect.attempts, retries: Math.max(0, architect.attempts - 1),
+    ...(architect.repairRequests?.length ? { repairRequests: architect.repairRequests } : {}),
+    ...(!architect.ok ? { error: architect.errors?.join("; ") || "no usable architecture document" } : {}),
+  };
+  if (!architect.ok || !architect.document) throw new V2GenerationFailure("architect", architect.errors ?? ["no usable architecture document"], [architectDiagnostic]);
+  const document = architect.document;
+  const intent = deriveArchitecturalIntent(input.brief, {
+    environment: document.siteStrategy.environment, viewDirection: document.siteStrategy.viewDirection,
+    approachSide: document.siteStrategy.arrivalDirection, scale: input.scale,
+  });
+  const design = toArchitecturalDesign({
+    brief: input.brief, intent, siteStrategy: document.siteStrategy,
+    terrainResponse: document.siteStrategy.terrain === "stepped" ? "The authored masses step with the site." : "The authored masses sit on a level site.",
+    masses: document.massing.masses, roofs: document.roofs.recipes, recipes: input.recipes,
+    availableCapabilities: input.availableCapabilities, variationSeed: input.variationSeed,
+  });
+  onEvent({ type: "stage", stage: "architect", index: 1, of: 1, document });
+  onUpstreamProgress({}, [architectDiagnostic]);
+  return {
+    document, design, capabilityRequests: [], massExpansionLog: [], truncated: false,
+    massExpansionStopReason: "model-done", massExpansionStopMessage: "", unplacedVolumes: [],
+    diagnostics: [architectDiagnostic], authority: { architectureHash: architectureAuthorityHash(document) },
+    upstream: { masses: [...document.massing.masses], articulatedMasses: [...document.massing.masses], roofs: [...document.roofs.recipes] },
   };
 }
 

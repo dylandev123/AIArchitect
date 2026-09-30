@@ -20,9 +20,11 @@ const primaryMass: MassVolume = { id: "mass-0", name: "Main Living Pavilion", ro
 
 beforeEach(() => {
   vi.resetModules();
+  vi.stubEnv("AI_ARCHITECT_LEGACY_PIPELINE", "1");
 });
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.doUnmock("../foundationStage");
   vi.doUnmock("../massExpansionStage");
   vi.doUnmock("../geometryStage");

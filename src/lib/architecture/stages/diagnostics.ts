@@ -6,7 +6,7 @@ import type { RecoveryOutcome } from "./recovery";
  * model call (see foundationStage.ts), so they are traced together as "foundation".
  */
 export interface StageDiagnostics {
-  stage: "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "site-plan" | "compiler" | "quality-gate";
+  stage: "architect" | "foundation" | "mass-expansion" | "architectural-geometry" | "roof-composition" | "site-plan" | "compiler" | "quality-gate";
   /** "error" = the stage failed and the generation does not finalize. "fallback" is only ever a warning-level finding (e.g. the quality gate's subjective checks, an unplaced optional volume) — never a deterministic substitute design. */
   status: "ok" | "fallback" | "error";
   /** The stage's standardized recovery outcome (see recovery.ts). */
@@ -24,6 +24,7 @@ export interface StageDiagnostics {
 }
 
 export const STAGE_DIAGNOSTICS_LABEL: Record<StageDiagnostics["stage"], string> = {
+  architect: "AI Architect",
   foundation: "Intent → Site Strategy → Primary Mass",
   "mass-expansion": "Mass Expansion",
   "architectural-geometry": "Architectural Geometry Pass",

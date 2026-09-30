@@ -5,9 +5,8 @@ import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { BLANK_HOUSE_JSON } from "@/types/house";
 import { modelOutput, VILLA_BRIEF } from "@/lib/library/__tests__/villaFixture";
-import { RESPONDER_PRIMARY, RESPONDER_SITE, stageOf, v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
+import { architectDocument, RESPONDER_PRIMARY, RESPONDER_SITE, stageOf, v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
 import { authoredPlan, referenceGeometry } from "@/lib/architecture/__tests__/authoredFixtures";
-import { mandatoryBaseline } from "@/lib/architecture/planBaseline";
 import { withVolumePlan } from "@/lib/architecture/volumePlan";
 import type { MassVolume } from "@/lib/architecture/document";
 
@@ -74,12 +73,15 @@ describe("V2 generation finalization authority", () => {
     expect(await persistedGenerations()).toBe(0);
   });
 
-  it("does not finalize when an authoritative architecture stage exhausts its retries", async () => {
-    generateText.mockImplementation(v2StageResponder(finalAssembly, { geometry: () => ({ results: [{ massId: "mass-0", operations: [] }] }) }));
+  it("repairs only through the Architect contract when its executable document is objectively invalid", async () => {
+    generateText.mockImplementation(v2StageResponder(finalAssembly, { architect: () => {
+      const document = architectDocument();
+      return { document: { ...document, massing: { ...document.massing, masses: [...document.massing.masses, { ...document.massing.masses[0] }] } } };
+    } }));
     const { res, body } = await generate();
     expect(res.status).toBe(502);
-    expect(body).toMatchObject({ code: "v2-generation-failed", stage: "architectural-geometry" });
-    expect(body.conflicts?.join(" ")).toMatch(/missing-planned-geometry/);
+    expect(body).toMatchObject({ code: "v2-generation-failed", stage: "architect" });
+    expect(body.conflicts?.join(" ")).toMatch(/duplicate mass id/);
     expect(stagesCalled()).not.toContain("sitePlan");
     expect(body.json).toBeUndefined();
   });
@@ -96,7 +98,7 @@ describe("V2 generation finalization authority", () => {
     expect(await persistedGenerations()).toBe(0);
   });
 
-  it("completes a valid complex authored V2 composition end to end, exactly as authored", async () => {
+  it("completes the accepted Architect document end to end without any retired architecture call", async () => {
     const bedroomPlan = authoredPlan("bedroom-wing");
     const garagePlan = authoredPlan("garage");
     const placed = (id: string, name: string, role: MassVolume["role"], x: number, z: number, width: number, depth: number, plan: typeof bedroomPlan, relationships: MassVolume["relationships"]): MassVolume =>
@@ -122,14 +124,15 @@ describe("V2 generation finalization authority", () => {
     expect(body.code).toBeUndefined();
     expect(res.status).toBe(200);
     const saved = JSON.parse(body.json!) as { architecturalDesignDocument: { massing: { masses: MassVolume[] }; roofs: { recipes: { massId: string; kind: string; overhang: number }[] } }; sitePlan: unknown };
-    expect(saved.architecturalDesignDocument.massing.masses.map((m) => [m.id, m.role, m.position])).toEqual(masses.map((m) => [m.id, m.role, m.position]));
-    // Built exactly as planned and authored: every mandatory baseline opening once, under its stable id, and the authored roofs untouched.
-    for (const m of masses) expect(saved.architecturalDesignDocument.massing.masses.find((s) => s.id === m.id)!.openings?.map((o) => o.id)).toEqual(mandatoryBaseline(m, masses, RESPONDER_SITE).elements.filter((e) => e.kind === "opening").map((e) => e.id));
-    expect(saved.architecturalDesignDocument.roofs.recipes.map((r) => [r.massId, r.kind, r.overhang])).toEqual([["mass-0", "floating-flat", 0.9], ["mass-1", "shed", 0.5], ["mass-2", "flat", 0]]);
+    expect(saved.architecturalDesignDocument.massing.masses.map((m) => m.id)).toEqual(["mass-0"]);
+    expect(saved.architecturalDesignDocument.roofs.recipes.map((r) => [r.massId, r.kind, r.overhang])).toEqual([["mass-0", "floating-flat", 0.9]]);
     expect(saved.sitePlan).toBeDefined();
     const gate = (body.architectureDiagnostics as { stage: string; status: string; outcome?: string }[]).find((d) => d.stage === "quality-gate")!;
     expect(gate.status).toBe("ok");
     expect(["accepted", "normalized"]).toContain(gate.outcome);
     expect(await persistedGenerations()).toBe(1);
+    const stages = stagesCalled();
+    expect(stages.filter((stage) => stage === "architect")).toHaveLength(1);
+    expect(stages).not.toEqual(expect.arrayContaining(["foundation", "massExpansion", "geometry", "roofs"]));
   });
 });

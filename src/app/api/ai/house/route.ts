@@ -321,7 +321,7 @@ function compilerDiagnostics(document: ArchitecturalDesignDocument): StageDiagno
 }
 
 /**
- * Always logs a concise final sequence for a live generation — Foundation through Final Assembly — so an
+ * Always logs a concise final sequence for a live generation — Architect through Final Assembly — so an
  * HTTP 200 on the SSE transport (which succeeds as soon as headers go out, regardless of what the stream
  * ultimately contains) never hides which stage, if any, actually failed the generation the browser sees.
  * Unconditional, not dev-gated: this is exactly the trace needed to diagnose a live failure after the fact.
@@ -335,13 +335,8 @@ function logFinalSequence(pipelineResult: PipelineResult, diagnostics: StageDiag
     if (!d) return `${label}: skipped`;
     return `${label}: ${d.status}${extra ? ` — ${extra}` : ""}${d.error ? ` (${d.error})` : ""}`;
   };
-  const massCount = pipelineResult.upstream.masses?.length ?? 0;
-  const opCount = (pipelineResult.upstream.articulatedMasses ?? []).reduce((sum, m) => sum + (m.operations?.length ?? 0) + (m.openings?.length ?? 0), 0);
   const lines = [
-    line("Foundation", "foundation"),
-    line("Mass Expansion", "mass-expansion", `${massCount} mass${massCount === 1 ? "" : "es"}`),
-    line("Geometry", "architectural-geometry", `${opCount} operation${opCount === 1 ? "" : "s"}`),
-    line("Roofs", "roof-composition"),
+    line("AI Architect", "architect"),
     line("Site Plan", "site-plan"),
     line("Compiler", "compiler"),
     line("Design Quality Gate", "quality-gate"),

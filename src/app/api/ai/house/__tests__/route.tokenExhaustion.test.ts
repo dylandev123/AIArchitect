@@ -73,14 +73,12 @@ describe("V2 generation — Site Plan token exhaustion and usage diagnostics", (
     const calls = (await usageRecords()).filter((r) => r.requestType === "generation");
     expect(calls).toHaveLength(generateText.mock.calls.length);
     for (const record of calls) {
-      expect(record.stage, JSON.stringify(record)).toMatch(/^(foundation|mass-expansion|architectural-geometry|roof-composition|site-plan|final-assembly)$/);
+      expect(record.stage, JSON.stringify(record)).toMatch(/^(architect|site-plan|final-assembly)$/);
       expect(record.retryNumber).toEqual(expect.any(Number));
       expect(record.maxOutputTokens).toEqual(expect.any(Number));
       expect(record.promptFingerprint).toMatch(/^[0-9a-f]{16}$/);
     }
-    expect(new Set(calls.map((r) => r.stage))).toEqual(new Set(["foundation", "mass-expansion", "architectural-geometry", "roof-composition", "site-plan", "final-assembly"]));
-    // Per-turn mass expansion calls keep their owning stage, with the turn as `stageCall`.
-    expect(calls.filter((r) => r.stage === "mass-expansion").every((r) => /^mass-expansion-\d+$/.test(r.stageCall ?? ""))).toBe(true);
+    expect(new Set(calls.map((r) => r.stage))).toEqual(new Set(["architect", "site-plan", "final-assembly"]));
 
     const sitePlan = calls.filter((r) => r.stage === "site-plan");
     expect(sitePlan).toMatchObject([

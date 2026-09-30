@@ -25,6 +25,7 @@ interface StageEventPayload {
 }
 
 const STAGE_LABEL: Record<string, string> = {
+  architect: "Architecting the complete design",
   intent: "Reading the architectural intent",
   "site-strategy": "Deciding the site strategy",
   "primary-mass": "Shaping the primary mass",

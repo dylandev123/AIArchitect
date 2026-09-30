@@ -11,7 +11,7 @@ import { isV2GenerationFailure } from "../stages/recovery";
 import { normalizeSitePlan, sitePlanOperations, sitePlanSchema, type SitePlan } from "../stages/sitePlanStage";
 import { sitePlanContextForDocument } from "../sitePlanContext";
 import { authoredPlan, authoredRoof, QUIET_PLAN, referenceGeometry } from "./authoredFixtures";
-import { responderOutputs } from "./v2StageResponder";
+import { architectDocument, responderOutputs } from "./v2StageResponder";
 
 /**
  * Deterministic regressions for V2 AI design authority (no live AI call — every model answer is mocked): the
@@ -124,19 +124,18 @@ describe("roofs: Roof Composition authors every recipe", () => {
     expect(missing).not.toHaveProperty("value");
   });
 
-  it("stops the whole generation when roofs fail — no fallback roof reaches the document", async () => {
+  it("stops the whole generation when the Architect's roof document fails — no fallback roof reaches the document", async () => {
     const { runArchitecturePipeline } = await import("../stages/pipeline");
     generateText.mockImplementation((options: { system: string }) => {
       const system = options.system;
-      const output = system.includes("three foundational decisions") ? responderOutputs.foundation()
-        : system.includes("one volume at a time") ? responderOutputs.massExpansion()
-        : system.includes("authoring the built form") ? responderOutputs.geometry()
-        : { roofs: [{ massId: "mass-0", kind: "flat" }] };
+      const output = system.includes("sole AI Architect")
+        ? { document: { ...architectDocument(), roofs: { recipes: [{ id: "bad-roof", massId: "missing-mass", kind: "flat" }] } } }
+        : responderOutputs.sitePlan();
       return Promise.resolve({ output, totalUsage: {} });
     });
     const failure = await runArchitecturePipeline({ brief: "A calm pavilion", hints: { viewDirection: "south", approachSide: "north", environment: "beach" } }, createTimings(), 120_000, usage).catch((e: unknown) => e);
-    expect(isV2GenerationFailure(failure) && failure.stage).toBe("roof-composition");
-    expect(isV2GenerationFailure(failure) && failure.conflicts.join(" ")).toMatch(/roof-incomplete/);
+    expect(isV2GenerationFailure(failure) && failure.stage).toBe("architect");
+    expect(isV2GenerationFailure(failure) && failure.conflicts.join(" ")).toMatch(/roof/);
   });
 
   it("never lets a library recipe overwrite the authored kind, pitch or overhang after authorship", async () => {

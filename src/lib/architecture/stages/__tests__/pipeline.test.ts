@@ -19,6 +19,7 @@ const usageMeta = { projectId: null, requestType: "generation" as const, scope: 
 beforeEach(() => {
   generateText.mockReset();
   vi.stubEnv("OPENAI_API_KEY", "test-key");
+  vi.stubEnv("AI_ARCHITECT_LEGACY_PIPELINE", "1");
 });
 
 describe("architecture stage pipeline", () => {
