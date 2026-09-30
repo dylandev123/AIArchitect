@@ -72,6 +72,43 @@ export function GlbPreview({ asset }: { asset: CuratedAsset }) {
   );
 }
 
+/**
+ * A small, non-interactive library-card view. It deliberately renders the stored GLB rather than deriving a swatch from
+ * its metadata, and frames the normalised model from its measured bounds.
+ */
+export function GlbCardPreview({ asset }: { asset: CuratedAsset }) {
+  const status = useGlbStatus(asset.id);
+
+  useEffect(() => {
+    void glbModels.load(asset.id);
+  }, [asset.id]);
+
+  const instance = useMemo(() => (status === "ready" ? instantiateGlb(asset.id) : null), [status, asset.id]);
+  const size = status === "ready" ? glbModels.peek(asset.id)?.size : undefined;
+
+  if (status === "failed") {
+    return <div className="flex h-full items-center justify-center bg-red-500/10 px-3 text-center text-[10px] text-red-300">Model preview unavailable</div>;
+  }
+  if (!instance || !size) {
+    return <div className="flex h-full items-center justify-center bg-neutral-900 px-3 text-center text-[10px] text-neutral-500">Loading GLB preview…</div>;
+  }
+
+  const reach = Math.max(size.x, size.y, size.z, 0.1);
+  return (
+    <Canvas
+      camera={{ position: [reach * 1.8, reach * 1.25, reach * 1.8], fov: 38, near: 0.02, far: reach * 40 }}
+      dpr={[1, 1]}
+    >
+      <color attach="background" args={["#171717"]} />
+      <hemisphereLight args={["#ffffff", "#303030", 1.35]} />
+      <directionalLight position={[reach * 2, reach * 3, reach]} intensity={2.2} />
+      <gridHelper args={[Math.ceil(reach * 3), Math.max(4, Math.ceil(reach * 3)), "#3f3f46", "#27272a"]} />
+      <primitive object={instance} />
+      <OrbitControls target={[0, size.y / 2, 0]} enablePan={false} enableRotate={false} enableZoom={false} />
+    </Canvas>
+  );
+}
+
 /** A floor and a back wall to catch the model's light, so its reach and cone are visible. */
 function NightSet({ reach }: { reach: number }) {
   return (

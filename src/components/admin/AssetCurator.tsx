@@ -8,7 +8,7 @@ import { useLibraryStore, type RecipeIntent } from "@/store/useLibraryStore";
 import { useLearnStore } from "@/store/useLearnStore";
 import { ingestGlb } from "@/lib/assets/glbIngest";
 import { getGlbStore } from "@/lib/assets/glbStorage";
-import { GlbPreview } from "./GlbPreview";
+import { GlbCardPreview, GlbPreview } from "./GlbPreview";
 import { GlbReport } from "./GlbReport";
 import { AssetUpgradeDialog } from "./AssetUpgradeDialog";
 import { canUpgrade, findPendingUpgrade } from "@/lib/assets/versions";
@@ -21,6 +21,7 @@ import { RecipesTab } from "./RecipesTab";
 import { GenerationsTab } from "./GenerationsTab";
 import { CapabilitiesTab } from "./CapabilitiesTab";
 import { ModalPortal } from "./ModalPortal";
+import { StorageDiagnostics } from "./StorageDiagnostics";
 import { categoryLabel } from "@/lib/library/taxonomy";
 import { ASSET_CATEGORIES, type AssetCategory, type Need } from "@/types/library";
 import type { BrowseAsset, AssetSource, CuratedAsset, PBRValues } from "@/types/assets";
@@ -581,40 +582,46 @@ function QueueTab() {
 function LibraryTab() {
   const catalog = useAssetStore((s) => s.catalog);
   const queue = useAssetStore((s) => s.queue);
+  const localOnly = useAssetStore((s) => s.localOnly);
   const removeFromCatalog = useAssetStore((s) => s.removeFromCatalog);
   const [upgrading, setUpgrading] = useState<string | null>(null);
 
-  if (catalog.length === 0) {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
-        <p className="text-sm text-neutral-500">Library is empty</p>
-        <p className="text-xs text-neutral-600">Approve queued assets to add them here</p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="grid grid-cols-2 gap-2 pb-2 sm:grid-cols-3">
-        {catalog.map((asset) => (
-          <div
-            key={asset.id}
-            className="group relative flex flex-col overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] transition hover:border-white/10"
-          >
+      <div className="mb-3">
+        <StorageDiagnostics reloadKey={catalog.length + queue.length + localOnly.length} />
+      </div>
+      {catalog.length === 0 ? (
+        <div className="flex min-h-48 flex-col items-center justify-center gap-2 text-center">
+          <p className="text-sm text-neutral-500">Library is empty</p>
+          <p className="text-xs text-neutral-600">Approve queued assets to add them here</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2 pb-2 sm:grid-cols-3">
+          {catalog.map((asset) => (
+            <div
+              key={asset.id}
+              className="group relative flex flex-col overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] transition hover:border-white/10"
+            >
             <div className="relative aspect-square overflow-hidden bg-neutral-800">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={asset.thumbnailUrl}
-                alt={asset.name}
-                className="h-full w-full object-cover"
-                loading="lazy"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-              />
-              {/* Color swatch overlay */}
-              <div
-                className="absolute bottom-1.5 right-1.5 h-5 w-5 rounded-full border-2 border-white/20 shadow"
-                style={{ backgroundColor: asset.pbr.baseColor }}
-              />
+              {asset.source === "generated" && asset.type === "glb-model" ? (
+                <GlbCardPreview asset={asset} />
+              ) : (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={asset.thumbnailUrl}
+                    alt={asset.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                  />
+                  <div
+                    className="absolute bottom-1.5 right-1.5 h-5 w-5 rounded-full border-2 border-white/20 shadow"
+                    style={{ backgroundColor: asset.pbr.baseColor }}
+                  />
+                </>
+              )}
             </div>
             <div className="flex items-start justify-between gap-1 p-2">
               <div className="min-w-0">
@@ -657,9 +664,10 @@ function LibraryTab() {
                 M {asset.pbr.metalness.toFixed(1)}
               </span>
             </div>
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
       {upgrading && <AssetUpgradeDialog baseId={upgrading} onClose={() => setUpgrading(null)} />}
     </div>
   );

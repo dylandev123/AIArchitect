@@ -122,7 +122,7 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
 
   return (
     <div className="rounded-lg border border-white/8 bg-white/[0.03] p-3">
-      <p className="mb-2 text-xs font-medium text-neutral-300">Storage diagnostics</p>
+      <p className="mb-2 text-xs font-medium text-neutral-300">Storage diagnostics & browser import</p>
       {error && <p className="text-xs text-red-400">{error}</p>}
       {!data && !error && <p className="text-xs text-neutral-500">Loading…</p>}
       {data && (
@@ -139,6 +139,7 @@ export function StorageDiagnostics({ reloadKey }: { reloadKey: number }) {
           <Row label="Asset Plans" value={count(data.library.plans)} bad={data.library.plans === null} />
           <Row label="Generation reports" value={count(data.library.generations)} bad={data.library.generations === null} />
           <Row label="Curated assets loaded" value={`${curated.toLocaleString()} (${sync.status === "ready" ? "from server" : sync.status === "error" ? "browser cache — server load failed" : "loading…"})`} bad={sync.status === "error"} />
+          <Row label="Browser-only assets ready to import" value={localOnly.length.toLocaleString()} bad={localOnly.length > 0} />
           {data.assets.error && <Row label="Asset read error" value={data.assets.error} bad />}
           {data.usage.error && <Row label="Usage read error" value={data.usage.error} bad />}
           {data.library.error && <Row label="Library read error" value={data.library.error} bad />}
