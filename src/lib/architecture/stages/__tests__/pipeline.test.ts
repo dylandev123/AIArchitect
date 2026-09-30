@@ -119,8 +119,7 @@ describe("architecture stage pipeline", () => {
         siteStrategy: { environment: "suburban", viewDirection: "south", arrivalDirection: "north", terrain: "level", terrainResponse: "Keep it level." },
         primaryMass: { name: "Main Living Pavilion", width: 14, depth: 9, floors: 1, reasoning: "Anchors the plan." },
       }, totalUsage: {} })
-      // mass expansion: one add, then done — ok. Brief/role deliberately avoid REQUIRED_ROLE_WORDS
-      // (garage/guest/bedroom) so the deterministic stop never fires and both calls below are actually made.
+      // Mass expansion remains AI-completed: an added volume is followed by its explicit done decision.
       .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A creative studio extends the plan.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "Two volumes fully serve this brief." }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "Two volumes fully serve this brief." }, totalUsage: {} })

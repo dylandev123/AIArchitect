@@ -66,24 +66,24 @@ describe("mass expansion stage", () => {
       .mockResolvedValueOnce({ output: { decision: "add", reasoning: "Extra wing, corrected.", mass: { name: "Studio Wing", role: "connector", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
       .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The plan is complete as designed." }, totalUsage: {} });
 
-    // Brief names no explicit program (no "garage"/"guest .../"bedroom"), so the deterministic stopping
-    // backstop in runMassExpansionStage never fires here — the model's own "done" is still what ends the
-    // loop, keeping this test isolated to what it actually checks: the repair-retry recovering.
+    // The model's own "done" remains the only normal completion signal, keeping this test isolated to
+    // the repair-retry recovery it exercises.
     const result = await runMassExpansionStage({ brief: "A house with an extra studio wing", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
     expect(result.masses).toHaveLength(2);
     expect(generateText).toHaveBeenCalledTimes(3);
   });
 
-  it("stops deterministically, without another model call, once the brief's explicit program is fully placed", async () => {
+  it("lets the architect explicitly complete composition after the brief's explicit program is placed", async () => {
     const { runMassExpansionStage } = await import("../massExpansionStage");
-    generateText.mockResolvedValueOnce({ output: { decision: "add", reasoning: "A guest wing serves visiting family.", mass: { name: "Guest Wing", role: "guest-pavilion", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} });
+    generateText
+      .mockResolvedValueOnce({ output: { decision: "add", reasoning: "A guest wing serves visiting family.", mass: { name: "Guest Wing", role: "guest-pavilion", width: 6, depth: 6, floors: 1 }, relationships: [{ kind: "adjacent-to", target: "mass-0", side: "east" }] }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { decision: "done", reasoning: "The guest wing and living pavilion complete this compact composition." }, totalUsage: {} });
 
     const result = await runMassExpansionStage({ brief: "A house with a guest wing", intent, siteStrategy, primaryMass }, createTimings(), 60_000, usageMeta);
     expect(result.masses).toHaveLength(2);
     expect(result.truncated).toBe(false);
-    expect(result.stopReason).toBe("deterministic-stop");
-    // Only the one call that placed the guest wing — no extra call is spent asking the model to confirm "done".
-    expect(generateText).toHaveBeenCalledTimes(1);
+    expect(result.stopReason).toBe("model-done");
+    expect(generateText).toHaveBeenCalledTimes(2);
   });
 
   it("recovers a degree-like rotationOffset locally, without spending a second model call on a repair retry", async () => {
@@ -193,15 +193,16 @@ describe("mass expansion stage", () => {
         .mockResolvedValueOnce(addMass("Bedroom Wing", "bedroom-wing", "west"))
         .mockResolvedValueOnce(done("The living pavilion and bedroom wing serve the brief."))
         .mockResolvedValueOnce(addMass("Pool Pavilion", "terrace", "south"))
-        .mockResolvedValueOnce(addMass("Service Spine", "garage", "east"));
+        .mockResolvedValueOnce(addMass("Service Spine", "garage", "east"))
+        .mockResolvedValueOnce(done("The four programmed volumes now form the intended composition."));
 
       const result = await runMassExpansionStage({ brief: "A family home with bedrooms", intent, siteStrategy, primaryMass, requiredVolumes: await spacePlanVolumes() }, createTimings(), 60_000, usageMeta);
 
       expect(result.masses.map((m) => m.role)).toEqual(["main-living", "bedroom-wing", "terrace", "garage"]);
-      expect(result.stopReason).toBe("deterministic-stop");
+      expect(result.stopReason).toBe("model-done");
       expect(result.unplacedVolumes).toEqual([]);
-      // No extra "done" round trip once all four are placed.
-      expect(generateText).toHaveBeenCalledTimes(4);
+      // Program coverage unlocks, but never substitutes for, the architect's completion decision.
+      expect(generateText).toHaveBeenCalledTimes(5);
       const pushBack = generateText.mock.calls[2][0].messages[0].content as string;
       expect(pushBack).toMatch(/You answered "done"/);
       expect(pushBack).toContain("outdoor-pavilion");

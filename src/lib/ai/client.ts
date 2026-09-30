@@ -55,7 +55,9 @@ function v2EditHash(json: string): string | undefined {
     const root = JSON.parse(json) as Record<string, unknown>;
     const document = v2DocumentOf(json);
     if (!document) return undefined;
-    return JSON.stringify({ document: documentAudit(document).hash, sitePlan: root.sitePlan });
+    // These are the V2-rendered/editable authorities. Compatibility house fields are deliberately absent:
+    // an edit must not pass merely by changing the legacy shell.
+    return JSON.stringify({ document: documentAudit(document).hash, sitePlan: root.sitePlan, outdoorAssetPlacements: root.outdoorAssetPlacements, materials: root.materials, exteriorOptions: root.exteriorOptions });
   } catch {
     return undefined;
   }

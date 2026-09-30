@@ -117,7 +117,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
     const request = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
     const persisted = JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson);
     expect(request).toMatchObject({ mode: "edit", projectId: project.id, prompt: "add an outdoor bar", currentHouseJson: base });
-    expect(handlerPayload?.operation).toBe("addSiteFeature");
+    expect(handlerPayload?.operation).toBe("addV2Placement");
     expect(result).toMatchObject({ ok: true, generated: false });
     expect(persisted.architecturalDesignDocument).toEqual(JSON.parse(base).architecturalDesignDocument);
     expect(persisted.sitePlan).toMatchObject({ poolDeck: { x: 0, z: 16, width: 12, depth: 8 } });

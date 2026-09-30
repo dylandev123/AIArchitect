@@ -94,7 +94,8 @@ function humanizeError(raw: string): string {
   if (raw.toLowerCase().includes("network")) {
     return "Lost my connection for a moment — shall we try again?";
   }
-  return "I hit a small snag. Mind giving that another go?";
+  // Placement and validation failures are already concrete and actionable; do not hide them.
+  return raw || "I hit a small snag. Mind giving that another go?";
 }
 
 // ── Completion phrases ───────────────────────────────────────────────────────

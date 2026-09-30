@@ -135,13 +135,12 @@ function normalizeMassExpansionOutput(raw: unknown): unknown {
 
 /**
  * Why the loop stopped, mutually exclusive: `"model-done"` = the model explicitly signaled the composition
- * was complete. `"deterministic-stop"` = the brief's required program was already fully placed, so the loop
- * stopped without spending another model call. `"failed"` = a decision call failed every retry and the loop
+ * was complete. `"failed"` = a decision call failed every retry and the loop
  * stopped early, one mass short of wherever the model would have gone next. `"hard-cap"` = the loop actually
  * exhausted `MAX_ADDITIONAL_MASSES` turns (or ran out of time budget) without the model ever volunteering
  * "done". Only `"hard-cap"` should ever be reported as hitting the hard cap.
  */
-export type MassExpansionStopReason = "model-done" | "deterministic-stop" | "failed" | "hard-cap";
+export type MassExpansionStopReason = "model-done" | "failed" | "hard-cap";
 
 export interface MassExpansionResult {
   masses: MassVolume[];
@@ -150,7 +149,7 @@ export interface MassExpansionResult {
   log: { massId: string; reasoning: string }[];
   /** Why the loop stopped. See `MassExpansionStopReason`. */
   stopReason: MassExpansionStopReason;
-  /** True for `"model-done"` and `"deterministic-stop"` — the composition is complete, not merely cut off. */
+  /** True only when the architect explicitly completed the composition. */
   completed: boolean;
   /** Human-readable summary of `stopReason`, e.g. for dev-diagnostics logging. Empty when nothing is worth reporting. */
   stopMessage: string;
@@ -215,15 +214,9 @@ export async function runMassExpansionStage(
     const resolved = resolvedSoFar(masses, ctx.siteStrategy);
     const missing = uncoveredVolumes(required, resolved);
     const additionalLeft = MAX_ADDITIONAL_MASSES - (masses.length - 1);
-    // Deterministic stop: once every volume the space plan / brief requires is already placed, don't spend
-    // another model call finding out whether the model agrees — this is what actually stops the loop
-    // instead of relying solely on the model to volunteer "done" before the hard cap. It never fires when
-    // nothing is required (no space plan, and a brief naming no concrete program), so ordinary composition
-    // richness is untouched.
-    if (required.length > 0 && missing.length === 0 && masses.length > 1) {
-      stopReason = "deterministic-stop";
-      break;
-    }
+    // Required program is a constraint, not a design-completion signal. Once it is satisfied, give the
+    // architect the ordinary next decision: it may say "done" or add one more purposeful volume. Ending
+    // here used to turn a four-role program into a compulsory, visually flat composition.
     const result = await runStage({
       stageName: `mass-expansion-${i + 1}`,
       system: SYSTEM,
@@ -305,7 +298,7 @@ export async function runMassExpansionStage(
     onMassAdded?.(resolvedSoFar(masses, ctx.siteStrategy));
   }
   if (isDev && stopReason === "hard-cap") console.debug(`[mass-expansion] hit the hard cap (${MAX_ADDITIONAL_MASSES}) without the model signaling "done" — kept all ${masses.length} accepted mass(es)`);
-  const completed = stopReason === "model-done" || stopReason === "deterministic-stop";
+  const completed = stopReason === "model-done";
   const baseStopMessage = stopReason === "failed"
     ? `mass expansion failed on turn ${failedAtTurn}; preserving ${masses.length} accepted mass${masses.length === 1 ? "" : "es"}`
     : stopReason === "hard-cap"

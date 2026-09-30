@@ -25,6 +25,7 @@ import type { PipelineResult } from "@/lib/architecture/stages/pipeline";
 import type { DesignRecipe, ReportRecipeRejection } from "@/types/library";
 import { providerErrorResponse } from "./providerErrors";
 import { sitePlanOperations, type SitePlan, type SitePlanContext } from "@/lib/architecture/stages/sitePlanStage";
+import { architectureAuthorityHash } from "@/lib/architecture/stages/authority";
 
 /** V2 opening coordinates projected into the renderer's world frame (x=east, z=south), on the masses as resolved and rendered. */
 function v2EntrancePoints(masses: readonly MassVolume[]): { x: number; z: number }[] {
@@ -95,6 +96,9 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
   const { brief, assets, baseRevision, library, usageMeta, timings, pipelineResult, recipes, recipeIds, retrieved, recipeRejections = [], spaces, budgetMs } = params;
   const design = pipelineResult.design;
   const architecturalDesignDocument = pipelineResult.document;
+  // Final Assembly owns compatibility/support data only. Keep a boundary fingerprint so future assembly
+  // work cannot silently turn into an architecture writer.
+  const architectureAtEntry = architectureAuthorityHash(architecturalDesignDocument);
   const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
   if (docErrors.length) console.warn("[architecture-stages] invalid document, falling back to legacy shell:", docErrors);
   if (pipelineResult.massExpansionStopMessage) console.info(`[architecture-stages] ${pipelineResult.massExpansionStopMessage}`);
@@ -155,6 +159,9 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
 
       const result = assembleGeneratedProject(output, assets, brief, true, timings, authoredSiteOps);
       if (result.ok) {
+        if (architectureAuthorityHash(architecturalDesignDocument) !== architectureAtEntry) {
+          throw new Error("[v2-authority] final-assembly mutated the architecture document.");
+        }
         finish("ok", attempt + 1);
         if (result.skipped.length > 0) console.warn("[AI] Rejected generation ops:", result.skipped);
         // The design is built with the procedural version of every object. Where an approved library GLB fits, the

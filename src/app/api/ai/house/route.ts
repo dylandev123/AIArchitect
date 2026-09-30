@@ -30,7 +30,7 @@ import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
 import { runFinalAssembly, sitePlanContextForDocument } from "@/lib/ai/finalAssembly";
 import { runSitePlanStage, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
-import { placeOutdoorBar } from "@/lib/architecture/v2SiteFeatures";
+import { placeV2AdditiveAsset } from "@/lib/architecture/v2AdditivePlacement";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -118,8 +118,7 @@ export async function POST(req: NextRequest) {
   const assets = parseAssets(body.assets);
   const projectId = parseProjectId(body.projectId);
 
-  // Deliberately before the AI configuration gate: this first V2 follow-up is a deterministic,
-  // cheap Site Plan patch and must never turn a one-object addition into a generation call.
+  // Additive V2 placement is a deterministic executor, not an architecture-generation call.
   const activeDocument = root.architecturalDesignDocument ?? root.architectureDocument;
   if (body.mode !== "generate" && isArchitecturalDesignDocument(activeDocument)) {
     return editV2SiteFeature(prompt, root, baseRevision);
@@ -228,24 +227,20 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * The intentionally narrow first V2 editing path. No model request and no architecture/site-plan
- * regeneration occur here; unsupported edits stay rejected until their corresponding V2 patch exists.
+ * Typed additive V2 edit path. It understands a small semantic object request and only appends a
+ * grounded placement/site feature; V2 architecture and existing Site Plan geometry remain read-only.
  */
 async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, baseRevision: string): Promise<NextResponse> {
-  if (!/\b(add|create|place)\b[\s\S]*\boutdoor[\s-]*bar\b|\boutdoor[\s-]*bar\b[\s\S]*\b(add|create|place)\b/i.test(prompt)) {
-    return NextResponse.json({ error: "V2 follow-up edits currently support adding an outdoor bar only. Architectural and massing edits are not available yet." }, { status: 422 });
-  }
-  let assetId: string | undefined;
+  let assets: Awaited<ReturnType<ReturnType<typeof assetBackend>["list"]>>["assets"] = [];
+  let glbIds: string[] = [];
   try {
-    const { assets, glbIds } = await assetBackend().list();
-    assetId = assets.find((asset) => asset.type === "glb-model" && asset.status === "approved" && glbIds.includes(asset.id) && asset.categories.includes("outdoor-bar"))?.id;
+    ({ assets, glbIds } = await assetBackend().list());
   } catch {
-    // A library outage never prevents the safe procedural V2 fallback.
+    return NextResponse.json({ error: "Approved asset library is unavailable, so I cannot safely place a V2 outdoor object." }, { status: 503 });
   }
-  const placed = placeOutdoorBar(root, assetId);
-  if ("error" in placed) return NextResponse.json({ error: placed.error }, { status: 422 });
-  const json = JSON.stringify({ ...root, sitePlan: placed.plan });
-  return NextResponse.json({ summary: "Added a grounded outdoor bar beside the existing outdoor-living area.", json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V2 Site Plan" }, operation: "addSiteFeature" });
+  const placed = placeV2AdditiveAsset(root, prompt, assets, glbIds);
+  if (!placed.ok) return NextResponse.json({ error: placed.error, code: placed.code }, { status: 422 });
+  return NextResponse.json({ summary: placed.summary, json: placed.json, baseRevision, revision: revisionOf(placed.json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId });
 }
 
 const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
