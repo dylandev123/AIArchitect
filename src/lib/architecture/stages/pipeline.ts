@@ -16,6 +16,7 @@ import { runRoofCompositionStage, type RoofCompositionStageResult } from "./roof
 import { mergeCapabilityIntents, parameterizeCapabilityIntent } from "../volumePlan";
 import { toArchitecturalDesign } from "./toArchitecturalDesign";
 import type { StageDiagnostics } from "./diagnostics";
+import { architectureGenerationMode, type ArchitectureGenerationMode } from "./generationMode";
 import { siteStrategyInvariantSchema } from "./schemas";
 import { runArchitectStage } from "./architectStage";
 import { deriveArchitecturalIntent } from "../designEngine";
@@ -186,12 +187,14 @@ async function runLegacyArchitecturePipeline(
    * stage then throws (a compiler bug, a bad relationship resolution), the AI calls already made for
    * Foundation/Mass Expansion/Geometry/Roofs are never repeated just to reach that bug again.
    */
-  onUpstreamProgress: (upstream: PipelineResult["upstream"], diagnostics: readonly StageDiagnostics[]) => void = () => {}
+  onUpstreamProgress: (upstream: PipelineResult["upstream"], diagnostics: readonly StageDiagnostics[]) => void = () => {},
+  generationMode: ArchitectureGenerationMode = "legacy-staged",
 ): Promise<PipelineResult> {
   const environment: SiteEnvironment = input.hints.environment ?? "suburban";
   const viewDirection: CompassSide = input.hints.viewDirection ?? "south";
   const arrivalDirection: CompassSide = input.hints.approachSide ?? "north";
   const diagnostics: StageDiagnostics[] = [];
+  const modeDiagnostic = (entry: StageDiagnostics): StageDiagnostics => ({ ...entry, generationMode });
   const failed = (failedDiagnostics: readonly StageDiagnostics[]) => onUpstreamProgress(upstream, failedDiagnostics);
   let upstream: PipelineResult["upstream"] = {};
   const progress = (next: PipelineResult["upstream"]) => { upstream = next; onUpstreamProgress(upstream, diagnostics); };
@@ -199,13 +202,13 @@ async function runLegacyArchitecturePipeline(
   // Intent, Site Strategy and Primary Mass are three visible progress updates, not three model calls: one
   // structured response decides all three, and the pipeline still emits three "stage" events from it below.
   const foundationResult = await runFoundationStage({ brief: input.brief, hints: input.hints, environment, scale: input.scale, viewDirection, arrivalDirection }, timings, budgetMs, usageMeta);
-  if (!foundationResult.ok) failGeneration("foundation", foundationResult.errors, diagnostics, foundationDiagnostics(foundationResult), failed);
+  if (!foundationResult.ok) failGeneration("foundation", foundationResult.errors, diagnostics, modeDiagnostic(foundationDiagnostics(foundationResult)), failed);
   const foundation = foundationResult.value;
   const { intent, siteStrategy, terrainResponse, primaryMass } = foundation;
   // The single checked boundary: every stage from here on reads `siteStrategy.viewDirection`/`arrivalDirection`
   // unguarded, trusting Foundation already normalized it — see `assertValidSiteStrategy`.
   assertValidSiteStrategy(siteStrategy);
-  diagnostics.push(foundationDiagnostics(foundationResult));
+  diagnostics.push(modeDiagnostic(foundationDiagnostics(foundationResult)));
   onEvent({ type: "stage", stage: "intent", index: 1, of: TOTAL_STAGES, document: draftDocument(input.brief, { environment, viewDirection, arrivalDirection, terrain: "level" }, [], [], undefined) });
   onEvent({ type: "stage", stage: "site-strategy", index: 2, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, [], [], undefined) });
   onEvent({ type: "stage", stage: "primary-mass", index: 3, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, [primaryMass], [], undefined) });
@@ -214,21 +217,21 @@ async function runLegacyArchitecturePipeline(
   const expansion = await runMassExpansionStage({ brief: input.brief, intent, siteStrategy, primaryMass, requiredVolumes: requiredVolumes(input, intent) }, timings, budgetMs, usageMeta, (masses) => {
     onEvent({ type: "mass-added", stage: "mass-expansion", massesSoFar: masses.length, document: draftDocument(input.brief, siteStrategy, masses, [], undefined) });
   });
-  if (expansion.hadFailure) failGeneration("mass-expansion", [expansion.stopMessage, ...expansion.failureErrors], diagnostics, massExpansionDiagnostics(expansion), failed);
+  if (expansion.hadFailure) failGeneration("mass-expansion", [expansion.stopMessage, ...expansion.failureErrors], diagnostics, modeDiagnostic(massExpansionDiagnostics(expansion)), failed);
   // Validation only: the masses are exactly what Mass Expansion authored and resolved.
   const review = reviewedComposition(expansion.masses, intent, siteStrategy);
   const placedMasses = review.masses;
-  diagnostics.push(massExpansionDiagnostics(expansion, review.notes));
+  diagnostics.push(modeDiagnostic(massExpansionDiagnostics(expansion, review.notes)));
   onEvent({ type: "stage", stage: "mass-expansion", index: 4, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, placedMasses, [], expansion.capabilityIntents) });
   progress({ foundation, masses: placedMasses });
 
   // Batched, same reasoning as roof composition below: every mass is already placed, so one call authors every
   // mass's geometry together instead of asking (and paying for) it per mass.
   const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses: placedMasses }, timings, budgetMs, usageMeta);
-  if (!geometryResult.ok) failGeneration(geometryResult.owningStage ?? "architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
+  if (!geometryResult.ok) failGeneration(geometryResult.owningStage ?? "architectural-geometry", geometryResult.errors, diagnostics, modeDiagnostic(geometryDiagnostics(geometryResult)), failed);
   const articulatedMasses = applyGeometry(placedMasses, geometryResult.byMassId);
   logPlanNotes(geometryResult.byMassId);
-  diagnostics.push(geometryDiagnostics(geometryResult));
+  diagnostics.push(modeDiagnostic(geometryDiagnostics(geometryResult)));
   const geometryCapabilityIntents = finalCapabilityIntents([...(expansion.capabilityIntents ?? []), ...geometryResult.capabilityIntents], articulatedMasses, siteStrategy);
   const geometryCapabilityRequests = [...expansion.capabilityRequests, ...geometryResult.capabilityRequests];
   onEvent({ type: "stage", stage: "architectural-geometry", index: 5, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, articulatedMasses, [], geometryCapabilityIntents) });
@@ -237,9 +240,9 @@ async function runLegacyArchitecturePipeline(
   // One call composes every mass's roof at once: by now every mass is placed, so nothing is gained by asking
   // sequentially, and the "roof-added" events below still fire once per mass for the same live-preview cadence.
   const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses, approvedRecipes: input.roofRecipes }, timings, budgetMs, usageMeta);
-  if (!roofResult.ok) failGeneration("roof-composition", roofResult.errors, diagnostics, { stage: "roof-composition", status: "error", durationMs: roofResult.durationMs, modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1), ...repairTrace(roofResult.repairRequests) }, failed);
+  if (!roofResult.ok) failGeneration("roof-composition", roofResult.errors, diagnostics, modeDiagnostic({ stage: "roof-composition", status: "error", durationMs: roofResult.durationMs, modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1), ...repairTrace(roofResult.repairRequests) }), failed);
   const roofs: RoofRecipe[] = roofResult.value;
-  diagnostics.push(roofDiagnostics(roofResult));
+  diagnostics.push(modeDiagnostic(roofDiagnostics(roofResult)));
   progress({ foundation, masses: placedMasses, articulatedMasses, roofs });
   roofs.forEach((roof, i) => {
     onEvent({ type: "roof-added", stage: "roof-composition", massId: roof.massId, roofsSoFar: i + 1, totalMasses: articulatedMasses.length, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs.slice(0, i + 1), geometryCapabilityIntents) });
@@ -265,16 +268,18 @@ export async function runArchitecturePipeline(
   onEvent: (event: PipelineStageEvent) => void = () => {},
   onUpstreamProgress: (upstream: PipelineResult["upstream"], diagnostics: readonly StageDiagnostics[]) => void = () => {},
 ): Promise<PipelineResult> {
-  // Deliberately opt-in only while the single-Architect path proves out; normal generation never enters it.
-  if (process.env.AI_ARCHITECT_LEGACY_PIPELINE === "1") {
-    return runLegacyArchitecturePipeline(input, timings, budgetMs, usageMeta, onEvent, onUpstreamProgress);
+  const generationMode = architectureGenerationMode();
+  const modeUsageMeta = { ...usageMeta, generationMode };
+  // Deliberately opt-in only: absence, empty, "0", and "false" all select the single Architect.
+  if (generationMode === "legacy-staged") {
+    return runLegacyArchitecturePipeline(input, timings, budgetMs, modeUsageMeta, onEvent, onUpstreamProgress, generationMode);
   }
-  const architect = await runArchitectStage(input.brief, timings, budgetMs, usageMeta);
+  const architect = await runArchitectStage(input.brief, timings, budgetMs, modeUsageMeta);
   const architectDiagnostic: StageDiagnostics = {
     stage: "architect", status: architect.ok ? "ok" : "error", outcome: architect.ok ? "accepted" : "failed",
     durationMs: architect.durationMs, modelCalls: architect.attempts, retries: Math.max(0, architect.attempts - 1),
     ...(architect.repairRequests?.length ? { repairRequests: architect.repairRequests } : {}),
-    ...(!architect.ok ? { error: architect.errors?.join("; ") || "no usable architecture document" } : {}),
+    ...(!architect.ok ? { error: architect.errors?.join("; ") || "no usable architecture document" } : {}), generationMode,
   };
   if (!architect.ok || !architect.document) throw new V2GenerationFailure("architect", architect.errors ?? ["no usable architecture document"], [architectDiagnostic]);
   const document = architect.document;

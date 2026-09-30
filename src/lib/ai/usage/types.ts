@@ -1,6 +1,7 @@
 /** `generation_failure` is not a model call: one zero-token row recording why a V2 generation did not finalize (excluded from usage summaries). */
 export type AiRequestType = "generation" | "scoped_edit" | "learn" | "recipe_proposal" | "asset_plan" | "native_asset" | "native_asset_retry" | "generation_failure";
 export type AiScope = "world" | "zone" | "component";
+export type GenerationMode = "single-architect" | "legacy-staged";
 
 /** One provider call. Deliberately holds no prompt, response, or error text — only metadata and counts. */
 export interface AiUsageRecord {
@@ -34,6 +35,8 @@ export interface AiUsageRecord {
   resultingAssetHash?: string | null;
   /** The exact stage call that made this request when it differs from `stage` (e.g. "mass-expansion-3" for turn 3 of stage "mass-expansion"). */
   stageCall?: string;
+  /** The route selected for this generation's paid call. */
+  generationMode?: GenerationMode;
   /** The provider's finish reason ("stop", "length", ...), when known. */
   finishReason?: string;
   /** Our own validation/repair reason for a rejected attempt, or the V2 failure reason (bounded; never a raw provider error or model reasoning). */

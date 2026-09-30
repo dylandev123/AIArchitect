@@ -26,6 +26,7 @@ import { compileArchitecture } from "@/lib/architecture/compiler";
 import { runDesignQualityGate } from "@/lib/architecture/stages/qualityGate";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import { runArchitecturePipeline, type PipelineInput, type PipelineResult, type PipelineStageEvent } from "@/lib/architecture/stages/pipeline";
+import { architectureGenerationMode } from "@/lib/architecture/stages/generationMode";
 import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
 import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
 import { runFinalAssembly } from "@/lib/ai/finalAssembly";
@@ -141,7 +142,9 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    const usageMeta: UsageMeta = { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId() };
+    const generationMode = architectureGenerationMode();
+    console.info(`[generation] generationMode: ${generationMode}`);
+    const usageMeta: UsageMeta = { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId(), generationMode };
     // Live progressive generation: the viewport can watch masses and roofs appear one at a time. Any caller that
     // doesn't ask for this (including every existing test) gets the exact same single JSON response as before.
     if (req.headers.get("accept")?.includes("text/event-stream")) {

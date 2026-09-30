@@ -1,4 +1,5 @@
 import type { RecoveryOutcome } from "./recovery";
+import type { ArchitectureGenerationMode } from "./generationMode";
 
 /**
  * One entry per conceptual stage in the live pipeline, for dev/debug tooling only — never required by
@@ -21,6 +22,8 @@ export interface StageDiagnostics {
   error?: string;
   /** Non-fatal findings on an "ok" stage — e.g. roof-language issues the model left unrepaired, whose authored roofs were still kept. */
   warnings?: string[];
+  /** Generation routing decision, recorded on the first architecture-stage diagnostic. */
+  generationMode?: ArchitectureGenerationMode;
 }
 
 export const STAGE_DIAGNOSTICS_LABEL: Record<StageDiagnostics["stage"], string> = {
