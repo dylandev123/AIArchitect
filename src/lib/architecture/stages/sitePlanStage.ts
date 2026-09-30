@@ -93,8 +93,11 @@ export function sitePlanIntegrityErrors(plan: SitePlan, ctx: SitePlanContext): s
  * design for it. Deterministic work is bounded numeric normalization, endpoint snapping (`normalizeSitePlan`)
  * and obstacle routing at execution (`sitePlanOperations`).
  */
+/** Site Plan's initial output allowance (reasoning + JSON). 1800 was exhausted repeatedly in production before any usable JSON. */
+export const SITE_PLAN_MAX_OUTPUT_TOKENS = 4000;
+
 export async function runSitePlanStage(ctx: SitePlanContext, timings: Timings, remainingBudgetMs: number, usageMeta: UsageMeta): Promise<RunStageResult<SitePlan>> {
-  return runStage({ stageName: "site-plan", system: SYSTEM, schema: sitePlanSchema, timings, remainingBudgetMs, usageMeta, maxOutputTokens: 1800, normalize: (raw) => normalizeSitePlan(raw, ctx),
+  return runStage({ stageName: "site-plan", system: SYSTEM, schema: sitePlanSchema, timings, remainingBudgetMs, usageMeta, maxOutputTokens: SITE_PLAN_MAX_OUTPUT_TOKENS, normalize: (raw) => normalizeSitePlan(raw, ctx),
     buildMessage: (errors) => [`BRIEF:\n${ctx.brief}`, `House: ${ctx.house.width}×${ctx.house.depth}m, ${ctx.house.floors} floor(s)${ctx.house.center ? `, centred at world (${ctx.house.center.x.toFixed(2)}, ${ctx.house.center.z.toFixed(2)}); wall offsets and distances are measured from this footprint` : ""}. View=${ctx.viewDirection}; arrival=${ctx.arrivalDirection}.`,
       ctx.masses && ctx.masses.length > 1 ? `Building masses (world centre, width×depth, yaw°) — keep all site geometry off them: ${ctx.masses.map((m) => `${m.id} (${m.cx.toFixed(1)}, ${m.cz.toFixed(1)}) ${m.width.toFixed(1)}×${m.depth.toFixed(1)} ${Math.round((m.rotation * 180) / Math.PI)}°`).join("; ")}.` : "", ctx.entrancePoints?.length ? `Actual V2 entrance door centre(s), in world x/z metres: ${ctx.entrancePoints.map((p) => `(${p.x.toFixed(2)}, ${p.z.toFixed(2)})`).join(", ")}. The entrance path must end at one of these.` : "", errors.length ? `Correct: ${errors.join("; ")}` : ""].filter(Boolean).join("\n\n"),
     validate: (plan) => [...sitePlanIntegrityErrors(plan, ctx), ...luxuryOutdoorCompositionErrors(plan, ctx)],

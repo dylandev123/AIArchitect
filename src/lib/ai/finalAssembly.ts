@@ -8,6 +8,7 @@ import { revisionOf } from "@/lib/house/revision";
 import { AI_PROVIDER_OPTIONS, getAiModel } from "@/lib/ai/model";
 import type { Timings } from "@/lib/ai/timing";
 import { logTimings } from "@/lib/ai/timing";
+import { fingerprint } from "@/lib/ai/usage/diagnostics";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
 import { attachOutdoorAssets } from "@/lib/outdoor/placements";
 import { attachLibraryAssets } from "@/lib/library/attach";
@@ -80,7 +81,7 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
   const architectureAtEntry = architectureAuthorityHash(architecturalDesignDocument);
   const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
   // An invalid V2 document is a failed generation. The legacy shell is never a stand-in for it.
-  if (docErrors.length) return v2FailureResponse("v2-generation-failed", "final-assembly", docErrors.map((e) => `invalid architecture document: ${e}`), pipelineResult.diagnostics);
+  if (docErrors.length) return v2FailureResponse("v2-generation-failed", "final-assembly", docErrors.map((e) => `invalid architecture document: ${e}`), pipelineResult.diagnostics, usageMeta);
   if (pipelineResult.massExpansionStopMessage) console.info(`[architecture-stages] ${pipelineResult.massExpansionStopMessage}`);
 
   // A valid V2 document already owns the real massing/roof/openings — compileArchitecture never reads
@@ -120,12 +121,18 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
         );
       }
       const callStart = performance.now();
-      const { output: rawOutput } = await timings.timeAsync(`openai#${attempt + 1}`, () => withUsageLogging(usageMeta, () =>
+      const system = buildGenerationSystemPrompt(assets, recipes, spaces, design, synthesizedHouse ? { floors: synthesizedHouse.floors } : undefined);
+      const userMessage = buildGenerationUserMessage(brief, errors);
+      const callMeta: UsageMeta = {
+        ...usageMeta, stage: "final-assembly", retryNumber: attempt, retryReason: attempt > 0 ? "validation_failed" : null,
+        maxOutputTokens: FINAL_ASSEMBLY_MAX_OUTPUT_TOKENS, promptFingerprint: fingerprint(`${system}\n\n${userMessage}`),
+      };
+      const { output: rawOutput } = await timings.timeAsync(`openai#${attempt + 1}`, () => withUsageLogging(callMeta, () =>
         generateText({
           model: getAiModel(),
           maxOutputTokens: FINAL_ASSEMBLY_MAX_OUTPUT_TOKENS,
-          system: buildGenerationSystemPrompt(assets, recipes, spaces, design, synthesizedHouse ? { floors: synthesizedHouse.floors } : undefined),
-          messages: [{ role: "user", content: buildGenerationUserMessage(brief, errors) }],
+          system,
+          messages: [{ role: "user", content: userMessage }],
           output: Output.object({ schema: buildGenerationResponseSchema(WORLD_SCOPE, assets.map((a) => a.id), synthesizedHouse !== undefined) }),
           providerOptions: AI_PROVIDER_OPTIONS,
           abortSignal: AbortSignal.timeout(Math.max(Math.floor(remainingMs), 1_000)),
@@ -169,7 +176,7 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
         if (!gate.passed) {
           finish("integrity_blocked", attempt + 1);
           after(() => noteRecipeOutcome(recipeIds, "failure"));
-          return v2FailureResponse("v2-integrity-blocked", "integrity-gate", gate.blocking.map((c) => `${c.id}: ${c.detail}`), finalDiagnostics);
+          return v2FailureResponse("v2-integrity-blocked", "integrity-gate", gate.blocking.map((c) => `${c.id}: ${c.detail}`), finalDiagnostics, usageMeta);
         }
         finish("ok", attempt + 1);
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and

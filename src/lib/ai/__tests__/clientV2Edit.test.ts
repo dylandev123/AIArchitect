@@ -1,9 +1,15 @@
+import { mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { ARCHITECTURE_FIXTURES } from "@/lib/architecture/fixtures";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { documentAudit, primitiveBounds } from "@/lib/architecture/renderAudit";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
+
+// The real-handler cases below are deterministic; any model call is a regression.
+vi.mock("ai", async (importOriginal) => ({ ...(await importOriginal<typeof import("ai")>()), generateText: () => { throw new Error("unexpected AI call"); } }));
 
 function stubBrowser() {
   const data = new Map<string, string>();
@@ -28,8 +34,30 @@ async function load() {
   return { useProjectStore, requestHouseEdit, V2_EDIT_UNCHANGED_MESSAGE };
 }
 
-beforeEach(stubBrowser);
-afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+beforeEach(async () => {
+  stubBrowser();
+  // Keep the handler's local asset-need/library writes out of the workspace `.data` directory.
+  const dir = await mkdtemp(path.join(tmpdir(), "client-v2-edit-"));
+  vi.stubEnv("AI_LIBRARY_PATH", path.join(dir, "library.json"));
+  vi.stubEnv("AI_ASSET_STORE_PATH", path.join(dir, "assets"));
+  vi.stubEnv("DATABASE_URL", "");
+  vi.stubEnv("POSTGRES_URL", "");
+});
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.restoreAllMocks(); });
+
+async function viaRealHandler() {
+  const { POST } = await import("@/app/api/ai/house/route");
+  const payloads: Array<{ operation?: string; code?: string }> = [];
+  const fetchSpy = vi.fn(async (_url: string, init?: RequestInit) => {
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", {
+      method: "POST", headers: init?.headers, body: init?.body,
+    }));
+    payloads.push(await response.clone().json());
+    return response;
+  });
+  vi.stubGlobal("fetch", fetchSpy);
+  return { fetchSpy, payloads };
+}
 
 describe("requestHouseEdit V2 commit boundary", () => {
   it("rejects a legacy-only rooftop-deck response rather than claiming the active V2 architecture changed", async () => {
@@ -90,23 +118,13 @@ describe("requestHouseEdit V2 commit boundary", () => {
     expect(persisted.sitePlan.features).toEqual([{ id: "bar-1", kind: "outdoor_bar", x: 20, z: 14, width: 6, depth: 3, rotation: 0 }]);
   });
 
-  it("sends the workspace V2 request shape through the real handler and commits its addSiteFeature response", async () => {
+  it("sends the workspace V2 request shape through the real handler and commits its addV2Placement response", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const { POST } = await import("@/app/api/ai/house/route");
-    const project = useProjectStore.getState().createProject("Legacy V2 workspace project");
-    // This is the persisted workspace shape from before full Site Plan persistence:
-    // V2 architecture plus the rendered legacy deck, but no `sitePlan` key.
-    const base = jsonFor();
+    const project = useProjectStore.getState().createProject("V2 workspace project");
+    // The persisted workspace shape after V2 generation: architecture, the rendered legacy deck and the canonical Site Plan.
+    const base = JSON.stringify({ ...JSON.parse(jsonFor()), sitePlan: { poolDeck: { x: 0, z: 16, width: 12, depth: 8 } } });
     useProjectStore.getState().updateHouseConfig(project.id, base);
-    let handlerPayload: { operation?: string } | undefined;
-    const fetchSpy = vi.fn(async (_url: string, init?: RequestInit) => {
-      const response = await POST(new NextRequest("http://localhost/api/ai/house", {
-        method: "POST", headers: init?.headers, body: init?.body,
-      }));
-      handlerPayload = await response.clone().json();
-      return response;
-    });
-    vi.stubGlobal("fetch", fetchSpy);
+    const { fetchSpy, payloads } = await viaRealHandler();
 
     const result = await requestHouseEdit({
       projectId: project.id,
@@ -117,10 +135,29 @@ describe("requestHouseEdit V2 commit boundary", () => {
     const request = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
     const persisted = JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson);
     expect(request).toMatchObject({ mode: "edit", projectId: project.id, prompt: "add an outdoor bar", currentHouseJson: base });
-    expect(handlerPayload?.operation).toBe("addV2Placement");
+    expect(payloads[0]?.operation).toBe("addV2Placement");
     expect(result).toMatchObject({ ok: true, generated: false });
     expect(persisted.architecturalDesignDocument).toEqual(JSON.parse(base).architecturalDesignDocument);
     expect(persisted.sitePlan).toMatchObject({ poolDeck: { x: 0, z: 16, width: 12, depth: 8 } });
     expect(persisted.sitePlan.features).toHaveLength(1);
+  });
+
+  it("refuses an additive edit on a legacy V2 project without a persisted Site Plan and commits nothing", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const project = useProjectStore.getState().createProject("Legacy V2 workspace project");
+    // Pre-Site Plan persistence shape: V2 architecture plus the rendered legacy deck, but no `sitePlan` key.
+    // The deck is deliberately not reconstructed into an anchor (see v2SitePlanOf).
+    const base = jsonFor();
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    const { payloads } = await viaRealHandler();
+
+    const apply = vi.fn();
+    const result = await requestHouseEdit({ projectId: project.id, prompt: "add an outdoor bar", apply });
+
+    expect(payloads[0]).toMatchObject({ code: "NO_VALID_SITE_PLAN" });
+    expect(payloads[0]?.operation).toBeUndefined();
+    expect(result).toMatchObject({ ok: false, status: 422 });
+    expect(apply).not.toHaveBeenCalled();
+    expect(useProjectStore.getState().getProject(project.id)!.houseConfigJson).toBe(base);
   });
 });

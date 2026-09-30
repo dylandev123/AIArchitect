@@ -35,6 +35,11 @@ ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS parent_usage_id uuid;
 ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS provider_request_id text;
 ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS max_output_tokens integer;
 ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS resulting_asset_hash text;
+ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS stage_call text;
+ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS finish_reason text;
+ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS diagnostic text;
+ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS output_fingerprint text;
+ALTER TABLE ai_usage ADD COLUMN IF NOT EXISTS candidate text;
 CREATE INDEX IF NOT EXISTS ai_usage_created_at_idx ON ai_usage (created_at);
 CREATE INDEX IF NOT EXISTS ai_usage_project_id_idx ON ai_usage (project_id);
 CREATE INDEX IF NOT EXISTS ai_usage_model_idx ON ai_usage (model);
@@ -75,8 +80,9 @@ export async function insertUsageRecordDb(r: AiUsageRecord): Promise<void> {
   await db.query(
     `INSERT INTO ai_usage (id, created_at, project_id, request_type, scope, model, input_tokens,
        cached_input_tokens, output_tokens, total_tokens, latency_ms, success, estimated_cost_usd, priced, error_category,
-       stage, asset_id, plan_id, prompt_fingerprint, retry_number, retry_reason, operation_id, parent_usage_id, provider_request_id, max_output_tokens, resulting_asset_hash)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26)
+       stage, asset_id, plan_id, prompt_fingerprint, retry_number, retry_reason, operation_id, parent_usage_id, provider_request_id, max_output_tokens, resulting_asset_hash,
+       stage_call, finish_reason, diagnostic, output_fingerprint, candidate)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31)
      ON CONFLICT (id) DO NOTHING`,
     [
       r.id,
@@ -96,6 +102,7 @@ export async function insertUsageRecordDb(r: AiUsageRecord): Promise<void> {
       r.errorKind,
       r.stage ?? null, r.assetId ?? null, r.planId ?? null, r.promptFingerprint ?? null, r.retryNumber ?? 0, r.retryReason ?? null,
       r.operationId ?? null, r.parentUsageId ?? null, r.providerRequestId ?? null, r.maxOutputTokens ?? null, r.resultingAssetHash ?? null,
+      r.stageCall ?? null, r.finishReason ?? null, r.diagnostic ?? null, r.outputFingerprint ?? null, r.candidate ?? null,
     ]
   );
 }
@@ -117,6 +124,7 @@ interface Row {
   priced: boolean;
   error_category: string | null;
   stage: string | null; asset_id: string | null; plan_id: string | null; prompt_fingerprint: string | null; retry_number: number | null; retry_reason: string | null; operation_id: string | null; parent_usage_id: string | null; provider_request_id: string | null; max_output_tokens: number | null; resulting_asset_hash: string | null;
+  stage_call?: string | null; finish_reason?: string | null; diagnostic?: string | null; output_fingerprint?: string | null; candidate?: string | null;
 }
 
 /** Oldest first, like the JSONL log, so the summary and "recent" slicing behave identically. */
@@ -141,5 +149,7 @@ export async function readUsageRecordsDb(): Promise<AiUsageRecord[]> {
     stage: r.stage ?? undefined, assetId: r.asset_id, planId: r.plan_id, promptFingerprint: r.prompt_fingerprint ?? undefined,
     retryNumber: r.retry_number ?? undefined, retryReason: r.retry_reason, operationId: r.operation_id ?? undefined,
     parentUsageId: r.parent_usage_id, providerRequestId: r.provider_request_id, maxOutputTokens: r.max_output_tokens ?? undefined, resultingAssetHash: r.resulting_asset_hash,
+    ...(r.stage_call ? { stageCall: r.stage_call } : {}), ...(r.finish_reason ? { finishReason: r.finish_reason } : {}), ...(r.diagnostic ? { diagnostic: r.diagnostic } : {}),
+    ...(r.output_fingerprint ? { outputFingerprint: r.output_fingerprint } : {}), ...(r.candidate ? { candidate: r.candidate } : {}),
   }));
 }

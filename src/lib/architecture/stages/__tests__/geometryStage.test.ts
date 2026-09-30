@@ -97,7 +97,7 @@ describe("architectural geometry stage — structured-output robustness", () => 
     expect(result.attempts).toBe(2);
     expect(result.byMassId.get("mass-0")!.openings).toEqual([expect.objectContaining({ start: 0.31, end: 0.69, heightRatio: 0.77 })]);
     // The repair message tells the model why it failed, so it can answer more compactly.
-    expect(generateText.mock.calls[1][0].messages[0].content).toMatch(/cut off at the token limit/);
+    expect(generateText.mock.calls[1][0].messages[0].content).toMatch(/exhausted the output budget before completing the structured result/);
   });
 
   it("fails when nothing usable came back — the plan's reference is never built in its place", async () => {

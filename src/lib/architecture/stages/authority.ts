@@ -16,8 +16,8 @@ export type AuthorityStage = keyof typeof STAGE_AUTHORITY;
 
 /** Stable enough for a boundary guard; metadata timestamps never affect geometry authority. */
 export function architectureAuthorityHash(document: ArchitecturalDesignDocument): string {
-  const { metadata: _metadata, ...owned } = document;
-  return JSON.stringify(owned);
+  // JSON.stringify drops undefined-valued keys, so this is exactly the document without `metadata`.
+  return JSON.stringify({ ...document, metadata: undefined });
 }
 
 /** The canonical Site Plan's fingerprint, taken when the Site Plan stage accepts it (after endpoint snapping). */

@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     // Same rule as a live generation: a stage that exhausts its retry budget yields no design, never a fallback one.
-    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics);
+    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics, usageMeta);
     console.error(`[architecture-replay] ${stage} failed:`, error);
     return providerErrorResponse(error, stage);
   }

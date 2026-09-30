@@ -241,6 +241,7 @@ export async function runMassExpansionStage(
     // here used to turn a four-role program into a compulsory, visually flat composition.
     const result = await runStage({
       stageName: `mass-expansion-${i + 1}`,
+      usageStage: "mass-expansion",
       system: SYSTEM,
       buildMessage: (previousErrors) => [
         `BRIEF:\n${ctx.brief}`,

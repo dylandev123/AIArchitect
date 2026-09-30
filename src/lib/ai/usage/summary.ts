@@ -37,7 +37,9 @@ function bucketBy(records: AiUsageRecord[], keyOf: (r: AiUsageRecord) => string)
 }
 
 /** "Today" and "this month" are in the viewer's timezone (`tzOffsetMinutes` as from Date#getTimezoneOffset). */
-export function summarizeUsage(records: AiUsageRecord[], now: Date = new Date(), tzOffsetMinutes = 0): UsageSummary {
+export function summarizeUsage(allRecords: AiUsageRecord[], now: Date = new Date(), tzOffsetMinutes = 0): UsageSummary {
+  // Generation-failure rows are diagnostics, not model calls: they carry no tokens and must not skew request counts.
+  const records = allRecords.filter((r) => r.requestType !== "generation_failure");
   const shift = (d: Date) => new Date(d.getTime() - tzOffsetMinutes * 60_000);
   const local = shift(now);
   const day = local.toISOString().slice(0, 10);

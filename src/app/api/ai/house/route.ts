@@ -419,7 +419,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     });
   } catch (error) {
     // An authoritative stage exhausted its retry budget: the generation is incomplete and does not finalize.
-    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics);
+    if (isV2GenerationFailure(error)) return v2FailureResponse("v2-generation-failed", error.stage, error.conflicts, error.diagnostics, usageMeta);
     logPipelineCrash(error, diagnosticsSoFar, upstreamSoFar);
     return providerErrorResponse(error, "architecture-pipeline", { architectureDiagnostics: [...diagnosticsSoFar] });
   }
@@ -428,7 +428,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   const compilerChecks = compilerDiagnostics(pipelineResult.document);
   const architectureFailure = compilerChecks.find((d) => d.status === "error");
   if (architectureFailure) {
-    return v2FailureResponse("v2-integrity-blocked", "integrity-gate", [`${architectureFailure.stage}: ${architectureFailure.error ?? "failed"}`], [...pipelineResult.diagnostics, ...compilerChecks]);
+    return v2FailureResponse("v2-integrity-blocked", "integrity-gate", [`${architectureFailure.stage}: ${architectureFailure.error ?? "failed"}`], [...pipelineResult.diagnostics, ...compilerChecks], usageMeta);
   }
   // The canonical V2 Site Plan is authored by its stage or the generation is incomplete — there is no legacy
   // deterministic site design (pool/deck/drive/path rules) behind a failed Site Plan.
@@ -436,7 +436,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   const siteContext = sitePlanContextForDocument(brief, pipelineResult.document);
   if (!siteContext) {
     pipelineResult.diagnostics.push({ stage: "site-plan", status: "error", outcome: "failed", durationMs: performance.now() - siteStart, modelCalls: 0, retries: 0, error: "No V2 mass available." });
-    return v2FailureResponse("v2-generation-failed", "site-plan", ["No V2 site frame: the architecture has no mass to site a plan against."], [...pipelineResult.diagnostics, ...compilerChecks]);
+    return v2FailureResponse("v2-generation-failed", "site-plan", ["No V2 site frame: the architecture has no mass to site a plan against."], [...pipelineResult.diagnostics, ...compilerChecks], usageMeta);
   }
   // `runStage` measures against the same generation-start timer itself. Passing the
   // fixed total budget leaves a real repair window instead of subtracting elapsed time twice.
@@ -446,7 +446,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     modelCalls: siteResult.attempts, retries: Math.max(0, siteResult.attempts - 1),
     ...(siteResult.repairRequests?.length ? { repairRequests: siteResult.repairRequests } : {}), ...(siteResult.ok ? {} : { error: siteResult.errors.join("; ") }),
   });
-  if (!siteResult.ok) return v2FailureResponse("v2-generation-failed", "site-plan", siteResult.errors, [...pipelineResult.diagnostics, ...compilerChecks]);
+  if (!siteResult.ok) return v2FailureResponse("v2-generation-failed", "site-plan", siteResult.errors, [...pipelineResult.diagnostics, ...compilerChecks], usageMeta);
   const sitePlan = siteResult.value;
   const sitePlanHash = sitePlanAuthorityHash(sitePlan);
   const diagnostics = [...pipelineResult.diagnostics, ...compilerChecks];
