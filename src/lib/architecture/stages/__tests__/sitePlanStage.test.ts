@@ -38,6 +38,17 @@ async function sdkSchemaRejection(raw: unknown) {
 beforeEach(() => { generateText.mockReset(); vi.stubEnv("OPENAI_API_KEY", "test-key"); });
 
 describe("site plan stage", () => {
+  it("requires a proportional pool, deck, terrace and planting composition only for luxury indoor-outdoor briefs", async () => {
+    const { luxuryOutdoorCompositionErrors } = await import("../sitePlanStage");
+    const luxuryContext = { ...context, brief: "A luxury tropical villa with strong indoor-outdoor living and ocean-facing terraces" };
+    const substantial: SitePlan = { ...(plan as SitePlan), landscape: [...(plan as SitePlan).landscape, { purpose: "pool-planting", kind: "garden", x: -9, z: 15, width: 5, depth: 4 }] };
+    expect(luxuryOutdoorCompositionErrors(substantial, luxuryContext)).toEqual([]);
+    const undersized: SitePlan = { ...substantial, pool: { ...substantial.pool, width: 4, depth: 3 }, poolDeck: { ...substantial.poolDeck, width: 3, depth: 2 } };
+    expect(luxuryOutdoorCompositionErrors(undersized, luxuryContext).join(" ")).toMatch(/substantial pool|Pool deck/);
+    // A non-luxury brief preserves the same authored geometry; this rule never redesigns it.
+    expect(luxuryOutdoorCompositionErrors(undersized, context)).toEqual([]);
+  });
+
   it("accepts an AI-authored connected site graph and emits its exact site operations", async () => {
     const { runSitePlanStage, sitePlanOperations } = await import("../sitePlanStage");
     generateText.mockResolvedValueOnce({ output: plan, totalUsage: {} });

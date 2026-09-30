@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import type { DesignRecipe } from "@/types/library";
-import { evaluateRecipes, retrieveRecipes } from "../spaceRecipes";
+import { evaluateRecipes, retrieveRecipes, retrieveRecipesWithDiagnostics } from "../spaceRecipes";
 import { assembleVilla, VILLA_BRIEF } from "./villaFixture";
 
 const recipe = (over: Partial<DesignRecipe> & { name: string; category: DesignRecipe["category"] }): DesignRecipe => ({
@@ -57,6 +57,16 @@ describe("which spaces a recipe serves", () => {
   it("says why each was retrieved", () => {
     const [first] = retrieveRecipes([recipe({ name: "Dining Terrace", category: "outdoor-living" })], spaces, ctx);
     expect(first.reason).toMatch(/^Outdoor Dining: category outdoor-living, its name and rules are about outdoor dining/);
+  });
+
+  it("uses narrowly scoped beach guidance for an ocean-facing project, while retaining scale and style safeguards", () => {
+    const ocean = { ...ctx, brief: "A luxury tropical ocean-facing villa with strong indoor-outdoor living", environment: "suburban" as const };
+    const coastal = recipe({ name: "Coastal Dining Terrace", category: "outdoor-living", environmentTags: ["beach"] });
+    const wrongScale = recipe({ name: "Coastal Mansion Terrace", category: "outdoor-living", environmentTags: ["beach"], compatibleScales: ["mansion"] });
+    const result = retrieveRecipesWithDiagnostics([coastal, wrongScale], spaces, ocean);
+    expect(result.retrieved.map((entry) => entry.recipe.name)).toContain("Coastal Dining Terrace");
+    expect(result.retrieved.find((entry) => entry.recipe.name === "Coastal Dining Terrace")?.reason).toContain("semantic environment beach");
+    expect(result.rejections).toContainEqual(expect.objectContaining({ name: "Coastal Mansion Terrace", reason: expect.stringMatching(/Scale mismatch/) }));
   });
 });
 

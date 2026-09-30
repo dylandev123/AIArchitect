@@ -1,5 +1,5 @@
 import type { ProjectScale, SiteEnvironment } from "@/types/house";
-import type { DesignRecipe, RecipeCategory, ReportRecipe } from "@/types/library";
+import type { DesignRecipe, RecipeCategory, ReportRecipe, ReportRecipeRejection } from "@/types/library";
 import { pickKnowledgeForSpace } from "./knowledge/catalog";
 import { MIN_RECIPE_SCORE, scoreRecipe } from "./retrieval";
 import { spaceName, type OutdoorSpace, type OutdoorSpaceKind } from "@/lib/outdoor/spaces";
@@ -24,6 +24,11 @@ export interface RetrievedRecipe {
   spaces: OutdoorSpaceKind[];
   reason: string;
   score: number;
+}
+
+export interface RecipeRetrievalResult {
+  retrieved: RetrievedRecipe[];
+  rejections: ReportRecipeRejection[];
 }
 
 const PER_SPACE = 2;
@@ -55,6 +60,26 @@ const ABOUT: Record<OutdoorSpaceKind, { specific: RegExp; generic?: RegExp }> = 
 const textOf = (r: DesignRecipe): string =>
   [r.name, ...r.styleTags, ...r.guidance, ...r.parameters.map((p) => p.key), ...r.relationships.map((x) => `${x.target} ${x.note ?? ""}`)].join(" ");
 
+/** Environmental synonyms are deliberately narrow: ocean-facing tropical projects can use beach guidance, but a generic
+ * suburban project cannot; hillside guidance still needs explicit terrain evidence. */
+function semanticEnvironmentTags(brief: string): SiteEnvironment[] {
+  const text = brief.toLowerCase();
+  const tags: SiteEnvironment[] = [];
+  if (/ocean|coast|coastal|waterfront|beach|island|seaside/.test(text)) tags.push("beach");
+  if (/hill|slope|cliff|ridge|mountain/.test(text)) tags.push("hillside");
+  return tags;
+}
+
+function rejectionReason(recipe: DesignRecipe, query: Parameters<typeof scoreRecipe>[1], spaces: readonly OutdoorSpace[], homes: ReadonlyMap<OutdoorSpaceKind, string | undefined>): string {
+  if (recipe.approval !== "approved") return `Not approved (${recipe.approval}).`;
+  if (query.scale && recipe.compatibleScales.length > 0 && !recipe.compatibleScales.includes(query.scale)) return `Scale mismatch: recipe supports ${recipe.compatibleScales.join(", ")}, project is ${query.scale}.`;
+  if (query.environment && recipe.environmentTags.length > 0 && !recipe.environmentTags.includes(query.environment) && !(query.semanticEnvironmentTags ?? []).some((tag) => recipe.environmentTags.includes(tag))) return `Environment mismatch: recipe is for ${recipe.environmentTags.join("/")}; project is ${query.environment}.`;
+  const shared = (query.styleTags ?? []).filter((tag) => recipe.styleTags.includes(tag));
+  if ((query.styleTags?.length ?? 0) > 0 && recipe.styleTags.length > 0 && shared.length === 0) return `Style mismatch: recipe is ${recipe.styleTags.join("/")}; project is ${(query.styleTags ?? []).join("/")}.`;
+  if (targetsOf(recipe, spaces, homes).length === 0) return "No compatible outdoor space was present for this recipe category or Knowledge filing.";
+  return "Compatible, but ranked below the per-space or generation retrieval limit.";
+}
+
 /**
  * The spaces a recipe serves. Filed under a Knowledge Need, it serves the spaces that need is the home of (filing says what it is
  * for). Filed nowhere, it serves the spaces of its category that its own words are about — the most specific ones — and, when
@@ -73,10 +98,9 @@ function targetsOf(recipe: DesignRecipe, spaces: readonly OutdoorSpace[], homes:
   return candidates.filter((s) => weight(s) === best).map((space) => ({ space, why: `category ${recipe.category}, its name and rules are about ${space.name.toLowerCase()}` }));
 }
 
-export function retrieveRecipes(recipes: readonly DesignRecipe[], spaces: readonly OutdoorSpace[], ctx: RetrievalContext, limit = MAX_RETRIEVED_RECIPES): RetrievedRecipe[] {
+export function retrieveRecipesWithDiagnostics(recipes: readonly DesignRecipe[], spaces: readonly OutdoorSpace[], ctx: RetrievalContext, limit = MAX_RETRIEVED_RECIPES): RecipeRetrievalResult {
   const approved = recipes.filter((r) => r.approval === "approved");
-  if (approved.length === 0) return [];
-  const query = { styleTags: [...ctx.styles], scale: ctx.scale, environment: ctx.environment };
+  const query = { styleTags: [...ctx.styles], scale: ctx.scale, environment: ctx.environment, semanticEnvironmentTags: semanticEnvironmentTags(ctx.brief) };
   const homes = new Map(spaces.map((s) => [s.kind, pickKnowledgeForSpace(s.kind, { brief: ctx.brief, styles: ctx.styles, environment: ctx.environment })?.id] as const));
   const homeTitle = (kind: OutdoorSpaceKind) => pickKnowledgeForSpace(kind, { brief: ctx.brief, styles: ctx.styles, environment: ctx.environment })?.title;
 
@@ -119,7 +143,14 @@ export function retrieveRecipes(recipes: readonly DesignRecipe[], spaces: readon
     .slice(0, GENERAL);
   for (const g of general) take(g.item, undefined, `brief: ${g.reasons.join(", ") || "matches the brief"}`, g.score);
 
-  return [...picked.values()].sort((a, b) => b.score - a.score).slice(0, limit);
+  const retrieved = [...picked.values()].sort((a, b) => b.score - a.score).slice(0, limit);
+  const selected = new Set(retrieved.map((entry) => entry.recipe.id));
+  const rejections = recipes.filter((recipe) => !selected.has(recipe.id)).map((recipe) => ({ id: recipe.id, name: recipe.name, reason: rejectionReason(recipe, query, spaces, homes) }));
+  return { retrieved, rejections };
+}
+
+export function retrieveRecipes(recipes: readonly DesignRecipe[], spaces: readonly OutdoorSpace[], ctx: RetrievalContext, limit = MAX_RETRIEVED_RECIPES): RetrievedRecipe[] {
+  return retrieveRecipesWithDiagnostics(recipes, spaces, ctx, limit).retrieved;
 }
 
 // ── Was it applied? ─────────────────────────────────────────────────────────

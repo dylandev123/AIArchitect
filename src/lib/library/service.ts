@@ -12,7 +12,7 @@ import { createRecipe, recordRecipeUse, setRecipeApproval, updateRecipe, type Re
 import { requestsFromProject } from "./requests";
 import { findRecipes, resolveAsset, type AssetIndexEntry } from "./retrieval";
 import { extractStyleTags } from "./taxonomy";
-import { retrieveRecipes, type RetrievedRecipe } from "./spaceRecipes";
+import { retrieveRecipes, retrieveRecipesWithDiagnostics, type RecipeRetrievalResult, type RetrievedRecipe } from "./spaceRecipes";
 import type { OutdoorSpace } from "@/lib/outdoor/spaces";
 import { mutateLibrary, readLibrary, type LibraryDoc } from "./store";
 
@@ -60,6 +60,14 @@ export function recipesForSpaces(brief: string, spaces: readonly OutdoorSpace[])
     if (recipes.length === 0) return [];
     return retrieveRecipes(recipes, spaces, { brief, styles: extractStyleTags(brief), scale: inferScaleFromBrief(brief), environment: inferSiteHints(brief).environment });
   }, []);
+}
+
+/** The same approved-recipe lookup, retaining durable reasons for every recipe that did not enter the generation prompt. */
+export function recipeRetrievalForSpaces(brief: string, spaces: readonly OutdoorSpace[]): Promise<RecipeRetrievalResult> {
+  return safely("recipe lookup", async () => {
+    const { recipes } = await readLibrary();
+    return retrieveRecipesWithDiagnostics(recipes, spaces, { brief, styles: extractStyleTags(brief), scale: inferScaleFromBrief(brief), environment: inferSiteHints(brief).environment });
+  }, { retrieved: [], rejections: [] });
 }
 
 /** Notes that generation used these recipes (`pending`), and later how it turned out. */

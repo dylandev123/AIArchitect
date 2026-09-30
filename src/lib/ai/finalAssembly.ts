@@ -22,7 +22,7 @@ import { pickDominantMass, resolveMasses, ROOF_KIND_TO_LEGACY_TYPE } from "@/lib
 import { v2SiteFrameForDocument } from "@/lib/architecture/siteFrame";
 import type { MassVolume } from "@/lib/architecture/document";
 import type { PipelineResult } from "@/lib/architecture/stages/pipeline";
-import type { DesignRecipe } from "@/types/library";
+import type { DesignRecipe, ReportRecipeRejection } from "@/types/library";
 import { providerErrorResponse } from "./providerErrors";
 import { sitePlanOperations, type SitePlan, type SitePlanContext } from "@/lib/architecture/stages/sitePlanStage";
 
@@ -78,6 +78,7 @@ export interface FinalAssemblyParams {
   recipes: DesignRecipe[];
   recipeIds: string[];
   retrieved: readonly RetrievedRecipe[];
+  recipeRejections?: readonly ReportRecipeRejection[];
   spaces: OutdoorSpace[];
   /** Total ms this call may spend, measured from `timings`'s own start (not from when this function was entered). */
   budgetMs: number;
@@ -91,7 +92,7 @@ export interface FinalAssemblyParams {
  * an already-produced `pipelineResult` instead of recomputing the whole staged sub-pipeline.
  */
 export async function runFinalAssembly(params: FinalAssemblyParams): Promise<NextResponse> {
-  const { brief, assets, baseRevision, library, usageMeta, timings, pipelineResult, recipes, recipeIds, retrieved, spaces, budgetMs } = params;
+  const { brief, assets, baseRevision, library, usageMeta, timings, pipelineResult, recipes, recipeIds, retrieved, recipeRejections = [], spaces, budgetMs } = params;
   const design = pipelineResult.design;
   const architecturalDesignDocument = pipelineResult.document;
   const docErrors = validateArchitecturalDesignDocument(architecturalDesignDocument);
@@ -172,7 +173,7 @@ export async function runFinalAssembly(params: FinalAssemblyParams): Promise<Nex
         // The learning loop: spaces → Knowledge → Asset Needs → starter Plans → recipe outcomes, written in one transaction and
         // reported. It is awaited (bounded by its own timeout) so the report says what was actually stored; it never throws.
         const capabilityRequests = [...architecturalCapabilityRequests(design), ...pipelineResult.capabilityRequests];
-        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId), capabilityRequests, architecturalDesign: design }));
+        const intelligence = await timings.timeAsync("learning", () => runPostGeneration({ json, brief, projectId: usageMeta.projectId, library, retrieved, recipeRejections, sitePlan: authoredSitePlan, attached, architecturalRequests: architecturalAssetRequests(design, usageMeta.projectId), capabilityRequests, architecturalDesign: design }));
         return NextResponse.json({
           summary: output.summary,
           json,

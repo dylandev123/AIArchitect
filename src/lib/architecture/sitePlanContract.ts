@@ -100,3 +100,26 @@ export function geometricGraphErrors(plan: SitePlan, ctx: SitePlanContext): stri
   }
   return errors;
 }
+
+/**
+ * A luxury villa explicitly asking for strong indoor-outdoor living needs a pool and connected living surfaces that read at
+ * the scale of its house. These are proportional minimums, not a replacement design: an accepted authored plan remains
+ * untouched, while an undersized one is returned to the authoring stage as a validation error.
+ */
+export function luxuryOutdoorCompositionErrors(plan: SitePlan, ctx: SitePlanContext): string[] {
+  const brief = ctx.brief.toLowerCase();
+  const luxuryVilla = /\b(luxury|estate|resort)\b/.test(brief) && /\b(villa|residence|home|house)\b/.test(brief);
+  const indoorOutdoor = /indoor[\s-]*outdoor|outdoor[\s-]*living|covered terrace|pool[\s-]*(?:side|deck|terrace)/.test(brief);
+  if (!luxuryVilla || !indoorOutdoor) return [];
+
+  const houseArea = ctx.house.width * ctx.house.depth;
+  const poolArea = plan.pool.width * plan.pool.depth;
+  const terraceArea = plan.terrace.width * plan.terrace.depth;
+  const deckArea = plan.poolDeck.width * plan.poolDeck.depth;
+  const errors: string[] = [];
+  if (poolArea < houseArea * 0.1) errors.push(`Luxury indoor-outdoor brief needs a substantial pool: ${poolArea.toFixed(1)}m² is under 10% of the ${houseArea.toFixed(1)}m² house footprint.`);
+  if (terraceArea < poolArea * 0.7) errors.push(`Outdoor-living terrace must be usable with the pool: ${terraceArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
+  if (deckArea < poolArea * 0.7) errors.push(`Pool deck must be usable around the pool: ${deckArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
+  if (!plan.landscape.some((zone) => zone.purpose === "pool-planting") || !plan.landscape.some((zone) => zone.purpose === "view-framing")) errors.push("Luxury pool composition needs both pool-planting and view-framing landscape zones.");
+  return errors;
+}

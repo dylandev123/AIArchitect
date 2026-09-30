@@ -20,6 +20,9 @@ export type AssetIndexEntry = Pick<CuratedAsset, "id" | "family" | "styleTags" |
   placementReady?: boolean;
   name?: string;
   tags?: string[];
+  /** Provenance retained in generation reports; it does not influence matching. */
+  assetType?: CuratedAsset["type"];
+  serverStored?: boolean;
 };
 
 /** Assets that can satisfy a global lookup: approved, a placeable object (not a material), and not project-local. */
@@ -32,7 +35,7 @@ export function isRetrievableAsset(a: CuratedAsset): boolean {
 }
 
 export function toAssetIndex(catalog: readonly CuratedAsset[]): AssetIndexEntry[] {
-  return catalog.filter(isRetrievableAsset).map(({ id, name, tags, family, styleTags, contextTags, dimensions, validation, type, successCount, failureCount }) => ({ id, name, tags, family, styleTags, contextTags, placementReady: type === "glb-model" && validation?.passed === true, dimensions: validation?.dimensions ?? dimensions, successCount, failureCount }));
+  return catalog.filter(isRetrievableAsset).map(({ id, name, tags, family, styleTags, contextTags, dimensions, validation, type, successCount, failureCount }) => ({ id, name, tags, family, styleTags, contextTags, assetType: type, placementReady: type === "glb-model" && validation?.passed === true, dimensions: validation?.dimensions ?? dimensions, successCount, failureCount }));
 }
 
 function dimensionFit(asset: NeedDimensions | undefined, want: NeedDimensions | undefined): { ok: boolean; bonus: number } {
@@ -109,9 +112,17 @@ export function scoreRecipe(recipe: DesignRecipe, q: RecipeQuery): Scored<Design
     reasons.push(`scale ${q.scale}`);
   }
   if (q.environment && recipe.environmentTags.length > 0) {
-    if (!recipe.environmentTags.includes(q.environment)) return null;
-    score += 0.15;
-    reasons.push(`environment ${q.environment}`);
+    if (recipe.environmentTags.includes(q.environment)) {
+      score += 0.15;
+      reasons.push(`environment ${q.environment}`);
+    } else {
+      const semantic = (q.semanticEnvironmentTags ?? []).find((tag) => recipe.environmentTags.includes(tag));
+      if (!semantic) return null;
+      // Context remains a relevance safeguard: this is a smaller score than an exact environment match and never relaxes
+      // approval, scale, style, category, or the per-space targeting rules.
+      score += 0.07;
+      reasons.push(`semantic environment ${semantic}`);
+    }
   }
   const want = q.styleTags ?? [];
   if (want.length > 0 && recipe.styleTags.length > 0) {

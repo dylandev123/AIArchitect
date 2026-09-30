@@ -12,11 +12,13 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
-import { recipesForSpaces } from "@/lib/library/service";
+import { recipeRetrievalForSpaces } from "@/lib/library/service";
+import { readLibrary } from "@/lib/library/store";
+import { assetBackend } from "@/lib/assets/serverStore";
+import { toAssetIndex } from "@/lib/library/retrieval";
 import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { INITIAL_CAPABILITIES } from "@/lib/library/capabilities";
-import { ASSET_CATEGORIES } from "@/types/library";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
 import { validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
 import { compileArchitecture } from "@/lib/architecture/compiler";
@@ -67,37 +69,6 @@ interface RequestBody {
   scope?: unknown;
   /** Imported PBR materials the model may reference by id. */
   assets?: AssetRef[];
-  /** Approved reusable objects (GLBs) in the admin's library, so a request one of them fits is not counted as a Need. */
-  libraryAssets?: unknown;
-}
-
-const MAX_LIBRARY_ASSETS = 500;
-
-const strings = (v: unknown, max = 8): string[] => (Array.isArray(v) ? v.filter((t): t is string => typeof t === "string").slice(0, max).map((t) => t.slice(0, 40)) : []);
-const dim = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) && v > 0 && v < 1000 ? v : undefined);
-const count = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : undefined);
-
-/** Untrusted client input: keep only what retrieval reads, in the shapes it expects. */
-function parseLibraryAssets(raw: unknown): AssetIndexEntry[] {
-  if (!Array.isArray(raw)) return [];
-  const out: AssetIndexEntry[] = [];
-  for (const a of raw.slice(0, MAX_LIBRARY_ASSETS)) {
-    if (typeof a?.id !== "string" || !(ASSET_CATEGORIES as readonly string[]).includes(a.family)) continue;
-    const d = typeof a.dimensions === "object" && a.dimensions !== null ? a.dimensions : {};
-    out.push({
-      id: a.id.slice(0, 80),
-      placementReady: typeof a.placementReady === "boolean" ? a.placementReady : undefined,
-      name: typeof a.name === "string" ? a.name.slice(0, 80) : undefined,
-      tags: strings(a.tags, 12),
-      family: a.family,
-      styleTags: strings(a.styleTags),
-      contextTags: strings(a.contextTags),
-      dimensions: { width: dim(d.width), depth: dim(d.depth), height: dim(d.height) },
-      successCount: count(a.successCount),
-      failureCount: count(a.failureCount),
-    });
-  }
-  return out;
 }
 
 function parseAssets(raw: unknown): AssetRef[] {
@@ -159,13 +130,12 @@ export async function POST(req: NextRequest) {
       );
     }
     const usageMeta: UsageMeta = { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId() };
-    const library = parseLibraryAssets(body.libraryAssets);
     // Live progressive generation: the viewport can watch masses and roofs appear one at a time. Any caller that
     // doesn't ask for this (including every existing test) gets the exact same single JSON response as before.
     if (req.headers.get("accept")?.includes("text/event-stream")) {
-      return streamInitialDesign(prompt, assets, baseRevision, library, usageMeta);
+      return streamInitialDesign(prompt, assets, baseRevision, usageMeta);
     }
-    return generateInitialDesign(prompt, assets, baseRevision, library, usageMeta);
+    return generateInitialDesign(prompt, assets, baseRevision, usageMeta);
   }
 
   const scope = scopeFromHint(body.scope, prompt);
@@ -257,13 +227,13 @@ const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSO
  * result (success or error) is delivered as one last `done`/`error` frame instead of the HTTP response
  * itself — so the two paths can never semantically drift, only in delivery cadence.
  */
-function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta): NextResponse {
+function streamInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, usageMeta: UsageMeta): NextResponse {
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const emit = (event: PipelineStageEvent) => controller.enqueue(encoder.encode(sseFrame("stage", event)));
       try {
-        const response = await generateInitialDesign(brief, assets, baseRevision, library, usageMeta, emit);
+        const response = await generateInitialDesign(brief, assets, baseRevision, usageMeta, emit);
         const payload = (await response.json()) as Record<string, unknown>;
         const frameEvent = response.ok ? "done" : "error";
         controller.enqueue(encoder.encode(sseFrame(frameEvent, response.ok ? payload : { ...payload, status: response.status })));
@@ -360,12 +330,25 @@ function logPipelineCrash(error: unknown, diagnosticsSoFar: readonly StageDiagno
 }
 
 /** Initial design from a brief: structured output -> typed ops on a blank base -> validated -> returned. */
-async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, library: AssetIndexEntry[], usageMeta: UsageMeta, emit: (event: PipelineStageEvent) => void = () => {}) {
+async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevision: string, usageMeta: UsageMeta, emit: (event: PipelineStageEvent) => void = () => {}) {
   const timings = createTimings();
+  // Only the server catalog and its stored GLB ids are authoritative for generation. If it is unavailable, generation remains
+  // possible but retrieves no reusable assets rather than trusting a browser cache or invented client metadata.
+  let library: AssetIndexEntry[] = [];
+  let capabilities = INITIAL_CAPABILITIES;
+  try {
+    const [{ assets: storedAssets, glbIds }, snapshot] = await Promise.all([assetBackend().list(), readLibrary()]);
+    const storedGlbs = new Set(glbIds);
+    library = toAssetIndex(storedAssets.filter((asset) => asset.type !== "glb-model" || storedGlbs.has(asset.id))).map((asset) => ({ ...asset, serverStored: true }));
+    capabilities = snapshot.capabilities;
+  } catch (error) {
+    console.warn("[generation] server library lookup failed; reusable-asset retrieval is unavailable:", error instanceof Error ? error.message : error);
+  }
   // The outdoor spaces this brief calls for, and the approved recipes that describe how to build each (a proven pattern per space,
   // not one lookup for the whole brief). A library problem never blocks generation (see `safely`).
   const planned = planOutdoorSpaces({ brief });
-  const retrieved = await timings.timeAsync("recipeLookup", () => recipesForSpaces(brief, planned));
+  const recipeLookup = await timings.timeAsync("recipeLookup", () => recipeRetrievalForSpaces(brief, planned));
+  const retrieved = recipeLookup.retrieved;
   const recipes = retrieved.map((r) => r.recipe);
   const recipeIds = recipes.map((r) => r.id);
   const spaces = planned.map((sp) => ({ ...sp, recipeIds: retrieved.filter((r) => r.spaces.includes(sp.kind)).map((r) => r.recipe.id) }));
@@ -374,7 +357,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   const hints = inferSiteHints(brief);
   const pipelineInput: PipelineInput = {
     brief, hints, scale: hints.projectScale, recipes,
-    availableCapabilities: INITIAL_CAPABILITIES.filter((capability) => capability.status !== "missing").map((capability) => capability.id),
+    availableCapabilities: capabilities.filter((capability) => capability.status === "supported" || capability.status === "partial").map((capability) => capability.id),
     variationSeed: usageMeta.projectId ?? brief, projectId: usageMeta.projectId,
   };
   // Stages 1-5 (Intent+Site Strategy+Primary Mass as one call, Recursive Mass Expansion, Roof Composition) run
@@ -418,7 +401,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
     result: { ...pipelineResult, diagnostics },
     finalAssembly: { assets, recipes, retrieved, spaces, library, baseRevision },
   });
-  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, spaces, budgetMs: GENERATION_BUDGET_MS, sitePlan });
+  const response = await runFinalAssembly({ brief, assets, baseRevision, library, usageMeta, timings, pipelineResult: { ...pipelineResult, diagnostics }, recipes, recipeIds, retrieved, recipeRejections: recipeLookup.rejections, spaces, budgetMs: GENERATION_BUDGET_MS, sitePlan });
   // Peek at the response without consuming the body the caller still needs to return: `response.clone()` tees
   // the stream, so this never affects what actually reaches the client.
   let finalAssemblyError: string | undefined;

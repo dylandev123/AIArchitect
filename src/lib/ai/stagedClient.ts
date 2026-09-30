@@ -6,7 +6,6 @@ import { useAdminStore } from "@/store/useAdminStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
 import { useArchitectureDebugStore } from "@/store/useArchitectureDebugStore";
-import { toAssetIndex } from "@/lib/library/retrieval";
 import { revisionOf } from "@/lib/house/revision";
 import type { TimeOfDay } from "@/types/project";
 import type { CapabilityRequest, GenerationReport } from "@/types/library";
@@ -115,7 +114,6 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
         currentHouseJson: baseJson,
         baseRevision,
         assets: useAssetStore.getState().getPBRMaterials().map((a) => ({ id: a.id, name: a.name })),
-        libraryAssets: toAssetIndex(useAssetStore.getState().catalog),
       }),
     });
   } catch {

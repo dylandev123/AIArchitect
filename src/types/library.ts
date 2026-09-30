@@ -1,4 +1,5 @@
 import type { AssetSpec } from "@/lib/assets/native/spec";
+import type { SitePlan } from "@/lib/architecture/sitePlanContract";
 import type { ProjectScale, SiteEnvironment } from "./house";
 
 /**
@@ -141,6 +142,8 @@ export interface RecipeQuery {
   styleTags?: string[];
   scale?: ProjectScale;
   environment?: SiteEnvironment;
+  /** Broader, brief-derived environmental signals (for example ocean-facing → beach). They soften only context matching. */
+  semanticEnvironmentTags?: SiteEnvironment[];
 }
 
 export interface Scored<T> {
@@ -323,6 +326,9 @@ export interface ReportRecipe {
   note: string;
 }
 
+/** A recipe considered for this generation but excluded before the prompt was built. */
+export interface ReportRecipeRejection { id: string; name: string; reason: string; }
+
 export interface ReportAsset {
   status?: "Retrieved" | "Applied" | "Rendered" | "Failed";
   placementIds?: string[];
@@ -333,6 +339,8 @@ export interface ReportAsset {
   space: string;
   /** The project feature it was attached to, when it was. */
   feature?: string;
+  /** Confirms the retrieved object was a server-authoritative GLB, not a procedural fallback. */
+  serverGlb?: boolean;
   applied: boolean;
   note: string;
 }
@@ -425,6 +433,10 @@ export interface GenerationReport {
   spaces: ReportSpace[];
   areas: { area: DesignArea; relevant: boolean; score: number; reason: string; weak: boolean }[];
   recipes: ReportRecipe[];
+  /** Exact accepted Site Plan that produced the saved pool, deck, terrace, paths and landscape. */
+  sitePlan?: SitePlan;
+  /** Rejections are durable audit evidence, not a live re-evaluation against a changed library. */
+  recipeRejections?: ReportRecipeRejection[];
   capabilitiesUsed: { id: string; name: string; stage: string; status: "supported" | "partial"; note?: string }[];
   capabilityGaps: { id: string; name: string; stage: string; fallback: string; status: CapabilityStatus }[];
   /** Pre-massing intelligence retained with the generation so future analysis can learn strategy/site fit. */

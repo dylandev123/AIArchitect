@@ -79,7 +79,8 @@ export function reportAssets(
     const category = a.request.category;
     const kinds = home[category] ?? [];
     const space = spaces.find((s) => kinds.includes(s.kind) && s.realized) ?? spaces.find((s) => kinds.includes(s.kind));
-    rows.push({ id: a.assetId, name: nameOf(a.assetId), family: category, component: category, space: space ? spaceName(space.kind) : "site", feature: `building ${a.index + 1}`, applied: true, status: "Applied", placementIds: [`building-${a.index}`], note: `Attached to building ${a.index + 1}; the library model draws in place of the procedural ${category}.` });
+    const asset = library.find((candidate) => candidate.id === a.assetId);
+    rows.push({ id: a.assetId, name: nameOf(a.assetId), family: category, component: category, space: space ? spaceName(space.kind) : "site", feature: `building ${a.index + 1}`, serverGlb: asset?.assetType === "glb-model" && asset.serverStored === true, applied: true, status: "Applied", placementIds: [`building-${a.index}`], note: `Attached to building ${a.index + 1}; the library model draws in place of the procedural ${category}.` });
   }
   for (const s of result.supplied) {
     const def = COMPONENTS[s.component];
@@ -92,6 +93,7 @@ export function reportAssets(
       space: spaceName(s.space),
       applied: placed.length > 0,
       status: placed.length ? "Applied" : "Retrieved",
+      serverGlb: s.asset.assetType === "glb-model" && s.asset.serverStored === true,
       placementIds: placed.map(outdoorTrackingId),
       note: placed.length ? `${placed.length} placements for ${def?.name ?? s.component}.` : `Retrieved, but no safe supported placement for ${def?.name ?? s.component}; Need remains open.`,
     });

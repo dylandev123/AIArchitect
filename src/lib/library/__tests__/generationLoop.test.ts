@@ -93,6 +93,14 @@ describe("one successful generation, end to end", () => {
     expect(report.placement.garages.every((g) => g.side === "arrival")).toBe(true);
   });
 
+  it("persists accepted Site Plan geometry and recipe rejection evidence with the generation", async () => {
+    const sitePlan = { entrance: { wall: "north" as const, offset: 6 }, driveway: { wall: "north" as const, offset: 4, width: 4, length: 18 }, parking: [{ x: 0, z: -15, width: 6, depth: 8 }], pool: { wall: "south" as const, offset: 3, distance: 6, width: 9, depth: 4, waterDepth: 1.4 }, terrace: { wall: "south" as const, offset: 2, width: 10, depth: 4 }, poolDeck: { x: 0, z: 12, width: 9, depth: 4 }, paths: [], landscape: [{ purpose: "pool-planting" as const, kind: "garden" as const, x: 4, z: 14, width: 3, depth: 3 }, { purpose: "view-framing" as const, kind: "garden" as const, x: -4, z: 14, width: 3, depth: 3 }] };
+    const report = await runPostGeneration(input({ sitePlan, recipeRejections: [{ id: "recipe-1", name: "Hillside Terrace", reason: "Environment mismatch: recipe is for hillside; project is beach." }] }));
+    expect(report.sitePlan).toEqual(sitePlan);
+    expect(report.recipeRejections).toEqual([{ id: "recipe-1", name: "Hillside Terrace", reason: "Environment mismatch: recipe is for hillside; project is beach." }]);
+    expect((await readLibrary()).generations[0]).toMatchObject({ sitePlan, recipeRejections: report.recipeRejections });
+  });
+
   it("counts demand again on the next generation without creating a second plan", async () => {
     const first = await runPostGeneration(input());
     const second = await runPostGeneration(input({ projectId: "p2" }));

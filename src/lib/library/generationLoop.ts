@@ -3,7 +3,8 @@ import { inferScaleFromBrief, isProjectScale } from "@/lib/house/scale";
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { COMPONENTS, plannedAssetFor } from "@/lib/outdoor/components";
 import { planOutdoorSpaces, realizeSpaces, type OutdoorSpace } from "@/lib/outdoor/spaces";
-import type { ArchitecturalCapability, ArchitectureReview, AssetPlan, AssetRequest, CapabilityNeed, CapabilityRequest, GenerationReport, KnowledgeNeed, Need, ReportKnowledge, ReportPlan, ReportStep } from "@/types/library";
+import type { ArchitecturalCapability, ArchitectureReview, AssetPlan, AssetRequest, CapabilityNeed, CapabilityRequest, GenerationReport, KnowledgeNeed, Need, ReportKnowledge, ReportPlan, ReportRecipeRejection, ReportStep } from "@/types/library";
+import type { SitePlan } from "@/lib/architecture/sitePlanContract";
 import type { SiteEnvironment } from "@/types/house";
 import type { ArchitecturalDesign } from "@/lib/architecture/designEngine";
 import { reviewCapabilityRequests, scoreArchitecture } from "@/lib/architecture/critic";
@@ -55,6 +56,10 @@ export interface LoopInput {
   library: readonly AssetIndexEntry[];
   /** The recipes retrieved for this generation (before the model call). */
   retrieved: readonly RetrievedRecipe[];
+  /** Rejected recipe candidates and their reason at lookup time, for the durable generation audit. */
+  recipeRejections?: readonly ReportRecipeRejection[];
+  /** The exact accepted Site Plan before it is compiled into project operations. */
+  sitePlan?: SitePlan;
   /** Library assets attached to project features. */
   attached: readonly AttachedAsset[];
   /** Mesh-free architectural components the concept selected. Missing ones use the normal Need → Plan → Review flow. */
@@ -90,7 +95,7 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     }
   };
 
-  const { json, brief, projectId, library, retrieved, attached, architecturalRequests = [], capabilityRequests = [] } = input;
+  const { json, brief, projectId, library, retrieved, attached, architecturalRequests = [], capabilityRequests = [], recipeRejections = [], sitePlan } = input;
   let root: Rec = {};
   try {
     const parsed: unknown = JSON.parse(json);
@@ -293,6 +298,8 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     })),
     areas: areas.map((a) => ({ area: a.area, relevant: a.relevant, score: a.score, reason: a.reason, weak: a.weak })),
     recipes,
+    ...(sitePlan ? { sitePlan } : {}),
+    ...(recipeRejections.length ? { recipeRejections: [...recipeRejections] } : {}),
     capabilitiesUsed,
     capabilityGaps,
     ...(input.architecturalDesign ? {

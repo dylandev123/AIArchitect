@@ -195,9 +195,21 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
             ))}
           </Section>
 
-          <Section title="Capabilities used" count={report.capabilitiesUsed?.length ?? 0}>
-            {(report.capabilitiesUsed ?? []).length === 0 && <Empty>No architectural capability was requested.</Empty>}
-            {(report.capabilitiesUsed ?? []).map((c) => <p key={`${c.id}-${c.stage}`} className="text-[11px] text-neutral-400"><span className={c.status === "supported" ? "text-emerald-400" : "text-amber-300"}>{c.status === "supported" ? "✓" : "◐"}</span> <span className="font-medium text-neutral-200">{c.name}</span> <span className="text-neutral-600">· {c.stage}{c.note ? ` · ${c.note}` : ""}</span></p>)}
+          <Section title="Recipe rejections" count={report.recipeRejections?.length ?? 0}>
+            {(report.recipeRejections ?? []).length === 0 && <Empty>No recipe rejections recorded.</Empty>}
+            {(report.recipeRejections ?? []).map((r) => <p key={r.id} className="text-[11px] text-neutral-400"><span className="font-medium text-neutral-200">{r.name}</span><span className="block text-neutral-600">{r.reason}</span></p>)}
+          </Section>
+
+          {report.sitePlan && (
+            <Section title="Accepted Site Plan geometry">
+              <p className="text-[11px] text-neutral-400">Pool {report.sitePlan.pool.width}×{report.sitePlan.pool.depth} m · deck {report.sitePlan.poolDeck.width}×{report.sitePlan.poolDeck.depth} m · terrace {report.sitePlan.terrace.width}×{report.sitePlan.terrace.depth} m</p>
+              <p className="text-[11px] text-neutral-600">{report.sitePlan.paths.length} paths · {report.sitePlan.landscape.map((zone) => zone.purpose).join(", ")}</p>
+            </Section>
+          )}
+
+          <Section title="Capabilities requested & resolved" count={report.capabilitiesUsed?.length ?? 0}>
+            {(report.capabilitiesUsed ?? []).length === 0 && <Empty>No recognized architectural capability was requested.</Empty>}
+            {(report.capabilitiesUsed ?? []).map((c) => <p key={`${c.id}-${c.stage}`} className="text-[11px] text-neutral-400"><span className={c.status === "supported" ? "text-emerald-400" : "text-amber-300"}>{c.status === "supported" ? "✓ used" : "◐ partial"}</span> <span className="font-medium text-neutral-200">{c.name}</span> <span className="text-neutral-600">· requested by {c.stage}{c.note ? ` · ${c.note}` : ""}</span></p>)}
           </Section>
 
           <Section title="Capability gaps" count={report.capabilityGaps?.length ?? 0}>
@@ -231,11 +243,11 @@ function ReportCard({ report, local, onNavigate }: { report: GenerationReport; l
             </Section>
           )}
 
-          <Section title="Assets retrieved" count={report.assets.length}>
+          <Section title="Library assets retrieved & placed" count={report.assets.length}>
             {report.assets.length === 0 && <Empty>No approved library asset fit a space or feature.</Empty>}
             {report.assets.map((a) => (
               <p key={`${a.id}-${a.component}-${a.space}`} className="text-[11px] text-neutral-400">
-                <span className="font-medium text-neutral-200">{a.name}</span> <span className="text-neutral-600">— {a.space}{a.feature ? ` · ${a.feature}` : ` · ${a.component}`}</span> <span>{a.status ?? (a.applied ? "Applied" : "Retrieved")}</span>
+                <span className="font-medium text-neutral-200">{a.name}</span>{a.serverGlb && <span className="ml-1 rounded bg-sky-500/10 px-1 py-0.5 text-[9px] text-sky-300">server GLB</span>} <span className="text-neutral-600">— {a.space}{a.feature ? ` · ${a.feature}` : ` · ${a.component}`}</span> <span>{a.status ?? (a.applied ? "Applied" : "Retrieved")}</span>
                 <span className="block text-neutral-600">{a.note}</span>
               </p>
             ))}
