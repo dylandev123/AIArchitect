@@ -5,8 +5,10 @@ import { STYLE_PROFILE } from "@/lib/assets/native/styleProfile";
 import type { AiRequestType } from "@/lib/ai/usage/types";
 import { MATERIAL_TYPES } from "@/lib/house/materials";
 import type { AssetCategory, NeedDimensions, PlannedAsset } from "@/types/library";
-import { saveNativeSpec } from "./service";
+import { finishNativeGeneration, reserveNativeGeneration } from "./service";
 import { readLibrary } from "./store";
+import { createHash } from "node:crypto";
+import { resolveNativeCapability } from "./nativeCapabilityResolver";
 
 /**
  * Native generation for one planned asset: the AI writes an AssetSpec (never vertices), it is validated and built
@@ -92,14 +94,19 @@ export interface NativeGenerateInput {
 export const nativeRequestType = (attempt: NativeAttempt): AiRequestType => (attempt === "repair" ? "native_asset_retry" : "native_asset");
 
 /** Room for a full spec (48 parts) with slack; anything longer is cut, which is still enough context to fix the named problem. */
-const PREVIOUS_SPEC_LIMIT = 14_000;
+const PREVIOUS_SPEC_LIMIT = 4_000;
 
 /**
  * The retry prompt: the original request, then the exact validation error and the spec that caused it. The error text is the
  * validator's own (never paraphrased), because it names the part, value and limit to change.
  */
 export function buildRepairPrompt(prompt: string, previous: unknown, error: string): string {
-  const spec = JSON.stringify(previous ?? null);
+  // Preserve identity and the likely failing part, rather than repaying input tokens for an entire large spec.
+  const raw = previous && typeof previous === "object" ? previous as Record<string, unknown> : previous;
+  const parts: Record<string, unknown>[] | undefined = raw && typeof raw === "object" && Array.isArray((raw as Record<string, unknown>).parts) ? (raw as Record<string, unknown>).parts as Record<string, unknown>[] : undefined;
+  const mentioned = typeof error === "string" ? error.match(/(?:Part )?"([^"]+)"/)?.[1] : undefined;
+  const compact = parts ? { ...(raw as Record<string, unknown>), parts: parts.filter((p) => !mentioned || p.role === mentioned).slice(0, 8), partCount: parts.length } : raw;
+  const spec = JSON.stringify(compact ?? null);
   return [
     prompt,
     "",
@@ -199,14 +206,35 @@ export async function generateNativeSpec(
   if (opts.instruction && !asset.spec) return { ok: false, status: 409, error: "Nothing to refine yet: generate the asset first." };
   if (asset.generated) return { ok: false, status: 409, error: "This asset is already in the library." };
 
-  const outcome = await generateSpecWithRepair(generate, buildNativePrompt(asset, plan.title, opts.instruction ? { instruction: opts.instruction, current: asset.spec! } : undefined));
-  if (!outcome.ok) return outcome;
+  const fingerprint = createHash("sha256").update(JSON.stringify({ asset: { name: asset.name, category: asset.category, description: asset.description, style: asset.style, material: asset.material, dimensions: asset.dimensions, generationPrompt: asset.generationPrompt }, instruction: opts.instruction ?? "", current: opts.instruction ? asset.spec : undefined })).digest("hex");
+  const reservation = await reserveNativeGeneration(planId, plannedAssetId, fingerprint);
+  if (!reservation.ok) return reservation;
+  if (reservation.value === "busy") return { ok: false, status: 409, error: "This exact native generation is already in progress." };
+
+  // Templates are deliberately generic families, not a named-asset exception list. They take the exact same
+  // validation/build/save path as an AI spec and therefore never bypass the library contract or incur model cost.
+  if (!opts.instruction) {
+    const template = resolveNativeCapability(asset).template;
+    if (template) {
+      const built = buildAsset(template);
+      if (built.ok) {
+        const noted = await finishNativeGeneration(planId, plannedAssetId, fingerprint, { spec: built.asset.spec });
+        if (!noted.ok) { built.asset.meshes.forEach((m) => m.geometry.dispose()); return noted; }
+        return specResult({ ok: true, kind: "built", asset: built.asset });
+      }
+    }
+  }
+
+  let outcome: SpecOutcome;
+  try { outcome = await generateSpecWithRepair(generate, buildNativePrompt(asset, plan.title, opts.instruction ? { instruction: opts.instruction, current: asset.spec! } : undefined)); }
+  catch (err) { await finishNativeGeneration(planId, plannedAssetId, fingerprint); throw err; }
+  if (!outcome.ok) { await finishNativeGeneration(planId, plannedAssetId, fingerprint); return outcome; }
   if (outcome.kind === "external") {
-    const noted = await saveNativeSpec(planId, plannedAssetId, { route: "external-generation-recommended" });
+    const noted = await finishNativeGeneration(planId, plannedAssetId, fingerprint, { route: "external-generation-recommended" });
     if (!noted.ok) return noted;
     return { ok: true, kind: "external", reason: outcome.reason };
   }
-  const noted = await saveNativeSpec(planId, plannedAssetId, { spec: outcome.asset.spec });
+  const noted = await finishNativeGeneration(planId, plannedAssetId, fingerprint, { spec: outcome.asset.spec });
   if (!noted.ok) {
     outcome.asset.meshes.forEach((m) => m.geometry.dispose());
     return noted;

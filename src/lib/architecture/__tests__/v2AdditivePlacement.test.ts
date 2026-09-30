@@ -25,8 +25,16 @@ describe("generic V2 additive placement", () => {
     expect(next.outdoorAssetPlacements[0]).toMatchObject({ assetId: "chair-glb", role: "lounge-armchair", position: expect.arrayContaining([expect.any(Number), 0]) });
   });
 
-  it("reports the real missing-approved-asset reason", () => {
+  it("uses grounded, collision-checked procedural placeholders when no approved GLB exists", () => {
     const root = { architecturalDesignDocument: ARCHITECTURE_FIXTURES.modernTropicalPavilionHouse, sitePlan: plan };
-    expect(placeV2AdditiveAsset(root, "add a lounge chair by the pool", [], [])).toMatchObject({ ok: false, code: "NO_APPROVED_ASSET" });
+    const before = structuredClone(root);
+    const result = placeV2AdditiveAsset(root, "add two lounge chairs beside the pool facing the water", [], []);
+    expect(result).toMatchObject({ ok: true, object: "chair", assetId: "procedural-v2-chair", usedProceduralFallback: true });
+    if (!result.ok) throw new Error(result.error);
+    const next = JSON.parse(result.json);
+    expect(next.architecturalDesignDocument).toEqual(before.architecturalDesignDocument);
+    expect(next.sitePlan).toEqual(before.sitePlan);
+    expect(next.outdoorAssetPlacements).toHaveLength(2);
+    expect(next.outdoorAssetPlacements.every((p: { assetId: string; position: number[]; rotation: number[] }) => p.assetId === "procedural-v2-chair" && p.position[1] === 0 && Number.isFinite(p.rotation[1]))).toBe(true);
   });
 });

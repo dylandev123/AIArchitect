@@ -11,6 +11,13 @@ const cap = (id: string, name: string, category: CapabilityCategory, status: Cap
 
 /** Audited against the current operation schema and procedural renderers. Unsupported entries are intentionally explicit. */
 const SEEDS: Seed[] = [
+  cap("native-vegetation", "Vegetation / Tree", "asset-generation", "partial", "Deterministic primitives can make a simple stylized trunk-and-canopy approximation; organic fidelity remains external.", ["height", "canopyRadius"]),
+  cap("native-seating", "Seating", "asset-generation", "supported", "Parameterized chairs, stools, benches and loungers."),
+  cap("native-tables", "Tables", "asset-generation", "supported", "Parameterized dining and side tables."),
+  cap("native-lighting", "Lighting", "asset-generation", "supported", "Parameterized lamps and pendant lights."),
+  cap("native-planters", "Planters", "asset-generation", "supported", "Parameterized pots and planters."),
+  cap("native-umbrellas", "Umbrellas", "asset-generation", "supported", "Parameterized umbrella and parasol primitives."),
+  cap("native-railings", "Railings", "asset-generation", "partial", "Tube and slat approximations are supported; architectural railings remain architecture capabilities."),
   cap("split-mass", "Split Mass", "massing", "supported", "Uses independently placed wing buildings.", ["width", "depth", "offset"]),
   cap("rotate-mass", "Rotate Mass", "massing", "supported", "Detached wings accept a vertical rotation.", ["rotation"], ["Main house cannot rotate"]),
   cap("offset-mass", "Offset Mass", "massing", "supported", "Wings can be placed at site coordinates.", ["x", "z"]),
@@ -50,7 +57,7 @@ const SEEDS: Seed[] = [
 const pluginMetadata = new Map(capabilityPlugins().map((plugin) => [plugin.metadata.id, plugin.metadata]));
 export const INITIAL_CAPABILITIES: ArchitecturalCapability[] = SEEDS.map((x) => {
   const plugin = pluginMetadata.get(x.id);
-  return { ...x, ...(plugin ? { name: plugin.name, category: plugin.category, status: plugin.status, description: plugin.description, parameters: plugin.parameters, constraints: plugin.constraints, version: plugin.version, implementationNotes: plugin.implementationNotes, visualImpact: plugin.visualImpact, implementationDifficulty: plugin.implementationDifficulty, performanceCost: plugin.performanceCost, architecturalImportance: plugin.architecturalImportance } : {}), usageCount: 0, successCount: 0, failureCount: 0, created_at: now, updated_at: now };
+  return { ...x, domain: x.category === "asset-generation" ? "native-asset" : "architecture", ...(plugin ? { name: plugin.name, category: plugin.category, status: plugin.status, description: plugin.description, parameters: plugin.parameters, constraints: plugin.constraints, version: plugin.version, implementationNotes: plugin.implementationNotes, visualImpact: plugin.visualImpact, implementationDifficulty: plugin.implementationDifficulty, performanceCost: plugin.performanceCost, architecturalImportance: plugin.architecturalImportance } : {}), usageCount: 0, successCount: 0, failureCount: 0, created_at: now, updated_at: now };
 });
 const aliases: Record<string, string> = { "raised floating roof plane": "floating-roof", "roof with shadow gap": "floating-roof", "floating roof plane": "floating-roof", "rotate wing": "rotate-mass", "rotate mass": "rotate-mass", "courtyard villa": "courtyard-composition", "corner glass": "corner-glazing", "deep eaves": "deep-overhang" };
 export function normalizeCapability(text: string): string | undefined {

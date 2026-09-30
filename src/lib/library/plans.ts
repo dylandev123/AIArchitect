@@ -33,6 +33,8 @@ export const plannedAssetSchema = z.object({
   route: z.enum(ASSET_ROUTES).optional(),
   spec: assetSpecSchema.optional(),
   job: z.object({ providerId: z.string().max(60), jobId: z.string().max(200), submittedAt: z.string().max(40) }).optional(),
+  generationFingerprint: z.string().max(128).optional(),
+  generationInFlight: z.object({ fingerprint: z.string().max(128), startedAt: z.string().max(40) }).optional(),
 });
 
 /** What the admin submits to save a plan; ids, timestamps are assigned by the store. */
@@ -65,7 +67,7 @@ export function finalizeGenerationPrompt(prompt: string, asset: Pick<PlannedAsse
 export function createPlan(input: PlanInput, now: Date = new Date(), id: string = crypto.randomUUID()): AssetPlan {
   const at = now.toISOString();
   // Progress and specs are server-owned: a new plan starts with none, whatever the client sent.
-  const assets = input.assets.map((a) => ({ ...a, assetId: undefined, generated: false, job: undefined, spec: undefined, route: a.route ?? nativeRoute(a) }));
+  const assets = input.assets.map((a) => ({ ...a, assetId: undefined, generated: false, job: undefined, spec: undefined, generationFingerprint: undefined, generationInFlight: undefined, route: a.route ?? nativeRoute(a) }));
   return { id, title: input.title, knowledgeId: input.knowledgeId, needId: input.needId, status: input.status, created_at: at, updated_at: at, assets };
 }
 
@@ -78,7 +80,7 @@ export function updatePlan(plan: AssetPlan, input: PlanInput, now: Date = new Da
   const assets = input.assets.map((a) => {
     const prior = stored.get(a.id);
     const route = a.route ?? prior?.route ?? nativeRoute(a);
-    return prior ? { ...a, route, assetId: prior.assetId, generated: prior.generated, job: prior.job, spec: prior.spec } : { ...a, route, assetId: undefined, generated: false, job: undefined, spec: undefined };
+    return prior ? { ...a, route, assetId: prior.assetId, generated: prior.generated, job: prior.job, spec: prior.spec, generationFingerprint: prior.generationFingerprint, generationInFlight: prior.generationInFlight } : { ...a, route, assetId: undefined, generated: false, job: undefined, spec: undefined, generationFingerprint: undefined, generationInFlight: undefined };
   });
   return { ...plan, title: input.title, status: input.status, assets, updated_at: now.toISOString() };
 }

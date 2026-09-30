@@ -8,6 +8,9 @@ export interface UsageMeta {
   requestType: AiRequestType;
   scope: AiScope;
   model: string;
+  stage?: string; assetId?: string | null; planId?: string | null; promptFingerprint?: string;
+  retryNumber?: number; retryReason?: string | null; operationId?: string; parentUsageId?: string | null;
+  maxOutputTokens?: number;
 }
 
 const n = (v: number | undefined) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : 0);

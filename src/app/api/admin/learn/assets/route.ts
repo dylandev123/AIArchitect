@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateText, NoObjectGeneratedError, Output } from "ai";
 import { z } from "zod";
 import { isAdminRequest } from "@/lib/admin/auth";
-import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
+import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAssetPlanningModel, getAssetPlanningModelId, isAiConfigured } from "@/lib/ai/model";
 import { withUsageLogging } from "@/lib/ai/usage/track";
 import { planAssets, planOutputSchema } from "@/lib/library/planner";
 
@@ -31,9 +31,9 @@ export async function POST(req: NextRequest) {
     const result = await planAssets(
       { needId: body.data.needId, knowledgeId: body.data.knowledgeId },
       async ({ system, prompt }) => {
-        const { output } = await withUsageLogging({ projectId: null, requestType: "asset_plan", scope: "world", model: getAiModelId() }, () =>
+        const { output } = await withUsageLogging({ projectId: null, requestType: "asset_plan", scope: "world", model: getAssetPlanningModelId(), maxOutputTokens: 8000, stage: "asset-planning" }, () =>
           generateText({
-            model: getAiModel(),
+            model: getAssetPlanningModel(),
             maxOutputTokens: 8000,
             system,
             messages: [{ role: "user", content: prompt }],

@@ -118,6 +118,14 @@ export function recordMissingAssetNeeds(json: string, brief: string, projectId: 
   }, []);
 }
 
+/** Records a deterministic edit's missing visual asset. This is intentionally local-only: it never queues a model call. */
+export function recordPriorityAssetNeed(request: AssetRequest): Promise<Need | undefined> {
+  return safely("additive asset need recording", () => mutateLibrary((s) => {
+    const need = recordRequest(s.needs, request);
+    return { put: [{ kind: "need" as const, data: need }], result: need };
+  }), undefined);
+}
+
 /**
  * After a design is built: scores its design areas and, for each weak one, creates or increments the Knowledge
  * Need it belongs to ("Luxury Outdoor Living", not "Gazebo"). Best-effort like every other library write.
@@ -285,6 +293,24 @@ export function completePlannedAsset(planId: string, plannedAssetId: string, ass
 /** The native generator's output for a planned asset: a spec awaiting review, or a verdict that it needs an external provider. */
 export function saveNativeSpec(planId: string, plannedAssetId: string, outcome: { spec: AssetSpec } | { route: "external-generation-recommended" }) {
   return withPlannedAsset(planId, plannedAssetId, (a) => ({ asset: "spec" in outcome ? { ...a, spec: outcome.spec, route: "native" as const } : { ...a, spec: undefined, route: outcome.route }, result: null }));
+}
+
+/** Atomically reserves a paid native call in the durable library document. */
+export function reserveNativeGeneration(planId: string, plannedAssetId: string, fingerprint: string): Promise<AdminResult<"reserved" | "reused" | "busy">> {
+  return withPlannedAsset(planId, plannedAssetId, (a) => {
+    // Reservations older than five minutes are abandoned requests, not a permanent lock.
+    const active = a.generationInFlight && a.generationInFlight.fingerprint === fingerprint && Date.now() - Date.parse(a.generationInFlight.startedAt) < 300_000;
+    if (active) return { asset: a, result: "busy" as const };
+    return { asset: { ...a, generationInFlight: { fingerprint, startedAt: new Date().toISOString() } }, result: "reserved" as const };
+  });
+}
+
+/** Completes (or clears) the durable reservation without allowing a stale caller to overwrite a newer one. */
+export function finishNativeGeneration(planId: string, plannedAssetId: string, fingerprint: string, outcome?: { spec: AssetSpec } | { route: "external-generation-recommended" }) {
+  return withPlannedAsset(planId, plannedAssetId, (a) => {
+    if (a.generationInFlight?.fingerprint !== fingerprint) return { asset: a, result: null };
+    return { asset: outcome && "spec" in outcome ? { ...a, spec: outcome.spec, route: "native" as const, generationFingerprint: fingerprint, generationInFlight: undefined } : outcome ? { ...a, spec: undefined, route: outcome.route, generationFingerprint: fingerprint, generationInFlight: undefined } : { ...a, generationInFlight: undefined }, result: null };
+  });
 }
 
 /** Rejecting a native draft discards the spec; the planned asset itself stays. */

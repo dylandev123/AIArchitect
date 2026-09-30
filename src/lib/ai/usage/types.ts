@@ -20,4 +20,15 @@ export interface AiUsageRecord {
   errorKind: string | null;
   /** null when the model had no configured price at the time. */
   costUsd: number | null;
+  stage?: string;
+  assetId?: string | null;
+  planId?: string | null;
+  promptFingerprint?: string;
+  retryNumber?: number;
+  retryReason?: string | null;
+  operationId?: string;
+  parentUsageId?: string | null;
+  providerRequestId?: string | null;
+  maxOutputTokens?: number;
+  resultingAssetHash?: string | null;
 }

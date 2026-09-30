@@ -7,7 +7,7 @@ import { v2SitePlanOf, placeOutdoorBar } from "./v2SiteFeatures";
 export type AdditiveObject = "chair" | "lounger" | "table" | "umbrella" | "planter" | "bar";
 export type PlacementFailureCode = "UNSUPPORTED_OBJECT" | "NO_VALID_SITE_PLAN" | "NO_APPROVED_ASSET" | "ALL_CANDIDATES_COLLIDE";
 export type AdditivePlacementResult =
-  | { ok: true; object: AdditiveObject; json: string; summary: string; assetId: string }
+  | { ok: true; object: AdditiveObject; json: string; summary: string; assetId: string; usedProceduralFallback: boolean }
   | { ok: false; code: PlacementFailureCode; error: string };
 
 const SPEC: Record<Exclude<AdditiveObject, "bar">, { role: string; terms: string[]; width: number; depth: number; height: number }> = {
@@ -17,6 +17,9 @@ const SPEC: Record<Exclude<AdditiveObject, "bar">, { role: string; terms: string
   umbrella: { role: "parasol", terms: ["umbrella", "parasol"], width: 2.5, depth: 2.5, height: 2.5 },
   planter: { role: "planter", terms: ["planter", "plant pot", "pot"], width: .9, depth: .9, height: .9 },
 };
+
+/** Deliberately non-catalog ids: the viewport recognizes these as cheap built-in stand-ins, never as GLBs. */
+export const proceduralV2AssetId = (object: AdditiveObject) => `procedural-v2-${object}`;
 
 function requestedObject(prompt: string): AdditiveObject | undefined {
   const p = prompt.toLowerCase();
@@ -50,12 +53,13 @@ export function placeV2AdditiveAsset(root: Record<string, unknown>, prompt: stri
     const asset = assets.find((a) => a.type === "glb-model" && a.status === "approved" && glbIds.includes(a.id) && a.validation?.passed !== false && (a.family === "outdoor-bar" || /outdoor[\s-]*bar/i.test(a.name)));
     const placed = placeOutdoorBar(root, asset?.id);
     if ("error" in placed) return { ok: false, code: "ALL_CANDIDATES_COLLIDE", error: placed.error };
-    return { ok: true, object, assetId: asset?.id ?? "procedural-outdoor-bar", summary: "Added a grounded outdoor bar beside the existing outdoor-living area.", json: JSON.stringify({ ...root, sitePlan: placed.plan }) };
+    return { ok: true, object, assetId: asset?.id ?? proceduralV2AssetId(object), usedProceduralFallback: !asset, summary: "Added a grounded outdoor bar beside the existing outdoor-living area.", json: JSON.stringify({ ...root, sitePlan: placed.plan }) };
   }
   const asset = assetFor(object, assets, glbIds);
-  if (!asset) return { ok: false, code: "NO_APPROVED_ASSET", error: `No approved GLB matching a ${object} is available in the library.` };
   const spec = SPEC[object], count = quantity(prompt);
-  const dimensions = { width: asset.validation?.footprint?.width ?? asset.dimensions?.width ?? spec.width, depth: asset.validation?.footprint?.depth ?? asset.dimensions?.depth ?? spec.depth, height: asset.dimensions?.height ?? spec.height };
+  // An approved, validated GLB always wins. Its absence is intentionally not a placement failure: the
+  // procedural marker below is rendered as a small, recognizable local primitive set.
+  const dimensions = { width: asset?.validation?.footprint?.width ?? asset?.dimensions?.width ?? spec.width, depth: asset?.validation?.footprint?.depth ?? asset?.dimensions?.depth ?? spec.depth, height: asset?.dimensions?.height ?? spec.height };
   const pool = { x: plan.poolDeck.x, z: plan.poolDeck.z };
   const existing = Array.isArray(root.outdoorAssetPlacements) ? root.outdoorAssetPlacements as OutdoorAssetPlacement[] : [];
   const obstacles = [
@@ -76,7 +80,7 @@ export function placeV2AdditiveAsset(root: Record<string, unknown>, prompt: stri
     if (!candidate) return { ok: false, code: "ALL_CANDIDATES_COLLIDE", error: `No chair-sized clear, grounded position remains beside the pool deck after checking building masses, paths/features, and existing outdoor assets.` };
     // Face the pool (or view-side pool deck) rather than use a fixed world rotation.
     const yaw = Math.atan2(pool.x - candidate.x, pool.z - candidate.z);
-    additions.push({ id: `outdoor-v2-${crypto.randomUUID()}`, assetId: asset.id, parentSpaceId: "v2-poolside", category: asset.family ?? "furniture", position: [candidate.x, 0, candidate.z], rotation: [0, yaw, 0], scale: 1, role: spec.role, relationship: { type: "around", targetId: "pool" }, dimensions });
+    additions.push({ id: `outdoor-v2-${crypto.randomUUID()}`, assetId: asset?.id ?? proceduralV2AssetId(object), parentSpaceId: "v2-poolside", category: asset?.family ?? (object === "planter" ? "decorative" : "furniture"), position: [candidate.x, 0, candidate.z], rotation: [0, yaw, 0], scale: 1, role: spec.role, relationship: { type: "around", targetId: "pool" }, dimensions });
   }
-  return { ok: true, object, assetId: asset.id, summary: `Added ${additions.length} grounded ${object}${additions.length === 1 ? "" : "s"} by the pool, oriented toward it.`, json: JSON.stringify({ ...root, outdoorAssetPlacements: [...existing, ...additions] }) };
+  return { ok: true, object, assetId: asset?.id ?? proceduralV2AssetId(object), usedProceduralFallback: !asset, summary: `Added ${additions.length} grounded ${object}${additions.length === 1 ? "" : "s"} by the pool, oriented toward it.`, json: JSON.stringify({ ...root, outdoorAssetPlacements: [...existing, ...additions] }) };
 }

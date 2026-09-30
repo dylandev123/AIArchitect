@@ -12,7 +12,8 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
-import { recipeRetrievalForSpaces, roofRecipesForBrief } from "@/lib/library/service";
+import { recipeRetrievalForSpaces, recordPriorityAssetNeed, roofRecipesForBrief } from "@/lib/library/service";
+import { extractContextTags, extractStyleTags } from "@/lib/library/taxonomy";
 import { readLibrary } from "@/lib/library/store";
 import { assetBackend } from "@/lib/assets/serverStore";
 import { toAssetIndex } from "@/lib/library/retrieval";
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
   // Additive V2 placement is a deterministic executor, not an architecture-generation call.
   const activeDocument = root.architecturalDesignDocument ?? root.architectureDocument;
   if (body.mode !== "generate" && isArchitecturalDesignDocument(activeDocument)) {
-    return editV2SiteFeature(prompt, root, baseRevision);
+    return editV2SiteFeature(prompt, root, baseRevision, projectId);
   }
 
   if (!isAiConfigured()) {
@@ -230,17 +231,27 @@ export async function POST(req: NextRequest) {
  * Typed additive V2 edit path. It understands a small semantic object request and only appends a
  * grounded placement/site feature; V2 architecture and existing Site Plan geometry remain read-only.
  */
-async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, baseRevision: string): Promise<NextResponse> {
+async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null): Promise<NextResponse> {
   let assets: Awaited<ReturnType<ReturnType<typeof assetBackend>["list"]>>["assets"] = [];
   let glbIds: string[] = [];
   try {
     ({ assets, glbIds } = await assetBackend().list());
   } catch {
-    return NextResponse.json({ error: "Approved asset library is unavailable, so I cannot safely place a V2 outdoor object." }, { status: 503 });
+    // The placement engine is self-contained. A transient catalog read must not turn a valid additive edit
+    // into a failure; use the same procedural fallback as an empty approved catalog.
+    console.warn("[v2-additive] asset catalog unavailable; placing procedural fallback");
   }
   const placed = placeV2AdditiveAsset(root, prompt, assets, glbIds);
   if (!placed.ok) return NextResponse.json({ error: placed.error, code: placed.code }, { status: 422 });
-  return NextResponse.json({ summary: placed.summary, json: placed.json, baseRevision, revision: revisionOf(placed.json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId });
+  const assetNeed = placed.usedProceduralFallback
+    ? await recordPriorityAssetNeed({
+      text: placed.object === "bar" ? "outdoor bar" : placed.object === "lounger" ? "sun lounger" : /lounge\s+chairs?/i.test(prompt) ? "lounge chair" : placed.object,
+      category: placed.object === "bar" ? "outdoor-bar" : placed.object === "planter" ? "decorative" : "furniture",
+      styleTags: extractStyleTags(prompt), contextTags: extractContextTags(prompt), projectId,
+      components: [placed.object === "lounger" ? "sun-lounger" : placed.object === "chair" ? "lounge-armchair" : placed.object],
+    })
+    : undefined;
+  return NextResponse.json({ summary: placed.summary, json: placed.json, baseRevision, revision: revisionOf(placed.json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId, ...(placed.usedProceduralFallback ? { proceduralFallback: true, assetNeedId: assetNeed?.id } : {}) });
 }
 
 const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;

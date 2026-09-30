@@ -277,6 +277,10 @@ export interface PlannedAsset {
   route?: AssetRoute;
   /** The latest native spec awaiting review (set by the native generator; cleared on reject). Server-owned. */
   spec?: AssetSpec;
+  /** Durable identity of the exact native request that produced `spec`. */
+  generationFingerprint?: string;
+  /** Short-lived, persisted reservation preventing two server instances buying the same generation. */
+  generationInFlight?: { fingerprint: string; startedAt: string };
 }
 
 export interface AssetPlan {
@@ -290,6 +294,8 @@ export interface AssetPlan {
   created_at: string;
   updated_at: string;
   assets: PlannedAsset[];
+  /** Fingerprint of the planning inputs that produced this saved draft. */
+  planningFingerprint?: string;
 }
 
 
@@ -373,12 +379,14 @@ export interface ReportPlan {
 
 export const CAPABILITY_STATUSES = ["supported", "partial", "missing", "deprecated"] as const;
 export type CapabilityStatus = (typeof CAPABILITY_STATUSES)[number];
-export const CAPABILITY_CATEGORIES = ["massing", "walls", "voids", "roofs", "facade", "openings", "terraces", "circulation", "structure", "site"] as const;
+export const CAPABILITY_CATEGORIES = ["massing", "walls", "voids", "roofs", "facade", "openings", "terraces", "circulation", "structure", "site", "asset-generation"] as const;
 export type CapabilityCategory = (typeof CAPABILITY_CATEGORIES)[number];
 
 export interface CapabilityParameter { key: string; description?: string; required?: boolean; }
 export interface ArchitecturalCapability {
   id: string; name: string; category: CapabilityCategory; description: string;
+  /** Explicit namespace: existing architecture entries remain architecture; reusable GLB families use native-asset. */
+  domain?: "architecture" | "native-asset";
   parameters: CapabilityParameter[]; constraints: string[]; compatibleMassTypes: string[];
   compatibleRoofTypes?: string[]; compatibleFacadeTypes?: string[];
   status: CapabilityStatus; version: number; usageCount: number; successCount: number; failureCount: number;

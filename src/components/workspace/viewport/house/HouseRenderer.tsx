@@ -23,6 +23,8 @@ import { revisionOf } from "@/lib/house/revision";
 import { useRenderFlightStore } from "@/store/useRenderFlightStore";
 import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib/architecture/v2OnlyMode";
 import { compileV2SiteFeatures, v2SitePlanOf } from "@/lib/architecture/v2SiteFeatures";
+import { ProceduralOutdoorPlaceholder } from "./ProceduralOutdoorPlaceholder";
+import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -57,6 +59,15 @@ function parsePlacements(json: string | undefined): AssetPlacement[] {
   } catch {
     return [];
   }
+}
+
+function parseProceduralOutdoorPlacements(json: string | undefined): OutdoorAssetPlacement[] {
+  try {
+    const raw = JSON.parse(json ?? "{}") as { outdoorAssetPlacements?: unknown };
+    return Array.isArray(raw.outdoorAssetPlacements) ? raw.outdoorAssetPlacements.filter((p): p is OutdoorAssetPlacement =>
+      !!p && typeof p === "object" && typeof (p as OutdoorAssetPlacement).assetId === "string" && (p as OutdoorAssetPlacement).assetId.startsWith("procedural-v2-")
+    ) : [];
+  } catch { return []; }
 }
 
 export function HouseRenderer() {
@@ -120,6 +131,7 @@ export function HouseRenderer() {
   // catalog; the model swaps in once loaded, and until then (or if it never loads) the procedural feature draws.
   const catalog = useAssetStore((s) => s.catalog);
   const placements = useMemo(() => parsePlacements(renderJson), [renderJson]);
+  const proceduralOutdoor = useMemo(() => parseProceduralOutdoorPlacements(renderJson), [renderJson]);
   const usable = useMemo(() => usablePlacements(placements, catalog), [placements, catalog]);
   const [checked, setChecked] = useState<{placements: readonly AssetPlacement[]; blocked: Set<string>} | null>(null);
   useEffect(() => {
@@ -181,6 +193,7 @@ export function HouseRenderer() {
       {swapped.map((p) => (
         <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />
       ))}
+      {proceduralOutdoor.map((placement) => <ProceduralOutdoorPlaceholder key={placement.id} placement={placement} />)}
     </group>
   );
 }

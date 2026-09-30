@@ -5,6 +5,7 @@ import { knowledgeDefinition, knowledgeForFamily } from "./knowledge/catalog";
 import { finalizeGenerationPrompt, MAX_ASSET_EDGE, MAX_PLANNED_ASSETS, plannedAssetSchema, USAGE_CONTEXTS, byGenerationOrder } from "./plans";
 import { categoryLabel } from "./taxonomy";
 import { readLibrary } from "./store";
+import { createHash } from "node:crypto";
 
 /**
  * The AI Asset Planner. It answers "what reusable assets should exist to satisfy this Need across future projects?" with
@@ -180,8 +181,15 @@ export async function planAssets(
   if (target.needId && !need) return { ok: false, status: 404, error: "Need not found." };
   const ctx = planContext(need, target.knowledgeId, plans, opts.known);
   if (!ctx) return { ok: false, status: 404, error: "Nothing to plan for." };
+  const fingerprint = createHash("sha256").update(JSON.stringify({ target, prompt: buildPlanPrompt(ctx, opts.avoid), known: opts.known ?? [], avoid: opts.avoid ?? [] })).digest("hex");
+  const reusable = plans.find((p) => p.planningFingerprint === fingerprint);
+  if (reusable) return { ok: true, draft: { title: reusable.title, knowledgeId: reusable.knowledgeId, needId: reusable.needId, assets: reusable.assets }, adjustments: ["Reused the unchanged persisted planning draft; no model call was made."] };
   const raw = await generate({ system: PLANNER_SYSTEM_PROMPT, prompt: buildPlanPrompt(ctx, opts.avoid) });
   const checked = validatePlan(raw, ctx);
   if (!checked.ok) return { ok: false, status: 502, error: checked.error };
   return { ok: true, draft: { title: `${ctx.title} — Asset Pack`, knowledgeId: ctx.knowledgeId, needId: ctx.needId, assets: checked.assets }, adjustments: checked.adjustments };
+}
+
+export function planningFingerprint(input: { needId?: string; knowledgeId?: string; assets: readonly Pick<PlannedAsset, "name" | "generationPrompt">[] }): string {
+  return createHash("sha256").update(JSON.stringify(input)).digest("hex");
 }
