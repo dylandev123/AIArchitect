@@ -222,7 +222,7 @@ export async function runArchitecturePipeline(
   // Batched, same reasoning as roof composition below: every mass is already placed, so one call authors every
   // mass's geometry together instead of asking (and paying for) it per mass.
   const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses: placedMasses }, timings, budgetMs, usageMeta);
-  if (!geometryResult.ok) failGeneration("architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
+  if (!geometryResult.ok) failGeneration(geometryResult.owningStage ?? "architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
   const articulatedMasses = applyGeometry(placedMasses, geometryResult.byMassId);
   logPlanNotes(geometryResult.byMassId);
   diagnostics.push(geometryDiagnostics(geometryResult));
@@ -316,7 +316,7 @@ export async function replayArchitectureStage(
   if (stage === "architectural-geometry" || stage === "mass-expansion" || !cached.articulatedMasses) {
     masses = reviewedComposition(masses, intent, siteStrategy).masses;
     const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses }, timings, budgetMs, usageMeta);
-    if (!geometryResult.ok) failGeneration("architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
+    if (!geometryResult.ok) failGeneration(geometryResult.owningStage ?? "architectural-geometry", geometryResult.errors, diagnostics, geometryDiagnostics(geometryResult), failed);
     articulatedMasses = applyGeometry(masses, geometryResult.byMassId);
     logPlanNotes(geometryResult.byMassId);
     geometryCapabilityIntents = geometryResult.capabilityIntents;

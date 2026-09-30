@@ -207,13 +207,13 @@ describe("courtyard authoring and private-wing arrival privacy", () => {
     expect([...punched.notes, ...glazed.notes].join(" ")).not.toMatch(/privacy/);
   });
 
-  it("builds a private wing's arrival-side windows exactly as the Geometry Pass authored them", async () => {
+  it("builds a private wing's planned arrival-side windows as the baseline, with exactly the Geometry Pass's refinements", async () => {
     const { runGeometryStage } = await import("../stages/geometryStage");
     const masses = [quiet(mass("mass-0", { role: "bedroom-wing", width: 10, depth: 7 }), { arrivalFacade: "punched" })];
-    const authored = { type: "opening-rhythm", facade: "north", count: 4, width: 1.2, height: 1.4, sill: 0.8 };
-    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [authored] }] }, totalUsage: {} });
+    const refined = { count: 4, width: 1.2, height: 1.4, sill: 0.8 };
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [], refinements: [{ id: "mass-0:plan:north-windows", ...refined }] }] }, totalUsage: {} });
     const result = await runGeometryStage({ brief: "x", intent: intentWith(["privacy"]), siteStrategy: site, masses }, createTimings(), 60_000, usage);
-    expect(result.ok && result.byMassId.get("mass-0")!.openings).toEqual([expect.objectContaining(authored)]);
+    expect(result.ok && result.byMassId.get("mass-0")!.openings).toEqual([{ id: "mass-0:plan:north-windows", type: "opening-rhythm", facade: "north", ...refined }]);
     expect(result.ok && result.capabilityIntents).toEqual([]);
   });
 });

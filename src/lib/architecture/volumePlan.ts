@@ -292,6 +292,13 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
   /** The span of each facade a footprint move already claims, so openings and later moves go around it. */
   const claimed: Partial<Record<MassFacade, Interval>> = {};
 
+  // 0. Planned glazing on the view (or courtyard) facade is mandatory: a neighbor standing against that facade makes
+  // it unbuildable where the plan puts it — a placement conflict, never glazing quietly dropped or moved elsewhere.
+  for (const [side, facade, treatment] of [["view", facades.view, plan.viewFacade], ["courtyard", facades.courtyard, plan.courtyardFacade ?? plan.viewFacade]] as const) {
+    if (!facade || treatment === "solid" || !facades.party.has(facade) || (side === "courtyard" && facade === facades.view)) continue;
+    conflicts.push({ code: "shared-facade", feature: `${side} glazing`, facade, detail: `the ${treatment} ${side} facade (local ${facade}) is authored against a neighboring volume, so its glazing cannot be built there.` });
+  }
+
   // 1. Form — the footprint itself, before anything is applied to its facades.
   if (plan.form === "l-shape") {
     if (minDim < 6) conflicts.push({ code: "insufficient-geometry", feature: "l-shape", facade: formFacade, detail: `l-shape needs a volume at least 6m deep (this one is ${minDim.toFixed(1)}m).` });

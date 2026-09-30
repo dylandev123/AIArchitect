@@ -1,6 +1,7 @@
 import type { CompassSide } from "@/types/house";
 import type { MassRole, MassVolume, RoofRecipe, SiteStrategy, VolumePlan } from "../document";
-import { localFacadeToward, realizeVolumePlan } from "../volumePlan";
+import { mandatoryBaseline } from "../planBaseline";
+import { localFacadeToward } from "../volumePlan";
 import type { GeometryOperationOutput } from "../stages/schemas";
 
 /**
@@ -34,19 +35,28 @@ export const authoredPlan = (role: MassRole, overrides: Partial<VolumePlan> = {}
 export const authoredRoof = (massId: string, overrides: Partial<RoofRecipe> = {}): RoofRecipe => ({ id: `${massId}-roof`, massId, kind: "flat", overhang: 0.3, pitch: 2, ...overrides });
 
 /**
- * What an architect who authors exactly the plan's reference realization returns from the Geometry Pass, in that
- * stage's own vocabulary (including canopy / screen / sun-fins operations for the plan's facade elements).
+ * What a well-behaved architect returns from the Geometry Pass when it takes the plan's reference placement for
+ * everything the Geometry Pass owns — the form move and the outdoor room — in that stage's own vocabulary. The
+ * mandatory baseline (glazing, windows, the entry and its door, the plan's canopy/screens/fins/pilotis) is already
+ * built and is deliberately NOT repeated here.
  */
 export function referenceGeometry(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): GeometryOperationOutput[] {
-  const r = realizeVolumePlan(mass, masses, site);
+  return mandatoryBaseline(mass, masses, site).reference.map((op): GeometryOperationOutput => (op.type === "chamfer" ? { type: "chamfer", corner: op.corner, width: op.size, ...(op.glazed ? { glazed: true } : {}) } : { ...op } as GeometryOperationOutput));
+}
+
+/** A copy of one mandatory baseline element in the Geometry Pass vocabulary — what a model that re-authors the baseline would return. */
+export function baselineAsOperations(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): GeometryOperationOutput[] {
   const local = (side: unknown) => localFacadeToward(side as CompassSide, mass.rotation);
-  const elements = r.capabilityIntents.flatMap((intent): GeometryOperationOutput[] => {
-    const p = (intent.parameters ?? {}) as Record<string, number>;
-    if (intent.id === "entry-canopy") return [{ type: "canopy", facade: local(p.facade), width: p.width, depth: p.depth, height: p.height }];
-    if (intent.id === "screen-layer") return [{ type: "screen", facade: local(p.facade), start: p.start, end: p.end, depth: p.depth }];
-    if (intent.id === "brise-soleil") return [{ type: "sun-fins", facade: local(p.facade), count: p.count, depth: p.depth, sill: p.sill }];
+  return mandatoryBaseline(mass, masses, site).elements.flatMap((e): GeometryOperationOutput[] => {
+    if (e.kind !== "capability") {
+      const value = { ...e.value } as { id?: string } & GeometryOperationOutput;
+      delete value.id;
+      return [value];
+    }
+    const p = (e.value.parameters ?? {}) as Record<string, number>;
+    if (e.value.id === "entry-canopy") return [{ type: "canopy", facade: local(p.facade), width: p.width, depth: p.depth, height: p.height }];
+    if (e.value.id === "screen-layer") return [{ type: "screen", facade: local(p.facade), start: p.start, end: p.end, depth: p.depth }];
+    if (e.value.id === "brise-soleil") return [{ type: "sun-fins", facade: local(p.facade), count: p.count, depth: p.depth, sill: p.sill }];
     return [];
   });
-  const operations = r.operations.map((op): GeometryOperationOutput => (op.type === "chamfer" ? { type: "chamfer", corner: op.corner, width: op.size, ...(op.glazed ? { glazed: true } : {}) } : { ...op }));
-  return [...operations, ...r.openings.map((op): GeometryOperationOutput => ({ ...op })), ...elements];
 }

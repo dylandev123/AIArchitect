@@ -2,6 +2,7 @@ import type { CapabilityIntent } from "@/lib/capabilities/types";
 import { massShellWarnings, massTotalHeight, roofClearance, maxPreservedOverhang } from "../compiler";
 import type { MassGeometryOperation, MassOpening, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "../document";
 import { buildFloorFootprint } from "../geometry/footprint";
+import { baselineViolations } from "../planBaseline";
 import { planConformance, realizeVolumePlan, sharedFacades } from "../volumePlan";
 import type { StageConflict } from "./recovery";
 
@@ -78,18 +79,25 @@ export function placementConflicts(masses: readonly MassVolume[], site: SiteStra
 export type ArticulatedMass = MassVolume & { operations: readonly MassGeometryOperation[]; openings: readonly MassOpening[] };
 
 /**
- * Whether one volume's AUTHORED geometry realizes its plan and can be built — owned by the Geometry Pass:
- * every planned element present, nothing on a shared wall, and nothing the shell compiler has to clip, drop or
- * leave without its door.
+ * Whether one volume's merged geometry (mandatory baseline + the Geometry Pass's refinements and additions)
+ * realizes its plan and can be built — owned by the Geometry Pass: every planned element present, the mandatory
+ * baseline intact (not removed, moved, modified beyond its refinable fields, duplicated or obstructed), nothing
+ * on a shared wall, and nothing the shell compiler has to clip, drop or leave without its door.
  */
 export function geometryConflicts(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, capabilities: readonly CapabilityIntent[]): StageConflict[] {
   const stage = "architectural-geometry" as const;
   const conflicts: StageConflict[] = [];
   const conformance = planConformance(mass, masses, site, capabilities);
   for (const missing of conformance.missing) conflicts.push({ stage, code: "missing-planned-geometry", massId: mass.id, detail: `"${mass.id}" is missing its planned ${missing}. Author it — nothing is restored for you.` });
+  for (const violation of baselineViolations(mass, masses, site)) conflicts.push({ stage, code: violation.code, massId: mass.id, detail: `"${mass.id}": ${violation.detail}` });
   const shared = sharedFacades(mass, masses, site);
   for (const item of [...(mass.operations ?? []), ...(mass.openings ?? [])]) {
     if ("facade" in item && shared.has(item.facade)) conflicts.push({ stage, code: "shared-wall", massId: mass.id, detail: `"${mass.id}" authors a ${item.type} on its ${item.facade} facade, which stands against a neighboring volume. Remove it or put it on a free facade.` });
+  }
+  for (const op of mass.operations ?? []) if (op.type === "notch") {
+    // The footprint builder has no arbitrary 4m capability limit; a notch is physical only while both legs
+    // remain inside the mass it cuts. Keep that relationship-aware constraint here, where the mass is known.
+    if (op.width >= mass.width || op.depth >= mass.depth) conflicts.push({ stage, code: "unbuildable-geometry", massId: mass.id, detail: `"${mass.id}" has a ${op.width.toFixed(1)}m × ${op.depth.toFixed(1)}m notch outside its ${mass.width.toFixed(1)}m × ${mass.depth.toFixed(1)}m footprint. Keep both notch legs smaller than their corresponding mass dimension.` });
   }
   for (const warning of massShellWarnings(mass)) conflicts.push({ stage, code: "unbuildable-geometry", massId: mass.id, detail: `"${mass.id}" cannot be built as authored — ${warning}` });
   return conflicts;

@@ -3,8 +3,9 @@ import { JSONParseError, NoObjectGeneratedError, TypeValidationError } from "ai"
 import { createTimings } from "@/lib/ai/timing";
 import type { ArchitecturalIntent } from "../../designEngine";
 import type { MassVolume, SiteStrategy } from "../../document";
+import { mandatoryBaseline } from "../../planBaseline";
 import { withVolumePlan } from "../../volumePlan";
-import { authoredPlan, QUIET_PLAN, referenceGeometry } from "../../__tests__/authoredFixtures";
+import { authoredPlan, baselineAsOperations, QUIET_PLAN, referenceGeometry } from "../../__tests__/authoredFixtures";
 
 const generateText = vi.fn();
 vi.mock("ai", async (importOriginal) => ({ ...(await importOriginal<typeof import("ai")>()), generateText: (...args: unknown[]) => generateText(...args) }));
@@ -115,31 +116,31 @@ describe("architectural geometry stage — the AI owns the built geometry", () =
   const living = withVolumePlan({ id: "mass-0", name: "Living", role: "main-living", position: { x: 0, z: 0 }, width: 14, depth: 9, floors: 1, elevation: 0, rotation: 0 }, authoredPlan("main-living", { viewFacade: "screened" }));
   const run = async (planned: MassVolume[]) => (await import("../geometryStage")).runGeometryStage({ brief: "A calm house", intent, siteStrategy, masses: planned }, createTimings(), 60_000, usageMeta);
 
-  it("builds an authored response verbatim: canopies and screens carry the architect's own parameters", async () => {
-    const authored = referenceGeometry(living, [living], siteStrategy).map((op) => (op.type === "canopy" ? { ...op, width: 5.1, depth: 2.4 } : op));
-    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: authored }] }, totalUsage: {} });
+  it("builds the mandatory baseline plus the architect's refinements and additions: the canopy carries the refined parameters", async () => {
+    const baseline = mandatoryBaseline(living, [living], siteStrategy);
+    const canopy = baseline.elements.find((e) => e.kind === "capability" && e.value.id === "entry-canopy")!;
+    const authored = referenceGeometry(living, [living], siteStrategy);
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: authored, refinements: [{ id: canopy.id, width: 5.1, depth: 2.4 }] }] }, totalUsage: {} });
     const result = await run([living]);
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(result.attempts).toBe(1);
     expect(result.capabilityIntents).toContainEqual({ id: "entry-canopy", stage: "architectural-geometry", parameters: { massId: "mass-0", facade: "north", width: 5.1, depth: 2.4, height: expect.any(Number) } });
     expect(result.capabilityIntents).toContainEqual(expect.objectContaining({ id: "screen-layer", parameters: expect.objectContaining({ massId: "mass-0", facade: "south" }) }));
     const geometry = result.byMassId.get("mass-0")!;
-    expect([...geometry.operations, ...geometry.openings]).toHaveLength(authored.filter((op) => op.type !== "canopy" && op.type !== "screen" && op.type !== "sun-fins").length);
+    // Every baseline element once, under its id, plus exactly the architect's additions.
+    expect([...geometry.operations, ...geometry.openings]).toHaveLength(baseline.elements.filter((e) => e.kind !== "capability").length + authored.length);
+    expect([...geometry.operations, ...geometry.openings].map((o) => o.id)).toEqual(expect.arrayContaining(baseline.elements.filter((e) => e.kind !== "capability").map((e) => e.id)));
   });
 
-  it("sends missing planned glazing, doors, canopies and screens back as repair requests — none is supplied", async () => {
-    const reference = referenceGeometry(living, [living], siteStrategy);
-    const stripped = reference.filter((op) => op.type !== "door" && op.type !== "canopy" && op.type !== "screen" && !(op.type === "glazing-zone" && op.facade === "east"));
-    generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: stripped }] }, totalUsage: {} });
+  it("never asks the architect to re-author mandatory glazing, doors, canopies or screens — only its own planned elements are sent back", async () => {
+    generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: [] }] }, totalUsage: {} });
     const result = await run([living]);
     expect(result.ok).toBe(false);
     const errors = !result.ok ? result.errors.join("\n") : "";
-    expect(errors).toMatch(/missing its planned door on the north facade/);
-    expect(errors).toMatch(/missing its planned canopy on the north facade/);
-    expect(errors).toMatch(/missing its planned screen on the south facade/);
-    expect(errors).toMatch(/missing its planned glazing-zone on the east facade/);
-    // The recess without its door is also what the compiler would have to build solid.
-    expect(errors).toMatch(/entry-recess on the north facade has no authored door/);
+    // The outdoor room is the Geometry Pass's to place, so leaving it out is still a repair request…
+    expect(errors).toMatch(/missing its planned open \(open:true\) recess or projection/);
+    // …but the plan's glazing, entry door, canopy and screen are already built and are never reported missing.
+    expect(errors).not.toMatch(/glazing-zone|\bdoor\b|canopy|screen|entry-recess/);
   });
 
   it("rejects geometry on a wall another volume stands against, and a canopy on a volume turned off the site axes", async () => {
@@ -154,5 +155,61 @@ describe("architectural geometry stage — the AI owns the built geometry", () =
     const errors = !result.ok ? result.errors.join("\n") : "";
     expect(errors).toMatch(/repair-required:shared-wall mass-0\].*east facade/);
     expect(errors).toMatch(/repair-required:unbuildable-geometry mass-1\].*canopy/);
+  });
+
+  it("mechanically builds two mandatory north glazing zones and the north entry without asking Geometry to repeat them", async () => {
+    const northGlass = withVolumePlan({ id: "mass-0", name: "North-light living", role: "main-living", position: { x: 0, z: 0 }, width: 16, depth: 10, floors: 1, elevation: 0, rotation: 0 }, authoredPlan("main-living", { viewFacade: "solid", arrivalFacade: "glass-wall", flankFacades: "solid", entry: "recessed", outdoor: "none" }));
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }] }, totalUsage: {} });
+    const result = await run([northGlass]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const openings = result.byMassId.get("mass-0")!.openings;
+    expect(openings.filter((o) => o.type === "glazing-zone" && o.facade === "north")).toHaveLength(2);
+    expect(openings.filter((o) => o.type === "door" && o.facade === "north")).toHaveLength(1);
+    expect(new Set(openings.map((o) => o.id)).size).toBe(openings.length);
+  });
+
+  it("rejects moving a mandatory north glazing zone south or repeating mandatory openings", async () => {
+    const northGlass = withVolumePlan({ id: "mass-0", name: "North-light living", role: "main-living", position: { x: 0, z: 0 }, width: 16, depth: 10, floors: 1, elevation: 0, rotation: 0 }, authoredPlan("main-living", { viewFacade: "solid", arrivalFacade: "glass-wall", flankFacades: "solid", entry: "recessed", outdoor: "none" }));
+    const baseline = mandatoryBaseline(northGlass, [northGlass], siteStrategy);
+    const glazing = baseline.elements.find((e) => e.kind === "opening" && e.value.type === "glazing-zone")!;
+    const duplicate = baselineAsOperations(northGlass, [northGlass], siteStrategy);
+    generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: duplicate, refinements: [{ id: glazing.id, facade: "south" }] }] }, totalUsage: {} });
+    const result = await run([northGlass]);
+    expect(result.ok).toBe(false);
+    expect(!result.ok && result.errors.join("\n")).toMatch(/cannot be moved to the south facade|duplicates the mandatory|overlaps the mandatory/);
+  });
+
+  it("keeps planned form and terrace placement flexible while retaining baseline openings", async () => {
+    const flexible = withVolumePlan({ id: "mass-0", name: "Flexible living", role: "main-living", position: { x: 0, z: 0 }, width: 16, depth: 10, floors: 1, elevation: 0, rotation: 0 }, authoredPlan("main-living", { form: "l-shape", outdoor: "covered-terrace", outdoorSide: "view" }));
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [
+      { type: "notch", corner: "nw", width: 3, depth: 3 },
+      { type: "projection", facade: "east", start: 0.2, end: 0.8, depth: 2, open: true },
+      { type: "screen", facade: "west", start: 0.2, end: 0.7, depth: 0.4 },
+    ] }] }, totalUsage: {} });
+    const result = await run([flexible]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const geometry = result.byMassId.get("mass-0")!;
+    expect(geometry.operations).toEqual(expect.arrayContaining([expect.objectContaining({ type: "notch", corner: "nw" }), expect.objectContaining({ type: "projection", facade: "east", open: true })]));
+    expect(geometry.openings.some((o) => o.id?.includes(":plan:"))).toBe(true);
+  });
+
+  it("routes an impossible mandatory entry facade to its placing stage without making an AI call", async () => {
+    const blocked = withVolumePlan({ id: "mass-0", name: "Blocked entry", role: "main-living", position: { x: 0, z: 0 }, width: 12, depth: 8, floors: 1, elevation: 0, rotation: 0 }, authoredPlan("main-living", { viewFacade: "solid", arrivalFacade: "solid", flankFacades: "solid", entry: "flush", outdoor: "none" }));
+    const neighbour: MassVolume = { id: "mass-1", name: "North neighbour", role: "service", position: { x: 0, z: -6 }, width: 8, depth: 4, floors: 1, elevation: 0, rotation: 0 };
+    const result = await run([blocked, neighbour]);
+    // The entry belongs to the primary plan, but the neighbour that turned its facade into a shared wall was
+    // placed by Mass Expansion, so that is the stage that must repair this composition conflict.
+    expect(result).toMatchObject({ ok: false, owningStage: "mass-expansion", attempts: 0 });
+    expect(generateText).not.toHaveBeenCalled();
+  });
+
+  it("accepts a 5.4m notch when it fits the mass, but rejects a notch that exceeds the actual footprint", async () => {
+    const roomy = withVolumePlan({ id: "mass-0", name: "Roomy", role: "main-living", position: { x: 0, z: 0 }, width: 16, depth: 8, floors: 1, elevation: 0, rotation: 0 }, { ...QUIET_PLAN, form: "l-shape" });
+    generateText.mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [{ type: "notch", corner: "se", width: 5, depth: 5.4 }] }] }, totalUsage: {} });
+    expect((await run([roomy])).ok).toBe(true);
+    generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: [{ type: "notch", corner: "se", width: 5, depth: 8 }] }] }, totalUsage: {} });
+    const invalid = await run([roomy]);
+    expect(invalid.ok).toBe(false);
+    expect(!invalid.ok && invalid.errors.join(" ")).toMatch(/outside its 16.0m × 8.0m footprint/);
   });
 });

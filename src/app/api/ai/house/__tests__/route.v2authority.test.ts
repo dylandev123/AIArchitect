@@ -7,6 +7,7 @@ import { BLANK_HOUSE_JSON } from "@/types/house";
 import { modelOutput, VILLA_BRIEF } from "@/lib/library/__tests__/villaFixture";
 import { RESPONDER_PRIMARY, RESPONDER_SITE, stageOf, v2StageResponder } from "@/lib/architecture/__tests__/v2StageResponder";
 import { authoredPlan, referenceGeometry } from "@/lib/architecture/__tests__/authoredFixtures";
+import { mandatoryBaseline } from "@/lib/architecture/planBaseline";
 import { withVolumePlan } from "@/lib/architecture/volumePlan";
 import type { MassVolume } from "@/lib/architecture/document";
 
@@ -122,8 +123,8 @@ describe("V2 generation finalization authority", () => {
     expect(res.status).toBe(200);
     const saved = JSON.parse(body.json!) as { architecturalDesignDocument: { massing: { masses: MassVolume[] }; roofs: { recipes: { massId: string; kind: string; overhang: number }[] } }; sitePlan: unknown };
     expect(saved.architecturalDesignDocument.massing.masses.map((m) => [m.id, m.role, m.position])).toEqual(masses.map((m) => [m.id, m.role, m.position]));
-    // Built exactly as authored: every authored opening, and the authored roofs untouched.
-    for (const m of masses) expect(saved.architecturalDesignDocument.massing.masses.find((s) => s.id === m.id)!.openings?.length).toBe(referenceGeometry(m, masses, RESPONDER_SITE).filter((op) => ["glazing-zone", "opening-rhythm", "door"].includes(op.type)).length);
+    // Built exactly as planned and authored: every mandatory baseline opening once, under its stable id, and the authored roofs untouched.
+    for (const m of masses) expect(saved.architecturalDesignDocument.massing.masses.find((s) => s.id === m.id)!.openings?.map((o) => o.id)).toEqual(mandatoryBaseline(m, masses, RESPONDER_SITE).elements.filter((e) => e.kind === "opening").map((e) => e.id));
     expect(saved.architecturalDesignDocument.roofs.recipes.map((r) => [r.massId, r.kind, r.overhang])).toEqual([["mass-0", "floating-flat", 0.9], ["mass-1", "shed", 0.5], ["mass-2", "flat", 0]]);
     expect(saved.sitePlan).toBeDefined();
     const gate = (body.architectureDiagnostics as { stage: string; status: string; outcome?: string }[]).find((d) => d.stage === "quality-gate")!;

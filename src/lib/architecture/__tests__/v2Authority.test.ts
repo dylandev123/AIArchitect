@@ -78,12 +78,10 @@ describe("geometry and facades: the Geometry Pass authors them; nothing is resto
 
   it.each([
     ["terrace", (op: { type: string; open?: boolean }) => op.open === true, /outdoor room/],
-    ["entry door", (op: { type: string }) => op.type === "door", /door on the north facade/],
-    ["entry recess", (op: { type: string }) => op.type === "entry-recess", /entry-recess on the north facade/],
-    ["view glazing", (op: { type: string; facade?: string }) => op.type === "glazing-zone" && op.facade === "south", /glazing-zone on the south facade/],
-  ])("sends a missing planned %s back to the Geometry Pass as repair-required, then fails — never restores it", async (_label, drop, missing) => {
+    ["form move", (op: { type: string }) => op.type === "notch", /notch/],
+  ])("sends a missing Geometry-owned planned %s back to the Geometry Pass as repair-required, then fails — never restores it", async (_label, drop, missing) => {
     const { runGeometryStage } = await import("../stages/geometryStage");
-    const living = withVolumePlan(mass("mass-0", { width: 16, depth: 10 }), authoredPlan("main-living", { entry: "recessed" }));
+    const living = withVolumePlan(mass("mass-0", { width: 16, depth: 10 }), authoredPlan("main-living", { entry: "recessed", form: "l-shape" }));
     const authored = referenceGeometry(living, [living], site).filter((op) => !drop(op as never));
     generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: authored }] }, totalUsage: {} });
     const result = await runGeometryStage({ brief: "x", intent, siteStrategy: site, masses: [living] }, createTimings(), 60_000, usage);
@@ -92,6 +90,19 @@ describe("geometry and facades: the Geometry Pass authors them; nothing is resto
     expect(messageOf(1)).toMatch(missing);
     expect(result.ok).toBe(false);
     expect(result).not.toHaveProperty("byMassId");
+  });
+
+  it("executes the plan's entry door, entry recess and view glazing as the mandatory baseline — the Geometry Pass never has to author them", async () => {
+    const { runGeometryStage } = await import("../stages/geometryStage");
+    const living = withVolumePlan(mass("mass-0", { width: 16, depth: 10 }), authoredPlan("main-living", { entry: "recessed" }));
+    generateText.mockResolvedValue({ output: { results: [{ massId: "mass-0", operations: referenceGeometry(living, [living], site) }] }, totalUsage: {} });
+    const result = await runGeometryStage({ brief: "x", intent, siteStrategy: site, masses: [living] }, createTimings(), 60_000, usage);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(generateText).toHaveBeenCalledTimes(1);
+    const built = result.byMassId.get("mass-0")!;
+    expect(built.operations).toContainEqual(expect.objectContaining({ type: "entry-recess", facade: "north", id: "mass-0:plan:north-entry-recess" }));
+    expect(built.openings).toContainEqual(expect.objectContaining({ type: "door", facade: "north", id: "mass-0:plan:north-door" }));
+    expect(built.openings).toContainEqual(expect.objectContaining({ type: "glazing-zone", facade: "south", id: "mass-0:plan:south-glazing" }));
   });
 });
 

@@ -1,6 +1,7 @@
 import type { ArchitecturalDesignDocument, MassVolume } from "../document";
 import type { ArchitectureDiagnostics } from "../compiler";
 import { resolveMasses } from "../compiler";
+import { baselineViolations } from "../planBaseline";
 import { planConformance, sharedFacades } from "../volumePlan";
 import { massCollisions, roofConflicts } from "./integrityChecks";
 
@@ -140,6 +141,8 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
     const shared = sharedFacades(mass, masses, doc.siteStrategy);
     const onSharedWall = [...(mass.operations ?? []), ...(mass.openings ?? [])].filter((item) => "facade" in item && shared.has(item.facade)).map((item) => `${item.type} on the shared ${"facade" in item ? item.facade : ""} wall`);
     const impossible = [...conflicts.map((c) => c.detail), ...onSharedWall];
+    const baseline = baselineViolations(mass, masses, doc.siteStrategy);
+    push(`plan-baseline-${mass.id}`, baseline.length === 0, baseline.length ? `Mandatory VolumePlan geometry on "${mass.id}" was contradicted: ${baseline.map((v) => `[${v.code}] ${v.detail}`).join(" ")}` : `"${mass.id}" keeps its mandatory VolumePlan geometry intact.`, "blocking");
     push(`facade-realization-${mass.id}`, impossible.length === 0, impossible.length ? `Impossible authored facade intent on "${mass.id}": ${impossible.join(" ")}` : `"${mass.id}" has no facade-specific realization conflict.`, "blocking");
   }
   for (const capability of diagnostics.capabilities) {

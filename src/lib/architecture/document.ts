@@ -39,18 +39,24 @@ export type FootprintScope = "ground" | "upper" | "all";
  * (a wedge form) instead of an L-shaped step — every other op still only ever produces horizontal/vertical
  * edges.
  */
-export type MassGeometryOperation =
+/**
+ * `id` is the element's stable identity through the Geometry merge (see planBaseline.ts): `<massId>:plan:…` for a
+ * mandatory element compiled from the VolumePlan, `<massId>:geometry:…` for one the Geometry Pass added. The
+ * compiler never reads it; it is absent on fixtures and pre-baseline documents.
+ */
+type Identified = { id?: string };
+export type MassGeometryOperation = Identified & (
   | { type: "recess"; facade: MassFacade; start: number; end: number; depth: number; floors?: FootprintScope; open?: boolean; postSpacing?: number }
   | { type: "projection"; facade: MassFacade; start: number; end: number; depth: number; floors?: FootprintScope; open?: boolean; postSpacing?: number }
   | { type: "notch"; corner: "nw" | "ne" | "se" | "sw"; width: number; depth: number; floors?: FootprintScope }
   | { type: "entry-recess"; facade: MassFacade; width: number; depth: number; floors?: FootprintScope }
   /** `glazed: true` makes the angled cut a full-height glass wall (a glazed prow toward a view) instead of solid wall. */
-  | { type: "chamfer"; corner: "nw" | "ne" | "se" | "sw"; size: number; floors?: FootprintScope; glazed?: boolean };
+  | { type: "chamfer"; corner: "nw" | "ne" | "se" | "sw"; size: number; floors?: FootprintScope; glazed?: boolean });
 
-export interface GlazingZoneOpening { type: "glazing-zone"; facade: MassFacade; start: number; end: number; heightRatio: number; floors?: FootprintScope; frame?: boolean; reveal?: number }
-export interface OpeningRhythm { type: "opening-rhythm"; facade: MassFacade; count: number; width: number; height: number; sill: number; floors?: FootprintScope }
+export interface GlazingZoneOpening extends Identified { type: "glazing-zone"; facade: MassFacade; start: number; end: number; heightRatio: number; floors?: FootprintScope; frame?: boolean; reveal?: number }
+export interface OpeningRhythm extends Identified { type: "opening-rhythm"; facade: MassFacade; count: number; width: number; height: number; sill: number; floors?: FootprintScope }
 /** A real pass-through rather than a short window: the compiler leaves the sill at grade and gives it a framed door assembly. */
-export interface DoorOpening { type: "door"; facade: MassFacade; start: number; end: number; height?: number; floors?: FootprintScope; frame?: boolean; reveal?: number }
+export interface DoorOpening extends Identified { type: "door"; facade: MassFacade; start: number; end: number; height?: number; floors?: FootprintScope; frame?: boolean; reveal?: number }
 export type MassOpening = GlazingZoneOpening | OpeningRhythm | DoorOpening;
 
 /**

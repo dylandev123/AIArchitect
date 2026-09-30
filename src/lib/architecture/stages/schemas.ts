@@ -266,7 +266,7 @@ export const geometryOperationSchema = z.object({
   corner: z.enum(MASS_CORNERS).optional().describe("Required for notch and chamfer only."),
   start: z.number().min(0).max(1).optional().describe("Normalized position (0=west/north end, 1=east/south end) along the facade. Required for recess, projection and glazing-zone."),
   end: z.number().min(0).max(1).optional().describe("Required for recess, projection and glazing-zone. Must be greater than start."),
-  depth: z.number().min(0.3).max(4).optional().describe("Meters the facade steps in/out. Required for recess, projection and notch."),
+  depth: z.number().min(0.3).max(8).optional().describe("Meters the facade steps in/out. Required for recess, projection and notch. Actual footprint dimensions are validated after the mass is known."),
   width: z.number().min(0.5).max(8).optional().describe("Meters. Required for notch (the corner cut's other extent) and entry-recess; for opening-rhythm, the width of each window; for chamfer, the corner cut's size (an angled cut, not an L-shaped step)."),
   floors: z.enum(FOOTPRINT_SCOPES).optional().describe('Which floors this applies to. Omit or "all" for every floor.'),
   heightRatio: z.number().min(0.2).max(0.95).optional().describe("Fraction of wall height the glazing occupies, centered vertically. Required for glazing-zone."),
@@ -308,9 +308,30 @@ export const geometryOperationSchema = z.object({
 });
 export type GeometryOperationOutput = z.infer<typeof geometryOperationSchema>;
 
+/**
+ * A refinement of one MANDATORY BASELINE element (see planBaseline.ts), addressed by its stable id. Only the fields
+ * that element's contract lists as refinable may be given; its type, facade and existence are the VolumePlan's
+ * and never change. Bounds match `geometryOperationSchema` and contain every baseline value a refinable field
+ * can start from, so keeping a baseline value is always valid.
+ */
+export const baselineRefinementSchema = z.object({
+  id: z.string().min(1).describe("The exact id of a MANDATORY BASELINE element listed for this mass."),
+  facade: z.enum(MASS_FACADES).optional().describe("Immutable: a baseline element never moves. Any facade other than its own is rejected."),
+  start: z.number().min(0).max(1).optional(),
+  end: z.number().min(0).max(1).optional(),
+  heightRatio: z.number().min(0.2).max(0.95).optional(),
+  count: z.number().int().min(2).max(16).optional(),
+  width: z.number().min(0.5).max(8).optional(),
+  height: z.number().min(0.6).max(3).optional(),
+  sill: z.number().min(0).max(1.5).optional(),
+  depth: z.number().min(0.3).max(8).optional(),
+});
+export type BaselineRefinementOutput = z.infer<typeof baselineRefinementSchema>;
+
 const geometryMassEntrySchema = z.object({
   massId: z.string().min(1).describe("Must exactly match one of the mass ids given, once each."),
-  operations: z.array(geometryOperationSchema).max(8).describe("0-8 operations. A mass with a plain rectangular form (perfectly fine for a quiet secondary volume) can have none. A genuine stepped/setback upper floor typically needs several floors:\"upper\" recesses at once."),
+  operations: z.array(geometryOperationSchema).max(8).describe("0-8 ADDITIONS to the mandatory baseline (never a repeat of a baseline element). A mass with a plain rectangular form and nothing to add can have none. A genuine stepped/setback upper floor typically needs several floors:\"upper\" recesses at once."),
+  refinements: z.array(baselineRefinementSchema).max(8).optional().describe("Refinements of mandatory baseline elements, by id — only their listed refinable fields."),
   /** Same mechanism `massExpansionStage` uses for `requestedOperation` — never blocks the pass. */
   requestedOperation: z.string().min(1).max(60).optional().describe("An articulation this mass needs that isn't in the supported vocabulary (e.g. curved facade)."),
 });
