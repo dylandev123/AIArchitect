@@ -216,6 +216,16 @@ describe("native generation for one planned asset", () => {
     expect(stored.spec).toBeUndefined();
   });
 
+  it("attempts a native draft for an externally recommended planned asset and keeps a valid approximation reviewable", async () => {
+    const plan = await savedPlan();
+    const sculpture = plan.assets.find((a) => a.name === "Special Sculpture")!;
+    expect(sculpture.route).toBe("external-generation-recommended");
+    const res = await generateNativeSpec(plan.id, sculpture.id, async () => loose(SAMPLES.barStool));
+    expect(res).toMatchObject({ ok: true, kind: "spec" });
+    const stored = (await readLibrary()).plans[0].assets.find((a) => a.id === sculpture.id)!;
+    expect(stored).toMatchObject({ route: "native", spec: expect.objectContaining({ family: "bar-stool" }) });
+  });
+
   it("does not regenerate an asset already in the library, and reject discards only the draft", async () => {
     const plan = await savedPlan();
     const stool = plan.assets.find((a) => a.name === "Bar Stool")!;

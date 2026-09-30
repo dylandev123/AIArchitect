@@ -4,8 +4,8 @@ const base = (brief: string): Omit<ArchitecturalDesignDocument, "massing" | "roo
 export const ARCHITECTURE_FIXTURES: Record<string, ArchitecturalDesignDocument> = {
   modernTropicalCourtyardVilla: { ...base("Modern Tropical Courtyard Villa"), massing: { composition: "u-shaped", masses: [
     { id: "living", name: "Main Living Pavilion", role: "main-living", position: { x: 0, z: 4 }, width: 16, depth: 5, floors: 1, elevation: 0, rotation: 0 },
-    { id: "west", name: "West Bedroom Wing", role: "bedroom-wing", position: { x: -5.5, z: -2 }, width: 5, depth: 12, floors: 1, elevation: 0, rotation: 0, relationships: [{ kind: "surrounds-courtyard", target: "living" }] },
-    { id: "east", name: "East Guest Wing", role: "guest-pavilion", position: { x: 5.5, z: -2 }, width: 5, depth: 12, floors: 1, elevation: 0, rotation: 0 },
+    { id: "west", name: "West Bedroom Wing", role: "bedroom-wing", position: { x: -5.5, z: -2 }, width: 5, depth: 12, floors: 1, elevation: 0, rotation: 0, relationships: [{ kind: "surrounds-courtyard", target: "living", side: "west", distance: 3 }] },
+    { id: "east", name: "East Guest Wing", role: "guest-pavilion", position: { x: 5.5, z: -2 }, width: 5, depth: 12, floors: 1, elevation: 0, rotation: 0, relationships: [{ kind: "surrounds-courtyard", target: "living", side: "east", distance: 3 }] },
   ] }, roofs: { recipes: [{ id: "living-roof", massId: "living", kind: "floating-flat" }, { id: "west-roof", massId: "west", kind: "mono-pitch" }, { id: "east-roof", massId: "east", kind: "flat" }] } },
   caribbeanPavilionEstate: { ...base("Caribbean Pavilion Estate"), massing: { composition: "pavilion-cluster", masses: [
     { id: "living", name: "Main Living Pavilion", role: "main-living", position: { x: 0, z: 0 }, width: 12, depth: 9, floors: 1, elevation: 0, rotation: 0 },

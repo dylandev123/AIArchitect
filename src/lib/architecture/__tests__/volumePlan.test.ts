@@ -56,7 +56,8 @@ describe("volume plans drive geometry", () => {
     expect(ground.operations).toContainEqual(expect.objectContaining({ type: "entry-recess", facade: "north" }));
     // Terrace claims the west half of the view facade, so the framed glazing takes the rest.
     expect(ground.openings).toContainEqual(expect.objectContaining({ type: "glazing-zone", facade: "south", start: 0.49, frame: true }));
-    expect(ground.openings?.some((o) => o.facade === "north")).toBe(false); // solid arrival face
+    // Solid arrival face, entered through a door centred on the canopied entry recess.
+    expect(ground.openings?.filter((o) => o.facade === "north")).toEqual([expect.objectContaining({ type: "door", start: expect.closeTo(0.44, 2), end: expect.closeTo(0.56, 2), frame: true })]);
 
     const upper = doc.massing.masses.find((m) => m.id === "upper")!;
     expect(upper.openings).toContainEqual(expect.objectContaining({ type: "opening-rhythm", facade: "north", width: 0.6 }));
@@ -128,7 +129,7 @@ describe("volume plans drive geometry", () => {
     expect(conformed.operations.some((o) => o.type === "recess")).toBe(false);
     expect(conformed.operations).toContainEqual(expect.objectContaining({ type: "projection", facade: "south", open: true }));
     expect(conformed.operations).toContainEqual(expect.objectContaining({ type: "entry-recess", facade: "north" }));
-    expect(conformed.openings.some((o) => o.facade === "north")).toBe(false);
+    expect(conformed.openings.filter((o) => o.facade === "north").map((o) => o.type)).toEqual(["door"]); // the planned entry door, never the proposed arrival glazing
     expect(conformed.openings.filter((o) => o.facade === "south")).toEqual([{ type: "glazing-zone", facade: "south", start: 0.5, end: 0.95, heightRatio: 0.85, frame: true }]);
     expect(conformed.notes.length).toBe(3);
   });

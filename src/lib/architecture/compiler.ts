@@ -10,12 +10,12 @@ import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { FLOOR_THICKNESS, LEVEL_HEIGHT, MATERIAL_COLORS } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import type { CompassSide, RoofType } from "@/types/house";
-import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
+import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
-import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type Point } from "./geometry/footprint";
+import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type Point, type WallEdge } from "./geometry/footprint";
 import { buildPolygonRoofPlate, buildPolygonShedRoof } from "./geometry/roofPlate";
 import { extrudeOutline, triMeshOf } from "@/lib/house/geometry/mesh";
-import { buildMassOpenings, buildPlainWallEdge, buildGlazedWallEdge, buildColonnadePosts } from "./geometry/openings";
+import { buildMassOpenings, buildPlainWallEdge, buildGlazedWallEdge, buildColonnadePosts, buildEntryRecessDoor } from "./geometry/openings";
 import { buildParapetPrimitives } from "./geometry/parapet";
 import "@/lib/capabilities/plugins";
 import { requestCapability } from "@/lib/capabilities/engine";
@@ -213,6 +213,27 @@ function roleFacadeOpenings(mass: MassVolume): readonly MassOpening[] {
   return [];
 }
 
+const DEFAULT_ENTRY_DOOR = { width: 1.6, height: 2.4 };
+const doorOnFloor = (door: DoorOpening, level: number) => !door.floors || door.floors === "all" || (door.floors === "ground" ? level === 0 : level > 0);
+
+/**
+ * The door an entry recess is entered through on `level`: the authored door on that facade whose span
+ * overlaps the recess, else — on the ground floor only — a default door, because an entry recess is by
+ * definition where the house is entered. Upper floors of the recess stay solid unless a door is authored there.
+ */
+function entryRecessDoor(recess: NonNullable<WallEdge["entryRecess"]>, openings: readonly MassOpening[], mass: MassVolume, level: number): { width: number; height: number; frame: boolean } | undefined {
+  const len = recess.facade === "north" || recess.facade === "south" ? mass.width : mass.depth;
+  const authored = openings.find((o): o is DoorOpening => o.type === "door" && o.facade === recess.facade && doorOnFloor(o, level) && Math.min(o.start, o.end) < recess.end && Math.max(o.start, o.end) > recess.start);
+  if (authored) return { width: Math.abs(authored.end - authored.start) * len, height: authored.height ?? DEFAULT_ENTRY_DOOR.height, frame: authored.frame ?? true };
+  return level === 0 ? { ...DEFAULT_ENTRY_DOOR, frame: true } : undefined;
+}
+
+/** Doors that land in an entry recess are built in its back wall, not as slivers on the facade plane beside it. */
+function withoutRecessedDoors(openings: readonly MassOpening[], recesses: readonly NonNullable<WallEdge["entryRecess"]>[]): readonly MassOpening[] {
+  if (!recesses.length) return openings;
+  return openings.filter((o) => o.type !== "door" || !recesses.some((r) => r.facade === o.facade && Math.min(o.start, o.end) < r.end && Math.max(o.start, o.end) > r.start));
+}
+
 function openingsForDiagnostics(mass: MassVolume): readonly MassOpening[] {
   return roleFacadeOpenings(mass);
 }
@@ -255,11 +276,14 @@ function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassSh
     const taggedEdges = footprint.edges.filter((e) => e.facade);
     const openEdges = footprint.edges.filter((e) => !e.facade && e.open);
     const untaggedEdges = footprint.edges.filter((e) => !e.facade && !e.open);
-    const openingsResult = buildMassOpenings(taggedEdges, mass.width, mass.depth, openings, level, wallBaseY, wallHeight, `wall-${level}`, materials);
+    const recesses = untaggedEdges.flatMap((e) => (e.entryRecess ? [e.entryRecess] : []));
+    const openingsResult = buildMassOpenings(taggedEdges, mass.width, mass.depth, withoutRecessedDoors(openings, recesses), level, wallBaseY, wallHeight, `wall-${level}`, materials);
     primitives.push(...openingsResult.primitives);
     warnings.push(...openingsResult.warnings.map((w) => `floor ${level}: ${w}`));
     untaggedEdges.forEach((edge, i) => {
-      if (edge.chamfer?.glazed) primitives.push(...buildGlazedWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, materials));
+      const entryDoor = edge.entryRecess && entryRecessDoor(edge.entryRecess, openings, mass, level);
+      if (entryDoor) primitives.push(...buildEntryRecessDoor(edge, entryDoor, wallBaseY, wallHeight, `wall-${level}-entry-${i}`, materials));
+      else if (edge.chamfer?.glazed) primitives.push(...buildGlazedWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, materials));
       else primitives.push(buildPlainWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, exteriorPaint));
     });
     openEdges.forEach((edge, i) => primitives.push(...buildColonnadePosts(edge, wallBaseY, wallHeight, `wall-${level}-open-${i}`, exteriorPaint)));

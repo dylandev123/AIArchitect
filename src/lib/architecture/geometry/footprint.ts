@@ -15,6 +15,8 @@ export interface WallEdge {
   postSpacing?: number;
   /** Set on a chamfer's own angled edge; `glazed` carries the op's flag so the compiler can build it as glass instead of solid wall. */
   chamfer?: { glazed: boolean };
+  /** Set on an entry-recess's back wall: the facade it was carved from and its span there (compass u), so the compiler can put the entry door in it. */
+  entryRecess?: { facade: MassFacade; start: number; end: number };
 }
 
 export interface Rect { x0: number; x1: number; z0: number; z1: number }
@@ -78,7 +80,7 @@ function appliesToFloor(scope: FootprintScope | undefined, floorIndex: number): 
   return floorIndex > 0;
 }
 
-interface FacadeInterval { start: number; end: number; depth: number; direction: 1 | -1; open?: boolean; postSpacing?: number }
+interface FacadeInterval { start: number; end: number; depth: number; direction: 1 | -1; open?: boolean; postSpacing?: number; entry?: boolean }
 
 /**
  * The corner each facade is entered/exited at when walking the loop clockwise (north, east, south, west,
@@ -146,7 +148,7 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
     if (end - start < EPS) { warnings.push(`${op.type} on ${op.facade} has zero width — skipped.`); continue; }
     const open = (op.type === "recess" || op.type === "projection") ? op.open : undefined;
     const postSpacing = (op.type === "recess" || op.type === "projection") ? op.postSpacing : undefined;
-    intervals[op.facade].push({ start, end, depth: Math.max(0, op.depth), direction, open, postSpacing });
+    intervals[op.facade].push({ start, end, depth: Math.max(0, op.depth), direction, open, postSpacing, entry: op.type === "entry-recess" });
   }
 
   // Clip every facade's intervals to the space left by adjacent notches, drop/clip overlaps against each other.
@@ -154,6 +156,8 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
   const facadePoints: Point[][] = [];
   /** The outward-facing edge of each `open:true` interval, recorded before the south/west point-list reversal below — matched back onto the final loop's edges by endpoint, in either direction. */
   const openEdges: { a: Point; b: Point; postSpacing?: number }[] = [];
+  /** Each entry-recess's back wall, recorded the same way. */
+  const entryEdges: { a: Point; b: Point; facade: MassFacade; start: number; end: number }[] = [];
   for (const facade of FACADES) {
     const len = facadeLength(facade, width, depth);
     const reservedStartU = reserved[facade].start / len;
@@ -166,7 +170,7 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
       const e = Math.min(iv.end, reservedEndU);
       if (e - s < EPS) { warnings.push(`${facade} operation clipped away entirely by an adjacent notch — skipped.`); continue; }
       if (s < cursor - EPS) { warnings.push(`overlapping operations on ${facade} facade — later one skipped.`); continue; }
-      accepted.push({ start: s, end: e, depth: iv.depth, direction: iv.direction, open: iv.open, postSpacing: iv.postSpacing });
+      accepted.push({ start: s, end: e, depth: iv.depth, direction: iv.direction, open: iv.open, postSpacing: iv.postSpacing, entry: iv.entry });
       cursor = e;
     }
 
@@ -185,6 +189,7 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
       push(offsetEnd);
       push(baseEnd);
       if (iv.open) openEdges.push({ a: offsetStart, b: offsetEnd, postSpacing: iv.postSpacing });
+      if (iv.entry && iv.depth > EPS) entryEdges.push({ a: offsetStart, b: offsetEnd, facade, start: iv.start, end: iv.end });
     }
     push(facadePointAt(facade, effectiveEnd, width, depth));
     facadePoints.push(pts);
@@ -228,6 +233,7 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
   for (let i = 0; i < loop.length; i++) edges.push({ a: loop[i], b: loop[(i + 1) % loop.length] });
   // Tag each edge with a facade when it lies on that facade's original plane (skips notch-inserted diagonal-free cut edges).
   const openEdgeFor = (e: WallEdge) => openEdges.find((o) => (samePoint(o.a, e.a) && samePoint(o.b, e.b)) || (samePoint(o.a, e.b) && samePoint(o.b, e.a)));
+  const entryEdgeFor = (e: WallEdge) => entryEdges.find((o) => (samePoint(o.a, e.a) && samePoint(o.b, e.b)) || (samePoint(o.a, e.b) && samePoint(o.b, e.a)));
   // A chamfer's angled edge always runs between the two points its corner reserved back on each facade.
   const chamferEdges = (Object.entries(chamfers) as [Corner, { size: number; glazed: boolean }][]).map(([corner, c]) => {
     const [cx, cz] = squareCorner[corner];
@@ -238,7 +244,8 @@ export function buildFloorFootprint(width: number, depth: number, operations: re
   const tagged = edges.map((e) => {
     const open = openEdgeFor(e);
     const chamfer = chamferEdgeFor(e);
-    return { ...e, facade: facadeOf(e, width, depth), ...(open ? { open: true as const, ...(open.postSpacing ? { postSpacing: open.postSpacing } : {}) } : {}), ...(chamfer ? { chamfer: { glazed: chamfer.glazed } } : {}) };
+    const entry = entryEdgeFor(e);
+    return { ...e, facade: facadeOf(e, width, depth), ...(open ? { open: true as const, ...(open.postSpacing ? { postSpacing: open.postSpacing } : {}) } : {}), ...(chamfer ? { chamfer: { glazed: chamfer.glazed } } : {}), ...(entry ? { entryRecess: { facade: entry.facade, start: entry.start, end: entry.end } } : {}) };
   });
 
   const chamferList = (Object.entries(chamfers) as [Corner, { size: number; glazed: boolean }][]).filter(([, c]) => c.size > EPS).map(([corner, c]) => ({ corner, size: c.size }));

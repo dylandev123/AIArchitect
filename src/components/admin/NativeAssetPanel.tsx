@@ -74,7 +74,7 @@ export function NativeAssetPanel({ plan, asset, ensureSaved }: Props) {
     const result = await generateNative(adminEmail, planId, asset.id, text);
     setBusy("");
     if ("error" in result) return setError(result.error);
-    if (result.kind === "external") return setError(`Not buildable natively — external generation recommended: ${result.reason}`);
+    if (result.kind === "external") return setError(`Native attempt did not produce a buildable draft: ${result.reason}. This asset remains available for external generation later.`);
     setInstruction("");
     setRetried(result.stats.retry?.firstError ?? "");
   };

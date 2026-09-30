@@ -5,7 +5,7 @@ import type { CapabilityIntent } from "@/lib/capabilities/types";
 import { capabilityById, normalizeCapability } from "@/lib/library/capabilities";
 import type { ArchitecturalIntent } from "../designEngine";
 import type { MassGeometryOperation, MassOpening, MassVolume, SiteStrategy } from "../document";
-import { describeVolumePlan, parameterizeCapabilityIntent, realizeVolumePlan, type PlanRealization } from "../volumePlan";
+import { arrivalPrivacyFor, conflicts, describeVolumePlan, parameterizeCapabilityIntent, realizeVolumePlan, type PlanRealization } from "../volumePlan";
 import { runStage, type RunStageResult } from "./runStage";
 import { geometryOperationSchema, geometryStageOutputSchema, type GeometryOperationOutput, GEOMETRY_OPERATION_TYPES, KNOWN_CAPABILITY_IDS } from "./schemas";
 import { clampNearBound } from "./numericNormalization";
@@ -148,16 +148,30 @@ function toDocumentOp(op: GeometryOperationOutput): MassGeometryOperation | Mass
 }
 
 /** Restore only required plan components the otherwise-valid architect response omitted. */
-function completeCriticalPlanElements(operations: MassGeometryOperation[], openings: MassOpening[], baseline: PlanRealization): { operations: MassGeometryOperation[]; openings: MassOpening[] } {
-  const completeOperations = [...operations];
+function completeCriticalPlanElements(operations: MassGeometryOperation[], openings: MassOpening[], baseline: PlanRealization, mass: MassVolume): { operations: MassGeometryOperation[]; openings: MassOpening[]; notes: string[] } {
+  const notes: string[] = [];
+  let completeOperations = [...operations];
   for (const required of baseline.operations.filter((op) => op.type === "entry-recess")) {
     if (!completeOperations.some((op) => op.type === "entry-recess" && op.facade === required.facade)) completeOperations.push(required);
+  }
+  // The planned outdoor room is how this volume meets the outside. The model may move or reshape it (any open
+  // edge it authors stands), but a refinement that drops every open edge loses the plan's indoor-outdoor move,
+  // so the planned one is restored — displacing only a plain recess/projection it would collide with.
+  const isOpen = (op: MassGeometryOperation) => (op.type === "projection" || op.type === "recess") && op.open === true;
+  if (!completeOperations.some(isOpen)) {
+    for (const required of baseline.operations.filter(isOpen)) {
+      const blocking = completeOperations.filter((op) => conflicts(op, required, mass));
+      if (blocking.some((op) => op.type !== "projection" && op.type !== "recess")) { notes.push(`planned ${required.type} terrace on ${"facade" in required ? required.facade : "?"} not restored — it collides with an authored ${blocking[0].type}.`); continue; }
+      completeOperations = completeOperations.filter((op) => !blocking.includes(op));
+      completeOperations.push(required);
+      notes.push(`restored the planned open ${required.type} on the ${"facade" in required ? required.facade : "?"} facade${blocking.length ? `, replacing ${blocking.length} colliding operation(s)` : ""}.`);
+    }
   }
   const completeOpenings = [...openings];
   for (const required of baseline.openings) {
     if (!completeOpenings.some((op) => op.type === required.type && op.facade === required.facade)) completeOpenings.push(required);
   }
-  return { operations: completeOperations, openings: completeOpenings };
+  return { operations: completeOperations, openings: completeOpenings, notes };
 }
 
 function baselineResult(masses: readonly MassVolume[], baselines: ReadonlyMap<string, PlanRealization>, attempts: number, durationMs: number): GeometryStageResult {
@@ -233,9 +247,12 @@ export async function runGeometryStage(ctx: GeometryStageContext, timings: Timin
     const mass = massesById.get(entry.massId)!;
     // A schema-valid response is the architect's executable geometry. `volumePlan` supplies geometry only
     // when this stage fails or a salvaged response omits a mass; it does not reinterpret valid authored form.
-    const completed = completeCriticalPlanElements(operations, openings, baselines.get(entry.massId)!);
-    byMassId.set(entry.massId, { ...completed, ...(mass.cantilever ? { cantilever: mass.cantilever } : {}), planNotes: [] });
-    capabilityIntents.push(...baselines.get(entry.massId)!.capabilityIntents);
+    const baseline = baselines.get(entry.massId)!;
+    const completed = completeCriticalPlanElements(operations, openings, baseline, mass);
+    // Privacy is re-applied to what the model actually authored, not just to the baseline it may have replaced.
+    const privacy = arrivalPrivacyFor(mass, ctx.masses, ctx.siteStrategy, completed.openings, baseline.capabilityIntents);
+    byMassId.set(entry.massId, { operations: completed.operations, openings: privacy.openings, ...(mass.cantilever ? { cantilever: mass.cantilever } : {}), planNotes: [...completed.notes, ...privacy.notes] });
+    capabilityIntents.push(...baseline.capabilityIntents, ...privacy.capabilityIntents);
     if (entry.requestedOperation) {
       const normalized = normalizeCapability(entry.requestedOperation);
       const capability = normalized ? capabilityById(normalized) : undefined;

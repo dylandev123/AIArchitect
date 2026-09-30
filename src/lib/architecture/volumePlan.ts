@@ -158,7 +158,7 @@ export function treatmentFor(facade: MassFacade, plan: VolumePlan, facades: Plan
   return plan.flankFacades;
 }
 
-const GLASS_TREATMENTS = new Set<FacadeTreatment>(["glass-wall", "framed-glass", "shaded-glass", "ribbon", "fin-screened"]);
+const GLASS_TREATMENTS = new Set<FacadeTreatment>(["glass-wall", "framed-glass", "shaded-glass", "ribbon", "fin-screened", "screened"]);
 const cornerOf = (a: MassFacade, b: MassFacade) => {
   const ns = a === "north" || a === "south" ? a : b;
   const ew = a === "east" || a === "west" ? a : b;
@@ -171,6 +171,50 @@ const oppositeFacade = (facade: MassFacade): MassFacade => ({ north: "south", so
 /** A shared wall is unavailable, but it must not erase a required architectural move. */
 function firstFreeFacade(facades: PlanFacades, candidates: readonly (MassFacade | undefined)[]): MassFacade | undefined {
   return candidates.find((facade): facade is MassFacade => facade !== undefined && !facades.party.has(facade));
+}
+
+// ── Screens and privacy ──────────────────────────────────────────────────────────────────────────────
+
+const PRIVATE_ROLES = new Set<MassRole>(["bedroom-wing", "guest-pavilion"]);
+/** Sill above standing eye height: light and air without a view into the room from the drive. */
+const PRIVATE_SILL = 1.6;
+
+/** A screen-layer intent covering the glazing already on `facade`; undefined when there is no glazing to screen. */
+function screenIntent(mass: MassVolume, facade: MassFacade, openings: readonly MassOpening[]): CapabilityIntent | undefined {
+  const zones = openings.filter((o) => o.facade === facade && o.type === "glazing-zone") as Extract<MassOpening, { type: "glazing-zone" }>[];
+  if (!zones.length) return undefined;
+  return { id: "screen-layer", stage: "architectural-geometry", parameters: {
+    massId: mass.id, facade: worldSideOf(facade, mass.rotation),
+    start: round(Math.max(0, Math.min(...zones.map((z) => Math.min(z.start, z.end))) - 0.02)), end: round(Math.min(1, Math.max(...zones.map((z) => Math.max(z.start, z.end))) + 0.02)),
+    depth: 0.5, height: round(totalHeight(mass) - 0.25),
+  } };
+}
+
+/**
+ * A bedroom or guest volume never shows its rooms to the drive: punched/slot windows on its arrival facade
+ * are lifted to a high sill, and glazing the plan put there is kept but screened. The design's own treatment
+ * (how much glass, where) is unchanged — only how exposed it is.
+ */
+function applyArrivalPrivacy(mass: MassVolume, facades: PlanFacades, openings: readonly MassOpening[], existing: readonly CapabilityIntent[]): { openings: MassOpening[]; capabilityIntents: CapabilityIntent[]; notes: string[] } {
+  const facade = facades.arrival;
+  if (!PRIVATE_ROLES.has(mass.role) || facade === facades.view || facade === facades.courtyard || facades.party.has(facade)) return { openings: [...openings], capabilityIntents: [], notes: [] };
+  const wallHeight = totalHeight(mass) / mass.floors - 0.2;
+  const notes: string[] = [];
+  const out = openings.map((o) => {
+    if (o.facade !== facade || o.type !== "opening-rhythm" || o.sill >= PRIVATE_SILL) return o;
+    notes.push(`${o.type} on the ${facade} arrival facade lifted to a ${PRIVATE_SILL}m privacy sill.`);
+    return { ...o, sill: PRIVATE_SILL, height: round(clamp(wallHeight - PRIVATE_SILL - 0.25, 0.5, Math.min(o.height, 0.9))) };
+  });
+  const side = worldSideOf(facade, mass.rotation);
+  const screened = existing.some((i) => (i.id === "screen-layer" || i.id === "brise-soleil") && i.parameters?.massId === mass.id && i.parameters?.facade === side);
+  const screen = screened ? undefined : screenIntent(mass, facade, out);
+  if (screen) notes.push(`glazing on the ${facade} arrival facade screened for privacy.`);
+  return { openings: out, capabilityIntents: screen ? [screen] : [], notes };
+}
+
+/** Privacy applied to an already-authored opening set (the Geometry Pass's refinement), with the intents it needs. */
+export function arrivalPrivacyFor(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy, openings: readonly MassOpening[], existing: readonly CapabilityIntent[]) {
+  return applyArrivalPrivacy(mass, resolvePlanFacades(mass, masses, site), openings, existing);
 }
 
 // ── Realization ──────────────────────────────────────────────────────────────────────────────────────
@@ -208,6 +252,7 @@ function facadeOpenings(facade: MassFacade, treatment: FacadeTreatment, mass: Ma
   });
   switch (treatment) {
     case "glass-wall": return [zone(0.88)];
+    case "screened": return [zone(0.88)];
     case "framed-glass": return [zone(0.9)];
     case "shaded-glass": return [zone(0.8, { reveal: 0.45 })];
     case "fin-screened": return [zone(0.62, { reveal: 0.25 })];
@@ -323,9 +368,11 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
   const entryThroughOutdoor = plan.entry !== "none" && entryFacade !== undefined && entryFacade === outdoorFacade;
   if (entryThroughOutdoor) notes.push(`entered through the ${plan.outdoor} on the arrival side instead of a separate ${plan.entry} entry.`);
   const entryActive = plan.entry !== "none" && entryFacade !== undefined && !entryThroughOutdoor;
+  let recessWidth: number | undefined;
   if (entryActive && (plan.entry === "recessed" || plan.entry === "canopied")) {
     const len = facadeLength(entryFacade!, mass);
     const width = round(clamp(0.22 * len, 2.4, Math.min(4, len * 0.6)));
+    recessWidth = width;
     operations.push({ type: "entry-recess", facade: entryFacade!, width, depth: round(clamp(0.12 * depthBehind(entryFacade!, mass), 1.1, 1.6)) });
     if (plan.entry === "canopied") {
       if (aligned) capabilityIntents.push({ id: "entry-canopy", stage: "architectural-geometry", parameters: { massId: mass.id, facade: worldSideOf(entryFacade!, mass.rotation), width: round(width + 0.8), depth: 2, height: round(Math.min(2.9, levelHeight - 0.2)) } });
@@ -346,6 +393,10 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
         notes.push(`substantial living glazing adapted onto the ${glazedFacade} exterior facade.`);
       }
     }
+  }
+  // A recessed/canopied entry is still entered through a door: centred on the recess, so the compiler builds it in the recess's back wall.
+  if (entryActive && recessWidth !== undefined) {
+    openings = placeDoor(openings, entryFacade!, mass, { width: round(Math.min(1.8, recessWidth - 0.6)), height: round(Math.min(2.4, levelHeight - 0.3)), frame: true });
   }
   if (entryActive && plan.entry === "flush") {
     const garage = mass.role === "garage";
@@ -372,9 +423,27 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
       capabilityIntents.push({ id: "brise-soleil", stage: "architectural-geometry", parameters: { massId: mass.id, facade: worldSideOf(facade, mass.rotation), count: clamp(Math.round(facadeLength(facade, mass) / 0.9), 5, 16), depth: 0.5, height: round(totalHeight(mass) - 0.4), sill: 0.3 } });
       return;
     }
+    // A rotated volume can't take the axis-aligned fins, but the screen layer follows its rotation.
+    if (i === 0 && !aligned && !claimed[facade]) {
+      const screen = screenIntent(mass, facade, openings);
+      if (screen) { capabilityIntents.push(screen); notes.push(`sun fins on the rotated ${facade} facade built as a screen layer.`); return; }
+    }
     notes.push(`sun fins on the ${facade} facade built as deep glazing reveals (${i > 0 ? "one fin screen per volume" : !aligned ? "rotated volume" : "an outdoor room stands in front of it"}).`);
     openings = openings.map((o) => (o.type === "glazing-zone" && o.facade === facade ? { ...o, reveal: 0.8 } : o));
   });
+
+  // 7. Screens — every facade planned "screened" gets a real screen layer over its glazing.
+  for (const facade of FACADES) {
+    if (treatmentFor(facade, plan, facades) !== "screened") continue;
+    const screen = screenIntent(mass, facade, openings);
+    if (screen) capabilityIntents.push(screen);
+  }
+
+  // 8. Privacy — a bedroom/guest volume's arrival side.
+  const privacy = applyArrivalPrivacy(mass, facades, openings, capabilityIntents);
+  openings = privacy.openings;
+  capabilityIntents.push(...privacy.capabilityIntents);
+  notes.push(...privacy.notes);
 
   return { operations, openings, capabilityIntents, ...(cantilever ? { cantilever } : {}), notes };
 }
@@ -396,7 +465,8 @@ function opInterval(op: MassGeometryOperation, mass: MassVolume): (Interval & { 
   return { facade: op.facade, start: Math.min(op.start, op.end), end: Math.max(op.start, op.end), floors: op.floors ?? "all" };
 }
 const floorsIntersect = (a: FootprintScope, b: FootprintScope) => a === "all" || b === "all" || a === b;
-function conflicts(a: MassGeometryOperation, b: MassGeometryOperation, mass: MassVolume): boolean {
+/** True when two footprint operations would claim the same corner, or overlapping spans of one facade on a shared floor. */
+export function conflicts(a: MassGeometryOperation, b: MassGeometryOperation, mass: MassVolume): boolean {
   if ((a.type === "notch" || a.type === "chamfer") && (b.type === "notch" || b.type === "chamfer")) return a.corner === b.corner;
   const ia = opInterval(a, mass), ib = opInterval(b, mass);
   return !!ia && !!ib && ia.facade === ib.facade && floorsIntersect(ia.floors, ib.floors) && ia.start < ib.end && ib.start < ia.end;
@@ -492,16 +562,31 @@ export function describeVolumePlan(mass: MassVolume, masses: readonly MassVolume
 }
 
 /**
+ * The local corner corner-glazing should wrap: the view facade (or, if that is a shared wall, the next open
+ * face) turning onto its free flank — skipping a corner the footprint already notched or chamfered away.
+ */
+export function viewCorner(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): "nw" | "ne" | "se" | "sw" {
+  const f = resolvePlanFacades(mass, masses, site);
+  const main = firstFreeFacade(f, [f.view, f.courtyard, f.freeSide]) ?? f.view;
+  const [a, b] = perpendicular(main);
+  const flanks = [f.freeSide, a, b].filter((x) => x !== main && x !== oppositeFacade(main));
+  const cut = new Set((mass.operations ?? []).flatMap((op) => (op.type === "notch" || op.type === "chamfer" ? [op.corner] : [])));
+  const candidates = [...flanks.filter((x) => !f.party.has(x)), ...flanks].map((flank) => cornerOf(main, flank));
+  return candidates.find((c) => !cut.has(c)) ?? candidates[0];
+}
+
+/**
  * A capability requested by name alone (`requestedOperation`) carries only `{ massId }`, but the facade-bound
  * plugins refuse to build without a facade. Fill it from the volume's plan orientation — arrival for an
  * entry canopy, the view for sun fins — instead of emitting an intent that is guaranteed to fail.
  */
 export function parameterizeCapabilityIntent(intent: CapabilityIntent, masses: readonly MassVolume[], site: SiteStrategy): CapabilityIntent {
   const mass = masses.find((m) => m.id === intent.parameters?.massId);
+  if (mass && intent.id === "corner-glazing" && typeof intent.parameters?.corner !== "string") return { ...intent, parameters: { ...intent.parameters, corner: viewCorner(mass, masses, site) } };
   if (!mass || typeof intent.parameters?.facade === "string") return intent;
   const f = resolvePlanFacades(mass, masses, site);
   if (intent.id === "entry-canopy") return { ...intent, parameters: { ...intent.parameters, facade: worldSideOf(f.arrival, mass.rotation) } };
-  if (intent.id === "brise-soleil") return { ...intent, parameters: { ...intent.parameters, facade: worldSideOf(f.view, mass.rotation) } };
+  if (intent.id === "brise-soleil" || intent.id === "screen-layer") return { ...intent, parameters: { ...intent.parameters, facade: worldSideOf(f.view, mass.rotation) } };
   return intent;
 }
 
@@ -509,7 +594,8 @@ export function parameterizeCapabilityIntent(intent: CapabilityIntent, masses: r
 export function mergeCapabilityIntents(intents: readonly CapabilityIntent[]): CapabilityIntent[] {
   const byKey = new Map<string, CapabilityIntent>();
   for (const intent of intents) {
-    const key = `${intent.id}:${String(intent.parameters?.massId ?? "")}:${String(intent.parameters?.secondaryMassId ?? "")}`;
+    // A volume can carry a screen on more than one facade; every other capability is one per mass (or mass pair).
+    const key = `${intent.id}:${String(intent.parameters?.massId ?? "")}:${String(intent.parameters?.secondaryMassId ?? "")}${intent.id === "screen-layer" ? `:${String(intent.parameters?.facade ?? "")}` : ""}`;
     const existing = byKey.get(key);
     if (!existing || Object.keys(intent.parameters ?? {}).length > Object.keys(existing.parameters ?? {}).length) byKey.set(key, intent);
   }

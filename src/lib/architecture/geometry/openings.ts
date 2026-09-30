@@ -223,6 +223,48 @@ export function buildGlazedWallEdge(edge: WallEdge, wallBaseY: number, wallHeigh
   ];
 }
 
+/** Solid wall kept either side of an entry-recess door, so the door reads as set into the recess. */
+const ENTRY_JAMB = 0.3;
+
+/**
+ * An entry-recess's back wall with the entry door in it: solid jambs either side, a head band above, and a
+ * framed glazed door panel at grade — the recess is where the house is entered, so its back wall is never the
+ * blank plane a facade opening can't reach (openings are authored on the facade's own plane, which the recess
+ * steps behind). `door.width`/`height` are clamped so the door always fits the recess with a jamb each side.
+ */
+export function buildEntryRecessDoor(edge: WallEdge, door: { width: number; height: number; frame: boolean }, wallBaseY: number, wallHeight: number, id: string, materials: OpeningMaterials): HousePrimitive[] {
+  const dx = edge.b[0] - edge.a[0];
+  const dz = edge.b[1] - edge.a[1];
+  const length = Math.hypot(dx, dz);
+  if (length < EPS) return [];
+  const nx = dz / length, nz = -dx / length;
+  const ux = dx / length, uz = dz / length;
+  const alongX = Math.abs(dx) >= Math.abs(dz);
+  const cx = (edge.a[0] + edge.b[0]) / 2 - nx * WALL_INSET;
+  const cz = (edge.a[1] + edge.b[1]) / 2 - nz * WALL_INSET;
+  const width = Math.max(0.2, Math.min(door.width, length - 2 * ENTRY_JAMB));
+  const height = Math.max(1.9, Math.min(door.height, wallHeight - 0.05));
+  const exteriorPaint = paintOf(materials.exterior);
+  const size = (along: number, h: number, thick: number): [number, number, number] => (alongX ? [along, h, thick] : [thick, h, along]);
+  const at = (offset: number, y: number): [number, number, number] => [cx + ux * offset, y, cz + uz * offset];
+  const jamb = (length - width) / 2;
+  const out: HousePrimitive[] = [];
+  if (jamb > EPS) {
+    out.push(box(`${id}-jamb-0`, "wall", "Wall (entry jamb)", at(-(width + jamb) / 2, wallBaseY + wallHeight / 2), size(jamb, wallHeight, WALL_THICKNESS), exteriorPaint));
+    out.push(box(`${id}-jamb-1`, "wall", "Wall (entry jamb)", at((width + jamb) / 2, wallBaseY + wallHeight / 2), size(jamb, wallHeight, WALL_THICKNESS), exteriorPaint));
+  }
+  const head = wallHeight - height;
+  if (head > 0.02) out.push(box(`${id}-head-wall`, "wall", "Wall (above entry door)", at(0, wallBaseY + height + head / 2), size(width, head, WALL_THICKNESS), exteriorPaint));
+  const doorY = wallBaseY + height / 2;
+  out.push(box(`${id}-door-frame`, "window", "Door Frame", at(0, doorY), size(width, height, FRAME_THICKNESS), paintOf(materials.trim)));
+  out.push(box(`${id}-door-panel`, "window", "Glazed Door Panel", at(0, doorY), size(Math.max(0.1, width - FRAME_BORDER * 2), height - FRAME_BORDER, GLASS_THICKNESS), paintOf(materials.glass)));
+  if (door.frame) {
+    const post = FRAME_THICKNESS * 2.5;
+    [-1, 1].forEach((sign, i) => out.push(box(`${id}-door-surround-${i}`, "wall", "Door Surround Post", at(sign * (width / 2 - post / 2), wallBaseY + height / 2), [post, height, post], paintOf(materials.trim))));
+  }
+  return out;
+}
+
 const POST_SIZE = 0.16;
 const HEADER_HEIGHT = 0.14;
 

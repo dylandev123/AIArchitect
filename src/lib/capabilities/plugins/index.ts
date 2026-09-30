@@ -9,3 +9,4 @@ import "./courtyard-edge-wall/plugin";
 import "./entry-canopy/plugin";
 import "./brise-soleil/plugin";
 import "./pilotis/plugin";
+import "./screen-layer/plugin";

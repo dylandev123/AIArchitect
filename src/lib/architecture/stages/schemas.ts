@@ -72,7 +72,7 @@ export const siteStrategyInvariantSchema = z.object({
 export const VOLUME_FORMS = ["bar", "l-shape", "prow", "setback"] as const;
 export const VOLUME_HEIGHTS = ["low", "standard", "lofty", "double-height"] as const;
 export const VOLUME_HIERARCHIES = ["dominant", "supporting", "recessive"] as const;
-export const FACADE_TREATMENTS = ["solid", "punched", "slot", "ribbon", "glass-wall", "framed-glass", "shaded-glass", "fin-screened"] as const;
+export const FACADE_TREATMENTS = ["solid", "punched", "slot", "ribbon", "glass-wall", "framed-glass", "shaded-glass", "fin-screened", "screened"] as const;
 export const ENTRY_TREATMENTS = ["none", "flush", "recessed", "canopied"] as const;
 export const OUTDOOR_TRANSITIONS = ["none", "veranda", "colonnade", "covered-terrace"] as const;
 export const OUTDOOR_SIDES = ["view", "courtyard", "flank", "arrival"] as const;
@@ -105,7 +105,7 @@ export const VOLUME_PLAN_GUIDE = `Plan every volume as architecture before it ha
 - form: ${VOLUME_FORMS.join(", ")} — bar = a plain long volume; l-shape = a corner carved out toward the view to make a sheltered outdoor room; prow = one view-side corner cut at an angle; setback = upper floor stepped back from the view facade (2+ floors only).
 - height: ${VOLUME_HEIGHTS.join(", ")} — double-height = one soaring floor; low = a subordinate service height.
 - hierarchy: ${VOLUME_HIERARCHIES.join(", ")} — how strongly this volume should read against the others.
-- viewFacade / arrivalFacade / flankFacades / courtyardFacade (courtyard wings only): ${FACADE_TREATMENTS.join(", ")} — the facade facing the view, the facade facing arrival, the two remaining sides. fin-screened = glazing shaded by vertical sun fins.
+- viewFacade / arrivalFacade / flankFacades / courtyardFacade (courtyard wings only): ${FACADE_TREATMENTS.join(", ")} — the facade facing the view, the facade facing arrival, the two remaining sides. fin-screened = glazing shaded by vertical sun fins; screened = full glazing behind a continuous batten screen (privacy and filtered light).
 - entry: ${ENTRY_TREATMENTS.join(", ")} — how this volume is entered from the arrival side.
 - outdoor: ${OUTDOOR_TRANSITIONS.join(", ")}, with outdoorSide: ${OUTDOOR_SIDES.join(", ")} — the covered transition from inside to outside.
 - roofEdge: ${ROOF_EDGES.join(", ")} — parapet = crisp box edge with no eave; floating = a thin roof plane hovering on a glass reveal.
@@ -247,7 +247,7 @@ export const FOOTPRINT_SCOPES = ["ground", "upper", "all"] as const;
  */
 export const GEOMETRY_OPERATION_TYPES = ["recess", "projection", "notch", "entry-recess", "chamfer", "glazing-zone", "opening-rhythm", "door"] as const;
 /** The known-good capability plugin ids the model may name via `requestedOperation`/mass-expansion's same field — disclosed for the same reason as every closed vocabulary here: matching against unlisted free text reliably misses. */
-export const KNOWN_CAPABILITY_IDS = ["courtyard-edge-wall", "corner-glazing", "bridge-masses", "entry-canopy", "brise-soleil", "pilotis"] as const;
+export const KNOWN_CAPABILITY_IDS = ["courtyard-edge-wall", "corner-glazing", "bridge-masses", "entry-canopy", "brise-soleil", "pilotis", "screen-layer"] as const;
 
 /**
  * One flat schema for every operation kind, same reasoning as `massExpansionStageOutputSchema`: a

@@ -1,3 +1,4 @@
+import { completeComposition } from "./compositionCompletion";
 import type { CompassSide, ProjectScale, SiteEnvironment } from "@/types/house";
 import type { DesignRecipe, CapabilityRequest } from "@/types/library";
 import type { UsageMeta } from "@/lib/ai/usage/track";
@@ -40,6 +41,12 @@ function finalCapabilityIntents(intents: readonly NonNullable<ArchitecturalDesig
 }
 
 const isDev = process.env.NODE_ENV !== "production";
+
+function completedMasses(masses: readonly MassVolume[], intent: Parameters<typeof completeComposition>[1], siteStrategy: SiteStrategy): MassVolume[] {
+  const completion = completeComposition(masses, intent, siteStrategy);
+  if (isDev && completion.notes.length) console.debug("[composition-completion]", completion.notes);
+  return completion.masses;
+}
 function logPlanNotes(byMassId: ReadonlyMap<string, MassGeometryResult>): void {
   if (!isDev) return;
   for (const [massId, result] of byMassId) if (result.planNotes.length) console.debug(`[architectural-geometry] ${massId} plan notes:`, result.planNotes);
@@ -165,19 +172,21 @@ export async function runArchitecturePipeline(
     onEvent({ type: "mass-added", stage: "mass-expansion", massesSoFar: masses.length, document: draftDocument(input.brief, siteStrategy, masses, [], undefined) });
   });
   diagnostics.push(massExpansionDiagnostics(expansion));
-  onEvent({ type: "stage", stage: "mass-expansion", index: 4, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, expansion.masses, [], expansion.capabilityIntents) });
-  onUpstreamProgress({ foundation, masses: expansion.masses }, diagnostics);
+  // Deterministic: makes the courtyard / indoor-outdoor moves the design declared executable before articulation.
+  const placedMasses = completedMasses(expansion.masses, intent, siteStrategy);
+  onEvent({ type: "stage", stage: "mass-expansion", index: 4, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, placedMasses, [], expansion.capabilityIntents) });
+  onUpstreamProgress({ foundation, masses: placedMasses }, diagnostics);
 
   // Batched, same reasoning as roof composition below: every mass is already placed, so one call gives every
   // mass its articulation together instead of asking (and paying for) it per mass.
-  const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses: expansion.masses }, timings, budgetMs, usageMeta);
-  const articulatedMasses = applyGeometry(expansion.masses, geometryResult.byMassId);
+  const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses: placedMasses }, timings, budgetMs, usageMeta);
+  const articulatedMasses = applyGeometry(placedMasses, geometryResult.byMassId);
   logPlanNotes(geometryResult.byMassId);
   diagnostics.push(geometryDiagnostics(geometryResult));
   const geometryCapabilityIntents = finalCapabilityIntents([...(expansion.capabilityIntents ?? []), ...geometryResult.capabilityIntents], articulatedMasses, siteStrategy);
   const geometryCapabilityRequests = [...expansion.capabilityRequests, ...geometryResult.capabilityRequests];
   onEvent({ type: "stage", stage: "architectural-geometry", index: 5, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, articulatedMasses, [], geometryCapabilityIntents) });
-  onUpstreamProgress({ foundation, masses: expansion.masses, articulatedMasses }, diagnostics);
+  onUpstreamProgress({ foundation, masses: placedMasses, articulatedMasses }, diagnostics);
 
   // One call composes every mass's roof at once: by now every mass is placed, so nothing is gained by asking
   // sequentially, and the "roof-added" events below still fire once per mass for the same live-preview cadence.
@@ -188,7 +197,7 @@ export async function runArchitecturePipeline(
     modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
     ...(roofResult.ok ? (roofResult.warnings ? { warnings: roofResult.warnings } : {}) : { error: roofResult.errors.join("; ") }),
   });
-  onUpstreamProgress({ foundation, masses: expansion.masses, articulatedMasses, roofs }, diagnostics);
+  onUpstreamProgress({ foundation, masses: placedMasses, articulatedMasses, roofs }, diagnostics);
   roofs.forEach((_, i) => {
     onEvent({ type: "roof-added", stage: "roof-composition", massId: articulatedMasses[i].id, roofsSoFar: i + 1, totalMasses: articulatedMasses.length, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs.slice(0, i + 1), geometryCapabilityIntents) });
   });
@@ -202,7 +211,7 @@ export async function runArchitecturePipeline(
   return {
     document, design, capabilityRequests: geometryCapabilityRequests, massExpansionLog: expansion.log, truncated: expansion.truncated,
     massExpansionStopReason: expansion.stopReason, massExpansionStopMessage: expansion.stopMessage, unplacedVolumes: expansion.unplacedVolumes,
-    diagnostics, upstream: { foundation, masses: expansion.masses, articulatedMasses, roofs },
+    diagnostics, upstream: { foundation, masses: placedMasses, articulatedMasses, roofs },
   };
 }
 
@@ -262,6 +271,7 @@ export async function replayArchitectureStage(
   let geometryCapabilityIntents: ArchitecturalDesignDocument["capabilities"] = [];
   let geometryCapabilityRequests: CapabilityRequest[] = [];
   if (stage === "architectural-geometry" || stage === "mass-expansion" || !cached.articulatedMasses) {
+    masses = completedMasses(masses, intent, siteStrategy);
     const geometryResult = await runGeometryStage({ brief: input.brief, intent, siteStrategy, masses }, timings, budgetMs, usageMeta);
     articulatedMasses = applyGeometry(masses, geometryResult.byMassId);
     logPlanNotes(geometryResult.byMassId);

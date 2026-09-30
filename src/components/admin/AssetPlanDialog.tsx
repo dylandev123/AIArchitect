@@ -47,7 +47,7 @@ function overlay(local: PlannedAsset[], stored: AssetPlan | undefined): PlannedA
 export function AssetPlanDialog({ target, planId: initialPlanId, onClose }: Props) {
   const adminEmail = useAdminStore((s) => s.adminEmail);
   const catalog = useAssetStore((s) => s.catalog);
-  const { plans, generation, planAssets, savePlan, generateNative, act } = useLibraryStore();
+  const { plans, planAssets, savePlan, generateNative } = useLibraryStore();
   const [planId, setPlanId] = useState(initialPlanId);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [phase, setPhase] = useState<"loading" | "error" | "review">("loading");
@@ -141,8 +141,9 @@ export function AssetPlanDialog({ target, planId: initialPlanId, onClose }: Prop
       const id = await persist("approved", true);
       if (!id) return;
       const chosen = assets.filter((a) => ids.includes(a.id) && !a.generated);
-      const native = chosen.filter((a) => (a.route ?? "native") === "native");
-      const external = chosen.filter((a) => a.route === "external-generation-recommended");
+      // Route is an advisory for the later external-provider workflow, never a gate on the
+      // one native attempt. A simple, valid native approximation is still useful to review.
+      const native = chosen;
       const problems: string[] = [];
       let done = 0;
       // Highest reuse first (`assets` is already in generation order).
@@ -153,14 +154,7 @@ export function AssetPlanDialog({ target, planId: initialPlanId, onClose }: Prop
         else if (res.kind === "external") problems.push(`${a.name}: external generation recommended (${res.reason})`);
         done++;
       }
-      let extra = "";
-      if (external.length > 0) {
-        if (generation?.available) {
-          const err = await act(adminEmail, { action: "generateExternal", planId: id, assetIds: external.map((a) => a.id) });
-          extra = err ? ` External: ${err}` : ` ${external.length} sent to the external provider.`;
-        } else extra = ` ${external.length} need external generation (no provider configured).`;
-      }
-      setMessage(`${native.length - problems.length} of ${native.length} native drafts ready to review — open each to preview and approve.${extra}`);
+      setMessage(`${native.length - problems.length} of ${native.length} native drafts ready to review — open each to preview and approve.`);
       if (problems.length > 0) setError(problems.slice(0, 3).join(" · "));
     });
 
@@ -241,22 +235,19 @@ export function AssetPlanDialog({ target, planId: initialPlanId, onClose }: Prop
                               </p>
                               <p className="mt-0.5 text-[11px] text-neutral-500">{a.description}</p>
                               {a.route === "external-generation-recommended" && (
-                                <p className="mt-0.5 text-[10px] text-amber-400/80">external-generation-recommended — too organic or complex for the native builders; better sent to Meshy/Tripo later.</p>
+                                <p className="mt-0.5 text-[10px] text-amber-400/80">external-generation-recommended — native is attempted first; if it cannot produce a valid draft, keep this for external generation later.</p>
                               )}
                               {a.job && <p className="mt-0.5 text-[10px] text-sky-400/80">Sent to {a.job.providerId} (job {a.job.jobId}).</p>}
                             </div>
                             <div className="flex shrink-0 gap-1">
-                              <button onClick={() => setExpanded(expanded === a.id ? null : a.id)} disabled={a.route === "external-generation-recommended" && !a.spec} className={`${btn} border-violet-500/25 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20`} title={a.route === "external-generation-recommended" ? "Recommended for external generation" : "Generate this asset natively and review it"}>
+                              <button onClick={() => setExpanded(expanded === a.id ? null : a.id)} className={`${btn} border-violet-500/25 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20`} title="Generate one native draft and review it">
                                 <Sparkles size={12} /> {a.generated ? "In library" : a.spec ? "Review" : "Generate Native"}
                               </button>
                               <button onClick={() => setEditing(a.id)} disabled={a.generated} className="p-1.5 text-neutral-500 hover:text-neutral-200" title="Edit"><Pencil size={13} /></button>
                               <button onClick={() => { if (!a.spec && !a.generated) remove(a.id); else if (window.confirm(`Remove "${a.name}" from the plan? Its native draft will be lost.`)) remove(a.id); }} disabled={a.generated} className="p-1.5 text-neutral-600 hover:text-red-400" title="Delete"><Trash2 size={13} /></button>
                             </div>
                           </div>
-                          {a.route === "external-generation-recommended" && !a.generated && (
-                            <button onClick={() => patch(a.id, { route: "native" })} className="w-fit text-[10px] text-neutral-600 hover:text-neutral-300">Try native anyway</button>
-                          )}
-                          {(expanded === a.id || a.spec) && a.route !== "external-generation-recommended" && (
+                          {(expanded === a.id || a.spec) && (
                             <NativeAssetPanel plan={activePlan} asset={a} ensureSaved={async () => planId ?? (await persist("draft", false))} />
                           )}
                         </div>

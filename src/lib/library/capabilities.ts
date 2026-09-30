@@ -38,7 +38,7 @@ const SEEDS: Seed[] = [
   cap("entry-canopy", "Entry Canopy", "facade", "supported", "Plugin: a freestanding roof-only canopy with two posts, projecting from one facade.", ["massId", "facade", "width", "depth", "height"]),
   cap("projecting-portal", "Projecting Portal", "facade", "partial", "Porches and bays supply a constrained projecting frame."),
   cap("framed-opening", "Framed Opening", "openings", "supported", "glazing-zone's frame field adds a structural post/lintel surround around the glazing.", ["frame", "reveal"]),
-  cap("screen-layer", "Screen Layer", "facade", "missing", "Requires a reusable screen asset, not a geometric capability."),
+  cap("screen-layer", "Screen Layer", "facade", "supported", "Plugin: a batten screen standing proud of one facade, turned with the mass.", ["massId", "facade", "start", "end", "depth", "height"]),
   cap("brise-soleil", "Brise Soleil", "facade", "supported", "Plugin: evenly spaced vertical sun-shading fins standing proud of one facade.", ["massId", "facade", "count", "depth", "height"]),
   cap("shadow-gap", "Shadow Gap", "facade", "supported", "Shared Roof Expression creates a reusable roof-to-wall reveal assembly.", ["verticalGap", "supportStyle"]),
   cap("pilotis", "Pilotis", "structure", "supported", "Plugin: exposed structural columns lifting an already-elevated mass clear of grade.", ["massId", "columnSize", "inset", "groundY"]),
