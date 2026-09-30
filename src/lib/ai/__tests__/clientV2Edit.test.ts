@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { NextRequest } from "next/server";
 import { ARCHITECTURE_FIXTURES } from "@/lib/architecture/fixtures";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { documentAudit, primitiveBounds } from "@/lib/architecture/renderAudit";
@@ -17,7 +18,7 @@ function stubBrowser() {
 
 function jsonFor(document = ARCHITECTURE_FIXTURES.luxuryTropicalCourtyardVillaV2) {
   // A non-empty legacy array makes this an existing project, as it is in the workspace after V2 generation.
-  return JSON.stringify({ house: { width: 18, depth: 10, floors: 1, roof: "flat" }, decks: [{ id: "legacy-deck", x: 0, z: 0, width: 3, depth: 2 }], architecturalDesignDocument: document });
+  return JSON.stringify({ house: { width: 18, depth: 10, floors: 1, roof: "flat" }, decks: [{ id: "legacy-deck", x: 0, z: 16, width: 12, depth: 8 }], architecturalDesignDocument: document });
 }
 
 async function load() {
@@ -87,5 +88,39 @@ describe("requestHouseEdit V2 commit boundary", () => {
     expect(result).toMatchObject({ ok: true, generated: false });
     expect(persisted.architecturalDesignDocument).toEqual(parsed.architecturalDesignDocument);
     expect(persisted.sitePlan.features).toEqual([{ id: "bar-1", kind: "outdoor_bar", x: 20, z: 14, width: 6, depth: 3, rotation: 0 }]);
+  });
+
+  it("sends the workspace V2 request shape through the real handler and commits its addSiteFeature response", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const { POST } = await import("@/app/api/ai/house/route");
+    const project = useProjectStore.getState().createProject("Legacy V2 workspace project");
+    // This is the persisted workspace shape from before full Site Plan persistence:
+    // V2 architecture plus the rendered legacy deck, but no `sitePlan` key.
+    const base = jsonFor();
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    let handlerPayload: { operation?: string } | undefined;
+    const fetchSpy = vi.fn(async (_url: string, init?: RequestInit) => {
+      const response = await POST(new NextRequest("http://localhost/api/ai/house", {
+        method: "POST", headers: init?.headers, body: init?.body,
+      }));
+      handlerPayload = await response.clone().json();
+      return response;
+    });
+    vi.stubGlobal("fetch", fetchSpy);
+
+    const result = await requestHouseEdit({
+      projectId: project.id,
+      prompt: "add an outdoor bar",
+      apply: (summary, json, writer) => useProjectStore.getState().appendVersion(project.id, summary, json, writer),
+    });
+
+    const request = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
+    const persisted = JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson);
+    expect(request).toMatchObject({ mode: "edit", projectId: project.id, prompt: "add an outdoor bar", currentHouseJson: base });
+    expect(handlerPayload?.operation).toBe("addSiteFeature");
+    expect(result).toMatchObject({ ok: true, generated: false });
+    expect(persisted.architecturalDesignDocument).toEqual(JSON.parse(base).architecturalDesignDocument);
+    expect(persisted.sitePlan).toMatchObject({ poolDeck: { x: 0, z: 16, width: 12, depth: 8 } });
+    expect(persisted.sitePlan.features).toHaveLength(1);
   });
 });

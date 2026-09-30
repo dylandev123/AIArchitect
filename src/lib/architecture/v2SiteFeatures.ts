@@ -5,6 +5,10 @@ import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { v2SiteFrame } from "./siteFrame";
 import { sitePlanSchema, type SitePlan, type V2SiteFeature } from "./sitePlanContract";
 
+/** The small persisted slice needed by follow-up V2 site-feature edits. */
+export type V2SiteFeaturePlan = Pick<SitePlan, "poolDeck" | "features">;
+const v2SiteFeaturePlanSchema = sitePlanSchema.pick({ poolDeck: true, features: true });
+
 /** The V2-only edit surface. Architectural/massing operations are intentionally absent. */
 export type V2SiteFeatureOperation =
   | { op: "addSiteFeature"; feature: V2SiteFeature }
@@ -13,19 +17,31 @@ export type V2SiteFeatureOperation =
   | { op: "removeSiteFeature"; id: string };
 
 /** Compiles only typed V2 Site Plan additions, without consulting legacy `buildings`. */
-export function compileV2SiteFeatures(plan: SitePlan, materials: MaterialsConfig = DEFAULT_MATERIALS_CONFIG): HousePrimitive[] {
+export function compileV2SiteFeatures(plan: V2SiteFeaturePlan, materials: MaterialsConfig = DEFAULT_MATERIALS_CONFIG): HousePrimitive[] {
   return (plan.features ?? []).flatMap((feature, index) =>
     buildBuilding({ kind: feature.kind, x: feature.x, z: feature.z, width: feature.width, depth: feature.depth, floors: 1, roof: "flat", rotation: feature.rotation, ...(feature.assetId ? { assetId: feature.assetId } : {}) }, materials, index)
       .map((primitive) => ({ ...primitive, id: `v2-site-feature-${feature.id}-${primitive.id}` }))
   );
 }
 
-export function v2SitePlanOf(root: Record<string, unknown>): SitePlan | undefined {
-  const parsed = sitePlanSchema.safeParse(root.sitePlan);
-  return parsed.success ? parsed.data : undefined;
+export function v2SitePlanOf(root: Record<string, unknown>): V2SiteFeaturePlan | undefined {
+  // A full authored Site Plan is preferred. Older V2 projects in the workspace predate
+  // that persistence field but do retain the deck the renderer already uses; it supplies
+  // the identical pool-deck anchor required by this deliberately narrow edit surface.
+  const parsed = v2SiteFeaturePlanSchema.safeParse(root.sitePlan);
+  if (parsed.success) return parsed.data;
+  const deck = Array.isArray(root.decks) ? root.decks.find((value): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null && !Array.isArray(value)
+    && ["x", "z", "width", "depth"].every((key) => typeof value[key] === "number" && Number.isFinite(value[key]))
+  ) : undefined;
+  if (!deck) return undefined;
+  const recovered = v2SiteFeaturePlanSchema.safeParse({
+    poolDeck: { x: deck.x, z: deck.z, width: deck.width, depth: deck.depth },
+  });
+  return recovered.success ? recovered.data : undefined;
 }
 
-export function applyV2SiteFeatureOperation(plan: SitePlan, operation: V2SiteFeatureOperation): SitePlan {
+export function applyV2SiteFeatureOperation(plan: V2SiteFeaturePlan, operation: V2SiteFeatureOperation): V2SiteFeaturePlan {
   switch (operation.op) {
     case "addSiteFeature": return { ...plan, features: [...(plan.features ?? []), operation.feature] };
     case "moveSiteFeature": return { ...plan, features: (plan.features ?? []).map((f) => f.id === operation.id ? { ...f, x: operation.x, z: operation.z } : f) };
@@ -42,7 +58,7 @@ const rectOf = (p: HousePrimitive): Rect | undefined => p.kind === "box" ? { x: 
  * Cheap deterministic placement for the first V2 follow-up feature. The existing Site Plan is read-only:
  * we only seek an empty ground rectangle beside its pool/deck/terrace, never move any existing feature.
  */
-export function placeOutdoorBar(root: Record<string, unknown>, assetId?: string): { plan: SitePlan; feature: V2SiteFeature } | { error: string } {
+export function placeOutdoorBar(root: Record<string, unknown>, assetId?: string): { plan: V2SiteFeaturePlan; feature: V2SiteFeature } | { error: string } {
   const plan = v2SitePlanOf(root);
   if (!plan) return { error: "This V2 project has no valid Site Plan to place an outdoor bar in." };
   const id = `site-feature-${crypto.randomUUID()}`;
