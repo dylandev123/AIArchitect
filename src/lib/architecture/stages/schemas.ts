@@ -228,6 +228,8 @@ const roofLanguageSchema = z.object({
 
 export const roofCompositionStageOutputSchema = z.object({
   language: roofLanguageSchema.optional(),
+  /** Optional id from the approved roof recipes supplied to this stage. */
+  libraryRecipeId: z.string().min(1).max(100).optional(),
   roofs: z.array(roofCompositionEntrySchema).min(1),
 });
 export type RoofCompositionStageOutput = z.infer<typeof roofCompositionStageOutputSchema>;

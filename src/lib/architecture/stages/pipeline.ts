@@ -5,6 +5,7 @@ import type { UsageMeta } from "@/lib/ai/usage/track";
 import type { Timings } from "@/lib/ai/timing";
 import type { SiteHints } from "@/lib/house/siteSettings";
 import type { ArchitecturalDesignDocument, MassVolume, RoofRecipe, SiteStrategy } from "../document";
+import { appliedRoofRecipe } from "../roofRecipeLibrary";
 import { runFoundationStage, type FoundationStageResult, type FoundationStageRunResult } from "./foundationStage";
 import { plannedVolumesFromSpacePlan, runMassExpansionStage, type MassExpansionResult, type MassExpansionStopReason, type PlannedVolume, type UnplacedVolume } from "./massExpansionStage";
 import { createSpacePlan, selectDesignStrategies, type ArchitecturalDesign, type ArchitecturalIntent } from "../designEngine";
@@ -57,6 +58,8 @@ export interface PipelineInput {
   hints: SiteHints;
   scale?: ProjectScale;
   recipes?: readonly DesignRecipe[];
+  /** Approved roof-only recipes retrieved for the Roof Composition stage. */
+  roofRecipes?: readonly DesignRecipe[];
   availableCapabilities?: readonly string[];
   variationSeed?: string;
   projectId?: string | null;
@@ -190,12 +193,12 @@ export async function runArchitecturePipeline(
 
   // One call composes every mass's roof at once: by now every mass is placed, so nothing is gained by asking
   // sequentially, and the "roof-added" events below still fire once per mass for the same live-preview cadence.
-  const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses }, timings, budgetMs, usageMeta);
+  const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses, approvedRecipes: input.roofRecipes }, timings, budgetMs, usageMeta);
   const roofs: RoofRecipe[] = roofResult.ok ? roofResult.value : fallbackRoofs(articulatedMasses, intent);
   diagnostics.push({
     stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
     modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
-    ...(roofResult.ok ? (roofResult.warnings ? { warnings: roofResult.warnings } : {}) : { error: roofResult.errors.join("; ") }),
+    ...(roofResult.ok ? { ...(roofResult.warnings ? { warnings: roofResult.warnings } : {}), ...(roofResult.libraryRecipe ? { warnings: [...(roofResult.warnings ?? []), `Applied Roof Recipe: ${roofResult.libraryRecipe.name} (${roofResult.libraryRecipe.id}).`] } : {}) } : { error: roofResult.errors.join("; ") }),
   });
   onUpstreamProgress({ foundation, masses: placedMasses, articulatedMasses, roofs }, diagnostics);
   roofs.forEach((_, i) => {
@@ -203,7 +206,8 @@ export async function runArchitecturePipeline(
   });
   onEvent({ type: "stage", stage: "roof-composition", index: 6, of: TOTAL_STAGES, document: draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, geometryCapabilityIntents) });
 
-  const document = draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, geometryCapabilityIntents);
+  const application = roofResult.ok && roofResult.libraryRecipe ? appliedRoofRecipe(roofResult.libraryRecipe) : undefined;
+  const document = { ...draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, geometryCapabilityIntents), roofs: { recipes: roofs, ...(application ?? {}) } };
   const design = toArchitecturalDesign({
     brief: input.brief, intent, siteStrategy, terrainResponse, masses: articulatedMasses, roofs,
     recipes: input.recipes, availableCapabilities: input.availableCapabilities, variationSeed: input.variationSeed,
@@ -287,9 +291,11 @@ export async function replayArchitectureStage(
 
   // Roofs follow the articulated footprint, so a geometry-pass replay always recomputes them too.
   let roofs = cached.roofs ?? [];
+  let roofLibraryRecipe: DesignRecipe | undefined;
   if (stage === "roof-composition" || stage === "architectural-geometry" || stage === "mass-expansion" || !cached.roofs) {
-    const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses }, timings, budgetMs, usageMeta);
+    const roofResult = await runRoofCompositionStage({ intent, siteStrategy, masses: articulatedMasses, approvedRecipes: input.roofRecipes }, timings, budgetMs, usageMeta);
     roofs = roofResult.ok ? roofResult.value : fallbackRoofs(articulatedMasses, intent);
+    roofLibraryRecipe = roofResult.ok ? roofResult.libraryRecipe : undefined;
     diagnostics.push({
       stage: "roof-composition", status: roofResult.ok ? "ok" : "fallback", durationMs: roofResult.durationMs,
       modelCalls: roofResult.attempts, retries: Math.max(0, roofResult.attempts - 1),
@@ -299,7 +305,8 @@ export async function replayArchitectureStage(
     diagnostics.push({ stage: "roof-composition", status: "ok", durationMs: 0, modelCalls: 0, retries: 0 });
   }
 
-  const document = draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, capabilityIntents);
+  const application = roofLibraryRecipe ? appliedRoofRecipe(roofLibraryRecipe) : undefined;
+  const document = { ...draftDocument(input.brief, siteStrategy, articulatedMasses, roofs, capabilityIntents), roofs: { recipes: roofs, ...(application ?? {}) } };
   const design = toArchitecturalDesign({
     brief: input.brief, intent, siteStrategy, terrainResponse, masses: articulatedMasses, roofs,
     recipes: input.recipes, availableCapabilities: input.availableCapabilities, variationSeed: input.variationSeed,

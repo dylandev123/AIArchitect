@@ -111,7 +111,9 @@ export interface RoofRecipe {
  * material. `counterpoint` is a deliberate second system on the named masses, with the reason for the break.
  */
 export interface RoofSystemChoice { primary: string; counterpoint?: { system: string; massIds: readonly string[]; reason: string } }
-export interface RoofComposition { recipes: readonly RoofRecipe[]; system?: RoofSystemChoice; }
+/** Durable evidence that an approved library recipe informed this executable V2 roof document. */
+export interface AppliedRoofLibraryRecipe { id: string; name: string; system: string; parameters: Record<string, number | string | boolean>; status: "applied"; }
+export interface RoofComposition { recipes: readonly RoofRecipe[]; system?: RoofSystemChoice; libraryRecipe?: AppliedRoofLibraryRecipe; }
 
 export function validateArchitecturalDesignDocument(doc: ArchitecturalDesignDocument): string[] {
   const errors: string[] = [];

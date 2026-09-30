@@ -1,7 +1,7 @@
 import type { HousePrimitive } from "@/lib/house/types";
 import type { Paint } from "@/lib/house/architecture/parts";
 import { add, cross, dot, planeCentre, scale, sub, unit } from "./planes";
-import type { RoofAssembly, RoofEdge, V3 } from "./types";
+import type { RoofAssembly, RoofEdge, RoofPlane, V3 } from "./types";
 
 const UP: V3 = [0, 1, 0];
 
@@ -30,13 +30,26 @@ const outward = (edge: RoofEdge): V3 => [edge.out![0], 0, edge.out![1]];
  * Trim never widens a roof: the recipe's overhang is the roof's outermost line, so every member here sits on
  * or inside the edge it finishes.
  */
-const BOARD_SETBACK = 0.012;
+const BOARD_SETBACK = 0.003;
 
-/** A board under an outer edge of a sheet roof (fascia on an eave, barge board on a rake), set just back from the covering's edge so the covering laps it. */
+/** Height of a face's surface above/below `p`'s own height, at `p`'s plan position. */
+function surfaceOffset(plane: RoofPlane, p: V3): number {
+  const d = sub(p, plane.origin);
+  return plane.origin[1] - (plane.normal[0] * d[0] + plane.normal[2] * d[2]) / plane.normal[1] - p[1];
+}
+
+/**
+ * A board under an outer edge of a sheet roof (fascia on an eave, barge board on a rake). Its top is tucked
+ * right up under the covering — at the lower of the covering's heights over the board's two faces — so no
+ * slot is left between them to see through, and the covering never has the board poking through it.
+ */
 export function edgeBoard(out: number[], edge: RoofEdge, height: number, thickness: number): void {
   const dir = unit(sub(edge.b, edge.a));
   const up = unit(sub(UP, scale(dir, dot(UP, dir))));
-  beam(out, edge.a, edge.b, thickness, height, { shift: add(scale(outward(edge), -(thickness / 2 + BOARD_SETBACK)), scale(up, -(height / 2 + 0.02))) });
+  const plane = edge.planes?.[0];
+  const face = (inset: number) => add(edge.a, scale(outward(edge), -inset));
+  const top = plane ? Math.min(surfaceOffset(plane, face(BOARD_SETBACK)), surfaceOffset(plane, face(BOARD_SETBACK + thickness))) - 0.002 : -0.02;
+  beam(out, edge.a, edge.b, thickness, height, { shift: add(scale(outward(edge), -(thickness / 2 + BOARD_SETBACK)), scale(up, top - height / 2)) });
 }
 
 /**

@@ -49,6 +49,16 @@ export function recipesForBrief(brief: string, limit = 3): Promise<DesignRecipe[
   }, []);
 }
 
+/** Approved, ranked procedural roof recipes. This is deliberately separate from outdoor-space retrieval. */
+export function roofRecipesForBrief(brief: string, limit = 2): Promise<DesignRecipe[]> {
+  return safely("roof recipe lookup", async () => {
+    const { recipes } = await readLibrary();
+    const hints = inferSiteHints(brief);
+    const query = { styleTags: extractStyleTags(brief), scale: inferScaleFromBrief(brief), environment: hints.environment };
+    return findRecipes(recipes.filter((recipe) => recipe.category === "roof" && recipe.approval === "approved"), query, limit).map((scored) => scored.item);
+  }, []);
+}
+
 /**
  * The approved recipes generation should lean on, retrieved per outdoor space (each space asks for the recipes that describe how
  * to build it), plus a couple for what no space covers. Every pick carries the reason it was chosen. Empty when none fit or the

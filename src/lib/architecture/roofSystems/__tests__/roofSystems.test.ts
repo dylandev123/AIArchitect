@@ -5,7 +5,7 @@ import { fittedTextureUvs } from "@/lib/roofSurfaceUv";
 import { DEFAULT_MATERIALS_CONFIG, type MaterialAssignment, type MaterialsConfig } from "@/types/house";
 import { compileArchitecture } from "../../compiler";
 import type { RoofComposition, RoofRecipe } from "../../document";
-import { butterflyRoofGeometry, gableRoofGeometry, hipRoofGeometry } from "../../geometry/pitchedRoof";
+import { butterflyRoofGeometry, gableRoofGeometry, hipRoofGeometry, MAX_EAVE_DROP } from "../../geometry/pitchedRoof";
 import { ROOF_SYSTEM_FIXTURES } from "../fixtures";
 import { buildSeamRibs, courseLayout, getRoofSystem, listRoofSystems, planRoofSystems, registerRoofSystem, roofSystemForMaterial, seamLayout, STANDING_SEAM_PAN, tileModuleFor, type V3 } from "..";
 
@@ -32,20 +32,37 @@ function bounds(vertices: readonly number[]) {
 }
 
 describe("authored pitch and overhang reach the V2 ridge-family builders", () => {
+  /** The eave edge's height: down the slope from the wall plate, but never more than MAX_EAVE_DROP below it. */
+  const eaveY = (pitch: number, overhang: number) => BASE - Math.min(tan(pitch) * overhang, MAX_EAVE_DROP);
+
   it.each([[20, 0.3], [40, 1.0]])("gable at %s° with a %sm overhang", (pitch, overhang) => {
     const b = bounds(compileRoof({ kind: "gable", pitch, overhang }, SEAM).mesh("surface")!.vertices);
-    expect(b.y[1]).toBeCloseTo(BASE + tan(pitch) * 4);
-    // The plane bears on the wall plate at the wall line, so the eave ends lower the further it reaches.
-    expect(b.y[0]).toBeCloseTo(BASE - tan(pitch) * overhang);
+    // One plane at the authored pitch from eave edge to ridge, bearing on the wall plate (or a raised heel above it).
+    expect(b.y[0]).toBeCloseTo(eaveY(pitch, overhang));
+    expect(b.y[1] - b.y[0]).toBeCloseTo(tan(pitch) * (4 + overhang));
     expect(b.x).toEqual([expect.closeTo(-6 - overhang), expect.closeTo(6 + overhang)]);
     expect(b.z).toEqual([expect.closeTo(-4 - overhang), expect.closeTo(4 + overhang)]);
   });
 
   it.each([[18, 0.4], [35, 0.9]])("hip at %s° with a %sm overhang", (pitch, overhang) => {
     const b = bounds(compileRoof({ kind: "hip", pitch, overhang }, SEAM).mesh("surface")!.vertices);
-    expect(b.y).toEqual([expect.closeTo(BASE - tan(pitch) * overhang), expect.closeTo(BASE + tan(pitch) * 4)]);
+    expect(b.y).toEqual([expect.closeTo(eaveY(pitch, overhang)), expect.closeTo(eaveY(pitch, overhang) + tan(pitch) * (4 + overhang))]);
     expect(b.x).toEqual([expect.closeTo(-6 - overhang), expect.closeTo(6 + overhang)]);
     expect(b.z).toEqual([expect.closeTo(-4 - overhang), expect.closeTo(4 + overhang)]);
+  });
+
+  it("lifts a deep eave on a raised heel instead of dropping it over the windows, and carries the wall up to it", () => {
+    const shallow = compileRoof({ kind: "hip", pitch: 24, overhang: 0.5 }, SEAM);
+    expect(bounds(shallow.mesh("surface")!.vertices).y[0]).toBeCloseTo(BASE - tan(24) * 0.5);
+    expect(shallow.mesh("infill")).toBeUndefined();
+    for (const kind of ["hip", "gable"] as const) {
+      const deep = compileRoof({ kind, pitch: 24, overhang: 1.8 }, SEAM);
+      expect(bounds(deep.mesh("surface")!.vertices).y[0]).toBeCloseTo(BASE - MAX_EAVE_DROP);
+      const infill = bounds(deep.mesh("infill")!.vertices);
+      expect(infill.y[0]).toBeCloseTo(BASE);
+      expect(infill.y[1]).toBeGreaterThanOrEqual(BASE + tan(24) * 1.8 - MAX_EAVE_DROP - 1e-9);
+      expect([infill.x, infill.z]).toEqual([[-6, 6], [-4, 4]]);
+    }
   });
 
   it.each([[6, 0.5], [14, 1.2]])("butterfly at %s° with a %sm overhang, its valley on the wall plate and its walls closed up to the wings", (pitch, overhang) => {
@@ -260,8 +277,8 @@ describe("draw calls and determinism", () => {
 
   it("finishes a pitched roof in a handful of merged meshes", () => {
     expect(roofIds(compileRoof({ kind: "gable", pitch: 30 }, SEAM).roof)).toEqual(["infill", "surface", "seams", "trim"]);
-    expect(roofIds(compileRoof({ kind: "hip", pitch: 30 }, SEAM).roof)).toEqual(["surface", "seams", "trim"]);
-    expect(roofIds(compileRoof({ kind: "hip", pitch: 30 }, CLAY).roof)).toEqual(["surface", "trim", "caps"]);
+    expect(roofIds(compileRoof({ kind: "hip", pitch: 20 }, SEAM).roof)).toEqual(["surface", "seams", "trim"]);
+    expect(roofIds(compileRoof({ kind: "hip", pitch: 20 }, CLAY).roof)).toEqual(["surface", "trim", "caps"]);
     expect(roofIds(compileRoof({ kind: "butterfly", pitch: 8 }, SEAM).roof)).toEqual(["infill", "surface", "seams", "trim"]);
     expect(roofIds(compileRoof({ kind: "mono-pitch", pitch: 12 }, SEAM).roof)).toEqual(["infill", "surface", "seams", "trim"]);
   });
@@ -277,7 +294,7 @@ describe("draw calls and determinism", () => {
     const lShaped = { ...doc, massing: { ...doc.massing, masses: [{ ...doc.massing.masses[0], operations: [{ type: "notch" as const, corner: "se" as const, width: 5, depth: 3 }] }] } };
     const { model, diagnostics } = compileArchitecture(lShaped, { materials: CLAY });
     expect(diagnostics?.geometry[0].topFloorRectCount).toBe(2);
-    expect(roofIds(model.primitives)).toEqual(["surface", "trim", "caps"]);
+    expect(roofIds(model.primitives)).toEqual(["infill", "surface", "trim", "caps"]);
   });
 
   it.each(Object.keys(ROOF_SYSTEM_FIXTURES))("compiles fixture %s identically every time, with only procedural primitives", (key) => {

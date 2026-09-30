@@ -8,13 +8,18 @@ import type { Point, Rect } from "./footprint";
  * primitives: the mass's Roof System lays the covering, pattern and trim over them.
  *
  * Shared datum: the roof plane bears on the wall plate at the wall line. A gable/hip eave therefore continues
- * down the same slope past the wall (a deeper overhang ends lower, as built), and a butterfly's valley sits at
- * the wall plate with its wings rising outward. The ridge/valley runs along the rectangle's longer side.
+ * down the same slope past the wall (a deeper overhang ends lower, as built) — but never more than
+ * `MAX_EAVE_DROP` below the plate: past that the whole roof is lifted on a raised heel (the wall carried up
+ * to it at the wall line), so a deep or steep eave shelters the windows under it instead of covering them.
+ * A butterfly's valley sits at the wall plate with its wings rising outward. The ridge/valley runs along the
+ * rectangle's longer side.
  */
 export interface PitchedRoofInput { rect: Rect; wallPlateY: number; pitchDeg: number; overhang: number }
 export interface PitchedRoofGeometry { planes: RoofPlane[]; edges: RoofEdge[]; /** Wall infill closing the gap between wall plate and roof underside, as triangles. */ infill: number[] }
 
 const MIN_PITCH = 1, MAX_PITCH = 60;
+/** Furthest (m) a gable/hip eave edge may sit below the wall plate. */
+export const MAX_EAVE_DROP = 0.25;
 
 /** A rectangle's long/short frame: `at(l, y, s)` is the point `l` along the ridge axis and `s` across it. */
 function frame({ rect, wallPlateY, pitchDeg, overhang }: PitchedRoofInput) {
@@ -27,48 +32,67 @@ function frame({ rect, wallPlateY, pitchDeg, overhang }: PitchedRoofInput) {
   const tan = Math.tan((Math.min(MAX_PITCH, Math.max(MIN_PITCH, pitchDeg)) * Math.PI) / 180);
   const halfLong = Math.max(width, depth) / 2, halfShort = Math.min(width, depth) / 2;
   const names = ridgeAlongX ? { s: ["north", "south"], l: ["west", "east"] } : { s: ["west", "east"], l: ["north", "south"] };
-  return { at, outL, outS, tan, halfLong, halfShort, base: wallPlateY, reach: Math.max(0, overhang), names };
+  const reach = Math.max(0, overhang);
+  return { at, outL, outS, tan, halfLong, halfShort, base: wallPlateY, reach, heel: Math.max(0, tan * reach - MAX_EAVE_DROP), names };
 }
 const SIDES = [-1, 1] as const;
 const tri = (out: number[], a: V3, b: V3, c: V3) => out.push(...a, ...b, ...c);
+/** The wall carried up from the plate to a raised heel along one eave wall. */
+function heelBand(out: number[], a: V3, b: V3, heel: number) {
+  if (heel <= 1e-6) return;
+  const top = (p: V3): V3 => [p[0], p[1] + heel, p[2]];
+  tri(out, a, b, top(b)); tri(out, a, top(b), top(a));
+}
 
 /** Two slopes meeting at a ridge, the gable-end walls carried up to it at the wall line. */
 export function gableRoofGeometry(input: PitchedRoofInput): PitchedRoofGeometry {
   const f = frame(input);
-  const ridgeY = f.base + f.tan * f.halfShort, eaveY = f.base - f.tan * f.reach;
+  const bearing = f.base + f.heel;
+  const ridgeY = bearing + f.tan * f.halfShort, eaveY = bearing - f.tan * f.reach;
   const span = f.halfShort + f.reach, length = f.halfLong + f.reach;
   const planes: RoofPlane[] = [], edges: RoofEdge[] = [], infill: number[] = [];
   SIDES.forEach((side, i) => {
     const corners = [f.at(-length, eaveY, side * span), f.at(length, eaveY, side * span), f.at(length, ridgeY, 0), f.at(-length, ridgeY, 0)];
-    planes.push(makePlane(`slope-${f.names.s[i]}`, corners, corners[0], corners[1]));
-    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outS(side) }, { kind: "rake", a: corners[0], b: corners[3], out: f.outL(-1) }, { kind: "rake", a: corners[1], b: corners[2], out: f.outL(1) });
+    const plane = makePlane(`slope-${f.names.s[i]}`, corners, corners[0], corners[1]);
+    planes.push(plane);
+    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outS(side), planes: [plane] }, { kind: "rake", a: corners[0], b: corners[3], out: f.outL(-1), planes: [plane] }, { kind: "rake", a: corners[1], b: corners[2], out: f.outL(1), planes: [plane] });
+    heelBand(infill, f.at(-f.halfLong, f.base, side * f.halfShort), f.at(f.halfLong, f.base, side * f.halfShort), f.heel);
   });
   edges.push({ kind: "ridge", a: f.at(-length, ridgeY, 0), b: f.at(length, ridgeY, 0), planes });
-  for (const end of SIDES) tri(infill, f.at(end * f.halfLong, f.base, -f.halfShort), f.at(end * f.halfLong, f.base, f.halfShort), f.at(end * f.halfLong, ridgeY, 0));
+  for (const end of SIDES) {
+    const low = [f.at(end * f.halfLong, f.base, -f.halfShort), f.at(end * f.halfLong, f.base, f.halfShort)];
+    heelBand(infill, low[0], low[1], f.heel);
+    tri(infill, f.at(end * f.halfLong, bearing, -f.halfShort), f.at(end * f.halfLong, bearing, f.halfShort), f.at(end * f.halfLong, ridgeY, 0));
+  }
   return { planes, edges, infill };
 }
 
 /** Four faces at one pitch: two trapezoids along the ridge and a triangle at each end (a pyramid on a square). */
 export function hipRoofGeometry(input: PitchedRoofInput): PitchedRoofGeometry {
   const f = frame(input);
-  const ridgeY = f.base + f.tan * f.halfShort, eaveY = f.base - f.tan * f.reach;
+  const bearing = f.base + f.heel;
+  const ridgeY = bearing + f.tan * f.halfShort, eaveY = bearing - f.tan * f.reach;
   const span = f.halfShort + f.reach, length = f.halfLong + f.reach, halfRidge = f.halfLong - f.halfShort;
-  const planes: RoofPlane[] = [], edges: RoofEdge[] = [];
+  const planes: RoofPlane[] = [], edges: RoofEdge[] = [], infill: number[] = [];
   const apex = (end: number) => f.at(end * halfRidge, ridgeY, 0);
   const long = SIDES.map((side, i) => {
     const corners = [f.at(-length, eaveY, side * span), f.at(length, eaveY, side * span), apex(1), ...(halfRidge > 1e-6 ? [apex(-1)] : [])];
-    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outS(side) });
-    return makePlane(`hip-${f.names.s[i]}`, corners, corners[0], corners[1]);
+    const plane = makePlane(`hip-${f.names.s[i]}`, corners, corners[0], corners[1]);
+    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outS(side), planes: [plane] });
+    heelBand(infill, f.at(-f.halfLong, f.base, side * f.halfShort), f.at(f.halfLong, f.base, side * f.halfShort), f.heel);
+    return plane;
   });
   const ends = SIDES.map((end, i) => {
     const corners = [f.at(end * length, eaveY, -span), f.at(end * length, eaveY, span), apex(end)];
-    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outL(end) });
-    return makePlane(`hip-${f.names.l[i]}`, corners, corners[0], corners[1]);
+    const plane = makePlane(`hip-${f.names.l[i]}`, corners, corners[0], corners[1]);
+    edges.push({ kind: "eave", a: corners[0], b: corners[1], out: f.outL(end), planes: [plane] });
+    heelBand(infill, f.at(end * f.halfLong, f.base, -f.halfShort), f.at(end * f.halfLong, f.base, f.halfShort), f.heel);
+    return plane;
   });
   planes.push(...long, ...ends);
   SIDES.forEach((end, e) => SIDES.forEach((side, s) => edges.push({ kind: "hip", a: f.at(end * length, eaveY, side * span), b: apex(end), planes: [long[s], ends[e]] })));
   if (halfRidge > 1e-6) edges.push({ kind: "ridge", a: apex(-1), b: apex(1), planes: long });
-  return { planes, edges, infill: [] };
+  return { planes, edges, infill };
 }
 
 /**
@@ -83,8 +107,9 @@ export function butterflyRoofGeometry(input: PitchedRoofInput): PitchedRoofGeome
   const valley: [V3, V3] = [f.at(-length, f.base, 0), f.at(length, f.base, 0)];
   SIDES.forEach((side, i) => {
     const corners = [valley[0], valley[1], f.at(length, outerY, side * span), f.at(-length, outerY, side * span)];
-    planes.push(makePlane(`wing-${f.names.s[i]}`, corners, corners[0], corners[1]));
-    edges.push({ kind: "high-eave", a: corners[3], b: corners[2], out: f.outS(side) }, { kind: "rake", a: corners[0], b: corners[3], out: f.outL(-1) }, { kind: "rake", a: corners[1], b: corners[2], out: f.outL(1) });
+    const plane = makePlane(`wing-${f.names.s[i]}`, corners, corners[0], corners[1]);
+    planes.push(plane);
+    edges.push({ kind: "high-eave", a: corners[3], b: corners[2], out: f.outS(side), planes: [plane] }, { kind: "rake", a: corners[0], b: corners[3], out: f.outL(-1), planes: [plane] }, { kind: "rake", a: corners[1], b: corners[2], out: f.outL(1), planes: [plane] });
     const low = [f.at(-f.halfLong, f.base, side * f.halfShort), f.at(f.halfLong, f.base, side * f.halfShort)], high = [f.at(-f.halfLong, wallY, side * f.halfShort), f.at(f.halfLong, wallY, side * f.halfShort)];
     tri(infill, low[0], low[1], high[1]); tri(infill, low[0], high[1], high[0]);
     for (const end of SIDES) tri(infill, f.at(end * f.halfLong, f.base, 0), f.at(end * f.halfLong, f.base, side * f.halfShort), f.at(end * f.halfLong, wallY, side * f.halfShort));

@@ -34,18 +34,24 @@ describe("architecture stage pipeline", () => {
       // architectural geometry pass: one batched call for every mass
       .mockResolvedValueOnce({ output: { results: [{ massId: "mass-0", operations: [] }, { massId: "mass-1", operations: [] }] }, totalUsage: {} })
       // roof composition: one call for every mass
-      .mockResolvedValueOnce({ output: { language: { dominantMassId: "mass-0", family: "floating-flat", concept: "A floating plane over the living pavilion; low sheds beneath it." }, roofs: [
+      .mockResolvedValueOnce({ output: { libraryRecipeId: "seam-library", language: { dominantMassId: "mass-0", family: "floating-flat", concept: "A floating plane over the living pavilion; low sheds beneath it." }, roofs: [
         { massId: "mass-0", kind: "floating-flat", overhang: 1.4, reasoning: "The dominant volume gets an expressive floating plane toward the view." },
         { massId: "mass-1", kind: "mono-pitch", overhang: 0.5, reasoning: "The bedroom wing gets a quieter shed roof, distinct from the main pavilion." },
       ] }, totalUsage: {} });
 
-    const result = await runArchitecturePipeline({ brief: "A dramatic hillside residence stepping to a sunset view", hints: { environment: "hillside", viewDirection: "south", approachSide: "north" } }, createTimings(), 120_000, usageMeta);
+    const result = await runArchitecturePipeline({ brief: "A dramatic hillside residence stepping to a sunset view", hints: { environment: "hillside", viewDirection: "south", approachSide: "north" }, roofRecipes: [{
+      id: "seam-library", name: "Standing Seam Hillside", category: "roof", styleTags: [], compatibleScales: [], environmentTags: [],
+      parameters: [{ key: "system", value: "standing-seam" }, { key: "overhang", value: 1.1 }], relationships: [], guidance: [], usageCount: 0, successCount: 0, failureCount: 0, approval: "approved", version: 1, created_at: "2026-01-01T00:00:00.000Z", updated_at: "2026-01-01T00:00:00.000Z",
+    }] }, createTimings(), 120_000, usageMeta);
 
     expect(result.document.massing.masses).toHaveLength(2);
     const roofKinds = new Set(result.document.roofs.recipes.map((r) => r.kind));
     expect(roofKinds.size).toBe(2);
     expect(roofKinds.has("floating-flat")).toBe(true);
     expect(roofKinds.has("mono-pitch")).toBe(true);
+    expect(result.document.roofs.libraryRecipe).toMatchObject({ id: "seam-library", system: "standing-seam", status: "applied" });
+    expect(result.document.roofs.system).toEqual({ primary: "standing-seam" });
+    expect(result.diagnostics.find((d) => d.stage === "roof-composition")?.warnings).toContain("Applied Roof Recipe: Standing Seam Hillside (seam-library).");
 
     expect(validateArchitecturalDesignDocument(result.document)).toEqual([]);
     const compiled = compileArchitecture(result.document, { materials: DEFAULT_MATERIALS_CONFIG });

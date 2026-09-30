@@ -11,10 +11,21 @@ const patio = z.object({ wall: side, offset: z.number().min(0).max(80), width: z
 const path = z.object({ from: z.enum(["arrival", "parking", "entrance", "outdoor-living", "pool"]), to: z.enum(["arrival", "parking", "entrance", "outdoor-living", "pool"]), x1: z.number().min(-100).max(100), z1: z.number().min(-100).max(100), x2: z.number().min(-100).max(100), z2: z.number().min(-100).max(100), width: z.number().min(.8).max(4), bend: z.number().min(-20).max(20), surface: z.enum(["gravel", "flagstone", "dirt", "boardwalk"]) });
 const landscape = z.object({ purpose: z.enum(["privacy", "entrance-planting", "pool-planting", "view-framing"]), kind: z.enum(["garden", "lawn", "clearing"]), x: z.number().min(-100).max(100), z: z.number().min(-100).max(100), width: z.number().min(2).max(40), depth: z.number().min(2).max(40) });
 
+/** Ground-level additions owned by a V2 Site Plan, never by legacy building geometry. */
+export const siteFeatureSchema = z.object({
+  id: z.string().min(1).max(100), kind: z.enum(["outdoor_bar"]),
+  x: z.number().min(-100).max(100), z: z.number().min(-100).max(100),
+  width: z.number().min(2).max(12), depth: z.number().min(2).max(8),
+  rotation: z.number().min(-360).max(360).default(0), assetId: z.string().min(1).max(80).optional(),
+});
+export type V2SiteFeature = z.infer<typeof siteFeatureSchema>;
+
 export const sitePlanSchema = z.object({
   entrance: z.object({ wall: side, offset: z.number().min(0).max(80) }), driveway, parking: z.array(parking).min(1).max(3), pool, terrace: patio,
   poolDeck: z.object({ x: z.number().min(-100).max(100), z: z.number().min(-100).max(100), width: z.number().min(3).max(40), depth: z.number().min(2).max(20), shape: z.enum(["rectangle", "rounded", "oval", "arc"]).optional() }),
   paths: z.array(path).min(4).max(8), landscape: z.array(landscape).min(2).max(8),
+  // Optional for backwards-compatible reading of existing persisted V2 plans; writers always emit it.
+  features: z.array(siteFeatureSchema).max(30).optional(),
 });
 export type SitePlan = z.infer<typeof sitePlanSchema>;
 export interface SitePlanContext {

@@ -36,7 +36,7 @@ export interface RoofEdge {
   b: V3;
   /** Horizontal unit vector [x, z] pointing away from the roof — outer edges only. */
   out?: readonly [number, number];
-  /** The planes meeting along a ridge, hip or valley. */
+  /** The faces meeting along a ridge, hip or valley; on an outer edge, the one face it bounds. */
   planes?: readonly RoofPlane[];
 }
 

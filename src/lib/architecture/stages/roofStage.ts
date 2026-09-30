@@ -2,6 +2,9 @@ import type { Timings } from "@/lib/ai/timing";
 import type { UsageMeta } from "@/lib/ai/usage/track";
 import type { ArchitecturalIntent } from "../designEngine";
 import type { MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy, VolumeHierarchy } from "../document";
+import type { DesignRecipe } from "@/types/library";
+import { parameterizeRoofsFromLibrary, roofRecipeCompatibility } from "../roofRecipeLibrary";
+import { getRoofSystem, roofShapeOf } from "../roofSystems";
 import { assessRoofLanguage, describeRoofLanguageRules, EAVE_OVERHANG_TOLERANCE, LOW_SLOPE_MAX_PITCH, PITCH_TOLERANCE, wallPlateHeight, type RoofLanguage } from "../roofLanguage";
 import { runStage, type RunStageResult } from "./runStage";
 import { roofCompositionStageOutputSchema, type RoofCompositionStageOutput } from "./schemas";
@@ -19,6 +22,7 @@ ${describeRoofLanguageRules()}
    - Orientation: sloped roofs keep their ridge/slope parallel or perpendicular to the dominant roof; \`orientation\` turns a roof relative to its own walls, so use 0 or π (π/2 only on a square mass).
    - Datums: volumes sharing a wall-plate height share one eave line (same family + same planned edge → overhangs within ${EAVE_OVERHANG_TOLERANCE}m), one parapet top, one floating reveal gap and plate thickness.
 3. Avoid unrelated gable/hip/flat/floating forms competing on one house. Break the language only when the architecture truly calls for it: then set that roof's \`counterpoint\` to the reason (at most one counterpoint family, never the dominant roof).
+4. An L-shaped or notched mass has no V2 valley geometry yet: never apply a gable or hip library recipe to it; use flat or shed guidance instead.
 
 Choose family, overhang, pitch, orientation, parapet and floating expression where applicable; do not leave dimensional tuning to the compiler. Honor each volume's planned roof edge. Return exactly one roof for every mass listed, using its exact id.`;
 
@@ -36,7 +40,7 @@ const ROOF_KIND_DEFAULTS: Record<RoofRecipeKind, { overhang: number; pitch: numb
   mixed: { overhang: 0.75, pitch: 14 },
 };
 
-export interface RoofCompositionStageContext { intent: ArchitecturalIntent; siteStrategy: SiteStrategy; masses: readonly MassVolume[]; }
+export interface RoofCompositionStageContext { intent: ArchitecturalIntent; siteStrategy: SiteStrategy; masses: readonly MassVolume[]; approvedRecipes?: readonly DesignRecipe[]; }
 
 /**
  * Scales a mass's overhang by its architectural weight instead of one flat per-kind default for every mass:
@@ -113,7 +117,7 @@ export function fallbackRoofs(masses: readonly MassVolume[], intent: Architectur
 }
 
 /** The roof stage's result: the authored recipes, the declared language, and any language issues the model never repaired. */
-export type RoofCompositionStageResult = RunStageResult<RoofRecipe[]> & { language?: RoofLanguage; warnings?: string[] };
+export type RoofCompositionStageResult = RunStageResult<RoofRecipe[]> & { language?: RoofLanguage; warnings?: string[]; libraryRecipe?: DesignRecipe };
 
 /** Every mass exactly once, by exact id — the only faults that make a response unbuildable. */
 function structuralRoofErrors(value: RoofCompositionStageOutput, ids: readonly string[]): string[] {
@@ -169,6 +173,7 @@ export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, 
       `Architectural intent: mood ${ctx.intent.mood.join(", ")}; environmental goals ${ctx.intent.environmentalGoals.join(", ")}.`,
       `Site: environment=${ctx.siteStrategy.environment}, terrain=${ctx.siteStrategy.terrain}, view faces ${ctx.siteStrategy.viewDirection}.`,
       `Masses (${ctx.masses.length}):\n${ctx.masses.map(describeMass).join("\n")}`,
+      ctx.approvedRecipes?.length ? `Approved procedural Roof Recipes (select at most one with libraryRecipeId; they may set system, kind, pitch and overhang, never geometry or GLBs):\n${ctx.approvedRecipes.map((r) => `- ${r.id}: ${r.name}; ${r.parameters.map((p) => `${p.key}=${p.value}`).join(", ")}; ${r.guidance.join(" ")}`).join("\n")}` : "",
       previousErrors.length ? `Your previous attempt was rejected:\n${previousErrors.map((e) => `- ${e}`).join("\n")}` : "",
     ].filter(Boolean).join("\n\n"),
     schema: roofCompositionStageOutputSchema,
@@ -180,13 +185,27 @@ export async function runRoofCompositionStage(ctx: RoofCompositionStageContext, 
       return structural.length ? structural : roofLanguageErrors(value, ctx.masses);
     },
   });
-  if (result.ok) return { ...result, value: recipesFromAuthoredRoofs(result.value, ctx.masses, ctx.intent), ...(result.value.language ? { language: result.value.language } : {}) };
+  const selected = (value: RoofCompositionStageOutput, roofs: readonly RoofRecipe[]): DesignRecipe | undefined => {
+    const recipe = ctx.approvedRecipes?.find((r) => r.id === value.libraryRecipeId);
+    const complex = ctx.masses.some((mass) => mass.plan?.form === "l-shape" || (mass.operations ?? []).some((op) => op.type === "notch"));
+    const parameterized = recipe ? parameterizeRoofsFromLibrary(recipe, roofs) : roofs;
+    const system = recipe ? getRoofSystem(recipe.parameters.find((p) => ["system", "roofsystem"].includes(p.key.replace(/[_.-]/g, "").toLowerCase()))?.value as string) : undefined;
+    const dominant = parameterized.find((roof) => roof.massId === value.language?.dominantMassId) ?? parameterized[0];
+    return recipe && !roofRecipeCompatibility(recipe, ctx.masses) && !(complex && parameterized.some((roof) => roof.kind === "gable" || roof.kind === "hip")) && !!system?.supports(roofShapeOf(dominant)) ? recipe : undefined;
+  };
+  if (result.ok) {
+    const roofs = recipesFromAuthoredRoofs(result.value, ctx.masses, ctx.intent);
+    const libraryRecipe = selected(result.value, roofs);
+    return { ...result, value: libraryRecipe ? parameterizeRoofsFromLibrary(libraryRecipe, roofs) : roofs, ...(result.value.language ? { language: result.value.language } : {}), ...(libraryRecipe ? { libraryRecipe } : {}) };
+  }
   // Only language issues left unrepaired: the authored roofs still build, so they stand.
   const last = result.rawValueTruncated ? undefined : roofCompositionStageOutputSchema.safeParse(result.rawValue);
   if (last?.success && structuralRoofErrors(last.data, ids).length === 0) {
     const warnings = roofLanguageErrors(last.data, ctx.masses);
-    return { ok: true, value: recipesFromAuthoredRoofs(last.data, ctx.masses, ctx.intent), attempts: result.attempts, durationMs: result.durationMs,
-      ...(last.data.language ? { language: last.data.language } : {}), ...(warnings.length ? { warnings } : {}) };
+    const roofs = recipesFromAuthoredRoofs(last.data, ctx.masses, ctx.intent);
+    const libraryRecipe = selected(last.data, roofs);
+    return { ok: true, value: libraryRecipe ? parameterizeRoofsFromLibrary(libraryRecipe, roofs) : roofs, attempts: result.attempts, durationMs: result.durationMs,
+      ...(last.data.language ? { language: last.data.language } : {}), ...(warnings.length ? { warnings } : {}), ...(libraryRecipe ? { libraryRecipe } : {}) };
   }
   return result;
 }

@@ -4,6 +4,7 @@ import { ASSET_CATEGORIES, type AssetCategory } from "@/types/library";
 import type { ModelStatus } from "./modelCache";
 import { resolveCurrentAssetId } from "./versions";
 import { validateBuilding } from "@/lib/house/features/buildings";
+import { sitePlanSchema } from "@/lib/architecture/sitePlanContract";
 
 /**
  * Semantic replacement, GLB side. A project feature keeps its own type, id and config; an optional `assetId` on it
@@ -63,6 +64,17 @@ export function placementsFromBuildings(rawBuildings: unknown): AssetPlacement[]
     });
   });
   return out;
+}
+
+/** Approved GLBs may replace a typed V2 Site Plan feature just as they replace a legacy building. */
+export function placementsFromV2SitePlan(rawSitePlan: unknown): AssetPlacement[] {
+  const plan = sitePlanSchema.safeParse(rawSitePlan);
+  if (!plan.success) return [];
+  return (plan.data.features ?? []).flatMap((feature) => {
+    const category = GLB_BUILDING_CATEGORY[feature.kind];
+    if (!category || !feature.assetId) return [];
+    return [{ featureId: `v2-site-feature-${feature.id}`, assetId: feature.assetId, kind: feature.kind, category, x: feature.x, z: feature.z, yaw: (feature.rotation * Math.PI) / 180, width: feature.width, depth: feature.depth }];
+  });
 }
 
 /** A model may be drawn between these multiples of its natural size; retrieval already keeps requests inside 0.5–2×. */

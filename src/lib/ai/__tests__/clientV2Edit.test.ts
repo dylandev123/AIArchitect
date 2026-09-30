@@ -71,4 +71,21 @@ describe("requestHouseEdit V2 commit boundary", () => {
     expect(primitiveBounds(beforePrimitives)).not.toEqual(primitiveBounds(afterPrimitives));
     expect(persisted.versions.at(-1)?.summary).toContain("Moved and enlarged");
   });
+
+  it("commits a mocked V2 Site Plan-only outdoor-bar addition without changing the architectural document", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const project = useProjectStore.getState().createProject("Luxury V2");
+    const base = jsonFor();
+    const parsed = JSON.parse(base);
+    // The client boundary only needs a valid V2 root; the route's deterministic placement is covered separately.
+    const next = JSON.stringify({ ...parsed, sitePlan: { features: [{ id: "bar-1", kind: "outdoor_bar", x: 20, z: 14, width: 6, depth: 3, rotation: 0 }] } });
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "Added an outdoor bar.", json: next }) }));
+
+    const result = await requestHouseEdit({ projectId: project.id, prompt: "add an outdoor bar", apply: (summary, json, writer) => useProjectStore.getState().appendVersion(project.id, summary, json, writer) });
+    const persisted = JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson);
+    expect(result).toMatchObject({ ok: true, generated: false });
+    expect(persisted.architecturalDesignDocument).toEqual(parsed.architecturalDesignDocument);
+    expect(persisted.sitePlan.features).toEqual([{ id: "bar-1", kind: "outdoor_bar", x: 20, z: 14, width: 6, depth: 3, rotation: 0 }]);
+  });
 });

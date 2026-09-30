@@ -5,6 +5,8 @@ import type { ArchitecturalDesignDocument, MassVolume, RoofRecipe } from "../../
 import { withVolumePlan } from "../../volumePlan";
 import { compileArchitecture } from "../../compiler";
 import { normalizeRoofOrientation, roofForMass } from "../roofStage";
+import { appliedRoofRecipe, parameterizeRoofsFromLibrary, roofRecipeCompatibility } from "../../roofRecipeLibrary";
+import type { DesignRecipe } from "@/types/library";
 
 const intent = (shelter: boolean): ArchitecturalIntent => ({
   mood: ["calm"], spatialGoals: ["views"], environmentalGoals: shelter ? ["shelter"] : ["daylight"], hierarchyGoals: ["living dominates"],
@@ -67,5 +69,26 @@ describe("roof edge intent → roof recipe", () => {
     expect(roofForMass(prow, "floating-flat", intent(false)).kind).toBe("floating-flat");
     // A plain bar keeps whatever family was chosen.
     expect(roofForMass(mass({ roofEdge: "deep-eave" }), "gable", intent(false)).kind).toBe("gable");
+  });
+});
+
+const libraryRoof = (parameters: DesignRecipe["parameters"]): DesignRecipe => ({
+  id: "roof-seam", name: "Tropical Seam Roof", category: "roof", styleTags: ["tropical"], compatibleScales: [], environmentTags: [], parameters,
+  relationships: [], guidance: ["Procedural V2 planes only."], usageCount: 0, successCount: 0, failureCount: 0, approval: "approved", version: 1,
+  created_at: "2026-01-01T00:00:00.000Z", updated_at: "2026-01-01T00:00:00.000Z",
+});
+
+describe("approved Roof Recipe integration", () => {
+  it("parameterizes procedural V2 roofs, persists the selected system, and never introduces a GLB", () => {
+    const recipe = libraryRoof([{ key: "roof-system", value: "standing-seam" }, { key: "pitch", value: 18 }, { key: "overhang", value: 1.1 }]);
+    const roofs = parameterizeRoofsFromLibrary(recipe, [{ id: "m-roof", massId: "m", kind: "shed", pitch: 12, overhang: .5 }]);
+    expect(roofs).toEqual([{ id: "m-roof", massId: "m", kind: "shed", pitch: 18, overhang: 1.1 }]);
+    expect(appliedRoofRecipe(recipe)).toMatchObject({ system: { primary: "standing-seam" }, libraryRecipe: { id: "roof-seam", status: "applied" } });
+  });
+
+  it("rejects a hip/gable library recipe for an L-shaped mass until valley geometry exists", () => {
+    const recipe = libraryRoof([{ key: "system", value: "tile-shingle" }, { key: "kind", value: "hip" }]);
+    expect(roofRecipeCompatibility(recipe, [mass({ form: "l-shape", roofEdge: "deep-eave" })])).toMatch(/valley geometry/);
+    expect(roofRecipeCompatibility(recipe, [mass({ form: "bar", roofEdge: "deep-eave" })])).toBeUndefined();
   });
 });

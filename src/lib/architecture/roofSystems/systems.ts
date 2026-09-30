@@ -20,8 +20,8 @@ function flatTrim(assembly: RoofAssembly, flashing: Paint): HousePrimitive[] {
 
 /** Nominal pan width (m); each face gets the whole number of equal pans nearest it. */
 export const STANDING_SEAM_PAN = 0.42;
-const SEAM_RIB = { width: 0.03, height: 0.035 };
-const SEAM_TRIM: PitchedTrimSpec = { board: { height: 0.2, thickness: 0.035 }, rim: { width: 0.07, height: 0.04 }, cap: { leaf: 0.15, thickness: 0.05 }, valley: { leaf: 0.22, thickness: 0.04 } };
+const SEAM_RIB = { width: 0.025, height: 0.035 };
+const SEAM_TRIM: PitchedTrimSpec = { board: { height: 0.2, thickness: 0.035 }, rim: { width: 0.07, height: 0.04 }, cap: { leaf: 0.13, thickness: 0.05 }, valley: { leaf: 0.22, thickness: 0.04 } };
 
 /**
  * Sheet-metal pans with raised seams running from the low edge straight up every face. The one system that
@@ -57,7 +57,7 @@ const SHINGLE_MODULE: PatternModule = [0.16, 0.19];
 const TILE_MODULE: Partial<Record<MaterialType, PatternModule>> = { slate: [0.3, 0.2], cedar: SHINGLE_MODULE, wood: SHINGLE_MODULE, timber: SHINGLE_MODULE, teak: SHINGLE_MODULE };
 const CLAY_MODULE: PatternModule = [0.17, 0.3];
 export const tileModuleFor = (material: MaterialType): PatternModule => TILE_MODULE[material] ?? CLAY_MODULE;
-const TILE_TRIM: PitchedTrimSpec = { board: { height: 0.2, thickness: 0.04 }, rim: { width: 0.07, height: 0.03 }, cap: { leaf: 0.16, thickness: 0.07 }, valley: { leaf: 0.2, thickness: 0.04 } };
+const TILE_TRIM: PitchedTrimSpec = { board: { height: 0.2, thickness: 0.04 }, rim: { width: 0.07, height: 0.03 }, cap: { leaf: 0.14, thickness: 0.05 }, valley: { leaf: 0.2, thickness: 0.04 } };
 
 /**
  * Lapped units in courses parallel to the eave — clay tile, slate, timber shingles. Every face carries a whole

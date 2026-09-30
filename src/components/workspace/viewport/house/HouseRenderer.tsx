@@ -8,7 +8,7 @@ import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { PrimitiveMesh, type RenderedMeshAudit } from "./PrimitiveMesh";
 import { GlbFeature } from "./GlbFeature";
 import { useAssetStore } from "@/store/useAssetStore";
-import { placementsFromBuildings, placementsFromOutdoor, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
+import { placementsFromBuildings, placementsFromOutdoor, placementsFromV2SitePlan, replacedFeatureIds, usablePlacements, type AssetPlacement } from "@/lib/assets/placement";
 import { glbModels, loadPlacedAssets, useGlbCacheVersion } from "@/lib/assets/glbModels";
 import type { MaterialsConfig } from "@/types/house";
 import { SURFACE_PBR, usePbrReady, type PbrSetDef, type SurfaceKey } from "@/lib/pbrLibrary";
@@ -22,6 +22,7 @@ import { auditHash, documentAudit, massIdOf, primitiveBounds, primitiveSignature
 import { revisionOf } from "@/lib/house/revision";
 import { useRenderFlightStore } from "@/store/useRenderFlightStore";
 import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib/architecture/v2OnlyMode";
+import { compileV2SiteFeatures, v2SitePlanOf } from "@/lib/architecture/v2SiteFeatures";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -52,7 +53,7 @@ function parsePlacements(json: string | undefined): AssetPlacement[] {
   if (!json || !json.includes('"assetId"')) return [];
   try {
     const root = JSON.parse(json);
-    return [...placementsFromBuildings(root.buildings), ...placementsFromOutdoor(root.outdoorAssetPlacements)];
+    return [...placementsFromBuildings(root.buildings), ...placementsFromV2SitePlan(root.sitePlan), ...placementsFromOutdoor(root.outdoorAssetPlacements)];
   } catch {
     return [];
   }
@@ -84,7 +85,10 @@ export function HouseRenderer() {
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
       if (isArchitecturalDesignDocument(document)) {
         const legacy = generateHouseFromJson(renderJson ?? "{}");
-        const v2Model = compileArchitecture(document, { materials: legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG, mode: architectureDebug }).model;
+        const materials = legacy.site?.materials ?? DEFAULT_MATERIALS_CONFIG;
+        const architecture = compileArchitecture(document, { materials, mode: architectureDebug }).model;
+        const plan = v2SitePlanOf(raw);
+        const v2Model = { ...architecture, primitives: [...architecture.primitives, ...(plan ? compileV2SiteFeatures(plan, materials) : [])] };
         const resolved = applyV2OnlyMode({ legacy, v2Model, v2OnlyMode, cutawayActive: cutawayLevel !== null });
         return { ...resolved, document };
       }

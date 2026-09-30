@@ -17,7 +17,7 @@ import type { TimeOfDay } from "@/types/project";
 export const STALE_PROJECT_MESSAGE =
   "The project changed while the AI was working, so its edit wasn't applied. Please ask again.";
 export const V2_EDIT_UNCHANGED_MESSAGE =
-  "This edit did not change the active V2 architectural document, so it was not applied as an architectural revision.";
+  "This edit did not change the active V2 architecture or Site Plan, so it was not applied.";
 
 export interface HouseEditRequest {
   projectId: string;
@@ -44,6 +44,18 @@ function v2DocumentOf(json: string) {
     const root = JSON.parse(json) as Record<string, unknown>;
     const document = root.architecturalDesignDocument ?? root.architectureDocument;
     return isArchitecturalDesignDocument(document) ? document : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** V2 edits may change the typed Site Plan without changing house massing. */
+function v2EditHash(json: string): string | undefined {
+  try {
+    const root = JSON.parse(json) as Record<string, unknown>;
+    const document = v2DocumentOf(json);
+    if (!document) return undefined;
+    return JSON.stringify({ document: documentAudit(document).hash, sitePlan: root.sitePlan });
   } catch {
     return undefined;
   }
@@ -108,8 +120,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
   }
 
   const baseDocument = v2DocumentOf(baseJson);
-  const resultDocument = v2DocumentOf(data.json);
-  if (!generate && baseDocument && documentAudit(baseDocument).hash === (resultDocument ? documentAudit(resultDocument).hash : undefined)) {
+  if (!generate && baseDocument && v2EditHash(baseJson) === v2EditHash(data.json)) {
     logEdit("COMMIT", { projectId: req.projectId, accepted: false, reason: "active-v2-document-unchanged" }, data.json);
     return { ok: false, error: V2_EDIT_UNCHANGED_MESSAGE, status: 422 };
   }

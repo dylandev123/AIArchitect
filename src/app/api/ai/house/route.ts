@@ -12,7 +12,7 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
-import { recipeRetrievalForSpaces } from "@/lib/library/service";
+import { recipeRetrievalForSpaces, roofRecipesForBrief } from "@/lib/library/service";
 import { readLibrary } from "@/lib/library/store";
 import { assetBackend } from "@/lib/assets/serverStore";
 import { toAssetIndex } from "@/lib/library/retrieval";
@@ -20,7 +20,7 @@ import { planOutdoorSpaces } from "@/lib/outdoor/spaces";
 import { inferSiteHints } from "@/lib/house/siteSettings";
 import { INITIAL_CAPABILITIES } from "@/lib/library/capabilities";
 import type { AssetIndexEntry } from "@/lib/library/retrieval";
-import { validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
+import { isArchitecturalDesignDocument, validateArchitecturalDesignDocument, type ArchitecturalDesignDocument } from "@/lib/architecture/document";
 import { compileArchitecture } from "@/lib/architecture/compiler";
 import { runDesignQualityGate } from "@/lib/architecture/stages/qualityGate";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
@@ -30,6 +30,7 @@ import { setDevSession } from "@/lib/architecture/stages/devSessionCache";
 import { runFinalAssembly, sitePlanContextForDocument } from "@/lib/ai/finalAssembly";
 import { runSitePlanStage, type SitePlan } from "@/lib/architecture/stages/sitePlanStage";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
+import { placeOutdoorBar } from "@/lib/architecture/v2SiteFeatures";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -84,10 +85,6 @@ function parseProjectId(raw: unknown): string | null {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isAiConfigured()) {
-    return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
-  }
-
   let body: RequestBody;
   try {
     body = await req.json();
@@ -120,6 +117,17 @@ export async function POST(req: NextRequest) {
 
   const assets = parseAssets(body.assets);
   const projectId = parseProjectId(body.projectId);
+
+  // Deliberately before the AI configuration gate: this first V2 follow-up is a deterministic,
+  // cheap Site Plan patch and must never turn a one-object addition into a generation call.
+  const activeDocument = root.architecturalDesignDocument ?? root.architectureDocument;
+  if (body.mode !== "generate" && isArchitecturalDesignDocument(activeDocument)) {
+    return editV2SiteFeature(prompt, root, baseRevision);
+  }
+
+  if (!isAiConfigured()) {
+    return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
+  }
 
   if (body.mode === "generate") {
     // Generation only ever starts from a blank project; an existing design is never regenerated here.
@@ -217,6 +225,27 @@ export async function POST(req: NextRequest) {
     console.error("AI house generation failed:", error);
     return providerErrorResponse(error);
   }
+}
+
+/**
+ * The intentionally narrow first V2 editing path. No model request and no architecture/site-plan
+ * regeneration occur here; unsupported edits stay rejected until their corresponding V2 patch exists.
+ */
+async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, baseRevision: string): Promise<NextResponse> {
+  if (!/\b(add|create|place)\b[\s\S]*\boutdoor[\s-]*bar\b|\boutdoor[\s-]*bar\b[\s\S]*\b(add|create|place)\b/i.test(prompt)) {
+    return NextResponse.json({ error: "V2 follow-up edits currently support adding an outdoor bar only. Architectural and massing edits are not available yet." }, { status: 422 });
+  }
+  let assetId: string | undefined;
+  try {
+    const { assets, glbIds } = await assetBackend().list();
+    assetId = assets.find((asset) => asset.type === "glb-model" && asset.status === "approved" && glbIds.includes(asset.id) && asset.categories.includes("outdoor-bar"))?.id;
+  } catch {
+    // A library outage never prevents the safe procedural V2 fallback.
+  }
+  const placed = placeOutdoorBar(root, assetId);
+  if ("error" in placed) return NextResponse.json({ error: placed.error }, { status: 422 });
+  const json = JSON.stringify({ ...root, sitePlan: placed.plan });
+  return NextResponse.json({ summary: "Added a grounded outdoor bar beside the existing outdoor-living area.", json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V2 Site Plan" }, operation: "addSiteFeature" });
 }
 
 const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -348,6 +377,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   // not one lookup for the whole brief). A library problem never blocks generation (see `safely`).
   const planned = planOutdoorSpaces({ brief });
   const recipeLookup = await timings.timeAsync("recipeLookup", () => recipeRetrievalForSpaces(brief, planned));
+  const roofRecipes = await timings.timeAsync("roofRecipeLookup", () => roofRecipesForBrief(brief));
   const retrieved = recipeLookup.retrieved;
   const recipes = retrieved.map((r) => r.recipe);
   const recipeIds = recipes.map((r) => r.id);
@@ -356,7 +386,7 @@ async function generateInitialDesign(brief: string, assets: AssetRef[], baseRevi
   // a default mass trio and receiving an architectural explanation afterwards.
   const hints = inferSiteHints(brief);
   const pipelineInput: PipelineInput = {
-    brief, hints, scale: hints.projectScale, recipes,
+    brief, hints, scale: hints.projectScale, recipes, roofRecipes,
     availableCapabilities: capabilities.filter((capability) => capability.status === "supported" || capability.status === "partial").map((capability) => capability.id),
     variationSeed: usageMeta.projectId ?? brief, projectId: usageMeta.projectId,
   };
