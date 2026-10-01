@@ -36,6 +36,9 @@ export function recordRequest(needs: readonly Need[], req: AssetRequest, now: Da
       status: "needed",
       ...(req.spaces?.length ? { spaces: unique(req.spaces) } : {}),
       ...(req.components?.length ? { components: unique(req.components) } : {}),
+      ...(req.source ? { sources: [req.source] } : {}),
+      ...(req.proxyInUse ? { proxyInUse: true } : {}),
+      ...(req.aliases?.length ? { aliases: unique(req.aliases) } : {}),
     };
   }
   return {
@@ -49,6 +52,9 @@ export function recordRequest(needs: readonly Need[], req: AssetRequest, now: Da
     phrasings: existing.phrasings.includes(req.text) ? existing.phrasings : [...existing.phrasings, req.text].slice(-MAX_PHRASINGS),
     ...(req.spaces?.length || existing.spaces ? { spaces: unique([...(existing.spaces ?? []), ...(req.spaces ?? [])]) } : {}),
     ...(req.components?.length || existing.components ? { components: unique([...(existing.components ?? []), ...(req.components ?? [])]) } : {}),
+    ...(req.source || existing.sources ? { sources: unique([...(existing.sources ?? []), ...(req.source ? [req.source] : [])]) } : {}),
+    ...(req.proxyInUse || existing.proxyInUse ? { proxyInUse: true } : {}),
+    ...(req.aliases?.length || existing.aliases ? { aliases: unique([...(existing.aliases ?? []), ...(req.aliases ?? [])]) } : {}),
   };
 }
 

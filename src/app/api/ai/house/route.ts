@@ -37,6 +37,7 @@ import { isV2GenerationFailure } from "@/lib/architecture/stages/recovery";
 import { v2FailureResponse } from "@/lib/ai/v2Failure";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
 import { placeV2AdditiveAsset } from "@/lib/architecture/v2AdditivePlacement";
+import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -250,6 +251,13 @@ async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, 
   }
   const placed = placeV2AdditiveAsset(root, prompt, assets, glbIds);
   if (!placed.ok) return NextResponse.json({ error: placed.error, code: placed.code }, { status: 422 });
+  if ("placementIds" in placed) {
+    // A standalone proxy: its Need carries the request's own type, style, size and context, and the Need's id is
+    // stamped on the proxy so an approved asset can later be matched to this exact placement.
+    const need = placed.needRequest ? await recordPriorityAssetNeed({ ...placed.needRequest, projectId }) : undefined;
+    const json = need ? withProxyNeedId(placed.json, placed.placementIds, need.id) : placed.json;
+    return NextResponse.json({ summary: placed.summary, json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId, placementIds: placed.placementIds, ...(placed.usedProceduralFallback ? { proceduralFallback: true, assetNeedId: need?.id } : {}) });
+  }
   const assetNeed = placed.usedProceduralFallback
     ? await recordPriorityAssetNeed({
       text: placed.object === "bar" ? "outdoor bar" : placed.object === "lounger" ? "sun lounger" : /lounge\s+chairs?/i.test(prompt) ? "lounge chair" : placed.object,
@@ -259,6 +267,12 @@ async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, 
     })
     : undefined;
   return NextResponse.json({ summary: placed.summary, json: placed.json, baseRevision, revision: revisionOf(placed.json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId, ...(placed.usedProceduralFallback ? { proceduralFallback: true, assetNeedId: assetNeed?.id } : {}) });
+}
+
+function withProxyNeedId(json: string, placementIds: readonly string[], needId: string): string {
+  const root = JSON.parse(json) as { outdoorAssetPlacements: OutdoorAssetPlacement[] };
+  root.outdoorAssetPlacements = root.outdoorAssetPlacements.map((p) => (p.proxy && placementIds.includes(p.id) ? { ...p, proxy: { ...p.proxy, needId } } : p));
+  return JSON.stringify(root);
 }
 
 const sseFrame = (event: string, data: unknown) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;

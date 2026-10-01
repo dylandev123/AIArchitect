@@ -15,6 +15,7 @@ import { fittedTextureUvs } from "@/lib/roofSurfaceUv";
 import { SURFACE_PBR, usePbrSet, type SurfaceKey } from "@/lib/pbrLibrary";
 import { macroVariation, macroVariationCacheKey } from "@/lib/materialVariation";
 import { naturalGreen } from "../scenery/vegetation";
+import { glassLook } from "./glassLook";
 
 /** Box geometry whose UVs are in metres / tile, so a pattern keeps its real-world scale on any face size. */
 function worldUvBox(size: [number, number, number], tile: number): THREE.BoxGeometry {
@@ -269,21 +270,18 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh }:
       }
     : baseMaterialProps;
 
-  // Glass. Windows and doors sit on a solid wall box, so plain low-opacity glass would just tint the wall pale blue.
-  // Panes never write depth: the half-res ambient occlusion pass would otherwise treat them as opaque geometry and
-  // stamp blocky darkening onto the glass. The wall box behind already supplies the occlusion. They get a deep-tinted, part-metallic pane instead — it mirrors the sky like real glazing and reads dark against the
-  // facade. Railings and glazed roofs (nothing solid behind) stay clear and tinted.
-  const isGlass = !!primitive.transparent && (primitive.opacity ?? 1) < 0.95;
-  const glazing = isGlass && (primitive.category === "window" || primitive.category === "door");
-  const glassColor = glazing ? `#${new THREE.Color(primitive.color).multiplyScalar(0.42).getHexString()}` : primitive.color;
-  const glass = isGlass ? (
+  // Glass (see glassLook for the wall-backed / exposed / clear recipes). Panes never write depth: the half-res
+  // ambient occlusion pass would otherwise treat them as opaque geometry and stamp blocky darkening onto the glass.
+  const look = glassLook(primitive);
+  const isGlass = !!look;
+  const glass = look ? (
     <meshPhysicalMaterial
-      color={glassColor}
+      color={look.color}
       transparent
-      opacity={glazing ? 0.86 : Math.min(primitive.opacity ?? 0.4, 0.42)}
-      roughness={glazing ? 0.02 : 0.03}
-      metalness={glazing ? 0.62 : 0.1}
-      envMapIntensity={glazing ? 2.2 : 2.4}
+      opacity={look.opacity}
+      roughness={look.roughness}
+      metalness={look.metalness}
+      envMapIntensity={look.envMapIntensity}
       clearcoat={1}
       clearcoatRoughness={0.02}
       ior={1.5}

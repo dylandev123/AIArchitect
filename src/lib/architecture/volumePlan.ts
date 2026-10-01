@@ -112,7 +112,10 @@ function worldExtent(m: MassVolume): { x0: number; x1: number; z0: number; z1: n
   return { x0: m.position.x - hw, x1: m.position.x + hw, z0: m.position.z - hd, z1: m.position.z + hd };
 }
 
-/** World sides where another volume stands against this one (≤ 0.6m gap, overlapping in plan and height) — a shared wall, never a facade to glaze or open. */
+/** A neighboring volume this close (meters) to a facade stands against it: a shared wall. */
+export const SHARED_WALL_GAP_M = 0.6;
+
+/** World sides where another volume stands against this one (≤ SHARED_WALL_GAP_M, overlapping in plan and height) — a shared wall, never a facade to glaze or open. */
 function partySides(mass: MassVolume, masses: readonly MassVolume[]): Set<CompassSide> {
   const a = worldExtent(mass);
   const sides = new Set<CompassSide>();
@@ -123,7 +126,7 @@ function partySides(mass: MassVolume, masses: readonly MassVolume[]): Set<Compas
     const b = worldExtent(other);
     const overlapX = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
     const overlapZ = Math.min(a.z1, b.z1) - Math.max(a.z0, b.z0);
-    const GAP = 0.6, MIN_SHARED = 0.5;
+    const GAP = SHARED_WALL_GAP_M, MIN_SHARED = 0.5;
     if (overlapZ > MIN_SHARED && Math.abs(b.x0 - a.x1) <= GAP) sides.add("east");
     if (overlapZ > MIN_SHARED && Math.abs(a.x0 - b.x1) <= GAP) sides.add("west");
     if (overlapX > MIN_SHARED && Math.abs(b.z0 - a.z1) <= GAP) sides.add("south");

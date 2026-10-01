@@ -5,31 +5,88 @@ import { routePathAroundMasses } from "./sitePathRouting";
 import { pathCurve } from "@/lib/house/features/paths";
 
 /** Browser-safe Site Plan contract and geometry checks. No AI, database, or stage dependencies. */
-const side = z.enum(["north", "south", "east", "west"]);
-const driveway = z.object({ wall: side, offset: z.number().min(0).max(80), width: z.number().min(2.5).max(8), length: z.number().min(6).max(60), bend: z.number().min(-20).max(20).optional() });
-const parking = z.object({ x: z.number().min(-100).max(100), z: z.number().min(-100).max(100), width: z.number().min(2.5).max(40), depth: z.number().min(4.5).max(40) });
-const pool = z.object({ wall: side, offset: z.number().min(0).max(80), distance: z.number().min(1).max(40), width: z.number().min(3).max(30), depth: z.number().min(2).max(20), waterDepth: z.number().min(.8).max(3), shape: z.enum(["rectangle", "rounded", "oval", "kidney"]).optional() });
-const patio = z.object({ wall: side, offset: z.number().min(0).max(80), width: z.number().min(3).max(40), depth: z.number().min(2).max(20) });
-const path = z.object({ from: z.enum(["arrival", "parking", "entrance", "outdoor-living", "pool"]), to: z.enum(["arrival", "parking", "entrance", "outdoor-living", "pool"]), x1: z.number().min(-100).max(100), z1: z.number().min(-100).max(100), x2: z.number().min(-100).max(100), z2: z.number().min(-100).max(100), width: z.number().min(.8).max(4), bend: z.number().min(-20).max(20), surface: z.enum(["gravel", "flagstone", "dirt", "boardwalk"]) });
-const landscape = z.object({ purpose: z.enum(["privacy", "entrance-planting", "pool-planting", "view-framing"]), kind: z.enum(["garden", "lawn", "clearing"]), x: z.number().min(-100).max(100), z: z.number().min(-100).max(100), width: z.number().min(2).max(40), depth: z.number().min(2).max(40) });
+
+/**
+ * A bounded number whose description states what it measures AND its executable range. The description travels
+ * to the model inside the structured-output JSON schema, so every enforced bound is also an explained one.
+ */
+const num = (min: number, max: number, meaning: string) => z.number().min(min).max(max).describe(`${meaning} Allowed ${min} to ${max}.`);
+/** The wall frame shared by every wall-anchored feature; see `wallPoint`, and `pointOnWall` in the renderer. */
+const WALL_OFFSET = "Metres ALONG the wall from its start corner — the west (lowest x) corner of a north/south wall, the north (lowest z) corner of an east/west wall — never from the wall's centre. 0 = flush with that start corner; larger values move toward the far corner. Never negative: a wall-anchored feature cannot start before its start corner (use 0, or another wall). To centre a feature of width w on a wall of length L use (L − w) / 2.";
+const worldX = (what: string) => num(-100, 100, `${what} world x in metres (x grows east).`);
+const worldZ = (what: string) => num(-100, 100, `${what} world z in metres (z grows south; north is −z).`);
+const side = z.enum(["north", "south", "east", "west"]).describe("House wall the feature is attached to: north = the −z face, south = +z, east = +x, west = −x.");
+const driveway = z.object({ wall: side, offset: num(0, 80, `${WALL_OFFSET} The driveway spans offset → offset + width along the wall.`), width: num(2.5, 8, "Paved driveway width in metres, measured along the wall."), length: num(6, 60, "How far the driveway runs out from the wall, in metres; its far end is the arrival node."), bend: num(-20, 20, "Metres the driveway's midpoint bows sideways off a straight line; 0 = straight, the sign picks the side.").optional() });
+const parking = z.object({ x: worldX("Parking pad centre:"), z: worldZ("Parking pad centre:"), width: num(2.5, 40, "Parking pad extent along x, in metres."), depth: num(4.5, 40, "Parking pad extent along z, in metres (at least one car length).") });
+const pool = z.object({ wall: side, offset: num(0, 80, `${WALL_OFFSET} The pool spans offset → offset + width along the wall.`), distance: num(1, 40, "Gap in metres between the house wall and the pool's near edge."), width: num(3, 30, "Pool extent along the wall, in metres."), depth: num(2, 20, "Pool extent outward from the wall, in metres (plan size, not water depth)."), waterDepth: num(.8, 3, "Water depth in metres."), shape: z.enum(["rectangle", "rounded", "oval", "kidney"]).optional() });
+const patio = z.object({ wall: side, offset: num(0, 80, `${WALL_OFFSET} The terrace spans offset → offset + width along the wall.`), width: num(3, 40, "Terrace extent along the wall, in metres."), depth: num(2, 20, "Terrace extent outward from the wall, in metres; it starts at the wall.") });
+const node = z.enum(["arrival", "parking", "entrance", "outdoor-living", "pool"]);
+const path = z.object({ from: node, to: node, x1: worldX("Path start:"), z1: worldZ("Path start:"), x2: worldX("Path end:"), z2: worldZ("Path end:"), width: num(.8, 4, "Path width in metres."), bend: num(-20, 20, "Metres the path's midpoint bows sideways off a straight line; 0 = straight, the sign picks the side."), surface: z.enum(["gravel", "flagstone", "dirt", "boardwalk"]) });
+const landscape = z.object({ purpose: z.enum(["privacy", "entrance-planting", "pool-planting", "view-framing"]), kind: z.enum(["garden", "lawn", "clearing"]), x: worldX("Planting zone centre:"), z: worldZ("Planting zone centre:"), width: num(2, 40, "Planting zone extent along x, in metres; a narrower bed or hedge strip must still be authored at least 2 m."), depth: num(2, 40, "Planting zone extent along z, in metres; a narrower bed or hedge strip must still be authored at least 2 m.") });
 
 /** Ground-level additions owned by a V2 Site Plan, never by legacy building geometry. */
 export const siteFeatureSchema = z.object({
   id: z.string().min(1).max(100), kind: z.enum(["outdoor_bar"]),
-  x: z.number().min(-100).max(100), z: z.number().min(-100).max(100),
-  width: z.number().min(2).max(12), depth: z.number().min(2).max(8),
-  rotation: z.number().min(-360).max(360).default(0), assetId: z.string().min(1).max(80).optional(),
+  x: worldX("Feature footprint centre:"), z: worldZ("Feature footprint centre:"),
+  width: num(2, 12, "Ground footprint width in metres (along x before rotation): the whole feature including its standing/service zone, not a counter alone."),
+  depth: num(2, 8, "Ground footprint depth in metres (along z before rotation): the whole feature including its standing/service zone — an outdoor bar's counter alone (~0.6–0.9 m) is too shallow; ~3 m is typical."),
+  rotation: num(-360, 360, "Turn about the footprint centre, in degrees; 0 = the front faces south.").default(0), assetId: z.string().min(1).max(80).optional(),
 });
 export type V2SiteFeature = z.infer<typeof siteFeatureSchema>;
 
 export const sitePlanSchema = z.object({
-  entrance: z.object({ wall: side, offset: z.number().min(0).max(80) }), driveway, parking: z.array(parking).min(1).max(3), pool, terrace: patio,
-  poolDeck: z.object({ x: z.number().min(-100).max(100), z: z.number().min(-100).max(100), width: z.number().min(3).max(40), depth: z.number().min(2).max(20), shape: z.enum(["rectangle", "rounded", "oval", "arc"]).optional() }),
+  entrance: z.object({ wall: side, offset: num(0, 80, `${WALL_OFFSET} Here it locates the entrance point itself.`) }), driveway, parking: z.array(parking).min(1).max(3), pool, terrace: patio,
+  poolDeck: z.object({ x: worldX("Pool deck centre:"), z: worldZ("Pool deck centre:"), width: num(3, 40, "Pool deck extent along x, in metres."), depth: num(2, 20, "Pool deck extent along z, in metres."), shape: z.enum(["rectangle", "rounded", "oval", "arc"]).optional() }),
   paths: z.array(path).min(4).max(8), landscape: z.array(landscape).min(2).max(8),
   // Optional for backwards-compatible reading of existing persisted V2 plans; writers always emit it.
   features: z.array(siteFeatureSchema).max(30).optional(),
 });
 export type SitePlan = z.infer<typeof sitePlanSchema>;
+
+type JsonNode = { type?: string; properties?: Record<string, JsonNode>; items?: JsonNode; minimum?: number; maximum?: number; minItems?: number; maxItems?: number; description?: string };
+const sitePlanJsonSchema = z.toJSONSchema(sitePlanSchema, { io: "input" }) as JsonNode;
+const range = (node: JsonNode, lo?: number, hi?: number) => `${lo ?? node.minimum ?? 0} to ${hi ?? node.maximum ?? "unbounded"}`;
+
+/**
+ * Every numeric bound the schema enforces, one line per site object (`driveway: offset 0 to 80, width 2.5 to 8, …`),
+ * read from the schema itself so the prompt can never drift from what validation rejects.
+ */
+export function sitePlanNumericLimits(): string {
+  const fields = (node: JsonNode, prefix = ""): string[] => Object.entries(node.properties ?? {}).flatMap(([key, child]) =>
+    child.type === "number" ? [`${prefix}${key} ${range(child)}`] : child.type === "object" ? fields(child, `${prefix}${key}.`) : []);
+  return Object.entries(sitePlanJsonSchema.properties ?? {}).map(([key, node]) => {
+    const item = node.type === "array" ? node.items ?? {} : node;
+    const count = node.type === "array" ? ` (${range(node, node.minItems, node.maxItems)} items)` : "";
+    return `  - ${key}${count}: ${fields(item).join(", ")}`;
+  }).join("\n");
+}
+
+/** The schema node at a validation issue's path (array indices step into `items`), for its description. */
+function jsonNodeAt(issuePath: readonly PropertyKey[]): JsonNode | undefined {
+  let node: JsonNode | undefined = sitePlanJsonSchema;
+  for (const key of issuePath) node = typeof key === "number" ? node?.items : node?.properties?.[String(key)];
+  return node;
+}
+
+/**
+ * Schema failures as repair instructions: the offending field, the value received, the rule it broke, and what
+ * the field measures — e.g. `features.0.depth = 0.85: Too small: … Ground footprint depth in metres …`. Reports
+ * only; never edits the value.
+ */
+export function sitePlanSchemaErrors(value: unknown): string[] {
+  const parsed = sitePlanSchema.safeParse(value);
+  if (parsed.success) return [];
+  return parsed.error.issues.map((issue) => {
+    let received: unknown = value;
+    for (const key of issue.path) received = typeof received === "object" && received !== null ? (received as Record<PropertyKey, unknown>)[key] : undefined;
+    const description = jsonNodeAt(issue.path)?.description;
+    return `${issue.path.join(".")} = ${received === undefined ? "missing" : JSON.stringify(received)}: ${issue.message}.${description ? ` ${description}` : ""}`;
+  });
+}
+
+/** The luxury indoor-outdoor proportional minimums (see `luxuryOutdoorCompositionErrors`), shared with the prompt. */
+export const LUXURY_OUTDOOR_RATIOS = { poolToHouse: 0.1, surfaceToPool: 0.7 } as const;
+
 export interface SitePlanContext {
   brief: string;
   /**
@@ -130,9 +187,10 @@ export function luxuryOutdoorCompositionErrors(plan: SitePlan, ctx: SitePlanCont
   const terraceArea = plan.terrace.width * plan.terrace.depth;
   const deckArea = plan.poolDeck.width * plan.poolDeck.depth;
   const errors: string[] = [];
-  if (poolArea < houseArea * 0.1) errors.push(`Luxury indoor-outdoor brief needs a substantial pool: ${poolArea.toFixed(1)}m² is under 10% of the ${houseArea.toFixed(1)}m² house footprint.`);
-  if (terraceArea < poolArea * 0.7) errors.push(`Outdoor-living terrace must be usable with the pool: ${terraceArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
-  if (deckArea < poolArea * 0.7) errors.push(`Pool deck must be usable around the pool: ${deckArea.toFixed(1)}m² is under 70% of pool area ${poolArea.toFixed(1)}m².`);
+  const { poolToHouse, surfaceToPool } = LUXURY_OUTDOOR_RATIOS;
+  if (poolArea < houseArea * poolToHouse) errors.push(`Luxury indoor-outdoor brief needs a substantial pool: ${poolArea.toFixed(1)}m² is under ${poolToHouse * 100}% of the ${houseArea.toFixed(1)}m² house footprint.`);
+  if (terraceArea < poolArea * surfaceToPool) errors.push(`Outdoor-living terrace must be usable with the pool: ${terraceArea.toFixed(1)}m² is under ${surfaceToPool * 100}% of pool area ${poolArea.toFixed(1)}m².`);
+  if (deckArea < poolArea * surfaceToPool) errors.push(`Pool deck must be usable around the pool: ${deckArea.toFixed(1)}m² is under ${surfaceToPool * 100}% of pool area ${poolArea.toFixed(1)}m².`);
   if (!plan.landscape.some((zone) => zone.purpose === "pool-planting") || !plan.landscape.some((zone) => zone.purpose === "view-framing")) errors.push("Luxury pool composition needs both pool-planting and view-framing landscape zones.");
   return errors;
 }

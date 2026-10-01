@@ -7,7 +7,7 @@ import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { FLOOR_THICKNESS, LEVEL_HEIGHT, MATERIAL_COLORS } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import type { CompassSide, RoofType } from "@/types/house";
-import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
+import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassFacade, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
 import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type WallEdge } from "./geometry/footprint";
 import { buildPolygonRoofPlate, buildPolygonShedRoof, shedSlope } from "./geometry/roofPlate";
@@ -199,6 +199,31 @@ function entryRecessDoor(recess: NonNullable<WallEdge["entryRecess"]>, openings:
   return authored ? { width: Math.abs(authored.end - authored.start) * len, height: authored.height ?? AUTHORED_DOOR_HEIGHT, frame: authored.frame ?? true } : undefined;
 }
 
+/** Rounding slack before an authored facade position counts as outside the facade. */
+const SPAN_TOLERANCE = 1e-3;
+const facadeLengthOf = (mass: MassVolume, facade: MassFacade) => (facade === "north" || facade === "south" ? mass.width : mass.depth);
+
+/**
+ * `start`/`end` are fractions 0..1 of the facade's length, and the shell builders clamp to that range — so an
+ * element authored outside it (typically in meters) would otherwise shrink or vanish without a trace, the
+ * compiler quietly building a different house. Each such element is reported once, with what was actually
+ * built; nothing is converted or corrected here.
+ */
+export function facadeSpanWarnings(mass: MassVolume): string[] {
+  const warnings: string[] = [];
+  for (const item of [...(mass.operations ?? []), ...(mass.openings ?? [])]) {
+    if (!("start" in item)) continue;
+    const lo = Math.min(item.start, item.end), hi = Math.max(item.start, item.end);
+    if (lo >= -SPAN_TOLERANCE && hi <= 1 + SPAN_TOLERANCE) continue;
+    const len = facadeLengthOf(mass, item.facade);
+    const s = Math.max(0, Math.min(1, lo)), e = Math.max(0, Math.min(1, hi));
+    const built = e - s < SPAN_TOLERANCE ? "none of it lies on the facade, so it was not built" : `only ${s.toFixed(2)}..${e.toFixed(2)} (${((e - s) * len).toFixed(2)}m) was built`;
+    const asMeters = lo >= 0 && hi <= len + SPAN_TOLERANCE ? ` If meters were meant, that span is ${(lo / len).toFixed(2)}..${(hi / len).toFixed(2)}.` : "";
+    warnings.push(`${item.type}${item.id ? ` "${item.id}"` : ""} on the ${item.facade} facade spans ${lo}..${hi}, outside the facade — start/end are fractions 0..1 of its ${len}m length; ${built}.${asMeters}`);
+  }
+  return warnings;
+}
+
 /** Doors that land in an entry recess are built in its back wall, not as slivers on the facade plane beside it. */
 function withoutRecessedDoors(openings: readonly MassOpening[], recesses: readonly NonNullable<WallEdge["entryRecess"]>[]): readonly MassOpening[] {
   if (!recesses.length) return openings;
@@ -214,7 +239,7 @@ function withoutRecessedDoors(openings: readonly MassOpening[], recesses: readon
  */
 function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassShellResult {
   const primitives: HousePrimitive[] = [];
-  const warnings: string[] = [];
+  const warnings: string[] = facadeSpanWarnings(mass);
   let topFloor: FloorFootprint | undefined;
   const operations: readonly MassGeometryOperation[] = mass.operations ?? [];
   // Only what the architect authored: a mass with no openings is compiled with none.
@@ -250,7 +275,14 @@ function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassSh
     warnings.push(...openingsResult.warnings.map((w) => `floor ${level}: ${w}`));
     untaggedEdges.forEach((edge, i) => {
       const entryDoor = edge.entryRecess && entryRecessDoor(edge.entryRecess, openings, mass, level);
-      if (edge.entryRecess && !entryDoor && level === 0) warnings.push(`floor 0: entry-recess on the ${edge.entryRecess.facade} facade has no authored door — built solid; author a door inside the recess.`);
+      if (edge.entryRecess && !entryDoor && level === 0) {
+        const recess = edge.entryRecess;
+        // A door authored on this facade that misses the recess is a placement error, not a missing door — name it.
+        const stray = openings.filter((o): o is DoorOpening => o.type === "door" && o.facade === recess.facade && doorOnFloor(o, level));
+        warnings.push(stray.length
+          ? `floor 0: entry-recess on the ${recess.facade} facade (${recess.start.toFixed(2)}..${recess.end.toFixed(2)}) has no door inside it — the authored door${stray.length > 1 ? "s" : ""} ${stray.map((d) => `${d.id ? `"${d.id}" ` : ""}at ${d.start}..${d.end}`).join(", ")} ${stray.length > 1 ? "lie" : "lies"} outside the recess; built solid.`
+          : `floor 0: entry-recess on the ${recess.facade} facade has no authored door — built solid; author a door inside the recess.`);
+      }
       if (entryDoor) primitives.push(...buildEntryRecessDoor(edge, entryDoor, wallBaseY, wallHeight, `wall-${level}-entry-${i}`, materials));
       else if (edge.chamfer?.glazed) primitives.push(...buildGlazedWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, materials));
       else primitives.push(buildPlainWallEdge(edge, wallBaseY, wallHeight, `wall-${level}-cut-${i}`, exteriorPaint));

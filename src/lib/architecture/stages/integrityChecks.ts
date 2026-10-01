@@ -1,9 +1,10 @@
 import type { CapabilityIntent } from "@/lib/capabilities/types";
 import { massShellWarnings, massTotalHeight, roofClearance, maxPreservedOverhang } from "../compiler";
-import type { MassGeometryOperation, MassOpening, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "../document";
+import { AUTHORED_ROOF_RECIPE_KINDS, type FootprintScope, type MassFacade, type MassGeometryOperation, type MassOpening, type MassVolume, type RoofRecipe, type RoofRecipeKind, type SiteStrategy } from "../document";
 import { buildFloorFootprint } from "../geometry/footprint";
+import { openingBands } from "../geometry/openings";
 import { baselineViolations } from "../planBaseline";
-import { planConformance, realizeVolumePlan, sharedFacades } from "../volumePlan";
+import { planConformance, realizeVolumePlan, SHARED_WALL_GAP_M, sharedFacades, worldSideOf } from "../volumePlan";
 import type { StageConflict } from "./recovery";
 
 /**
@@ -75,6 +76,130 @@ export function placementConflicts(masses: readonly MassVolume[], site: SiteStra
   return conflicts;
 }
 
+/** A stretch of one of `mass`'s facades that another volume's solid wall stands against, on one of that volume's floors. */
+export interface FacadeObstruction {
+  facade: MassFacade; neighborId: string;
+  /** Meters from the facade plane out to the neighbor's wall; negative = that wall runs into this volume. */
+  gap: number;
+  /** Span along the facade (0..1, the authored span coordinate) and the heights (meters) the wall covers there. */
+  start: number; end: number; bottom: number; top: number;
+}
+
+/** Overlaps below these are touching corners and rounding, not a wall standing in front of an element. */
+const MIN_ALONG_M = 0.05, MIN_HEIGHT_M = 0.1;
+const levelBand = (m: MassVolume, level: number) => { const h = massTotalHeight(m) / m.floors; return { bottom: m.elevation + level * h, top: m.elevation + (level + 1) * h }; };
+/** Same yaw convention as `rotatePrimitiveY`: local (x, z) → (x·cos + z·sin, −x·sin + z·cos), then placed at the mass's position. */
+const toWorld = (m: MassVolume, [x, z]: readonly [number, number]): [number, number] => { const c = Math.cos(m.rotation), s = Math.sin(m.rotation); return [m.position.x + x * c + z * s, m.position.z - x * s + z * c]; };
+const toLocal = (m: MassVolume, [wx, wz]: readonly [number, number]): [number, number] => { const dx = wx - m.position.x, dz = wz - m.position.z, c = Math.cos(m.rotation), s = Math.sin(m.rotation); return [dx * c - dz * s, dx * s + dz * c]; };
+const alongNS = (f: MassFacade) => f === "north" || f === "south";
+const spanLength = (m: MassVolume, f: MassFacade) => (alongNS(f) ? m.width : m.depth);
+const onFloor = (scope: FootprintScope | undefined, level: number) => !scope || scope === "all" || (scope === "ground" ? level === 0 : level > 0);
+
+/**
+ * Where other volumes' SOLID walls stand against `mass`'s shared facades, read from the footprints the compiler
+ * builds: an open (post) edge is no wall, a recess sets its wall back, and each floor counts only at its own
+ * height. Only facades `sharedFacades` already reports are inspected, so this narrows that verdict to the stretches
+ * that are really closed — it never finds a new shared wall.
+ */
+export function facadeObstructions(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): FacadeObstruction[] {
+  const shared = sharedFacades(mass, masses, site);
+  const out: FacadeObstruction[] = [];
+  if (!shared.size) return out;
+  for (const other of masses) {
+    if (other.id === mass.id) continue;
+    for (let level = 0; level < other.floors; level++) {
+      const { bottom, top } = levelBand(other, level);
+      for (const edge of buildFloorFootprint(other.width, other.depth, other.operations ?? [], level).edges) {
+        if (edge.open) continue;
+        const a = toLocal(mass, toWorld(other, edge.a)), b = toLocal(mass, toWorld(other, edge.b));
+        for (const facade of shared) {
+          const [along, across] = alongNS(facade) ? [0, 1] : [1, 0];
+          if (Math.abs(a[across] - b[across]) > 1e-3) continue;
+          const half = (alongNS(facade) ? mass.depth : mass.width) / 2;
+          const gap = (facade === "north" || facade === "west" ? -a[across] : a[across]) - half;
+          if (Math.abs(gap) > SHARED_WALL_GAP_M) continue;
+          const len = spanLength(mass, facade);
+          const start = Math.max(0, Math.min(a[along], b[along]) / len + 0.5), end = Math.min(1, Math.max(a[along], b[along]) / len + 0.5);
+          if ((end - start) * len >= MIN_ALONG_M) out.push({ facade, neighborId: other.id, gap, start, end, bottom, top });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+/** The spans (0..1) and heights one authored facade element occupies, per floor it is built on. */
+function elementReach(mass: MassVolume, item: MassGeometryOperation | MassOpening): { start: number; end: number; bottom: number; top: number }[] {
+  if (!("facade" in item)) return [];
+  const len = spanLength(mass, item.facade);
+  const reach: { start: number; end: number; bottom: number; top: number }[] = [];
+  for (let level = 0; level < mass.floors; level++) {
+    const band = levelBand(mass, level);
+    if (item.type === "glazing-zone" || item.type === "opening-rhythm" || item.type === "door") {
+      for (const b of openingBands(item.facade, mass.width, mass.depth, [item], level, band.top - band.bottom)) reach.push({ start: b.start, end: b.end, ...band });
+    } else if (onFloor(item.floors, level)) {
+      const [start, end] = item.type === "entry-recess" ? [0.5 - Math.min(item.width, len) / len / 2, 0.5 + Math.min(item.width, len) / len / 2] : [Math.min(item.start, item.end), Math.max(item.start, item.end)];
+      reach.push({ start: Math.max(0, start), end: Math.min(1, end), ...band });
+    }
+  }
+  return reach;
+}
+
+const m2 = (v: number) => v.toFixed(2);
+const FLOORS_LABEL: Record<FootprintScope, string> = { ground: "ground floor", upper: "upper floors", all: "every floor" };
+
+/**
+ * Every authored facade element of `mass` that a neighboring volume's solid wall actually stands in front of —
+ * overlapping it along the facade AND in height — one entry per blocked facade and neighbor, naming that neighbor,
+ * where its wall stands (gap, world and facade span, heights) and each element it blocks. An element on a shared
+ * facade that clears every such wall (above a single-storey neighbor, beyond its end, or behind its open post
+ * edge) is not blocked.
+ */
+export function sharedWallBlocks(mass: MassVolume, masses: readonly MassVolume[], site: SiteStrategy): { facade: MassFacade; neighborId: string; detail: string }[] {
+  const obstructions = facadeObstructions(mass, masses, site);
+  if (!obstructions.length) return [];
+  const groups = new Map<string, { facade: MassFacade; neighborId: string; walls: Set<FacadeObstruction>; items: string[] }>();
+  for (const item of [...(mass.operations ?? []), ...(mass.openings ?? [])]) {
+    // An open recess only takes wall away, setting posts back from the neighbor: it is how a volume opens toward it.
+    if (!("facade" in item) || (item.type === "recess" && item.open)) continue;
+    const len = spanLength(mass, item.facade);
+    const reach = elementReach(mass, item);
+    const hits = obstructions.filter((o) => o.facade === item.facade && reach.some((r) => (Math.min(r.end, o.end) - Math.max(r.start, o.start)) * len >= MIN_ALONG_M && Math.min(r.top, o.top) - Math.max(r.bottom, o.bottom) >= MIN_HEIGHT_M));
+    for (const neighborId of new Set(hits.map((o) => o.neighborId))) {
+      const key = `${item.facade}|${neighborId}`;
+      const group = groups.get(key) ?? { facade: item.facade, neighborId, walls: new Set<FacadeObstruction>(), items: [] };
+      const own = hits.filter((o) => o.neighborId === neighborId);
+      own.forEach((o) => group.walls.add(o));
+      const span = reach.length ? `span ${m2(Math.min(...reach.map((r) => r.start)))}..${m2(Math.max(...reach.map((r) => r.end)))}` : "";
+      const gap = Math.min(...own.map((o) => o.gap));
+      const intrudes = item.type === "projection" && item.depth > gap ? `, ${m2(item.depth)}m deep — past that ${m2(Math.max(0, gap))}m gap, into "${neighborId}"` : "";
+      group.items.push(`${item.type}${item.id ? ` "${item.id}"` : ""} (${[span, FLOORS_LABEL[item.floors ?? "all"]].filter(Boolean).join(", ")}${intrudes})`);
+      groups.set(key, group);
+    }
+  }
+  return [...groups.values()].map(({ facade, neighborId, walls, items }) => {
+    const len = spanLength(mass, facade);
+    const worldSide = worldSideOf(facade, mass.rotation);
+    const axis = alongNS(worldSide) ? 0 : 1;
+    const half = (alongNS(facade) ? mass.depth : mass.width) / 2;
+    const worldAt = (u: number) => toWorld(mass, alongNS(facade) ? [(u - 0.5) * len, facade === "north" ? -half : half] : [facade === "west" ? -half : half, (u - 0.5) * len])[axis];
+    // One phrase per distinct wall line (e.g. a projection's face and the facade beside it), spans and heights merged.
+    const byGap = new Map<string, FacadeObstruction[]>();
+    for (const w of walls) byGap.set(m2(w.gap), [...(byGap.get(m2(w.gap)) ?? []), w]);
+    const stretches = [...byGap.values()].map((ws) => {
+      const start = Math.min(...ws.map((w) => w.start)), end = Math.max(...ws.map((w) => w.end));
+      const [w0, w1] = [worldAt(start), worldAt(end)].sort((p, q) => p - q);
+      const gap = ws[0].gap;
+      const where = gap > 0.005 ? `stands ${m2(gap)}m off that facade` : gap < -0.005 ? `runs ${m2(-gap)}m into that facade` : "stands flush against that facade";
+      return `${where} across world ${axis === 0 ? "x" : "z"} ${m2(w0)}..${m2(w1)} (${m2((end - start) * len)}m of the ${m2(len)}m facade, span ${m2(start)}..${m2(end)}), ${m2(Math.min(...ws.map((w) => w.bottom)))}..${m2(Math.max(...ws.map((w) => w.top)))}m high`;
+    });
+    return { facade, neighborId, detail: `Its local ${facade} facade (facing world ${worldSide}) is blocked by "${neighborId}": that volume's solid wall ${stretches.join(", and ")} — in front of ${items.join(", ")}.` };
+  });
+}
+
+/** How a blocked facade can be freed, without choosing which way for the Architect. */
+export const SHARED_WALL_REPAIR = `A volume's solid wall within ${SHARED_WALL_GAP_M}m of a facade closes that stretch of it. Free each blocked element by revising your own composition: move or separate that volume (more than ${SHARED_WALL_GAP_M}m clear of the facade), open its facing edge (an open:true recess or projection builds posts there, not a wall), or move the blocked elements to an exposed facade.`;
+
 /** A mass exactly as the Geometry Pass authored it. */
 export type ArticulatedMass = MassVolume & { operations: readonly MassGeometryOperation[]; openings: readonly MassOpening[] };
 
@@ -137,7 +262,7 @@ export function roofConflicts(masses: readonly MassVolume[], roofs: readonly Roo
     const roof = own[0];
     byMass.set(mass.id, roof);
     if (roof.overhang === undefined || roof.pitch === undefined) conflicts.push({ stage, code: "roof-incomplete", massId: mass.id, detail: `The roof for "${mass.id}" must author both "overhang" and "pitch" — neither is defaulted.` });
-    if (roof.kind === "mixed") conflicts.push({ stage, code: "roof-unbuildable", massId: mass.id, detail: `"mixed" is not a buildable roof family for "${mass.id}". Choose one family.` });
+    if (!(AUTHORED_ROOF_RECIPE_KINDS as readonly RoofRecipeKind[]).includes(roof.kind)) conflicts.push({ stage, code: "roof-unbuildable", massId: mass.id, detail: `"mixed" is not a buildable roof family for "${mass.id}". Choose one family.` });
     const footprint = topFloorRects(mass);
     if (RIDGE_KINDS.has(roof.kind) && footprint.chamfers.length > 0) conflicts.push({ stage, code: "roof-unbuildable", massId: mass.id, detail: `A ${roof.kind} roof cannot follow the angled (chamfered) edge of "${mass.id}". Use flat, floating-flat, shed or mono-pitch there.` });
     else if (RIDGE_KINDS.has(roof.kind) && footprint.rects.length > 1) conflicts.push({ stage, code: "roof-fragmented", massId: mass.id, detail: `A ${roof.kind} roof on "${mass.id}" breaks into ${footprint.rects.length} separate ridged roofs over its articulated footprint (no valley geometry). Use flat, floating-flat, shed or mono-pitch there.` });

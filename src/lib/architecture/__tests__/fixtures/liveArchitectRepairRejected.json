@@ -1,0 +1,477 @@
+{
+  "version": 1,
+  "brief": "Modern two-story three-bedroom garden house composed as a broad living pavilion with an offset bedroom wing, a sheltered garden terrace, a clear north arrival entry, and expansive south-facing glazing toward the garden.",
+  "siteStrategy": {
+    "environment": "suburban",
+    "viewDirection": "south",
+    "arrivalDirection": "north",
+    "terrain": "level"
+  },
+  "massing": {
+    "composition": "l-shaped",
+    "masses": [
+      {
+        "id": "main-living",
+        "name": "Garden Living Pavilion",
+        "role": "main-living",
+        "position": {
+          "x": -2,
+          "z": 0
+        },
+        "width": 12,
+        "depth": 9,
+        "height": 6.8,
+        "floors": 2,
+        "elevation": 0,
+        "rotation": 0,
+        "placementLocked": true,
+        "relationships": [
+          {
+            "kind": "view-facing",
+            "target": "rear-terrace",
+            "side": "south"
+          },
+          {
+            "kind": "arrival-facing",
+            "target": "bedroom-wing",
+            "side": "north"
+          },
+          {
+            "kind": "adjacent-to",
+            "target": "bedroom-wing",
+            "side": "east"
+          }
+        ],
+        "operations": [
+          {
+            "id": "main-entry-recess",
+            "type": "entry-recess",
+            "facade": "north",
+            "width": 3,
+            "depth": 1.6,
+            "floors": "ground"
+          },
+          {
+            "id": "south-terrace-recess",
+            "type": "recess",
+            "facade": "south",
+            "start": 0.8,
+            "end": 10.8,
+            "depth": 0.8,
+            "floors": "ground",
+            "open": true,
+            "postSpacing": 3.2
+          },
+          {
+            "id": "living-west-notch",
+            "type": "notch",
+            "corner": "sw",
+            "width": 1.1,
+            "depth": 1.1,
+            "floors": "all"
+          }
+        ],
+        "openings": [
+          {
+            "id": "garden-glass-wall",
+            "type": "glazing-zone",
+            "facade": "south",
+            "start": 1,
+            "end": 11.4,
+            "heightRatio": 0.84,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.18
+          },
+          {
+            "id": "living-upper-ribbon",
+            "type": "glazing-zone",
+            "facade": "south",
+            "start": 1.2,
+            "end": 10.8,
+            "heightRatio": 0.55,
+            "floors": "upper",
+            "frame": true,
+            "reveal": 0.14
+          },
+          {
+            "id": "main-entry-door",
+            "type": "door",
+            "facade": "north",
+            "start": 4.8,
+            "end": 7.2,
+            "height": 2.7,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.22
+          },
+          {
+            "id": "west-window-rhythm",
+            "type": "opening-rhythm",
+            "facade": "west",
+            "count": 3,
+            "width": 0.9,
+            "height": 1.45,
+            "sill": 1.05,
+            "floors": "upper"
+          },
+          {
+            "id": "west-stair-window",
+            "type": "glazing-zone",
+            "facade": "west",
+            "start": 2.1,
+            "end": 5.8,
+            "heightRatio": 0.7,
+            "floors": "all",
+            "frame": true,
+            "reveal": 0.16
+          }
+        ],
+        "plan": {
+          "form": "l-shape",
+          "height": "standard",
+          "hierarchy": "dominant",
+          "viewFacade": "framed-glass",
+          "arrivalFacade": "punched",
+          "flankFacades": "punched",
+          "courtyardFacade": "glass-wall",
+          "entry": "recessed",
+          "outdoor": "covered-terrace",
+          "outdoorSide": "view",
+          "roofEdge": "floating",
+          "structure": "post-and-beam"
+        }
+      },
+      {
+        "id": "bedroom-wing",
+        "name": "Three-Bedroom Wing",
+        "role": "bedroom-wing",
+        "position": {
+          "x": 7.5,
+          "z": 1.5
+        },
+        "width": 7,
+        "depth": 8,
+        "height": 6.5,
+        "floors": 2,
+        "elevation": 0,
+        "rotation": 0,
+        "placementLocked": true,
+        "relationships": [
+          {
+            "kind": "adjacent-to",
+            "target": "main-living",
+            "side": "west"
+          },
+          {
+            "kind": "offset-from",
+            "target": "main-living",
+            "distance": 1.5,
+            "side": "north"
+          },
+          {
+            "kind": "view-facing",
+            "target": "rear-terrace",
+            "side": "south"
+          }
+        ],
+        "operations": [
+          {
+            "id": "bedroom-south-projection",
+            "type": "projection",
+            "facade": "south",
+            "start": 0.8,
+            "end": 5.8,
+            "depth": 0.55,
+            "floors": "upper",
+            "open": false
+          },
+          {
+            "id": "bedroom-northeast-notch",
+            "type": "notch",
+            "corner": "ne",
+            "width": 1.2,
+            "depth": 1.2,
+            "floors": "ground"
+          }
+        ],
+        "openings": [
+          {
+            "id": "bedroom-garden-rhythm",
+            "type": "opening-rhythm",
+            "facade": "south",
+            "count": 3,
+            "width": 1.35,
+            "height": 1.7,
+            "sill": 0.8,
+            "floors": "upper"
+          },
+          {
+            "id": "bedroom-north-rhythm",
+            "type": "opening-rhythm",
+            "facade": "north",
+            "count": 3,
+            "width": 1.1,
+            "height": 1.45,
+            "sill": 1.05,
+            "floors": "upper"
+          },
+          {
+            "id": "bedroom-east-rhythm",
+            "type": "opening-rhythm",
+            "facade": "east",
+            "count": 3,
+            "width": 1.05,
+            "height": 1.5,
+            "sill": 1,
+            "floors": "upper"
+          },
+          {
+            "id": "bedroom-east-ribbon",
+            "type": "glazing-zone",
+            "facade": "east",
+            "start": 1.1,
+            "end": 5.8,
+            "heightRatio": 0.5,
+            "floors": "upper",
+            "frame": true,
+            "reveal": 0.15
+          },
+          {
+            "id": "bedroom-ground-garden-glazing",
+            "type": "glazing-zone",
+            "facade": "south",
+            "start": 1,
+            "end": 5.9,
+            "heightRatio": 0.68,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.16
+          }
+        ],
+        "plan": {
+          "form": "bar",
+          "height": "standard",
+          "hierarchy": "supporting",
+          "viewFacade": "framed-glass",
+          "arrivalFacade": "punched",
+          "flankFacades": "punched",
+          "courtyardFacade": "glass-wall",
+          "entry": "none",
+          "outdoor": "none",
+          "outdoorSide": "view",
+          "roofEdge": "floating",
+          "structure": "post-and-beam"
+        }
+      },
+      {
+        "id": "rear-terrace",
+        "name": "Covered Garden Terrace",
+        "role": "terrace",
+        "position": {
+          "x": -2,
+          "z": -6.9
+        },
+        "width": 10,
+        "depth": 3,
+        "height": 3.15,
+        "floors": 1,
+        "elevation": 0,
+        "rotation": 0,
+        "placementLocked": true,
+        "relationships": [
+          {
+            "kind": "separated-from",
+            "target": "main-living",
+            "distance": 0.9,
+            "side": "north"
+          },
+          {
+            "kind": "view-facing",
+            "target": "main-living",
+            "side": "south"
+          },
+          {
+            "kind": "separated-from",
+            "target": "bedroom-wing",
+            "distance": 1.5,
+            "side": "east"
+          }
+        ],
+        "operations": [
+          {
+            "id": "terrace-open-south-edge",
+            "type": "recess",
+            "facade": "south",
+            "start": 0.35,
+            "end": 9.65,
+            "depth": 0.35,
+            "floors": "ground",
+            "open": true,
+            "postSpacing": 3.1
+          },
+          {
+            "id": "terrace-east-screen-recess",
+            "type": "recess",
+            "facade": "east",
+            "start": 0.4,
+            "end": 2.6,
+            "depth": 0.18,
+            "floors": "ground",
+            "open": true,
+            "postSpacing": 0.45
+          },
+          {
+            "id": "terrace-west-screen-recess",
+            "type": "recess",
+            "facade": "west",
+            "start": 0.4,
+            "end": 2.6,
+            "depth": 0.18,
+            "floors": "ground",
+            "open": true,
+            "postSpacing": 0.45
+          }
+        ],
+        "openings": [
+          {
+            "id": "terrace-north-glazing",
+            "type": "glazing-zone",
+            "facade": "north",
+            "start": 0.6,
+            "end": 9.4,
+            "heightRatio": 0.72,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.12
+          },
+          {
+            "id": "terrace-east-glazing",
+            "type": "glazing-zone",
+            "facade": "east",
+            "start": 0.45,
+            "end": 2.55,
+            "heightRatio": 0.7,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.1
+          },
+          {
+            "id": "terrace-west-glazing",
+            "type": "glazing-zone",
+            "facade": "west",
+            "start": 0.45,
+            "end": 2.55,
+            "heightRatio": 0.7,
+            "floors": "ground",
+            "frame": true,
+            "reveal": 0.1
+          }
+        ],
+        "plan": {
+          "form": "bar",
+          "height": "low",
+          "hierarchy": "supporting",
+          "viewFacade": "screened",
+          "arrivalFacade": "glass-wall",
+          "flankFacades": "screened",
+          "courtyardFacade": "glass-wall",
+          "entry": "none",
+          "outdoor": "colonnade",
+          "outdoorSide": "view",
+          "roofEdge": "floating",
+          "structure": "post-and-beam"
+        }
+      }
+    ]
+  },
+  "roofs": {
+    "recipes": [
+      {
+        "id": "main-living-roof",
+        "massId": "main-living",
+        "kind": "floating-flat",
+        "overhang": 0.6,
+        "pitch": 2,
+        "orientation": 0,
+        "expression": {
+          "verticalGap": 0.28,
+          "thickness": 0.28,
+          "soffitMaterial": "dark",
+          "supportStyle": "clerestory",
+          "clerestoryHeight": 0.42
+        }
+      },
+      {
+        "id": "bedroom-wing-roof",
+        "massId": "bedroom-wing",
+        "kind": "floating-flat",
+        "overhang": 0.6,
+        "pitch": 2,
+        "orientation": 0,
+        "expression": {
+          "verticalGap": 0.28,
+          "thickness": 0.28,
+          "soffitMaterial": "dark",
+          "supportStyle": "clerestory",
+          "clerestoryHeight": 0.42
+        }
+      },
+      {
+        "id": "rear-terrace-roof",
+        "massId": "rear-terrace",
+        "kind": "floating-flat",
+        "overhang": 0.25,
+        "pitch": 2,
+        "orientation": 0,
+        "expression": {
+          "verticalGap": 0.18,
+          "thickness": 0.22,
+          "soffitMaterial": "dark",
+          "supportStyle": "band"
+        }
+      }
+    ]
+  },
+  "facade": {
+    "status": "pending",
+    "notes": [
+      "Facade material and detailed elevation treatment remain pending."
+    ]
+  },
+  "architecturalStyle": {
+    "status": "pending",
+    "notes": [
+      "Modern residential style development remains pending."
+    ]
+  },
+  "outdoorPlan": {
+    "status": "pending",
+    "notes": [
+      "Garden planting, paving, and site furniture remain pending."
+    ]
+  },
+  "materialStrategy": {
+    "status": "pending",
+    "notes": [
+      "Exterior material palette remains pending."
+    ]
+  },
+  "components": {
+    "status": "pending",
+    "notes": [
+      "Architectural component specifications remain pending."
+    ]
+  },
+  "furnishings": {
+    "status": "pending",
+    "notes": [
+      "Interior and exterior furnishing layout remains pending."
+    ]
+  },
+  "metadata": {
+    "createdAt": "2025-03-08T00:00:00Z",
+    "source": "live-generation",
+    "compiler": "procedural-architecture-v1"
+  }
+}

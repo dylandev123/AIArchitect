@@ -42,7 +42,24 @@ export interface OutdoorAssetPlacement {
     /** Resolved local model bounds used to derive this persisted world transform.  Procedural assets are [0, size]. */
     localBounds?: { min: [number, number, number]; max: [number, number, number] };
     /** The surface selected by the deterministic placer; y is the model-origin world coordinate, never an offset. */
-    support?: { kind: "terrain" | "deck" | "terrace" | "patio"; elevation: number };
+    support?: { kind: "terrain" | "deck" | "terrace" | "patio" | "roof"; elevation: number; /** roof only: the V2 mass whose roof carries it. */ massId?: string };
+    /**
+     * What the request asked for, independent of which asset currently fills the placement: the anchor surface,
+     * the requested side, and the intended size. A replacement asset keeps this (and `id`, centre, yaw, support)
+     * so an approved GLB can take over a proxy's placement without another edit.
+     */
+    intent?: PlacementIntentRecord;
+    /** Present only while a procedural proxy stands in for a missing approved asset. */
+    proxy?: { shape: import('./proxyShapes').ProxyShape; canopy?: import('./proxyShapes').ProxyCanopy; objectType: string; label: string; requestText: string; needId?: string };
+}
+export interface PlacementIntentRecord {
+    surface: "roof" | "poolside" | "garden";
+    massId?: string;
+    side?: "front" | "rear" | "north" | "south" | "east" | "west" | "left" | "right" | "center";
+    /** World centre of the intended footprint and its yaw — the logical placement a replacement asset must reuse. */
+    centre: { x: number; z: number };
+    yaw: number;
+    dimensions: { width: number; depth: number; height: number };
 }
 type Bounds = {
     x: number;

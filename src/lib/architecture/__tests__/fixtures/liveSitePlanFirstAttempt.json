@@ -1,0 +1,159 @@
+{
+  "entrance": {
+    "wall": "north",
+    "offset": 0
+  },
+  "driveway": {
+    "wall": "north",
+    "offset": -4.5,
+    "width": 4,
+    "length": 14,
+    "bend": 0
+  },
+  "parking": [
+    {
+      "x": -4.6,
+      "z": -10.1,
+      "width": 6.4,
+      "depth": 5.2
+    }
+  ],
+  "pool": {
+    "wall": "south",
+    "offset": -0.5,
+    "distance": 7.5,
+    "width": 11,
+    "depth": 5.5,
+    "waterDepth": 1.55,
+    "shape": "rounded"
+  },
+  "terrace": {
+    "wall": "south",
+    "offset": -0.5,
+    "width": 12,
+    "depth": 4
+  },
+  "poolDeck": {
+    "x": -2,
+    "z": 15.5,
+    "width": 14,
+    "depth": 12,
+    "shape": "rounded"
+  },
+  "paths": [
+    {
+      "from": "arrival",
+      "to": "parking",
+      "x1": -6,
+      "z1": -19.5,
+      "x2": -6,
+      "z2": -12.7,
+      "width": 3.2,
+      "bend": 0,
+      "surface": "gravel"
+    },
+    {
+      "from": "parking",
+      "to": "entrance",
+      "x1": -2.2,
+      "z1": -7.5,
+      "x2": -1.5,
+      "z2": -5.5,
+      "width": 1.8,
+      "bend": 0,
+      "surface": "flagstone"
+    },
+    {
+      "from": "entrance",
+      "to": "outdoor-living",
+      "x1": -1.5,
+      "z1": -5.5,
+      "x2": -7,
+      "z2": 5.8,
+      "width": 1.5,
+      "bend": 9,
+      "surface": "flagstone"
+    },
+    {
+      "from": "outdoor-living",
+      "to": "pool",
+      "x1": -2,
+      "z1": 9.5,
+      "x2": -2,
+      "z2": 12.75,
+      "width": 2,
+      "bend": 0,
+      "surface": "flagstone"
+    }
+  ],
+  "landscape": [
+    {
+      "purpose": "privacy",
+      "kind": "garden",
+      "x": 3.2,
+      "z": -9.3,
+      "width": 2.6,
+      "depth": 6.6
+    },
+    {
+      "purpose": "privacy",
+      "kind": "garden",
+      "x": -9.9,
+      "z": 0.5,
+      "width": 1.8,
+      "depth": 12
+    },
+    {
+      "purpose": "entrance-planting",
+      "kind": "garden",
+      "x": 1,
+      "z": -6.55,
+      "width": 3.2,
+      "depth": 1.3
+    },
+    {
+      "purpose": "pool-planting",
+      "kind": "garden",
+      "x": -9.7,
+      "z": 15.5,
+      "width": 1.5,
+      "depth": 11.5
+    },
+    {
+      "purpose": "pool-planting",
+      "kind": "garden",
+      "x": 5.7,
+      "z": 15.5,
+      "width": 1.5,
+      "depth": 11.5
+    },
+    {
+      "purpose": "view-framing",
+      "kind": "garden",
+      "x": -2,
+      "z": 23.2,
+      "width": 15,
+      "depth": 2.4
+    },
+    {
+      "purpose": "view-framing",
+      "kind": "lawn",
+      "x": -2,
+      "z": 26.4,
+      "width": 18,
+      "depth": 5
+    }
+  ],
+  "features": [
+    {
+      "id": "terrace-bar",
+      "kind": "outdoor_bar",
+      "x": 1.7,
+      "z": 8.55,
+      "width": 3,
+      "depth": 0.85,
+      "rotation": 0,
+      "assetId": "modern_outdoor_bar_01"
+    }
+  ]
+}

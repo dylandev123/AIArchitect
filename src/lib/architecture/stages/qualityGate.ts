@@ -2,8 +2,8 @@ import type { ArchitecturalDesignDocument, MassVolume } from "../document";
 import type { ArchitectureDiagnostics } from "../compiler";
 import { resolveMasses } from "../compiler";
 import { baselineViolations } from "../planBaseline";
-import { planConformance, sharedFacades } from "../volumePlan";
-import { massCollisions, roofConflicts } from "./integrityChecks";
+import { planConformance } from "../volumePlan";
+import { massCollisions, roofConflicts, SHARED_WALL_REPAIR, sharedWallBlocks } from "./integrityChecks";
 
 /**
  * "blocking" = an objective structural-integrity failure: the artifact is not what was authored, or cannot
@@ -28,6 +28,17 @@ const MIN_COURTYARD_DIMENSION_M = 3;
 const MAX_OVERHANG_RATIO = 0.4;
 /** The capabilities a volume's plan can call for; one that was authored but did not build is missing planned geometry. */
 const PLAN_CAPABILITIES = new Set(["entry-canopy", "brise-soleil", "screen-layer", "pilotis"]);
+
+/**
+ * Whether a volume's `plan` binds its geometry. In the staged pipeline (and fixtures) an upstream stage authors
+ * the plan and the Geometry Pass must realize it, so a missing planned element is another stage's decision
+ * dropped. A live single-Architect document authors plan and geometry together: its `plan` is the Architect's
+ * own description of the operations/openings it wrote (the compiler never reads it), so a mismatch between the
+ * two is a fidelity observation, never grounds to discard an executable house.
+ */
+export function planIsBinding(doc: ArchitecturalDesignDocument): boolean {
+  return doc.metadata?.source !== "live-generation";
+}
 
 /** Summarizes a check list: only failed BLOCKING checks fail the gate. */
 export function summarizeChecks(checks: QualityCheck[]): QualityGateResult {
@@ -126,7 +137,9 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
   }
 
   const hasDoor = masses.some((m) => (m.openings ?? []).some((op) => op.type === "door"));
-  push("identifiable-entrance", hasDoor || hasEntryRecess, hasDoor || hasEntryRecess ? "A door or entry recess marks the entrance." : "No actual door or entry recess identifies the entrance.");
+  // Blocking: a house with no way in is not executable architecture, whoever authored its plan. (An authored door or
+  // recess that fails to build is caught by requested-geometry-survived-compilation.)
+  push("identifiable-entrance", hasDoor || hasEntryRecess, hasDoor || hasEntryRecess ? "A door or entry recess marks the entrance." : "No actual door or entry recess identifies the entrance.", "blocking");
 
   for (const mass of masses.filter((m) => m.floors > 1)) {
     const changesByLevel = Boolean(mass.cantilever) || (mass.operations ?? []).some((op) => op.floors === "ground" || op.floors === "upper");
@@ -134,16 +147,19 @@ export function runDesignQualityGate(doc: ArchitecturalDesignDocument, diagnosti
   }
 
   // Plan fidelity: what was AUTHORED must contain every planned element, and the plan must be buildable where it stands.
+  // Explicit geometry on a shared wall is always blocking; the plan's own expectations bind only where another stage authored the plan.
+  const planSeverity: QualitySeverity = planIsBinding(doc) ? "blocking" : "warning";
   for (const mass of masses.filter((m) => m.plan)) {
     const { missing, conflicts, notes } = planConformance(mass, masses, doc.siteStrategy, doc.capabilities ?? []);
     const detail = missing.length ? `"${mass.id}" is missing planned ${missing.join(", ")}.` : `"${mass.id}" realizes its ${mass.plan!.form}/${mass.plan!.structure} plan.`;
-    push(`plan-realized-${mass.id}`, missing.length === 0, notes.length ? `${detail} Reference notes: ${notes.join(" ")}` : detail, "blocking");
-    const shared = sharedFacades(mass, masses, doc.siteStrategy);
-    const onSharedWall = [...(mass.operations ?? []), ...(mass.openings ?? [])].filter((item) => "facade" in item && shared.has(item.facade)).map((item) => `${item.type} on the shared ${"facade" in item ? item.facade : ""} wall`);
-    const impossible = [...conflicts.map((c) => c.detail), ...onSharedWall];
+    push(`plan-realized-${mass.id}`, missing.length === 0, notes.length ? `${detail} Reference notes: ${notes.join(" ")}` : detail, planSeverity);
+    // Explicit geometry blocks only where a neighbor's solid wall really stands in front of it; the text names that
+    // neighbor and where it stands, so the same Architect can revise its own composition.
+    const blocked = sharedWallBlocks(mass, masses, doc.siteStrategy);
+    const impossible = [...conflicts.map((c) => c.detail), ...blocked.map((b) => b.detail), ...(blocked.length ? [SHARED_WALL_REPAIR] : [])];
     const baseline = baselineViolations(mass, masses, doc.siteStrategy);
     push(`plan-baseline-${mass.id}`, baseline.length === 0, baseline.length ? `Mandatory VolumePlan geometry on "${mass.id}" was contradicted: ${baseline.map((v) => `[${v.code}] ${v.detail}`).join(" ")}` : `"${mass.id}" keeps its mandatory VolumePlan geometry intact.`, "blocking");
-    push(`facade-realization-${mass.id}`, impossible.length === 0, impossible.length ? `Impossible authored facade intent on "${mass.id}": ${impossible.join(" ")}` : `"${mass.id}" has no facade-specific realization conflict.`, "blocking");
+    push(`facade-realization-${mass.id}`, impossible.length === 0, impossible.length ? `Impossible authored facade intent on "${mass.id}": ${impossible.join(" ")}` : `"${mass.id}" has no facade-specific realization conflict.`, blocked.length ? "blocking" : planSeverity);
   }
   for (const capability of diagnostics.capabilities) {
     if (capability.status === "applied") continue;

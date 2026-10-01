@@ -3,12 +3,15 @@ import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 import { placementBounds } from "@/lib/outdoor/placements";
 import { v2SiteFrame } from "./siteFrame";
 import { v2SitePlanOf, placeOutdoorBar } from "./v2SiteFeatures";
+import { classifyAdditiveRequest, originForCentre, placeStandaloneObject, type LocalBounds, type StandaloneObject, type StandalonePlacementResult } from "./v2AdditiveObjects";
 
 export type AdditiveObject = "chair" | "lounger" | "table" | "umbrella" | "planter" | "bar";
-export type PlacementFailureCode = "UNSUPPORTED_OBJECT" | "NO_VALID_SITE_PLAN" | "NO_APPROVED_ASSET" | "ALL_CANDIDATES_COLLIDE";
+export type PlacementFailureCode = "UNSUPPORTED_OBJECT" | "NO_VALID_SITE_PLAN" | "NO_APPROVED_ASSET" | "ALL_CANDIDATES_COLLIDE" | "ARCHITECTURAL_EDIT" | "NOT_ADDITIVE" | Extract<StandalonePlacementResult, { ok: false }>["code"];
 export type AdditivePlacementResult =
   | { ok: true; object: AdditiveObject; json: string; summary: string; assetId: string; usedProceduralFallback: boolean }
+  | Extract<StandalonePlacementResult, { ok: true }>
   | { ok: false; code: PlacementFailureCode; error: string };
+export type { StandaloneObject };
 
 const SPEC: Record<Exclude<AdditiveObject, "bar">, { role: string; terms: string[]; width: number; depth: number; height: number }> = {
   chair: { role: "lounge-armchair", terms: ["chair", "armchair", "lounge"], width: .9, depth: .9, height: .8 },
@@ -40,7 +43,6 @@ function assetFor(object: Exclude<AdditiveObject, "bar">, assets: readonly Curat
     [asset.name, ...(asset.tags ?? []), ...(asset.categories ?? []), asset.family ?? ""].join(" ").toLowerCase().split(/\W+/).some((term) => spec.terms.some((wanted) => term === wanted || term.includes(wanted.replace(" ", "")))));
 }
 
-type LocalBounds = { min: [number, number, number]; max: [number, number, number] };
 function boundsFor(asset: CuratedAsset | undefined, spec: { width: number; depth: number; height: number }): LocalBounds {
   const bounds = asset?.validation?.bounds;
   if (bounds && bounds.min.every(Number.isFinite) && bounds.max.every(Number.isFinite)
@@ -51,19 +53,20 @@ function boundsFor(asset: CuratedAsset | undefined, spec: { width: number; depth
 function dimensionsFor(bounds: LocalBounds) {
   return { width: bounds.max[0] - bounds.min[0], depth: bounds.max[2] - bounds.min[2], height: bounds.max[1] - bounds.min[1] };
 }
-/** Turns a desired world geometry-centre into the model-origin transform persisted in project JSON. */
-function originForCentre(centre: { x: number; z: number }, bounds: LocalBounds, scale: number, yaw: number, supportY: number) {
-  const cx = (bounds.min[0] + bounds.max[0]) * scale / 2, cz = (bounds.min[2] + bounds.max[2]) * scale / 2;
-  return [centre.x - cx * Math.cos(yaw) - cz * Math.sin(yaw), supportY - bounds.min[1] * scale, centre.z + cx * Math.sin(yaw) - cz * Math.cos(yaw)] as [number, number, number];
-}
 
 /**
  * Deterministic executor for a small semantic additive request. It deliberately never edits the V2
  * architecture document or existing Site Plan geometry; only a new loose asset placement is appended.
  */
 export function placeV2AdditiveAsset(root: Record<string, unknown>, prompt: string, assets: readonly CuratedAsset[], glbIds: readonly string[]): AdditivePlacementResult {
+  // Architectural changes and change/remove requests are refused before any noun is matched: they are never
+  // disguised as an object. Standalone objects outside the original whitelist take the GLB-or-proxy path.
+  const request = classifyAdditiveRequest(prompt);
+  if (request.kind === "architectural") return { ok: false, code: "ARCHITECTURAL_EDIT", error: request.reason };
+  if (request.kind === "non-additive") return { ok: false, code: "NOT_ADDITIVE", error: request.reason };
+  if (request.kind === "standalone") return placeStandaloneObject(root, prompt, request.object, assets, glbIds);
   const object = requestedObject(prompt);
-  if (!object) return { ok: false, code: "UNSUPPORTED_OBJECT", error: "This V2 additive edit supports chairs, loungers, tables, umbrellas, planters, and outdoor bars." };
+  if (!object) return { ok: false, code: "UNSUPPORTED_OBJECT", error: "This V2 additive edit supports chairs, loungers, tables, umbrellas, planters, outdoor bars, gazebos, pergolas, cabanas, shade structures, outdoor kitchens, fire pits, benches, and sculptures." };
   const plan = v2SitePlanOf(root);
   if (!plan) return { ok: false, code: "NO_VALID_SITE_PLAN", error: "This V2 project has no valid Site Plan, so I cannot safely anchor the requested object." };
   if (object === "bar") {

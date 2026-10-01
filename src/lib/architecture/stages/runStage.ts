@@ -84,6 +84,8 @@ export interface RunStageInput<T> {
   usageMeta: UsageMeta;
   /** Extra semantic checks beyond the schema; returning any errors triggers a repair retry. */
   validate?: (value: T) => string[];
+  /** Compact, stage-owned repair errors for a raw value that failed the structural schema. */
+  schemaError?: (raw: unknown) => string[];
   /**
    * Runs on every raw response BEFORE our strict schema parse — including the raw value recovered from the
    * SDK's own schema rejection (`NoObjectGeneratedError`). Fixes up an otherwise-usable response — e.g.
@@ -103,7 +105,7 @@ export interface RunStageInput<T> {
  * Why a stage failed. OUTPUT_TRUNCATED = the last attempt exhausted its output-token allowance (cut off mid-object,
  * or no text at all) — distinct from a complete response that failed the schema or semantic validation.
  */
-export type StageErrorCode = "OUTPUT_TRUNCATED" | "VALIDATION_FAILED" | "GENERATION_ERROR" | "TIME_BUDGET_EXHAUSTED";
+export type StageErrorCode = "OUTPUT_TRUNCATED" | "VALIDATION_FAILED" | "GENERATION_ERROR" | "INTERNAL_ERROR" | "TIME_BUDGET_EXHAUSTED";
 
 /** Each truncation grows the allowance by this factor... */
 export const TRUNCATION_TOKEN_GROWTH = 1.6;
@@ -127,14 +129,28 @@ export type RunStageResult<T> =
   | { ok: true; value: T; attempts: number; durationMs: number; repairRequests?: string[] }
   | { ok: false; errorCode: StageErrorCode; errors: string[]; attempts: number; durationMs: number; rawValue?: unknown; rawValueTruncated?: boolean; repairRequests?: string[] };
 
-type Checked<T> = { ok: true; value: T } | { ok: false; errors: string[]; issues?: unknown };
+type Checked<T> =
+  | { ok: true; value: T }
+  | { ok: false; errors: string[]; issues?: unknown; internalError?: { cause: unknown } };
+
+function internalDiagnostic(stageName: string, error: unknown): string {
+  const message = error instanceof Error ? error.message : String(error);
+  return `INTERNAL_ERROR: ${stageName} validation code threw: ${message}`;
+}
 
 /** Normalizes (if the stage has a normalizer) THEN strictly validates: schema first, then semantic `validate`. */
 function normalizeAndCheck<T>(input: RunStageInput<T>, raw: unknown): Checked<T> {
-  const parsed = input.schema.safeParse(input.normalize ? input.normalize(raw) : raw);
-  if (!parsed.success) return { ok: false, errors: [`Response didn't match the expected shape: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`], issues: parsed.error.issues };
-  const semanticErrors = input.validate?.(parsed.data) ?? [];
-  return semanticErrors.length ? { ok: false, errors: semanticErrors } : { ok: true, value: parsed.data };
+  try {
+    const parsed = input.schema.safeParse(input.normalize ? input.normalize(raw) : raw);
+    if (!parsed.success) {
+      const stageErrors = input.schemaError?.(raw) ?? [];
+      return { ok: false, errors: stageErrors.length ? stageErrors : [`Response didn't match the expected shape: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`], issues: parsed.error.issues };
+    }
+    const semanticErrors = input.validate?.(parsed.data) ?? [];
+    return semanticErrors.length ? { ok: false, errors: semanticErrors } : { ok: true, value: parsed.data };
+  } catch (error) {
+    return { ok: false, errors: [internalDiagnostic(input.stageName, error)], internalError: { cause: error } };
+  }
 }
 
 /** One attempt's verdict: accepted, or rejected with what the next attempt is told and how it is classified. */
@@ -142,7 +158,7 @@ type AttemptVerdict<T> =
   | { ok: true; value: T; assessment: UsageAssessment }
   | { ok: false; errorCode: Exclude<StageErrorCode, "TIME_BUDGET_EXHAUSTED">; errors: string[]; truncated: boolean; rawValue?: unknown; rawValueTruncated?: boolean; assessment: UsageAssessment };
 
-const USAGE_KIND: Record<Exclude<StageErrorCode, "TIME_BUDGET_EXHAUSTED">, string> = { OUTPUT_TRUNCATED: "output_truncated", VALIDATION_FAILED: "validation_failed", GENERATION_ERROR: "error" };
+const USAGE_KIND: Record<Exclude<StageErrorCode, "TIME_BUDGET_EXHAUSTED">, string> = { OUTPUT_TRUNCATED: "output_truncated", VALIDATION_FAILED: "validation_failed", GENERATION_ERROR: "error", INTERNAL_ERROR: "internal_error" };
 
 async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { output: unknown; finishReason?: string } } | { error: unknown }): Promise<AttemptVerdict<T>> {
   let output: unknown;
@@ -159,6 +175,13 @@ async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { out
     // already throws `NoObjectGeneratedError` before returning anything schema-invalid, so this rarely fires.
     const checked = normalizeAndCheck(input, output);
     if (checked.ok) return { ok: true, value: checked.value, assessment: { errorKind: null, outputFingerprint } };
+    if (checked.internalError) {
+      // This is our code, not an invalid model answer. Retrying would submit the same prompt and pay for
+      // another response before hitting the same deterministic exception again.
+      if (isDev) console.error(`[${input.stageName}] internal validation error`, checked.internalError.cause);
+      return { ok: false, errorCode: "INTERNAL_ERROR", errors: checked.errors, truncated: false, rawValue: output, rawValueTruncated: false,
+        assessment: { errorKind: USAGE_KIND.INTERNAL_ERROR, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output) } };
+    }
     if (isDev) console.debug(`[${input.stageName}] attempt failed validation after normalization`, { rawValue: output, errors: checked.errors, issues: checked.issues });
     return { ok: false, errorCode: "VALIDATION_FAILED", errors: checked.errors, truncated: false, rawValue: output, rawValueTruncated: false,
       assessment: { errorKind: USAGE_KIND.VALIDATION_FAILED, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output) } };
@@ -256,6 +279,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
     errorCode = judged.errorCode;
     retryReason = USAGE_KIND[judged.errorCode];
     if ("rawValue" in judged && judged.rawValue !== undefined) { rawValue = judged.rawValue; rawValueTruncated = judged.rawValueTruncated === true; }
+    if (judged.errorCode === "INTERNAL_ERROR") return failed();
     if (judged.truncated) maxOutputTokens = Math.min(Math.round(maxOutputTokens * TRUNCATION_TOKEN_GROWTH), maxOutputTokensCeiling);
   }
   return failed();

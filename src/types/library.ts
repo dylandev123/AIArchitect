@@ -60,7 +60,15 @@ export interface Need {
   spaces?: string[];
   /** The specific objects still missing ("dining-table", "sun-lounger") under this family. Absent on older needs. */
   components?: string[];
+  /** Where requests came from ("follow-up-edit" for an additive object edit). Absent on older needs. */
+  sources?: AssetRequestSource[];
+  /** True once a project shows a procedural proxy in place of this asset; an approved asset can then replace it. */
+  proxyInUse?: boolean;
+  /** Search words an approved asset for this need should match (name/tags/family), e.g. "gazebo", "belvedere". */
+  aliases?: string[];
 }
+
+export type AssetRequestSource = "generation" | "follow-up-edit";
 
 /** A request for a visual asset, before it is matched against needs or the library. */
 export interface AssetRequest {
@@ -73,6 +81,10 @@ export interface AssetRequest {
   /** The outdoor spaces that want it, and the specific objects (component keys), when the request came from them. */
   spaces?: string[];
   components?: string[];
+  source?: AssetRequestSource;
+  /** The requesting project is showing a procedural proxy until an approved asset exists. */
+  proxyInUse?: boolean;
+  aliases?: string[];
 }
 
 // ── Recipes ─────────────────────────────────────────────────────────────────

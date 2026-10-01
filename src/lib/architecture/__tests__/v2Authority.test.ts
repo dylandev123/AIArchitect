@@ -1,17 +1,22 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest";
+import type { z } from "zod";
 import { createTimings } from "@/lib/ai/timing";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import type { ArchitecturalIntent } from "../designEngine";
-import type { ArchitecturalDesignDocument, MassVolume, RoofRecipe, SiteStrategy } from "../document";
+import { AUTHORED_ROOF_RECIPE_KINDS, validateArchitecturalDesignDocument, type ArchitecturalDesignDocument, type AuthoredRoofRecipe, type MassVolume, type RoofRecipe, type SiteStrategy } from "../document";
 import { compileArchitecture, resolveMasses } from "../compiler";
+import { buildFloorFootprint } from "../geometry/footprint";
 import { realizeVolumePlan, withVolumePlan } from "../volumePlan";
 import { architectureAuthorityHash, sitePlanAuthorityHash } from "../stages/authority";
+import { roofConflicts } from "../stages/integrityChecks";
 import { runV2IntegrityGate } from "../stages/integrityGate";
+import { runDesignQualityGate } from "../stages/qualityGate";
 import { isV2GenerationFailure } from "../stages/recovery";
 import { normalizeSitePlan, sitePlanOperations, sitePlanSchema, type SitePlan } from "../stages/sitePlanStage";
 import { sitePlanContextForDocument } from "../sitePlanContext";
 import { authoredPlan, authoredRoof, QUIET_PLAN, referenceGeometry } from "./authoredFixtures";
 import { architectDocument, responderOutputs } from "./v2StageResponder";
+import type { architectOutputSchema } from "../stages/architectStage";
 
 /**
  * Deterministic regressions for V2 AI design authority (no live AI call — every model answer is mocked): the
@@ -148,7 +153,7 @@ describe("roofs: Roof Composition authors every recipe", () => {
   });
 
   it("allows an intent-preserving eave trim (a normalization) and blocks one that would change the roof", () => {
-    const a = mass("a", { width: 10 }), b = mass("b", { width: 10, position: { x: 10, z: 0 } });
+    const a = mass("a", { width: 10, openings: [{ type: "door", facade: "north", start: 0.45, end: 0.55 }] }), b = mass("b", { width: 10, position: { x: 10, z: 0 } });
     const trimmed = compile(doc([a, b], [authoredRoof("a", { overhang: 0.6 }), authoredRoof("b", { overhang: 0.5 })]));
     expect(trimmed.diagnostics!.roofClearance).toEqual([
       expect.objectContaining({ massId: "a", authored: 0.6, cleared: 0.3, preservesLanguage: true }),
@@ -159,6 +164,306 @@ describe("roofs: Roof Composition authors every recipe", () => {
       gate(doc([a, b], [authoredRoof("a", { overhang: 0.6 }), authoredRoof("b", { overhang: 0.5 })])).then((g) => expect(g.blocking).toEqual([])),
       gate(doc([a, b], [authoredRoof("a", { overhang: 1.5, kind: "floating-flat" }), authoredRoof("b")])).then((g) => expect(g.blocking.map((c) => c.id)).toContain("roof-integrity-a")),
     ]);
+  });
+});
+
+describe("single Architect roof contract", () => {
+  const threeMassDocument = (): ArchitecturalDesignDocument => {
+    const ground = mass("ground-plinth", { name: "Ground plinth", width: 18, depth: 10 });
+    const upper = mass("upper-sleeping-bar", { name: "Upper sleeping bar", role: "bedroom-wing", position: { x: 3, z: 1 }, width: 12, depth: 6, elevation: 3.2 });
+    const terrace = mass("rear-terrace-canopy", { name: "Rear terrace canopy", role: "terrace", position: { x: 0, z: 8 }, width: 14, depth: 4 });
+    return doc([ground, upper, terrace], [
+      { id: "ground-plinth-roof", massId: ground.id, kind: "flat", overhang: .4, pitch: 2 },
+      { id: "upper-sleeping-bar-roof", massId: upper.id, kind: "flat", overhang: .4, pitch: 2 },
+      { id: "rear-terrace-canopy-roof", massId: terrace.id, kind: "floating-flat", overhang: .6, pitch: 2 },
+    ]);
+  };
+
+  it("uses the same executable MassVolume shape that compileArchitecture consumes", async () => {
+    const { architectOutputSchema } = await import("../stages/architectStage");
+    const document = threeMassDocument();
+    delete (document as Partial<ArchitecturalDesignDocument>).capabilities;
+    expect(architectOutputSchema.safeParse({ document }).success).toBe(true);
+    expect(validateArchitecturalDesignDocument(document, { requireRoofForEveryMass: true })).toEqual([]);
+    expect(compile(document).errors).toEqual([]);
+  });
+
+  it("reports the exact missing executable fields and does not obscure them with downstream roof errors", () => {
+    const malformed = threeMassDocument() as unknown as { massing: { masses: Record<string, unknown>[] } };
+    malformed.massing.masses[0] = {
+      id: "ground-plinth", name: "Ground plinth", role: "main-living",
+      dimensions: { width: 18, depth: 10, height: 3.2 }, placement: { x: 0, z: 0 },
+    };
+    expect(validateArchitecturalDesignDocument(malformed, { requireRoofForEveryMass: true })).toEqual(expect.arrayContaining([
+      "mass ground-plinth missing width; expected a finite number",
+      "mass ground-plinth missing depth; expected a finite number",
+      "mass ground-plinth missing floors; expected a finite number",
+      "mass ground-plinth missing position",
+      "mass ground-plinth missing elevation; expected a finite number",
+      "mass ground-plinth missing rotation; expected a finite number",
+    ]));
+    expect(validateArchitecturalDesignDocument(malformed).join("\n")).not.toContain("ground-plinth-roof references unknown mass");
+  });
+
+  it("identifies the rejected Architect DTO field names instead of calling its masses generic malformed", () => {
+    const rejectedShape = threeMassDocument() as unknown as { massing: { masses: Record<string, unknown>[] } };
+    rejectedShape.massing.masses[0] = {
+      id: "ground-plinth", position: { x: 0, z: 0 }, width: 18, depth: 10, floors: 1, elevation: 0, rotation: 0,
+      geometry: { height: 3.25 }, footprintOperations: [],
+      openings: [{ operation: "glazing-zone", face: "north", centerOffset: 0 }],
+    };
+    expect(validateArchitecturalDesignDocument(rejectedShape)).toEqual(expect.arrayContaining([
+      "mass ground-plinth missing name",
+      "mass ground-plinth missing; expected one of: main-living, bedroom-wing, guest-pavilion, garage, service, connector, terrace, veranda, entry",
+      "mass ground-plinth uses unsupported geometry.height; use height",
+      "mass ground-plinth uses unsupported footprintOperations; use operations",
+      "mass ground-plinth openings[0] missing or invalid type; expected one of: door, glazing-zone, opening-rhythm",
+    ]));
+  });
+
+  it("sends exact malformed-mass diagnostics and the previous document to the same Architect repair", async () => {
+    const { runArchitectStage } = await import("../stages/architectStage");
+    const malformed = threeMassDocument() as unknown as { massing: { masses: Record<string, unknown>[] } };
+    malformed.massing.masses[0] = { id: "ground-plinth", name: "Ground plinth", role: "main-living", dimensions: { width: 18, depth: 10 } };
+    generateText
+      .mockResolvedValueOnce({ output: { document: malformed }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: { document: threeMassDocument() }, totalUsage: {} });
+    await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+    expect(messageOf(1)).toContain("mass ground-plinth missing width");
+    expect(messageOf(1)).toContain("Previous document");
+    expect(messageOf(1)).not.toContain("ground-plinth-roof references unknown mass");
+  });
+
+  it("uses only the mocked single Architect call; no legacy architecture stage is invoked", async () => {
+    const { runArchitecturePipeline } = await import("../stages/pipeline");
+    vi.stubEnv("ARCHITECTURE_LEGACY_STAGED", "0");
+    generateText.mockResolvedValue({ output: responderOutputs.architect(), totalUsage: {} });
+    const result = await runArchitecturePipeline({ brief: "Test residence", hints: { environment: "beach", viewDirection: "south", approachSide: "north" } }, createTimings(), 60_000, usage);
+    expect(result.diagnostics).toEqual([expect.objectContaining({ stage: "architect", generationMode: "single-architect" })]);
+    expect(generateText).toHaveBeenCalledTimes(1);
+    expect((generateText.mock.calls[0][0] as { system: string }).system).toContain("sole AI Architect");
+  });
+
+  it("turns an omitted roofs section into a same-Architect repair with the prior document and exact mass id", async () => {
+    const { runArchitectStage } = await import("../stages/architectStage");
+    const incomplete = architectDocument() as unknown as Record<string, unknown>;
+    delete incomplete.roofs;
+    generateText
+      .mockResolvedValueOnce({ output: { document: incomplete }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: responderOutputs.architect(), totalUsage: {} });
+
+    const result = await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+
+    expect(result.ok).toBe(true);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(messageOf(1)).toContain("missing roof recipe for mass: mass-0");
+    expect(messageOf(1)).toContain("Previous document");
+    expect(messageOf(1)).toContain("\"mass-0\"");
+  });
+
+  it("reports malformed roof containers as validation errors without throwing", () => {
+    const incomplete = { ...architectDocument(), roofs: { recipes: {} } };
+    expect(() => validateArchitecturalDesignDocument(incomplete, { requireRoofForEveryMass: true })).not.toThrow();
+    expect(validateArchitecturalDesignDocument(incomplete, { requireRoofForEveryMass: true })).toEqual(expect.arrayContaining([
+      "missing or malformed required section: roofs.recipes",
+      "missing roof recipe for mass: mass-0",
+    ]));
+  });
+
+  it("reproduces the former exact compiler exception from a mocked Architect operation with no facade", () => {
+    let thrown: unknown;
+    try {
+      // This is the raw Architect shape that the old shallow boundary let reach the compiler. The
+      // direct call intentionally bypasses document validation so the historical stack stays pinned.
+      buildFloorFootprint(18, 10, [{ type: "recess", face: "south", start: .2, end: .8, depth: 1 } as never], 0);
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown).toBeInstanceOf(TypeError);
+    expect((thrown as Error).message).toBe("Cannot read properties of undefined (reading 'push')");
+    expect((thrown as Error).stack).toMatch(/geometry\/footprint\.ts:151/);
+  });
+
+  it("turns that malformed Architect document into a same-Architect validation repair before the compiler", async () => {
+    const { runArchitectStage } = await import("../stages/architectStage");
+    const malformed = architectDocument();
+    malformed.massing.masses[0].operations = [{ type: "recess", face: "south", start: .2, end: .8, depth: 1 } as never];
+    generateText
+      .mockResolvedValueOnce({ output: { document: malformed }, totalUsage: {} })
+      .mockResolvedValueOnce({ output: responderOutputs.architect(), totalUsage: {} });
+
+    const result = await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+
+    expect(result.ok).toBe(true);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(messageOf(1)).toContain("mass mass-0 operations[0] missing; expected one of: north, south, east, west");
+  });
+
+  it("inspects the latest rejected Architect values and reports their executable mismatches field by field", async () => {
+    const rejected = structuredClone(threeMassDocument()) as unknown as { siteStrategy: Record<string, unknown>; facade: Record<string, unknown>; metadata: Record<string, unknown>; massing: { masses: Record<string, unknown>[] }; roofs: { recipes: Record<string, unknown>[] } };
+    rejected.siteStrategy.environment = "Level suburban garden plot; all dimensions are meters.";
+    rejected.siteStrategy.terrain = "Building platform at elevation 0.00, with the garden falling gently away to the south.";
+    rejected.massing.masses[0].relationships = [{ kind: "attached", target: "upper-sleeping-bar", distance: 0, side: "west" }];
+    rejected.massing.masses[0].openings = [{ type: "glazing-zone" }];
+    rejected.massing.masses[0].plan = { form: "11.6 by 8.0 rectangular primary bar", height: "Two stories", hierarchy: "Primary social volume", viewFacade: "South glazing", arrivalFacade: "North solid", flankFacades: "East windows", entry: "Entrance north", outdoor: "Covered terrace", outdoorSide: "south", roofEdge: "Thin dark parapet line", structure: "Steel frame" };
+    rejected.facade.status = "Warm off-white mineral render";
+    rejected.metadata.source = "Architect-authored executable residential design";
+    rejected.metadata.compiler = "Residential Procedural Architecture Compiler";
+    rejected.massing.masses[1].operations = [{ type: "notch", corner: "southeast", width: 1.15, depth: 1.35 }];
+    rejected.massing.masses[2].operations = [{ type: "chamfer", corner: "southeast", size: .55 }];
+    rejected.roofs.recipes = ["ground-plinth", "upper-sleeping-bar", "rear-terrace-canopy"].map((massId, index) => ({
+      id: ["roof-main-living", "roof-bedroom-wing", "roof-rear-terrace"][index], massId, kind: "floating-flat", pitch: .035, orientation: "south", overhang: .45,
+      parapet: "0.28 m dark metal parapet", floatingExpression: "45 mm shadow reveal",
+    }));
+    const errors = validateArchitecturalDesignDocument(rejected, { requireRoofForEveryMass: true });
+    expect(errors).toEqual(expect.arrayContaining([
+      'mass upper-sleeping-bar operations[0] invalid corner "southeast"; expected one of: nw, ne, se, sw',
+      'mass rear-terrace-canopy operations[0] invalid corner "southeast"; expected one of: nw, ne, se, sw',
+      'roof roof-main-living invalid orientation "south"; expected a finite number in radians',
+      'roof roof-main-living invalid parapet "0.28 m dark metal parapet"; expected { height: number, thickness?: number }',
+      'roof roof-main-living unsupported field floatingExpression; use expression',
+      'siteStrategy invalid environment "Level suburban garden plot; all dimensions are meters."; expected one of: countryside, beach, cliff, hillside, farm, forest, suburban, urban',
+      'mass ground-plinth relationships[0] invalid kind "attached"; expected one of: adjacent-to, connected-to, separated-from, surrounds-courtyard, bridge-between, view-facing, arrival-facing, offset-from, stepped-above, stepped-below',
+      'mass ground-plinth openings[0] missing; expected one of: north, south, east, west',
+      'mass ground-plinth plan invalid form "11.6 by 8.0 rectangular primary bar"; expected one of: bar, l-shape, prow, setback',
+      'facade invalid status "Warm off-white mineral render"; expected "pending"',
+      'metadata invalid compiler "Residential Procedural Architecture Compiler"; expected "procedural-architecture-v1"',
+    ]));
+    const { architectOutputSchema } = await import("../stages/architectStage");
+    expect(architectOutputSchema.safeParse({ document: rejected }).success).toBe(false);
+  });
+
+  it("accepts every executable operation and roof recipe variant, then compiles the authored document", async () => {
+    const variants = AUTHORED_ROOF_RECIPE_KINDS;
+    const document = threeMassDocument() as ArchitecturalDesignDocument;
+    delete (document as Partial<ArchitecturalDesignDocument>).capabilities;
+    const primary = document.massing.masses[0];
+    const operations: NonNullable<MassVolume["operations"]> = [
+      { type: "recess", facade: "north", start: .1, end: .25, depth: .4, floors: "ground", open: true, postSpacing: 1.2 },
+      { type: "projection", facade: "east", start: .3, end: .7, depth: .4, floors: "upper", open: false, postSpacing: 1.1 },
+      { type: "notch", corner: "nw", width: .8, depth: .8, floors: "all" },
+      { type: "notch", corner: "ne", width: .8, depth: .8 },
+      { type: "entry-recess", facade: "south", width: 1.2, depth: .4 },
+      { type: "chamfer", corner: "se", size: .6, glazed: true },
+      { type: "chamfer", corner: "sw", size: .6 },
+    ];
+    const openings: NonNullable<MassVolume["openings"]> = [
+      { type: "glazing-zone", facade: "south", start: .1, end: .4, heightRatio: .8, frame: true, reveal: .1 },
+      { type: "opening-rhythm", facade: "west", count: 2, width: .5, height: 1.2, sill: .8, floors: "upper" },
+      { type: "door", facade: "north", start: .45, end: .55, height: 2.3, frame: true, reveal: .05 },
+    ];
+    const masses = variants.map((kind, index): MassVolume => ({ ...primary, id: `mass-${index}`, name: `Mass ${index}`, position: { x: index * 30, z: 0 }, floors: 2, operations: index === 0 ? operations : [], openings: index === 0 ? openings : [] }));
+    document.massing = { composition: "pavilion-cluster", masses };
+    document.roofs = { recipes: variants.map((kind, index) => ({ id: `roof-${kind}`, massId: `mass-${index}`, kind, overhang: .4, pitch: kind === "flat" || kind === "floating-flat" ? 2 : 18, orientation: 0, ...(kind === "floating-flat" ? { expression: { verticalGap: .2, thickness: .18, supportStyle: "reveal" as const } } : {}), ...(kind === "flat" ? { parapet: { height: .3, thickness: .15 } } : {}) })) };
+    const { architectOutputSchema, ARCHITECT_DOCUMENT_CONTRACT } = await import("../stages/architectStage");
+    expect(architectOutputSchema.safeParse({ document }).success).toBe(true);
+    expect(validateArchitecturalDesignDocument(document, ARCHITECT_DOCUMENT_CONTRACT)).toEqual([]);
+    expect(roofConflicts(document.massing.masses, document.roofs.recipes)).toEqual([]);
+    expect(compile(document).errors).toEqual([]);
+  });
+
+  it("types the Architect's structured roof output as the canonical AuthoredRoofRecipe", () => {
+    expectTypeOf<z.infer<typeof architectOutputSchema>["document"]["roofs"]["recipes"][number]>().toMatchTypeOf<AuthoredRoofRecipe>();
+    expect(AUTHORED_ROOF_RECIPE_KINDS).not.toContain("mixed");
+  });
+
+  it("accepts the canonical roof contract at every gate: Architect schema, document validation, roofConflicts and the quality gate", async () => {
+    const { architectOutputSchema, ARCHITECT_DOCUMENT_CONTRACT } = await import("../stages/architectStage");
+    const document = threeMassDocument();
+    delete (document as Partial<ArchitecturalDesignDocument>).capabilities;
+    document.roofs = { recipes: document.roofs.recipes.map((r, i) => ({ ...r, overhang: i === 1 ? 0 : r.overhang })) };
+    expect(architectOutputSchema.safeParse({ document }).success).toBe(true);
+    expect(validateArchitecturalDesignDocument(document, ARCHITECT_DOCUMENT_CONTRACT)).toEqual([]);
+    expect(roofConflicts(document.massing.masses, document.roofs.recipes)).toEqual([]);
+    const compiled = compile(document);
+    expect(compiled.errors).toEqual([]);
+    expect(runDesignQualityGate(document, compiled.diagnostics!).blocking.filter((c) => c.id.startsWith("roof-integrity-") && !c.passed)).toEqual([]);
+  });
+
+  /** The three-mass document with its first roof changed, `undefined` meaning the field is omitted. */
+  const rejectedRoof = (change: Record<string, unknown>) => {
+    const document = threeMassDocument();
+    delete (document as Partial<ArchitecturalDesignDocument>).capabilities;
+    const roof: Record<string, unknown> = { ...document.roofs.recipes[0], ...change };
+    for (const key of Object.keys(roof)) if (roof[key] === undefined) delete roof[key];
+    document.roofs = { recipes: [roof as unknown as RoofRecipe, ...document.roofs.recipes.slice(1)] };
+    return document;
+  };
+
+  it.each([
+    ["missing overhang", { overhang: undefined }, "roof-incomplete"],
+    ["missing pitch", { pitch: undefined }, "roof-incomplete"],
+    ["\"mixed\"", { kind: "mixed" }, "roof-unbuildable"],
+  ] as const)("the blocking roofConflicts check rejects the same %s roof the Architect contract rejects", (_label, change, code) => {
+    const document = rejectedRoof(change);
+    expect(roofConflicts(document.massing.masses, document.roofs.recipes)).toEqual([expect.objectContaining({ code, massId: "ground-plinth" })]);
+  });
+
+  describe.each([
+    ["missing overhang", { overhang: undefined }, "roof ground-plinth-roof missing overhang; expected a non-negative finite number in meters"],
+    ["missing pitch", { pitch: undefined }, "roof ground-plinth-roof missing pitch; expected a non-negative finite number in degrees"],
+    ["the unbuildable \"mixed\" kind", { kind: "mixed" }, `roof ground-plinth-roof invalid kind "mixed"; expected one of: ${AUTHORED_ROOF_RECIPE_KINDS.join(", ")}`],
+    ["a negative overhang", { overhang: -0.2 }, "roof ground-plinth-roof invalid overhang -0.2; expected a non-negative finite number in meters"],
+    ["a negative pitch", { pitch: -5 }, "roof ground-plinth-roof invalid pitch -5; expected a non-negative finite number in degrees"],
+    ["a non-finite pitch", { pitch: Number.NaN }, "roof ground-plinth-roof invalid pitch null; expected a non-negative finite number in degrees"],
+  ] as const)("rejects a roof with %s before compilation", (_label, change, validationError) => {
+    const rejected = () => rejectedRoof(change);
+
+    it("in the Architect's structured schema and document validation", async () => {
+      const { architectOutputSchema, ARCHITECT_DOCUMENT_CONTRACT } = await import("../stages/architectStage");
+      expect(architectOutputSchema.safeParse({ document: rejected() }).success).toBe(false);
+      expect(validateArchitecturalDesignDocument(rejected(), ARCHITECT_DOCUMENT_CONTRACT)).toEqual([validationError]);
+    });
+
+    it("as a same-Architect repair, without compiling the rejected document", async () => {
+      const compiler = await import("../compiler");
+      const compileSpy = vi.spyOn(compiler, "compileArchitecture");
+      try {
+        const { runArchitectStage } = await import("../stages/architectStage");
+        generateText.mockResolvedValueOnce({ output: { document: rejected() }, totalUsage: {} }).mockResolvedValueOnce({ output: responderOutputs.architect(), totalUsage: {} });
+        const result = await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+        expect(result.ok).toBe(true);
+        expect(generateText).toHaveBeenCalledTimes(2);
+        expect(messageOf(1)).toContain(validationError);
+        expect(compileSpy).toHaveBeenCalledTimes(1);
+      } finally {
+        compileSpy.mockRestore();
+      }
+    });
+  });
+
+  it("feeds exact corner and roof diagnostics to the bounded same-Architect repair", async () => {
+    const { runArchitectStage } = await import("../stages/architectStage");
+    const malformed = architectDocument() as unknown as { massing: { masses: Record<string, unknown>[] }; roofs: { recipes: Record<string, unknown>[] } };
+    malformed.massing.masses[0].operations = [{ type: "notch", corner: "southeast", width: 1, depth: 1 }];
+    malformed.roofs.recipes[0] = { id: "roof-0", massId: "mass-0", kind: "floating-flat", orientation: "south", parapet: "dark edge", floatingExpression: "shadow gap" };
+    generateText.mockResolvedValueOnce({ output: { document: malformed }, totalUsage: {} }).mockResolvedValueOnce({ output: responderOutputs.architect(), totalUsage: {} });
+    const result = await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+    expect(result.ok).toBe(true);
+    expect(messageOf(1)).toContain('invalid corner "southeast"; expected one of: nw, ne, se, sw');
+    expect(messageOf(1)).toContain('roof roof-0 invalid orientation "south"; expected a finite number in radians');
+    expect(messageOf(1)).toContain("roof roof-0 unsupported field floatingExpression; use expression");
+  });
+
+  it("does not spend a second Architect attempt when deterministic validation code throws", async () => {
+    const compiler = await import("../compiler");
+    const compileSpy = vi.spyOn(compiler, "compileArchitecture").mockImplementation(() => {
+      const intervals: unknown[] | undefined = undefined;
+      intervals!.push("unexpected");
+      throw new Error("unreachable");
+    });
+    try {
+      const { runArchitectStage } = await import("../stages/architectStage");
+      generateText.mockResolvedValue({ output: responderOutputs.architect(), totalUsage: {} });
+
+      const result = await runArchitectStage("Test residence", createTimings(), 60_000, usage);
+
+      expect(result.ok).toBe(false);
+      expect(result.errors).toEqual([expect.stringContaining("INTERNAL_ERROR: architect validation code threw: Cannot read properties of undefined (reading 'push')")]);
+      expect(generateText).toHaveBeenCalledTimes(1);
+    } finally {
+      compileSpy.mockRestore();
+    }
   });
 });
 

@@ -20,7 +20,7 @@ export const architectDocument = (): ArchitecturalDesignDocument => {
   delete mass.plan;
   return {
     version: 1, brief: "Test residence", siteStrategy: RESPONDER_SITE,
-    massing: { composition: "rectangular-pavilion", masses: [{ ...mass, relationships: [{ kind: "arrival-facing", target: "mass-0" }], operations: [], openings: [{ id: "mass-0:glazing", type: "glazing-zone", facade: "south", start: 2, end: 16, heightRatio: .8 } satisfies MassOpening] }] },
+    massing: { composition: "rectangular-pavilion", masses: [{ ...mass, relationships: [{ kind: "arrival-facing", target: "mass-0" }], operations: [], openings: [{ id: "mass-0:glazing", type: "glazing-zone", facade: "south", start: 0.11, end: 0.89, heightRatio: .8 } satisfies MassOpening, { id: "mass-0:entry", type: "door", facade: "north", start: 0.45, end: 0.55 } satisfies MassOpening] }] },
     roofs: { recipes: [{ id: "roof-0", massId: "mass-0", kind: "floating-flat", overhang: 0.9, pitch: 2, expression: { verticalGap: 0.25 } }] },
     facade: { status: "pending" }, architecturalStyle: { status: "pending" }, outdoorPlan: { status: "pending" }, materialStrategy: { status: "pending" }, components: { status: "pending" }, furnishings: { status: "pending" },
     metadata: { createdAt: "2026-01-01T00:00:00.000Z", source: "live-generation", compiler: "procedural-architecture-v1" },
