@@ -99,6 +99,11 @@ export interface RunStageInput<T> {
   maxOutputTokens?: number;
   /** The owning stage recorded on every usage row; defaults to `stageName` (set it when `stageName` is a per-turn label). */
   usageStage?: string;
+  /**
+   * Optional stage-owned evidence for a rejected response. This is merged into the bounded usage record,
+   * rather than introducing an unbounded application log. `attempt` is one-based for human debugging.
+   */
+  rejectedAttemptEvidence?: (rejection: { candidate: unknown; errors: readonly string[]; attempt: number }) => Partial<UsageAssessment>;
 }
 
 /**
@@ -160,7 +165,10 @@ type AttemptVerdict<T> =
 
 const USAGE_KIND: Record<Exclude<StageErrorCode, "TIME_BUDGET_EXHAUSTED">, string> = { OUTPUT_TRUNCATED: "output_truncated", VALIDATION_FAILED: "validation_failed", GENERATION_ERROR: "error", INTERNAL_ERROR: "internal_error" };
 
-async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { output: unknown; finishReason?: string } } | { error: unknown }): Promise<AttemptVerdict<T>> {
+async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { output: unknown; finishReason?: string } } | { error: unknown }, attempt: number): Promise<AttemptVerdict<T>> {
+  const evidence = (candidate: unknown, errors: readonly string[]): Partial<UsageAssessment> => {
+    try { return input.rejectedAttemptEvidence?.({ candidate, errors, attempt }) ?? {}; } catch { return {}; }
+  };
   let output: unknown;
   let failure: unknown;
   if ("result" in outcome) {
@@ -180,11 +188,11 @@ async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { out
       // another response before hitting the same deterministic exception again.
       if (isDev) console.error(`[${input.stageName}] internal validation error`, checked.internalError.cause);
       return { ok: false, errorCode: "INTERNAL_ERROR", errors: checked.errors, truncated: false, rawValue: output, rawValueTruncated: false,
-        assessment: { errorKind: USAGE_KIND.INTERNAL_ERROR, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output) } };
+        assessment: { errorKind: USAGE_KIND.INTERNAL_ERROR, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output), ...evidence(output, checked.errors) } };
     }
     if (isDev) console.debug(`[${input.stageName}] attempt failed validation after normalization`, { rawValue: output, errors: checked.errors, issues: checked.issues });
     return { ok: false, errorCode: "VALIDATION_FAILED", errors: checked.errors, truncated: false, rawValue: output, rawValueTruncated: false,
-      assessment: { errorKind: USAGE_KIND.VALIDATION_FAILED, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output) } };
+      assessment: { errorKind: USAGE_KIND.VALIDATION_FAILED, outputFingerprint, diagnostic: checked.errors.join("; "), candidate: boundedCandidate(output), ...evidence(output, checked.errors) } };
   }
 
   const described = await describeGenerationError(failure);
@@ -194,7 +202,7 @@ async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { out
     // A truncated value is never accepted whole, even if it happens to validate: its tail is missing.
     if (isDev) console.debug(`[${input.stageName}] attempt exhausted its output budget`, { message: described.message });
     return { ok: false, errorCode: "OUTPUT_TRUNCATED", errors: [OUTPUT_TRUNCATED_RETRY_INSTRUCTION], truncated: true, ...raw,
-      assessment: { errorKind: USAGE_KIND.OUTPUT_TRUNCATED, outputFingerprint, diagnostic: described.message, candidate: boundedCandidate(described.rawValue) } };
+      assessment: { errorKind: USAGE_KIND.OUTPUT_TRUNCATED, outputFingerprint, diagnostic: described.message, candidate: boundedCandidate(described.rawValue), ...evidence(described.rawValue, [OUTPUT_TRUNCATED_RETRY_INSTRUCTION]) } };
   }
   // The SDK rejected the raw value with the strict schema; normalize it before re-validating ourselves. If it
   // still fails, retry with the errors that remain AFTER normalization, never the range slips it already fixed.
@@ -204,7 +212,7 @@ async function judgeAttempt<T>(input: RunStageInput<T>, outcome: { result: { out
   if (isDev) console.debug(`[${input.stageName}] attempt threw`, { message: described.message, rawValue: described.rawValue });
   const errorCode = NoObjectGeneratedError.isInstance(failure) ? "VALIDATION_FAILED" : "GENERATION_ERROR";
   return { ok: false, errorCode, errors, truncated: false, ...raw,
-    assessment: { errorKind: errorCode === "VALIDATION_FAILED" ? USAGE_KIND.VALIDATION_FAILED : undefined, outputFingerprint, diagnostic: errors.join("; "), candidate: boundedCandidate(described.rawValue) } };
+    assessment: { errorKind: errorCode === "VALIDATION_FAILED" ? USAGE_KIND.VALIDATION_FAILED : undefined, outputFingerprint, diagnostic: errors.join("; "), candidate: boundedCandidate(described.rawValue), ...evidence(described.rawValue, errors) } };
 }
 
 export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResult<T>> {
@@ -247,7 +255,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
     lastAllowance = maxOutputTokens;
     let verdict: Promise<AttemptVerdict<T>> | undefined;
     // Memoized: the usage record and the retry decision share one judgement of the same response.
-    const judge = (outcome: Parameters<typeof judgeAttempt<T>>[1]) => (verdict ??= judgeAttempt(input, outcome));
+    const judge = (outcome: Parameters<typeof judgeAttempt<T>>[1]) => (verdict ??= judgeAttempt(input, outcome, attempt + 1));
     const callStart = performance.now();
     attempts++;
     let judged: AttemptVerdict<T>;
@@ -270,7 +278,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
       judged = await judge({ result: response });
     } catch (error) {
       // A throwing normalize/validate left a rejected memo: judge that error itself, as an ordinary retryable failure.
-      judged = await judge({ error }).catch(() => judgeAttempt(input, { error }));
+      judged = await judge({ error }).catch(() => judgeAttempt(input, { error }, attempt + 1));
     }
     lastAttemptMs = performance.now() - callStart;
     totalMs += lastAttemptMs;

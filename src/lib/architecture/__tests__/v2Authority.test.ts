@@ -14,6 +14,7 @@ import { runDesignQualityGate } from "../stages/qualityGate";
 import { isV2GenerationFailure } from "../stages/recovery";
 import { normalizeSitePlan, sitePlanOperations, sitePlanSchema, type SitePlan } from "../stages/sitePlanStage";
 import { sitePlanContextForDocument } from "../sitePlanContext";
+import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 import { authoredPlan, authoredRoof, QUIET_PLAN, referenceGeometry } from "./authoredFixtures";
 import { architectDocument, responderOutputs } from "./v2StageResponder";
 import type { architectOutputSchema } from "../stages/architectStage";
@@ -524,6 +525,59 @@ describe("the final integrity gate inspects the saved artifact", () => {
     expect(collided.blocking[0].detail).toMatch(/The pool runs .*into building mass "mass-1"/);
     const asset = { id: "a", assetId: "lounger", parentSpaceId: "s", category: "furniture", role: "sun-lounger", position: [0, 0, 0], rotation: [0, 0, 0], dimensions: { width: 1, depth: 2, height: 0.5 } };
     expect(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [asset] }), brief: d.brief, authority }).blocking.map((c) => c.id)).toContain("scene-assets-clear-of-building");
+  });
+
+  const rooftopDocument = doc([{ ...living, height: 7.1 }]);
+  const rooftopAuthority = { architectureHash: architectureAuthorityHash(rooftopDocument), sitePlanHash: sitePlanAuthorityHash(plan) };
+  const roofY = () => {
+    const plane = compile(rooftopDocument).model.primitives.find((primitive) => primitive.id === "architecture-mass-0-roof-plane")!;
+    if (plane.kind !== "box") throw new Error("fixture roof must be a flat roof plane");
+    return plane.position[1] + plane.size[1] / 2;
+  };
+  const rooftopGazebo = (): OutdoorAssetPlacement => ({
+    id: "outdoor-v2-a2aec565-f772-446d-b3c9-6dced30e103a", assetId: "gazebo", parentSpaceId: "v2-roof-mass-0", category: "gazebo", role: "gazebo",
+    position: [-1.5, roofY(), 3], rotation: [0, 0, 0], scale: 1, dimensions: { width: 4, depth: 4, height: 2.9 },
+    support: { kind: "roof", elevation: roofY(), massId: "mass-0" },
+    intent: { surface: "roof", massId: "mass-0", centre: { x: -1.5, z: 3 }, yaw: 0, dimensions: { width: 4, depth: 4, height: 2.9 } },
+  });
+  const sceneCheck = (gate: ReturnType<typeof runV2IntegrityGate>) => gate.checks.find((check) => check.id === "scene-assets-clear-of-building")!;
+
+  it("allows the conceptual live case: an explicitly hosted rooftop gazebo overlaps its host footprint at the roof elevation", () => {
+    const gazebo = rooftopGazebo();
+    expect(gazebo.position).toEqual([-1.5, 7.35, 3]);
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [gazebo] }, rooftopDocument), brief: rooftopDocument.brief, authority: rooftopAuthority })).passed).toBe(true);
+  });
+
+  it("keeps ground assets, unrelated masses, and vertically embedded rooftop assets blocked", () => {
+    const rooftop = rooftopGazebo();
+    const ground: OutdoorAssetPlacement = { ...rooftop, parentSpaceId: "garden", position: [-1.5, 0, 3], support: { kind: "terrain", elevation: 0 }, intent: { ...rooftop.intent!, surface: "garden", massId: undefined } };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [ground] }, rooftopDocument), brief: rooftopDocument.brief, authority: rooftopAuthority })).passed).toBe(false);
+
+    const other = { ...living, id: "unrelated", name: "Unrelated Mass", role: "garage" as const, position: { x: -1.5, z: 3 }, width: 4, depth: 4, operations: [], openings: [] };
+    const withOther = doc([{ ...living, height: 7.1 }, other]);
+    const withOtherAuthority = { architectureHash: architectureAuthorityHash(withOther), sitePlanHash: sitePlanAuthorityHash(plan) };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [rooftop] }, withOther), brief: withOther.brief, authority: withOtherAuthority })).passed).toBe(false);
+
+    const embedded = { ...rooftop, position: [-1.5, roofY() - 1, 3] as [number, number, number] };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [embedded] }, rooftopDocument), brief: rooftopDocument.brief, authority: rooftopAuthority })).passed).toBe(false);
+  });
+
+  it("compares an architectural edit to the saved baseline without hiding a worsened or malformed rooftop collision", () => {
+    const preExisting: OutdoorAssetPlacement = { id: "pre-existing", assetId: "bench", parentSpaceId: "garden", category: "furniture", role: "bench", position: [0, 0, 0], rotation: [0, 0, 0], scale: 1, dimensions: { width: 1, depth: 1, height: 1 } };
+    const before = artifact({ outdoorAssetPlacements: [preExisting] });
+    const entranceOnly = doc([{ ...living, operations: [{ id: "mass-0:entry", type: "projection", facade: "north", start: .35, end: .65, depth: 2.2, open: true }] }]);
+    const entranceAuthority = { architectureHash: architectureAuthorityHash(entranceOnly), sitePlanHash: sitePlanAuthorityHash(plan) };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [preExisting] }, entranceOnly), brief: d.brief, authority: entranceAuthority, previousJson: before })).passed).toBe(true);
+
+    const edgeAsset: OutdoorAssetPlacement = { ...preExisting, id: "edge", position: [8, 0, 0] };
+    const expanded = doc([{ ...living, width: 20 }]);
+    const expandedAuthority = { architectureHash: architectureAuthorityHash(expanded), sitePlanHash: sitePlanAuthorityHash(plan) };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [edgeAsset] }, expanded), brief: d.brief, authority: expandedAuthority, previousJson: artifact({ outdoorAssetPlacements: [edgeAsset] }) })).passed).toBe(false);
+
+    const clearAsset: OutdoorAssetPlacement = { ...preExisting, id: "entry-clear", position: [0, 0, -6.5] };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [clearAsset] }, entranceOnly), brief: d.brief, authority: entranceAuthority, previousJson: artifact({ outdoorAssetPlacements: [clearAsset] }) })).passed).toBe(false);
+    const malformedRooftop = { ...rooftopGazebo(), position: [-1.5, roofY() - 1, 3] as [number, number, number] };
+    expect(sceneCheck(runV2IntegrityGate({ json: artifact({ outdoorAssetPlacements: [malformedRooftop] }, rooftopDocument), brief: rooftopDocument.brief, authority: rooftopAuthority, previousJson: artifact({ outdoorAssetPlacements: [malformedRooftop] }, rooftopDocument) })).passed).toBe(false);
   });
 
   it("blocks missing planned geometry and material mass collisions in the saved document", () => {

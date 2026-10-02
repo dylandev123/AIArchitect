@@ -47,7 +47,7 @@ export const STANDALONE_OBJECTS = Object.keys(STANDALONE) as StandaloneObject[];
 /** The original whitelist's nouns (chair, lounger, table, umbrella, planter, bar), located only to order mentions. */
 const EXISTING_OBJECT = /\b(?:chairs?|armchairs?|lounge(?:rs?)?|chaises?|tables?|umbrellas?|parasols?|planters?|plant\s+pots?|pots?|bars?)\b/;
 /** Buildings, rooms, envelope parts and roofs: requests about these are architectural-document edits, never objects. */
-const ARCHITECTURAL = /\b(?:\w*rooms?|suites?|wings?|stor(?:e?ys?|ies)|floors?|levels?|walls?|windows?|doors?|doorways?|balcon(?:y|ies)|terraces?|verandas?|porch(?:es)?|recess(?:es)?|extensions?|additions?|annex(?:es)?|mass(?:es)?|volumes?|fa[cç]ades?|skylights?|roofs?|roofline|garages?|carports?|kitchens?|stairs?|staircases?|overhangs?|cantilevers?|glazing|houses?|buildings?|pavilions?|studios?|cottages?|basements?|attics?|lofts?|towers?|courtyards?)\b/;
+const ARCHITECTURAL = /\b(?:\w*rooms?|suites?|wings?|stor(?:e?ys?|ies)|floors?|levels?|walls?|windows?|doors?|doorways?|balcon(?:y|ies)|terraces?|verandas?|porch(?:es)?|recess(?:es)?|extensions?|additions?|annex(?:es)?|mass(?:es)?|volumes?|fa[cç]ades?|skylights?|roofs?|roofline|entrances?|entryways?|garages?|carports?|kitchens?|stairs?|staircases?|overhangs?|cantilevers?|glazing|houses?|buildings?|pavilions?|studios?|cottages?|basements?|attics?|lofts?|towers?|courtyards?)\b/;
 /** Requests that change or remove something rather than add a new object. */
 const NON_ADDITIVE = /^(?:please\s+|(?:can|could|would)\s+you\s+)?(?:remove|delete|move|relocate|replace|resize|rotate|swap|enlarge|shrink|widen|extend|deepen|raise|lower|change|modify|convert|turn|take\s+away|get\s+rid\s+of)\b/;
 
@@ -98,7 +98,6 @@ export type AdditiveClassification =
  */
 export function classifyAdditiveRequest(prompt: string): AdditiveClassification {
   const lower = prompt.trim().toLowerCase();
-  if (NON_ADDITIVE.test(lower)) return { kind: "non-additive", reason: "Additive object edits only add a new standalone object; changing, moving or removing something is not handled here." };
   const { subject } = requestParts(prompt);
   const mentions = [
     ...STANDALONE_OBJECTS.map((object) => ({ object, at: subject.search(STANDALONE[object].pattern) })),
@@ -107,6 +106,9 @@ export function classifyAdditiveRequest(prompt: string): AdditiveClassification 
   // "outdoor kitchen" is an object, not a kitchen; mask every object phrase before looking for architecture.
   const masked = [...STANDALONE_OBJECTS.map((o) => STANDALONE[o].pattern), EXISTING_OBJECT].reduce((s, re) => s.replace(new RegExp(re.source, "g"), " "), subject);
   const architectural = masked.match(ARCHITECTURAL)?.[0];
+  // A change verb whose subject is architecture ("change the roof to hip") is an architectural edit; any other
+  // change/move/remove request is not additive.
+  if (NON_ADDITIVE.test(lower) && !architectural) return { kind: "non-additive", reason: "Additive object edits only add a new standalone object; changing, moving or removing something is not handled here." };
   if (architectural) return { kind: "architectural", reason: `"${architectural}" is part of the architecture, not a standalone object. That change belongs to the architectural design, so this additive object edit was not applied.` };
   const first = mentions[0];
   if (!first) return { kind: "unknown" };

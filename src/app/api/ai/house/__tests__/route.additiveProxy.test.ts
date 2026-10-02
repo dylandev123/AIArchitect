@@ -74,10 +74,11 @@ describe("V2 additive edit route: procedural proxy fallback", { timeout: 30_000 
     expect(await needs()).toHaveLength(0);
   });
 
-  it("refuses an architectural request without touching the project or the Needs", async () => {
+  it("hands an architectural request to the Architect, never the placer, without touching the project or the Needs", async () => {
+    // No model is configured here, so the Architect edit path answers 503 rather than the placer's ARCHITECTURAL_EDIT refusal.
     const { res, body } = await edit("add another bedroom");
-    expect(res.status).toBe(422);
-    expect(body).toMatchObject({ code: "ARCHITECTURAL_EDIT" });
+    expect(res.status).toBe(503);
+    expect(body.code).toBeUndefined();
     expect(body.json).toBeUndefined();
     expect(await needs()).toHaveLength(0);
   });

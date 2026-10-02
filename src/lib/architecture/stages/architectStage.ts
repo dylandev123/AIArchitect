@@ -6,8 +6,11 @@ import { CORNER_VALUES, ENTRY_TREATMENT_VALUES, FACADE_TREATMENT_VALUES, FOOTPRI
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import { COMPASS_SIDES, SIDE_VECTOR, SITE_ENVIRONMENTS } from "@/lib/house/siteSettings";
 import { SHARED_WALL_GAP_M } from "../volumePlan";
+import { v2SiteFrameForDocument } from "../siteFrame";
 import { runDesignQualityGate } from "./qualityGate";
 import { runStage } from "./runStage";
+import { fingerprint } from "@/lib/ai/usage/diagnostics";
+import { architecturalDocumentFingerprintInput, architecturalEditDiff, architecturalEditScope, describeArchitecturalEditDiff } from "./architectEditDiff";
 
 const compositionKinds = ["rectangular-pavilion", "l-shaped", "u-shaped", "h-shaped", "courtyard", "pavilion-cluster", "rotated-wings", "stepped-terraces"] as const;
 const finiteNumber = z.number().finite();
@@ -125,6 +128,16 @@ function schemaRepairErrors(raw: unknown): string[] {
   return [...spans, ...parsed.error.issues.filter((issue) => !isSpanRangeIssue(issue)).map((issue) => `${issue.path.join(".")}: ${issue.message}`)];
 }
 
+/** The Architect's objective acceptance test: the document contract, then the compiler, then the blocking design-quality checks. */
+export function architectDocumentErrors(document: unknown): string[] {
+  const errors = validateArchitecturalDesignDocument(document, ARCHITECT_DOCUMENT_CONTRACT);
+  if (errors.length) return errors;
+  const compiled = compileArchitecture(document as ArchitecturalDesignDocument, { materials: DEFAULT_MATERIALS_CONFIG });
+  if (compiled.errors.length || !compiled.diagnostics) return compiled.errors.length ? compiled.errors : ["The document produced no compiler diagnostics."];
+  const gate = runDesignQualityGate(document as ArchitecturalDesignDocument, compiled.diagnostics);
+  return gate.blocking.filter((check) => !check.passed).map((check) => `${check.id}: ${check.detail}`);
+}
+
 export interface ArchitectStageResult {
   ok: boolean;
   document?: ArchitecturalDesignDocument;
@@ -154,15 +167,110 @@ export async function runArchitectStage(brief: string, timings: Timings, budgetM
       return raw;
     },
     schemaError: schemaRepairErrors,
-    validate: ({ document }) => {
-      const errors = validateArchitecturalDesignDocument(document, ARCHITECT_DOCUMENT_CONTRACT);
-      if (errors.length) return errors;
-      const compiled = compileArchitecture(document as unknown as ArchitecturalDesignDocument, { materials: DEFAULT_MATERIALS_CONFIG });
-      if (compiled.errors.length || !compiled.diagnostics) return compiled.errors.length ? compiled.errors : ["The document produced no compiler diagnostics."];
-      const gate = runDesignQualityGate(document as unknown as ArchitecturalDesignDocument, compiled.diagnostics);
-      return gate.blocking.filter((check) => !check.passed).map((check) => `${check.id}: ${check.detail}`);
-    },
+    validate: ({ document }) => architectDocumentErrors(document),
   });
   if (!result.ok) return { ok: false, attempts: result.attempts, durationMs: result.durationMs, errors: result.errors, ...(result.repairRequests ? { repairRequests: result.repairRequests } : {}) };
   return { ok: true, document: result.value.document as unknown as ArchitecturalDesignDocument, attempts: result.attempts, durationMs: result.durationMs, ...(result.repairRequests ? { repairRequests: result.repairRequests } : {}) };
+}
+
+/**
+ * Edit mode of the same Architect: the same system prompt, schema, contracts and acceptance test, plus these rules.
+ * The edited document replaces the saved one only if it passes everything a newly authored document must pass.
+ */
+export const ARCHITECT_EDIT_INSTRUCTIONS = `EDIT MODE — you are editing YOUR OWN existing, saved design for this property. Edit the existing house; do not regenerate, redesign or re-author it.
+- You receive the complete current ArchitecturalDesignDocument and the owner's exact edit request. Return the complete document with the requested edit applied.
+- Change any architectural fields genuinely required to accomplish the request — masses, dimensions, positions, footprint operations, facade geometry, openings, entrance geometry, projections/recesses, roofs — and nothing else.
+- Everything unrelated to the request stays exactly as it is: the same ids, names, roles, positions, dimensions, rotations, elevations, floors, operations, openings and roof recipes, value for value. Change an unrelated field only when it is objectively necessary to keep the architecture valid under the contracts above.
+- Keep siteStrategy unchanged. Keep the dominant (largest main) mass at the same position, width, depth and rotation unless the request is explicitly about that mass's footprint: the existing Site Plan (driveway, parking, pool, terrace, pool deck, paths, landscaping) and every placed outdoor object (gazebos, furniture, proxies, approved models) are anchored to it and are NOT moved by this edit. Keep new or enlarged geometry clear of them.
+- Do not remove or rename masses, openings or roofs the request does not concern. Do not swap the roof system unless the request is about the roof.
+- On a repair request, the "previous document" is your edited candidate: correct only the listed failures and keep the requested edit.`;
+
+export interface ArchitectEditInput {
+  current: ArchitecturalDesignDocument;
+  request: string;
+  timings: Timings;
+  budgetMs: number;
+  usageMeta: UsageMeta;
+  /** Objective checks the caller owns on a candidate that already passed the Architect acceptance test (e.g. the final project integrity gate). */
+  checkCandidate?: (document: ArchitecturalDesignDocument) => string[];
+}
+
+/** Objective preservation findings for an edit: the site strategy and the site frame the existing Site Plan is anchored to. */
+export function architectEditPreservationErrors(current: ArchitecturalDesignDocument, edited: ArchitecturalDesignDocument, request = ""): string[] {
+  const errors: string[] = [];
+  if (JSON.stringify(edited.siteStrategy) !== JSON.stringify(current.siteStrategy)) errors.push("siteStrategy changed: the existing Site Plan is authored against it; keep siteStrategy exactly as it was.");
+  const before = v2SiteFrameForDocument(current), after = v2SiteFrameForDocument(edited);
+  if (before && after) {
+    const same = before.anchor.id === after.anchor.id && Math.abs(before.center.x - after.center.x) < 1e-6 && Math.abs(before.center.z - after.center.z) < 1e-6
+      && Math.abs(before.anchor.width - after.anchor.width) < 1e-6 && Math.abs(before.anchor.depth - after.anchor.depth) < 1e-6 && Math.abs(before.anchor.rotation - after.anchor.rotation) < 1e-6;
+    if (!same) errors.push(`The site frame moved: dominant mass "${before.anchor.id}" was ${before.anchor.width}x${before.anchor.depth}m at (${before.center.x}, ${before.center.z}) rotation ${before.anchor.rotation} and is now "${after.anchor.id}" ${after.anchor.width}x${after.anchor.depth}m at (${after.center.x}, ${after.center.z}) rotation ${after.anchor.rotation}. The pool, driveway, terrace and other site features are anchored to it and would move; keep that mass's position, width, depth and rotation, and do not make another mass dominant.`);
+  }
+  const changes = architecturalEditDiff(current, edited, architecturalEditScope(current, request, edited));
+  for (const change of changes.filter((change) => change.unrelated)) errors.push(`Unrelated architectural change: ${describeArchitecturalEditDiff([change])[0]}. Keep it identical unless the request targets its owning mass.`);
+  return errors;
+}
+
+export async function runArchitectEditStage(input: ArchitectEditInput): Promise<ArchitectStageResult> {
+  const { current, request } = input;
+  let previousDocument: unknown;
+  const attemptEvidence = (candidate: unknown, errors: readonly string[], attempt: number) => {
+    const candidateDocument = documentOf(candidate);
+    const candidateFingerprint = fingerprint(architecturalDocumentFingerprintInput(candidateDocument));
+    const contractErrors = architectDocumentErrors(candidateDocument);
+    let preservationErrors: string[] = [];
+    let integrityErrors: string[] = [];
+    let diff: ReturnType<typeof architecturalEditDiff> = [];
+    if (!contractErrors.length) {
+      const edited = candidateDocument as ArchitecturalDesignDocument;
+      preservationErrors = architectEditPreservationErrors(current, edited, request);
+      diff = architecturalEditDiff(current, edited, architecturalEditScope(current, request, edited));
+      if (!preservationErrors.length) integrityErrors = input.checkCandidate?.(edited) ?? [];
+    }
+    return {
+      diagnostic: errors.join("; "),
+      candidate: JSON.stringify({
+        kind: "architectural-edit-rejection",
+        attempt,
+        original: { fingerprint: fingerprint(architecturalDocumentFingerprintInput(current)) },
+        candidate: { fingerprint: candidateFingerprint, document: candidateDocument },
+        errors: { rejection: [...errors], validation: contractErrors, preservation: preservationErrors, integrity: integrityErrors },
+        diff,
+      }),
+    };
+  };
+  const result = await runStage({
+    stageName: "architect-edit",
+    usageStage: "architect",
+    system: `${ARCHITECT_SYSTEM_PROMPT}\n\n${ARCHITECT_EDIT_INSTRUCTIONS}`,
+    buildMessage: (previousErrors) => [
+      `EDIT REQUEST (the owner's exact words):\n${request}`,
+      `CURRENT SAVED DOCUMENT — edit this existing design; do not regenerate it:\n${JSON.stringify({ document: current })}`,
+      "Return the complete edited document. Apply only the changes the request genuinely requires; keep every unrelated value identical.",
+      previousErrors.length ? `Objective failures in your edited candidate to repair without undoing the requested edit or touching unrelated architecture:\n${previousErrors.map((error) => `- ${error}`).join("\n")}\n\nYour previous edited candidate; return it corrected only for those failures:\n${JSON.stringify(previousDocument)}` : "",
+    ].filter(Boolean).join("\n\n"),
+    schema: architectOutputSchema,
+    timings: input.timings,
+    remainingBudgetMs: input.budgetMs,
+    usageMeta: input.usageMeta,
+    maxOutputTokens: 5000,
+    maxAttempts: 2,
+    normalize: (raw) => {
+      if (typeof raw === "object" && raw !== null && "document" in raw) previousDocument = (raw as { document: unknown }).document;
+      return raw;
+    },
+    schemaError: schemaRepairErrors,
+    validate: ({ document }) => {
+      const errors = architectDocumentErrors(document);
+      if (errors.length) return errors;
+      const edited = document as unknown as ArchitecturalDesignDocument;
+      const preserved = architectEditPreservationErrors(current, edited, request);
+      if (preserved.length) return preserved;
+      return input.checkCandidate?.(edited) ?? [];
+    },
+    rejectedAttemptEvidence: ({ candidate, errors, attempt }) => attemptEvidence(candidate, errors, attempt),
+  });
+  if (!result.ok) return { ok: false, attempts: result.attempts, durationMs: result.durationMs, errors: result.errors, ...(result.repairRequests ? { repairRequests: result.repairRequests } : {}) };
+  // Metadata records when and how the design was first authored; it carries no geometry authority.
+  const document = { ...(result.value.document as unknown as ArchitecturalDesignDocument), metadata: current.metadata };
+  return { ok: true, document, attempts: result.attempts, durationMs: result.durationMs, ...(result.repairRequests ? { repairRequests: result.repairRequests } : {}) };
 }

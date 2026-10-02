@@ -37,6 +37,11 @@ import { isV2GenerationFailure } from "@/lib/architecture/stages/recovery";
 import { v2FailureResponse } from "@/lib/ai/v2Failure";
 import { providerErrorResponse } from "@/lib/ai/providerErrors";
 import { placeV2AdditiveAsset } from "@/lib/architecture/v2AdditivePlacement";
+import { classifyAdditiveRequest } from "@/lib/architecture/v2AdditiveObjects";
+import { runArchitectEditStage } from "@/lib/architecture/stages/architectStage";
+import { architecturalEditDiff, architecturalEditScope, describeArchitecturalEditDiff } from "@/lib/architecture/stages/architectEditDiff";
+import { architectureAuthorityHash } from "@/lib/architecture/stages/authority";
+import { runV2IntegrityGate } from "@/lib/architecture/stages/integrityGate";
 import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
@@ -128,6 +133,11 @@ export async function POST(req: NextRequest) {
   // Additive V2 placement is a deterministic executor, not an architecture-generation call.
   const activeDocument = root.architecturalDesignDocument ?? root.architectureDocument;
   if (body.mode !== "generate" && isArchitecturalDesignDocument(activeDocument)) {
+    // An architectural change is never handed to the fixed-rules placer: it goes to the same AI Architect, editing its saved document.
+    if (classifyAdditiveRequest(prompt).kind === "architectural") {
+      if (!isAiConfigured()) return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
+      return editV2Architecture(prompt, root, activeDocument, baseRevision, projectId);
+    }
     return editV2SiteFeature(prompt, root, baseRevision, projectId);
   }
 
@@ -267,6 +277,54 @@ async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, 
     })
     : undefined;
   return NextResponse.json({ summary: placed.summary, json: placed.json, baseRevision, revision: revisionOf(placed.json), scope: { level: "component", label: "V2 additive placement" }, operation: "addV2Placement", assetId: placed.assetId, ...(placed.usedProceduralFallback ? { proceduralFallback: true, assetNeedId: assetNeed?.id } : {}) });
+}
+
+/**
+ * Architectural follow-up edit: the same AI Architect edits its own saved document (one bounded repair). The edited
+ * document must pass the Architect contract, the compiler, the design-quality gate, the edit preservation checks and
+ * the final V2 integrity gate over the exact project JSON to be saved, with the existing Site Plan and outdoor
+ * placements carried over unchanged. Anything else fails with no `json`, so the saved project is never touched.
+ */
+async function editV2Architecture(prompt: string, root: Record<string, unknown>, current: ArchitecturalDesignDocument, baseRevision: string, projectId: string | null): Promise<NextResponse> {
+  const usageMeta: UsageMeta = { projectId, requestType: "scoped_edit", scope: WORLD_SCOPE.level, model: getAiModelId() };
+  // Site Plan authority is the plan already saved: the edit may not change it.
+  const authority = (document: ArchitecturalDesignDocument) => ({ architectureHash: architectureAuthorityHash(document), sitePlanHash: JSON.stringify(root.sitePlan) });
+  const projectWith = (document: ArchitecturalDesignDocument) => {
+    const rest = { ...root };
+    delete rest.architectureDocument;
+    return JSON.stringify({ ...rest, architecturalDesignDocument: document });
+  };
+  const integrityErrors = (document: ArchitecturalDesignDocument) =>
+    runV2IntegrityGate({ json: projectWith(document), brief: current.brief, authority: authority(document), previousArchitectureDocument: current, previousJson: JSON.stringify(root) }).blocking
+      .map((c) => `${c.id}: ${c.detail} (the saved Site Plan and outdoor placements are fixed by this edit; keep the edited architecture consistent with them)`);
+  try {
+    const result = await runArchitectEditStage({ current, request: prompt, timings: createTimings(), budgetMs: GENERATION_BUDGET_MS, usageMeta, checkCandidate: integrityErrors });
+    const fail = (errors: readonly string[], repairRequests?: readonly string[]) => {
+      console.warn("[v2-architectural-edit] not applied:", errors);
+      return NextResponse.json({
+        error: "The Architect could not make that change while keeping the design valid, so the project was not changed. Try describing the change differently.",
+        code: "ARCHITECTURAL_EDIT_FAILED", outcome: "failed", stage: "architect",
+        ...(process.env.NODE_ENV !== "production" ? { conflicts: [...errors], repairRequests: [...(repairRequests ?? [])], attempts: result.attempts } : {}),
+      }, { status: 422 });
+    };
+    if (!result.ok || !result.document) return fail(result.errors ?? ["The Architect returned no document."], result.repairRequests);
+    const edited = result.document;
+    if (architectureAuthorityHash(edited) === architectureAuthorityHash(current)) return fail(["The Architect returned the document unchanged."]);
+    const json = projectWith(edited);
+    // The stage already ran this gate on the candidate; this is the artifact actually returned for saving.
+    const finalErrors = integrityErrors(edited);
+    if (finalErrors.length) return fail(finalErrors);
+    const changes = describeArchitecturalEditDiff(architecturalEditDiff(current, edited, architecturalEditScope(current, prompt, edited)));
+    return NextResponse.json({
+      summary: `Architectural edit applied (${changes.join("; ") || "document updated"}).`,
+      json, baseRevision, revision: revisionOf(json),
+      scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes,
+      ...(process.env.NODE_ENV !== "production" ? { attempts: result.attempts, repairRequests: result.repairRequests ?? [] } : {}),
+    });
+  } catch (error) {
+    console.error("[v2-architectural-edit] failed:", error);
+    return providerErrorResponse(error);
+  }
 }
 
 function withProxyNeedId(json: string, placementIds: readonly string[], needId: string): string {
