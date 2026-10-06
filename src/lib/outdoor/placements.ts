@@ -13,6 +13,7 @@ import { SITE_FEATURE_CATEGORIES } from '@/lib/architecture/v2OnlyMode';
 import { pathCurve } from '@/lib/house/features/paths';
 import type { PathConfig } from '@/types/house';
 import { massHalfExtents } from '@/lib/architecture/massFootprint';
+import type { SceneMaterial } from '@/lib/architecture/document';
 export interface OutdoorAssetPlacement {
     id: string;
     assetId: string;
@@ -39,10 +40,12 @@ export interface OutdoorAssetPlacement {
         depth: number;
         height: number;
     };
+    /** Optional user-authored finish override. It is deliberately semantic, never renderer state. */
+    material?: SceneMaterial;
     /** Resolved local model bounds used to derive this persisted world transform.  Procedural assets are [0, size]. */
     localBounds?: { min: [number, number, number]; max: [number, number, number] };
     /** The surface selected by the deterministic placer; y is the model-origin world coordinate, never an offset. */
-    support?: { kind: "terrain" | "deck" | "terrace" | "patio" | "roof"; elevation: number; /** roof only: the V2 mass whose roof carries it. */ massId?: string };
+    support?: { kind: "terrain" | "deck" | "terrace" | "patio" | "roof" | "balcony"; elevation: number; /** roof only: the V2 mass whose roof carries it. */ massId?: string };
     /**
      * What the request asked for, independent of which asset currently fills the placement: the anchor surface,
      * the requested side, and the intended size. A replacement asset keeps this (and `id`, centre, yaw, support)
@@ -51,6 +54,41 @@ export interface OutdoorAssetPlacement {
     intent?: PlacementIntentRecord;
     /** Present only while a procedural proxy stands in for a missing approved asset. */
     proxy?: { shape: import('./proxyShapes').ProxyShape; canopy?: import('./proxyShapes').ProxyCanopy; objectType: string; label: string; requestText: string; needId?: string };
+    /**
+     * Durable provenance for a renderer-derived object.  `semanticId` is a source
+     * identity, never a transform-derived key: it is how a renderer can decide
+     * that this persistent record has taken ownership of its generated twin.
+     */
+    source?: OutdoorAssetSource;
+    /** Arrangement data for a generated composition. Members remain assets, but
+     * can be transformed coherently through their group's stable anchor. */
+    group?: OutdoorAssetGroupMember;
+}
+
+export interface OutdoorAssetSource {
+    semanticId: string;
+    sourceType: "renderer-derived" | "procedural" | "native" | "glb";
+    generatorId: string;
+    ownership: "materialized";
+}
+
+export interface OutdoorAssetGroupMember {
+    id: string;
+    anchor: [number, number, number];
+    rotation: [number, number, number];
+    localPosition: [number, number, number];
+    localRotation: [number, number, number];
+    localScale: number;
+    role?: string;
+    facingTargetId?: string;
+    facingPoint?: [number, number, number];
+}
+
+/** A deleted materialized source must continue suppressing its generated twin. */
+export interface OutdoorAssetTombstone {
+    semanticId: string;
+    sourceType: OutdoorAssetSource["sourceType"];
+    generatorId: string;
 }
 export interface PlacementIntentRecord {
     surface: "roof" | "poolside" | "garden";

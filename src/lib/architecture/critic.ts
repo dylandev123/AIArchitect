@@ -284,7 +284,7 @@ function scoreV2Criterion(criterion: ArchitectureCriterion, e: V2Evidence): { sc
       return undefined;
     case "originality": {
       const vocabulary = new Set<string>();
-      for (const m of e.masses) for (const op of cleanOps(m)) vocabulary.add(op.type === "notch" ? "L-shaped footprint" : op.type === "chamfer" ? (op.glazed ? "glazed prow" : "prow") : op.type === "entry-recess" ? "entry recess" : op.open ? "carved open terrace" : `${op.type}`);
+      for (const m of e.masses) for (const op of cleanOps(m)) vocabulary.add(op.type === "notch" ? "L-shaped footprint" : op.type === "chamfer" ? (op.glazed ? "glazed prow" : "prow") : op.type === "entry-recess" ? "entry recess" : (op.type === "recess" || op.type === "projection") && op.open ? "carved open terrace" : `${op.type}`);
       if (e.masses.some((m) => m.cantilever)) vocabulary.add("cantilever");
       if (dominant && others.some((m) => Math.abs(m.elevation - dominant.elevation) >= 0.5)) vocabulary.add("stepped section");
       if (dominant && others.some((m) => Math.abs(Math.sin(m.rotation - dominant.rotation)) > 0.05)) vocabulary.add("rotated wing");

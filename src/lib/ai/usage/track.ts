@@ -3,7 +3,7 @@ import { computeCostUsd } from "../pricing";
 import { bounded, boundedDiagnostic, CANDIDATE_MAX_CHARS } from "./diagnostics";
 import { appendUsageRecord } from "./store";
 import type { AiRequestType, AiScope, AiUsageRecord } from "./types";
-import type { ArchitectureGenerationMode } from "@/lib/architecture/stages/generationMode";
+import type { GenerationMode } from "./types";
 
 export interface UsageMeta {
   projectId: string | null;
@@ -15,7 +15,7 @@ export interface UsageMeta {
   maxOutputTokens?: number;
   stageCall?: string;
   /** Generation routing decision, persisted on every paid call for generation requests. */
-  generationMode?: ArchitectureGenerationMode;
+  generationMode?: GenerationMode;
 }
 
 /** What a caller learned about one call after judging its response; merged into that call's usage record. */

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import * as THREE from "three";
 import { useProjectStore } from "@/store/useProjectStore";
+import { useSceneStore } from "@/store/useSceneStore";
 import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { getPoolDeckOutline } from "@/lib/house/features/pools";
@@ -20,6 +21,8 @@ export function GroundPlane() {
   const houseConfigJson = useProjectStore(
     (s) => s.getProject(params.projectId)?.houseConfigJson
   );
+
+  const hideTerrain = useSceneStore((s) => s.v3Diagnostics.hideTerrain);
 
   const { geometry, color } = useMemo(() => {
     const { site } = generateHouseFromJson(houseConfigJson ?? "{}");
@@ -71,6 +74,8 @@ export function GroundPlane() {
     return { map: clone(source.map)!, bump: clone(source.bump), normal: clone(source.normal), rough: clone(source.rough) };
   }, [pbr.textures, grassDef.tile]);
   const tint = useMemo(() => naturalGreen(color), [color]);
+  // DEV-only V3 diagnostic ("Hide terrain"): the flat lawn is part of the ground, so it goes with the heightfield.
+  if (process.env.NODE_ENV !== "production" && hideTerrain) return null;
 
   return (
     <mesh geometry={geometry} receiveShadow>

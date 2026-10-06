@@ -18,12 +18,38 @@ export interface ArchitecturalDesignDocument {
   materialStrategy: StagePlaceholder;
   components: StagePlaceholder;
   furnishings: StagePlaceholder;
+  /**
+   * General-purpose persistent world objects.  These are intentionally primitive-led rather than named after
+   * architectural features: an Architect can compose a boundary, a screen, a canopy, or a future proxy asset
+   * without teaching the compiler a new noun.  Facade-hosted construction continues to use `assemblies`.
+   */
+  sceneObjects?: readonly SceneObject[];
+  /** Targeted finishes; keys are stable scene targets such as `mass:<id>` or `scene:<id>`. */
+  materialOverrides?: readonly SceneMaterialOverride[];
   metadata: DesignProvenance;
 }
 
 export interface StagePlaceholder { status: "pending"; notes?: string[] }
 export interface DesignProvenance { createdAt: string; source: "fixture" | "stage-pipeline" | "live-generation"; compiler: "procedural-architecture-v1"; }
 export interface SiteStrategy { environment: SiteEnvironment; viewDirection: CompassSide; arrivalDirection: CompassSide; terrain: "level" | "stepped"; }
+
+export type ScenePrimitiveKind = "mass" | "wall" | "surface" | "slab" | "post" | "beam" | "railing" | "roof" | "path" | "asset-proxy";
+export interface SceneMaterial { color: string; roughness?: number; metalness?: number; opacity?: number; }
+export interface SceneMaterialOverride { target: string; material: SceneMaterial; }
+/** `mass` host positions are local to that mass's center; `world` uses world metres directly. */
+export type SceneObjectHost = { kind: "world" } | { kind: "mass"; massId: string; anchor?: "center" | "roof" };
+export interface SceneObject {
+  id: string;
+  kind: ScenePrimitiveKind;
+  label: string;
+  position: readonly [number, number, number];
+  rotation?: readonly [number, number, number];
+  size: readonly [number, number, number];
+  host?: SceneObjectHost;
+  material?: SceneMaterial;
+  /** Free semantic identity, never used to select a renderer implementation. */
+  intent?: string;
+}
 
 export const MASS_ROLE_VALUES = ["main-living", "bedroom-wing", "guest-pavilion", "garage", "service", "connector", "terrace", "veranda", "entry"] as const;
 export type MassRole = typeof MASS_ROLE_VALUES[number];
@@ -54,10 +80,39 @@ type Identified = { id?: string };
 export type MassGeometryOperation = Identified & (
   | { type: "recess"; facade: MassFacade; start: number; end: number; depth: number; floors?: FootprintScope; open?: boolean; postSpacing?: number }
   | { type: "projection"; facade: MassFacade; start: number; end: number; depth: number; floors?: FootprintScope; open?: boolean; postSpacing?: number }
+  /** A thin upper-storey exterior slab. Unlike `projection`, this never changes the enclosing shell footprint. */
+  | { type: "balcony"; facade: MassFacade; start: number; end: number; depth: number; floors: "upper" }
   | { type: "notch"; corner: "nw" | "ne" | "se" | "sw"; width: number; depth: number; floors?: FootprintScope }
   | { type: "entry-recess"; facade: MassFacade; width: number; depth: number; floors?: FootprintScope }
   /** `glazed: true` makes the angled cut a full-height glass wall (a glazed prow toward a view) instead of solid wall. */
   | { type: "chamfer"; corner: "nw" | "ne" | "se" | "sw"; size: number; floors?: FootprintScope; glazed?: boolean });
+export type BalconyOperation = Extract<MassGeometryOperation, { type: "balcony" }>;
+
+/**
+ * Additive architectural construction authored in a mass's local facade frame.  Assemblies do not edit the
+ * enclosing shell or its roof footprint: an Architect composes exterior architecture from these parts and the
+ * compiler only places it.  `intent` is deliberately free text so the saved document retains the Architect's
+ * semantic reason ("balcony", "portico", "pergola") without making that reason a renderer primitive.
+ */
+export type AssemblyEdge = "outer" | "start" | "end";
+/**
+ * A semantic vertical anchor.  The Architect names the architectural support; the compiler resolves its
+ * local elevation from the owning mass.  `offset` is a small local adjustment in metres, never a world Y.
+ * Legacy `level`/`elevation` fields remain readable so stored V2 documents do not change on reload.
+ */
+export type AssemblyHost =
+  | { kind: "floor"; level: number; offset?: number }
+  | { kind: "facade"; facade: MassFacade; level: number; offset?: number }
+  | { kind: "entrance"; facade: MassFacade; level?: number; offset?: number }
+  | { kind: "terrace"; level?: number; offset?: number }
+  | { kind: "roof"; offset?: number }
+  | { kind: "slab"; slabId: string; offset?: number };
+export type ArchitecturalAssemblyPart =
+  | { id: string; type: "slab"; facade: MassFacade; start: number; end: number; depth: number; level?: number; elevation?: number; host?: AssemblyHost; thickness?: number }
+  | { id: string; type: "railing"; slabId: string; edges: readonly AssemblyEdge[]; height: number; thickness?: number }
+  | { id: string; type: "post"; facade: MassFacade; at: number; depth: number; level?: number; elevation?: number; host?: AssemblyHost; height: number; size?: number }
+  | { id: string; type: "beam"; facade: MassFacade; start: number; end: number; depth: number; level?: number; elevation?: number; host?: AssemblyHost; height: number; thickness?: number };
+export interface ArchitecturalAssembly { id: string; intent: string; parts: readonly ArchitecturalAssemblyPart[]; }
 
 export interface GlazingZoneOpening extends Identified { type: "glazing-zone"; facade: MassFacade; start: number; end: number; heightRatio: number; floors?: FootprintScope; frame?: boolean; reveal?: number }
 export interface OpeningRhythm extends Identified { type: "opening-rhythm"; facade: MassFacade; count: number; width: number; height: number; sill: number; floors?: FootprintScope }
@@ -116,6 +171,8 @@ export interface MassVolume {
   operations?: readonly MassGeometryOperation[];
   /** Mass-aware facade openings, decided by the Architectural Geometry Pass. */
   openings?: readonly MassOpening[];
+  /** Additive, facade-hosted architectural construction. It never changes this mass's shell footprint. */
+  assemblies?: readonly ArchitecturalAssembly[];
   /** The design intent `operations`/`openings` were realized from. Absent on fixtures and pre-plan documents. */
   plan?: VolumePlan;
 }
@@ -152,7 +209,7 @@ export interface AppliedRoofLibraryRecipe { id: string; name: string; system: st
 export interface RoofComposition { recipes: readonly RoofRecipe[]; system?: RoofSystemChoice; libraryRecipe?: AppliedRoofLibraryRecipe; }
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
-const FOOTPRINT_OPERATION_TYPES = ["recess", "projection", "notch", "entry-recess", "chamfer"] as const;
+const FOOTPRINT_OPERATION_TYPES = ["recess", "projection", "balcony", "notch", "entry-recess", "chamfer"] as const;
 const isFacade = (value: unknown): value is MassFacade => typeof value === "string" && (MASS_FACADE_VALUES as readonly string[]).includes(value);
 const isCorner = (value: unknown): value is "nw" | "ne" | "se" | "sw" => typeof value === "string" && (CORNER_VALUES as readonly string[]).includes(value);
 const received = (value: unknown) => value === undefined ? "missing" : JSON.stringify(value);
@@ -262,7 +319,13 @@ export function validateArchitecturalDesignDocument(doc: unknown, options: Docum
         errors.push(`${operationPrefix} missing or invalid type`);
         continue;
       }
-      if (operation.type === "notch") {
+      if (operation.type === "balcony") {
+        if (!isFacade(operation.facade)) errors.push(enumError(operationPrefix, "facade", operation.facade, MASS_FACADE_VALUES));
+        if (!finiteNumber(operation.start)) errors.push(numberError(operationPrefix, "start", operation.start));
+        if (!finiteNumber(operation.end)) errors.push(numberError(operationPrefix, "end", operation.end));
+        if (!finiteNumber(operation.depth) || operation.depth <= 0) errors.push(numberError(operationPrefix, "depth", operation.depth, "a positive finite number"));
+        if (operation.floors !== "upper") errors.push(enumError(operationPrefix, "floors", operation.floors, ["upper"]));
+      } else if (operation.type === "notch") {
         if (!isCorner(operation.corner)) errors.push(enumError(operationPrefix, "corner", operation.corner, CORNER_VALUES));
         if (!finiteNumber(operation.width)) errors.push(numberError(operationPrefix, "width", operation.width));
         if (!finiteNumber(operation.depth)) errors.push(numberError(operationPrefix, "depth", operation.depth));
@@ -281,7 +344,7 @@ export function validateArchitecturalDesignDocument(doc: unknown, options: Docum
         if (!finiteNumber(operation.end)) errors.push(numberError(operationPrefix, "end", operation.end));
         if (!finiteNumber(operation.depth)) errors.push(numberError(operationPrefix, "depth", operation.depth));
       }
-      if (operation.floors !== undefined && !(FOOTPRINT_SCOPE_VALUES as readonly string[]).includes(operation.floors as string)) errors.push(enumError(operationPrefix, "floors", operation.floors, FOOTPRINT_SCOPE_VALUES));
+      if (operation.type !== "balcony" && operation.floors !== undefined && !(FOOTPRINT_SCOPE_VALUES as readonly string[]).includes(operation.floors as string)) errors.push(enumError(operationPrefix, "floors", operation.floors, FOOTPRINT_SCOPE_VALUES));
       if ((operation.type === "recess" || operation.type === "projection") && operation.open !== undefined && typeof operation.open !== "boolean") errors.push(`${operationPrefix} open must be a boolean`);
       if ((operation.type === "recess" || operation.type === "projection") && operation.postSpacing !== undefined && (!finiteNumber(operation.postSpacing) || operation.postSpacing <= 0)) errors.push(numberError(operationPrefix, "postSpacing", operation.postSpacing, "a positive finite number"));
       if (operation.type === "chamfer" && operation.glazed !== undefined && typeof operation.glazed !== "boolean") errors.push(`${operationPrefix} glazed must be a boolean`);
@@ -303,6 +366,67 @@ export function validateArchitecturalDesignDocument(doc: unknown, options: Docum
       if ((opening.type === "glazing-zone" || opening.type === "door") && opening.reveal !== undefined && !finiteNumber(opening.reveal)) errors.push(numberError(openingPrefix, "reveal", opening.reveal));
       if (record(opening) && opening.face !== undefined) errors.push(`${openingPrefix} uses unsupported face; use facade`);
       if (record(opening) && opening.centerOffset !== undefined) errors.push(`${openingPrefix} uses unsupported centerOffset; use start and end`);
+    }
+    if (mass.assemblies !== undefined && !Array.isArray(mass.assemblies)) errors.push(`${prefix} assemblies must be an array`);
+    else for (const [assemblyIndex, assembly] of (mass.assemblies ?? []).entries()) {
+      const assemblyPrefix = `${prefix} assemblies[${assemblyIndex}]`;
+      const floorCount = finiteNumber(mass.floors) ? mass.floors : 0;
+      if (!record(assembly)) { errors.push(`${assemblyPrefix} must be an object`); continue; }
+      if (typeof assembly.id !== "string" || !assembly.id) errors.push(`${assemblyPrefix} missing id`);
+      if (typeof assembly.intent !== "string" || !assembly.intent) errors.push(`${assemblyPrefix} missing intent`);
+      if (!Array.isArray(assembly.parts) || assembly.parts.length === 0) { errors.push(`${assemblyPrefix} parts must be a non-empty array`); continue; }
+      const partIds = new Set<string>();
+      for (const [partIndex, part] of assembly.parts.entries()) {
+        const partPrefix = `${assemblyPrefix} parts[${partIndex}]`;
+        if (!record(part) || typeof part.id !== "string" || !part.id) { errors.push(`${partPrefix} missing id`); continue; }
+        if (partIds.has(part.id)) errors.push(`${partPrefix} duplicate part id ${part.id}`); partIds.add(part.id);
+        if (part.type === "slab") {
+          if (!isFacade(part.facade)) errors.push(enumError(partPrefix, "facade", part.facade, MASS_FACADE_VALUES));
+          for (const field of ["start", "end", "depth"] as const) if (!finiteNumber(part[field])) errors.push(numberError(partPrefix, field, part[field]));
+          if (part.level !== undefined && !finiteNumber(part.level)) errors.push(numberError(partPrefix, "level", part.level));
+          if (part.host === undefined && part.level === undefined) errors.push(`${partPrefix} needs level when no semantic host is supplied`);
+          if (finiteNumber(part.depth) && part.depth <= 0) errors.push(`${partPrefix} depth must be greater than 0`);
+          if (finiteNumber(part.level) && (!Number.isInteger(part.level) || part.level < 0 || part.level >= floorCount)) errors.push(`${partPrefix} level must be an existing integer floor`);
+          if (part.elevation !== undefined && !finiteNumber(part.elevation)) errors.push(numberError(partPrefix, "elevation", part.elevation));
+          if (part.thickness !== undefined && (!finiteNumber(part.thickness) || part.thickness <= 0)) errors.push(numberError(partPrefix, "thickness", part.thickness, "a positive finite number"));
+        } else if (part.type === "railing") {
+          if (typeof part.slabId !== "string" || !part.slabId) errors.push(`${partPrefix} missing slabId`);
+          if (!Array.isArray(part.edges) || !part.edges.length || !part.edges.every((edge) => edge === "outer" || edge === "start" || edge === "end")) errors.push(`${partPrefix} edges must be one or more of: outer, start, end`);
+          if (!finiteNumber(part.height) || part.height <= 0) errors.push(numberError(partPrefix, "height", part.height, "a positive finite number"));
+          if (part.thickness !== undefined && (!finiteNumber(part.thickness) || part.thickness <= 0)) errors.push(numberError(partPrefix, "thickness", part.thickness, "a positive finite number"));
+        } else if (part.type === "post") {
+          if (!isFacade(part.facade)) errors.push(enumError(partPrefix, "facade", part.facade, MASS_FACADE_VALUES));
+          for (const field of ["at", "depth", "height"] as const) if (!finiteNumber(part[field])) errors.push(numberError(partPrefix, field, part[field]));
+          if (part.level !== undefined && !finiteNumber(part.level)) errors.push(numberError(partPrefix, "level", part.level));
+          if (part.host === undefined && part.level === undefined) errors.push(`${partPrefix} needs level when no semantic host is supplied`);
+          if (finiteNumber(part.level) && (!Number.isInteger(part.level) || part.level < 0 || part.level >= floorCount)) errors.push(`${partPrefix} level must be an existing integer floor`);
+          if (part.elevation !== undefined && !finiteNumber(part.elevation)) errors.push(numberError(partPrefix, "elevation", part.elevation));
+          if (part.size !== undefined && (!finiteNumber(part.size) || part.size <= 0)) errors.push(numberError(partPrefix, "size", part.size, "a positive finite number"));
+        } else if (part.type === "beam") {
+          if (!isFacade(part.facade)) errors.push(enumError(partPrefix, "facade", part.facade, MASS_FACADE_VALUES));
+          for (const field of ["start", "end", "depth", "height"] as const) if (!finiteNumber(part[field])) errors.push(numberError(partPrefix, field, part[field]));
+          if (part.level !== undefined && !finiteNumber(part.level)) errors.push(numberError(partPrefix, "level", part.level));
+          if (part.host === undefined && part.level === undefined) errors.push(`${partPrefix} needs level when no semantic host is supplied`);
+          if (finiteNumber(part.level) && (!Number.isInteger(part.level) || part.level < 0 || part.level >= floorCount)) errors.push(`${partPrefix} level must be an existing integer floor`);
+          if (part.thickness !== undefined && (!finiteNumber(part.thickness) || part.thickness <= 0)) errors.push(numberError(partPrefix, "thickness", part.thickness, "a positive finite number"));
+        } else errors.push(`${partPrefix} missing or invalid type; expected one of: slab, railing, post, beam`);
+        if (record(part) && part.host !== undefined) {
+          if (!record(part.host) || !["floor", "facade", "entrance", "terrace", "roof", "slab"].includes(part.host.kind as string)) {
+            errors.push(`${partPrefix} host missing or invalid kind`);
+          } else {
+            const host = part.host;
+            if (host.offset !== undefined && !finiteNumber(host.offset)) errors.push(numberError(`${partPrefix} host`, "offset", host.offset));
+            if ((host.kind === "floor" || host.kind === "facade") && (!finiteNumber(host.level) || !Number.isInteger(host.level) || host.level < 0 || host.level >= floorCount)) errors.push(`${partPrefix} host level must be an existing integer floor`);
+            if ((host.kind === "facade" || host.kind === "entrance") && !isFacade(host.facade)) errors.push(enumError(`${partPrefix} host`, "facade", host.facade, MASS_FACADE_VALUES));
+            if ((host.kind === "entrance" || host.kind === "terrace") && host.level !== undefined && (!finiteNumber(host.level) || !Number.isInteger(host.level) || host.level < 0 || host.level >= floorCount)) errors.push(`${partPrefix} host level must be an existing integer floor`);
+            if (host.kind === "slab" && (typeof host.slabId !== "string" || !host.slabId)) errors.push(`${partPrefix} host missing slabId`);
+          }
+        }
+      }
+      for (const part of assembly.parts) if (record(part)) {
+        const slabId = part.type === "railing" ? part.slabId : record(part.host) && part.host.kind === "slab" ? part.host.slabId : undefined;
+        if (typeof slabId === "string" && !partIds.has(slabId)) errors.push(`${assemblyPrefix} ${part.id} references unknown slab ${slabId}`);
+      }
     }
     if (mass.plan !== undefined) {
       const planPrefix = `${prefix} plan`;
@@ -365,6 +489,46 @@ export function validateArchitecturalDesignDocument(doc: unknown, options: Docum
     if (typeof roof.massId === "string" && roof.massId) roofedMassIds.add(roof.massId);
   }
   if (options.requireRoofForEveryMass) for (const massId of ids) if (!roofedMassIds.has(massId)) errors.push(`missing roof recipe for mass: ${massId}`);
+  const sceneIds = new Set<string>();
+  if (doc.sceneObjects !== undefined && !Array.isArray(doc.sceneObjects)) errors.push("sceneObjects must be an array");
+  for (const [index, object] of (Array.isArray(doc.sceneObjects) ? doc.sceneObjects : []).entries()) {
+    const prefix = `sceneObjects[${index}]`;
+    if (!record(object)) { errors.push(`${prefix} must be an object`); continue; }
+    if (typeof object.id !== "string" || !object.id) errors.push(`${prefix} missing id`);
+    else if (sceneIds.has(object.id)) errors.push(`${prefix} duplicate id ${object.id}`); else sceneIds.add(object.id);
+    if (!(["mass", "wall", "surface", "slab", "post", "beam", "railing", "roof", "path", "asset-proxy"] as const).includes(object.kind as never)) errors.push(`${prefix} invalid kind`);
+    if (typeof object.label !== "string" || !object.label) errors.push(`${prefix} missing label`);
+    for (const field of ["position", "size"] as const) {
+      const value = object[field];
+      if (!Array.isArray(value) || value.length !== 3 || !value.every(finiteNumber)) errors.push(`${prefix} ${field} must be three finite numbers`);
+    }
+    if (Array.isArray(object.size) && object.size.every(finiteNumber) && object.size.some((n) => n <= 0)) errors.push(`${prefix} size must be positive`);
+    if (object.rotation !== undefined && (!Array.isArray(object.rotation) || object.rotation.length !== 3 || !object.rotation.every(finiteNumber))) errors.push(`${prefix} rotation must be three finite numbers`);
+    if (object.host !== undefined) {
+      if (!record(object.host) || (object.host.kind !== "world" && object.host.kind !== "mass")) errors.push(`${prefix} host invalid`);
+      else if (object.host.kind === "mass" && (typeof object.host.massId !== "string" || !declaredMassIds.has(object.host.massId))) errors.push(`${prefix} host references unknown mass`);
+      else if (object.host.kind === "mass" && object.host.anchor !== undefined && object.host.anchor !== "center" && object.host.anchor !== "roof") errors.push(`${prefix} host anchor invalid`);
+    }
+    if (object.material !== undefined) errors.push(...sceneMaterialErrors(object.material, `${prefix} material`));
+  }
+  if (doc.materialOverrides !== undefined && !Array.isArray(doc.materialOverrides)) errors.push("materialOverrides must be an array");
+  for (const [index, override] of (Array.isArray(doc.materialOverrides) ? doc.materialOverrides : []).entries()) {
+    const prefix = `materialOverrides[${index}]`;
+    if (!record(override) || typeof override.target !== "string" || !override.target) errors.push(`${prefix} missing target`);
+    else if (!/^mass:[\w-]+$|^scene:[\w-]+$/.test(override.target)) errors.push(`${prefix} target must be a stable mass or scene id`);
+    else if (override.target.startsWith("mass:") && !declaredMassIds.has(override.target.slice(5))) errors.push(`${prefix} references unknown mass target`);
+    else if (override.target.startsWith("scene:") && !sceneIds.has(override.target.slice(6))) errors.push(`${prefix} references unknown scene target`);
+    if (!record(override) || !record(override.material)) errors.push(`${prefix} missing material`);
+    else errors.push(...sceneMaterialErrors(override.material, `${prefix} material`));
+  }
+  return errors;
+}
+
+function sceneMaterialErrors(value: unknown, prefix: string): string[] {
+  if (!record(value)) return [`${prefix} must be an object`];
+  const errors: string[] = [];
+  if (typeof value.color !== "string" || !/^#[0-9a-fA-F]{6}$/.test(value.color)) errors.push(`${prefix} color must be a #RRGGBB value`);
+  for (const field of ["roughness", "metalness", "opacity"] as const) if (value[field] !== undefined && !finiteNumber(value[field])) errors.push(numberError(prefix, field, value[field]));
   return errors;
 }
 

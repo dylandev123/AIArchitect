@@ -39,6 +39,12 @@ interface SceneStore {
    */
   v2OnlyMode: boolean;
   setV2OnlyMode: (enabled: boolean) => void;
+  /** DEV-only V3 heightfield bounds/semantic overlay. Never persisted or active in production. */
+  v3TerrainDebug: boolean;
+  setV3TerrainDebug: (enabled: boolean) => void;
+  /** DEV-only V3 render diagnostics: hide the heightfield/ground, tint every object, outline architecture bounds. */
+  v3Diagnostics: { hideTerrain: boolean; debugMaterial: boolean; architectureBounds: boolean };
+  setV3Diagnostics: (patch: Partial<{ hideTerrain: boolean; debugMaterial: boolean; architectureBounds: boolean }>) => void;
 
   /**
    * The room the user has stepped into, or null for the whole house. This one value drives the camera, the cutaway
@@ -88,6 +94,10 @@ export const useSceneStore = create<SceneStore>((set) => ({
   setIsolateArchitectureMassId: (isolateArchitectureMassId) => set({ isolateArchitectureMassId }),
   v2OnlyMode: false,
   setV2OnlyMode: (v2OnlyMode) => set({ v2OnlyMode }),
+  v3TerrainDebug: false,
+  setV3TerrainDebug: (v3TerrainDebug) => set({ v3TerrainDebug }),
+  v3Diagnostics: { hideTerrain: false, debugMaterial: false, architectureBounds: false },
+  setV3Diagnostics: (patch) => set((s) => ({ v3Diagnostics: { ...s.v3Diagnostics, ...patch } })),
 
   focusedRoom: null,
   cutawayLevel: null,

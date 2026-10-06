@@ -1,4 +1,5 @@
 import { FEATURE_JSON_KEY, FEATURE_TYPES } from "./features/featureTypes";
+import { isV3ProjectRoot } from "@/lib/v3/scene";
 
 /**
  * True when the project JSON has no site features at all — i.e. it is a fresh project that
@@ -13,6 +14,7 @@ export function isBlankSite(jsonText: string): boolean {
     return false;
   }
   if (typeof root !== "object" || root === null || Array.isArray(root)) return false;
+  if (isV3ProjectRoot(root)) return root.v3Scene.objects.length === 0;
   const record = root as Record<string, unknown>;
   return FEATURE_TYPES.every((type) => {
     const arr = record[FEATURE_JSON_KEY[type]];

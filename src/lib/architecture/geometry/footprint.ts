@@ -104,7 +104,8 @@ const FACADE_CORNERS: Record<MassFacade, { atEnd: Corner }> = {
  */
 export function buildFloorFootprint(width: number, depth: number, operations: readonly MassGeometryOperation[], floorIndex: number): FloorFootprint {
   const warnings: string[] = [];
-  const ops = operations.filter((op) => appliesToFloor(op.floors, floorIndex));
+  // A balcony is an exterior slab attached to this shell, not a footprint edit. The mass wall loop stays intact.
+  const ops = operations.filter((op) => op.type !== "balcony" && appliesToFloor(op.floors, floorIndex));
 
   const notches: Partial<Record<Corner, { width: number; depth: number }>> = {};
   const chamfers: Partial<Record<Corner, { size: number; glazed: boolean }>> = {};

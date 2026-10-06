@@ -176,7 +176,7 @@ describe("the Architect's facade span contract: start/end are fractions 0..1 of 
       Object.values(node).forEach(walk);
     };
     walk(await asSchema(architectOutputSchema).jsonSchema);
-    expect(spans).toHaveLength(8); // recess, projection, glazing-zone, door × start/end
+    expect(spans).toHaveLength(14); // shell/opening spans plus additive slab and beam spans
     for (const span of spans) {
       expect(span).toMatchObject({ type: "number", minimum: 0, maximum: 1 });
       expect(span.description).toMatch(/normalized fraction 0\.\.1 along the owning facade, NOT meters/);

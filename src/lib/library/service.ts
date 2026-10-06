@@ -3,7 +3,7 @@ import { inferScaleFromBrief } from "@/lib/house/scale";
 import type { AssetSpec } from "@/lib/assets/native/spec";
 import { buildPlannedAssetRequest, PROVIDERS } from "@/lib/assetGeneration/providers";
 import type { AssetGenerationProvider } from "@/lib/assetGeneration/types";
-import type { AssetPlan, AssetRequest, DesignRecipe, KnowledgeNeed, KnowledgeStatus, Need, NeedStatus, PlannedAsset } from "@/types/library";
+import type { AssetPlan, AssetRequest, CapabilityNeed, DesignRecipe, KnowledgeNeed, KnowledgeStatus, Need, NeedStatus, PlannedAsset } from "@/types/library";
 import { matchKnowledge } from "./knowledge/catalog";
 import { detectKnowledgeSignals, recordKnowledgeSignal } from "./knowledge/knowledge";
 import { canTransition, recordRequest } from "./needs";
@@ -123,6 +123,34 @@ export function recordPriorityAssetNeed(request: AssetRequest): Promise<Need | u
   return safely("additive asset need recording", () => mutateLibrary((s) => {
     const need = recordRequest(s.needs, request);
     return { put: [{ kind: "need" as const, data: need }], result: need };
+  }), undefined);
+}
+
+/** Records an unsupported bounded spatial edit without attempting a substitute or a network/model call. */
+export function recordSpatialReflowCapabilityNeed(desiredBehaviour: string, projectId: string | null, brief: string): Promise<CapabilityNeed | undefined> {
+  return recordArchitectEditCapabilityNeed("bounded-spatial-reflow", "Bounded spatial reflow", ["dependency graph", "before/after geometry", "minimal displacement"], desiredBehaviour, projectId, brief);
+}
+
+/** Records a follow-up design request the Architect could not express with its current vocabulary; nothing is substituted. */
+export function recordArchitectVocabularyCapabilityNeed(desiredBehaviour: string, projectId: string | null, brief: string): Promise<CapabilityNeed | undefined> {
+  return recordArchitectEditCapabilityNeed("architect-edit-vocabulary", "Architect edit vocabulary", ["requested element", "host/site relationship", "geometry primitives"], desiredBehaviour, projectId, brief);
+}
+
+function recordArchitectEditCapabilityNeed(operation: string, name: string, parameters: string[], desiredBehaviour: string, projectId: string | null, brief: string): Promise<CapabilityNeed | undefined> {
+  return safely(`${operation} capability need`, () => mutateLibrary((snapshot) => {
+    const id = `capability-${operation}`;
+    const now = new Date().toISOString();
+    const existing = snapshot.capabilityNeeds.find((need) => need.id === id);
+    const need: CapabilityNeed = {
+      id, capabilityId: operation, name, category: "site", desiredBehaviour,
+      parameters, requestedCount: (existing?.requestedCount ?? 0) + 1,
+      firstRequested: existing?.firstRequested ?? now, lastRequested: now,
+      projectRefs: [...(existing?.projectRefs ?? []), { projectId, at: now, brief: brief.slice(0, 240), stage: "architect-edit" }].slice(-12),
+      recipeIds: existing?.recipeIds ?? [], stages: [...new Set([...(existing?.stages ?? []), "architect-edit"])],
+      priority: Math.min(100, (existing?.priority ?? 0) + 10), fallback: "Keep the saved property unchanged; do not squeeze, overlap, delete, or substitute site geometry.",
+      status: "missing", phrasings: [...new Set([...(existing?.phrasings ?? []), desiredBehaviour])].slice(-12),
+    };
+    return { put: [{ kind: "capabilityNeed" as const, data: need }], result: need };
   }), undefined);
 }
 

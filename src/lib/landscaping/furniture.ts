@@ -3,6 +3,8 @@ import { createRng, hashSeed } from "./rng";
 import { getWallAnchor, offsetOutward, pointOnWall } from "@/lib/house/wallAnchor";
 import { FLOOR_THICKNESS, LEVEL_HEIGHT, PAVING_THICKNESS } from "@/lib/house/constants";
 import { getPoolDeckFootprint } from "@/lib/house/features/pools";
+import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
+import { sourceFor } from "@/lib/outdoor/ownership";
 
 export interface FurnitureCluster {
   id: string;
@@ -12,6 +14,14 @@ export interface FurnitureCluster {
 
 /** A table-and-four-chairs set (see PatioFurnitureSet) spans ~2.5 m whichever way it turns; this leaves a margin. */
 const CLUSTER_ROOM = 3;
+// Keep these authored dimensions aligned with PatioFurnitureSet. They describe
+// the semantic placement bounds, not renderer meshes.
+const TABLE_RADIUS = .55;
+const TABLE_HEIGHT = .72;
+const CHAIR_SIZE = .42;
+const CHAIR_HEIGHT = .42;
+const RING_RADIUS = .95;
+const CHAIR_ANGLES = [0, Math.PI / 2, Math.PI, -Math.PI / 2];
 
 export type Rect = { x0: number; x1: number; z0: number; z1: number };
 const touches = (a: Rect, b: Rect) => a.x0 < b.x1 && a.x1 > b.x0 && a.z0 < b.z1 && a.z1 > b.z0;
@@ -92,4 +102,37 @@ export function generateFurnitureClusters(site: SiteConfig, furnished: readonly 
   });
 
   return clusters;
+}
+
+/**
+ * The scenery layer historically drew these sets from geometry alone.  This
+ * projection gives the exact same deterministic set durable asset identities
+ * when an edit needs to address it.  It is deliberately data-only: rendering
+ * remains responsible for how a procedural or GLB asset looks.
+ */
+export function persistentFurniturePlacements(site: SiteConfig): OutdoorAssetPlacement[] {
+  const rotate = (center: FurnitureCluster["center"], yaw: number, x: number, z: number): [number, number, number] => [
+    center[0] + x * Math.cos(yaw) + z * Math.sin(yaw), center[1], center[2] - x * Math.sin(yaw) + z * Math.cos(yaw),
+  ];
+  return generateFurnitureClusters(site).flatMap((cluster) => {
+    const supportKind = cluster.id.startsWith("deck-") ? "deck" : cluster.id.startsWith("balcony-") ? "balcony" : "patio";
+    const support = { kind: supportKind, elevation: cluster.center[1] } as const;
+    const tableId = `outdoor-scenery-${cluster.id}-table`;
+    const group = { id: `outdoor-scenery-group-${cluster.id}`, anchor: [...cluster.center] as [number, number, number], rotation: [0, cluster.rotationY, 0] as [number, number, number] };
+    const table: OutdoorAssetPlacement = {
+      id: tableId, assetId: "procedural-v2-table", parentSpaceId: cluster.id, category: "furniture", role: "side-table",
+      position: cluster.center, rotation: [0, cluster.rotationY, 0], scale: 1, dimensions: { width: TABLE_RADIUS * 2, depth: TABLE_RADIUS * 2, height: TABLE_HEIGHT },
+      localBounds: { min: [-TABLE_RADIUS, 0, -TABLE_RADIUS], max: [TABLE_RADIUS, TABLE_HEIGHT, TABLE_RADIUS] }, support,
+      source: sourceFor(tableId, "renderer-derived", "landscaping/furniture"),
+      group: { ...group, localPosition: [0, 0, 0], localRotation: [0, 0, 0], localScale: 1, role: "side-table" },
+    };
+    const chairs = CHAIR_ANGLES.map((angle, index): OutdoorAssetPlacement => ({
+      id: `outdoor-scenery-${cluster.id}-chair-${index}`, assetId: "procedural-v2-chair", parentSpaceId: cluster.id, category: "furniture", role: "lounge-armchair",
+      position: rotate(cluster.center, cluster.rotationY, Math.sin(angle) * RING_RADIUS, Math.cos(angle) * RING_RADIUS), rotation: [0, cluster.rotationY + angle + Math.PI, 0], scale: 1,
+      dimensions: { width: CHAIR_SIZE, depth: CHAIR_SIZE, height: CHAIR_HEIGHT + CHAIR_SIZE }, localBounds: { min: [-CHAIR_SIZE / 2, 0, -CHAIR_SIZE / 2], max: [CHAIR_SIZE / 2, CHAIR_HEIGHT + CHAIR_SIZE, CHAIR_SIZE / 2] }, support,
+      source: sourceFor(`outdoor-scenery-${cluster.id}-chair-${index}`, "renderer-derived", "landscaping/furniture"),
+      group: { ...group, localPosition: [Math.sin(angle) * RING_RADIUS, 0, Math.cos(angle) * RING_RADIUS], localRotation: [0, angle + Math.PI, 0], localScale: 1, role: "lounge-armchair", facingTargetId: tableId },
+    }));
+    return [table, ...chairs];
+  });
 }

@@ -5,6 +5,7 @@ import type { ModelStatus } from "./modelCache";
 import { resolveCurrentAssetId } from "./versions";
 import { validateBuilding } from "@/lib/house/features/buildings";
 import { sitePlanSchema } from "@/lib/architecture/sitePlanContract";
+import type { SceneMaterial } from "@/lib/architecture/document";
 
 /**
  * Semantic replacement, GLB side. A project feature keeps its own type, id and config; an optional `assetId` on it
@@ -41,6 +42,7 @@ export interface AssetPlacement {
   /** The feature's own footprint: the space the model must fit inside. */
   width: number;
   depth: number;
+  material?: SceneMaterial;
 }
 
 /** Feature ids are the array index in the project JSON, so a dropped (invalid) entry never shifts the others. */
@@ -122,7 +124,7 @@ export function placementsFromOutdoor(raw: unknown): AssetPlacement[] {
   if (!Array.isArray(raw)) return [];
   return raw.flatMap((p) => {
     if (!p || typeof p.id !== 'string' || !p.id.startsWith('outdoor-') || typeof p.assetId !== 'string' || !ASSET_CATEGORIES.includes(p.category) || !Array.isArray(p.position) || p.position.length !== 3 || !Array.isArray(p.rotation) || p.rotation.length !== 3 || ![...p.position,...p.rotation,p.scale,p.dimensions?.width,p.dimensions?.depth,p.dimensions?.height].every(Number.isFinite) || p.scale <= 0 || p.dimensions.width <= 0 || p.dimensions.depth <= 0 || p.dimensions.height <= 0) return [];
-    return [{ featureId:p.id,trackingId:outdoorTrackingId(p),supportId:p.relationship?.type === "above" ? p.relationship.targetId : undefined,assetId:p.assetId,category:p.category,x:p.position[0],y:p.position[1],z:p.position[2],yaw:p.rotation[1],scale:p.scale,height:p.dimensions.height,width:p.dimensions.width,depth:p.dimensions.depth }];
+    return [{ featureId:p.id,trackingId:outdoorTrackingId(p),supportId:p.relationship?.type === "above" ? p.relationship.targetId : undefined,assetId:p.assetId,category:p.category,x:p.position[0],y:p.position[1],z:p.position[2],yaw:p.rotation[1],scale:p.scale,height:p.dimensions.height,width:p.dimensions.width,depth:p.dimensions.depth,material:p.material }];
   });
 }
 

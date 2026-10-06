@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useArchitectureDebugStore } from "@/store/useArchitectureDebugStore";
@@ -17,6 +17,14 @@ import { useRenderFlightStore } from "@/store/useRenderFlightStore";
 import { auditHash, documentAudit, primitiveBounds, primitiveSignature } from "@/lib/architecture/renderAudit";
 import { applyV2OnlyMode } from "@/lib/architecture/v2OnlyMode";
 import { geometricGraphErrors, sitePlanSchema } from "@/lib/architecture/sitePlanContract";
+import { buildV3TerrainSurface, isV3ProjectRoot } from "@/lib/v3/scene";
+import { auditV3SiteHierarchy, resolveSiteHierarchy, routeGrade } from "@/lib/v3/siteHierarchy";
+import { upgradeLegacyV3SiteHierarchy, type V3SiteHierarchyMigrationReport } from "@/lib/v3/siteHierarchyMigration";
+import { getObjectBaseY, getRootSupportId, getSupportSurfaceY } from "@/lib/v3/elevation";
+import { supportEndpoints } from "@/lib/v3/supportGraph";
+import { computeV3CameraFit, diagnoseV3Scene } from "@/lib/v3/presentation";
+import { compileV3Scene } from "@/lib/v3/scene";
+import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
 
 type JsonRecord = Record<string, unknown>;
 const isRecord = (value: unknown): value is JsonRecord => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -115,6 +123,31 @@ function V2OnlyModeToggle() {
       <p className="text-neutral-600">When on (and a document exists), legacy house/building geometry cannot affect the visible building — only genuine site features (pools, driveways, landscaping, terrain-adjacent walls) are merged back in. Remaining legacy dependencies are logged to the console as [V2-ONLY VIOLATION].</p>
     </section>
   );
+}
+
+/** Read-only contract evidence for an otherwise recoverable Terra response. */
+function V3FailedPreviewPanel({ projectId }: { projectId: string }) {
+  const candidate = useV3FailedPreviewStore((s) => s.candidate);
+  const active = useV3FailedPreviewStore((s) => s.active);
+  const render = useV3FailedPreviewStore((s) => s.render);
+  const clear = useV3FailedPreviewStore((s) => s.clear);
+  const selectKey = useSceneStore((s) => s.selectKey);
+  const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
+  if (candidate?.projectId !== projectId) return null;
+  const { diagnostics } = candidate;
+  return <section className="space-y-1.5 rounded-lg border border-red-500/30 bg-red-500/[0.06] p-2.5">
+    <h3 className="font-semibold uppercase tracking-widest text-red-200">V3 Preview — Invalid / Not Saved</h3>
+    <p className="text-[10px] text-red-100/70">{candidate.scene.objects.length} compiler-safe objects. This scene exists only in memory and is read-only.</p>
+    <div className="flex flex-wrap gap-1.5">
+      {!active && <button type="button" onClick={() => { render(projectId); triggerCameraPreset("site"); }} className="rounded-full border border-red-300/40 px-2.5 py-1 text-[10px] font-semibold text-red-100 hover:bg-red-300/10">Render failed Terra preview</button>}
+      <button type="button" onClick={clear} className="rounded-full border border-white/15 px-2.5 py-1 text-[10px] font-semibold text-neutral-200 hover:bg-white/10">Clear failed preview</button>
+    </div>
+    {diagnostics.strictValidationErrors.map((error, index) => <p key={`${error}-${index}`} className="text-[10px] text-red-300">strict: {error}</p>)}
+    {diagnostics.unsupportedObjectIds.length > 0 && <div className="text-[10px] text-amber-200">unsupported geometry: {diagnostics.unsupportedObjectIds.map((objectId) => <button key={objectId} type="button" onClick={() => selectKey(objectId)} className="ml-1 underline decoration-amber-200/50 hover:text-amber-50">{objectId}</button>)}</div>}
+    {diagnostics.skippedObjectIds.length > 0 && <p className="text-[10px] text-amber-200">skipped objects: {diagnostics.skippedObjectIds.join(", ")}</p>}
+    {diagnostics.skippedRelationshipIds.length > 0 && <p className="text-[10px] text-amber-200">skipped relationships: {diagnostics.skippedRelationshipIds.join(", ")}</p>}
+    {diagnostics.normalizedFields.length > 0 && <details className="text-[10px] text-neutral-300"><summary className="cursor-pointer text-neutral-400">normalized / omitted fields ({diagnostics.normalizedFields.length})</summary>{diagnostics.normalizedFields.map((field, index) => <p key={`${field}-${index}`} className="mt-0.5">{field}</p>)}</details>}
+  </section>;
 }
 
 /** DEV-only visual isolation controls. They only change scene visibility, never the document or compiler. */
@@ -255,6 +288,172 @@ function FixtureLoadButton({ fixtureKey, label }: { fixtureKey: keyof typeof ARC
   );
 }
 
+/** Read-only V3 compiler trace. The checkbox is deliberately dev-only and affects no persisted scene data. */
+function V3TerrainDebugPanel({ json }: { json: string | undefined }) {
+  const enabled = useSceneStore((s) => s.v3TerrainDebug);
+  const setEnabled = useSceneStore((s) => s.setV3TerrainDebug);
+  const report = useMemo(() => {
+    try {
+      const raw = JSON.parse(json ?? "{}");
+      if (!isV3ProjectRoot(raw)) return null;
+      const terrain = buildV3TerrainSurface(raw.v3Scene);
+      const resolved = resolveSiteHierarchy(raw.v3Scene);
+      const issues = auditV3SiteHierarchy(raw.v3Scene);
+      return {
+        terrain,
+        derived: resolved.derived,
+        levels: resolved.hierarchy.levels,
+        connections: resolved.hierarchy.connections.map((connection) => ({ ...connection, grade: routeGrade(connection.route) })),
+        issues,
+        rows: raw.v3Scene.objects.map((object) => {
+          const objectBaseY = getObjectBaseY(object), candidateSurfaceY = getSupportSurfaceY(object.support, object.transform.position[0], object.transform.position[2], raw.v3Scene);
+          const terrainFollowing = object.support?.kind === "terrain" || object.metadata?.followsTerrain === true || object.type === "path" || object.type === "fence" || object.type === "retaining-wall";
+          const terrainPoints = terrainFollowing ? [[object.transform.position[0], object.transform.position[2]] as [number, number], ...supportEndpoints(object)] : [];
+          return {
+          id: object.id, role: object.semanticRole, type: object.type,
+          bounds: object.dimensions, elevation: terrain.heightAt(object.transform.position[0], object.transform.position[2]), objectBaseY, candidateSurfaceY,
+          verticalGap: candidateSurfaceY === undefined ? undefined : Math.abs(objectBaseY - candidateSurfaceY), owningLevelId: object.support?.levelId, rootSupportId: getRootSupportId(object.support, raw.v3Scene),
+          terrainSamples: terrainPoints.map(([x, z]) => terrain.heightAt(x, z)),
+          support: object.support?.levelId ?? object.support?.objectId ?? (object.type === "path" || object.type === "fence" || object.type === "retaining-wall" ? "terrain sampled" : object.hostId ?? "missing"),
+          };
+        }),
+      };
+    } catch { return null; }
+  }, [json]);
+  if (!report) return null;
+  return <section className="space-y-1.5">
+    <div className="flex items-center justify-between gap-2">
+      <h3 className="font-semibold uppercase tracking-widest text-neutral-600">V3 terrain compiler (dev only)</h3>
+      <button type="button" onClick={() => setEnabled(!enabled)} className={"rounded-full border px-2 py-1 text-[10px] font-semibold " + (enabled ? "border-fuchsia-400/60 bg-fuchsia-500/15 text-fuchsia-200" : "border-white/[0.1] text-neutral-400")}>
+        {enabled ? "Hide bounds" : "Show bounds"}
+      </button>
+    </div>
+    <p className="text-neutral-500">{report.derived ? "Legacy-derived hierarchy" : "Persisted hierarchy"} · {report.levels.length} levels · {report.connections.length} connections · {report.terrain.vertices.length / 9} terrain triangles.</p>
+    <div className="max-h-32 space-y-1 overflow-auto">
+      {report.levels.map((level) => <div key={level.id} className="rounded border border-fuchsia-400/20 px-2 py-1 text-fuchsia-200">{level.id} · {level.elevation.toFixed(1)}m · {level.supportType}{level.access ? ` · ${level.access}` : ""}</div>)}
+      {report.connections.map((connection) => <div key={connection.id} className="rounded border border-cyan-400/20 px-2 py-1 text-cyan-200">{connection.id} · {connection.fromLevelId} → {connection.toLevelId} · {(connection.grade * 100).toFixed(1)}%</div>)}
+      {report.issues.map((issue) => <div key={issue.id} className={issue.severity === "error" ? "text-red-300" : "text-amber-300"}>{issue.code}: {issue.message}</div>)}
+    </div>
+    <div className="max-h-48 space-y-1 overflow-auto">
+      {report.rows.map((row) => <div key={row.id} className="rounded border border-white/[0.06] px-2 py-1 text-[10px] text-neutral-400">
+        <span className="font-medium text-neutral-200">{row.id}</span> · {row.role} · {row.type} · base {row.objectBaseY.toFixed(2)} · support {row.candidateSurfaceY?.toFixed(2) ?? "—"} · gap {row.verticalGap?.toFixed(2) ?? "—"} · level {row.owningLevelId ?? "—"} · root {row.rootSupportId} · terrain {row.terrainSamples.length ? row.terrainSamples.map((sample) => sample.toFixed(2)).join(" / ") : row.elevation.toFixed(2)} · {row.support}
+      </div>)}
+    </div>
+  </section>;
+}
+
+const fmt3 = (v: readonly number[]) => v.map((n) => n.toFixed(1)).join(", ");
+/** DEV-only: proves from the saved scene alone (no model call) whether objects compile, are framed, and sit above terrain. */
+function V3RenderDiagnosticsPanel({ json }: { json: string | undefined }) {
+  const flags = useSceneStore((s) => s.v3Diagnostics);
+  const setFlags = useSceneStore((s) => s.setV3Diagnostics);
+  const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
+  const report = useMemo(() => {
+    try {
+      const raw = JSON.parse(json ?? "{}");
+      if (!isV3ProjectRoot(raw)) return null;
+      const diagnosis = diagnoseV3Scene(raw.v3Scene, compileV3Scene(raw.v3Scene));
+      return { diagnosis, fit: computeV3CameraFit(diagnosis.architectureBounds) };
+    } catch { return null; }
+  }, [json]);
+  if (!report) return null;
+  const { diagnosis: d, fit } = report;
+  const toggle = (key: keyof typeof flags, label: string) => (
+    <button type="button" onClick={() => setFlags({ [key]: !flags[key] })} className={"rounded-full border px-2 py-1 text-[10px] font-semibold " + (flags[key] ? "border-cyan-400/60 bg-cyan-500/15 text-cyan-200" : "border-white/[0.1] text-neutral-400")}>{label}</button>
+  );
+  const hidden = [...d.notCompiled.map((id) => `${id}: not compiled`), ...d.nonFinite.map((id) => `${id}: non-finite`), ...d.zeroScale.map((id) => `${id}: ~zero scale`), ...d.transparent.map((id) => `${id}: opacity 0`), ...d.belowGroundPlane.map((id) => `${id}: below ground plane`)];
+  return <section className="space-y-1.5">
+    <h3 className="font-semibold uppercase tracking-widest text-neutral-600">V3 render diagnostics (dev only)</h3>
+    <div className="flex flex-wrap gap-1.5">
+      {toggle("hideTerrain", "Hide terrain")}
+      {toggle("debugMaterial", "Debug material")}
+      {toggle("architectureBounds", "Architecture bounds")}
+      <button type="button" onClick={() => triggerCameraPreset("site")} className="rounded-full border border-white/[0.1] px-2 py-1 text-[10px] font-semibold text-neutral-300 hover:bg-white/[0.06]">Frame V3 architecture</button>
+    </div>
+    <p className="text-neutral-500">{d.objectCount} objects → {d.compiledPrimitiveCount} primitives · {d.buriedVolumes} buried volume(s)</p>
+    <p className="text-neutral-500">site {fmt3(d.siteBounds.min)} → {fmt3(d.siteBounds.max)}</p>
+    {d.terrainBounds && <p className="text-neutral-500">terrain {fmt3(d.terrainBounds.min)} → {fmt3(d.terrainBounds.max)}</p>}
+    <p className="text-neutral-500">architecture ({d.architectureBounds.source}) {fmt3(d.architectureBounds.min)} → {fmt3(d.architectureBounds.max)}</p>
+    {d.compiledBounds && <p className="text-neutral-500">compiled {fmt3(d.compiledBounds.min)} → {fmt3(d.compiledBounds.max)}</p>}
+    <p className="text-neutral-500">camera target {fmt3(fit.target.toArray())} · position {fmt3(fit.position.toArray())}</p>
+    {d.volumes.map((v) => <div key={v.id} className={"text-[10px] " + (v.buried ? "text-red-300" : "text-neutral-400")}>{v.id} · base {v.baseY.toFixed(2)} · top {v.topY.toFixed(2)} · terrain {v.terrainY.toFixed(2)} · visible {v.visibleHeight.toFixed(2)}</div>)}
+    {hidden.length > 0 && <div className="max-h-24 overflow-auto text-[10px] text-amber-300">{hidden.map((line) => <div key={line}>{line}</div>)}</div>}
+  </section>;
+}
+
+const stringList = (value: unknown) => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+const displayText = (value: unknown, fallback = "missing") => typeof value === "string" ? value : fallback;
+const displayNumber = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? value : 0;
+
+/** Defensive display adapter for reports that may predate the current migration diagnostics shape. */
+export function V3SiteHierarchyMigrationReportDetails({ report }: { report: unknown }) {
+  const data = isRecord(report) ? report : {};
+  const groundingIssues = isRecord(data.groundingIssues) ? data.groundingIssues : {};
+  const improvements = isRecord(data.improvements) ? data.improvements : {};
+  const levels = Array.isArray(data.levels) ? data.levels.filter(isRecord) : [];
+  const connections = Array.isArray(data.connections) ? data.connections.filter(isRecord) : [];
+  const assignments = Array.isArray(data.supportAssignments) ? data.supportAssignments.filter(isRecord) : [];
+  const supportGraph = Array.isArray(data.supportGraph) ? data.supportGraph.filter(isRecord) : [];
+  const before = stringList(groundingIssues.before);
+  const after = stringList(groundingIssues.after);
+  const ambiguousObjectIds = stringList(data.ambiguousObjectIds);
+  const warnings = stringList(data.warnings);
+  const rendersCleanly = data.rendersCleanly === true;
+
+  return <div className={rendersCleanly ? "text-emerald-300" : "text-red-300"}>
+    {rendersCleanly ? "Committed a validated hierarchy version." : `Migration was not committed: ${after.join(", ") || "validation failed"}`}
+    <div className="mt-1 text-neutral-400">{levels.map((level, index) => `${displayText(level.id, `level-${index + 1}`)} ${displayNumber(level.elevation).toFixed(1)}m`).join(" · ")}</div>
+    <div className="mt-1 text-neutral-400">{connections.map((connection, index) => `${displayText(connection.id, `connection-${index + 1}`)} ${(displayNumber(connection.grade) * 100).toFixed(1)}%`).join(" · ")}</div>
+    <div className="mt-1 space-y-1 text-neutral-400">Inferred relationships:
+      {assignments.map((assignment, index) => {
+        const oldSupport = isRecord(assignment.oldSupport) ? assignment.oldSupport : {};
+        const support = isRecord(assignment.support) ? assignment.support : {};
+        const oldTarget = displayText(oldSupport.levelId, displayText(oldSupport.objectId, displayText(oldSupport.kind, "none")));
+        const newTarget = displayText(support.levelId, displayText(support.objectId, displayText(support.kind)));
+        const evidence = stringList(assignment.evidence);
+        return <div key={`${displayText(assignment.objectId, "assignment")}-${index}`} className="pl-1"><span className="text-neutral-200">{displayText(assignment.objectId, `assignment-${index + 1}`)}</span> · {oldTarget} → {newTarget} · {Math.round(displayNumber(assignment.confidence))}% · {evidence.join(", ")}</div>;
+      })}
+    </div>
+    {supportGraph.length > 0 && <div className="mt-1 space-y-1 text-neutral-400">Support graph:
+      {supportGraph.map((link, index) => <div key={`${displayText(link.objectId, "object")}-${index}`} className="pl-1"><span className="text-neutral-200">{displayText(link.objectId, `object-${index + 1}`)}</span> → {displayText(link.supportId)} · base {displayNumber(link.objectBaseY).toFixed(2)} · surface {displayNumber(link.directSupportSurfaceY).toFixed(2)} · gap {displayNumber(link.verticalGap).toFixed(2)} · level {displayText(link.owningLevelId, displayText(link.levelId, "—"))} · root {displayText(link.rootSupportId)} · {Math.round(displayNumber(link.confidence))}% · {stringList(link.evidence).join(", ")}</div>)}
+    </div>}
+    <div className="mt-1 text-neutral-400">Grounding issues: {before.length} before → {after.length} after · driveway {improvements.driveway === true ? "connected" : "unchanged"} · pool {improvements.pool === true ? "supported" : "unchanged"} · retaining {improvements.retainingWalls === true ? "mapped" : "ambiguous"} · fence {improvements.fences === true ? "terrain-following" : "unchanged"} · render {rendersCleanly ? "clean" : "not committed"}</div>
+    {ambiguousObjectIds.length > 0 && <div className="mt-1 text-amber-300">Ambiguous: {ambiguousObjectIds.join(", ")}</div>}
+    {warnings.map((warning, index) => <div key={`${warning}-${index}`} className="mt-1 text-amber-300">Warning: {warning}</div>)}
+  </div>;
+}
+
+/** Local-only one-time migration for V3 saves written before siteHierarchy was persisted. */
+function V3SiteHierarchyUpgrade({ json }: { json: string | undefined }) {
+  const params = useParams<{ projectId: string }>();
+  const appendVersion = useProjectStore((s) => s.appendVersion);
+  const [report, setReport] = useState<V3SiteHierarchyMigrationReport | null>(null);
+  const legacy = useMemo(() => {
+    try {
+      const raw = JSON.parse(json ?? "{}");
+      return isV3ProjectRoot(raw) && !raw.v3Scene.siteHierarchy ? raw.v3Scene : null;
+    } catch { return null; }
+  }, [json]);
+  if (!legacy && !report) return null;
+  const upgrade = () => {
+    if (!legacy) return;
+    // Keep this explicit clone at the UI boundary: a failed audit never mutates the viewed persisted scene.
+    const result = upgradeLegacyV3SiteHierarchy(structuredClone(legacy));
+    setReport(result.report);
+    if (result.ok) appendVersion(params.projectId, "Upgrade V3 Site Hierarchy", JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: result.scene }), "v3-site-hierarchy-upgrade");
+  };
+  return <section className="space-y-1.5 rounded-lg border border-cyan-400/20 bg-cyan-400/[0.04] p-2.5">
+    <div className="flex items-center justify-between gap-2">
+      <div>
+        <h3 className="font-semibold uppercase tracking-widest text-cyan-200">Legacy V3 site hierarchy</h3>
+        <p className="text-[10px] text-neutral-500">Deterministic local migration · no AI or network call.</p>
+      </div>
+      {legacy && <button type="button" onClick={upgrade} className="rounded-full border border-cyan-300/40 px-2.5 py-1 text-[10px] font-semibold text-cyan-100 hover:bg-cyan-300/10">Upgrade V3 Site Hierarchy</button>}
+    </div>
+    {report && <V3SiteHierarchyMigrationReportDetails report={report} />}
+  </section>;
+}
+
 /** Temporary, dev-only view into what the live compile path actually produced — not part of the render pipeline itself. */
 export function ArchitectureDebugPanel() {
   const params = useParams<{ projectId: string }>();
@@ -292,7 +491,12 @@ export function ArchitectureDebugPanel() {
       {process.env.NODE_ENV !== "production" && <V2OnlyModeToggle />}
       {process.env.NODE_ENV !== "production" && <RenderAuditControls />}
 
+      {process.env.NODE_ENV !== "production" && <V3FailedPreviewPanel projectId={params.projectId} />}
+
       {process.env.NODE_ENV !== "production" && <SitePlanDebugPanel json={houseConfigJson} />}
+      {process.env.NODE_ENV !== "production" && <V3SiteHierarchyUpgrade json={houseConfigJson} />}
+      {process.env.NODE_ENV !== "production" && <V3RenderDiagnosticsPanel json={houseConfigJson} />}
+      {process.env.NODE_ENV !== "production" && <V3TerrainDebugPanel json={houseConfigJson} />}
 
       {process.env.NODE_ENV !== "production" && (
         <section className="space-y-1.5">

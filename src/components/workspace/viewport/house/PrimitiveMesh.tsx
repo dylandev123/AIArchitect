@@ -189,7 +189,7 @@ export interface RenderedMeshAudit {
   id: string; signature: string; kind: HousePrimitive["kind"]; position: number[]; scale: number[]; rotation: number[]; visible: boolean; parent: string; opacity: number; depthWrite: boolean;
 }
 
-export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh }: { primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void }) {
+export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, readOnly = false }: { primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const featureRef = useMemo(() => parseFeatureMeshId(primitive.id), [primitive.id]);
   const selectionKey = featureRef ? featureKey(featureRef) : primitive.id;
@@ -235,6 +235,7 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh }:
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
+    if (readOnly) return;
     const store = useSceneStore.getState();
 
     // From the whole-house view a click on a room's floor steps into that room; inside a room it selects as usual.

@@ -14,6 +14,7 @@ import {
 import {
   getProjectTypeSwitchWarning,
 } from "@/lib/elementRegistry";
+import { projectModeAuthority, projectModeBadgeLabel } from "@/lib/v3/projectMode";
 
 const PROJECT_TYPES: ProjectType[] = ["house", "villa", "resort", "restaurant", "commercial"];
 
@@ -85,6 +86,7 @@ export function TopBar({ project }: { project: Project }) {
 
   const canUndo = project.currentVersionIndex > 0;
   const canRedo = project.currentVersionIndex < project.versions.length - 1;
+  const modeAuthority = projectModeAuthority(project);
 
   const commitRename = () => {
     renameProject(project.id, draft);
@@ -135,8 +137,17 @@ export function TopBar({ project }: { project: Project }) {
         <ProjectTypePill project={project} />
       </div>
 
-      {/* Right: undo/redo + admin */}
+      {/* Right: durable generation authority + undo/redo + admin */}
       <div className="flex items-center gap-0.5">
+        {process.env.NODE_ENV !== "production" && (
+          <span
+            title={modeAuthority.agrees ? "Derived from the persisted project root sent to the server." : "Project record disagrees with its persisted root; generation is blocked."}
+            data-generation-mode={modeAuthority.persistedMode}
+            className={`mr-1 rounded border px-1.5 py-1 text-[9px] font-bold tracking-wide ${modeAuthority.persistedMode === "v3-scene" ? "border-violet-400/50 bg-violet-500/15 text-violet-200" : "border-sky-400/40 bg-sky-500/10 text-sky-200"}`}
+          >
+            {projectModeBadgeLabel(project)}
+          </span>
+        )}
         <button
           onClick={() => undo(project.id)}
           disabled={!canUndo}

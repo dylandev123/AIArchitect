@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText, NoObjectGeneratedError, Output } from "ai";
+import { generateText, JSONParseError, NoObjectGeneratedError, Output, TypeValidationError } from "ai";
 import { buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
 import { buildScopedSystemPrompt } from "@/lib/ai/systemPrompt";
 import { buildScopeContext } from "@/lib/ai/context";
@@ -12,7 +12,9 @@ import { isBlankSite } from "@/lib/house/blank";
 import { AI_NOT_CONFIGURED_MESSAGE, AI_PROVIDER_OPTIONS, getAiModel, getAiModelId, isAiConfigured } from "@/lib/ai/model";
 import { createTimings } from "@/lib/ai/timing";
 import { withUsageLogging, type UsageMeta } from "@/lib/ai/usage/track";
-import { recipeRetrievalForSpaces, recordPriorityAssetNeed, roofRecipesForBrief } from "@/lib/library/service";
+import { describeEditGoalSummary, summarizeEditGoals } from "@/lib/architecture/editGoals";
+import { auditCirculation } from "@/lib/architecture/circulationAudit";
+import { recipeRetrievalForSpaces, recordPriorityAssetNeed, recordArchitectVocabularyCapabilityNeed, recordSpatialReflowCapabilityNeed, roofRecipesForBrief } from "@/lib/library/service";
 import { extractContextTags, extractStyleTags } from "@/lib/library/taxonomy";
 import { readLibrary } from "@/lib/library/store";
 import { assetBackend } from "@/lib/assets/serverStore";
@@ -35,14 +37,29 @@ import { runSitePlanStage } from "@/lib/architecture/stages/sitePlanStage";
 import { sitePlanAuthorityHash } from "@/lib/architecture/stages/authority";
 import { isV2GenerationFailure } from "@/lib/architecture/stages/recovery";
 import { v2FailureResponse } from "@/lib/ai/v2Failure";
-import { providerErrorResponse } from "@/lib/ai/providerErrors";
+import { logV3ProviderRequestRejection, providerErrorResponse } from "@/lib/ai/providerErrors";
 import { placeV2AdditiveAsset } from "@/lib/architecture/v2AdditivePlacement";
-import { classifyAdditiveRequest } from "@/lib/architecture/v2AdditiveObjects";
+import { routeV2FollowUp } from "@/lib/architecture/v2AdditiveObjects";
 import { runArchitectEditStage } from "@/lib/architecture/stages/architectStage";
-import { architecturalEditDiff, architecturalEditScope, describeArchitecturalEditDiff } from "@/lib/architecture/stages/architectEditDiff";
+import { architecturalEditDiff, describeArchitecturalEditDiff } from "@/lib/architecture/stages/architectEditDiff";
 import { architectureAuthorityHash } from "@/lib/architecture/stages/authority";
 import { runV2IntegrityGate } from "@/lib/architecture/stages/integrityGate";
-import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
+import type { OutdoorAssetPlacement, OutdoorAssetTombstone } from "@/lib/outdoor/placements";
+import { materializeGeneratedAssets } from "@/lib/outdoor/ownership";
+import { generateHouseFromJson } from "@/lib/house/generateHouse";
+import { persistentFurniturePlacements } from "@/lib/landscaping/furniture";
+import { sitePlanSchema, type SitePlan } from "@/lib/architecture/sitePlanContract";
+import { reconcileSitePlanExecution } from "@/lib/architecture/stages/reconcileSitePlanExecution";
+import { spatialReflowDiff } from "@/lib/architecture/stages/spatialReflow";
+import { computeCostUsd } from "@/lib/ai/pricing";
+import { compileV3Scene, isV3ProjectRoot, validateV3CompiledGeometry, type V3Scene } from "@/lib/v3/scene";
+import { executeV3SceneOperations } from "@/lib/v3/operations";
+import { v3EditOutputSchema, v3SceneOutputSchema, V3_SCENE_ARCHITECT_PROMPT, V3_SCENE_SCHEMA_BYTES } from "@/lib/v3/schema";
+import { validateV3Scene } from "@/lib/v3/validation";
+import { normalizeV3GenerationOutput, repairV3GeneratedScene, summarizeV3Generation } from "@/lib/v3/generation";
+import { recoverV3FailedPreview } from "@/lib/v3/failedPreview";
+import { fingerprint } from "@/lib/ai/usage/diagnostics";
+import type { UsageAssessment } from "@/lib/ai/usage/track";
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -62,6 +79,12 @@ const STAGE_PIPELINE_BUDGET_MS = GENERATION_BUDGET_MS - FINAL_ASSEMBLY_RESERVE_M
 const MAX_HISTORY_TURNS = { world: 12, zone: 6, component: 4 } as const;
 const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
+/** V3 is a bounded scene response, deliberately independent of V2's budgets. */
+export const V3_INITIAL_MAX_OUTPUT_TOKENS = 10_000;
+/** Persisted/logged V3 raw output is a diagnostic preview, never a full model response. */
+export const V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS = 2_048;
+const V3_STRUCTURED_OUTPUT_MAX_ISSUES = 4;
+const V3_STRUCTURED_OUTPUT_VALUE_MAX_CHARS = 180;
 
 interface ChatTurn {
   role: "user" | "assistant";
@@ -80,8 +103,12 @@ interface RequestBody {
   history?: ChatTurn[];
   /** Untrusted hint about what the edit targets; the op allow-list is always rebuilt server-side. */
   scope?: unknown;
+  /** Optional stable V2 target ids from the viewport selection; validated against the server catalog. */
+  selectedTargetIds?: unknown;
   /** Imported PBR materials the model may reference by id. */
   assets?: AssetRef[];
+  /** Explicit opt-in transport flag. Existing V2 requests omit it. */
+  generationMode?: "v2-architectural" | "v3-scene";
 }
 
 function parseAssets(raw: unknown): AssetRef[] {
@@ -94,6 +121,175 @@ function parseAssets(raw: unknown): AssetRef[] {
 
 function parseProjectId(raw: unknown): string | null {
   return typeof raw === "string" && /^[\w-]{1,64}$/.test(raw) ? raw : null;
+}
+
+type ResolvedGenerationMode = "v2-architectural" | "v3-scene";
+
+/**
+ * The root's V3 sentinel is durable project authority; the request mode is a
+ * consistency check, never permission to reinterpret a project as V2.
+ */
+function resolveGenerationMode(requested: unknown, root: Record<string, unknown>): { mode: ResolvedGenerationMode } | { error: string } {
+  if (requested !== undefined && requested !== "v2-architectural" && requested !== "v3-scene") {
+    return { error: "Unknown generation mode. Expected v2-architectural or v3-scene." };
+  }
+  const rootIsV3 = isV3ProjectRoot(root);
+  if (rootIsV3 && requested === "v2-architectural") {
+    return { error: "V3 project routing conflict: a V3 scene project cannot invoke V2 generation." };
+  }
+  if (!rootIsV3 && requested === "v3-scene") {
+    return { error: "V3 routing/configuration error: the persisted project is not a valid V3 scene root." };
+  }
+  return { mode: rootIsV3 ? "v3-scene" : "v2-architectural" };
+}
+
+/** Lets the client audit the mode the server resolved without changing its payload contract. */
+function withResolvedGenerationMode(response: NextResponse, mode: ResolvedGenerationMode): NextResponse {
+  response.headers.set("x-ai-architect-resolved-mode", mode);
+  return response;
+}
+
+type V3SchemaIssue = { path?: unknown; message?: unknown; expected?: unknown; received?: unknown; input?: unknown };
+
+export type V3StructuredOutputFailure = {
+  code: "V3_MODEL_OUTPUT_INVALID" | "V3_OUTPUT_TRUNCATED" | "V3_MODEL_JSON_INVALID";
+  finishReason?: string;
+  error: string;
+  cause: string;
+  jsonParsingFailed: boolean;
+  issues: Array<{ path?: string; message: string; expected?: string; received?: string }>;
+  rawPreview?: string;
+  outputFingerprint?: string;
+};
+
+function boundedV3Value(value: unknown): string | undefined {
+  if (value === undefined) return undefined;
+  let text: string;
+  try { text = typeof value === "string" ? value : JSON.stringify(value); } catch { text = String(value); }
+  return redactV3DiagnosticText(text).slice(0, V3_STRUCTURED_OUTPUT_VALUE_MAX_CHARS);
+}
+
+/** Keeps model text useful for diagnosis while preventing credentials or request transport data reaching logs. */
+function redactV3DiagnosticText(text: string): string {
+  return redactV3HeaderObjects(text)
+    .replace(/\bsk-(?:proj-)?[A-Za-z0-9_-]{8,}\b/g, "[REDACTED_API_KEY]")
+    .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]+/gi, "Bearer [REDACTED]")
+    .replace(/([\"']?(?:(?:x-)?api[_-]?key|authorization|cookie|password|secret|token)[\"']?\s*[:=]\s*[\"']?)[^\"'\s,}\]]+/gi, "$1[REDACTED]");
+}
+
+/** Removes whole header objects (including nested values) from arbitrary, possibly malformed model text. */
+function redactV3HeaderObjects(text: string): string {
+  const headerStart = /([\"']?headers?[\"']?\s*[:=]\s*)\{/gi;
+  let result = "";
+  let cursor = 0;
+  let match: RegExpExecArray | null;
+  while ((match = headerStart.exec(text))) {
+    result += text.slice(cursor, match.index) + `${match[1]}[REDACTED_HEADERS]`;
+    let index = headerStart.lastIndex;
+    let depth = 1;
+    let quote = "";
+    while (index < text.length && depth > 0) {
+      const char = text[index++];
+      if (quote) {
+        if (char === "\\") index++;
+        else if (char === quote) quote = "";
+      } else if (char === "\"" || char === "'") quote = char;
+      else if (char === "{") depth++;
+      else if (char === "}") depth--;
+    }
+    cursor = index;
+    headerStart.lastIndex = index;
+  }
+  return result ? result + text.slice(cursor) : text;
+}
+
+function boundedV3RawPreview(text: string | undefined): string | undefined {
+  if (!text) return undefined;
+  const safe = redactV3DiagnosticText(text);
+  if (safe.length <= V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS) return safe;
+  const head = 1_400;
+  const tail = 500;
+  // The marker is deliberately inside the published cap too (its longest practical form is < 148 chars).
+  return `${safe.slice(0, head)}…[+${safe.length - head - tail} chars]…${safe.slice(-tail)}`.slice(0, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS);
+}
+
+function pathOf(issue: V3SchemaIssue): string | undefined {
+  if (typeof issue.path === "string") return issue.path;
+  if (Array.isArray(issue.path)) return issue.path.map(String).join(".");
+  return undefined;
+}
+
+/**
+ * Extract only the AI SDK's structured-output evidence. This deliberately never serializes a request,
+ * provider headers, or an arbitrary error message, all of which may contain credentials.
+ */
+export function describeV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure | undefined {
+  if (!NoObjectGeneratedError.isInstance(error)) return undefined;
+  const cause = error.cause;
+  const jsonParsingFailed = JSONParseError.isInstance(cause);
+  const validationIssues = TypeValidationError.isInstance(cause)
+    ? (cause.cause as { issues?: unknown } | undefined)?.issues
+    : undefined;
+  const issues = Array.isArray(validationIssues)
+    ? validationIssues.slice(0, V3_STRUCTURED_OUTPUT_MAX_ISSUES).map((candidate) => {
+      const issue = (candidate && typeof candidate === "object" ? candidate : {}) as V3SchemaIssue;
+      return {
+        ...(pathOf(issue) ? { path: pathOf(issue) } : {}),
+        message: redactV3DiagnosticText(typeof issue.message === "string" ? issue.message : "validation issue"),
+        ...(boundedV3Value(issue.expected) ? { expected: boundedV3Value(issue.expected) } : {}),
+        ...(boundedV3Value(issue.received ?? issue.input) ? { received: boundedV3Value(issue.received ?? issue.input) } : {}),
+      };
+    }) : [];
+  const rawPreview = boundedV3RawPreview(error.text);
+  const code = error.finishReason === "length"
+    ? "V3_OUTPUT_TRUNCATED"
+    : jsonParsingFailed
+      ? "V3_MODEL_JSON_INVALID"
+      : "V3_MODEL_OUTPUT_INVALID";
+  return {
+    code,
+    ...(typeof error.finishReason === "string" ? { finishReason: error.finishReason } : {}),
+    error: error.name || "NoObjectGeneratedError",
+    cause: cause instanceof Error && cause.name ? cause.name : "unknown",
+    jsonParsingFailed,
+    issues,
+    ...(rawPreview ? { rawPreview, outputFingerprint: fingerprint(error.text ?? "") } : {}),
+  };
+}
+
+function v3StructuredOutputUsageAssessment(error: unknown): UsageAssessment {
+  const failure = describeV3StructuredOutputFailure(error);
+  if (!failure) return {};
+  const issueSummary = failure.issues.map((issue) => `${issue.path ?? "(root)"}: ${issue.message}`).join("; ");
+  return {
+    errorKind: failure.code.toLowerCase(),
+    ...(failure.finishReason ? { finishReason: failure.finishReason } : {}),
+    outputFingerprint: failure.outputFingerprint,
+    diagnostic: [
+      `code=${failure.code}`,
+      `error=${failure.error}`,
+      `cause=${failure.cause}`,
+      `jsonParsingFailed=${failure.jsonParsingFailed}`,
+      ...(issueSummary ? [`issues=${issueSummary}`] : []),
+    ].join(" "),
+    // The existing bounded candidate field keeps this compact V3-only evidence without storing a full response.
+    candidate: JSON.stringify({ kind: "v3-structured-output-failure", ...failure }),
+  };
+}
+
+function logV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure | undefined {
+  const failure = describeV3StructuredOutputFailure(error);
+  if (failure && process.env.NODE_ENV !== "production") {
+    console.warn("[v3-contract] structured output failed", {
+      finishReason: failure.finishReason,
+      error: failure.error,
+      cause: failure.cause,
+      jsonParsingFailed: failure.jsonParsingFailed,
+      issues: failure.issues,
+      rawPreview: failure.rawPreview,
+    });
+  }
+  return failure;
 }
 
 export async function POST(req: NextRequest) {
@@ -129,20 +325,33 @@ export async function POST(req: NextRequest) {
 
   const assets = parseAssets(body.assets);
   const projectId = parseProjectId(body.projectId);
+  const resolvedMode = resolveGenerationMode(body.generationMode, root);
+  if ("error" in resolvedMode) return NextResponse.json({ error: resolvedMode.error, code: "GENERATION_MODE_ROUTING_ERROR" }, { status: 409 });
+
+  // V3 is an entirely separate scene authority. It deliberately enters before every V2 document/router branch.
+  if (resolvedMode.mode === "v3-scene") {
+    console.info("[generation] generationMode: v3-scene");
+    if (!isAiConfigured()) return withResolvedGenerationMode(NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 }), resolvedMode.mode);
+    const response = body.mode === "generate"
+      ? generateV3Scene(prompt, root, baseRevision, projectId)
+      : editV3Scene(prompt, root, baseRevision, projectId, Array.isArray(body.selectedTargetIds) ? body.selectedTargetIds.filter((id): id is string => typeof id === "string").slice(0, 8) : []);
+    return withResolvedGenerationMode(await response, resolvedMode.mode);
+  }
 
   // Additive V2 placement is a deterministic executor, not an architecture-generation call.
   const activeDocument = root.architecturalDesignDocument ?? root.architectureDocument;
   if (body.mode !== "generate" && isArchitecturalDesignDocument(activeDocument)) {
-    // An architectural change is never handed to the fixed-rules placer: it goes to the same AI Architect, editing its saved document.
-    if (classifyAdditiveRequest(prompt).kind === "architectural") {
+    // Only a recognized loose asset takes the deterministic placer; everything else (architecture, changes to existing
+    // things, and requests whose noun no list knows) goes to the same AI Architect, editing its saved document.
+    if (routeV2FollowUp(prompt).route === "architect") {
       if (!isAiConfigured()) return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
-      return editV2Architecture(prompt, root, activeDocument, baseRevision, projectId);
+      return editV2Architecture(prompt, root, activeDocument, currentHouseJson, baseRevision, projectId, Array.isArray(body.selectedTargetIds) ? body.selectedTargetIds.filter((id): id is string => typeof id === "string").slice(0, 8) : undefined);
     }
     return editV2SiteFeature(prompt, root, baseRevision, projectId);
   }
 
   if (!isAiConfigured()) {
-    return NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 });
+    return withResolvedGenerationMode(NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 }), resolvedMode.mode);
   }
 
   if (body.mode === "generate") {
@@ -159,9 +368,9 @@ export async function POST(req: NextRequest) {
     // Live progressive generation: the viewport can watch masses and roofs appear one at a time. Any caller that
     // doesn't ask for this (including every existing test) gets the exact same single JSON response as before.
     if (req.headers.get("accept")?.includes("text/event-stream")) {
-      return streamInitialDesign(prompt, assets, baseRevision, usageMeta);
+      return withResolvedGenerationMode(await streamInitialDesign(prompt, assets, baseRevision, usageMeta), resolvedMode.mode);
     }
-    return generateInitialDesign(prompt, assets, baseRevision, usageMeta);
+    return withResolvedGenerationMode(await generateInitialDesign(prompt, assets, baseRevision, usageMeta), resolvedMode.mode);
   }
 
   const scope = scopeFromHint(body.scope, prompt);
@@ -245,6 +454,90 @@ export async function POST(req: NextRequest) {
   }
 }
 
+/** One authoritative Terra call for V3. A single repair may correct objective contract failures, never redesign it. */
+async function generateV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null) {
+  const run = (repairErrors?: readonly string[], repairScene?: V3Scene) => withUsageLogging(
+    { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId(), generationMode: "v3-scene", stage: repairErrors ? "v3-scene-repair" : "v3-scene-architect", retryNumber: repairErrors ? 1 : 0, retryReason: repairErrors ? "objective-scene-validation" : undefined, maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS },
+    () => generateText({ model: getAiModel(), maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS, system: V3_SCENE_ARCHITECT_PROMPT, messages: [{ role: "user", content: repairErrors ? `Repair this same scene plan only. Objective failures: ${JSON.stringify(repairErrors.slice(0, 16))}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repairScene ?? root.v3Scene)}` : prompt }], output: Output.object({ schema: v3SceneOutputSchema }), providerOptions: AI_PROVIDER_OPTIONS }),
+    (outcome) => "error" in outcome ? v3StructuredOutputUsageAssessment(outcome.error) : {}
+  );
+  try {
+    // Render-first: parse (structural) -> normalize -> repair deterministically -> lenient validation.
+    // Only structural failures can trigger the single bounded model repair or reject the scene.
+    const prepare = (output: unknown) => {
+      const normalized = normalizeV3GenerationOutput(output);
+      const repaired = repairV3GeneratedScene(normalized.scene, normalized.notes);
+      return { scene: repaired.scene, notes: repaired.notes, validation: validateV3Scene(repaired.scene, { lenient: true }) };
+    };
+    let result = await run();
+    let prepared = prepare(result.output);
+    let repair = false;
+    if (!prepared.validation.ok) {
+      repair = true;
+      // Bounded: this is the only repair call V3 initial generation can make.
+      result = await run(prepared.validation.errors, prepared.scene);
+      prepared = prepare(result.output);
+    }
+    const { scene, notes, validation } = prepared;
+    if (!validation.ok) return NextResponse.json({ error: `V3 scene could not pass objective validation: ${validation.errors[0]}` }, { status: 422 });
+    // Compile here as a deterministic renderability gate; the V3 compiler has no V2 document dependency.
+    const model = compileV3Scene(scene);
+    const geometryAudit = validateV3CompiledGeometry(scene, model, { lenient: true });
+    if (!geometryAudit.ok) return NextResponse.json({ error: "V3 scene contains unsupported compiled geometry: " + geometryAudit.errors[0] }, { status: 422 });
+    validation.warnings.push(...geometryAudit.warnings);
+    const audit = summarizeV3Generation(notes, validation.issues);
+    const usage = result.totalUsage;
+    scene.metadata = {
+      ...scene.metadata,
+      brief: prompt,
+      generatedAt: new Date().toISOString(),
+      audit: { status: audit.status, counts: audit.counts },
+      usage: { inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: usage.totalTokens, attempts: repair ? 2 : 1, estimatedCost: computeCostUsd(getAiModelId(), { inputTokens: usage.inputTokens ?? 0, cachedInputTokens: usage.inputTokenDetails?.cacheReadTokens ?? 0, outputTokens: usage.outputTokens ?? 0 }) ?? undefined, contextBytes: V3_SCENE_ARCHITECT_PROMPT.length + prompt.length, schemaBytes: V3_SCENE_SCHEMA_BYTES, repair },
+    };
+    const json = JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: scene });
+    const warnings = [...notes.map((note) => `${note.code} [${note.targetId}]: ${note.message}`), ...validation.warnings];
+    return NextResponse.json({ summary: `V3 scene generated: ${scene.objects.length} persistent objects${repair ? " (one validation repair)" : ""}.${audit.summary ? ` ${audit.summary}` : ""}`, json, baseRevision, revision: revisionOf(json), generationMode: "v3-scene", warnings, v3Audit: audit });
+  } catch (error) {
+    const failure = logV3StructuredOutputFailure(error);
+    if (failure) {
+      const message = failure.code === "V3_OUTPUT_TRUNCATED"
+        ? "Terra's V3 response was incomplete. Please try again."
+        : failure.code === "V3_MODEL_JSON_INVALID"
+          ? "Terra's V3 response was not valid JSON. Please try again."
+          : "Terra's V3 response didn't match the compact scene contract. Please try again.";
+      // This is a development-only, already-sanitised compiler input. It is
+      // deliberately not a `json` result, so the normal client commit path
+      // cannot persist it or replace the last valid scene.
+      const preview = process.env.NODE_ENV !== "production"
+        ? recoverV3FailedPreview((error as { text?: unknown }).text, failure.issues.map((issue) => `${issue.path ?? "(root)"}: ${issue.message}`))
+        : undefined;
+      return NextResponse.json({ error: message, code: failure.code, ...(preview ? { v3FailedPreview: preview } : {}) }, { status: 502 });
+    }
+    logV3ProviderRequestRejection(error);
+    return providerErrorResponse(error);
+  }
+}
+
+/** Compact local V3 edit retrieval and atomic direct-scene execution. */
+async function editV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null, selectedIds: string[]) {
+  const scene = root.v3Scene as V3Scene;
+  const selected = selectedIds.length ? scene.objects.filter((object) => selectedIds.includes(object.id)) : scene.objects.slice(0, 36);
+  const context = selected.map((object) => ({ id: object.id, type: object.type, role: object.semanticRole, p: object.transform.position, d: object.dimensions, material: object.material.id, hostId: object.hostId, support: object.support, fromSupportId: object.fromSupportId, toSupportId: object.toSupportId, groupId: object.groupId }));
+  try {
+    const { output } = await withUsageLogging(
+      { projectId, requestType: "scoped_edit", scope: "component", model: getAiModelId(), generationMode: "v3-scene", stage: "v3-local-edit", maxOutputTokens: 1800 },
+      () => generateText({ model: getAiModel(), maxOutputTokens: 1800, system: "You are Terra editing a compact V3 scene. Return direct operations only against supplied stable ids. Preserve authored support relationships unchanged when their geometry is unchanged. If a move changes a host, include setSupport with the corrected explicit hostId and relationship; if a stair/ramp changes, include setConnectorEndpoints. The edit is atomically rejected when explicit support no longer meets geometry. When an edit changes levels, routes, or supports, use replaceSiteHierarchy with the complete corrected hierarchy. Hierarchy connection routes are world-space [x, y, z]: x east/west, y elevation, z north/south. Do not recreate or use V2 architecture documents.", messages: [{ role: "user", content: `Request: ${prompt}\nSite hierarchy: ${JSON.stringify(scene.siteHierarchy)}\nLocal scene subset: ${JSON.stringify(context)}` }], output: Output.object({ schema: v3EditOutputSchema }), providerOptions: AI_PROVIDER_OPTIONS })
+    );
+    const applied = executeV3SceneOperations(scene, output as never);
+    if (!applied.ok) return NextResponse.json({ error: `V3 edit was rejected atomically: ${applied.errors[0]}` }, { status: 422 });
+    const json = JSON.stringify({ ...root, v3Scene: applied.scene });
+    return NextResponse.json({ summary: output.intent, json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V3 local scene" }, generationMode: "v3-scene" });
+  } catch (error) {
+    if (NoObjectGeneratedError.isInstance(error)) return NextResponse.json({ error: "Terra's V3 edit did not match the operation contract." }, { status: 502 });
+    return providerErrorResponse(error);
+  }
+}
+
 /**
  * Typed additive V2 edit path. It understands a small semantic object request and only appends a
  * grounded placement/site feature; V2 architecture and existing Site Plan geometry remain read-only.
@@ -282,43 +575,129 @@ async function editV2SiteFeature(prompt: string, root: Record<string, unknown>, 
 /**
  * Architectural follow-up edit: the same AI Architect edits its own saved document (one bounded repair). The edited
  * document must pass the Architect contract, the compiler, the design-quality gate, the edit preservation checks and
- * the final V2 integrity gate over the exact project JSON to be saved, with the existing Site Plan and outdoor
- * placements carried over unchanged. Anything else fails with no `json`, so the saved project is never touched.
+ * the final V2 integrity gate over the exact project JSON to be saved. The Architect may also submit one bounded,
+ * relationship-audited Site Plan reflow; outdoor placements remain protected. Anything else fails with no `json`.
  */
-async function editV2Architecture(prompt: string, root: Record<string, unknown>, current: ArchitecturalDesignDocument, baseRevision: string, projectId: string | null): Promise<NextResponse> {
+async function editV2Architecture(prompt: string, root: Record<string, unknown>, current: ArchitecturalDesignDocument, currentHouseJson: string, baseRevision: string, projectId: string | null, selectedTargetIds?: readonly string[]): Promise<NextResponse> {
   const usageMeta: UsageMeta = { projectId, requestType: "scoped_edit", scope: WORLD_SCOPE.level, model: getAiModelId() };
-  // Site Plan authority is the plan already saved: the edit may not change it.
-  const authority = (document: ArchitecturalDesignDocument) => ({ architectureHash: architectureAuthorityHash(document), sitePlanHash: JSON.stringify(root.sitePlan) });
-  const projectWith = (document: ArchitecturalDesignDocument) => {
+  const parsedCurrentPlan = sitePlanSchema.safeParse(root.sitePlan);
+  if (!parsedCurrentPlan.success) return NextResponse.json({ error: "The saved V2 project has no valid canonical Site Plan to reflow.", code: "SITE_PLAN_REQUIRED" }, { status: 422 });
+  const currentPlan = parsedCurrentPlan.data;
+  const savedOutdoorAssets = Array.isArray(root.outdoorAssetPlacements) ? root.outdoorAssetPlacements as OutdoorAssetPlacement[] : [];
+  const savedOutdoorAssetTombstones = Array.isArray(root.outdoorAssetTombstones) ? root.outdoorAssetTombstones as OutdoorAssetTombstone[] : [];
+  // Renderer-only patio sets get deterministic persistent identities in the edit
+  // world. They are not saved merely because an unrelated architectural request
+  // was made; an asset operation is required to materialize them in the project.
+  const renderedSite = generateHouseFromJson(currentHouseJson).site;
+  const derivedFurniture = renderedSite ? persistentFurniturePlacements(renderedSite) : [];
+  // This is the authoritative edit world for the entire attempt. Renderer-only
+  // assets receive durable ids before the Architect sees a catalog; if an asset
+  // operation succeeds this exact array (with its edits) is what is persisted.
+  const editableOutdoorAssets = materializeGeneratedAssets(savedOutdoorAssets, derivedFurniture)
+    .filter((placement) => !savedOutdoorAssetTombstones.some((tombstone) => tombstone.semanticId === placement.source?.semanticId));
+  const authority = (document: ArchitecturalDesignDocument, plan: SitePlan) => ({ architectureHash: architectureAuthorityHash(document), sitePlanHash: sitePlanAuthorityHash(plan) });
+  const projectWith = (document: ArchitecturalDesignDocument, plan: SitePlan, outdoorAssetPlacements = root.outdoorAssetPlacements, outdoorAssetTombstones = root.outdoorAssetTombstones) => {
     const rest = { ...root };
     delete rest.architectureDocument;
-    return JSON.stringify({ ...rest, architecturalDesignDocument: document });
+    const context = sitePlanContextForDocument(document.brief, document);
+    const reconciled = sitePlanAuthorityHash(plan) === sitePlanAuthorityHash(currentPlan) ? rest : reconcileSitePlanExecution(rest, plan, context?.masses);
+    return JSON.stringify({ ...reconciled, architecturalDesignDocument: document, ...(outdoorAssetPlacements ? { outdoorAssetPlacements } : {}), ...(outdoorAssetTombstones ? { outdoorAssetTombstones } : {}) });
   };
-  const integrityErrors = (document: ArchitecturalDesignDocument) =>
-    runV2IntegrityGate({ json: projectWith(document), brief: current.brief, authority: authority(document), previousArchitectureDocument: current, previousJson: JSON.stringify(root) }).blocking
-      .map((c) => `${c.id}: ${c.detail} (the saved Site Plan and outdoor placements are fixed by this edit; keep the edited architecture consistent with them)`);
+  const editableBaselineJson = JSON.stringify({ ...root, outdoorAssetPlacements: editableOutdoorAssets });
+  const compactIntegrityFailure = (id: string, detail: string) => {
+    // Asset collision diagnostics contain exact placement and mass ids. Keep that
+    // actionable evidence, but never send the renderer/compiler diagnostic blob
+    // back through the model context.
+    if (id === "scene-assets-clear-of-building") {
+      const placement = detail.match(/"placement"\s*:\s*\{\s*"id"\s*:\s*"([^"]+)"/)?.[1];
+      const mass = detail.match(/"intersectingMass"\s*:\s*\{\s*"id"\s*:\s*"([^"]+)"/)?.[1];
+      if (placement || mass) return `${id}: ${placement ? `asset:${placement}` : "a placed asset"} intersects ${mass ? `mass:${mass}` : "the building"}. Revise the operation plan so targeted assets are supported and clear.`;
+    }
+    const concise = detail.replace(/\{[^{}]*\}/g, "").replace(/\s+/g, " ").trim();
+    return `${id}: ${concise.slice(0, 360)}`;
+  };
+  const integrityErrors = (document: ArchitecturalDesignDocument, plan = currentPlan, outdoorAssetPlacements: readonly OutdoorAssetPlacement[] = editableOutdoorAssets) =>
+    runV2IntegrityGate({
+      json: projectWith(document, plan, outdoorAssetPlacements), brief: current.brief, authority: authority(document, plan),
+      previousArchitectureDocument: current, previousJson: editableBaselineJson,
+    }).blocking.map((check) => compactIntegrityFailure(check.id, check.detail));
   try {
-    const result = await runArchitectEditStage({ current, request: prompt, timings: createTimings(), budgetMs: GENERATION_BUDGET_MS, usageMeta, checkCandidate: integrityErrors });
-    const fail = (errors: readonly string[], repairRequests?: readonly string[]) => {
+    const result = await runArchitectEditStage({ current, currentSitePlan: currentPlan, outdoorAssetPlacements: editableOutdoorAssets, outdoorAssetTombstones: savedOutdoorAssetTombstones, request: prompt, selectedTargetIds, timings: createTimings(), budgetMs: GENERATION_BUDGET_MS, usageMeta, checkCandidate: integrityErrors });
+    const fail = async (errors: readonly string[], repairRequests?: readonly string[], recordedNeedId?: string) => {
       console.warn("[v2-architectural-edit] not applied:", errors);
+      const capability = errors.find((error) => error.startsWith("Capability Need:"));
+      const capabilityNeed = recordedNeedId ? { id: recordedNeedId } : capability ? await recordSpatialReflowCapabilityNeed(capability.slice("Capability Need:".length).trim(), projectId, current.brief) : undefined;
       return NextResponse.json({
         error: "The Architect could not make that change while keeping the design valid, so the project was not changed. Try describing the change differently.",
         code: "ARCHITECTURAL_EDIT_FAILED", outcome: "failed", stage: "architect",
+        ...(capabilityNeed ? { capabilityNeedId: capabilityNeed.id } : {}),
         ...(process.env.NODE_ENV !== "production" ? { conflicts: [...errors], repairRequests: [...(repairRequests ?? [])], attempts: result.attempts } : {}),
       }, { status: 422 });
     };
     if (!result.ok || !result.document) return fail(result.errors ?? ["The Architect returned no document."], result.repairRequests);
     const edited = result.document;
-    if (architectureAuthorityHash(edited) === architectureAuthorityHash(current)) return fail(["The Architect returned the document unchanged."]);
-    const json = projectWith(edited);
+    const capabilityNeeds = result.capabilityNeeds ?? [];
+    if (result.plan?.status === "already-satisfied") {
+      return NextResponse.json({
+        summary: result.plan.rationale!, json: currentHouseJson, baseRevision, revision: baseRevision,
+        outcome: "already-satisfied", scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes: [], editPlan: result.plan, capabilityNeeds,
+        ...(process.env.NODE_ENV !== "production" ? { attempts: result.attempts, repairRequests: result.repairRequests ?? [] } : {}),
+      });
+    }
+    if (result.plan?.status === "capability-needed") {
+      const need = await recordArchitectVocabularyCapabilityNeed(capabilityNeeds.map((need) => `${need.capability}: ${need.reason}`).join("; "), projectId, current.brief);
+      return NextResponse.json({
+        summary: `Capability needed: ${capabilityNeeds.map((need) => need.capability).join(", ")}. ${capabilityNeeds.map((need) => need.reason).join(" ")}`,
+        json: currentHouseJson, baseRevision, revision: baseRevision, outcome: "capability-needed", scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes: [], editPlan: result.plan, capabilityNeeds,
+        ...(need ? { capabilityNeedId: need.id } : {}),
+        ...(process.env.NODE_ENV !== "production" ? { attempts: result.attempts, repairRequests: result.repairRequests ?? [] } : {}),
+      });
+    }
+    // Goal coverage of the accepted plan. extrude/cut only record Capability Needs, so they are not applied work.
+    const appliedOperations = result.plan?.operations.filter((operation) => operation.op !== "extrude" && operation.op !== "cut").length ?? 0;
+    const goalSummary = result.plan ? summarizeEditGoals(result.plan.goals, appliedOperations, capabilityNeeds) : undefined;
+    if (result.plan && goalSummary && !appliedOperations) {
+      // A goal ledger that needs no world change: some goals already hold, the rest need capabilities.
+      const need = goalSummary.capabilityNeeded ? await recordArchitectVocabularyCapabilityNeed(capabilityNeeds.map((need) => `${need.capability}: ${need.reason}`).join("; "), projectId, current.brief) : undefined;
+      return NextResponse.json({
+        summary: describeEditGoalSummary(goalSummary), json: currentHouseJson, baseRevision, revision: baseRevision,
+        outcome: goalSummary.capabilityNeeded ? "capability-needed" : "already-satisfied", scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes: [], editPlan: result.plan, capabilityNeeds, goalSummary,
+        ...(need ? { capabilityNeedId: need.id } : {}),
+        ...(process.env.NODE_ENV !== "production" ? { attempts: result.attempts, repairRequests: result.repairRequests ?? [] } : {}),
+      });
+    }
+    if (result.plan && capabilityNeeds.length && !appliedOperations && architectureAuthorityHash(edited) === architectureAuthorityHash(current) && sitePlanAuthorityHash(result.sitePlan ?? currentPlan) === sitePlanAuthorityHash(currentPlan)) {
+      const need = await recordArchitectVocabularyCapabilityNeed(capabilityNeeds.map((need) => `${need.capability}: ${need.reason}`).join("; "), projectId, current.brief);
+      return fail(capabilityNeeds.map((need) => `Capability Need: ${need.capability}: ${need.reason}`), undefined, need?.id);
+    }
+    // Replacement-document compatibility is isolated here. An operation plan is
+    // authoritative by its validated operations and may legitimately change only
+    // persistent assets, leaving both the document and Site Plan byte-identical.
+    if (result.legacyDocumentReplacement && architectureAuthorityHash(edited) === architectureAuthorityHash(current) && (!result.sitePlan || sitePlanAuthorityHash(result.sitePlan) === sitePlanAuthorityHash(currentPlan))) {
+        const need = await recordArchitectVocabularyCapabilityNeed(prompt, projectId, current.brief);
+        return fail(["The legacy Architect replacement response returned the document unchanged."], undefined, need?.id);
+    }
+    const plan = result.sitePlan ?? currentPlan;
+    const assetOperation = result.plan?.operations.some((operation) => "target" in operation && (operation.target.startsWith("asset:") || operation.target.startsWith("asset-group:")));
+    const savedPlacements = assetOperation ? result.outdoorAssetPlacements : savedOutdoorAssets;
+    const savedTombstones = assetOperation ? result.outdoorAssetTombstones : savedOutdoorAssetTombstones;
+    const json = projectWith(edited, plan, savedPlacements, savedTombstones);
     // The stage already ran this gate on the candidate; this is the artifact actually returned for saving.
-    const finalErrors = integrityErrors(edited);
+    const finalErrors = integrityErrors(edited, plan, savedPlacements);
     if (finalErrors.length) return fail(finalErrors);
-    const changes = describeArchitecturalEditDiff(architecturalEditDiff(current, edited, architecturalEditScope(current, prompt, edited)));
+    const changes = result.plan
+      ? result.plan.operations.map((operation) => `${operation.op}${"target" in operation ? ` ${operation.target}` : ""}`)
+      : describeArchitecturalEditDiff(architecturalEditDiff(current, edited, result.scope, new Set(result.reflow?.elements.filter((entry) => entry.id.startsWith("mass:")).map((entry) => entry.id.slice(5)) ?? [])));
+    // Partial completion is honest: achievable goals were applied, the rest are recorded Capability Needs.
+    const partialNeed = goalSummary && !goalSummary.complete ? await recordArchitectVocabularyCapabilityNeed(capabilityNeeds.map((need) => `${need.capability}: ${need.reason}`).join("; "), projectId, current.brief) : undefined;
     return NextResponse.json({
-      summary: `Architectural edit applied (${changes.join("; ") || "document updated"}).`,
+      summary: goalSummary ? describeEditGoalSummary(goalSummary) : `Architectural edit applied (${changes.join("; ") || "document updated"}).`,
       json, baseRevision, revision: revisionOf(json),
-      scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes,
+      scope: { level: WORLD_SCOPE.level, label: "Architectural edit" }, operation: "architecturalEdit", changes, ...(result.scope ? { editScope: result.scope } : {}), ...(result.plan ? { editPlan: result.plan, capabilityNeeds } : {}),
+      // Pre-existing findings and what the geometry model cannot verify are reported, never claimed as passing.
+      ...(goalSummary ? { goalSummary, completion: goalSummary.complete ? "complete" : "partial", circulation: auditCirculation(edited) } : {}),
+      ...(partialNeed ? { capabilityNeedId: partialNeed.id } : {}),
+      ...(result.reflow || result.plan?.siteReflow ? { reflow: result.reflow ?? result.plan?.siteReflow, reflowDiff: spatialReflowDiff(current, edited, currentPlan, plan) } : {}),
       ...(process.env.NODE_ENV !== "production" ? { attempts: result.attempts, repairRequests: result.repairRequests ?? [] } : {}),
     });
   } catch (error) {

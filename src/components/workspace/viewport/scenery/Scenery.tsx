@@ -9,14 +9,15 @@ import { generateHouseFromJson } from "@/lib/house/generateHouse";
 import { generateShrubs, generateTrees } from "@/lib/landscaping/trees";
 import { generateGrassTufts } from "@/lib/landscaping/grass";
 import { generateCars } from "@/lib/landscaping/cars";
-import { generateFurnitureClusters } from "@/lib/landscaping/furniture";
-import { placementBounds, type OutdoorAssetPlacement } from "@/lib/outdoor/placements";
+import { persistentFurniturePlacements } from "@/lib/landscaping/furniture";
+import type { OutdoorAssetPlacement, OutdoorAssetTombstone } from "@/lib/outdoor/placements";
+import { sourceIsSuppressed } from "@/lib/outdoor/ownership";
 import { yardHalfExtent } from "@/lib/landscaping/footprints";
 import { planTerrain } from "@/lib/landscaping/terrain";
 import { Shrub, Tree } from "./Tree";
 import { GrassField } from "./GrassField";
 import { Car } from "./Car";
-import { PatioFurnitureSet } from "./PatioFurnitureSet";
+import { ProceduralOutdoorPlaceholder } from "../house/ProceduralOutdoorPlaceholder";
 
 /** Soft dark halo just outside the walls — cheap ambient occlusion where the house meets the lawn. */
 function FootprintAO({ x = 0, z = 0, width, depth, rotation = 0 }: { x?: number; z?: number; width: number; depth: number; rotation?: number }) {
@@ -44,13 +45,13 @@ function FootprintAO({ x = 0, z = 0, width, depth, rotation = 0 }: { x?: number;
   );
 }
 
-/** Footprints of the library furniture the project places, which procedural sets leave to it. */
-function furnishedAreas(json: string | undefined) {
+/** Persistent source ownership, not footprint overlap, decides whether generated scenery is visible. */
+function assetOwnership(json: string | undefined) {
   try {
-    const placements = (JSON.parse(json ?? "{}") as { outdoorAssetPlacements?: OutdoorAssetPlacement[] }).outdoorAssetPlacements ?? [];
-    return placements.map(placementBounds).map((b) => ({ x0: b.x - b.w / 2, x1: b.x + b.w / 2, z0: b.z - b.d / 2, z1: b.z + b.d / 2 }));
+    const root = JSON.parse(json ?? "{}") as { outdoorAssetPlacements?: OutdoorAssetPlacement[]; outdoorAssetTombstones?: OutdoorAssetTombstone[] };
+    return { placements: root.outdoorAssetPlacements ?? [], tombstones: root.outdoorAssetTombstones ?? [] };
   } catch {
-    return [];
+    return { placements: [], tombstones: [] };
   }
 }
 
@@ -73,7 +74,10 @@ export function Scenery() {
       environment: site.settings?.environment,
       grassTufts: plan && !plan.grassTufts ? [] : generateGrassTufts(site),
       cars: generateCars(site),
-      furniture: generateFurnitureClusters(site, furnishedAreas(houseConfigJson)),
+      furniture: (() => {
+        const ownership = assetOwnership(houseConfigJson);
+        return persistentFurniturePlacements(site).filter((placement) => !sourceIsSuppressed(placement, ownership.placements, ownership.tombstones));
+      })(),
       halfExtent: yardHalfExtent(site),
       // One halo per building mass where they stand; the legacy house rectangle otherwise.
       footprints: site.buildingFootprints?.length
@@ -94,8 +98,8 @@ export function Scenery() {
       {cars.map((car) => (
         <Car key={car.id} car={car} />
       ))}
-      {furniture.map((cluster) => (
-        <PatioFurnitureSet key={cluster.id} cluster={cluster} />
+      {furniture.map((placement) => (
+        <ProceduralOutdoorPlaceholder key={placement.id} placement={placement} />
       ))}
       {footprints.map(({ key, ...f }) => <FootprintAO key={key} {...f} />)}
       <ContactShadows

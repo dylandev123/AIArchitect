@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { generateText, NoObjectGeneratedError, NoOutputGeneratedError, Output, parsePartialJson, TypeValidationError } from "ai";
+import { generateText, NoObjectGeneratedError, NoOutputGeneratedError, Output, parsePartialJson, TypeValidationError, type LanguageModelUsage } from "ai";
 import { AI_PROVIDER_OPTIONS, getAiModel } from "@/lib/ai/model";
 import { boundedCandidate, fingerprint } from "@/lib/ai/usage/diagnostics";
 import { withUsageLogging, type UsageAssessment, type UsageMeta } from "@/lib/ai/usage/track";
@@ -78,6 +78,12 @@ export interface RunStageInput<T> {
   /** Builds the user message for one attempt; `previousErrors` is empty on the first attempt. */
   buildMessage: (previousErrors: readonly string[]) => string;
   schema: z.ZodType<T>;
+  /**
+   * The structured-output schema the provider is asked to fill, when it is narrower than `schema`. The provider
+   * schema is sent in full on every call, so a stage that still parses an older envelope locally must not advertise
+   * (and pay input tokens for) that envelope to the model.
+   */
+  wireSchema?: z.ZodType;
   timings: Timings;
   /** Remaining ms in the whole generation's budget, checked before each attempt. */
   remainingBudgetMs: number;
@@ -104,6 +110,13 @@ export interface RunStageInput<T> {
    * rather than introducing an unbounded application log. `attempt` is one-based for human debugging.
    */
   rejectedAttemptEvidence?: (rejection: { candidate: unknown; errors: readonly string[]; attempt: number }) => Partial<UsageAssessment>;
+  /**
+   * Stops a bounded repair loop when another call cannot add useful information (for example an identical
+   * rejected plan). Returning a message records the reason in the final stage failure without making a call.
+   */
+  stopRetry?: (rejection: { candidate: unknown; errors: readonly string[]; attempt: number }) => string | undefined;
+  /** Non-fatal observation hook for per-edit telemetry. */
+  onAttemptUsage?: (attempt: number, usage: LanguageModelUsage | undefined) => void;
 }
 
 /**
@@ -267,7 +280,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
             maxOutputTokens,
             system: input.system,
             messages: [{ role: "user", content: message }],
-            output: Output.object({ schema: input.schema }),
+            output: Output.object({ schema: input.wireSchema ?? input.schema }),
             providerOptions: AI_PROVIDER_OPTIONS,
             abortSignal: AbortSignal.timeout(Math.max(Math.floor(remainingMs), 1_000)),
             maxRetries: 1,
@@ -275,6 +288,7 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
           async (outcome) => (await judge(outcome)).assessment,
         )
       );
+      try { input.onAttemptUsage?.(attempt + 1, response.totalUsage); } catch { /* diagnostics never affect an edit */ }
       judged = await judge({ result: response });
     } catch (error) {
       // A throwing normalize/validate left a rejected memo: judge that error itself, as an ordinary retryable failure.
@@ -288,6 +302,8 @@ export async function runStage<T>(input: RunStageInput<T>): Promise<RunStageResu
     retryReason = USAGE_KIND[judged.errorCode];
     if ("rawValue" in judged && judged.rawValue !== undefined) { rawValue = judged.rawValue; rawValueTruncated = judged.rawValueTruncated === true; }
     if (judged.errorCode === "INTERNAL_ERROR") return failed();
+    const stopReason = input.stopRetry?.({ candidate: "rawValue" in judged ? judged.rawValue : undefined, errors, attempt: attempts });
+    if (stopReason) return failed([stopReason]);
     if (judged.truncated) maxOutputTokens = Math.min(Math.round(maxOutputTokens * TRUNCATION_TOKEN_GROWTH), maxOutputTokensCeiling);
   }
   return failed();

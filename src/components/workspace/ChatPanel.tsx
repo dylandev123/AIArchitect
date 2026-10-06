@@ -17,9 +17,10 @@ import { useSceneStore } from "@/store/useSceneStore";
 import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
 import { useFocusedRoom } from "./useRoomFocus";
 import { makeScopeForRoom } from "@/lib/ai/targeting";
-import { requestHouseEdit, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
+import { requestHouseEdit, resolveClientGenerationMode, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
 import { requestStagedGeneration } from "@/lib/ai/stagedClient";
 import { needsInitialGeneration } from "@/lib/house/blank";
+import { messagesAfterSuccessfulEdit, type WorkspaceChatMessage } from "./chatMessageState";
 
 // ── Step generator ──────────────────────────────────────────────────────────
 // Reads the prompt for keywords and returns steps that feel relevant.
@@ -123,12 +124,7 @@ const ROOM_PROMPTS = [
 ];
 
 // ── Types ────────────────────────────────────────────────────────────────────
-interface ChatMessage {
-  role: "user" | "assistant" | "error";
-  content: string;
-  /** Set on a user message sent while a room was in focus: "Kitchen · Ground floor". */
-  scope?: string;
-}
+type ChatMessage = WorkspaceChatMessage;
 
 interface ArchitectWork {
   steps: string[];
@@ -146,6 +142,7 @@ export function ChatPanel() {
   const needsGeneration = !!project && needsInitialGeneration(project);
   // While a room is in focus every edit is scoped to it; back in the whole-house view the scope is global again.
   const focusedRoom = useFocusedRoom(params.projectId);
+  const selectedKey = useSceneStore((s) => s.selectedKey);
   const exitRoom = useSceneStore((s) => s.exitRoom);
   const roomScopeLabel = focusedRoom ? `${focusedRoom.name} · ${focusedRoom.floorName}` : undefined;
   const setAiWorking = useUIStore((s) => s.setAiWorking);
@@ -196,6 +193,17 @@ export function ChatPanel() {
     const prompt = text.trim();
     if (!prompt || isLoading || !project) return;
     const wasBlank = needsInitialGeneration(project);
+    const modeResolution = resolveClientGenerationMode(project);
+    if (!modeResolution.ok) {
+      const failure = humanizeError(modeResolution.error);
+      setMessages((prev) => [...prev, { role: "error", content: failure }]);
+      setGenerationError(failure);
+      return;
+    }
+    const generationMode = modeResolution.mode;
+    // This happens in the generation UI before choosing a transport. V3 can
+    // only use the non-SSE V3 route below; it never enters requestStagedGeneration.
+    console.info(`[client-generation] resolvedMode: ${generationMode}`);
 
     const roomScope = focusedRoom && !wasBlank ? focusedRoom : null;
     setMessages((prev) => [...prev, { role: "user", content: prompt, scope: roomScope ? roomScopeLabel : undefined }]);
@@ -205,10 +213,10 @@ export function ChatPanel() {
     setGenerationError(null);
     // The initial design streams real per-stage progress (see the "live architecture" panel below);
     // a scoped edit is a single call, so it keeps the illustrative animated step sequence.
-    if (!wasBlank) beginWork(prompt);
+    if (!wasBlank || generationMode === "v3-scene") beginWork(prompt);
 
     try {
-      const result = wasBlank
+      const result = wasBlank && generationMode === "v2-architectural"
         ? await requestStagedGeneration({
             projectId: project.id,
             prompt,
@@ -221,14 +229,14 @@ export function ChatPanel() {
               .filter((m): m is ChatMessage & { role: "user" | "assistant" } => m.role !== "error")
               .map((m) => ({ role: m.role, content: m.content })),
             scope: roomScope ? makeScopeForRoom(roomScope.index, roomScopeLabel, roomScope.id) : undefined,
+            selectedTargetIds: selectedKey ? [selectedKey] : undefined,
             apply: (summary, json, debugWriter) => appendVersion(project.id, summary, json, debugWriter),
           });
 
       const failure = result.ok ? undefined : humanizeError(result.error);
-      setMessages((prev) => [
-        ...prev,
-        result.ok ? { role: "assistant", content: result.summary } : { role: "error", content: failure! },
-      ]);
+      setMessages((prev) => result.ok
+        ? messagesAfterSuccessfulEdit(prev, result.summary)
+        : [...prev, { role: "error", content: failure! }]);
       if (failure && wasBlank) {
         setGenerationError(failure);
         setDraft(prompt);

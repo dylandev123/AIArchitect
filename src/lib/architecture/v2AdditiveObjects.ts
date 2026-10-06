@@ -115,6 +115,26 @@ export function classifyAdditiveRequest(prompt: string): AdditiveClassification 
   return first.object === "existing" ? { kind: "existing" } : { kind: "standalone", object: first.object };
 }
 
+export type V2FollowUpRoute = { route: "placement" } | { route: "architect"; reason: AdditiveClassification["kind"] };
+
+/**
+ * Follow-up routing for a saved V2 project. The deterministic placer is a fast path only for requests it positively
+ * recognizes as a new loose asset; every other request — architectural, change/move/remove, or a noun no list here
+ * knows — goes to the AI Architect, whose own scope, integrity, reflow and Capability Need checks decide the outcome.
+ * No noun list is a gatekeeper: an unknown noun widens nothing deterministic, it just reaches the Architect.
+ */
+export function routeV2FollowUp(prompt: string): V2FollowUpRoute {
+  const request = classifyAdditiveRequest(prompt);
+  // The noun list recognizes possible *new* loose assets; it must never become a
+  // routing system for edits to an object that already exists in the saved world.
+  // A clear add/create/place request may use the deterministic placer. Everything
+  // else, including any existing-object edit, is an operation-plan Architect edit.
+  const createsLooseAsset = /^(?:please\s+)?(?:add|create|place|put)\b/i.test(prompt.trim());
+  return (request.kind === "standalone" || request.kind === "existing") && createsLooseAsset
+    ? { route: "placement" }
+    : { route: "architect", reason: request.kind };
+}
+
 // ── Placement intent ────────────────────────────────────────────────────────────────────────────────────────────
 
 type Side = NonNullable<PlacementIntentRecord["side"]>;

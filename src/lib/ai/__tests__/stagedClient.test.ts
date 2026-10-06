@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { BLANK_V3_SCENE } from "@/lib/v3/scene";
 
 /**
  * Regression coverage for the false-failure bug: a staged generation that completes successfully on the
@@ -51,6 +52,19 @@ afterEach(() => {
 });
 
 describe("requestStagedGeneration", () => {
+  it("refuses to transport a persisted V3 project through V2 SSE", async () => {
+    const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
+    const project = useProjectStore.getState().createProject("V3 mansion", "house", "v3-scene");
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+
+    const result = await requestStagedGeneration({ projectId: project.id, prompt: "A hillside mansion", apply: () => { throw new Error("must not apply"); } });
+
+    expect(JSON.parse(project.houseConfigJson)).toEqual(BLANK_V3_SCENE);
+    expect(result).toMatchObject({ ok: false, status: 409, error: expect.stringContaining("V3 scene projects") });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it("applies the result when the server finishes ok, even though the stream's own stage frames moved the project's live revision", async () => {
     const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
     const project = useProjectStore.getState().createProject("Test House");

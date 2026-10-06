@@ -12,6 +12,9 @@ import { CAMERA_FOV, computeCameraFit } from "@/lib/house/cameraFit";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { CAMERA_FLIGHT_MS, listRooms, resolveRoomFocus, roomCameraGoal, type CameraGoal } from "@/lib/house/roomView";
 import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
+import { isV3ProjectRoot } from "@/lib/v3/scene";
+import { computeV3CameraFit, getV3PresentationBounds, type V3PresentationBounds } from "@/lib/v3/presentation";
+import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
 
 interface Flight {
   fromPosition: THREE.Vector3;
@@ -35,6 +38,8 @@ export function CameraRig() {
   const houseConfigJson = useProjectStore((s) => s.getProject(params.projectId)?.houseConfigJson);
   const cameraPreset = useSceneStore((s) => s.cameraPreset);
   const walkMode = useSceneStore((s) => s.walkMode);
+  const failedPreview = useV3FailedPreviewStore((s) => s.candidate);
+  const previewActive = useV3FailedPreviewStore((s) => s.active);
   const get = useThree((s) => s.get);
   // Only used to re-run when orbit controls come or go (walk mode swaps them); the live objects are read via `get()`.
   const controlsInstance = useThree((s) => s.controls);
@@ -50,8 +55,15 @@ export function CameraRig() {
     if (!cameraPreset || !controls || walkMode) return;
     const aspect = size.width / Math.max(1, size.height);
     const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
+    let v3Bounds: V3PresentationBounds | undefined;
+    try {
+      const preview = process.env.NODE_ENV !== "production" && previewActive && failedPreview?.projectId === params.projectId ? failedPreview.scene : undefined;
+      if (preview) v3Bounds = getV3PresentationBounds(preview);
+      else { const root = JSON.parse(houseConfigJson ?? "{}"); if (isV3ProjectRoot(root)) v3Bounds = getV3PresentationBounds(root.v3Scene); }
+    } catch { /* legacy remains below */ }
     const house = config ?? DEFAULT_HOUSE_CONFIG;
-    const siteFit = () => computeCameraFit(house, site ? computeSiteBounds(site) : undefined, aspect);
+    // V3 frames the presentation bounds (architecture + site structures) around their own centre, never the terrain.
+    const siteFit = () => v3Bounds ? computeV3CameraFit(v3Bounds, aspect) : computeCameraFit(house, site ? computeSiteBounds(site) : undefined, aspect);
 
     const resolve = (preset: CameraPreset): ReturnType<typeof goalOf> | null => {
       switch (preset) {
@@ -60,13 +72,14 @@ export function CameraRig() {
           return goalOf(fit.position, fit.target);
         }
         case "house": {
-          const fit = computeCameraFit(house, undefined, aspect);
+          const fit = v3Bounds ? computeV3CameraFit(v3Bounds, aspect) : computeCameraFit(house, undefined, aspect);
           return goalOf(fit.position, fit.target);
         }
         case "top": {
-          const bounds = site ? computeSiteBounds(site) : { halfWidth: 15, halfDepth: 15 };
+          const bounds = site ? computeSiteBounds(site) : v3Bounds ? { halfWidth: v3Bounds.size[0] / 2, halfDepth: v3Bounds.size[2] / 2 } : { halfWidth: 15, halfDepth: 15 };
           const extent = Math.max(bounds.halfWidth, bounds.halfDepth) + 12;
-          return goalOf(new THREE.Vector3(0, extent * 1.6, 0.001), new THREE.Vector3());
+          const cx = v3Bounds && !site ? v3Bounds.center[0] : 0, cz = v3Bounds && !site ? v3Bounds.center[2] : 0;
+          return goalOf(new THREE.Vector3(cx, extent * 1.6, cz + 0.001), new THREE.Vector3(cx, 0, cz));
         }
         case "room": {
           const { rooms } = listRooms(houseConfigJson ?? "");
@@ -108,7 +121,7 @@ export function CameraRig() {
     useSceneStore.getState().triggerCameraPreset(null);
     // The preset is one-shot; the design and viewport size are read at the moment it fires.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cameraPreset, controlsInstance, walkMode]);
+  }, [cameraPreset, controlsInstance, walkMode, failedPreview, previewActive, params.projectId]);
 
   // Never leave orbiting disabled if the rig goes away mid-flight.
   useEffect(

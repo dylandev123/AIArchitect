@@ -282,7 +282,7 @@ describe("single Architect roof contract", () => {
     }
     expect(thrown).toBeInstanceOf(TypeError);
     expect((thrown as Error).message).toBe("Cannot read properties of undefined (reading 'push')");
-    expect((thrown as Error).stack).toMatch(/geometry\/footprint\.ts:151/);
+    expect((thrown as Error).stack).toMatch(/geometry\/footprint\.ts:152/);
   });
 
   it("turns that malformed Architect document into a same-Architect validation repair before the compiler", async () => {

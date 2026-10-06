@@ -7,10 +7,11 @@ import { useProjectStore } from "@/store/useProjectStore";
 import { useGenerationProgressStore } from "@/store/useGenerationProgressStore";
 import { useArchitectureDebugStore } from "@/store/useArchitectureDebugStore";
 import { revisionOf } from "@/lib/house/revision";
-import type { TimeOfDay } from "@/types/project";
+import type { GenerationMode, TimeOfDay } from "@/types/project";
 import type { CapabilityRequest, GenerationReport } from "@/types/library";
 import type { StageDiagnostics } from "@/lib/architecture/stages/diagnostics";
 import type { HouseEditResult } from "./client";
+import { projectModeAuthority, projectModeDisagreementMessage } from "@/lib/v3/projectMode";
 
 /** Mirrors `PipelineStageEvent` in `@/lib/architecture/stages/pipeline` on the wire; kept structurally loose here since this is untrusted network data. */
 interface StageEventPayload {
@@ -87,6 +88,14 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
   const setProgress = useGenerationProgressStore.getState().setProgress;
   const project = useProjectStore.getState().getProject(req.projectId);
   if (!project) return { ok: false, error: "Project not found.", status: 404 };
+  const authority = projectModeAuthority(project);
+  const modeError = projectModeDisagreementMessage(authority);
+  if (modeError) return { ok: false, error: modeError, status: 409 };
+  // SSE stages are V2 ArchitecturalDesignDocument previews. Never put a V3
+  // project through this transport, even if an obsolete caller bypasses ChatPanel.
+  if (authority.persistedMode === "v3-scene") {
+    return { ok: false, error: "V3 scene projects must use the V3 scene generation route; V2 staged generation is disabled.", status: 409 };
+  }
 
   const baseJson = project.houseConfigJson;
   const baseRevision = revisionOf(baseJson);
@@ -120,6 +129,21 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
   } catch {
     setProgress(null);
     return { ok: false, error: "network error", status: 0 };
+  }
+
+  const serverResolvedMode = res.headers.get("x-ai-architect-resolved-mode") as GenerationMode | null;
+  if (process.env.NODE_ENV !== "production") {
+    console.info("[client-generation]", {
+      projectId: req.projectId,
+      persistedMode: authority.persistedMode,
+      clientResolvedMode: authority.persistedMode,
+      requestMode: "v2-architectural",
+      serverResolvedMode,
+    });
+  }
+  if (serverResolvedMode && serverResolvedMode !== "v2-architectural") {
+    setProgress(null);
+    return { ok: false, error: `Generation mode disagreement: client requested v2-architectural, but server resolved ${serverResolvedMode}. Generation was blocked.`, status: 409 };
   }
 
   if (!res.body || !(res.headers.get("Content-Type") ?? "").includes("text/event-stream")) {

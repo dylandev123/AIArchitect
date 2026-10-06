@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { AlertTriangle, RotateCcw, Sparkles } from "lucide-react";
 import { useProjectStore } from "@/store/useProjectStore";
-import { generateHouseFromJson } from "@/lib/house/generateHouse";
+import { validateProjectJson } from "@/lib/house/validateProjectJson";
 import { BLANK_HOUSE_JSON } from "@/types/house";
 import { classifyPromptTarget } from "@/lib/ai/targeting";
 import { requestHouseEdit } from "@/lib/ai/client";
@@ -49,7 +49,7 @@ export function HouseJsonPanel() {
     }
   };
 
-  const { errors, warnings, config, site } = generateHouseFromJson(text);
+  const { errors, warnings, config, site } = useMemo(() => validateProjectJson(text), [text]);
 
   const handleChange = (value: string) => {
     if (project) updateHouseConfig(project.id, value);

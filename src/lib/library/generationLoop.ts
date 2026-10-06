@@ -242,11 +242,24 @@ export function analyzeGeneration(input: LoopInput, snapshot: LibrarySnapshot, n
     const recipeRequests = capabilityRequestsForRecipes(retrieved.map((r) => r.recipe));
     const reviewRequests = review ? reviewCapabilityRequests(review) : [];
     for (const request of [...capabilityRequests, ...recipeRequests, ...reviewRequests]) {
-      const id = normalizeCapability(request.operation);
-      if (!id) continue; // Unknown prose stays advisory; only registry families become Needs.
-      const capability = capabilityById(id, snapshot.capabilities);
-      if (!capability) continue;
-      const fallback = request.fallback ?? fallbackFor(capability);
+      const knownId = normalizeCapability(request.operation);
+      // A free-text request is evidence of a vocabulary gap, not permission to approximate it with the
+      // nearest shell operation. Persist a deterministic missing capability so the next Architect call can
+      // learn what is executable while the original intent remains reviewable.
+      const id = knownId ?? `unsupported-${request.operation.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48) || "architectural-intent"}`;
+      const capability = capabilityById(id, snapshot.capabilities) ?? {
+        id,
+        name: `Unsupported architectural intent: ${request.operation}`,
+        category: "structure" as const,
+        description: request.desiredBehaviour ?? request.operation,
+        domain: "architecture" as const,
+        parameters: [], constraints: ["No deterministic construction vocabulary exists yet."], compatibleMassTypes: ["house", "wing", "pavilion"],
+        status: "missing" as const, version: 1, usageCount: 0, successCount: 0, failureCount: 0,
+        visualImpact: 5, implementationDifficulty: 5, performanceCost: 3, architecturalImportance: 5,
+        created_at: now.toISOString(), updated_at: now.toISOString(),
+        implementationNotes: "Recorded from unsupported Architect intent; no substitute geometry was authored.",
+      };
+      const fallback = request.fallback ?? (knownId ? fallbackFor(capability) : "Preserve the requested intent as a capability need; do not substitute unrelated geometry.");
       const nextCapability = { ...capability, usageCount: capability.usageCount + 1, ...(capability.status === "supported" ? { successCount: capability.successCount + 1 } : { failureCount: capability.failureCount + 1 }), updated_at: now.toISOString() };
       capabilities.set(id, nextCapability);
       if (capability.status === "supported") {

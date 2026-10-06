@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { z } from "zod";
 import { asSchema } from "ai";
 import { foundationStageOutputSchema, massExpansionStageOutputSchema, roofCompositionStageOutputSchema } from "../schemas";
+import { architectEditResponseSchema } from "../architectStage";
 
 function expectObjectRootSchema(schema: z.ZodType) {
   const jsonSchema = asSchema(schema).jsonSchema as { type?: unknown; oneOf?: unknown; anyOf?: unknown; properties?: unknown };
@@ -9,6 +10,20 @@ function expectObjectRootSchema(schema: z.ZodType) {
   expect(jsonSchema.oneOf).toBeUndefined();
   expect(jsonSchema.anyOf).toBeUndefined();
   expect(jsonSchema.properties).toBeTruthy();
+}
+
+function expectNoUnsupportedStructuredOutputNodes(value: unknown, path = "response"): void {
+  if (!value || typeof value !== "object") return;
+  const node = value as Record<string, unknown>;
+  // Draft 2020-12 uses prefixItems for tuples; older emitters used an array-valued items.
+  expect(Array.isArray(node.items), `${path}.items must be one schema, never a tuple array`).toBe(false);
+  expect(node.prefixItems, `${path}.prefixItems must be absent`).toBeUndefined();
+  // OpenAI response formats need closed, described object shapes rather than free-form maps.
+  if (node.type === "object") expect(node.additionalProperties, `${path}.additionalProperties`).not.toEqual({});
+  for (const [key, child] of Object.entries(node)) {
+    if (Array.isArray(child)) child.forEach((entry, index) => expectNoUnsupportedStructuredOutputNodes(entry, `${path}.${key}[${index}]`));
+    else expectNoUnsupportedStructuredOutputNodes(child, `${path}.${key}`);
+  }
 }
 
 /**
@@ -30,6 +45,12 @@ describe("stage schemas compile to a provider-valid root JSON Schema", () => {
 
   it("roofCompositionStageOutputSchema has a root type of \"object\"", () => {
     expectObjectRootSchema(roofCompositionStageOutputSchema);
+  });
+
+  it("Architect edit uses one object-root operation-plan schema with no tuple vectors or free-form object branches", () => {
+    const jsonSchema = asSchema(architectEditResponseSchema).jsonSchema;
+    expectObjectRootSchema(architectEditResponseSchema);
+    expectNoUnsupportedStructuredOutputNodes(jsonSchema);
   });
 
   it("mass expansion's add-only fields are optional in the wire schema, conditionally required only via local superRefine", () => {

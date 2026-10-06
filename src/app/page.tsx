@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowUp, ChevronRight, Clock, FolderOpen } from "lucide-react";
-import { useProjectStore } from "@/store/useProjectStore";
+import { useProjectStore, verifyPersistedProjectMode } from "@/store/useProjectStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useHydrated } from "@/lib/useHydrated";
 import { formatRelativeTime } from "@/lib/format";
@@ -28,6 +28,8 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [creating, setCreating] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [v3SceneMode, setV3SceneMode] = useState(false);
+  const [creationError, setCreationError] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   /** Suggestions and inspiration only tailor the prompt; the user still presses Generate. */
@@ -45,7 +47,18 @@ export default function Home() {
     const brief = prompt.trim();
     if (!brief || creating) return;
     setCreating(true);
-    const project = createProject(projectNameFromBrief(brief));
+    setCreationError(null);
+    const project = createProject(projectNameFromBrief(brief), "house", v3SceneMode ? "v3-scene" : "v2-architectural");
+    if (v3SceneMode) {
+      // Do not let a transient checkbox claim V3: re-read the persisted V3 root
+      // before a workspace (or its pending AI request) can open.
+      const verified = verifyPersistedProjectMode(project.id, "v3-scene");
+      if (!verified.ok) {
+        setCreationError(verified.error);
+        setCreating(false);
+        return;
+      }
+    }
     setPendingBrief(project.id, brief);
     router.push(`/workspace/${project.id}`);
   };
@@ -128,7 +141,10 @@ export default function Home() {
                 className="w-full resize-none bg-transparent px-2 py-1.5 text-base leading-relaxed text-neutral-100 outline-none placeholder:text-neutral-600 disabled:opacity-60"
               />
               <div className="flex items-center justify-between gap-3 pt-1">
-                <span className="pl-2 text-[11px] text-neutral-600">Enter to generate · Shift+Enter for a new line</span>
+                <label className="flex cursor-pointer items-center gap-1.5 pl-2 text-[11px] text-neutral-500">
+                  <input type="checkbox" checked={v3SceneMode} onChange={(e) => setV3SceneMode(e.target.checked)} className="accent-amber-500" />
+                  Experimental V3 scene mode
+                </label>
                 <button
                   type="submit"
                   disabled={!prompt.trim() || creating}
@@ -142,6 +158,7 @@ export default function Home() {
                   Generate
                 </button>
               </div>
+              {creationError && <p role="alert" className="px-2 pt-2 text-xs text-red-300">{creationError}</p>}
             </form>
           </div>
 

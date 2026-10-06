@@ -2,8 +2,10 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
+import type { GenerationMode, Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
 import { BLANK_HOUSE_JSON } from "@/types/house";
+import { BLANK_V3_SCENE, isV3ProjectRoot } from "@/lib/v3/scene";
+import { projectModeAuthority, resolveProjectGenerationMode } from "@/lib/v3/projectMode";
 import { documentAudit } from "@/lib/architecture/renderAudit";
 import { useRenderFlightStore } from "./useRenderFlightStore";
 
@@ -11,14 +13,49 @@ function makeVersion(summary: string, houseConfigJson: string): ProjectVersion {
   return { id: crypto.randomUUID(), createdAt: Date.now(), summary, houseConfigJson };
 }
 
-const STORAGE_KEY = "ai-architect-projects";
+export const PROJECT_STORAGE_KEY = "ai-architect-projects";
 let devConfigRevision = 0;
+
+function normalizePersistedProject(project: Project): Project {
+  // This also runs for a same-version rehydrate through `merge`, which is
+  // essential for a V3 record written by an earlier experimental build.
+  return { ...project, generationMode: resolveProjectGenerationMode(project) };
+}
+
+export type PersistedModeVerification =
+  | { ok: true; project: Project; persistedMode: GenerationMode }
+  | { ok: false; error: string; persistedMode?: GenerationMode };
+
+/**
+ * Reads the browser-persisted record, rather than Zustand's current memory.
+ * New V3 entry points call this immediately after creation before navigation.
+ */
+export function verifyPersistedProjectMode(projectId: string, expected: GenerationMode): PersistedModeVerification {
+  if (typeof window === "undefined") return { ok: false, error: "Project storage is unavailable; workspace entry was blocked." };
+  try {
+    const raw = window.localStorage.getItem(PROJECT_STORAGE_KEY);
+    const saved = raw ? JSON.parse(raw) as { state?: { projects?: Project[] } } : undefined;
+    const project = saved?.state?.projects?.find((candidate) => candidate.id === projectId);
+    if (!project) return { ok: false, error: "Project was not persisted; workspace entry was blocked." };
+    const authority = projectModeAuthority(project);
+    if (authority.persistedMode !== expected || !authority.agrees) {
+      return { ok: false, persistedMode: authority.persistedMode, error: `Project mode was not persisted as ${expected}; workspace entry was blocked.` };
+    }
+    return { ok: true, project, persistedMode: authority.persistedMode };
+  } catch {
+    return { ok: false, error: "Project storage could not be read; workspace entry was blocked." };
+  }
+}
 
 function logConfigChange(id: string, houseConfigJson: string, source: string): void {
   useRenderFlightStore.getState().noteWrite(source);
   if (process.env.NODE_ENV === "production") return;
   try {
     const raw = JSON.parse(houseConfigJson) as Record<string, unknown>;
+    if (isV3ProjectRoot(raw)) {
+      console.info("[V3 CONFIG]", { revision: ++devConfigRevision, source, projectId: id, objectCount: raw.v3Scene.objects.length });
+      return;
+    }
     const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
     const audit = document && typeof document === "object" && "massing" in document ? documentAudit(document as Parameters<typeof documentAudit>[0]) : undefined;
     console.info("[V2 CONFIG]", { revision: ++devConfigRevision, source, projectId: id, hasArchitecturalDesignDocument: !!raw.architecturalDesignDocument, documentHash: audit?.hash, massCount: audit?.massCount ?? 0, operationCount: audit?.operationCount ?? 0 });
@@ -27,7 +64,7 @@ function logConfigChange(id: string, houseConfigJson: string, source: string): v
 
 interface ProjectStore {
   projects: Project[];
-  createProject: (name: string, projectType?: ProjectType) => Project;
+  createProject: (name: string, projectType?: ProjectType, generationMode?: GenerationMode) => Project;
   renameProject: (id: string, name: string) => void;
   /** Copies a project (all versions) under a new ID, named "<name> (Copy)". Returns the copy. */
   duplicateProject: (id: string) => Project | undefined;
@@ -55,15 +92,17 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
 
-      createProject: (name, projectType = "house") => {
-        const initialVersion = makeVersion("Blank project", BLANK_HOUSE_JSON);
+      createProject: (name, projectType = "house", generationMode = "v2-architectural") => {
+        const initialJson = generationMode === "v3-scene" ? JSON.stringify(BLANK_V3_SCENE) : BLANK_HOUSE_JSON;
+        const initialVersion = makeVersion("Blank project", initialJson);
         const project: Project = {
           id: crypto.randomUUID(),
           name: name.trim() || "Untitled Project",
           createdAt: Date.now(),
           updatedAt: Date.now(),
           projectType,
-          houseConfigJson: BLANK_HOUSE_JSON,
+          generationMode,
+          houseConfigJson: initialJson,
           versions: [initialVersion],
           currentVersionIndex: 0,
         };
@@ -105,7 +144,7 @@ export const useProjectStore = create<ProjectStore>()(
         try {
           set((state) => ({ projects: state.projects.filter((p) => p.id !== id) }));
           // Confirm the removal actually reached storage, not just memory.
-          const raw = localStorage.getItem(STORAGE_KEY);
+          const raw = localStorage.getItem(PROJECT_STORAGE_KEY);
           const stored = raw ? (JSON.parse(raw).state?.projects as Project[] | undefined) : [];
           if (stored?.some((p) => p.id === id)) throw new Error("not persisted");
           return true;
@@ -200,8 +239,8 @@ export const useProjectStore = create<ProjectStore>()(
         })),
     }),
     {
-      name: STORAGE_KEY,
-      version: 5,
+      name: PROJECT_STORAGE_KEY,
+      version: 6,
       migrate: (persisted) => {
         const state = persisted as { projects?: Project[] };
         return {
@@ -217,8 +256,18 @@ export const useProjectStore = create<ProjectStore>()(
                 : versions.length - 1;
             // v5: backfill projectType — existing projects default to "house"
             const projectType: ProjectType = (p as Project & { projectType?: ProjectType }).projectType ?? "house";
-            return { ...p, houseConfigJson, versions, currentVersionIndex, projectType };
+            return normalizePersistedProject({ ...p, houseConfigJson, versions, currentVersionIndex, projectType });
           }),
+        };
+      },
+      // Migrations run only after a version bump. Merge makes the invariant
+      // hold for same-version persisted browser data as well.
+      merge: (persisted, current) => {
+        const saved = persisted as { projects?: Project[] };
+        return {
+          ...current,
+          ...saved,
+          projects: (saved.projects ?? []).map(normalizePersistedProject),
         };
       },
       onRehydrateStorage: () => (state) => {
@@ -232,6 +281,6 @@ export const useProjectStore = create<ProjectStore>()(
 // by a stale tab; the workspace page redirects home once its project disappears.
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (e) => {
-    if (e.key === STORAGE_KEY) void useProjectStore.persist.rehydrate();
+    if (e.key === PROJECT_STORAGE_KEY) void useProjectStore.persist.rehydrate();
   });
 }

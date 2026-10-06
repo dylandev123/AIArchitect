@@ -25,6 +25,10 @@ import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib
 import { compileV2SiteFeatures, v2SitePlanOf } from "@/lib/architecture/v2SiteFeatures";
 import { ProceduralOutdoorPlaceholder } from "./ProceduralOutdoorPlaceholder";
 import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
+import { compileV3Scene, isV3ProjectRoot } from "@/lib/v3/scene";
+import { validateV3Scene } from "@/lib/v3/validation";
+import { applyV3RenderDiagnostics } from "@/lib/v3/presentation";
+import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -86,13 +90,29 @@ export function HouseRenderer() {
   const geometryXRay = useSceneStore((s) => s.geometryXRay);
   const isolateMassId = useSceneStore((s) => s.isolateArchitectureMassId);
   const v2OnlyMode = useSceneStore((s) => s.v2OnlyMode);
-  const priorBranch = useRef<"v2" | "legacy" | null>(null);
+  const v3TerrainDebug = useSceneStore((s) => s.v3TerrainDebug);
+  const v3Diagnostics = useSceneStore((s) => s.v3Diagnostics);
+  const failedPreview = useV3FailedPreviewStore((s) => s.candidate);
+  const previewActive = useV3FailedPreviewStore((s) => s.active);
+  const priorBranch = useRef<"v2" | "v3" | "v3-preview" | "legacy" | null>(null);
   useEffect(() => { noteRenderWriter("HouseRenderer-mount-or-fast-refresh"); }, [noteRenderWriter]);
 
   const renderJson = frozen?.configJson ?? viewed?.configJson ?? houseConfigJson;
+  const previewScene = process.env.NODE_ENV !== "production" && previewActive && failedPreview?.projectId === params.projectId ? failedPreview.scene : undefined;
   const { model, site, document, violations } = useMemo(() => {
     try {
+      // The recovery parser has already admitted only compiler-safe fields.
+      // Do not re-run strict validation here: previewing is explicitly the
+      // visual inspection path for a scene that failed that contract.
+      if (previewScene) return { model: applyV3RenderDiagnostics(compileV3Scene(previewScene, { debug: v3TerrainDebug }), previewScene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
       const raw = JSON.parse(renderJson ?? "{}");
+      if (isV3ProjectRoot(raw)) {
+        // Lenient: only structurally unusable scenes (fatal) are withheld. Physical imperfections (unresolved supports,
+        // tolerance, overlaps) are reported as warnings at generation time and must never blank an accepted scene.
+        const valid = validateV3Scene(raw.v3Scene, { lenient: true });
+        if (!valid.ok) return { model: null, site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+        return { model: applyV3RenderDiagnostics(compileV3Scene(raw.v3Scene, { debug: v3TerrainDebug }), raw.v3Scene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+      }
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
       if (isArchitecturalDesignDocument(document)) {
         const legacy = generateHouseFromJson(renderJson ?? "{}");
@@ -105,11 +125,14 @@ export function HouseRenderer() {
       }
     } catch { /* legacy generator exposes JSON errors normally */ }
     return { ...generateHouseFromJson(renderJson ?? "{}"), document: undefined, violations: [] as V2OnlyViolation[] };
-  }, [architectureDebug, renderJson, v2OnlyMode, cutawayLevel]);
+  }, [architectureDebug, previewScene, renderJson, v2OnlyMode, cutawayLevel, v3TerrainDebug, v3Diagnostics]);
   useEffect(() => {
     violations.forEach(logV2OnlyViolation);
   }, [violations]);
-  const branch = document ? "v2" : "legacy";
+  const branch = useMemo(() => {
+    if (previewScene) return "v3-preview";
+    try { return isV3ProjectRoot(JSON.parse(renderJson ?? "{}")) ? "v3" : document ? "v2" : "legacy"; } catch { return "legacy"; }
+  }, [document, previewScene, renderJson]);
   const configRevision = revisionOf(renderJson ?? "{}");
   const audit = document ? documentAudit(document) : undefined;
   useEffect(() => {
@@ -188,7 +211,7 @@ export function HouseRenderer() {
   return (
     <group>
       {isolated.map((primitive, i) =>
-        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} /> : null
+        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} readOnly={!!previewScene} /> : null
       )}
       {swapped.map((p) => (
         <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />

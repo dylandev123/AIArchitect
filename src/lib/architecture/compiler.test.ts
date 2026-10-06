@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_MATERIALS_CONFIG } from "@/types/house";
 import { capabilityRegistry } from "@/lib/capabilities/registry";
 import { compileArchitecture, projectArchitectureToLegacy } from "./compiler";
+import { hostedSlabRect } from "./geometry/assemblies";
 import { ARCHITECTURE_FIXTURES } from "./fixtures";
 import type { ArchitecturalDesignDocument } from "./document";
 
@@ -48,6 +49,111 @@ describe("procedural architecture compiler", () => {
     expect(upperX.length).toBeGreaterThan(0);
     expect(groundX.length).toBeGreaterThan(0);
     expect(mean(upperX) - mean(groundX)).toBeCloseTo(2, 5);
+  });
+
+  it("compiles a balcony as an exterior upper-floor slab without changing its wall, window, footprint, or roof", () => {
+    const mass = { id: "living", name: "Living", role: "main-living" as const, position: { x: 0, z: 0 }, width: 10, depth: 8, height: 6.8, floors: 2, elevation: 0, rotation: 0,
+      openings: [{ id: "upper-window", type: "glazing-zone" as const, facade: "north" as const, start: .6, end: .86, heightRatio: .68, floors: "upper" as const, frame: true }],
+    };
+    const before = baseDoc({ massing: { composition: "rectangular-pavilion", masses: [mass] }, roofs: { recipes: [{ id: "living-roof", massId: "living", kind: "flat", overhang: .4 }] } });
+    const balcony = { id: "living:upper-front-balcony", type: "balcony" as const, facade: "north" as const, start: .6, end: .86, depth: 1.65, floors: "upper" as const };
+    const after = { ...before, massing: { ...before.massing, masses: [{ ...mass, operations: [balcony] }] } };
+    const baseline = compileArchitecture(before, { materials: DEFAULT_MATERIALS_CONFIG });
+    const compiled = compileArchitecture(after, { materials: DEFAULT_MATERIALS_CONFIG });
+    expect(compiled.errors).toEqual([]);
+
+    const platform = compiled.model.primitives.find((p) => p.id === "architecture-living-balcony-living:upper-front-balcony");
+    expect(platform).toMatchObject({ kind: "box", category: "floor" });
+    if (!platform || platform.kind !== "box") throw new Error("balcony must compile to a slab box");
+    expect(platform.position).toEqual([2.3, 3.5, -4.825]);
+    expect(platform.size[0]).toBeCloseTo(2.6);
+    expect(platform.size[1]).toBeCloseTo(.2);
+    expect(platform.size[2]).toBeCloseTo(1.65);
+    // Every original primitive is byte-for-byte identical: specifically the original north wall and its window.
+    const beforeWithoutPlatform = baseline.model.primitives;
+    const afterWithoutPlatform = compiled.model.primitives.filter((p) => p !== platform);
+    expect(afterWithoutPlatform).toEqual(beforeWithoutPlatform);
+    expect(compiled.model.primitives.find((p) => p.id === "architecture-living-wall-1-north-window-0-glass"))
+      .toEqual(baseline.model.primitives.find((p) => p.id === "architecture-living-wall-1-north-window-0-glass"));
+    expect(compiled.model.primitives.filter((p): p is Extract<typeof p, { kind: "box" }> => p.kind === "box").filter((p) => p.category === "wall" && p.position[2] < -4)).toEqual([]);
+    expect(compiled.diagnostics?.geometry.find((g) => g.massId === "living")?.topFloorRectCount).toBe(1);
+  });
+
+  it("composes a balcony and portico from the shared assembly parts, preserving the shell and rotating with its mass", () => {
+    const mass = { id: "living", name: "Living", role: "main-living" as const, position: { x: 12, z: -4 }, width: 10, depth: 8, height: 6.8, floors: 2, elevation: 0, rotation: Math.PI / 2,
+      openings: [{ id: "upper-window", type: "glazing-zone" as const, facade: "north" as const, start: .58, end: .86, heightRatio: .68, floors: "upper" as const, frame: true }],
+      assemblies: [{ id: "front-balcony", intent: "modern balcony", parts: [
+        { id: "platform", type: "slab" as const, facade: "north" as const, start: .58, end: .86, depth: 1.65, level: 1 },
+        { id: "guard", type: "railing" as const, slabId: "platform", edges: ["outer", "start", "end"] as const, height: 1.1 },
+      ] }, { id: "entry-portico", intent: "portico", parts: [
+        { id: "canopy", type: "slab" as const, facade: "south" as const, start: .3, end: .7, depth: 1.4, level: 0, elevation: 2.7, thickness: .16 },
+        { id: "left-column", type: "post" as const, facade: "south" as const, at: .3, depth: 1.3, level: 0, height: 2.7 },
+        { id: "right-column", type: "post" as const, facade: "south" as const, at: .7, depth: 1.3, level: 0, height: 2.7 },
+        { id: "lintel", type: "beam" as const, facade: "south" as const, start: .3, end: .7, depth: 1.3, level: 0, elevation: 2.5, height: .2 },
+      ] }],
+    };
+    const before = baseDoc({ massing: { composition: "rectangular-pavilion", masses: [{ ...mass, assemblies: [] }] }, roofs: { recipes: [{ id: "living-roof", massId: "living", kind: "flat", overhang: .4 }] } });
+    const after = baseDoc({ massing: { composition: "rectangular-pavilion", masses: [mass] }, roofs: before.roofs });
+    const baseline = compileArchitecture(before, { materials: DEFAULT_MATERIALS_CONFIG });
+    const compiled = compileArchitecture(after, { materials: DEFAULT_MATERIALS_CONFIG });
+    expect(compiled.errors).toEqual([]);
+    const added = compiled.model.primitives.filter((p) => p.id.includes("-assembly-"));
+    expect(added.map((p) => p.id)).toEqual(expect.arrayContaining([
+      "architecture-living-assembly-front-balcony-platform",
+      "architecture-living-assembly-front-balcony-guard-outer",
+      "architecture-living-assembly-entry-portico-left-column",
+      "architecture-living-assembly-entry-portico-lintel",
+    ]));
+    // At +90° a local north-facing platform projects to world west; the existing wall/window/roof remain byte-stable.
+    const platform = added.find((p) => p.id.endsWith("front-balcony-platform"));
+    expect(platform).toMatchObject({ kind: "box" });
+    if (!platform || platform.kind !== "box") throw new Error("assembly slab must be a box");
+    expect(platform.position[0]).toBeCloseTo(7.175);
+    expect(platform.position[1]).toBeCloseTo(3.5);
+    expect(platform.position[2]).toBeCloseTo(-6.2);
+    const withoutAssemblies = compiled.model.primitives.filter((p) => !p.id.includes("-assembly-"));
+    expect(withoutAssemblies).toEqual(baseline.model.primitives);
+    // The document is plain data: save/reload makes no hidden geometry decisions.
+    expect(compileArchitecture(JSON.parse(JSON.stringify(after)), { materials: DEFAULT_MATERIALS_CONFIG }).model.primitives).toEqual(compiled.model.primitives);
+  });
+
+  it("maps additive slabs onto every local facade before the shared mass rotation transform", () => {
+    const mass = { width: 10, depth: 8 };
+    const slab = (facade: "north" | "south" | "east" | "west") => hostedSlabRect(mass, { id: "slab", type: "slab", facade, start: .2, end: .6, depth: 1, level: 0 });
+    expect(slab("north")).toEqual({ x0: -3, x1: 1, z0: -5, z1: -4 });
+    expect(slab("south")).toEqual({ x0: -3, x1: 1, z0: 4, z1: 5 });
+    expect(slab("east")).toMatchObject({ x0: 5, x1: 6, z0: -2.4 });
+    expect(slab("east").z1).toBeCloseTo(.8);
+    expect(slab("west")).toMatchObject({ x0: -6, x1: -5, z0: -2.4 });
+    expect(slab("west").z1).toBeCloseTo(.8);
+  });
+
+  it("resolves floor, facade, terrace, roof, and slab hosts deterministically on a rotated mass", () => {
+    const mass = {
+      id: "rotated", name: "Rotated", role: "main-living" as const, position: { x: 10, z: -6 }, width: 10, depth: 8, height: 6.8, floors: 2, elevation: 1.2, rotation: Math.PI / 2,
+      assemblies: [{
+        id: "shaded-edge", intent: "A deliberately long descriptive note about a layered tropical shaded edge, privacy rhythm, arrival sequence, and view-oriented outdoor room that is metadata rather than a renderer command.", parts: [
+          { id: "upper-platform", type: "slab" as const, facade: "north" as const, start: .25, end: .75, depth: 1.2, host: { kind: "facade" as const, facade: "north" as const, level: 1 } },
+          { id: "screen-post", type: "post" as const, facade: "north" as const, at: .25, depth: 1.1, host: { kind: "slab" as const, slabId: "upper-platform" }, height: 1.4 },
+          { id: "roof-canopy", type: "slab" as const, facade: "east" as const, start: .2, end: .8, depth: .9, host: { kind: "roof" as const, offset: .15 } },
+          { id: "terrace-shade", type: "beam" as const, facade: "south" as const, start: .3, end: .7, depth: 1, host: { kind: "terrace" as const, offset: 2.5 }, height: .2 },
+        ],
+      }],
+    };
+    const doc = baseDoc({ massing: { composition: "rotated-wings", masses: [mass] }, roofs: { recipes: [{ id: "rotated-roof", massId: mass.id, kind: "flat", overhang: .4 }] } });
+    const compiled = compileArchitecture(doc, { materials: DEFAULT_MATERIALS_CONFIG });
+    expect(compiled.errors).toEqual([]);
+    const primitive = (id: string) => {
+      const found = compiled.model.primitives.find((p) => p.id === `architecture-rotated-assembly-shaded-edge-${id}`);
+      if (!found || found.kind !== "box") throw new Error(`missing ${id}`);
+      return found;
+    };
+    // Hosts resolve in local mass space, then the ordinary mass elevation/rotation transform is applied once.
+    expect(primitive("upper-platform").position[1]).toBeCloseTo(4.7); // level 1 (3.4) + elevation 1.2 + half slab
+    expect(primitive("screen-post").position[1]).toBeCloseTo(5.5); // platform top + half post
+    expect(primitive("roof-canopy").position[1]).toBeCloseTo(8.25); // mass roofline + host offset + mass elevation + half slab
+    expect(primitive("terrace-shade").position[1]).toBeCloseTo(3.8); // terrace support + offset + mass elevation + half beam
+    expect(compileArchitecture(JSON.parse(JSON.stringify(doc)), { materials: DEFAULT_MATERIALS_CONFIG }).model.primitives).toEqual(compiled.model.primitives);
   });
 
   it("strips primitive ids a capability requests removed before adding its own geometry", () => {

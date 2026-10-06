@@ -76,6 +76,21 @@ describe("requestHouseEdit V2 commit boundary", () => {
     expect(useProjectStore.getState().getProject(project.id)!.houseConfigJson).toBe(base);
   });
 
+  it("treats an evidence-backed V2 no-op as success without saving a new version", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const project = useProjectStore.getState().createProject("Luxury V2");
+    const base = jsonFor();
+    useProjectStore.getState().updateHouseConfig(project.id, base);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "The requested condition already exists.", outcome: "already-satisfied", json: base }) }));
+
+    const apply = vi.fn();
+    const result = await requestHouseEdit({ projectId: project.id, prompt: "Confirm the existing condition", apply });
+
+    expect(result).toEqual({ ok: true, summary: "The requested condition already exists.", generated: false, unchanged: "already-satisfied" });
+    expect(apply).not.toHaveBeenCalled();
+    expect(useProjectStore.getState().getProject(project.id)!.houseConfigJson).toBe(base);
+  });
+
   it("commits a deterministic V2 mass move and resize through the same follow-up client path", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
     const project = useProjectStore.getState().createProject("Luxury V2");

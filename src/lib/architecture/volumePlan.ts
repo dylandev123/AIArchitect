@@ -432,12 +432,12 @@ export function realizeVolumePlan(mass: MassVolume, masses: readonly MassVolume[
 function opKey(op: MassGeometryOperation): string {
   if (op.type === "notch" || op.type === "chamfer") return `form:${op.type}`;
   if (op.type === "entry-recess") return `entry:${op.facade}`;
-  if (op.open) return "outdoor-room";
+  if ((op.type === "recess" || op.type === "projection") && op.open) return "outdoor-room";
   return `${op.type}:${op.floors ?? "all"}`;
 }
 const opLabel = (op: MassGeometryOperation) => (op.type === "notch" || op.type === "chamfer" ? `${op.type} (reference: the ${op.corner} corner)`
   : op.type === "entry-recess" ? `entry-recess on the ${op.facade} facade`
-  : op.open ? `open (open:true) recess or projection — the outdoor room (reference: the ${op.facade} facade)`
+  : (op.type === "recess" || op.type === "projection") && op.open ? `open (open:true) recess or projection — the outdoor room (reference: the ${op.facade} facade)`
   : `${op.type}${op.floors && op.floors !== "all" ? ` on floors:"${op.floors}"` : ""} (reference: the ${op.facade} facade)`);
 function openingKey(op: MassOpening): string { return `${op.facade}:${op.type === "glazing-zone" ? "glass" : op.type === "door" ? "door" : "rhythm"}`; }
 /** A capability the plan calls for on a volume (a canopy, fins, a screen, props), by id and — where it is facade-bound — world side. */

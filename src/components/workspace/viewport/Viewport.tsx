@@ -17,6 +17,7 @@ import { CameraRig } from "./CameraRig";
 import { RoomNavigator } from "./RoomNavigator";
 import { QuickActions } from "./QuickActions";
 import { GenerationOverlay } from "./GenerationOverlay";
+import { V3FailedPreviewBanner } from "./V3FailedPreviewBanner";
 import { useNeedsGeneration } from "./useNeedsGeneration";
 import { useRoomFocusSync } from "../useRoomFocus";
 import { useSceneStore } from "@/store/useSceneStore";
@@ -27,6 +28,8 @@ import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { preloadPbrLibrary } from "@/lib/pbrLibrary";
 import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
 import type { TimeOfDay } from "@/types/project";
+import { isV3ProjectRoot } from "@/lib/v3/scene";
+import { computeV3CameraFit, getV3PresentationBounds } from "@/lib/v3/presentation";
 
 type WalkKey = "forward" | "backward" | "left" | "right";
 
@@ -96,6 +99,12 @@ export function Viewport() {
   );
 
   const initialFit = useMemo(() => {
+    try {
+      const root = JSON.parse(houseConfigJson ?? "{}");
+      if (isV3ProjectRoot(root)) {
+        return computeV3CameraFit(getV3PresentationBounds(root.v3Scene));
+      }
+    } catch { /* fall through to legacy parse */ }
     const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
     const bounds = site ? computeSiteBounds(site) : undefined;
     return computeCameraFit(config ?? DEFAULT_HOUSE_CONFIG, bounds);
@@ -149,6 +158,7 @@ export function Viewport() {
       )}
 
       <ViewportToolbar onEnterWalk={() => setWalkMode(true)} />
+      <V3FailedPreviewBanner />
       <RoomNavigator projectId={params.projectId} />
       <GenerationOverlay />
       {!blank && <QuickActions />}

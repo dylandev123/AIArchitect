@@ -1,5 +1,7 @@
 export type ProjectType = "house" | "villa" | "resort" | "restaurant" | "commercial";
 export type TimeOfDay = "morning" | "midday" | "sunset" | "night";
+/** V3 is opt-in; persisted V2 projects retain their existing default. */
+export type GenerationMode = "v2-architectural" | "v3-scene";
 
 export const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
   house:      "House",
@@ -32,6 +34,7 @@ export interface Project {
   updatedAt: number;
   /** Categorises what's being built — drives which sidebar elements are available. */
   projectType: ProjectType;
+  generationMode?: GenerationMode;
   /** Raw JSON text driving procedural house generation for this project. */
   houseConfigJson: string;
   /** Permanent, append-only log of every AI edit. Never truncated or overwritten. */

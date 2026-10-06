@@ -12,6 +12,75 @@ export interface ProviderErrorContext {
 }
 
 /**
+ * The SDK retains the provider's parsed error body on APICallError, but the
+ * generic client response intentionally does not disclose it. Keep the small,
+ * actionable portion for server diagnostics without ever logging the request,
+ * URL, headers, or an unbounded provider body.
+ */
+export type ProviderRequestRejection = {
+  name: string;
+  status?: number;
+  type?: string;
+  code?: string;
+  parameter?: string;
+  message: string;
+};
+
+const PROVIDER_DIAGNOSTIC_MAX_CHARS = 600;
+
+function redactProviderDiagnostic(value: string): string {
+  return value
+    .replace(/\bsk-(?:proj-)?[A-Za-z0-9_-]{8,}\b/g, "[REDACTED_API_KEY]")
+    .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]+/gi, "Bearer [REDACTED]")
+    .replace(/([\"']?(?:(?:x-)?api[_-]?key|authorization|cookie|password|secret|token)[\"']?\s*[:=]\s*[\"']?)[^\"'\s,}\]]+/gi, "$1[REDACTED]")
+    .slice(0, PROVIDER_DIAGNOSTIC_MAX_CHARS);
+}
+
+function providerErrorObject(error: APICallError): Record<string, unknown> | undefined {
+  const fromData = error.data;
+  if (fromData && typeof fromData === "object" && !Array.isArray(fromData)) {
+    const nested = (fromData as Record<string, unknown>).error;
+    if (nested && typeof nested === "object" && !Array.isArray(nested)) return nested as Record<string, unknown>;
+  }
+  if (!error.responseBody) return undefined;
+  try {
+    const parsed: unknown = JSON.parse(error.responseBody);
+    const nested = parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>).error
+      : undefined;
+    return nested && typeof nested === "object" && !Array.isArray(nested) ? nested as Record<string, unknown> : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function diagnosticString(value: unknown): string | undefined {
+  if (typeof value !== "string" && typeof value !== "number") return undefined;
+  return redactProviderDiagnostic(String(value));
+}
+
+/** Extracts only the stable provider-error fields; it never exposes request data. */
+export function describeProviderRequestRejection(error: unknown): ProviderRequestRejection | undefined {
+  if (!APICallError.isInstance(error)) return undefined;
+  const detail = providerErrorObject(error);
+  return {
+    name: error.name || "AI_APICallError",
+    ...(error.statusCode !== undefined ? { status: error.statusCode } : {}),
+    ...(diagnosticString(detail?.type) ? { type: diagnosticString(detail?.type) } : {}),
+    ...(diagnosticString(detail?.code) ? { code: diagnosticString(detail?.code) } : {}),
+    ...(diagnosticString(detail?.param) ? { parameter: diagnosticString(detail?.param) } : {}),
+    message: diagnosticString(detail?.message) ?? redactProviderDiagnostic(error.message || "Provider request failed"),
+  };
+}
+
+/** V3-only server logging for provider rejections before a model response exists. */
+export function logV3ProviderRequestRejection(error: unknown): ProviderRequestRejection | undefined {
+  const rejection = describeProviderRequestRejection(error);
+  if (rejection) console.warn("[v3-provider] request rejected", rejection);
+  return rejection;
+}
+
+/**
  * Maps a model-call failure to a clear, actionable response instead of a generic one (or a platform 504).
  * `stage` (dev-only) names which part of generation actually failed — the mandatory final design call is
  * the one most likely to time out, distinct from the bounded architecture sub-stages, which never throw here.

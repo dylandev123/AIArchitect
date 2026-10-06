@@ -180,6 +180,7 @@ const entrySpan = (op: EntryRecess, mass: Pick<MassVolume, "width" | "depth">): 
 /** The span of `facade` a footprint move takes off the original facade plane (where no opening on that plane can be built). */
 function takenSpan(op: MassGeometryOperation, facade: MassFacade, mass: Pick<MassVolume, "width" | "depth">): Interval | undefined {
   if (op.type === "recess" || op.type === "projection") return op.facade === facade ? { start: Math.min(op.start, op.end), end: Math.max(op.start, op.end) } : undefined;
+  if (op.type === "balcony") return undefined;
   if (op.type === "entry-recess") return op.facade === facade ? entrySpan(op, mass) : undefined;
   const [ns, ew] = [op.corner[0], op.corner[1]];
   const ofFacade = facade === "north" || facade === "south" ? facade[0] === ns : facade[0] === ew;

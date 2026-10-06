@@ -47,6 +47,8 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "obj
 /** Every authored field is present, unchanged, on the executed feature (the executor may add ids/asset references). */
 const carries = (executed: unknown, authored: Record<string, unknown>) => isRecord(executed) && Object.entries(authored).every(([key, value]) => JSON.stringify(executed[key]) === JSON.stringify(value));
 const ROOF_SUPPORT_TOLERANCE_M = 0.05;
+/** A thin slab needs its own small contact tolerance; the site-plan's 0.5m clearance tolerance would erase it. */
+const PLATFORM_COLLISION_TOLERANCE_M = 0.01;
 
 type SceneAssetCollision = {
   placement: OutdoorAssetPlacement;
@@ -73,7 +75,8 @@ const pointToSegmentDistance = (point: Point, a: Point, b: Point) => {
 };
 
 /** Includes articulated projections/recesses, while retaining the conservative cantilever-aware site-frame footprint. */
-function buildingContains(document: ArchitecturalDesignDocument, mass: MassFootprint, x: number, z: number): { contains: boolean; penetration: number } {
+function buildingContains(document: ArchitecturalDesignDocument, primitives: readonly HousePrimitive[], mass: MassFootprint, bounds: ReturnType<typeof placementBounds>): { contains: boolean; penetration: number } {
+  const { x, z } = bounds;
   const [lx, lz] = toMassLocal(mass, x, z);
   const basePenetration = Math.min(mass.width / 2 - Math.abs(lx), mass.depth / 2 - Math.abs(lz));
   if (basePenetration > SITE_COLLISION_TOLERANCE_M) return { contains: true, penetration: basePenetration - SITE_COLLISION_TOLERANCE_M };
@@ -88,7 +91,25 @@ function buildingContains(document: ArchitecturalDesignDocument, mass: MassFootp
     const edgeDistance = Math.min(...polygon.map((a, i) => pointToSegmentDistance(local, a, polygon[(i + 1) % polygon.length])));
     penetration = Math.max(penetration, edgeDistance);
   }
-  return { contains: penetration > SITE_COLLISION_TOLERANCE_M, penetration: Math.max(0, penetration - SITE_COLLISION_TOLERANCE_M) };
+  if (penetration > SITE_COLLISION_TOLERANCE_M) return { contains: true, penetration: penetration - SITE_COLLISION_TOLERANCE_M };
+
+  // Additive exterior slabs are intentionally absent from a mass's enclosing footprint. Inspect their real compiled
+  // slabs here instead, and require an actual vertical overlap so a ground object below an upper platform is safe.
+  for (const primitive of primitives) {
+    const exteriorSlab = primitive.id.startsWith(`architecture-${mass.id}-balcony-`) || primitive.id.startsWith(`architecture-${mass.id}-assembly-`);
+    if (primitive.kind !== "box" || primitive.category !== "floor" || !exteriorSlab) continue;
+    // Placement bounds are already world-axis-aligned. Use their overlap against this real slab's world AABB;
+    // for a rotated slab, the circumscribed AABB is deliberately conservative for integrity rather than missing
+    // a collision at a thin edge.
+    const c = Math.abs(Math.cos(primitive.rotation[1])), s = Math.abs(Math.sin(primitive.rotation[1]));
+    const slabHalfW = (primitive.size[0] * c + primitive.size[2] * s) / 2;
+    const slabHalfD = (primitive.size[2] * c + primitive.size[0] * s) / 2;
+    const horizontal = Math.min(slabHalfW + bounds.w / 2 - Math.abs(x - primitive.position[0]), slabHalfD + bounds.d / 2 - Math.abs(z - primitive.position[2]));
+    const slabBottom = primitive.position[1] - primitive.size[1] / 2;
+    const verticalOverlap = bounds.y < slabBottom + primitive.size[1] - PLATFORM_COLLISION_TOLERANCE_M && bounds.y + bounds.h > slabBottom + PLATFORM_COLLISION_TOLERANCE_M;
+    if (horizontal > PLATFORM_COLLISION_TOLERANCE_M && verticalOverlap) return { contains: true, penetration: horizontal - PLATFORM_COLLISION_TOLERANCE_M };
+  }
+  return { contains: false, penetration: 0 };
 }
 
 function roofSurfaceAt(primitives: readonly HousePrimitive[], massId: string, x: number, z: number): number | undefined {
@@ -134,7 +155,7 @@ function sceneAssetCollisions(document: ArchitecturalDesignDocument, primitives:
   return placements.flatMap((placement) => {
     const bounds = placementBounds(placement);
     return masses.flatMap((mass) => {
-      const building = buildingContains(document, mass, bounds.x, bounds.z);
+      const building = buildingContains(document, primitives, mass, bounds);
       if (!building.contains || isSupportedOnHostRoof(placement, bounds, mass, primitives)) return [];
       return [{ placement, bounds, mass, penetration: building.penetration }];
     });

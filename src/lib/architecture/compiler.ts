@@ -1,15 +1,17 @@
 import type { HouseModel, HousePrimitive, TriMeshPrimitive } from "@/lib/house/types";
 import { rotatePrimitiveY, translatePrimitive, buildFloorSlabPrimitive } from "@/lib/house/primitiveBuilders";
-import { paintOf } from "@/lib/house/architecture/parts";
+import { box, paintOf, type Paint } from "@/lib/house/architecture/parts";
 import { resolveMaterial, type ResolvedMaterial } from "@/lib/house/materials";
 import { buildFlatRoof } from "@/lib/house/roof/flatRoof";
 import { buildRoofExpression } from "@/lib/house/roof/expression";
 import { FLOOR_THICKNESS, LEVEL_HEIGHT, MATERIAL_COLORS } from "@/lib/house/constants";
 import { SIDE_VECTOR } from "@/lib/house/siteSettings";
 import type { CompassSide, RoofType } from "@/types/house";
-import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassFacade, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SiteStrategy } from "./document";
+import type { ArchitecturalDesignDocument, ArchitectureCompileOptions, DoorOpening, MassFacade, MassGeometryOperation, MassOpening, MassRelationship, MassRole, MassVolume, RoofRecipe, RoofRecipeKind, SceneObject, SiteStrategy } from "./document";
 import { validateArchitecturalDesignDocument } from "./document";
 import { buildFloorFootprint, offsetFootprintOutline, decomposeToRectangles, type FloorFootprint, type Rect, type WallEdge } from "./geometry/footprint";
+import { balconiesOnLevel, balconyPlatformRect } from "./geometry/balcony";
+import { buildArchitecturalAssemblies } from "./geometry/assemblies";
 import { buildPolygonRoofPlate, buildPolygonShedRoof, shedSlope } from "./geometry/roofPlate";
 import { butterflyRoofGeometry, gableRoofGeometry, hipRoofGeometry, outlineEdges } from "./geometry/pitchedRoof";
 import { getRoofSystem, makePlane, planRoofSystems, resolveRoofFinish, roofShapeOf, type RoofAssembly, type RoofSystem, type RoofSystemPlan, type V3 } from "./roofSystems";
@@ -184,6 +186,21 @@ interface MassShellMaterials { exterior: ReturnType<typeof resolveMaterial>; tri
 
 interface MassShellResult { primitives: HousePrimitive[]; warnings: string[]; topFloor: FloorFootprint }
 
+/** Compiles persistent generic scene primitives. It has no feature-name branching. */
+function buildSceneObjects(objects: readonly SceneObject[] | undefined, masses: readonly MassVolume[], fallback: Paint, overrides: ReadonlyMap<string, SceneObject["material"]>): HousePrimitive[] {
+  const byMass = new Map(masses.map((mass) => [mass.id, mass] as const));
+  return (objects ?? []).flatMap((object) => {
+    const host = object.host?.kind === "mass" ? byMass.get(object.host.massId) : undefined;
+    if (object.host?.kind === "mass" && !host) return [];
+    const y = object.position[1] + (host ? host.elevation + (object.host?.kind === "mass" && object.host.anchor === "roof" ? massTotalHeight(host) : 0) : 0);
+    const x = object.position[0] + (host?.position.x ?? 0);
+    const z = object.position[2] + (host?.position.z ?? 0);
+    const finish = object.material ?? overrides.get(`scene:${object.id}`);
+    const material = finish ? { ...fallback, ...finish, ...(finish.opacity !== undefined && finish.opacity < 1 ? { transparent: true } : {}) } : fallback;
+    return [box(`scene-${object.id}`, object.kind === "path" || object.kind === "surface" ? "path" : object.kind === "slab" ? "floor" : "wall", object.label, [x, y, z], [...object.size] as [number, number, number], material, [...(object.rotation ?? [0, 0, 0])] as [number, number, number])];
+  });
+}
+
 const doorOnFloor = (door: DoorOpening, level: number) => !door.floors || door.floors === "all" || (door.floors === "ground" ? level === 0 : level > 0);
 /** Height of a door the architect authored without one — a numeric default for an authored door, never a door of the compiler's own. */
 const AUTHORED_DOOR_HEIGHT = 2.4;
@@ -257,6 +274,15 @@ function buildMassShell(mass: MassVolume, materials: MassShellMaterials): MassSh
       primitives.push(buildFloorSlabPrimitive(
         { center: [(rect.x0 + rect.x1) / 2, (rect.z0 + rect.z1) / 2], width: rect.x1 - rect.x0, depth: rect.z1 - rect.z0 },
         floorY, FLOOR_THICKNESS, `floor-${level}${suffix}`, `Floor Slab ${level + 1}`, MATERIAL_COLORS.floor
+      ));
+    });
+    // A balcony is deliberately independent of `footprint`: it is only an upper-floor slab outside the wall.
+    // It never adds the projection's outer wall/returns, changes the existing facade, or affects the roof outline.
+    balconiesOnLevel(mass, level).forEach((operation, i) => {
+      const rect = balconyPlatformRect(mass, operation);
+      primitives.push(buildFloorSlabPrimitive(
+        { center: [(rect.x0 + rect.x1) / 2, (rect.z0 + rect.z1) / 2], width: rect.x1 - rect.x0, depth: rect.z1 - rect.z0 },
+        floorY, FLOOR_THICKNESS, `balcony-${operation.id ?? `${level}-${i}`}`, `Balcony Platform ${level + 1}`, MATERIAL_COLORS.floor,
       ));
     });
     // A chamfered corner's slab is the triangle inside the angled wall — never the square the rects leave out.
@@ -468,16 +494,24 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
   const capabilityDiagnostics: ArchitectureDiagnostics["capabilities"] = [];
   const geometryDiagnostics: ArchitectureDiagnostics["geometry"] = [];
   const shellMaterials: MassShellMaterials = { exterior: resolveMaterial(options.materials.exterior), trim: resolveMaterial(options.materials.trim), glass: resolveMaterial({ material: "glass", color: MATERIAL_COLORS.glass }) };
+  const materialOverrides = new Map(doc.materialOverrides?.map((entry) => [entry.target, entry.material] as const));
   for (const mass of masses) {
     let topFloor: FloorFootprint;
     if (options.mode !== "roofs-only") {
-      const shell = buildMassShell(mass, shellMaterials);
+      const override = materialOverrides.get(`mass:${mass.id}`);
+      const massMaterials = override ? { ...shellMaterials, exterior: { ...shellMaterials.exterior, ...override } } : shellMaterials;
+      const shell = buildMassShell(mass, massMaterials);
       topFloor = shell.topFloor;
       // "Openings" mode isolates just the facade openings (plus whatever capability plugins add — see below):
       // every other shell primitive is dropped rather than skipped at the source, since openings are carved
       // out of the same wall pass that builds the plain solid walls.
       const shellSource = options.mode === "openings-only" ? shell.primitives.filter((p) => p.category === "window") : shell.primitives;
-      const shellPrimitives = shellSource.map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
+      // Assemblies are additive construction, not another shell operation. They share the exact same local →
+      // world transform (including rotated/cantilevered masses) but never alter wall, opening or roof geometry.
+      const assemblySource = options.mode === "openings-only" ? [] : buildArchitecturalAssemblies(
+        mass, massLevelHeight(mass), paintOf(shellMaterials.trim), paintOf(shellMaterials.trim), paintOf(shellMaterials.glass),
+      );
+      const shellPrimitives = [...shellSource, ...assemblySource].map((p) => ({ ...p, id: `architecture-${mass.id}-${p.id}`, label: `${mass.name}: ${p.label}` }));
       geometryDiagnostics.push({ massId: mass.id, operationsRequested: mass.operations?.length ?? 0, openingsRequested: mass.openings?.length ?? 0, topFloorRectCount: shell.topFloor.rects.length, warnings: shell.warnings });
       // A cantilevered mass offsets every primitive above the ground floor along its declared side, in world space.
       const cantileverOffset = mass.cantilever ? SIDE_VECTOR[mass.cantilever.direction] : undefined;
@@ -518,6 +552,7 @@ export function compileArchitecture(doc: ArchitecturalDesignDocument, options: A
       capabilityDiagnostics.push({ id: outcome.id, massId: mass.id, status: outcome.status, note: outcome.note });
     }
   }
+  if (options.mode !== "openings-only") primitives.push(...buildSceneObjects(doc.sceneObjects, masses, paintOf(shellMaterials.trim), materialOverrides));
   const diagnostics: ArchitectureDiagnostics = {
     massCount: masses.length,
     masses: masses.map((m) => ({ id: m.id, name: m.name, role: m.role, position: m.position, rotation: m.rotation, elevation: m.elevation })),

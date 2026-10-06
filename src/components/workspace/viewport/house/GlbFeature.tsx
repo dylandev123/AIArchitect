@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import * as THREE from "three";
 import type { ThreeEvent } from "@react-three/fiber";
 import { useSceneStore } from "@/store/useSceneStore";
 import { fitScale, type AssetPlacement } from "@/lib/assets/placement";
@@ -25,6 +26,19 @@ export function GlbFeature({ placement, projectId, footprint }: { placement: Ass
   useEffect(() => {
     if (instance) noteGlbRendered(projectId, featureId, assetId, placement.trackingId);
   }, [instance, projectId, featureId, assetId, placement.trackingId]);
+
+  useEffect(() => {
+    if (!instance || !placement.material) return;
+    instance.traverse((node) => {
+      if (!(node instanceof THREE.Mesh)) return;
+      for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
+        if ("color" in material) material.color.set(placement.material!.color);
+        if ("roughness" in material && placement.material!.roughness !== undefined) material.roughness = placement.material!.roughness;
+        if ("metalness" in material && placement.material!.metalness !== undefined) material.metalness = placement.material!.metalness;
+        material.needsUpdate = true;
+      }
+    });
+  }, [instance, placement.material]);
 
   if (!instance) return null;
 

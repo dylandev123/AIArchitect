@@ -1,7 +1,7 @@
 /** `generation_failure` is not a model call: one zero-token row recording why a V2 generation did not finalize (excluded from usage summaries). */
 export type AiRequestType = "generation" | "scoped_edit" | "learn" | "recipe_proposal" | "asset_plan" | "native_asset" | "native_asset_retry" | "generation_failure";
 export type AiScope = "world" | "zone" | "component";
-export type GenerationMode = "single-architect" | "legacy-staged";
+export type GenerationMode = "single-architect" | "legacy-staged" | "v3-scene";
 
 /** One provider call. Deliberately holds no prompt, response, or error text — only metadata and counts. */
 export interface AiUsageRecord {

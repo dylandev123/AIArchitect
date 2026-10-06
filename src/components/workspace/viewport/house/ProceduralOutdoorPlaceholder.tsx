@@ -10,7 +10,7 @@ import { proxyParts } from "@/lib/outdoor/proxyShapes";
 export function ProceduralOutdoorPlaceholder({ placement }: { placement: OutdoorAssetPlacement }) {
   const { width: w, depth: d, height: h } = placement.dimensions;
   const [x, y, z] = placement.position;
-  const color = placement.role === "planter" ? "#9a7654" : placement.role === "parasol" ? "#d8d0bd" : "#6a5545";
+  const color = placement.material?.color ?? (placement.role === "planter" ? "#9a7654" : placement.role === "parasol" ? "#d8d0bd" : "#6a5545");
   const leg = (lx: number, lz: number, key: string, height = h * 0.48) => (
     <mesh key={key} position={[lx, height / 2, lz]}><boxGeometry args={[Math.min(.09, w * .12), height, Math.min(.09, d * .12)]} /><meshStandardMaterial color="#3c3028" roughness={.85} /></mesh>
   );
