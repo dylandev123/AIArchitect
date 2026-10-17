@@ -1,0 +1,1543 @@
+{
+ "version": 3,
+ "generationMode": "v3-scene",
+ "v3Scene": {
+  "version": 3,
+  "site": {
+   "width": 78,
+   "depth": 72,
+   "groundMaterial": {
+    "id": "ground",
+    "color": "#4e7449",
+    "surface": "grass"
+   },
+   "baseElevation": 0,
+   "naturalGround": {
+    "elevation": 0,
+    "grade": 0
+   }
+  },
+  "objects": [
+   {
+    "id": "main-living-pavilion",
+    "type": "building-mass",
+    "semanticRole": "primary-residence",
+    "label": "Double-height Great Room and Main Living Pavilion",
+    "geometryKind": "box",
+    "architecture": {
+     "x": 0,
+     "z": 3,
+     "baseElevation": 0,
+     "width": 16,
+     "depth": 11,
+     "height": 8.4,
+     "rotationY": 0
+    },
+    "transform": {
+     "position": [
+      0,
+      4.2,
+      3
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     16,
+     8.4,
+     11
+    ],
+    "material": {
+     "id": "warm-concrete",
+     "color": "#b8aa96"
+    },
+    "collision": "solid",
+    "composition": {
+     "massHierarchy": "primary",
+     "facadeRoles": {
+      "north": "view",
+      "south": "arrival"
+     },
+     "mainEntry": {
+      "openingId": "arrival-door",
+      "canopyDepth": 3.6,
+      "color": "#6d5439"
+     },
+     "openings": [
+      {
+       "id": "arrival-door",
+       "facade": "south",
+       "floors": "ground",
+       "type": "door",
+       "start": 0.43,
+       "end": 0.57,
+       "height": 3.4,
+       "frame": true,
+       "reveal": 0.32
+      },
+      {
+       "id": "arrival-sidelight-left",
+       "facade": "south",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.18,
+       "end": 0.41,
+       "heightRatio": 0.72,
+       "frame": true,
+       "reveal": 0.28
+      },
+      {
+       "id": "arrival-sidelight-right",
+       "facade": "south",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.59,
+       "end": 0.82,
+       "heightRatio": 0.72,
+       "frame": true,
+       "reveal": 0.28
+      },
+      {
+       "id": "great-room-view",
+       "facade": "north",
+       "floors": "all",
+       "type": "glazing-zone",
+       "start": 0.08,
+       "end": 0.92,
+       "heightRatio": 0.9,
+       "frame": true,
+       "reveal": 0.34
+      },
+      {
+       "id": "west-courtyard-glass",
+       "facade": "west",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.2,
+       "end": 0.8,
+       "heightRatio": 0.72,
+       "frame": true,
+       "reveal": 0.25
+      },
+      {
+       "id": "east-courtyard-glass",
+       "facade": "east",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.2,
+       "end": 0.8,
+       "heightRatio": 0.72,
+       "frame": true,
+       "reveal": 0.25
+      }
+     ],
+     "assemblies": [
+      {
+       "id": "arrival-portico",
+       "intent": "deep stone-lined arrival portico with structural rhythm",
+       "parts": [
+        {
+         "id": "portico-slab",
+         "facade": "south",
+         "level": 0,
+         "elevation": 3.45,
+         "type": "slab",
+         "start": 0.22,
+         "end": 0.78,
+         "depth": 3.6,
+         "thickness": 0.28
+        },
+        {
+         "id": "portico-post-left",
+         "facade": "south",
+         "level": 0,
+         "type": "post",
+         "at": 0.24,
+         "depth": 0.55,
+         "height": 3.5,
+         "size": 0.48
+        },
+        {
+         "id": "portico-post-right",
+         "facade": "south",
+         "level": 0,
+         "type": "post",
+         "at": 0.76,
+         "depth": 0.55,
+         "height": 3.5,
+         "size": 0.48
+        },
+        {
+         "id": "portico-beam",
+         "facade": "south",
+         "level": 0,
+         "elevation": 3.3,
+         "type": "beam",
+         "start": 0.22,
+         "end": 0.78,
+         "depth": 0.55,
+         "height": 0.42,
+         "thickness": 0.42
+        }
+       ]
+      },
+      {
+       "id": "pool-loggia",
+       "intent": "shaded view loggia framing the pool terrace",
+       "parts": [
+        {
+         "id": "loggia-slab",
+         "facade": "north",
+         "level": 0,
+         "elevation": 3.35,
+         "type": "slab",
+         "start": 0.1,
+         "end": 0.9,
+         "depth": 3.4,
+         "thickness": 0.3
+        },
+        {
+         "id": "loggia-post-a",
+         "facade": "north",
+         "level": 0,
+         "type": "post",
+         "at": 0.12,
+         "depth": 0.52,
+         "height": 3.4,
+         "size": 0.42
+        },
+        {
+         "id": "loggia-post-b",
+         "facade": "north",
+         "level": 0,
+         "type": "post",
+         "at": 0.38,
+         "depth": 0.52,
+         "height": 3.4,
+         "size": 0.42
+        },
+        {
+         "id": "loggia-post-c",
+         "facade": "north",
+         "level": 0,
+         "type": "post",
+         "at": 0.62,
+         "depth": 0.52,
+         "height": 3.4,
+         "size": 0.42
+        },
+        {
+         "id": "loggia-post-d",
+         "facade": "north",
+         "level": 0,
+         "type": "post",
+         "at": 0.88,
+         "depth": 0.52,
+         "height": 3.4,
+         "size": 0.42
+        }
+       ]
+      }
+     ]
+    },
+    "levels": 2
+   },
+   {
+    "id": "west-bedroom-wing",
+    "type": "building-mass",
+    "semanticRole": "bedroom-wing",
+    "label": "West Private Wing — Bedrooms 1, 2 and 3",
+    "geometryKind": "box",
+    "architecture": {
+     "x": -11.25,
+     "z": 1,
+     "baseElevation": 0,
+     "width": 6.5,
+     "depth": 18,
+     "height": 7.2
+    },
+    "transform": {
+     "position": [
+      -11.25,
+      3.6,
+      1
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     6.5,
+     7.2,
+     18
+    ],
+    "material": {
+     "id": "coral-stone",
+     "color": "#ad9c83"
+    },
+    "collision": "solid",
+    "composition": {
+     "massHierarchy": "secondary",
+     "facadeRoles": {
+      "north": "view",
+      "south": "arrival",
+      "west": "private"
+     },
+     "openings": [
+      {
+       "id": "west-arrival-windows",
+       "facade": "south",
+       "floors": "upper",
+       "type": "opening-rhythm",
+       "count": 3,
+       "width": 1.05,
+       "height": 1.55,
+       "sill": 0.85
+      },
+      {
+       "id": "west-pool-glazing",
+       "facade": "north",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.14,
+       "end": 0.86,
+       "heightRatio": 0.68,
+       "frame": true,
+       "reveal": 0.24
+      },
+      {
+       "id": "west-bedroom-rhythm",
+       "facade": "west",
+       "floors": "all",
+       "type": "opening-rhythm",
+       "count": 6,
+       "width": 1.15,
+       "height": 1.55,
+       "sill": 0.8
+      },
+      {
+       "id": "west-courtyard-glazing",
+       "facade": "east",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.2,
+       "end": 0.78,
+       "heightRatio": 0.66,
+       "frame": true,
+       "reveal": 0.22
+      }
+     ],
+     "assemblies": [
+      {
+       "id": "west-upper-balcony",
+       "intent": "recessed bedroom balcony overlooking the entry court",
+       "parts": [
+        {
+         "id": "west-balcony-slab",
+         "facade": "east",
+         "level": 1,
+         "elevation": 0,
+         "type": "slab",
+         "start": 0.18,
+         "end": 0.75,
+         "depth": 1.35,
+         "thickness": 0.22
+        },
+        {
+         "id": "west-balcony-rail",
+         "type": "railing",
+         "slabId": "west-balcony-slab",
+         "edges": [
+          "outer",
+          "start",
+          "end"
+         ],
+         "height": 1.08,
+         "thickness": 0.07
+        }
+       ]
+      }
+     ]
+    },
+    "levels": 2
+   },
+   {
+    "id": "east-bedroom-wing",
+    "type": "building-mass",
+    "semanticRole": "bedroom-wing",
+    "label": "East Private Wing — Bedrooms 4, 5 and 6",
+    "geometryKind": "box",
+    "architecture": {
+     "x": 11.25,
+     "z": 2.5,
+     "baseElevation": 0,
+     "width": 6.5,
+     "depth": 17,
+     "height": 7.2
+    },
+    "transform": {
+     "position": [
+      11.25,
+      3.6,
+      2.5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     6.5,
+     7.2,
+     17
+    ],
+    "material": {
+     "id": "sand-render",
+     "color": "#d1c3ae"
+    },
+    "collision": "solid",
+    "composition": {
+     "massHierarchy": "secondary",
+     "facadeRoles": {
+      "north": "view",
+      "east": "private",
+      "south": "arrival"
+     },
+     "openings": [
+      {
+       "id": "east-arrival-rhythm",
+       "facade": "south",
+       "floors": "upper",
+       "type": "opening-rhythm",
+       "count": 3,
+       "width": 1.05,
+       "height": 1.55,
+       "sill": 0.85
+      },
+      {
+       "id": "east-pool-glazing",
+       "facade": "north",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.12,
+       "end": 0.88,
+       "heightRatio": 0.7,
+       "frame": true,
+       "reveal": 0.24
+      },
+      {
+       "id": "east-bedroom-rhythm",
+       "facade": "east",
+       "floors": "all",
+       "type": "opening-rhythm",
+       "count": 6,
+       "width": 1.1,
+       "height": 1.55,
+       "sill": 0.82
+      },
+      {
+       "id": "east-courtyard-glazing",
+       "facade": "west",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.22,
+       "end": 0.78,
+       "heightRatio": 0.65,
+       "frame": true,
+       "reveal": 0.22
+      }
+     ],
+     "assemblies": [
+      {
+       "id": "east-upper-balcony",
+       "intent": "private upper suites balcony with bronze balustrade",
+       "parts": [
+        {
+         "id": "east-balcony-slab",
+         "facade": "west",
+         "level": 1,
+         "elevation": 0,
+         "type": "slab",
+         "start": 0.2,
+         "end": 0.78,
+         "depth": 1.45,
+         "thickness": 0.22
+        },
+        {
+         "id": "east-balcony-rail",
+         "type": "railing",
+         "slabId": "east-balcony-slab",
+         "edges": [
+          "outer",
+          "start",
+          "end"
+         ],
+         "height": 1.08,
+         "thickness": 0.07
+        }
+       ]
+      }
+     ]
+    },
+    "levels": 2
+   },
+   {
+    "id": "east-service-gallery",
+    "type": "building-mass",
+    "semanticRole": "secondary-service-wing",
+    "label": "East Service Gallery — Kitchen, Pantry, Laundry and Staff Support",
+    "geometryKind": "box",
+    "architecture": {
+     "x": 16.25,
+     "z": -1.5,
+     "baseElevation": 0,
+     "width": 4.5,
+     "depth": 8,
+     "height": 3.9
+    },
+    "transform": {
+     "position": [
+      16.25,
+      1.95,
+      -1.5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     4.5,
+     3.9,
+     8
+    ],
+    "material": {
+     "id": "charcoal-render",
+     "color": "#4b4a45"
+    },
+    "collision": "solid",
+    "composition": {
+     "massHierarchy": "connector",
+     "facadeRoles": {
+      "east": "service",
+      "south": "service",
+      "west": "arrival"
+     },
+     "openings": [
+      {
+       "id": "service-north-glazing",
+       "facade": "north",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.2,
+       "end": 0.8,
+       "heightRatio": 0.58,
+       "frame": true,
+       "reveal": 0.2
+      },
+      {
+       "id": "service-door",
+       "facade": "east",
+       "floors": "ground",
+       "type": "door",
+       "start": 0.35,
+       "end": 0.62,
+       "height": 2.35,
+       "frame": true,
+       "reveal": 0.12
+      }
+     ]
+    },
+    "levels": 1
+   },
+   {
+    "id": "west-wellness-suite",
+    "type": "building-mass",
+    "semanticRole": "wellness-and-guest-suite",
+    "label": "West Wellness Pavilion — Gym, Spa and Guest Lounge",
+    "geometryKind": "box",
+    "architecture": {
+     "x": -16.25,
+     "z": 4,
+     "baseElevation": 0,
+     "width": 4.5,
+     "depth": 8,
+     "height": 3.9
+    },
+    "transform": {
+     "position": [
+      -16.25,
+      1.95,
+      4
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     4.5,
+     3.9,
+     8
+    ],
+    "material": {
+     "id": "timber-concrete",
+     "color": "#88745b"
+    },
+    "collision": "solid",
+    "composition": {
+     "massHierarchy": "connector",
+     "facadeRoles": {
+      "north": "view",
+      "south": "private",
+      "west": "private"
+     },
+     "openings": [
+      {
+       "id": "wellness-pool-glass",
+       "facade": "north",
+       "floors": "ground",
+       "type": "glazing-zone",
+       "start": 0.14,
+       "end": 0.86,
+       "heightRatio": 0.72,
+       "frame": true,
+       "reveal": 0.22
+      },
+      {
+       "id": "wellness-door",
+       "facade": "east",
+       "floors": "ground",
+       "type": "door",
+       "start": 0.34,
+       "end": 0.62,
+       "height": 2.55,
+       "frame": true,
+       "reveal": 0.14
+      }
+     ]
+    },
+    "levels": 1
+   },
+   {
+    "id": "main-roof",
+    "type": "roof-form",
+    "semanticRole": "primary-roof",
+    "label": "Floating Hipped Roof over Great Room",
+    "geometryKind": "extrusion",
+    "architecture": {
+     "x": 0,
+     "z": 3,
+     "baseElevation": 8.4,
+     "width": 18.2,
+     "depth": 13.2,
+     "height": 1.65
+    },
+    "transform": {
+     "position": [
+      0,
+      9.225,
+      3
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     18.2,
+     1.65,
+     13.2
+    ],
+    "material": {
+     "id": "bronze-roof",
+     "color": "#4a4037"
+    },
+    "collision": "solid",
+    "hostId": "main-living-pavilion",
+    "roofForm": "hip",
+    "overhang": 1.1,
+    "pitch": 0.24
+   },
+   {
+    "id": "west-wing-roof",
+    "type": "roof-form",
+    "semanticRole": "roof",
+    "label": "West Wing Low Tropical Roof",
+    "geometryKind": "extrusion",
+    "architecture": {
+     "x": -11.25,
+     "z": 1,
+     "baseElevation": 7.2,
+     "width": 8.3,
+     "depth": 19.8,
+     "height": 1.25
+    },
+    "transform": {
+     "position": [
+      -11.25,
+      7.825,
+      1
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     8.3,
+     1.25,
+     19.8
+    ],
+    "material": {
+     "id": "bronze-roof",
+     "color": "#4a4037"
+    },
+    "collision": "solid",
+    "hostId": "west-bedroom-wing",
+    "roofForm": "hip",
+    "overhang": 0.9,
+    "pitch": 0.2
+   },
+   {
+    "id": "east-wing-roof",
+    "type": "roof-form",
+    "semanticRole": "roof",
+    "label": "East Wing Low Tropical Roof",
+    "geometryKind": "extrusion",
+    "architecture": {
+     "x": 11.25,
+     "z": 2.5,
+     "baseElevation": 7.2,
+     "width": 8.3,
+     "depth": 18.8,
+     "height": 1.25
+    },
+    "transform": {
+     "position": [
+      11.25,
+      7.825,
+      2.5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     8.3,
+     1.25,
+     18.8
+    ],
+    "material": {
+     "id": "bronze-roof",
+     "color": "#4a4037"
+    },
+    "collision": "solid",
+    "hostId": "east-bedroom-wing",
+    "roofForm": "hip",
+    "overhang": 0.9,
+    "pitch": 0.2
+   },
+   {
+    "id": "service-roof",
+    "type": "roof-form",
+    "semanticRole": "roof",
+    "label": "Service Gallery Flat Green Roof",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 16.25,
+     "z": -1.5,
+     "baseElevation": 3.9,
+     "width": 5.1,
+     "depth": 8.6,
+     "height": 0.25
+    },
+    "transform": {
+     "position": [
+      16.25,
+      4.025,
+      -1.5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.1,
+     0.25,
+     8.6
+    ],
+    "material": {
+     "id": "green-roof",
+     "color": "#516843"
+    },
+    "collision": "solid",
+    "hostId": "east-service-gallery",
+    "roofForm": "flat",
+    "overhang": 0.3,
+    "pitch": 0
+   },
+   {
+    "id": "wellness-roof",
+    "type": "roof-form",
+    "semanticRole": "roof",
+    "label": "Wellness Pavilion Timber Canopy Roof",
+    "geometryKind": "extrusion",
+    "architecture": {
+     "x": -16.25,
+     "z": 4,
+     "baseElevation": 3.9,
+     "width": 5.3,
+     "depth": 8.8,
+     "height": 0.8
+    },
+    "transform": {
+     "position": [
+      -16.25,
+      4.3,
+      4
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.3,
+     0.8,
+     8.8
+    ],
+    "material": {
+     "id": "dark-timber-roof",
+     "color": "#5e4936"
+    },
+    "collision": "solid",
+    "hostId": "west-wellness-suite",
+    "roofForm": "mono-pitch",
+    "overhang": 0.4,
+    "pitch": 0.12
+   },
+   {
+    "id": "arrival-court",
+    "type": "courtyard",
+    "semanticRole": "arrival-courtyard",
+    "label": "Formal Stone Arrival Court with Reflecting Garden",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 0,
+     "z": -7.2,
+     "baseElevation": 0.03,
+     "width": 19,
+     "depth": 7.5,
+     "height": 0.14
+    },
+    "transform": {
+     "position": [
+      0,
+      0.1,
+      -7.2
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     19,
+     0.14,
+     7.5
+    ],
+    "material": {
+     "id": "arrival-stone",
+     "color": "#b9aa91"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "arrival-water-rill",
+    "type": "pool",
+    "semanticRole": "reflecting-water",
+    "label": "Linear Arrival Reflecting Rill",
+    "geometryKind": "water",
+    "architecture": {
+     "x": 0,
+     "z": -8.8,
+     "baseElevation": -0.32,
+     "width": 9.2,
+     "depth": 1.05,
+     "height": 0.38
+    },
+    "transform": {
+     "position": [
+      0,
+      -0.13,
+      -8.8
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     9.2,
+     0.38,
+     1.05
+    ],
+    "material": {
+     "id": "dark-water",
+     "color": "#355c62"
+    },
+    "collision": "water"
+   },
+   {
+    "id": "pool-terrace",
+    "type": "terrace",
+    "semanticRole": "outdoor-living-terrace",
+    "label": "Expansive Limestone Pool Terrace",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 0,
+     "z": 13.2,
+     "baseElevation": 0.05,
+     "width": 28,
+     "depth": 11.5,
+     "height": 0.16
+    },
+    "transform": {
+     "position": [
+      0,
+      0.13,
+      13.2
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     28,
+     0.16,
+     11.5
+    ],
+    "material": {
+     "id": "pool-limestone",
+     "color": "#cbbca2"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "resort-pool",
+    "type": "pool",
+    "semanticRole": "swimming-pool",
+    "label": "Resort Infinity-Edge Swimming Pool",
+    "geometryKind": "water",
+    "architecture": {
+     "x": 0,
+     "z": 17.2,
+     "baseElevation": -1.45,
+     "width": 16,
+     "depth": 8.2,
+     "height": 1.55
+    },
+    "transform": {
+     "position": [
+      0,
+      -0.6749999999999999,
+      17.2
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     16,
+     1.55,
+     8.2
+    ],
+    "material": {
+     "id": "pool-water",
+     "color": "#2d8ea0"
+    },
+    "collision": "water",
+    "hostId": "pool-terrace"
+   },
+   {
+    "id": "sun-shelf",
+    "type": "pool",
+    "semanticRole": "pool-sun-shelf",
+    "label": "Shallow Sun Shelf and Lounger Ledge",
+    "geometryKind": "water",
+    "architecture": {
+     "x": -5.2,
+     "z": 14.65,
+     "baseElevation": -0.28,
+     "width": 5.1,
+     "depth": 2.2,
+     "height": 0.35
+    },
+    "transform": {
+     "position": [
+      -5.2,
+      -0.10500000000000004,
+      14.65
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.1,
+     0.35,
+     2.2
+    ],
+    "material": {
+     "id": "pool-water",
+     "color": "#48a8b5"
+    },
+    "collision": "water",
+    "hostId": "resort-pool"
+   },
+   {
+    "id": "outdoor-lounge-deck",
+    "type": "terrace",
+    "semanticRole": "covered-outdoor-lounge",
+    "label": "Covered Teak Outdoor Lounge",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 10.7,
+     "z": 10.8,
+     "baseElevation": 0.12,
+     "width": 6.2,
+     "depth": 5.5,
+     "height": 0.16
+    },
+    "transform": {
+     "position": [
+      10.7,
+      0.2,
+      10.8
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     6.2,
+     0.16,
+     5.5
+    ],
+    "material": {
+     "id": "teak-deck",
+     "color": "#8a6240"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "lounge-canopy",
+    "type": "canopy",
+    "semanticRole": "outdoor-shade",
+    "label": "Floating Teak Pergola over Outdoor Lounge",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 10.7,
+     "z": 10.8,
+     "baseElevation": 3.3,
+     "width": 6.8,
+     "depth": 6.1,
+     "height": 0.22
+    },
+    "transform": {
+     "position": [
+      10.7,
+      3.4099999999999997,
+      10.8
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     6.8,
+     0.22,
+     6.1
+    ],
+    "material": {
+     "id": "teak-canopy",
+     "color": "#745037"
+    },
+    "collision": "solid"
+   },
+   {
+    "id": "fire-lounge",
+    "type": "terrace",
+    "semanticRole": "poolside-fire-lounge",
+    "label": "Sunken-Feel Poolside Fire Lounge",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": -10.7,
+     "z": 11.2,
+     "baseElevation": 0.08,
+     "width": 5.5,
+     "depth": 4.6,
+     "height": 0.16
+    },
+    "transform": {
+     "position": [
+      -10.7,
+      0.16,
+      11.2
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.5,
+     0.16,
+     4.6
+    ],
+    "material": {
+     "id": "fire-lounge-stone",
+     "color": "#9f8e77"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "entry-steps",
+    "type": "stair",
+    "semanticRole": "arrival-stair",
+    "label": "Broad Floating Limestone Entry Steps",
+    "geometryKind": "box",
+    "architecture": {
+     "x": 0,
+     "z": -2.95,
+     "baseElevation": 0,
+     "width": 5.8,
+     "depth": 1.25,
+     "height": 0.42
+    },
+    "transform": {
+     "position": [
+      0,
+      0.21,
+      -2.95
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.8,
+     0.42,
+     1.25
+    ],
+    "material": {
+     "id": "arrival-stone",
+     "color": "#b9aa91"
+    },
+    "collision": "walkable",
+    "toSupportId": "main-living-pavilion"
+   },
+   {
+    "id": "arrival-drive",
+    "type": "driveway",
+    "semanticRole": "formal-driveway",
+    "label": "Palm-Lined Formal Arrival Drive",
+    "geometryKind": "slab",
+    "architecture": {
+     "x": 0,
+     "z": -22,
+     "baseElevation": 0.01,
+     "width": 9,
+     "depth": 23,
+     "height": 0.12
+    },
+    "transform": {
+     "position": [
+      0,
+      0.06999999999999999,
+      -22
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     9,
+     0.12,
+     23
+    ],
+    "material": {
+     "id": "drive-pavers",
+     "color": "#a99c89"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "arrival-turnaround",
+    "type": "driveway",
+    "semanticRole": "arrival-turnaround",
+    "label": "Circular Arrival Turning Court",
+    "geometryKind": "cylinder",
+    "transform": {
+     "position": [
+      0,
+      0.05,
+      -15
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     18,
+     0.12,
+     18
+    ],
+    "material": {
+     "id": "drive-pavers",
+     "color": "#a99c89"
+    },
+    "collision": "walkable"
+   },
+   {
+    "id": "arrival-garden",
+    "type": "landscape-zone",
+    "semanticRole": "tropical-entry-garden",
+    "label": "Sculptural Tropical Arrival Garden",
+    "geometryKind": "plane",
+    "architecture": {
+     "x": 0,
+     "z": -11.5,
+     "baseElevation": 0.02,
+     "width": 5.5,
+     "depth": 3,
+     "height": 0.02
+    },
+    "transform": {
+     "position": [
+      0,
+      0.03,
+      -11.5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     5.5,
+     0.02,
+     3
+    ],
+    "material": {
+     "id": "tropical-planting",
+     "color": "#356b42"
+    },
+    "collision": "none"
+   },
+   {
+    "id": "west-garden",
+    "type": "landscape-zone",
+    "semanticRole": "tropical-garden",
+    "label": "West Palm and Frangipani Garden",
+    "geometryKind": "plane",
+    "architecture": {
+     "x": -25,
+     "z": 5,
+     "baseElevation": 0.01,
+     "width": 17,
+     "depth": 31,
+     "height": 0.02
+    },
+    "transform": {
+     "position": [
+      -25,
+      0.02,
+      5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     17,
+     0.02,
+     31
+    ],
+    "material": {
+     "id": "tropical-planting",
+     "color": "#3d7548"
+    },
+    "collision": "none"
+   },
+   {
+    "id": "east-garden",
+    "type": "landscape-zone",
+    "semanticRole": "tropical-garden",
+    "label": "East Palm and Heliconia Garden",
+    "geometryKind": "plane",
+    "architecture": {
+     "x": 25,
+     "z": 5,
+     "baseElevation": 0.01,
+     "width": 17,
+     "depth": 31,
+     "height": 0.02
+    },
+    "transform": {
+     "position": [
+      25,
+      0.02,
+      5
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     17,
+     0.02,
+     31
+    ],
+    "material": {
+     "id": "tropical-planting",
+     "color": "#3d7548"
+    },
+    "collision": "none"
+   },
+   {
+    "id": "pool-garden",
+    "type": "landscape-zone",
+    "semanticRole": "tropical-garden",
+    "label": "Pool Horizon Palm Garden",
+    "geometryKind": "plane",
+    "architecture": {
+     "x": 0,
+     "z": 27,
+     "baseElevation": 0.01,
+     "width": 38,
+     "depth": 14,
+     "height": 0.02
+    },
+    "transform": {
+     "position": [
+      0,
+      0.02,
+      27
+     ],
+     "rotation": [
+      0,
+      0,
+      0
+     ],
+     "scale": [
+      1,
+      1,
+      1
+     ]
+    },
+    "dimensions": [
+     38,
+     0.02,
+     14
+    ],
+    "material": {
+     "id": "pool-planting",
+     "color": "#427849"
+    },
+    "collision": "none"
+   }
+  ],
+  "relationships": [],
+  "metadata": {
+   "brief": "Design an extraordinary 850 m² modern tropical luxury mansion on a spacious, completely flat private estate.\nThe home should feel like a world-class architect designed it specifically for this property—not a generic modern house or a collection of rectangular boxes.\nARCHITECTURE\nCreate a sophisticated two-storey mansion with six bedrooms, multiple interconnected wings, a dramatic double-height entrance, impressive rooflines, and a clear hierarchy between the main living pavilion, private bedroom wings, and secondary spaces.\nUse beautifully balanced proportions, deep roof overhangs, varied building depths, architectural columns, recessed glazing, and intentional transitions between indoor and outdoor spaces.\nDESIGN CHARACTER\nContemporary Caribbean resort architecture inspired by exceptional tropical luxury residences. Combine warm natural stone, timber accents, textured concrete, bronze or dark-framed glass, and carefully placed architectural lighting.\nPrioritize coherent materials, realistic construction, and thoughtful facade detailing.\nOUTDOOR LIVING\nDesign a spectacular resort-style swimming pool integrated with the main living terrace, expansive covered outdoor lounges, a landscaped courtyard, tropical gardens, a formal arrival driveway, and a striking main entrance.\nArrange the wings to create beautiful outdoor spaces rather than simply placing everything in a straight line.\nARCHITECTURAL QUALITY\nEvery wing, roof, window, balcony, entrance, and outdoor area should feel intentionally designed as part of one cohesive residence.\nCreate a memorable arrival experience and an equally impressive garden/pool-facing facade.\nThe final result should feel like a real multimillion-dollar Caribbean estate.\nSITE\nCompletely flat land at elevation zero. No slopes, cliffs, retaining walls, mountains, or terrain elevation changes.\nFocus the complexity and creativity on the architecture itself.",
+   "terrainMode": "flat",
+   "generatedAt": "2026-10-15T16:01:16.387Z",
+   "audit": {
+    "status": "rendered-with-warnings",
+    "counts": {
+     "INTENT_RELOCATED": 5,
+     "VOCABULARY_MAPPED": 1,
+     "UNRESOLVED_SUPPORT": 25,
+     "TRANSFORM_DEFAULTED": 1,
+     "FLAT_SITE_NORMALIZED": 1,
+     "SUPPORT_HINT_REPLACED": 1,
+     "SUPPORT_INFERRED": 21,
+     "UNRESOLVED_CONNECTOR": 1,
+     "FALLBACK_RENDER_USED": 2,
+     "JUNCTION_AUTHORED_PARTITION": 1
+    }
+   },
+   "usage": {
+    "inputTokens": 1539,
+    "outputTokens": 5589,
+    "totalTokens": 7128,
+    "attempts": 1,
+    "estimatedCost": 0.070146,
+    "contextBytes": 7689,
+    "schemaBytes": 0,
+    "repair": false
+   }
+  }
+ }
+}

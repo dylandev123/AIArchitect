@@ -132,6 +132,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
     body: JSON.stringify({
       mode: generate ? "generate" : "edit",
       generationMode,
+      ...(generate && generationMode === "v3-scene" ? { v3TerrainMode: project.v3TerrainMode ?? "flat" } : {}),
       projectId: req.projectId,
       prompt: req.prompt,
       currentHouseJson: baseJson,
@@ -159,9 +160,9 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
   const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string; intelligence?: GenerationReport; outcome?: "already-satisfied" | "capability-needed"; v3FailedPreview?: V3FailedPreview };
 
   if (!res.ok || typeof data.json !== "string") {
-    // Failed previews are held only in an ephemeral dev store. There is no
+    // Failed previews are held only in an ephemeral read-only store. There is no
     // project-store write and no call to `apply` on this path.
-    if (process.env.NODE_ENV !== "production" && generationMode === "v3-scene" && data.v3FailedPreview) {
+    if (generationMode === "v3-scene" && data.v3FailedPreview) {
       useV3FailedPreviewStore.getState().capture(req.projectId, data.v3FailedPreview);
     }
     return { ok: false, error: data.error ?? fallbackError(res.status), status: res.status };

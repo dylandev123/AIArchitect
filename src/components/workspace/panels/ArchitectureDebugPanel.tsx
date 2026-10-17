@@ -22,9 +22,13 @@ import { auditV3SiteHierarchy, resolveSiteHierarchy, routeGrade } from "@/lib/v3
 import { upgradeLegacyV3SiteHierarchy, type V3SiteHierarchyMigrationReport } from "@/lib/v3/siteHierarchyMigration";
 import { getObjectBaseY, getRootSupportId, getSupportSurfaceY } from "@/lib/v3/elevation";
 import { supportEndpoints } from "@/lib/v3/supportGraph";
+import { resolveV3EffectiveSupport } from "@/lib/v3/derivedSupport";
 import { computeV3CameraFit, diagnoseV3Scene } from "@/lib/v3/presentation";
 import { compileV3Scene } from "@/lib/v3/scene";
 import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
+import { buildV3RenderIdentity, formatV3RenderIdentity, hasV3RenderIdentityMismatch } from "@/lib/v3/renderIdentity";
+import { useActiveV3RenderSource } from "@/store/useActiveV3RenderSource";
+import { useV3RenderIdentityStore } from "@/store/useV3RenderIdentityStore";
 
 type JsonRecord = Record<string, unknown>;
 const isRecord = (value: unknown): value is JsonRecord => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -144,9 +148,67 @@ function V3FailedPreviewPanel({ projectId }: { projectId: string }) {
     </div>
     {diagnostics.strictValidationErrors.map((error, index) => <p key={`${error}-${index}`} className="text-[10px] text-red-300">strict: {error}</p>)}
     {diagnostics.unsupportedObjectIds.length > 0 && <div className="text-[10px] text-amber-200">unsupported geometry: {diagnostics.unsupportedObjectIds.map((objectId) => <button key={objectId} type="button" onClick={() => selectKey(objectId)} className="ml-1 underline decoration-amber-200/50 hover:text-amber-50">{objectId}</button>)}</div>}
+    {diagnostics.unresolvedSupportObjectIds.length > 0 && <div className="text-[10px] text-amber-200">unresolved support: {diagnostics.unresolvedSupportObjectIds.map((objectId) => <button key={objectId} type="button" onClick={() => selectKey(objectId)} className="ml-1 underline decoration-amber-200/50 hover:text-amber-50">{objectId}</button>)}</div>}
     {diagnostics.skippedObjectIds.length > 0 && <p className="text-[10px] text-amber-200">skipped objects: {diagnostics.skippedObjectIds.join(", ")}</p>}
     {diagnostics.skippedRelationshipIds.length > 0 && <p className="text-[10px] text-amber-200">skipped relationships: {diagnostics.skippedRelationshipIds.join(", ")}</p>}
     {diagnostics.normalizedFields.length > 0 && <details className="text-[10px] text-neutral-300"><summary className="cursor-pointer text-neutral-400">normalized / omitted fields ({diagnostics.normalizedFields.length})</summary>{diagnostics.normalizedFields.map((field, index) => <p key={`${field}-${index}`} className="mt-0.5">{field}</p>)}</details>}
+  </section>;
+}
+
+/** DEV-only evidence of persisted, compiled, and actual renderer V3 authorities. */
+function V3RenderIdentityPanel({ projectId, json }: { projectId: string; json: string | undefined }) {
+  const rendererIdentity = useV3RenderIdentityStore((s) => s.identity);
+  const [copiedReport, setCopiedReport] = useState<string | null>(null);
+  const identity = useMemo(() => {
+    if (rendererIdentity?.projectId === projectId) return rendererIdentity;
+    // First paint can precede HouseRenderer's effect. This fallback is deliberately
+    // labeled persisted and is replaced by the renderer-bound record immediately.
+    return buildV3RenderIdentity({
+      projectId,
+      persistedJson: json,
+      rendererJson: json,
+      failedPreviewActive: false,
+      renderHistoryOverrideActive: false,
+      fixtureDebugOverrideActive: false,
+    });
+  }, [json, projectId, rendererIdentity]);
+  const isV3 = useMemo(() => {
+    try { return isV3ProjectRoot(JSON.parse(json ?? "{}")); } catch { return false; }
+  }, [json]);
+  if (!isV3) return null;
+  const mismatch = hasV3RenderIdentityMismatch(identity);
+  const overridden = identity.rendererSource !== "persisted";
+  const copy = () => {
+    const report = formatV3RenderIdentity(identity);
+    setCopiedReport(report);
+    void navigator.clipboard?.writeText(report).catch(() => undefined);
+  };
+  const flag = (value: boolean) => value ? "yes" : "no";
+  return <section className={`space-y-1.5 rounded-lg border p-2.5 ${mismatch || overridden ? "border-red-500/50 bg-red-500/[0.06]" : "border-emerald-500/25 bg-emerald-500/[0.03]"}`}>
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <h3 className="font-semibold uppercase tracking-widest text-neutral-300">V3 render identity (dev only)</h3>
+      <button type="button" onClick={copy} className="rounded-full border border-white/[0.14] px-2.5 py-1 text-[10px] font-semibold text-neutral-100 hover:bg-white/[0.08]">Copy V3 Render Identity</button>
+    </div>
+    {(mismatch || overridden) && <div className="font-semibold text-red-200">{overridden ? "STALE / OVERRIDDEN RENDER SOURCE" : "V3 SCENE HASH MISMATCH"}</div>}
+    <div className="grid gap-x-3 gap-y-0.5 text-[10px] text-neutral-400">
+      <div>projectId: <span className="text-neutral-100">{identity.projectId}</span></div>
+      <div className={mismatch ? "text-amber-200" : ""}>persisted scene hash: <span className="font-mono">{identity.persistedSceneHash ?? "unavailable"}</span></div>
+      <div>persisted object count: {identity.persistedObjectCount ?? "unavailable"}</div>
+      <div className={mismatch ? "text-amber-200" : ""}>compiled input scene hash: <span className="font-mono">{identity.compiledInputSceneHash ?? "unavailable"}</span></div>
+      <div>compiled primitive hash: <span className="font-mono">{identity.compiledPrimitiveHash ?? "unavailable"}</span></div>
+      <div>compiled primitive count: {identity.compiledPrimitiveCount ?? "unavailable"}</div>
+      <div className={mismatch ? "text-amber-200" : ""}>renderer scene hash: <span className="font-mono">{identity.rendererSceneHash ?? "unavailable"}</span></div>
+      <div>renderer source: <span className={overridden ? "font-semibold text-red-200" : "text-emerald-300"}>{identity.rendererSource}</span></div>
+      <div>V2 document/config active: {flag(identity.v2DocumentOrConfigActive)}</div>
+      <div>failed-preview active: {flag(identity.failedPreviewActive)}</div>
+      <div>render-history override active: {flag(identity.renderHistoryOverrideActive)}</div>
+      <div>fixture/debug override active: {flag(identity.fixtureDebugOverrideActive)}</div>
+    </div>
+    <div className="max-h-28 overflow-auto rounded border border-white/[0.06] p-1.5 font-mono text-[10px] text-neutral-400">
+      <div className="mb-1 font-sans font-semibold uppercase tracking-widest text-neutral-600">First 15 persisted objects</div>
+      {identity.persistedObjects.length ? identity.persistedObjects.map((object) => <div key={object.id}>{object.id} · {object.type} · {object.label}</div>) : <div>none</div>}
+    </div>
+    {copiedReport && <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded border border-white/[0.06] bg-black/20 p-2 font-mono text-[10px] leading-4 text-neutral-300">{copiedReport}</pre>}
   </section>;
 }
 
@@ -299,22 +361,24 @@ function V3TerrainDebugPanel({ json }: { json: string | undefined }) {
       const terrain = buildV3TerrainSurface(raw.v3Scene);
       const resolved = resolveSiteHierarchy(raw.v3Scene);
       const issues = auditV3SiteHierarchy(raw.v3Scene);
+      const effective = resolveV3EffectiveSupport(raw.v3Scene);
       return {
         terrain,
         derived: resolved.derived,
         levels: resolved.hierarchy.levels,
         connections: resolved.hierarchy.connections.map((connection) => ({ ...connection, grade: routeGrade(connection.route) })),
         issues,
-        rows: raw.v3Scene.objects.map((object) => {
-          const objectBaseY = getObjectBaseY(object), candidateSurfaceY = getSupportSurfaceY(object.support, object.transform.position[0], object.transform.position[2], raw.v3Scene);
+        // Effective support: authored where present, otherwise derived (and labelled as such, never persisted).
+        rows: effective.scene.objects.map((object) => {
+          const objectBaseY = getObjectBaseY(object), candidateSurfaceY = getSupportSurfaceY(object.support, object.transform.position[0], object.transform.position[2], effective.scene);
           const terrainFollowing = object.support?.kind === "terrain" || object.metadata?.followsTerrain === true || object.type === "path" || object.type === "fence" || object.type === "retaining-wall";
           const terrainPoints = terrainFollowing ? [[object.transform.position[0], object.transform.position[2]] as [number, number], ...supportEndpoints(object)] : [];
           return {
           id: object.id, role: object.semanticRole, type: object.type,
           bounds: object.dimensions, elevation: terrain.heightAt(object.transform.position[0], object.transform.position[2]), objectBaseY, candidateSurfaceY,
-          verticalGap: candidateSurfaceY === undefined ? undefined : Math.abs(objectBaseY - candidateSurfaceY), owningLevelId: object.support?.levelId, rootSupportId: getRootSupportId(object.support, raw.v3Scene),
+          verticalGap: candidateSurfaceY === undefined ? undefined : Math.abs(objectBaseY - candidateSurfaceY), owningLevelId: object.support?.levelId, rootSupportId: getRootSupportId(object.support, effective.scene),
           terrainSamples: terrainPoints.map(([x, z]) => terrain.heightAt(x, z)),
-          support: object.support?.levelId ?? object.support?.objectId ?? (object.type === "path" || object.type === "fence" || object.type === "retaining-wall" ? "terrain sampled" : object.hostId ?? "missing"),
+          support: (effective.derived.has(object.id) ? "derived " : "") + (object.support?.levelId ?? object.support?.objectId ?? object.support?.hostId ?? (object.type === "path" || object.type === "fence" || object.type === "retaining-wall" ? "terrain sampled" : object.hostId ?? "missing")),
           };
         }),
       };
@@ -345,17 +409,18 @@ function V3TerrainDebugPanel({ json }: { json: string | undefined }) {
 const fmt3 = (v: readonly number[]) => v.map((n) => n.toFixed(1)).join(", ");
 /** DEV-only: proves from the saved scene alone (no model call) whether objects compile, are framed, and sit above terrain. */
 function V3RenderDiagnosticsPanel({ json }: { json: string | undefined }) {
+  const params = useParams<{ projectId: string }>();
+  const activeV3 = useActiveV3RenderSource(params.projectId, json);
   const flags = useSceneStore((s) => s.v3Diagnostics);
   const setFlags = useSceneStore((s) => s.setV3Diagnostics);
   const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
   const report = useMemo(() => {
     try {
-      const raw = JSON.parse(json ?? "{}");
-      if (!isV3ProjectRoot(raw)) return null;
-      const diagnosis = diagnoseV3Scene(raw.v3Scene, compileV3Scene(raw.v3Scene));
+      if (!activeV3.scene) return null;
+      const diagnosis = diagnoseV3Scene(activeV3.scene, compileV3Scene(activeV3.scene));
       return { diagnosis, fit: computeV3CameraFit(diagnosis.architectureBounds) };
     } catch { return null; }
-  }, [json]);
+  }, [activeV3]);
   if (!report) return null;
   const { diagnosis: d, fit } = report;
   const toggle = (key: keyof typeof flags, label: string) => (
@@ -491,6 +556,7 @@ export function ArchitectureDebugPanel() {
       {process.env.NODE_ENV !== "production" && <V2OnlyModeToggle />}
       {process.env.NODE_ENV !== "production" && <RenderAuditControls />}
 
+      {process.env.NODE_ENV !== "production" && <V3RenderIdentityPanel projectId={params.projectId} json={houseConfigJson} />}
       {process.env.NODE_ENV !== "production" && <V3FailedPreviewPanel projectId={params.projectId} />}
 
       {process.env.NODE_ENV !== "production" && <SitePlanDebugPanel json={houseConfigJson} />}

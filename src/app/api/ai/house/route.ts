@@ -1,3 +1,9 @@
+import { assessV3Revision } from '@/lib/v3/safeRevision';
+import { retainV3RevisionArtifact } from '@/lib/ai/v3FailureArtifact';
+import type { V3TerrainMode } from "@/lib/v3/terrainMode";
+import { retainV3FailureArtifact } from "@/lib/ai/v3FailureArtifact";
+import { V3_COMPOSITION_PROMPT } from "@/lib/v3/composition";
+import { reviewV3ArchitecturalComposition, v3DesignRepairInstructions } from "@/lib/v3/designReview";
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, JSONParseError, NoObjectGeneratedError, Output, TypeValidationError } from "ai";
 import { buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
@@ -52,12 +58,12 @@ import { sitePlanSchema, type SitePlan } from "@/lib/architecture/sitePlanContra
 import { reconcileSitePlanExecution } from "@/lib/architecture/stages/reconcileSitePlanExecution";
 import { spatialReflowDiff } from "@/lib/architecture/stages/spatialReflow";
 import { computeCostUsd } from "@/lib/ai/pricing";
-import { compileV3Scene, isV3ProjectRoot, validateV3CompiledGeometry, type V3Scene } from "@/lib/v3/scene";
+import { isV3ProjectRoot, type V3Scene } from "@/lib/v3/scene";
 import { executeV3SceneOperations } from "@/lib/v3/operations";
-import { v3EditOutputSchema, v3SceneOutputSchema, V3_SCENE_ARCHITECT_PROMPT, V3_SCENE_SCHEMA_BYTES } from "@/lib/v3/schema";
-import { validateV3Scene } from "@/lib/v3/validation";
-import { normalizeV3GenerationOutput, repairV3GeneratedScene, summarizeV3Generation } from "@/lib/v3/generation";
+import { v3SceneArchitectPrompt } from "@/lib/v3/schema";
+import { summarizeV3Generation } from "@/lib/v3/generation";
 import { recoverV3FailedPreview } from "@/lib/v3/failedPreview";
+import { ingestV3GenerationOutput } from "@/lib/v3/ingestion";
 import { fingerprint } from "@/lib/ai/usage/diagnostics";
 import type { UsageAssessment } from "@/lib/ai/usage/track";
 
@@ -81,7 +87,7 @@ const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
 /** V3 is a bounded scene response, deliberately independent of V2's budgets. */
 export const V3_INITIAL_MAX_OUTPUT_TOKENS = 10_000;
-/** Persisted/logged V3 raw output is a diagnostic preview, never a full model response. */
+/** Shared usage/log output stays a preview; full failure artifacts are development-local only. */
 export const V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS = 2_048;
 const V3_STRUCTURED_OUTPUT_MAX_ISSUES = 4;
 const V3_STRUCTURED_OUTPUT_VALUE_MAX_CHARS = 180;
@@ -109,6 +115,7 @@ interface RequestBody {
   assets?: AssetRef[];
   /** Explicit opt-in transport flag. Existing V2 requests omit it. */
   generationMode?: "v2-architectural" | "v3-scene";
+  v3TerrainMode?: V3TerrainMode;
 }
 
 function parseAssets(raw: unknown): AssetRef[] {
@@ -134,6 +141,7 @@ function resolveGenerationMode(requested: unknown, root: Record<string, unknown>
     return { error: "Unknown generation mode. Expected v2-architectural or v3-scene." };
   }
   const rootIsV3 = isV3ProjectRoot(root);
+  if (!rootIsV3 && (root.generationMode === "v3-scene" || root.v3Scene !== undefined)) return { error: "V3 routing/configuration error: malformed V3 authority cannot route into V2." };
   if (rootIsV3 && requested === "v2-architectural") {
     return { error: "V3 project routing conflict: a V3 scene project cannot invoke V2 generation." };
   }
@@ -332,8 +340,9 @@ export async function POST(req: NextRequest) {
   if (resolvedMode.mode === "v3-scene") {
     console.info("[generation] generationMode: v3-scene");
     if (!isAiConfigured()) return withResolvedGenerationMode(NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 }), resolvedMode.mode);
+    if (body.mode === "generate" && body.v3TerrainMode !== undefined && body.v3TerrainMode !== "flat" && body.v3TerrainMode !== "advanced") return withResolvedGenerationMode(NextResponse.json({ error: "Unknown V3 terrain mode." }, { status: 400 }), resolvedMode.mode);
     const response = body.mode === "generate"
-      ? generateV3Scene(prompt, root, baseRevision, projectId)
+      ? generateV3Scene(prompt, root, baseRevision, projectId, body.v3TerrainMode ?? "flat")
       : editV3Scene(prompt, root, baseRevision, projectId, Array.isArray(body.selectedTargetIds) ? body.selectedTargetIds.filter((id): id is string => typeof id === "string").slice(0, 8) : []);
     return withResolvedGenerationMode(await response, resolvedMode.mode);
   }
@@ -455,49 +464,107 @@ export async function POST(req: NextRequest) {
 }
 
 /** One authoritative Terra call for V3. A single repair may correct objective contract failures, never redesign it. */
-async function generateV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null) {
-  const run = (repairErrors?: readonly string[], repairScene?: V3Scene) => withUsageLogging(
-    { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId(), generationMode: "v3-scene", stage: repairErrors ? "v3-scene-repair" : "v3-scene-architect", retryNumber: repairErrors ? 1 : 0, retryReason: repairErrors ? "objective-scene-validation" : undefined, maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS },
-    () => generateText({ model: getAiModel(), maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS, system: V3_SCENE_ARCHITECT_PROMPT, messages: [{ role: "user", content: repairErrors ? `Repair this same scene plan only. Objective failures: ${JSON.stringify(repairErrors.slice(0, 16))}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repairScene ?? root.v3Scene)}` : prompt }], output: Output.object({ schema: v3SceneOutputSchema }), providerOptions: AI_PROVIDER_OPTIONS }),
+async function generateV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null, terrainMode: V3TerrainMode) {
+  const systemPrompt = v3SceneArchitectPrompt(terrainMode);
+  // At most one follow-up call: either an objective validation repair or, for a valid scene with genuine conflicts, one targeted revision.
+  const run = (repair?: { kind: "objective" | "design"; items: readonly string[]; plan: unknown }) => withUsageLogging(
+    { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId(), generationMode: "v3-scene", stage: !repair ? "v3-scene-architect" : repair.kind === "design" ? "v3-scene-design-repair" : "v3-scene-repair", retryNumber: repair ? 1 : 0, retryReason: !repair ? undefined : repair.kind === "design" ? "architectural-composition-review" : "objective-scene-validation", maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS },
+    // JSON mode asks the provider for JSON but deliberately supplies no exact
+    // schema. The SDK may reject malformed JSON; our ingestion boundary owns
+    // all normalization and canonical structural validation after parsing.
+    () => generateText({ model: getAiModel(), maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS, system: systemPrompt, messages: [{ role: "user", content: !repair ? prompt
+      : repair.kind === "objective" ? `Repair this same scene plan only. Objective failures: ${JSON.stringify(repair.items.slice(0, 16))}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan ?? root.v3Scene)}`
+      : `Revise this same valid scene plan to resolve the architectural review findings below. Fix only the identified conflict. Preserve all existing object identities, mass positions/dimensions, roof families, materials, unrelated openings and assemblies, and site relationships. Collision counterpart ids are evidence, not permission to remodel them. Move or resize only the conflicting amenity; for an entry change only its door facade; for a balcony assembly change only that assembly facade. Add only an explicitly missing requested feature. Do not restart or restyle the design. Architectural review: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan)}` }], output: Output.json({ name: "v3_scene" }), providerOptions: AI_PROVIDER_OPTIONS }),
     (outcome) => "error" in outcome ? v3StructuredOutputUsageAssessment(outcome.error) : {}
   );
-  try {
-    // Render-first: parse (structural) -> normalize -> repair deterministically -> lenient validation.
-    // Only structural failures can trigger the single bounded model repair or reject the scene.
-    const prepare = (output: unknown) => {
-      const normalized = normalizeV3GenerationOutput(output);
-      const repaired = repairV3GeneratedScene(normalized.scene, normalized.notes);
-      return { scene: repaired.scene, notes: repaired.notes, validation: validateV3Scene(repaired.scene, { lenient: true }) };
-    };
-    let result = await run();
-    let prepared = prepare(result.output);
-    let repair = false;
-    if (!prepared.validation.ok) {
-      repair = true;
-      // Bounded: this is the only repair call V3 initial generation can make.
-      result = await run(prepared.validation.errors, prepared.scene);
-      prepared = prepare(result.output);
+  let attempt: 0 | 1 = 0;
+  const ingest = async (result: Awaited<ReturnType<typeof run>>) => {
+    // Snapshot before normalization/repair can touch provider-owned values.
+    const raw = process.env.NODE_ENV === "development" ? (result.text ?? JSON.stringify(result.output)) : undefined;
+    try {
+      const prepared = ingestV3GenerationOutput(result.output, terrainMode);
+      if (!prepared.ok) await retainV3FailureArtifact(raw, attempt, "ingestion", raw === undefined ? undefined : {
+        terrainMode,
+        decision: attempt === 0 ? "repair-requested" : "rejected",
+        errors: [...prepared.validation.errors, ...(prepared.geometryAudit?.errors ?? [])],
+        warnings: [...prepared.validation.warnings, ...(prepared.geometryAudit?.warnings ?? [])],
+        notes: prepared.notes,
+        omitted: prepared.notes.filter((note) => note.code.endsWith("_OMITTED") || note.code === "COMPOSITION_FALLBACK"),
+        normalizedScene: prepared.scene,
+      });
+      return prepared;
+    } catch (error) {
+      await retainV3FailureArtifact(raw, attempt, "ingestion", { terrainMode, decision: "rejected", errors: [], warnings: [], notes: [], omitted: [] });
+      throw error;
     }
-    const { scene, notes, validation } = prepared;
-    if (!validation.ok) return NextResponse.json({ error: `V3 scene could not pass objective validation: ${validation.errors[0]}` }, { status: 422 });
-    // Compile here as a deterministic renderability gate; the V3 compiler has no V2 document dependency.
-    const model = compileV3Scene(scene);
-    const geometryAudit = validateV3CompiledGeometry(scene, model, { lenient: true });
-    if (!geometryAudit.ok) return NextResponse.json({ error: "V3 scene contains unsupported compiled geometry: " + geometryAudit.errors[0] }, { status: 422 });
-    validation.warnings.push(...geometryAudit.warnings);
+  };
+  try {
+    let result = await run();
+    let prepared = await ingest(result);
+    let repair = false, objectiveRepair = false;
+    if (!prepared.ok) {
+      repair = objectiveRepair = true;
+      // Bounded: this is the only repair call V3 initial generation can make.
+      const failures = [...prepared.validation.errors, ...(prepared.geometryAudit?.errors ?? [])];
+      attempt = 1;
+      // Repair Terra's own authored plan, not the normalized runtime scene: re-sending derived arrays
+      // invites the model to rewrite intent it never authored (and a lossy copy loses intent it did).
+      result = await run({ kind: "objective", items: failures, plan: result.output });
+      prepared = await ingest(result);
+    }
+    let designReview = prepared.ok ? reviewV3ArchitecturalComposition(prepared.scene, { brief: prompt }) : undefined;
+    const initialDesignCodes = designReview?.diagnostics.map((d) => d.code);
+    let designRevised = false;
+    if (!repair && designReview?.repairRecommended) {
+      // One targeted follow-up; the original valid scene remains authoritative unless preservation passes.
+      repair = true;
+      attempt = 1;
+      try {
+        const revised = await run({ kind: "design", items: v3DesignRepairInstructions(designReview), plan: result.output });
+        const revisedPrepared = await ingest(revised);
+        const revisedReview = revisedPrepared.ok ? reviewV3ArchitecturalComposition(revisedPrepared.scene, { brief: prompt }) : undefined;
+        const decision = revisedReview ? assessV3Revision(prepared.scene, revisedPrepared.scene, designReview, revisedReview)
+          : { accepted: false, reasons: ['Revision failed objective validation.'], changedPaths: [] };
+        await retainV3RevisionArtifact({ initialScene: prepared.scene, revisedScene: revisedPrepared.scene,
+          initialAuthoredScene: result.output, revisedAuthoredScene: revised.output,
+          targetedFindings: designReview.diagnostics.filter(d => d.severity === 'significant'), ...decision });
+        if (revisedReview && decision.accepted) {
+          result = revised;
+          prepared = revisedPrepared;
+          designReview = revisedReview;
+          designRevised = true;
+        }
+      } catch {
+        // A failed optional revision must never cost the user the valid scene already in hand.
+        await retainV3RevisionArtifact({ initialScene: prepared.scene, initialAuthoredScene: result.output,
+          targetedFindings: designReview.diagnostics.filter(d => d.severity === 'significant'), accepted: false,
+          reasons: ['Revision generation or ingestion failed; original valid scene retained.'] });
+        console.warn("[v3] design revision discarded; original valid scene retained.");
+      }
+    }
+    const { scene, notes, validation, geometryAudit } = prepared;
+    if (!prepared.ok) {
+      const errors = [...validation.errors, ...(geometryAudit?.errors ?? [])];
+      const preview = recoverV3FailedPreview(result.output, errors, terrainMode);
+      return NextResponse.json({ error: `V3 scene could not pass objective validation: ${errors[0]}${errors.length > 1 ? ` (+${errors.length - 1} more)` : ""}`, ...(preview ? { v3FailedPreview: preview } : {}) }, { status: 422 });
+    }
+    validation.warnings.push(...(geometryAudit?.warnings ?? []));
     const audit = summarizeV3Generation(notes, validation.issues);
     const usage = result.totalUsage;
     scene.metadata = {
       ...scene.metadata,
       brief: prompt,
+      terrainMode,
       generatedAt: new Date().toISOString(),
       audit: { status: audit.status, counts: audit.counts },
-      usage: { inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: usage.totalTokens, attempts: repair ? 2 : 1, estimatedCost: computeCostUsd(getAiModelId(), { inputTokens: usage.inputTokens ?? 0, cachedInputTokens: usage.inputTokenDetails?.cacheReadTokens ?? 0, outputTokens: usage.outputTokens ?? 0 }) ?? undefined, contextBytes: V3_SCENE_ARCHITECT_PROMPT.length + prompt.length, schemaBytes: V3_SCENE_SCHEMA_BYTES, repair },
+      designReview: { initial: initialDesignCodes ?? [], final: designReview?.diagnostics.map((d) => d.code) ?? [], revised: designRevised },
+      usage: { inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: usage.totalTokens, attempts: repair ? 2 : 1, estimatedCost: computeCostUsd(getAiModelId(), { inputTokens: usage.inputTokens ?? 0, cachedInputTokens: usage.inputTokenDetails?.cacheReadTokens ?? 0, outputTokens: usage.outputTokens ?? 0 }) ?? undefined, contextBytes: systemPrompt.length + prompt.length, schemaBytes: 0, repair },
     };
     const json = JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: scene });
-    const warnings = [...notes.map((note) => `${note.code} [${note.targetId}]: ${note.message}`), ...validation.warnings];
-    return NextResponse.json({ summary: `V3 scene generated: ${scene.objects.length} persistent objects${repair ? " (one validation repair)" : ""}.${audit.summary ? ` ${audit.summary}` : ""}`, json, baseRevision, revision: revisionOf(json), generationMode: "v3-scene", warnings, v3Audit: audit });
+    const warnings = [...notes.map((note) => `${note.code} [${note.targetId}]: ${note.message}`), ...validation.warnings, ...(designReview?.diagnostics.filter((d) => d.severity === "significant" || d.code === "UNSUPPORTED_ARCHITECTURAL_INTENT").map((d) => `DESIGN_${d.code} [${d.targetIds.join(", ")}]: ${d.message}`) ?? [])];
+    return NextResponse.json({ summary: `V3 scene generated: ${scene.objects.length} persistent objects${designRevised ? " (one architectural revision)" : objectiveRepair ? " (one validation repair)" : ""}.${audit.summary ? ` ${audit.summary}` : ""}`, json, baseRevision, revision: revisionOf(json), generationMode: "v3-scene", warnings, v3Audit: audit, v3DesignReview: designReview });
   } catch (error) {
+    if (NoObjectGeneratedError.isInstance(error)) await retainV3FailureArtifact(error.text, attempt, "structured-output", { terrainMode, decision: "rejected", errors: [], warnings: [], notes: [], omitted: [] });
     const failure = logV3StructuredOutputFailure(error);
     if (failure) {
       const message = failure.code === "V3_OUTPUT_TRUNCATED"
@@ -505,12 +572,10 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
         : failure.code === "V3_MODEL_JSON_INVALID"
           ? "Terra's V3 response was not valid JSON. Please try again."
           : "Terra's V3 response didn't match the compact scene contract. Please try again.";
-      // This is a development-only, already-sanitised compiler input. It is
+      // This is an already-sanitised compiler input. It is
       // deliberately not a `json` result, so the normal client commit path
       // cannot persist it or replace the last valid scene.
-      const preview = process.env.NODE_ENV !== "production"
-        ? recoverV3FailedPreview((error as { text?: unknown }).text, failure.issues.map((issue) => `${issue.path ?? "(root)"}: ${issue.message}`))
-        : undefined;
+      const preview = recoverV3FailedPreview((error as { text?: unknown }).text, failure.issues.map((issue) => `${issue.path ?? "(root)"}: ${issue.message}`), terrainMode);
       return NextResponse.json({ error: message, code: failure.code, ...(preview ? { v3FailedPreview: preview } : {}) }, { status: 502 });
     }
     logV3ProviderRequestRejection(error);
@@ -522,16 +587,16 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
 async function editV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null, selectedIds: string[]) {
   const scene = root.v3Scene as V3Scene;
   const selected = selectedIds.length ? scene.objects.filter((object) => selectedIds.includes(object.id)) : scene.objects.slice(0, 36);
-  const context = selected.map((object) => ({ id: object.id, type: object.type, role: object.semanticRole, p: object.transform.position, d: object.dimensions, material: object.material.id, hostId: object.hostId, support: object.support, fromSupportId: object.fromSupportId, toSupportId: object.toSupportId, groupId: object.groupId }));
+  const context = selected.map((object) => ({ id: object.id, type: object.type, role: object.semanticRole, architecture: object.architecture, composition: object.composition, levels: object.levels, facadePreset: object.facadePreset, roofForm: object.roofForm, p: object.architecture ? undefined : object.transform.position, d: object.architecture ? undefined : object.dimensions, material: object.material.id, hostId: object.hostId, support: object.support, fromSupportId: object.fromSupportId, toSupportId: object.toSupportId, groupId: object.groupId }));
   try {
     const { output } = await withUsageLogging(
       { projectId, requestType: "scoped_edit", scope: "component", model: getAiModelId(), generationMode: "v3-scene", stage: "v3-local-edit", maxOutputTokens: 1800 },
-      () => generateText({ model: getAiModel(), maxOutputTokens: 1800, system: "You are Terra editing a compact V3 scene. Return direct operations only against supplied stable ids. Preserve authored support relationships unchanged when their geometry is unchanged. If a move changes a host, include setSupport with the corrected explicit hostId and relationship; if a stair/ramp changes, include setConnectorEndpoints. The edit is atomically rejected when explicit support no longer meets geometry. When an edit changes levels, routes, or supports, use replaceSiteHierarchy with the complete corrected hierarchy. Hierarchy connection routes are world-space [x, y, z]: x east/west, y elevation, z north/south. Do not recreate or use V2 architecture documents.", messages: [{ role: "user", content: `Request: ${prompt}\nSite hierarchy: ${JSON.stringify(scene.siteHierarchy)}\nLocal scene subset: ${JSON.stringify(context)}` }], output: Output.object({ schema: v3EditOutputSchema }), providerOptions: AI_PROVIDER_OPTIONS })
+      () => generateText({ model: getAiModel(), maxOutputTokens: 1800, system: "You are Terra editing a compact V3 scene. Return JSON {intent,operations}. Operations: setComposition {target,composition} replaces the target building mass composition (use {} to restore facade presets), create {object}, delete {target}, editArchitecture {target,architecture: partial named geometry}, changeMaterial {target,material}, duplicate {target,id,position?}, attach {target,hostId}, detach {target}, setSupport {target,support}, setConnectorEndpoints {target,fromSupportId,toSupportId}, replaceSiteHierarchy {hierarchy}. Legacy move/rotate/resize use position/rotation/dimensions. Target supplied authored stable ids only. New objects use named architecture and material intent; support metadata is optional. For an object with architecture, use editArchitecture and change named x, z, baseElevation, width, depth, or height; never rewrite its derived runtime arrays. X is left/right, Y is vertical, Z is forward/back. Canonical legacy arrays are position [x,y,z] and dimensions [width,height,depth]. Preserve unusual valid support relationships when geometry is unchanged; ordinary architectural support is compiler-inferred. If a stair/ramp changes, include setConnectorEndpoints. When an edit changes levels or routes, use replaceSiteHierarchy with the complete corrected hierarchy. Hierarchy routes are world-space [x,y,z]. Do not recreate or use V2 architecture documents." + "\n" + V3_COMPOSITION_PROMPT, messages: [{ role: "user", content: `Request: ${prompt}\nSite hierarchy: ${JSON.stringify(scene.siteHierarchy)}\nLocal scene subset: ${JSON.stringify(context)}` }], output: Output.json({ name: "v3_semantic_edit" }), providerOptions: AI_PROVIDER_OPTIONS })
     );
-    const applied = executeV3SceneOperations(scene, output as never);
+    const applied = executeV3SceneOperations(scene, output);
     if (!applied.ok) return NextResponse.json({ error: `V3 edit was rejected atomically: ${applied.errors[0]}` }, { status: 422 });
     const json = JSON.stringify({ ...root, v3Scene: applied.scene });
-    return NextResponse.json({ summary: output.intent, json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V3 local scene" }, generationMode: "v3-scene" });
+    return NextResponse.json({ summary: (output as { intent: string }).intent, warnings: applied.warnings, json, baseRevision, revision: revisionOf(json), scope: { level: "component", label: "V3 local scene" }, generationMode: "v3-scene" });
   } catch (error) {
     if (NoObjectGeneratedError.isInstance(error)) return NextResponse.json({ error: "Terra's V3 edit did not match the operation contract." }, { status: 502 });
     return providerErrorResponse(error);

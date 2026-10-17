@@ -1,0 +1,13 @@
+# Local V3 failure replay
+
+Only `NODE_ENV=development` writes `.v3-debug/failed-attempt-0.json` (initial) and `failed-attempt-1.json` (repair). Each slot holds the latest rejected attempt of that kind; compare timestamps before treating them as one generation. Files are git-ignored, outside public assets, mode 0600 in a 0700 directory, and replaced atomically. There is no download endpoint or client payload field.
+
+`rawResponse` preserves the provider's original output text before ingestion, except redacted sensitive fields and credential/email patterns. If the SDK supplies only parsed output, it is JSON-serialized. Request prompts/history, transport headers and arbitrary error objects are not collected. Embedded sensitive fields, including brief/prompt, are redacted. `sha256` fingerprints the original output; `redacted` records whether text changed.
+
+For offline replay, read the artifact, check `omittedForSize === false`, and pass `JSON.parse(artifact.rawResponse)` to `ingestV3GenerationOutput` from `src/lib/v3/ingestion.ts`. Malformed JSON can instead be replayed directly through `JSON.parse` to reproduce the parsing failure. No provider call is needed. Redaction can change failures involving the removed fields; artifacts are not byte-exact originals when `redacted` is true.
+
+Each file is capped at 1 MiB (2 MiB total retained slots). Oversize responses retain metadata with `omittedForSize: true` and `rawResponse: null`, never a misleading partial replay. Delete `.v3-debug` to clear local diagnostics. Writes are best effort and do not change success, repair, rejection, or project persistence behavior. Production and test environments do not write artifacts.
+
+Artifact `version: 2` adds `diagnostics` for ingestion rejections: `decision` (`repair-requested` for the initial attempt, `rejected` for the final one), every validation and geometry-audit `errors`/`warnings`, all normalization/repair `notes`, `omitted` (each `*_OMITTED`/`COMPOSITION_FALLBACK` note with its reason) and the `normalizedScene` that was judged. Diagnostics pass through the same redaction. If the file would exceed the cap, `normalizedScene` is dropped first (it is reproducible from `rawResponse`); the replay input is only dropped after that. A successful repair leaves the attempt-0 artifact recording `repair-requested`; the accepted scene itself is the project.
+
+New generation artifacts also record `diagnostics.terrainMode`. Replay with `ingestV3GenerationOutput(JSON.parse(artifact.rawResponse), artifact.diagnostics?.terrainMode)` to apply the same flat/advanced generation contract. Older artifacts without this field retain legacy advanced ingestion behavior.

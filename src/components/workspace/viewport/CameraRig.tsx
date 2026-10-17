@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useParams } from "next/navigation";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -12,9 +12,10 @@ import { CAMERA_FOV, computeCameraFit } from "@/lib/house/cameraFit";
 import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { CAMERA_FLIGHT_MS, listRooms, resolveRoomFocus, roomCameraGoal, type CameraGoal } from "@/lib/house/roomView";
 import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
-import { isV3ProjectRoot } from "@/lib/v3/scene";
-import { computeV3CameraFit, getV3PresentationBounds, type V3PresentationBounds } from "@/lib/v3/presentation";
-import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
+import { computeV3CameraFit, getV3PresentationBounds } from "@/lib/v3/presentation";
+import { useActiveV3RenderSource } from "@/store/useActiveV3RenderSource";
+import { useV3RenderIdentityStore } from "@/store/useV3RenderIdentityStore";
+import { auditHash } from "@/lib/architecture/renderAudit";
 
 interface Flight {
   fromPosition: THREE.Vector3;
@@ -38,8 +39,16 @@ export function CameraRig() {
   const houseConfigJson = useProjectStore((s) => s.getProject(params.projectId)?.houseConfigJson);
   const cameraPreset = useSceneStore((s) => s.cameraPreset);
   const walkMode = useSceneStore((s) => s.walkMode);
-  const failedPreview = useV3FailedPreviewStore((s) => s.candidate);
-  const previewActive = useV3FailedPreviewStore((s) => s.active);
+  const activeV3Source = useActiveV3RenderSource(params.projectId, houseConfigJson);
+  const v3Bounds = useMemo(() => {
+    try { return activeV3Source.scene ? getV3PresentationBounds(activeV3Source.scene) : undefined; } catch { return undefined; }
+  }, [activeV3Source]);
+  const setCameraSource = useV3RenderIdentityStore(s => s.setCameraSource);
+  const clearCameraSource = useV3RenderIdentityStore(s => s.clearCameraSource);
+  useEffect(() => {
+    if (activeV3Source.scene && v3Bounds) setCameraSource({ projectId: params.projectId, sceneHash: auditHash(activeV3Source.scene), source: activeV3Source.source });
+    return () => clearCameraSource(params.projectId);
+  }, [activeV3Source, v3Bounds, params.projectId, setCameraSource, clearCameraSource]);
   const get = useThree((s) => s.get);
   // Only used to re-run when orbit controls come or go (walk mode swaps them); the live objects are read via `get()`.
   const controlsInstance = useThree((s) => s.controls);
@@ -48,6 +57,24 @@ export function CameraRig() {
   /** Exterior pose to return to; set when stepping in from outside, cleared once used or overridden. */
   const exteriorPose = useRef<CameraGoal | null>(null);
 
+  // Offline production-renderer acceptance: exact world-space cameras, development only.
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const replay = (event: Event) => {
+      const { position, target } = (event as CustomEvent<{ position: number[]; target: number[] }>).detail;
+      if (![position, target].every(v => Array.isArray(v) && v.length === 3 && v.every(Number.isFinite))) return;
+      const { camera, controls } = get();
+      flight.current = null;
+      camera.position.set(position[0], position[1], position[2]);
+      const orbit = controls as OrbitControlsImpl | null;
+      orbit?.target.set(target[0], target[1], target[2]);
+      camera.lookAt(target[0], target[1], target[2]);
+      orbit?.update();
+    };
+    window.addEventListener("v3-replay-camera", replay);
+    return () => window.removeEventListener("v3-replay-camera", replay);
+  }, [get]);
+
   useEffect(() => {
     const { size, camera: cam, controls: ctl } = get();
     const camera = cam as THREE.PerspectiveCamera;
@@ -55,12 +82,6 @@ export function CameraRig() {
     if (!cameraPreset || !controls || walkMode) return;
     const aspect = size.width / Math.max(1, size.height);
     const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
-    let v3Bounds: V3PresentationBounds | undefined;
-    try {
-      const preview = process.env.NODE_ENV !== "production" && previewActive && failedPreview?.projectId === params.projectId ? failedPreview.scene : undefined;
-      if (preview) v3Bounds = getV3PresentationBounds(preview);
-      else { const root = JSON.parse(houseConfigJson ?? "{}"); if (isV3ProjectRoot(root)) v3Bounds = getV3PresentationBounds(root.v3Scene); }
-    } catch { /* legacy remains below */ }
     const house = config ?? DEFAULT_HOUSE_CONFIG;
     // V3 frames the presentation bounds (architecture + site structures) around their own centre, never the terrain.
     const siteFit = () => v3Bounds ? computeV3CameraFit(v3Bounds, aspect) : computeCameraFit(house, site ? computeSiteBounds(site) : undefined, aspect);
@@ -121,7 +142,7 @@ export function CameraRig() {
     useSceneStore.getState().triggerCameraPreset(null);
     // The preset is one-shot; the design and viewport size are read at the moment it fires.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cameraPreset, controlsInstance, walkMode, failedPreview, previewActive, params.projectId]);
+  }, [v3Bounds, cameraPreset, controlsInstance, walkMode, params.projectId]);
 
   // Never leave orbiting disabled if the rig goes away mid-flight.
   useEffect(

@@ -56,7 +56,9 @@ describe("V3 presentation bounds and visibility", () => {
   });
 
   it("detects a building buried by terrain", () => {
-    const buried: V3Scene = { ...scene, objects: [obj("raise", "terrain-region", [0, 0, 0], [180, 1, 180], { terrain: { operation: "raiseRegion", rise: 20 } }), obj("hut", "volume", [0, 2, 0], [10, 4, 10], { metadata: { embedded: false } })] };
+    // Explicit embedding retains surrounding terrain; ordinary bearing
+    // volumes receive a terrain pad in both render and visibility analysis.
+    const buried: V3Scene = { ...scene, objects: [obj("raise", "terrain-region", [0, 0, 0], [180, 1, 180], { terrain: { operation: "raiseRegion", rise: 20 } }), obj("hut", "volume", [0, 2, 0], [10, 4, 10], { metadata: { embedded: true } })] };
     expect(diagnoseV3Scene(buried).buriedVolumes).toBe(1);
   });
 

@@ -1,5 +1,7 @@
 import type { V3Scene, V3SceneObject, Vec3 } from "./scene";
-import { getObjectBaseY, getObjectTopY, getSupportSurfaceY, getTerrainY, scaledDimensionsOf } from "./elevation";
+import { effectiveV3Scene } from "./derivedSupport";
+import { v3SupportCapability } from "./capabilities";
+import { createV3TerrainSampler, getObjectBaseY, getObjectTopY, getSupportSurfaceY, getTerrainY, scaledDimensionsOf, v3FollowsTerrain } from "./elevation";
 
 export type V3SupportType = "terrain" | "pad" | "terrace" | "slab" | "deck" | "roof" | "object";
 export type V3ConnectionType = "driveway" | "path" | "stair" | "ramp";
@@ -15,8 +17,12 @@ export type V3LegacyRoutePoint = [number, number];
 export type V3PersistedRoutePoint = V3RoutePoint | V3LegacyRoutePoint;
 
 export interface V3LevelRegion { x: number; z: number; width: number; depth: number; rotation?: number; }
-export interface V3SiteLevel { id: string; elevation: number; region: V3LevelRegion; role?: string; supportType: V3SupportType; access?: "entry" | "arrival"; }
-export interface V3SiteConnection { id: string; fromLevelId: string; toLevelId: string; type: V3ConnectionType; route: V3PersistedRoutePoint[]; width: number; maxGrade?: number; surfaceObjectId?: string; }
+export interface V3SiteLevel { id: string; elevation: number; region: V3LevelRegion; role?: string; supportType: V3SupportType; access?: "entry" | "arrival";
+  /** Pad edges intentionally left open (e.g. a view or cliff edge): graded with a batter, never a derived retaining wall. */
+  openEdges?: ("north" | "south" | "west" | "east")[]; }
+export interface V3SiteConnection { id: string; fromLevelId: string; toLevelId: string; type: V3ConnectionType; route: V3PersistedRoutePoint[]; width: number; maxGrade?: number; surfaceObjectId?: string;
+  /** Driveways/paths are graded into the ground by default. `authored` keeps the authored route Y (an explicitly elevated route). */
+  profile?: "graded" | "authored"; }
 export interface V3ResolvedSiteConnection extends Omit<V3SiteConnection, "route"> { route: V3RoutePoint[]; }
 export interface V3ResolvedSiteHierarchy extends Omit<V3SiteHierarchy, "connections"> { connections: V3ResolvedSiteConnection[]; }
 export interface V3SiteTransition { id: string; fromLevelId: string; toLevelId: string; type: V3TransitionType; objectId?: string; }
@@ -62,14 +68,36 @@ export function normalizeConnectionRoute(connection: V3SiteConnection, levels: r
     return [point[0], from.elevation + (to.elevation - from.elevation) * (horizontal > 0 ? walked / horizontal : 0), point[1]];
   });
 }
+
+/**
+ * Rebuilds only a malformed connection's vertical profile.  The authored X/Z
+ * route remains authoritative; its two declared levels are the authoritative
+ * elevations.  This is intentionally a compiler-time compatibility repair so
+ * an old saved scene keeps its object ids and route shape.
+ */
+export function groundedConnectionRoute(connection: V3SiteConnection, levels: readonly V3SiteLevel[]): V3RoutePoint[] {
+  const route = normalizeConnectionRoute(connection, levels);
+  const from = levels.find((level) => level.id === connection.fromLevelId);
+  const to = levels.find((level) => level.id === connection.toLevelId);
+  if (!from || !to || route.length < 2 || routeLength(route) <= 0) return route;
+  const endpointMismatch = Math.abs(route[0][1] - from.elevation) > EPSILON || Math.abs(route.at(-1)![1] - to.elevation) > EPSILON;
+  if (!endpointMismatch) return route;
+
+  const total = routeLength(route);
+  let travelled = 0;
+  return route.map((point, index) => {
+    if (index) travelled += Math.hypot(point[0] - route[index - 1][0], point[2] - route[index - 1][2]);
+    return [point[0], from.elevation + (to.elevation - from.elevation) * (travelled / total), point[2]];
+  });
+}
 const levelAt = (level: V3SiteLevel, x: number, z: number) => {
   const angle = level.region.rotation ?? 0, c = Math.cos(angle), s = Math.sin(angle), dx = x - level.region.x, dz = z - level.region.z;
   return Math.abs(dx * c - dz * s) <= level.region.width / 2 + EPSILON && Math.abs(dx * s + dz * c) <= level.region.depth / 2 + EPSILON;
 };
 const dimensionsOf = (object: V3SceneObject): Vec3 => scaledDimensionsOf(object);
 const isIntentionalElevation = (object: V3SceneObject) => ["floating", "suspended", "cantilevered", "embedded"].includes(object.support?.grounding ?? "") || object.metadata?.embedded === true;
-export const v3ObjectNeedsSupport = (object: V3SceneObject) => !["terrain-region", "light", "opening", "glass-panel", "roof", "canopy", "wall", "column", "beam"].includes(object.type) && !isIntentionalElevation(object);
-const isOccupiable = (object: V3SceneObject) => object.collision === "walkable" || ["slab", "surface", "path", "stair", "ramp", "pool"].includes(object.type);
+export const v3ObjectNeedsSupport = (object: V3SceneObject) => !v3SupportCapability(object.type).auditExempt && !isIntentionalElevation(object);
+const isOccupiable = (object: V3SceneObject) => object.collision === "walkable" || !!v3SupportCapability(object.type).occupiable;
 
 /**
  * Legacy V3 scenes did not persist a site graph. This conservative adapter keeps them renderable without pretending
@@ -127,6 +155,8 @@ const endpointContains = (endpoint: V3SiteLevel | V3SceneObject, x: number, z: n
 
 /** Objective physical checks. It deliberately does not infer taste or architectural quality. */
 export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: number, z: number) => number): V3SiteIssue[] {
+  // Audit the effective scene: authored support plus deterministic derived support (never persisted).
+  scene = effectiveV3Scene(scene);
   const { hierarchy, derived } = resolveSiteHierarchy(scene), issues: V3SiteIssue[] = [];
   const issue = (code: string, targetId: string, message: string, severity: "error" | "warning" = "error") => issues.push({ id: `${code}:${targetId}`, code, targetId, message, severity });
   const levels = new Map<string, V3SiteLevel>();
@@ -135,6 +165,15 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
     levels.set(level.id, level);
     if (!finite(level.elevation) || !finite(level.region.width) || !finite(level.region.depth) || level.region.width <= 0 || level.region.depth <= 0) issue("INVALID_SITE_LEVEL", level.id, `Site level ${level.id} has an invalid elevation or region.`);
   }
+  const terrainAt = createV3TerrainSampler(scene);
+  // Grade on either side of a wall, sampled across its thickness (not half its length, the former bug),
+  // one mesh cell out on each face so a heightfield step is measurable.
+  const wallRetainsGrade = (object: V3SceneObject) => {
+    const [width, , depth] = dimensionsOf(object), side = Math.min(width, depth) * .5 + 1.5, angle = object.transform.rotation[1], alongX = width >= depth;
+    const dx = alongX ? -Math.sin(angle) * side : Math.cos(angle) * side, dz = alongX ? Math.cos(angle) * side : -Math.sin(angle) * side;
+    // The graded surface (before pool excavation): a pool beside a wall is not the grade it retains.
+    return Math.abs(terrainAt.gradedAt(object.transform.position[0] + dx, object.transform.position[2] + dz) - terrainAt.gradedAt(object.transform.position[0] - dx, object.transform.position[2] - dz)) >= .2;
+  };
   const adjacency = new Map<string, Set<string>>();
   for (const level of hierarchy.levels) adjacency.set(level.id, new Set());
   for (const connection of hierarchy.connections) {
@@ -157,7 +196,10 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
   for (const transition of hierarchy.transitions ?? []) {
     const from = levels.get(transition.fromLevelId), to = levels.get(transition.toLevelId);
     if (!from || !to) { issue("MISSING_TRANSITION_LEVEL", transition.id, `Transition ${transition.id} references a missing level.`); continue; }
-    if (transition.type === "retaining-edge" && Math.abs(from.elevation - to.elevation) < .2) issue("RETAINING_EDGE_NO_GRADE_DIFFERENCE", transition.id, `Retaining edge ${transition.id} does not separate meaningful grades.`);
+    // A same-level retaining edge is valid when it actually retains a grade: its wall does, or grading derived one.
+    const wall = transition.objectId ? scene.objects.find((object) => object.id === transition.objectId && object.type === "retaining-wall") : undefined;
+    const retains = from.id !== to.id && (wall ? wallRetainsGrade(wall) : terrainAt.grading.walls.some((derivedWall) => derivedWall.levelId === from.id || derivedWall.levelId === to.id));
+    if (transition.type === "retaining-edge" && Math.abs(from.elevation - to.elevation) < .2 && !retains) issue("RETAINING_EDGE_NO_GRADE_DIFFERENCE", transition.id, `Retaining edge ${transition.id} does not separate meaningful grades.`);
   }
   const entries = hierarchy.levels.filter((level) => level.access === "entry");
   const reachable = new Set(entries.map((level) => level.id)), queue = [...reachable];
@@ -173,7 +215,7 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
   }
   const connectionSurfaceIds = new Set(hierarchy.connections.flatMap((connection) => connection.surfaceObjectId ? [connection.surfaceObjectId] : []));
   for (const object of scene.objects) {
-    const connector = object.type === "stair" || object.type === "ramp";
+    const connector = !!v3SupportCapability(object.type).verticalConnector;
     // Connectors are validated as two-ended graph edges, rather than as ordinary objects.
     if (connector) {
       const fromId = object.fromSupportId, toId = object.toSupportId;
@@ -182,7 +224,7 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
         if (!from || !to || !fromId || !toId || fromId === toId) {
           issue("INVALID_CONNECTOR_ENDPOINT", object.id, `${object.label} must reference two distinct existing supports.`);
         } else {
-          const [a, b] = object.type === "stair" || object.type === "ramp"
+          const [a, b] = connector
             ? (() => { const [w, , d] = dimensionsOf(object), alongDepth = d >= w, half = (alongDepth ? d : w) / 2, angle = object.transform.rotation[1], dx = (alongDepth ? Math.sin(angle) : Math.cos(angle)) * half, dz = (alongDepth ? Math.cos(angle) : -Math.sin(angle)) * half; return [[object.transform.position[0] - dx, object.transform.position[2] - dz], [object.transform.position[0] + dx, object.transform.position[2] + dz]] as const; })()
             : [[object.transform.position[0], object.transform.position[2]], [object.transform.position[0], object.transform.position[2]]] as const;
           const direct = endpointContains(from, a[0], a[1]) && endpointContains(to, b[0], b[1]);
@@ -204,7 +246,7 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
         issue("INVALID_SUPPORT_RELATIONSHIP", object.id, `object: ${object.id}; host: ${hostId ?? "missing"}; reason: referenced host does not exist.`);
         continue;
       }
-      if (relationship === "terrain-following") {
+      if (relationship === "terrain-following" && !v3FollowsTerrain(object)) {
         const gap = Math.abs(getObjectBaseY(object) - getTerrainY(object.transform.position[0], object.transform.position[2], scene));
         if (gap > 1.1) { issue("INVALID_SUPPORT_RELATIONSHIP", object.id, `object: ${object.id}; host: terrain; reason: support gap ${gap.toFixed(1)}m exceeds tolerance.`); continue; }
       } else if (host) {
@@ -231,15 +273,24 @@ export function auditV3SiteHierarchy(scene: V3Scene, _legacyTerrainAt?: (x: numb
     if (!object.support && !derived) { issue("UNRESOLVED_SUPPORT", object.id, `${object.label} has no resolved physical support.`); continue; }
     // Terrain-following lines are compiled from the shared heightfield segment by segment. Their stored
     // vertical centre remains legacy placement context rather than an independent grounding plane.
-    const terrainFollowingLine = object.metadata?.followsTerrain === true && object.support?.kind === "terrain";
+    const terrainFollowingLine = v3FollowsTerrain(object);
     const tolerance = object.support?.objectId ? (object.collision === "water" ? 2.5 : 1.35) : EPSILON;
-    if (!terrainFollowingLine && Math.abs(getObjectBaseY(object) - expected) > tolerance) { issue("UNRESOLVED_SUPPORT", object.id, `${object.label} base ${getObjectBaseY(object).toFixed(2)} does not meet its resolved support at ${expected.toFixed(2)}.`); continue; }
+    // Facade-attached parts (notably model-authored glass-wall and window-band) are
+    // checked against their host volume above. Their vertical centre/base is not a
+    // floor-bearing support, so comparing it to the host's top would turn ordinary
+    // wall glazing into a false physical warning.
+    const facadeAttachment = relationship === "attached-to";
+    // A cantilever bears on a host storey datum (base + k·storey height), not necessarily the host's top.
+    if (relationship === "cantilevered-from" && hostId) {
+      const host = scene.objects.find((candidate) => candidate.id === hostId)!, storeys = Math.max(1, host.levels ?? 1), hostBase = getObjectBaseY(host), storey = (getObjectTopY(host) - hostBase) / storeys;
+      if (!Array.from({ length: storeys + 1 }, (_, k) => hostBase + k * storey).some((datum) => Math.abs(getObjectBaseY(object) - datum) <= EPSILON)) issue("UNRESOLVED_SUPPORT", object.id, `${object.label} base ${getObjectBaseY(object).toFixed(2)} does not meet a storey datum of ${host.id}.`);
+      continue;
+    }
+    if (!terrainFollowingLine && !facadeAttachment && Math.abs(getObjectBaseY(object) - expected) > tolerance) { issue("UNRESOLVED_SUPPORT", object.id, `${object.label} base ${getObjectBaseY(object).toFixed(2)} does not meet its resolved support at ${expected.toFixed(2)}.`); continue; }
     if (isOccupiable(object) && !supportLevelId(scene, object.support) && !derived && !terrainFollowingLine) issue("UNRESOLVED_SUPPORT", object.id, `${object.label} is walkable but its support does not resolve to a site level.`);
   }
   for (const object of scene.objects.filter((candidate) => candidate.type === "retaining-wall")) {
-    const [width, , depth] = dimensionsOf(object), side = Math.max(width, depth) * .5 + .3, angle = object.transform.rotation[1], alongX = width >= depth;
-    const dx = alongX ? -Math.sin(angle) * side : Math.cos(angle) * side, dz = alongX ? Math.cos(angle) * side : -Math.sin(angle) * side;
-    if (Math.abs(getTerrainY(object.transform.position[0] + dx, object.transform.position[2] + dz, scene) - getTerrainY(object.transform.position[0] - dx, object.transform.position[2] - dz, scene)) < .2) issue("RETAINING_WALL_NO_GRADE_DIFFERENCE", object.id, `${object.label} does not separate meaningful terrain elevations.`);
+    if (!wallRetainsGrade(object)) issue("RETAINING_WALL_NO_GRADE_DIFFERENCE", object.id, `${object.label} does not separate meaningful terrain elevations.`);
   }
   return issues;
 }

@@ -28,7 +28,7 @@ import { computeSiteBounds } from "@/lib/house/siteBounds";
 import { preloadPbrLibrary } from "@/lib/pbrLibrary";
 import { DEFAULT_HOUSE_CONFIG } from "@/types/house";
 import type { TimeOfDay } from "@/types/project";
-import { isV3ProjectRoot } from "@/lib/v3/scene";
+import { useActiveV3RenderSource } from "@/store/useActiveV3RenderSource";
 import { computeV3CameraFit, getV3PresentationBounds } from "@/lib/v3/presentation";
 
 type WalkKey = "forward" | "backward" | "left" | "right";
@@ -97,12 +97,13 @@ export function Viewport() {
   const timeOfDay: TimeOfDay = useProjectStore(
     (s) => s.getProject(params.projectId)?.timeOfDay ?? "midday"
   );
+  const activeV3 = useActiveV3RenderSource(params.projectId, houseConfigJson);
+  const v3Presentation = !!activeV3.scene;
 
   const initialFit = useMemo(() => {
     try {
-      const root = JSON.parse(houseConfigJson ?? "{}");
-      if (isV3ProjectRoot(root)) {
-        return computeV3CameraFit(getV3PresentationBounds(root.v3Scene));
+      if (activeV3.scene) {
+        return computeV3CameraFit(getV3PresentationBounds(activeV3.scene));
       }
     } catch { /* fall through to legacy parse */ }
     const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
@@ -123,7 +124,7 @@ export function Viewport() {
           onPointerMissed={() => selectKey(null)}
         >
           <Suspense fallback={null}>
-            <Scene timeOfDay={timeOfDay} />
+            <Scene timeOfDay={timeOfDay} v3Presentation={v3Presentation} v3Site={activeV3.scene?.site} />
           </Suspense>
           <CameraRig />
 

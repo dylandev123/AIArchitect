@@ -1,5 +1,7 @@
 "use client";
 
+import { V3ObjectInspector } from "./V3ObjectInspector";
+import { isV3ProjectRoot } from "@/lib/v3/scene";
 import { useParams } from "next/navigation";
 import { MousePointerClick, Trash2 } from "lucide-react";
 import { useSceneStore } from "@/store/useSceneStore";
@@ -201,7 +203,11 @@ export function PropertyInspector() {
   const params = useParams<{ projectId: string }>();
   const selectedKey = useSceneStore((s) => s.selectedKey);
 
+  const json = useProjectStore(s => s.getProject(params.projectId)?.houseConfigJson);
   if (!selectedKey) return <EmptyState />;
+  let v3 = false;
+  try { v3 = isV3ProjectRoot(JSON.parse(json ?? '{}')); } catch { /* legacy inspector */ }
+  if (v3) return <V3ObjectInspector projectId={params.projectId} objectId={selectedKey} />;
 
   const featureRef = parseFeatureKey(selectedKey);
   if (featureRef) {

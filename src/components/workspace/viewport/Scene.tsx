@@ -13,14 +13,26 @@ import { Scenery } from "./scenery/Scenery";
 import { Terrain } from "./scenery/Terrain";
 import { useNeedsGeneration } from "./useNeedsGeneration";
 import { useSceneStore } from "@/store/useSceneStore";
+import type { V3SceneSite } from "@/lib/v3/scene";
 
 interface SceneProps {
   timeOfDay: TimeOfDay;
+  v3Presentation?: boolean;
+  /** Active V3 site: its terrain is the ground authority inside the site rectangle. */
+  v3Site?: V3SceneSite;
 }
 
-export function Scene({ timeOfDay }: SceneProps) {
+export function Scene({ timeOfDay, v3Presentation = false, v3Site }: SceneProps) {
   const cfg = TIME_OF_DAY[timeOfDay];
-  const { sky, sun, ambient, hemi, fills, fog, exposure, envIntensity } = cfg;
+  const { sky, sun } = cfg;
+  // V3's terrain has local relief and needs a little more distance contrast.
+  // Keep the established V2 palette and lighting completely untouched.
+  const ambient = v3Presentation ? { ...cfg.ambient, intensity: cfg.ambient.intensity * .82 } : cfg.ambient;
+  const hemi = v3Presentation ? { ...cfg.hemi, intensity: cfg.hemi.intensity * .82 } : cfg.hemi;
+  const fills = v3Presentation ? cfg.fills.map((fill) => ({ ...fill, intensity: fill.intensity * .85 })) : cfg.fills;
+  const fog = v3Presentation ? { ...cfg.fog, near: cfg.fog.near * 1.5, far: cfg.fog.far * 1.5 } : cfg.fog;
+  const exposure = v3Presentation ? cfg.exposure * .92 : cfg.exposure;
+  const envIntensity = v3Presentation ? cfg.envIntensity * .82 : cfg.envIntensity;
   // A never-designed project shows only the site, terrain and horizon — no placeholder house.
   const blank = useNeedsGeneration();
   const geometryXRay = useSceneStore((s) => s.geometryXRay);
@@ -60,7 +72,7 @@ export function Scene({ timeOfDay }: SceneProps) {
 
       <SunLight position={sun.position} intensity={sun.intensity} color={sun.color} />
 
-      {!geometryXRay && <GroundPlane />}
+      {!geometryXRay && <GroundPlane v3Site={v3Presentation ? v3Site : undefined} />}
       <SceneGrid />
       {!geometryXRay && <Terrain />}
       {!blank && <HouseRenderer />}

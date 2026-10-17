@@ -40,8 +40,16 @@ interface MaterialFields {
   assetId?: string;
   /** UV repeat scale — tiles across the face. Default 1. */
   uvScale?: number;
-  /** The surface this primitive is finished in, when its builder owns the finish (V2 Roof Systems). Absent = the renderer infers it from category and colour. */
-  surface?: MaterialType;
+  /** The surface this primitive is finished in, when its builder owns the finish (V2 Roof Systems, V3 materials). Absent = the renderer infers it from category and colour. */
+  surface?: MaterialType | "paving" | "grass";
+  /** V3 authored object that deterministically produced this render primitive. */
+  sourceObjectId?: string;
+  /** V3 shared meshes can represent multiple authored semantic contributors. */
+  sourceObjectIds?: string[];
+  /** Stable architectural intent retained on compiled V3 children for selection/edit context. */
+  semanticRole?: string;
+  /** The child part within a compiled V3 architectural object (wall, glazing, coping, etc.). */
+  componentRole?: string;
 }
 
 export interface BoxPrimitive extends MaterialFields {

@@ -3,6 +3,7 @@ import type { HouseModel, HousePrimitive } from "@/lib/house/types";
 import { CAMERA_FOV } from "@/lib/house/cameraFit";
 import { getObjectBaseY, getObjectTopY, sampleFinalTerrainHeight, scaledDimensionsOf } from "./elevation";
 import { compileV3Scene, type V3Scene, type V3SceneObject, type Vec3 } from "./scene";
+import { materializeV3ArchitecturalScene } from "./architecture";
 
 export interface V3Bounds { min: Vec3; max: Vec3; }
 export interface V3PresentationBounds extends V3Bounds { center: Vec3; size: Vec3; source: "compiled" | "objects" | "site-fallback"; }
@@ -53,8 +54,9 @@ const belongsTo = (primitiveId: string, objectId: string) => primitiveId === obj
  * the mansion, not the lawn. Deterministic: depends only on the scene (and its compilation).
  */
 export function getV3PresentationBounds(scene: V3Scene, compiled: HouseModel = compileV3Scene(scene)): V3PresentationBounds {
+  scene = materializeV3ArchitecturalScene(scene);
   const excluded = scene.objects.filter((o) => isV3GroundLike(o, scene)).map((o) => o.id);
-  const presented = compiled.primitives.filter((p) => p.id !== TERRAIN_ID && !p.id.startsWith("v3-debug-") && !excluded.some((id) => belongsTo(p.id, id)));
+  const presented = compiled.primitives.filter((p) => p.id !== TERRAIN_ID && !p.id.startsWith("v3-debug-") && !excluded.some((id) => p.sourceObjectId ? p.sourceObjectId === id : belongsTo(p.id, id)));
   let bounds = primitivesBounds(presented), source: V3PresentationBounds["source"] = "compiled";
   if (!bounds) {
     const b = empty();
@@ -101,6 +103,7 @@ export interface V3SceneDiagnosis {
 
 /** Offline, model-free account of whether a scene's objects compile into visible geometry above the terrain. */
 export function diagnoseV3Scene(scene: V3Scene, compiled: HouseModel = compileV3Scene(scene)): V3SceneDiagnosis {
+  scene = materializeV3ArchitecturalScene(scene);
   const objectBounds = empty();
   for (const o of scene.objects) growBox(objectBounds, o.transform.position, scaledDimensionsOf(o), o.transform.rotation[1]);
   const terrain = compiled.primitives.find((p) => p.id === TERRAIN_ID);
@@ -117,7 +120,7 @@ export function diagnoseV3Scene(scene: V3Scene, compiled: HouseModel = compileV3
     architectureBounds: getV3PresentationBounds(scene, compiled),
     compiledBounds: primitivesBounds(compiled.primitives.filter((p) => p.id !== TERRAIN_ID)),
     compiledPrimitiveCount: compiled.primitives.length,
-    notCompiled: scene.objects.filter((o) => o.type !== "terrain-region" && !compiled.primitives.some((p) => belongsTo(p.id, o.id) || p.id === o.id + "-water")).map((o) => o.id),
+    notCompiled: scene.objects.filter((o) => !compiled.primitives.some((p) => p.sourceObjectId === o.id || p.sourceObjectIds?.includes(o.id) || (!p.sourceObjectId && belongsTo(p.id, o.id)))).map((o) => o.id),
     nonFinite: scene.objects.filter((o) => ![...o.transform.position, ...scaledDimensionsOf(o)].every(Number.isFinite)).map((o) => o.id),
     zeroScale: scene.objects.filter((o) => scaledDimensionsOf(o).some((v) => !(v > 1e-6))).map((o) => o.id),
     transparent: scene.objects.filter((o) => o.material.opacity === 0).map((o) => o.id),

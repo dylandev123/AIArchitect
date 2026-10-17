@@ -24,11 +24,15 @@ import { useRenderFlightStore } from "@/store/useRenderFlightStore";
 import { applyV2OnlyMode, logV2OnlyViolation, type V2OnlyViolation } from "@/lib/architecture/v2OnlyMode";
 import { compileV2SiteFeatures, v2SitePlanOf } from "@/lib/architecture/v2SiteFeatures";
 import { ProceduralOutdoorPlaceholder } from "./ProceduralOutdoorPlaceholder";
+import { V3Vegetation } from "../scenery/V3Vegetation";
 import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 import { compileV3Scene, isV3ProjectRoot } from "@/lib/v3/scene";
 import { validateV3Scene } from "@/lib/v3/validation";
 import { applyV3RenderDiagnostics } from "@/lib/v3/presentation";
 import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
+import { buildV3RenderIdentity } from "@/lib/v3/renderIdentity";
+import { resolveActiveV3RenderSource } from "@/lib/v3/activeRenderSource";
+import { useV3RenderIdentityStore } from "@/store/useV3RenderIdentityStore";
 
 /**
  * Which material a primitive is made of, recovered from its category and colour: the builders tint walls,
@@ -37,7 +41,8 @@ import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
 const MASONRY_CATEGORIES = new Set<HousePrimitive["category"]>(["bay", "curvedWall", "arch", "foundation", "stairs"]);
 
 function surfaceOf(primitive: HousePrimitive, materials: MaterialsConfig | undefined): SurfaceKey | undefined {
-  // A builder that owns its finish (V2 Roof Systems) says so outright.
+  // A builder that owns its finish (V2 Roof Systems) says so outright. V3 primitives always take this path: the V3
+  // compiler resolves each finish from the scene's own material data, so V2 site materials never apply to them.
   if (primitive.surface) return primitive.surface;
   if (!materials) return undefined;
   const color = primitive.color.toLowerCase();
@@ -94,25 +99,40 @@ export function HouseRenderer() {
   const v3Diagnostics = useSceneStore((s) => s.v3Diagnostics);
   const failedPreview = useV3FailedPreviewStore((s) => s.candidate);
   const previewActive = useV3FailedPreviewStore((s) => s.active);
+  const cameraSource = useV3RenderIdentityStore(s => s.cameraSource);
+  const setV3RenderIdentity = useV3RenderIdentityStore((s) => s.setIdentity);
+  const clearV3RenderIdentity = useV3RenderIdentityStore((s) => s.clearIdentity);
   const priorBranch = useRef<"v2" | "v3" | "v3-preview" | "legacy" | null>(null);
   useEffect(() => { noteRenderWriter("HouseRenderer-mount-or-fast-refresh"); }, [noteRenderWriter]);
 
-  const renderJson = frozen?.configJson ?? viewed?.configJson ?? houseConfigJson;
-  const previewScene = process.env.NODE_ENV !== "production" && previewActive && failedPreview?.projectId === params.projectId ? failedPreview.scene : undefined;
-  const { model, site, document, violations } = useMemo(() => {
+  const candidateJson = frozen?.configJson ?? viewed?.configJson ?? houseConfigJson;
+  const activeV3Source = useMemo(() => resolveActiveV3RenderSource({
+    projectId: params.projectId,
+    persistedJson: houseConfigJson,
+    rendererJson: candidateJson,
+    historyActive: !!(frozen ?? viewed),
+    historyProjectId: (frozen ?? viewed)?.projectId,
+    failedPreviewCandidate: failedPreview,
+    failedPreviewActive: previewActive,
+  }), [failedPreview, houseConfigJson, params.projectId, previewActive, candidateJson, frozen, viewed]);
+  const renderJson = activeV3Source.source === "persisted" ? houseConfigJson : activeV3Source.source === "failed-preview" ? JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: activeV3Source.scene }) : candidateJson;
+  const previewScene = activeV3Source.source === "failed-preview" ? activeV3Source.scene : undefined;
+  const { model, site, document, violations, compilerInputHash } = useMemo(() => {
     try {
       // The recovery parser has already admitted only compiler-safe fields.
       // Do not re-run strict validation here: previewing is explicitly the
       // visual inspection path for a scene that failed that contract.
-      if (previewScene) return { model: applyV3RenderDiagnostics(compileV3Scene(previewScene, { debug: v3TerrainDebug }), previewScene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
-      const raw = JSON.parse(renderJson ?? "{}");
-      if (isV3ProjectRoot(raw)) {
-        // Lenient: only structurally unusable scenes (fatal) are withheld. Physical imperfections (unresolved supports,
-        // tolerance, overlaps) are reported as warnings at generation time and must never blank an accepted scene.
-        const valid = validateV3Scene(raw.v3Scene, { lenient: true });
-        if (!valid.ok) return { model: null, site: null, document: undefined, violations: [] as V2OnlyViolation[] };
-        return { model: applyV3RenderDiagnostics(compileV3Scene(raw.v3Scene, { debug: v3TerrainDebug }), raw.v3Scene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+      if (activeV3Source.scene) {
+        // Every V3 compile, including a non-persisted failed preview, receives
+        // the one source selected above. Preview recovery already guarantees
+        // compiler-safe fields; persisted/history scenes retain lenient checks.
+        if (activeV3Source.source !== "failed-preview") {
+          const valid = validateV3Scene(activeV3Source.scene, { lenient: true });
+          if (!valid.ok) return { compilerInputHash: undefined, model: null, site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+        }
+        return { compilerInputHash: auditHash(activeV3Source.scene), model: applyV3RenderDiagnostics(compileV3Scene(activeV3Source.scene, { debug: v3TerrainDebug }), activeV3Source.scene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
       }
+      const raw = JSON.parse(renderJson ?? "{}");
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
       if (isArchitecturalDesignDocument(document)) {
         const legacy = generateHouseFromJson(renderJson ?? "{}");
@@ -121,11 +141,31 @@ export function HouseRenderer() {
         const plan = v2SitePlanOf(raw);
         const v2Model = { ...architecture, primitives: [...architecture.primitives, ...(plan ? compileV2SiteFeatures(plan, materials) : [])] };
         const resolved = applyV2OnlyMode({ legacy, v2Model, v2OnlyMode, cutawayActive: cutawayLevel !== null });
-        return { ...resolved, document };
+        return { ...resolved, document, compilerInputHash: undefined };
       }
     } catch { /* legacy generator exposes JSON errors normally */ }
-    return { ...generateHouseFromJson(renderJson ?? "{}"), document: undefined, violations: [] as V2OnlyViolation[] };
-  }, [architectureDebug, previewScene, renderJson, v2OnlyMode, cutawayLevel, v3TerrainDebug, v3Diagnostics]);
+    return { compilerInputHash: undefined, ...generateHouseFromJson(renderJson ?? "{}"), document: undefined, violations: [] as V2OnlyViolation[] };
+  }, [activeV3Source, architectureDebug, renderJson, v2OnlyMode, cutawayLevel, v3TerrainDebug, v3Diagnostics]);
+  const v3RenderIdentity = useMemo(() => {
+    return buildV3RenderIdentity({
+      projectId: params.projectId,
+      observedCompilerInputHash: compilerInputHash ?? null,
+      cameraSource,
+      persistedJson: houseConfigJson,
+      rendererJson: renderJson,
+      failedPreviewScene: previewScene,
+      failedPreviewActive: previewActive,
+      renderHistoryOverrideActive: !!(frozen ?? viewed),
+      renderHistorySource: frozen?.source ?? viewed?.source,
+      historyProjectId: (frozen ?? viewed)?.projectId,
+      fixtureDebugOverrideActive: geometryXRay || !!isolateMassId || v2OnlyMode || v3TerrainDebug || Object.values(v3Diagnostics).some(Boolean),
+    });
+  }, [cameraSource, previewActive, compilerInputHash, frozen, geometryXRay, houseConfigJson, isolateMassId, params.projectId, previewScene, renderJson, v2OnlyMode, v3Diagnostics, v3TerrainDebug, viewed]);
+  useEffect(() => {
+    if (!v3RenderIdentity) return;
+    setV3RenderIdentity(v3RenderIdentity);
+    return () => clearV3RenderIdentity(params.projectId);
+  }, [clearV3RenderIdentity, params.projectId, setV3RenderIdentity, v3RenderIdentity]);
   useEffect(() => {
     violations.forEach(logV2OnlyViolation);
   }, [violations]);
@@ -211,12 +251,13 @@ export function HouseRenderer() {
   return (
     <group>
       {isolated.map((primitive, i) =>
-        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} readOnly={!!previewScene} /> : null
+        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} readOnly={!!activeV3Source.scene && activeV3Source.source !== "persisted"} /> : null
       )}
       {swapped.map((p) => (
         <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />
       ))}
       {proceduralOutdoor.map((placement) => <ProceduralOutdoorPlaceholder key={placement.id} placement={placement} />)}
+      {activeV3Source.scene && !geometryXRay && !isolateMassId && !v3Diagnostics.hideTerrain && <V3Vegetation scene={activeV3Source.scene} />}
     </group>
   );
 }

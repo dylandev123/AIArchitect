@@ -1,5 +1,9 @@
 "use client";
 
+import { useActiveV3RenderSource } from "@/store/useActiveV3RenderSource";
+import { isV3ProjectRoot } from "@/lib/v3/scene";
+import { architectureFromRuntimeGeometry } from "@/lib/v3/architecture";
+import { executeV3SceneOperations } from "@/lib/v3/operations";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { Settings2, X } from "lucide-react";
@@ -104,6 +108,7 @@ export function QuickActions() {
 
   const params = useParams<{ projectId: string }>();
   const project = useProjectStore((s) => s.getProject(params.projectId));
+  const activeV3 = useActiveV3RenderSource(params.projectId, project?.houseConfigJson);
   const updateHouseConfig = useProjectStore((s) => s.updateHouseConfig);
   const appendVersion = useProjectStore((s) => s.appendVersion);
 
@@ -111,6 +116,28 @@ export function QuickActions() {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   if (!selectedKey || !project) return null;
+
+  let root;
+  try { root = JSON.parse(project.houseConfigJson); } catch { root = undefined; }
+  if (isV3ProjectRoot(root)) {
+    if (activeV3.source !== "persisted") return null;
+    const object = root.v3Scene.objects.find(o => o.id === selectedKey);
+    if (!object) return null;
+    const geometry = object.architecture ?? architectureFromRuntimeGeometry(object);
+    const move = (dx: number, dz: number) => {
+      const result = executeV3SceneOperations(root.v3Scene, { intent: `Move ${object.label}`, operations: [{ op: 'editArchitecture', target: object.id, architecture: { x: geometry.x + dx, z: geometry.z + dz } }] });
+      if (result.ok) appendVersion(project.id, `Move ${object.label}`, JSON.stringify({ ...root, v3Scene: result.scene }), 'v3-semantic-nudge');
+      else setFeedback(result.errors[0]);
+    };
+    return <div className="absolute inset-x-0 bottom-4 flex justify-center"><div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-neutral-950/95 p-4 text-sm text-neutral-300">
+      <span>{object.label}</span>
+      <NudgeButton label="←" onClick={() => move(-1, 0)} /><NudgeButton label="→" onClick={() => move(1, 0)} />
+      <NudgeButton label="↑" onClick={() => move(0, -1)} /><NudgeButton label="↓" onClick={() => move(0, 1)} />
+      <button onClick={() => setShowAdvanced(true)} aria-label="Edit object"><Settings2 size={18} /></button>
+      <button onClick={() => selectKey(null)} aria-label="Clear selection"><X size={18} /></button>
+      {feedback && <span role="alert">{feedback}</span>}
+    </div></div>;
+  }
 
   const featureRef = parseFeatureKey(selectedKey);
   let group: QuickActionGroup;

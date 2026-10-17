@@ -5,6 +5,7 @@ import { v3SceneOutputSchema } from "../schema";
 import { normalizeV3GenerationOutput, repairV3GeneratedScene, summarizeV3Generation } from "../generation";
 import { validateV3Scene } from "../validation";
 import { resolveSupportSurface } from "../supportGraph";
+import { resolveV3EffectiveSupport } from "../derivedSupport";
 
 const material = { id: "stone", color: "#817a70", surface: "stone" };
 const none = { kind: "none", levelId: "", hostId: "", relationship: "none", grounding: "grounded" };
@@ -57,7 +58,7 @@ describe("V3 render-first generation contract", () => {
 
     const model = compileV3Scene(repaired.scene);
     expect(validateV3CompiledGeometry(repaired.scene, model, { lenient: true }).ok).toBe(true);
-    for (const id of ["wing", "spa", "balcony", "balcony-rail", "entry-stair"]) expect(model.primitives.some((primitive) => primitive.id === id)).toBe(true);
+    for (const id of ["wing", "spa", "balcony", "balcony-rail", "entry-stair"]) expect(model.primitives.some((primitive) => (primitive.sourceObjectId ?? primitive.id) === id)).toBe(true);
     expect(model.primitives.some((primitive) => primitive.id === "v3-connection-drive")).toBe(true);
 
     const audit = summarizeV3Generation(repaired.notes, validation.issues);
@@ -70,7 +71,10 @@ describe("V3 render-first generation contract", () => {
 
   it("infers obvious support through the support graph and records it instead of failing", () => {
     const { scene } = repairV3GeneratedScene(normalizeV3GenerationOutput(imperfectMansion()).scene);
-    const byId = (id: string) => scene.objects.find((object) => object.id === id)!;
+    // Inferred support is derived, never persisted as authored intent.
+    const effective = resolveV3EffectiveSupport(scene).scene;
+    const byId = (id: string) => effective.objects.find((object) => object.id === id)!;
+    expect(scene.objects.find((object) => object.id === "spa")!.support).toBeUndefined();
     // Dangling host is dropped and the spa is re-grounded by geometry.
     expect(byId("spa").support?.hostId).not.toBe("ghost-deck");
     expect(byId("spa").support).toBeDefined();
@@ -132,11 +136,11 @@ describe("V3 provider-facing JSON Schema", () => {
     expect(risky).toEqual([]);
   });
 
-  it("emits support as one flat, fully-required, closed object with neutral values", async () => {
+  it("keeps support flat and closed when supplied, without requiring it to render", async () => {
     const format = await Output.object({ schema: v3SceneOutputSchema }).responseFormat;
     const schema = (format as unknown as { schema: { properties: { objects: { items: { required: string[]; properties: { support: { type: string; required: string[]; additionalProperties: boolean; properties: Record<string, { enum?: string[]; type?: string }> } } } } } } }).schema;
     const item = schema.properties.objects.items;
-    expect(item.required).toContain("support");
+    expect(item.required).not.toContain("support");
     const support = item.properties.support;
     expect(support).toMatchObject({ type: "object", additionalProperties: false });
     expect(support.required.slice().sort()).toEqual(["grounding", "hostId", "kind", "levelId", "relationship"]);

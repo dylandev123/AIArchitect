@@ -11,14 +11,11 @@ interface V3FailedPreviewStore {
   clear: () => void;
 }
 
-/** Ephemeral dev inspection state. It intentionally has no persistence middleware or project write capability. */
+/** Ephemeral, read-only recovery state. It intentionally has no persistence middleware or project write capability. */
 export const useV3FailedPreviewStore = create<V3FailedPreviewStore>((set) => ({
   candidate: null,
   active: false,
-  capture: (projectId, preview) => {
-    if (process.env.NODE_ENV === "production") return;
-    set({ candidate: { projectId, ...preview }, active: false });
-  },
-  render: (projectId) => set((state) => state.candidate?.projectId === projectId && process.env.NODE_ENV !== "production" ? { active: true } : state),
+  capture: (projectId, preview) => set({ candidate: { projectId, ...preview }, active: false }),
+  render: (projectId) => set((state) => state.candidate?.projectId === projectId ? { active: true } : state),
   clear: () => set({ candidate: null, active: false }),
 }));

@@ -6,6 +6,7 @@ import type { GenerationMode, Project, ProjectType, ProjectVersion, TimeOfDay } 
 import { BLANK_HOUSE_JSON } from "@/types/house";
 import { BLANK_V3_SCENE, isV3ProjectRoot } from "@/lib/v3/scene";
 import { projectModeAuthority, resolveProjectGenerationMode } from "@/lib/v3/projectMode";
+import { validateV3Scene } from "@/lib/v3/validation";
 import { documentAudit } from "@/lib/architecture/renderAudit";
 import { useRenderFlightStore } from "./useRenderFlightStore";
 
@@ -19,7 +20,17 @@ let devConfigRevision = 0;
 function normalizePersistedProject(project: Project): Project {
   // This also runs for a same-version rehydrate through `merge`, which is
   // essential for a V3 record written by an earlier experimental build.
-  return { ...project, generationMode: resolveProjectGenerationMode(project) };
+  return { ...project, generationMode: project.generationMode === "v3-scene" ? "v3-scene" : resolveProjectGenerationMode(project) };
+}
+
+/** V3 commits cannot silently replace semantic authority with another project format. */
+function assertV3Commit(project: Project | undefined, json: string): void {
+  if (!project || (project.generationMode !== "v3-scene" && resolveProjectGenerationMode(project) !== "v3-scene")) return;
+  let root: unknown;
+  try { root = JSON.parse(json); } catch { throw new Error("V3 commit requires valid JSON; the current scene was preserved."); }
+  if (!isV3ProjectRoot(root)) throw new Error("V3 project cannot commit a V2 or malformed root.");
+  const validation = validateV3Scene(root.v3Scene, { lenient: true });
+  if (!validation.ok) throw new Error(`V3 commit rejected: ${validation.errors[0]}`);
 }
 
 export type PersistedModeVerification =
@@ -64,7 +75,7 @@ function logConfigChange(id: string, houseConfigJson: string, source: string): v
 
 interface ProjectStore {
   projects: Project[];
-  createProject: (name: string, projectType?: ProjectType, generationMode?: GenerationMode) => Project;
+  createProject: (name: string, projectType?: ProjectType, generationMode?: GenerationMode, v3TerrainMode?: "flat" | "advanced") => Project;
   renameProject: (id: string, name: string) => void;
   /** Copies a project (all versions) under a new ID, named "<name> (Copy)". Returns the copy. */
   duplicateProject: (id: string) => Project | undefined;
@@ -92,7 +103,7 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
 
-      createProject: (name, projectType = "house", generationMode = "v2-architectural") => {
+      createProject: (name, projectType = "house", generationMode = "v2-architectural", v3TerrainMode = "flat") => {
         const initialJson = generationMode === "v3-scene" ? JSON.stringify(BLANK_V3_SCENE) : BLANK_HOUSE_JSON;
         const initialVersion = makeVersion("Blank project", initialJson);
         const project: Project = {
@@ -102,6 +113,7 @@ export const useProjectStore = create<ProjectStore>()(
           updatedAt: Date.now(),
           projectType,
           generationMode,
+          ...(generationMode === "v3-scene" ? { v3TerrainMode } : {}),
           houseConfigJson: initialJson,
           versions: [initialVersion],
           currentVersionIndex: 0,
@@ -168,12 +180,13 @@ export const useProjectStore = create<ProjectStore>()(
       getProject: (id) => get().projects.find((p) => p.id === id),
 
       updateHouseConfig: (id, houseConfigJson, debugWriter = "updateHouseConfig") => {
+        assertV3Commit(get().getProject(id), houseConfigJson);
         logConfigChange(id, houseConfigJson, debugWriter);
         set((state) => ({ projects: state.projects.map((p) => p.id === id ? { ...p, houseConfigJson, updatedAt: Date.now() } : p) }));
       },
 
       appendVersion: (id, summary, houseConfigJson, debugWriter = "appendVersion") =>
-        (logConfigChange(id, houseConfigJson, debugWriter), set((state) => ({
+        (assertV3Commit(get().getProject(id), houseConfigJson), logConfigChange(id, houseConfigJson, debugWriter), set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id) return p;
             const versions = [...p.versions, makeVersion(summary, houseConfigJson)];
@@ -192,6 +205,7 @@ export const useProjectStore = create<ProjectStore>()(
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex <= 0) return p;
             const nextIndex = p.currentVersionIndex - 1;
+            assertV3Commit(p, p.versions[nextIndex].houseConfigJson);
             logConfigChange(id, p.versions[nextIndex].houseConfigJson, "undo");
             return {
               ...p,
@@ -207,6 +221,7 @@ export const useProjectStore = create<ProjectStore>()(
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex >= p.versions.length - 1) return p;
             const nextIndex = p.currentVersionIndex + 1;
+            assertV3Commit(p, p.versions[nextIndex].houseConfigJson);
             logConfigChange(id, p.versions[nextIndex].houseConfigJson, "redo");
             return {
               ...p,
@@ -221,6 +236,7 @@ export const useProjectStore = create<ProjectStore>()(
         set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id || versionIndex < 0 || versionIndex >= p.versions.length) return p;
+            assertV3Commit(p, p.versions[versionIndex].houseConfigJson);
             logConfigChange(id, p.versions[versionIndex].houseConfigJson, "restoreVersion");
             return {
               ...p,

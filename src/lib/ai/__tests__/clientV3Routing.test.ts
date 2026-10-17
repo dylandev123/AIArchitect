@@ -38,7 +38,7 @@ describe("V3 initial client request", () => {
 
     expect(result).toMatchObject({ ok: true, generated: true });
     const request = JSON.parse(String(fetch.mock.calls[0][1]?.body));
-    expect(request).toMatchObject({ mode: "generate", generationMode: "v3-scene", currentHouseJson });
+    expect(request).toMatchObject({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "flat", currentHouseJson });
     expect(JSON.parse(request.currentHouseJson)).toEqual(BLANK_V3_SCENE);
     expect(useProjectStore.getState().getProject(project.id)?.generationMode).toBe("v3-scene");
     expect(info).toHaveBeenCalledWith("[client-generation] resolvedMode: v3-scene");
@@ -49,6 +49,20 @@ describe("V3 initial client request", () => {
       requestMode: "v3-scene",
       serverResolvedMode: "v3-scene",
     });
+  });
+
+  it("sends advanced terrain only for a new generation, not subsequent edits", async () => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const project = useProjectStore.getState().createProject("Advanced mansion", "house", "v3-scene", "advanced");
+    const fetch = vi.fn().mockImplementation(() => Promise.resolve(new Response(JSON.stringify({ error: "offline mock" }), { status: 422 })));
+    vi.stubGlobal("fetch", fetch);
+    await requestHouseEdit({ projectId: project.id, prompt: "Cliffside", apply: vi.fn() });
+    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ mode: "generate", v3TerrainMode: "advanced" });
+    useProjectStore.getState().appendVersion(project.id, "Existing scene", project.houseConfigJson);
+    await requestHouseEdit({ projectId: project.id, prompt: "Change finish", apply: vi.fn() });
+    const edit = JSON.parse(String(fetch.mock.calls[1][1]?.body));
+    expect(edit.mode).toBe("edit");
+    expect(edit.v3TerrainMode).toBeUndefined();
   });
 
   it("blocks a project-record/root disagreement before any generation request", async () => {

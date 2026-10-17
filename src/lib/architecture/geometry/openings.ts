@@ -43,7 +43,25 @@ function inverseU(facade: MassFacade, point: readonly [number, number], width: n
   return (point[1] + halfD) / depth;
 }
 
-interface Band { start: number; end: number; sill?: number; height?: number; frame?: boolean; reveal?: number; door?: boolean }
+export interface Band { start: number; end: number; sill?: number; height?: number; frame?: boolean; reveal?: number; door?: boolean; /** Semantic identity of the authored opening (rhythm members are keyed within their own opening). */ key?: string }
+
+/**
+ * Child-id policy for one facade segment. V2 uses the positional default below (unchanged legacy ids); V3 supplies
+ * a semantic scheme so inserting/removing an opening never renames its siblings.
+ */
+export interface OpeningIdScheme {
+  /** A solid wall span; `previousKey` is the opening immediately before it in this segment, if any. */
+  wall(context: { idPrefix: string; bandIndex: number; bandCount: number; previousKey?: string }): string;
+  /** The band an opening occupies (its sill/head infill walls are suffixed onto this). */
+  openingBand(context: { idPrefix: string; bandIndex: number; bandCount: number; opening: Band }): string;
+  /** The opening's own frame/glass/door/surround prefix. */
+  opening(context: { idPrefix: string; windowIndex: number; opening: Band }): string;
+}
+const POSITIONAL_IDS: OpeningIdScheme = {
+  wall: ({ idPrefix, bandIndex, bandCount }) => bandCount > 1 ? `${idPrefix}-${bandIndex}` : idPrefix,
+  openingBand: ({ idPrefix, bandIndex, bandCount }) => bandCount > 1 ? `${idPrefix}-${bandIndex}` : idPrefix,
+  opening: ({ idPrefix, windowIndex, opening }) => `${idPrefix}-${opening.door ? "door" : "window"}-${windowIndex}`,
+};
 
 function appliesToFloor(scope: MassOpening["floors"], floorIndex: number): boolean {
   if (!scope || scope === "all") return true;
@@ -63,18 +81,18 @@ export function openingBands(facade: MassFacade, width: number, depth: number, o
       if (end - start < EPS) continue;
       const height = Math.max(0.3, Math.min(wallHeight - 0.2, op.heightRatio * wallHeight));
       const sill = Math.max(0.05, (wallHeight - height) / 2);
-      bands.push({ start, end, sill, height, frame: op.frame, reveal: op.reveal });
+      bands.push({ start, end, sill, height, frame: op.frame, reveal: op.reveal, key: op.id });
     } else if (op.type === "door") {
       const start = Math.max(0, Math.min(op.start, op.end));
       const end = Math.min(1, Math.max(op.start, op.end));
-      if (end - start >= EPS) bands.push({ start, end, sill: 0, height: Math.max(1.9, Math.min(wallHeight - 0.05, op.height ?? 2.4)), frame: op.frame ?? true, reveal: op.reveal, door: true });
+      if (end - start >= EPS) bands.push({ start, end, sill: 0, height: Math.max(1.9, Math.min(wallHeight - 0.05, op.height ?? 2.4)), frame: op.frame ?? true, reveal: op.reveal, door: true, key: op.id });
     } else {
       const widthU = Math.min(1, op.width / len);
       const totalSpan = Math.min(1, op.count * widthU + (op.count - 1) * (widthU * 0.4));
       const gapU = op.count > 1 ? (totalSpan - op.count * widthU) / (op.count - 1) : 0;
       let cursor = (1 - totalSpan) / 2;
       for (let i = 0; i < op.count; i++) {
-        bands.push({ start: cursor, end: cursor + widthU, sill: op.sill, height: op.height });
+        bands.push({ start: cursor, end: cursor + widthU, sill: op.sill, height: op.height, key: op.id === undefined ? undefined : `${op.id}-${i}` });
         cursor += widthU + gapU;
       }
     }
@@ -154,7 +172,7 @@ function buildFramedGlazing(id: string, frameLabel: string, glassLabel: string, 
  * a sill and above a window head it's still solid wall; the window itself is a frame + glass insert at the
  * wall's own plane. No boolean cut — the solid wall is simply never built across an opening's span.
  */
-function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width: number, depth: number, openings: readonly MassOpening[], floorIndex: number, wallBaseY: number, wallHeight: number, idPrefix: string, materials: OpeningMaterials, _warnings: string[]): HousePrimitive[] {
+function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width: number, depth: number, openings: readonly MassOpening[], floorIndex: number, wallBaseY: number, wallHeight: number, idPrefix: string, materials: OpeningMaterials, _warnings: string[], ids: OpeningIdScheme = POSITIONAL_IDS): HousePrimitive[] {
   const edgeLenU = edgeU1 - edgeU0;
   if (edgeLenU < EPS) return [];
   // Bands are computed against the FULL facade (0..1), then clipped to this segment's own [edgeU0, edgeU1].
@@ -174,6 +192,7 @@ function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width:
   const trimPaint = paintOf(materials.trim);
   const glassPaint = paintOf(materials.glass);
   let windowIndex = 0;
+  let previousKey: string | undefined;
   bands.forEach((band, bandIndex) => {
     const u0 = edgeU0 + band.start * edgeLenU;
     const u1 = edgeU0 + band.end * edgeLenU;
@@ -181,7 +200,10 @@ function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width:
     const { center, length, alongX } = segmentGeometry(facade, u0, u1, width, depth);
     // Backward-compatible id: an unmodified facade (one band covering the whole segment) keeps today's
     // plain `wall-<level>-<facade>` id exactly; only a facade actually carved by an operation gets suffixed.
-    const bandId = bands.length > 1 ? `${idPrefix}-${bandIndex}` : idPrefix;
+    const bandId = band.opening
+      ? ids.openingBand({ idPrefix, bandIndex, bandCount: bands.length, opening: band.opening })
+      : ids.wall({ idPrefix, bandIndex, bandCount: bands.length, previousKey });
+    if (band.opening) previousKey = band.opening.key;
     if (!band.opening) {
       out.push(box(bandId, "wall", "Wall", [center[0], wallBaseY + wallHeight / 2, center[1]], alongX ? [length, wallHeight, WALL_THICKNESS] : [WALL_THICKNESS, wallHeight, length], exteriorPaint));
       return;
@@ -191,7 +213,7 @@ function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width:
     if (sill > 0.02) out.push(box(`${bandId}-sill-wall`, "wall", "Wall (below sill)", [center[0], wallBaseY + sill / 2, center[1]], alongX ? [length, sill, WALL_THICKNESS] : [WALL_THICKNESS, sill, length], exteriorPaint));
     const headHeight = wallHeight - sill - height;
     if (headHeight > 0.02) out.push(box(`${bandId}-head-wall`, "wall", "Wall (above head)", [center[0], wallBaseY + sill + height + headHeight / 2, center[1]], alongX ? [length, headHeight, WALL_THICKNESS] : [WALL_THICKNESS, headHeight, length], exteriorPaint));
-    const winId = `${idPrefix}-${band.opening.door ? "door" : "window"}-${windowIndex++}`;
+    const winId = ids.opening({ idPrefix, windowIndex: windowIndex++, opening: band.opening });
     const winY = wallBaseY + sill + height / 2;
     // `reveal` sets the glass/frame back from the wall's outer face along the facade's own outward normal —
     // the sill/head walls above stay at the original plane, so the setback reads as a shaded recess.
@@ -231,7 +253,7 @@ function buildSegment(facade: MassFacade, edgeU0: number, edgeU1: number, width:
  * (e.g. "wall-0"); the facade name and, only when needed, a segment/band index are appended here so an
  * unmodified mass (no operations at all) produces byte-identical ids to the legacy shell (`wall-0-south`, …).
  */
-export function buildMassOpenings(taggedEdges: readonly WallEdge[], width: number, depth: number, openings: readonly MassOpening[], floorIndex: number, wallBaseY: number, wallHeight: number, levelIdPrefix: string, materials: OpeningMaterials): MassOpeningsResult {
+export function buildMassOpenings(taggedEdges: readonly WallEdge[], width: number, depth: number, openings: readonly MassOpening[], floorIndex: number, wallBaseY: number, wallHeight: number, levelIdPrefix: string, materials: OpeningMaterials, ids?: OpeningIdScheme): MassOpeningsResult {
   const warnings: string[] = [];
   const primitives: HousePrimitive[] = [];
   const byFacade = new Map<MassFacade, WallEdge[]>();
@@ -246,7 +268,7 @@ export function buildMassOpenings(taggedEdges: readonly WallEdge[], width: numbe
       const idPrefix = facadeEdges.length > 1 ? `${levelIdPrefix}-${facade}-${segmentIndex}` : `${levelIdPrefix}-${facade}`;
       const u0 = inverseU(facade, edge.a, width, depth);
       const u1 = inverseU(facade, edge.b, width, depth);
-      primitives.push(...buildSegment(facade, Math.min(u0, u1), Math.max(u0, u1), width, depth, openings, floorIndex, wallBaseY, wallHeight, idPrefix, materials, warnings));
+      primitives.push(...buildSegment(facade, Math.min(u0, u1), Math.max(u0, u1), width, depth, openings, floorIndex, wallBaseY, wallHeight, idPrefix, materials, warnings, ids));
     });
   }
   return { primitives, warnings };

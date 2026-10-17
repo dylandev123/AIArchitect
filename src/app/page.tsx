@@ -29,6 +29,7 @@ export default function Home() {
   const [creating, setCreating] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [v3SceneMode, setV3SceneMode] = useState(false);
+  const [advancedTerrain, setAdvancedTerrain] = useState(false);
   const [creationError, setCreationError] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -48,7 +49,7 @@ export default function Home() {
     if (!brief || creating) return;
     setCreating(true);
     setCreationError(null);
-    const project = createProject(projectNameFromBrief(brief), "house", v3SceneMode ? "v3-scene" : "v2-architectural");
+    const project = createProject(projectNameFromBrief(brief), "house", v3SceneMode ? "v3-scene" : "v2-architectural", advancedTerrain ? "advanced" : "flat");
     if (v3SceneMode) {
       // Do not let a transient checkbox claim V3: re-read the persisted V3 root
       // before a workspace (or its pending AI request) can open.
@@ -140,11 +141,17 @@ export default function Home() {
                 placeholder="Describe your dream home… e.g. a modern two-storey house with a pool, double garage and a garden, facing the sunset"
                 className="w-full resize-none bg-transparent px-2 py-1.5 text-base leading-relaxed text-neutral-100 outline-none placeholder:text-neutral-600 disabled:opacity-60"
               />
-              <div className="flex items-center justify-between gap-3 pt-1">
-                <label className="flex cursor-pointer items-center gap-1.5 pl-2 text-[11px] text-neutral-500">
-                  <input type="checkbox" checked={v3SceneMode} onChange={(e) => setV3SceneMode(e.target.checked)} className="accent-amber-500" />
-                  Experimental V3 scene mode
-                </label>
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="flex cursor-pointer items-center gap-1.5 pl-2 text-[11px] text-neutral-500">
+                    <input type="checkbox" checked={v3SceneMode} onChange={(e) => setV3SceneMode(e.target.checked)} className="accent-amber-500" />
+                    Experimental V3 scene mode
+                  </label>
+                  <label className={`flex items-center gap-1.5 text-[11px] ${v3SceneMode ? "cursor-pointer text-neutral-400" : "text-neutral-600"}`} title="New V3 generations only. Off: flat land. On: slopes, cliffs and stepped sites.">
+                    <input type="checkbox" checked={advancedTerrain} disabled={!v3SceneMode || creating} onChange={(e) => setAdvancedTerrain(e.target.checked)} className="accent-amber-500" />
+                    Advanced Terrain &amp; Elevation
+                  </label>
+                </div>
                 <button
                   type="submit"
                   disabled={!prompt.trim() || creating}

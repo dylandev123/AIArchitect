@@ -13,7 +13,7 @@ export function V3FailedPreviewBanner() {
   const render = useV3FailedPreviewStore((s) => s.render);
   const clear = useV3FailedPreviewStore((s) => s.clear);
   const triggerCameraPreset = useSceneStore((s) => s.triggerCameraPreset);
-  if (process.env.NODE_ENV === "production" || candidate?.projectId !== params.projectId) return null;
+  if (candidate?.projectId !== params.projectId) return null;
   const show = () => { render(params.projectId); triggerCameraPreset("site"); };
   return (
     <div className="pointer-events-none absolute left-4 top-4 z-10 max-w-md">

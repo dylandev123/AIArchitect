@@ -191,8 +191,8 @@ export interface RenderedMeshAudit {
 
 export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, readOnly = false }: { primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const featureRef = useMemo(() => parseFeatureMeshId(primitive.id), [primitive.id]);
-  const selectionKey = featureRef ? featureKey(featureRef) : primitive.id;
+  const featureRef = useMemo(() => primitive.sourceObjectId ? undefined : parseFeatureMeshId(primitive.id), [primitive.id, primitive.sourceObjectId]);
+  const selectionKey = primitive.sourceObjectId ?? (featureRef ? featureKey(featureRef) : primitive.id);
 
   const isSelected = useSceneStore((s) => s.selectedKey === selectionKey);
   const selectKey = useSceneStore((s) => s.selectKey);
@@ -320,11 +320,13 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
   }, [onAuditMesh, primitive]);
 
   if (primitive.kind === "box" && primitive.id.endsWith("-water")) {
-    return <WaterSurface position={primitive.position} width={primitive.size[0]} depth={primitive.size[2]} />;
+    const water = <WaterSurface position={primitive.position} width={primitive.size[0]} depth={primitive.size[2]} />;
+    return primitive.sourceObjectId ? <group onClick={handleClick} userData={{ sourceObjectId: primitive.sourceObjectId }}>{water}</group> : water;
   }
   // Water over an arbitrary outline (curved pools, rivers) gets the animated ripple shader.
   if (primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
-    return <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
+    const water = <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
+    return primitive.sourceObjectId ? <group onClick={handleClick} userData={{ sourceObjectId: primitive.sourceObjectId }}>{water}</group> : water;
   }
 
   if (primitive.kind === "box") {

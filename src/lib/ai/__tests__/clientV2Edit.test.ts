@@ -66,7 +66,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
     const base = jsonFor();
     useProjectStore.getState().updateHouseConfig(project.id, base);
     const legacyOnly = JSON.stringify({ ...JSON.parse(base), decks: [{ id: "legacy-deck", x: 0, z: 8, width: 9, depth: 6, shape: "rounded" }] });
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "I made a rooftop terrace.", json: legacyOnly }) }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, headers: new Headers(), json: async () => ({ summary: "I made a rooftop terrace.", json: legacyOnly }) }));
 
     const apply = vi.fn();
     const result = await requestHouseEdit({ projectId: project.id, prompt: "Design a rooftop terrace", apply });
@@ -81,7 +81,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
     const project = useProjectStore.getState().createProject("Luxury V2");
     const base = jsonFor();
     useProjectStore.getState().updateHouseConfig(project.id, base);
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "The requested condition already exists.", outcome: "already-satisfied", json: base }) }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, headers: new Headers(), json: async () => ({ summary: "The requested condition already exists.", outcome: "already-satisfied", json: base }) }));
 
     const apply = vi.fn();
     const result = await requestHouseEdit({ projectId: project.id, prompt: "Confirm the existing condition", apply });
@@ -102,7 +102,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
       massing: { ...original.massing, masses: original.massing.masses.map((mass) => mass.id === "living" ? { ...mass, position: { ...mass.position, x: mass.position.x + 15 }, width: mass.width + 8, depth: mass.depth + 4 } : mass) },
     };
     const next = jsonFor(moved);
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "Moved and enlarged the main living pavilion.", json: next }) }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, headers: new Headers(), json: async () => ({ summary: "Moved and enlarged the main living pavilion.", json: next }) }));
 
     const result = await requestHouseEdit({ projectId: project.id, prompt: "Move the main living pavilion 15m east and enlarge it", apply: (summary, json, writer) => useProjectStore.getState().appendVersion(project.id, summary, json, writer) });
 
@@ -124,7 +124,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
     // The client boundary only needs a valid V2 root; the route's deterministic placement is covered separately.
     const next = JSON.stringify({ ...parsed, sitePlan: { features: [{ id: "bar-1", kind: "outdoor_bar", x: 20, z: 14, width: 6, depth: 3, rotation: 0 }] } });
     useProjectStore.getState().updateHouseConfig(project.id, base);
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ summary: "Added an outdoor bar.", json: next }) }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, headers: new Headers(), json: async () => ({ summary: "Added an outdoor bar.", json: next }) }));
 
     const result = await requestHouseEdit({ projectId: project.id, prompt: "add an outdoor bar", apply: (summary, json, writer) => useProjectStore.getState().appendVersion(project.id, summary, json, writer) });
     const persisted = JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson);

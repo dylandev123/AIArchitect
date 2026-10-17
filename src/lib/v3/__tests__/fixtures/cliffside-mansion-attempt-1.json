@@ -1,0 +1,504 @@
+{
+ "version": 3,
+ "site": {
+  "width": 80,
+  "depth": 130,
+  "naturalFall": "south",
+  "naturalGrade": 0.38,
+  "cliffAt": 57,
+  "cliffDrop": 25,
+  "seaLevel": 0
+ },
+ "siteHierarchy": {
+  "levels": [
+   {
+    "id": "upper-road",
+    "elevation": 60,
+    "region": {}
+   },
+   {
+    "id": "arrival-court-level",
+    "elevation": 50.1,
+    "region": {}
+   },
+   {
+    "id": "upper-house-level",
+    "elevation": 50.1,
+    "region": {}
+   },
+   {
+    "id": "main-house-level",
+    "elevation": 46.5,
+    "region": {}
+   },
+   {
+    "id": "pool-deck-level",
+    "elevation": 40,
+    "region": {}
+   },
+   {
+    "id": "lower-garden-level",
+    "elevation": 35.5,
+    "region": {}
+   }
+  ],
+  "connections": [
+   {
+    "id": "upper-road-drive",
+    "fromLevelId": "upper-road",
+    "toLevelId": "arrival-court-level",
+    "width": 5.8,
+    "route": [
+     [
+      -2,
+      60,
+      -56
+     ],
+     [
+      -3,
+      58.9,
+      -47
+     ],
+     [
+      -5,
+      57.4,
+      -37
+     ],
+     [
+      -4,
+      55.5,
+      -27
+     ],
+     [
+      -2,
+      53.3,
+      -18
+     ],
+     [
+      -2,
+      50.1,
+      -14
+     ]
+    ],
+    "surfaceObjectId": "arrival-driveway"
+   },
+   {
+    "id": "arrival-walk",
+    "fromLevelId": "arrival-court-level",
+    "toLevelId": "upper-house-level",
+    "width": 2.2,
+    "route": [
+     [
+      -2,
+      50.1,
+      -14
+     ],
+     [
+      -5,
+      50.1,
+      -12
+     ],
+     [
+      -8,
+      50.1,
+      -12
+     ]
+    ],
+    "surfaceObjectId": "arrival-walkway"
+   }
+  ],
+  "transitions": []
+ },
+ "objects": [
+  {
+   "id": "arrival-driveway",
+   "type": "driveway",
+   "semanticRole": "arrival driveway surface",
+   "label": "Graded upper-road arrival driveway",
+   "geometryKind": "path",
+   "material": {
+    "id": "arrival-driveway-material",
+    "color": "#58534c"
+   }
+  },
+  {
+   "id": "arrival-walkway",
+   "type": "path",
+   "semanticRole": "arrival pedestrian path",
+   "label": "Arrival court walkway",
+   "geometryKind": "path",
+   "material": {
+    "id": "arrival-walkway-material",
+    "color": "#b8ad96"
+   }
+  },
+  {
+   "id": "arrival-court",
+   "type": "terrace",
+   "semanticRole": "arrival court",
+   "label": "Walled arrival court",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": -2,
+    "z": -19,
+    "baseElevation": 50.1,
+    "width": 27,
+    "depth": 10,
+    "height": 0.35,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "arrival-court-material",
+    "color": "#80776d"
+   }
+  },
+  {
+   "id": "arrival-wing",
+   "type": "building-mass",
+   "semanticRole": "arrival wing",
+   "label": "Upper arrival gallery",
+   "geometryKind": "box",
+   "architecture": {
+    "x": -10,
+    "z": -8,
+    "baseElevation": 50.1,
+    "width": 14,
+    "depth": 10,
+    "height": 3.6,
+    "rotationY": 0
+   },
+   "massHierarchy": "secondary",
+   "facadeRoles": {
+    "north": "arrival",
+    "east": "private",
+    "south": "service",
+    "west": "private"
+   },
+   "material": {
+    "id": "arrival-wing-material",
+    "color": "#b7ae9d"
+   }
+  },
+  {
+   "id": "arrival-connector",
+   "type": "building-mass",
+   "semanticRole": "glazed connector",
+   "label": "Glazed arrival bridge",
+   "geometryKind": "box",
+   "architecture": {
+    "x": -6,
+    "z": -1,
+    "baseElevation": 50.1,
+    "width": 6,
+    "depth": 5,
+    "height": 3.6,
+    "rotationY": 0
+   },
+   "massHierarchy": "connector",
+   "facadeRoles": {
+    "north": "arrival",
+    "east": "view",
+    "south": "view",
+    "west": "private"
+   },
+   "material": {
+    "id": "arrival-connector-material",
+    "color": "#343d3d"
+   }
+  },
+  {
+   "id": "main-pavilion",
+   "type": "building-mass",
+   "semanticRole": "primary living pavilion",
+   "label": "Ocean living pavilion",
+   "geometryKind": "box",
+   "architecture": {
+    "x": -3,
+    "z": 8,
+    "baseElevation": 46.5,
+    "width": 20,
+    "depth": 13,
+    "height": 7.2,
+    "rotationY": 0
+   },
+   "levels": 2,
+   "massHierarchy": "primary",
+   "facadeRoles": {
+    "north": "arrival",
+    "east": "private",
+    "south": "view",
+    "west": "view"
+   },
+   "material": {
+    "id": "main-pavilion-material",
+    "color": "#d2c7b4"
+   }
+  },
+  {
+   "id": "primary-suite-wing",
+   "type": "building-mass",
+   "semanticRole": "primary suite wing",
+   "label": "Ocean primary suite wing",
+   "geometryKind": "box",
+   "architecture": {
+    "x": 13.5,
+    "z": 12,
+    "baseElevation": 46.5,
+    "width": 13,
+    "depth": 10,
+    "height": 3.6,
+    "rotationY": 0
+   },
+   "massHierarchy": "secondary",
+   "facadeRoles": {
+    "north": "private",
+    "east": "private",
+    "south": "view",
+    "west": "service"
+   },
+   "material": {
+    "id": "primary-suite-wing-material",
+    "color": "#b7ae9d"
+   }
+  },
+  {
+   "id": "arrival-roof",
+   "type": "roof-form",
+   "semanticRole": "roof form",
+   "label": "Arrival wing limestone parapet roof",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": -10,
+    "z": -8,
+    "baseElevation": 53.7,
+    "width": 16.2,
+    "depth": 12.2,
+    "height": 0.35,
+    "rotationY": 0
+   },
+   "roofDatumGroup": "upper-roof-datum",
+   "material": {
+    "id": "arrival-roof-material",
+    "color": "#d8d0c2"
+   }
+  },
+  {
+   "id": "pavilion-roof",
+   "type": "roof-form",
+   "semanticRole": "roof form",
+   "label": "Primary pavilion deep shadow roof",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": -3,
+    "z": 8,
+    "baseElevation": 53.7,
+    "width": 24.8,
+    "depth": 17.8,
+    "height": 0.4,
+    "rotationY": 0
+   },
+   "roofDatumGroup": "upper-roof-datum",
+   "material": {
+    "id": "pavilion-roof-material",
+    "color": "#46423d"
+   }
+  },
+  {
+   "id": "suite-roof",
+   "type": "roof-form",
+   "semanticRole": "roof form",
+   "label": "Primary suite parapet roof",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": 13.5,
+    "z": 12,
+    "baseElevation": 50.1,
+    "width": 16.6,
+    "depth": 13.6,
+    "height": 0.35,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "suite-roof-material",
+    "color": "#d8d0c2"
+   }
+  },
+  {
+   "id": "view-terrace",
+   "type": "terrace",
+   "semanticRole": "ocean terrace",
+   "label": "Main ocean terrace",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": -2.5,
+    "z": 20.5,
+    "baseElevation": 46.5,
+    "width": 23,
+    "depth": 6.5,
+    "height": 0.32,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "view-terrace-material",
+    "color": "#b8ad96"
+   }
+  },
+  {
+   "id": "terrace-descent",
+   "type": "stair",
+   "semanticRole": "terrace stair",
+   "label": "Stepped descent to pool terrace",
+   "geometryKind": "extrusion",
+   "transform": {
+    "position": [
+     -2.5,
+     43.25,
+     25.8
+    ],
+    "rotation": [
+     0,
+     0,
+     0
+    ],
+    "scale": [
+     1,
+     1,
+     1
+    ]
+   },
+   "dimensions": [
+    3,
+    6.5,
+    7
+   ],
+   "fromSupportId": "view-terrace",
+   "toSupportId": "pool-deck",
+   "material": {
+    "id": "terrace-descent-material",
+    "color": "#9c927f"
+   }
+  },
+  {
+   "id": "pool-deck",
+   "type": "terrace",
+   "semanticRole": "pool terrace",
+   "label": "Cliff-integrated infinity pool deck",
+   "geometryKind": "slab",
+   "architecture": {
+    "x": -2.5,
+    "z": 31,
+    "baseElevation": 40,
+    "width": 25,
+    "depth": 12,
+    "height": 0.38,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "pool-deck-material",
+    "color": "#a89e8d"
+   }
+  },
+  {
+   "id": "infinity-pool",
+   "type": "pool",
+   "semanticRole": "infinity pool",
+   "label": "Ocean-edge infinity pool",
+   "geometryKind": "water",
+   "architecture": {
+    "x": -2.5,
+    "z": 33.2,
+    "baseElevation": 39.7,
+    "width": 17,
+    "depth": 4.8,
+    "height": 1.45,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "infinity-pool-material",
+    "color": "#2d788a"
+   }
+  },
+  {
+   "id": "arrival-garden",
+   "type": "landscape-zone",
+   "semanticRole": "landscape zone",
+   "label": "Sheltered arrival planting court",
+   "geometryKind": "plane",
+   "architecture": {
+    "x": 19,
+    "z": -16,
+    "baseElevation": 50.1,
+    "width": 13,
+    "depth": 15,
+    "height": 0.18,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "arrival-garden-material",
+    "color": "#587048"
+   }
+  },
+  {
+   "id": "upper-view-garden",
+   "type": "landscape-zone",
+   "semanticRole": "landscape zone",
+   "label": "Protected view-side garden terrace",
+   "geometryKind": "plane",
+   "architecture": {
+    "x": -19,
+    "z": 20,
+    "baseElevation": 43.8,
+    "width": 11,
+    "depth": 14,
+    "height": 0.2,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "upper-view-garden-material",
+    "color": "#587048"
+   }
+  },
+  {
+   "id": "lower-garden",
+   "type": "landscape-zone",
+   "semanticRole": "landscape zone",
+   "label": "Lower stepped coastal garden",
+   "geometryKind": "plane",
+   "architecture": {
+    "x": 10,
+    "z": 43,
+    "baseElevation": 35.5,
+    "width": 25,
+    "depth": 13,
+    "height": 0.2,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "lower-garden-material",
+    "color": "#496640"
+   }
+  },
+  {
+   "id": "cliff-planting",
+   "type": "landscape-zone",
+   "semanticRole": "landscape zone",
+   "label": "Cliff-edge restoration planting",
+   "geometryKind": "plane",
+   "architecture": {
+    "x": -4,
+    "z": 53,
+    "baseElevation": 29,
+    "width": 38,
+    "depth": 10,
+    "height": 0.15,
+    "rotationY": 0
+   },
+   "material": {
+    "id": "cliff-planting-material",
+    "color": "#3f5b38"
+   }
+  }
+ ],
+ "relationships": [],
+ "metadata": {}
+}

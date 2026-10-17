@@ -1,3 +1,4 @@
+import * as failureArtifacts from "@/lib/ai/v3FailureArtifact";
 import { NextRequest } from "next/server";
 import { APICallError, JSONParseError, NoObjectGeneratedError, TypeValidationError } from "ai";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -60,12 +61,120 @@ beforeEach(() => { vi.stubEnv("OPENAI_API_KEY", "test-key"); generateText.mockRe
 afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
 describe("POST /api/ai/house V3 scene mode", () => {
+  it.each([
+    'Design an ambitious mansion',
+    'Design a mansion with a US$750,000 budget, maximum 250 m², on a 25 by 30 metre lot',
+    'Design a small 80 m² two-bedroom house without a pool',
+    'Design an ultra-luxury estate; choose any coherent massing and amenities',
+  ])('passes scale guidance and the unchanged brief to Terra offline: %s', async prompt => {
+    const { flatMansion } = await import('@/lib/v3/__tests__/flatMansionFixture');
+    generateText.mockResolvedValue({ output: flatMansion(), totalUsage: sdkUsage });
+    const { POST } = await import('../route');
+    const response = await POST(new NextRequest('http://localhost/api/ai/house', {method:'POST',body:JSON.stringify({mode:'generate',generationMode:'v3-scene',prompt,currentHouseJson:JSON.stringify(BLANK_V3_SCENE)})}));
+    expect(response.status).toBe(200);
+    const call=generateText.mock.calls[0][0];
+    expect(call.messages[0].content).toBe(prompt);
+    expect(call.system).toContain('US$5–10 million');
+    expect(call.system).toContain('Explicit user budgets, dimensions, site limits and program always take precedence');
+    expect(call.system).toContain('Small-house, cottage and modest-home requests must stay appropriately scaled');
+    expect(call.system).toContain('Terra independently selects');
+    expect(call.system).toContain('NOT required features or a checklist');
+  });
+
+  it("defaults to flat land, preserves upper architecture and records the generation setting", async () => {
+    const { flatMansion } = await import("@/lib/v3/__tests__/flatMansionFixture");
+    generateText.mockResolvedValue({ output: flatMansion(), totalUsage: sdkUsage });
+    const { POST } = await import("../route");
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "Sophisticated mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    expect(response.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(1);
+    expect(generateText.mock.calls[0][0].system).toContain("FLAT LAND CONTRACT");
+    const scene = JSON.parse((await response.json()).json).v3Scene;
+    expect(scene.metadata.terrainMode).toBe("flat");
+    expect(scene.site.baseElevation).toBe(0);
+    expect(scene.objects.find((o: { id: string }) => o.id === "upper-wing").architecture.baseElevation).toBe(9);
+  });
+
+  it("uses the same flat contract on repair and never commits terrain that violates it", async () => {
+    generateText.mockResolvedValue({ output: generationScene(), totalUsage: sdkUsage });
+    const { POST } = await import("../route");
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "flat", prompt: "Mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    expect(response.status).toBe(422);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    for (const [options] of generateText.mock.calls) expect(options.system).toContain("FLAT LAND CONTRACT");
+    const body = await response.json();
+    expect(body.json).toBeUndefined();
+    expect(body.v3FailedPreview).toBeUndefined();
+  });
+
+  it("ignores terrain preferences during edits of an elevated scene", async () => {
+    const { POST } = await import("../route");
+    const existing = generationScene();
+    generateText.mockResolvedValue({ output: { intent: "Change material", operations: [{ op: "changeMaterial", target: "main-volume", material: { id: "stone", color: "#888888" } }] }, totalUsage: sdkUsage });
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "flat", prompt: "Change finish", currentHouseJson: JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: existing }) }) }));
+    expect(response.status).toBe(200);
+    const edited = JSON.parse((await response.json()).json).v3Scene;
+    expect(edited.site).toEqual(existing.site);
+    expect(edited.siteHierarchy).toEqual(existing.siteHierarchy);
+    expect(edited.objects.map((o: { transform: unknown }) => o.transform)).toEqual(existing.objects.map(o => o.transform));
+    expect(generateText.mock.calls[0][0].system).not.toContain("FLAT LAND CONTRACT");
+  });
+
+  it("retains both rejected raw attempts locally without returning a saveable project", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const retain = vi.spyOn(failureArtifacts, "retainV3FailureArtifact").mockResolvedValue(undefined);
+    generateText.mockResolvedValueOnce({ text: '{ "objects": [] }', output: { objects: [] }, totalUsage: sdkUsage })
+      .mockResolvedValueOnce({ text: '{ "objects": [], "metadata": {} }', output: { objects: [], metadata: {} }, totalUsage: sdkUsage });
+    const { POST } = await import("../route");
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Offline test", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    expect(response.status).toBe(422);
+    expect(retain.mock.calls).toEqual([
+      ['{ "objects": [] }', 0, "ingestion", expect.objectContaining({ decision: "repair-requested", errors: expect.arrayContaining([expect.any(String)]) })],
+      ['{ "objects": [], "metadata": {} }', 1, "ingestion", expect.objectContaining({ decision: "rejected", normalizedScene: expect.anything() })],
+    ]);
+    // The repair call receives Terra's own authored plan, never the normalized runtime scene.
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('Current plan: {"objects":[]}');
+    const body = await response.json();
+    expect(body.json).toBeUndefined();
+    expect(body.rawResponse).toBeUndefined();
+  });
+
+  it("accepts malformed cliffside drive metadata without a provider repair request", async () => {
+    const { malformedCliffsideDrive } = await import("@/lib/v3/__tests__/cliffsideIngestionFixture");
+    generateText.mockResolvedValue({ output: malformedCliffsideDrive(), totalUsage: sdkUsage });
+    const { POST } = await import("../route");
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Offline cliffside mansion regression", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    expect(response.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(1);
+    expect(JSON.parse((await response.json()).json).v3Scene.objects.some((o: { id: string }) => o.id === "upper-road-drive")).toBe(true);
+  });
+
+  it("normalizes raw semantic edits and keeps malformed operations atomic", async () => {
+    const { POST } = await import("../route");
+    const currentHouseJson = JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: scene() });
+    generateText.mockResolvedValue({ output: { intent: "Add unknown semantic object", operations: [{ op: "create", object: { id: "new-semantic", semanticRole: "future detail", architecture: { x: 20, z: 0, baseElevation: 0, width: 2, depth: 2, height: 3 } } }] } });
+    const request = () => new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Add a detail", currentHouseJson }) });
+    const res = await POST(request());
+    expect(res.status).toBe(200);
+    expect(JSON.parse((await res.json()).json).v3Scene.objects.at(-1).id).toBe("new-semantic");
+    expect(await generateText.mock.calls[0][0].output.responseFormat).toMatchObject({ type: "json", name: "v3_semantic_edit" });
+    generateText.mockResolvedValue({ output: { intent: "Malformed", operations: [{ op: "move", target: "main-volume" }] } });
+    expect((await POST(request())).status).toBe(422);
+  });
+
+  it("does not route malformed V3 authority into V2 when the client omits mode", async () => {
+    const { POST } = await import("../route");
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", prompt: "House", currentHouseJson: JSON.stringify({ generationMode: "v3-scene", v3Scene: { version: 2 } }) }) }));
+    expect(response.status).toBe(409);
+    expect(generateText).not.toHaveBeenCalled();
+  });
+
   it("records bounded field-level diagnostics for an SDK structured-output schema rejection", async () => {
     const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
     generateText.mockRejectedValue(schemaFailure({ siteHierarchy: { levels: [{ id: 7 }] } }));
     const { POST } = await import("../route");
 
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", projectId: "diagnostic-v3", prompt: "private brief must not be logged", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", projectId: "diagnostic-v3", prompt: "private brief must not be logged", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
 
     expect(res.status).toBe(502);
     expect(await res.json()).toMatchObject({ code: "V3_MODEL_OUTPUT_INVALID", error: expect.stringContaining("didn't match") });
@@ -87,7 +196,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     }));
     const { POST } = await import("../route");
 
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
 
     expect(res.status).toBe(502);
     expect(warning).toHaveBeenCalledWith("[v3-provider] request rejected", {
@@ -96,60 +205,55 @@ describe("POST /api/ai/house V3 scene mode", () => {
     });
   });
 
-  it("returns a recoverable dev-only preview for valid JSON without turning it into a persisted result", async () => {
+  it("normalizes missing support.hostId through normal generation instead of failed-preview recovery", async () => {
     const failed = generationScene();
     failed.objects.find((item) => item.id === "main-volume")!.support = { kind: "slab", relationship: "rests-on" };
     const parsed = v3SceneOutputSchema.safeParse(failed);
     expect(parsed.success).toBe(false);
-    generateText.mockRejectedValue(new NoObjectGeneratedError({
-      message: "No object generated: response did not match schema.", text: JSON.stringify(failed),
-      cause: new TypeValidationError({ value: failed, cause: parsed.error }), response: sdkResponse, usage: sdkUsage, finishReason: "stop",
-    }));
+    generateText.mockResolvedValue({ output: failed, totalUsage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 } });
     const { POST } = await import("../route");
 
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "recoverable mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
-    const body = await res.json() as { json?: string; v3FailedPreview?: { scene: V3Scene; diagnostics: { unsupportedObjectIds: string[] } } };
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "recoverable mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const body = await res.json() as { json?: string; v3FailedPreview?: unknown; warnings?: string[] };
 
-    expect(res.status).toBe(502);
-    expect(body.json).toBeUndefined();
-    expect(body.v3FailedPreview?.scene.objects.map((item) => item.id)).toContain("main-volume");
-    expect(body.v3FailedPreview?.diagnostics.unsupportedObjectIds).toContain("main-volume");
+    expect(res.status).toBe(200);
+    expect(body.json).toBeDefined();
+    expect(body.v3FailedPreview).toBeUndefined();
+    expect(JSON.parse(body.json!).v3Scene.objects.find((item: { id: string }) => item.id === "main-volume")).toBeDefined();
+    expect(body.warnings?.join("\n")).toContain("UNRESOLVED_SUPPORT [main-volume]");
   });
 
-  it("keeps the same structured-output failure closed in production", async () => {
+  it("uses the same forgiving boundary in production", async () => {
     vi.stubEnv("NODE_ENV", "production");
     const failed = generationScene();
     failed.objects.find((item) => item.id === "main-volume")!.support = { kind: "slab", relationship: "rests-on" };
     const parsed = v3SceneOutputSchema.safeParse(failed);
     if (parsed.success) throw new Error("fixture must fail strict V3 schema");
-    generateText.mockRejectedValue(new NoObjectGeneratedError({
-      message: "No object generated: response did not match schema.", text: JSON.stringify(failed),
-      cause: new TypeValidationError({ value: failed, cause: parsed.error }), response: sdkResponse, usage: sdkUsage, finishReason: "stop",
-    }));
+    generateText.mockResolvedValue({ output: failed, totalUsage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 } });
     const { POST } = await import("../route");
 
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "strict production", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "strict production", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
     const body = await res.json() as Record<string, unknown>;
 
-    expect(res.status).toBe(502);
-    expect(body.json).toBeUndefined();
+    expect(res.status).toBe(200);
+    expect(body.json).toEqual(expect.any(String));
     expect(body.v3FailedPreview).toBeUndefined();
   });
 
   it("classifies malformed structured text as invalid JSON and length finishes as truncation", async () => {
     const { POST } = await import("../route");
     generateText.mockRejectedValueOnce(malformedJsonFailure('{"siteHierarchy":'))
-      .mockRejectedValueOnce(schemaFailure({ siteHierarchy: { levels: [{ id: 7 }] } }, '{"siteHierarchy":', "length"));
+      .mockRejectedValueOnce(malformedJsonFailure('{"siteHierarchy":', "length"));
 
-    const malformed = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "json", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
-    const truncated = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "truncated", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const malformed = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "json", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const truncated = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "truncated", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
 
     expect(await malformed.json()).toMatchObject({ code: "V3_MODEL_JSON_INVALID" });
     expect(await truncated.json()).toMatchObject({ code: "V3_OUTPUT_TRUNCATED" });
     const malformedCandidate = JSON.parse((usageAssessments[0].assessment as { candidate: string }).candidate);
     const truncatedCandidate = JSON.parse((usageAssessments[1].assessment as { candidate: string }).candidate);
     expect(malformedCandidate.jsonParsingFailed).toBe(true);
-    expect(truncatedCandidate.jsonParsingFailed).toBe(false);
+    expect(truncatedCandidate.jsonParsingFailed).toBe(true);
     expect(truncatedCandidate.finishReason).toBe("length");
   });
 
@@ -159,7 +263,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     generateText.mockRejectedValue(malformedJsonFailure(raw));
     const { POST } = await import("../route");
 
-    await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", projectId: "safe-v3", prompt: "UNRELATED PRIVATE REQUEST TEXT", currentHouseJson: JSON.stringify(BLANK_V3_SCENE), history: [{ role: "user", content: "DO NOT LOG THIS" }] }) }));
+    await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", projectId: "safe-v3", prompt: "UNRELATED PRIVATE REQUEST TEXT", currentHouseJson: JSON.stringify(BLANK_V3_SCENE), history: [{ role: "user", content: "DO NOT LOG THIS" }] }) }));
 
     const serialized = JSON.stringify(usageAssessments[0]);
     const candidate = JSON.parse((usageAssessments[0].assessment as { candidate: string }).candidate);
@@ -177,11 +281,14 @@ describe("POST /api/ai/house V3 scene mode", () => {
     expect(v3SceneOutputSchema.safeParse(modelFacing).success).toBe(true);
     generateText.mockResolvedValue({ output: modelFacing, totalUsage: { inputTokens: 120, outputTokens: 80, totalTokens: 200 } });
     const { POST } = await import("../route");
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", projectId: "v3-test", prompt: "dramatic hillside mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", projectId: "v3-test", prompt: "dramatic hillside mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
     const body = await res.json() as { json: string; generationMode: string };
     expect(res.status).toBe(200);
     expect(generateText).toHaveBeenCalledTimes(1);
     expect((generateText.mock.calls[0][0] as { system: string }).system).toContain("single V3 Scene Architect");
+    const output = (generateText.mock.calls[0][0] as { output: { name: string; responseFormat: PromiseLike<unknown> } }).output;
+    expect(output.name).toBe("json");
+    expect(await output.responseFormat).toEqual({ type: "json", name: "v3_scene" });
     const root = JSON.parse(body.json);
     expect(body.generationMode).toBe("v3-scene");
     expect(root).toMatchObject({ version: 3, generationMode: "v3-scene" });
@@ -192,24 +299,32 @@ describe("POST /api/ai/house V3 scene mode", () => {
     expect(res.headers.get("x-ai-architect-resolved-mode")).toBe("v3-scene");
   });
 
-  it("allows exactly one bounded repair for an objectively invalid mocked plan", async () => {
+  it("allows one bounded repair and keeps JSON-object instructions on both provider calls", async () => {
     const invalid = scene(); invalid.objects.push({ ...invalid.objects[1], id: "main-volume" });
     generateText
       .mockResolvedValueOnce({ output: invalid, totalUsage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 } })
       .mockResolvedValueOnce({ output: scene(), totalUsage: { inputTokens: 110, outputTokens: 60, totalTokens: 170 } });
     const { POST } = await import("../route");
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "repairable hillside", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "repairable hillside", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
     const body = await res.json() as { json: string };
     expect(res.status).toBe(200);
     expect(generateText).toHaveBeenCalledTimes(2);
     expect((generateText.mock.calls[1][0] as { messages: { content: string }[] }).messages[0].content).toContain("Repair this same scene plan only");
+    for (const [rawOptions] of generateText.mock.calls) {
+      const options = rawOptions as { system: string; messages: { content: string }[]; output: { responseFormat: PromiseLike<unknown> } };
+      expect(await options.output.responseFormat).toMatchObject({ type: "json" });
+      expect(options.system).toMatch(/\bjson\b/i);
+      expect(options.system).toContain("no Markdown fences");
+      expect(options.system).toContain("no commentary before or after");
+    }
+    expect((generateText.mock.calls[0][0] as { messages: { content: string }[] }).messages[0].content).not.toMatch(/\bjson\b/i);
     expect(JSON.parse(body.json).v3Scene.metadata.usage).toMatchObject({ attempts: 2, repair: true });
   });
 
   it("fails closed on a V3/V2 routing mismatch rather than entering V2", async () => {
     const { POST } = await import("../route");
     const v3AsV2 = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v2-architectural", prompt: "mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
-    const v2AsV3 = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "mansion", currentHouseJson: "{}" }) }));
+    const v2AsV3 = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "mansion", currentHouseJson: "{}" }) }));
 
     expect(v3AsV2.status).toBe(409);
     expect(await v3AsV2.json()).toMatchObject({ code: "GENERATION_MODE_ROUTING_ERROR", error: expect.stringContaining("cannot invoke V2") });
@@ -222,7 +337,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const v2Document = { version: 1, architecturalDesignDocument: { brief: "not a V3 scene" } };
     generateText.mockResolvedValue({ output: v2Document, totalUsage: { inputTokens: 100, outputTokens: 60, totalTokens: 160 } });
     const { POST } = await import("../route");
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
 
     expect(res.status).toBe(422);
     expect(await res.json()).toMatchObject({ error: expect.stringContaining("V3 scene could not pass objective validation") });
@@ -244,12 +359,104 @@ describe("POST /api/ai/house V3 scene mode", () => {
     }
     generateText.mockResolvedValue({ output: large, totalUsage: { inputTokens: 800, outputTokens: 6_200, totalTokens: 7_000 } });
     const { POST } = await import("../route");
-    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "large compact hillside mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "large compact hillside mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
 
     expect(res.status).toBe(200);
     expect(large.objects).toHaveLength(60);
     // Three bytes/token is deliberately conservative for compact JSON with many numbers.
     expect(JSON.stringify(large).length).toBeLessThan(V3_INITIAL_MAX_OUTPUT_TOKENS * 3);
     expect((generateText.mock.calls[0][0] as { maxOutputTokens: number }).maxOutputTokens).toBe(V3_INITIAL_MAX_OUTPUT_TOKENS);
+  });
+});
+
+describe("POST /api/ai/house V3 architectural design revision", () => {
+  const raw = async (weak: boolean) => {
+    const { object } = await import("@/lib/v3/__tests__/flatMansionFixture");
+    const primary = { levels: 2, composition: { massHierarchy: "primary" } };
+    return { version: 3, site: { width: 120, depth: 120, baseElevation: 0 }, relationships: [], objects: weak ? [
+      object("main", "building-mass", 0, 0, 0, 12, 10, 7, primary),
+      object("west", "building-mass", -10, 0, 0, 8, 10, 7, { levels: 2 }),
+      object("east", "building-mass", 10, 0, 0, 8, 10, 7, { levels: 2 }),
+      object("pool", "pool", 0, 0, -1.3, 4, 4, 1.5),
+    ] : [
+      object("main", "building-mass", 0, 0, 0, 12, 10, 7, primary),
+      object("west", "building-mass", -10, 0, 0, 8, 10, 7, { levels: 2 }),
+      object("east", "building-mass", 10, 0, 0, 8, 10, 7, { levels: 2 }),
+      object("pool", "pool", 0, 20, -1.3, 4, 4, 1.5),
+    ] };
+  };
+  const post = async () => {
+    const { POST } = await import("../route");
+    return POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "Sophisticated villa", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+  };
+  const masses = (body: { json: string }) => JSON.parse(body.json).v3Scene.objects.map((o: { id: string; dimensions: number[] }) => `${o.id}:${o.dimensions.join(",")}`);
+
+  it("spends the single follow-up on one specific architectural revision and keeps it when it improves", async () => {
+    generateText.mockResolvedValueOnce({ output: await raw(true), totalUsage: sdkUsage }).mockResolvedValueOnce({ output: await raw(false), totalUsage: sdkUsage });
+    const res = await post(), body = await res.json();
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    const message = generateText.mock.calls[1][0].messages[0].content as string;
+    expect(message).toContain("Revise this same valid scene plan");
+    expect(message).toContain("OUTDOOR_PLACEMENT_CONFLICT");
+    expect(message).not.toContain("WEAK_MASS_HIERARCHY [");
+    expect(message).toContain("Current plan:");
+    expect(body.summary).toContain("one architectural revision");
+    const meta = JSON.parse(body.json).v3Scene.metadata.designReview;
+    expect(meta.revised).toBe(true);
+    expect(meta.final).not.toContain("OUTDOOR_PLACEMENT_CONFLICT");
+    expect(meta.initial).toEqual(expect.arrayContaining(["WEAK_MASS_HIERARCHY", "FLUSH_MASS_COMPOSITION", "LIMITED_MASSING_DEPTH"]));
+    expect(masses(body)).toContain("main:12,7,10");
+  });
+
+  it("keeps the first valid scene when the revision is not better, invalid, or fails", async () => {
+    for (const second of [{ output: await raw(true) }, { output: { objects: [] } }, new Error("provider down")]) {
+      generateText.mockReset();
+      generateText.mockResolvedValueOnce({ output: await raw(true), totalUsage: sdkUsage });
+      if (second instanceof Error) generateText.mockRejectedValueOnce(second); else generateText.mockResolvedValueOnce({ ...second, totalUsage: sdkUsage });
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      vi.spyOn(failureArtifacts, "retainV3FailureArtifact").mockResolvedValue(undefined);
+      const res = await post(), body = await res.json();
+      expect(res.status).toBe(200);
+      expect(generateText).toHaveBeenCalledTimes(2);
+      expect(masses(body)).toContain("main:12,7,10");
+      expect(JSON.parse(body.json).v3Scene.metadata.designReview.revised).toBe(false);
+      expect(body.warnings.some((w: string) => w.startsWith("DESIGN_WEAK_MASS_HIERARCHY"))).toBe(false);
+      expect(body.v3DesignReview.diagnostics.some((d: { code: string; severity: string }) => d.code === "WEAK_MASS_HIERARCHY" && d.severity === "advisory")).toBe(true);
+    }
+  });
+
+  it("rejects a redesign even when it fixes the collision and has fewer warnings", async () => {
+    const changed = await raw(false);
+    changed.objects[0].architecture.height += 2;
+    generateText.mockResolvedValueOnce({ output: await raw(true), totalUsage: sdkUsage }).mockResolvedValueOnce({ output: changed, totalUsage: sdkUsage });
+    const res = await post(), body = await res.json();
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(masses(body)).toContain("main:12,7,10");
+    expect(JSON.parse(body.json).v3Scene.metadata.designReview.revised).toBe(false);
+    expect(body).not.toHaveProperty("rawResponse");
+    expect(body).not.toHaveProperty("revisedScene");
+  });
+
+  it("does not call revision for a symmetrical equal-height design with aligned facades", async () => {
+    const coherent = await raw(true);
+    coherent.objects = coherent.objects.filter(o => o.id !== "pool");
+    generateText.mockResolvedValueOnce({ output: coherent, totalUsage: sdkUsage });
+    const res = await post(), body = await res.json();
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(1);
+    expect(body.v3DesignReview.significant).toBe(0);
+  });
+
+  it("never adds a design revision after an objective repair, and never for a well-composed scene", async () => {
+    generateText.mockResolvedValueOnce({ output: { objects: [] }, totalUsage: sdkUsage }).mockResolvedValueOnce({ output: await raw(true), totalUsage: sdkUsage });
+    vi.spyOn(failureArtifacts, "retainV3FailureArtifact").mockResolvedValue(undefined);
+    expect((await post()).status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    generateText.mockReset();
+    generateText.mockResolvedValue({ output: await raw(false), totalUsage: sdkUsage });
+    expect((await post()).status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(1);
   });
 });

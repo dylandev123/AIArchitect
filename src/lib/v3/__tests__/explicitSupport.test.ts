@@ -29,15 +29,14 @@ const scene = (): V3Scene => ({ version: 3, site: { width: 80, depth: 80 }, meta
 ] });
 
 describe("V3 explicit authored support graph", () => {
-  it("requires a flat support object on every generated object and keeps connector endpoints in the prompt", () => {
+  it("keeps support optional so missing grounding never blocks rendering", () => {
     const output = toGenerationOutput(scene());
     expect(v3SceneOutputSchema.safeParse(output).success).toBe(true);
     const missingSupport = structuredClone(output) as unknown as { objects: Array<Record<string, unknown> & { id: string }> };
     delete missingSupport.objects.find((item) => item.id === "spa")!.support;
-    expect(v3SceneOutputSchema.safeParse(missingSupport).success).toBe(false);
+    expect(v3SceneOutputSchema.safeParse(missingSupport).success).toBe(true);
     expect(V3_SCENE_ARCHITECT_PROMPT).toContain("fromSupportId");
-    expect(V3_SCENE_ARCHITECT_PROMPT).toContain("flat support object");
-    expect(V3_SCENE_ARCHITECT_PROMPT).toContain("never set a relationship without a hostId");
+    expect(V3_SCENE_ARCHITECT_PROMPT).toContain("Support metadata is optional");
   });
 
   it("accepts neutral flat support values and folds them away when normalizing", () => {
@@ -110,9 +109,10 @@ describe("V3 explicit authored support graph", () => {
     expect(validateV3Scene(invalid).errors.join(" ")).toMatch(/INVALID_CONNECTOR_ENDPOINT/);
   });
 
-  it("rejects a stale local support atomically and accepts an explicit support repair", () => {
+  it("repairs stale local support without blocking a usable edit and accepts explicit support", () => {
     const moved = executeV3SceneOperations(scene(), { intent: "Move spa away", operations: [{ op: "move", target: "spa", position: [20, 1, 0] }] });
-    expect(moved.ok).toBe(false);
+    expect(moved.ok).toBe(true);
+    expect(moved.scene.objects.find(item => item.id === "spa")?.transform.position).toEqual([20, 1, 0]);
     const repaired = executeV3SceneOperations(scene(), { intent: "Move spa to the wing", operations: [
       { op: "move", target: "spa", position: [14, 4.5, 0] },
       { op: "setSupport", target: "spa", support: { kind: "object", hostId: "wing", relationship: "rests-on" } },

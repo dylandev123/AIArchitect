@@ -35,6 +35,8 @@ export interface Project {
   /** Categorises what's being built — drives which sidebar elements are available. */
   projectType: ProjectType;
   generationMode?: GenerationMode;
+  /** Applies to new V3 generations only; absent on legacy projects. */
+  v3TerrainMode?: "flat" | "advanced";
   /** Raw JSON text driving procedural house generation for this project. */
   houseConfigJson: string;
   /** Permanent, append-only log of every AI edit. Never truncated or overwritten. */

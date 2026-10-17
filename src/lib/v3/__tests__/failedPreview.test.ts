@@ -43,6 +43,30 @@ function failedMansion() {
 }
 
 describe("failed V3 Terra preview recovery", () => {
+  it("accepts a five-storey mansion mass and keeps its authored level count through recovery and compilation", () => {
+    const mansion = {
+      version: 3 as const,
+      site: { width: 160, depth: 140 },
+      siteHierarchy: { levels: [{ id: "main-level", elevation: 0, region: { x: 0, z: 0, width: 160, depth: 140 }, supportType: "terrain" as const }], connections: [], transitions: [] },
+      objects: [{ ...object(26), id: "north-tower", type: "building-mass", semanticRole: "mansion tower", label: "North tower", dimensions: [14, 20, 12], levels: 5, support: { kind: "terrain", levelId: "", hostId: "", relationship: "none", grounding: "grounded" } }],
+      relationships: [],
+    };
+
+    // Five storeys are structurally safe and must not cause a provider-output rejection.
+    expect(v3SceneOutputSchema.safeParse(mansion).success).toBe(true);
+
+    const preview = recoverV3FailedPreview(JSON.stringify(mansion));
+    expect(preview?.scene.objects.find((candidate) => candidate.id === "north-tower")?.levels).toBe(5);
+    const towerParts = compileV3Scene(preview!.scene).primitives.filter((primitive) => primitive.sourceObjectId === "north-tower");
+    expect(towerParts.filter((primitive) => primitive.componentRole === "floor slab")).toHaveLength(6);
+
+    const overLimit = structuredClone(mansion);
+    overLimit.objects[0].levels = 23;
+    const approximated = recoverV3FailedPreview(JSON.stringify(overLimit));
+    expect(approximated?.scene.objects[0]).toMatchObject({ levels: 20, metadata: { requestedLevels: 23 } });
+    expect(approximated?.diagnostics.renderWarnings).toEqual(expect.arrayContaining([expect.objectContaining({ code: "LEVEL_COUNT_APPROXIMATED", targetId: "north-tower" })]));
+  });
+
   it("keeps strict V3 output strict while rendering the safe parts of a failed mansion", () => {
     const mansion = failedMansion();
     const raw = JSON.stringify(mansion);
@@ -54,7 +78,9 @@ describe("failed V3 Terra preview recovery", () => {
     expect(preview).toBeDefined();
     expect(preview!.scene.objects).toHaveLength(32);
     expect(preview!.scene.objects.some((candidate) => candidate.id === "unsupported-pool-house")).toBe(true);
-    expect(preview!.diagnostics.unsupportedObjectIds).toContain("unsupported-pool-house");
+    expect(preview!.diagnostics.unsupportedObjectIds).toEqual([]);
+    expect(preview!.diagnostics.unresolvedSupportObjectIds).toContain("unsupported-pool-house");
+    expect(preview!.diagnostics.renderWarnings).toEqual(expect.arrayContaining([expect.objectContaining({ code: "UNRESOLVED_SUPPORT", targetId: "unsupported-pool-house" })]));
     expect(preview!.diagnostics.skippedRelationshipIds).toContain("broken-relationship");
     expect(preview!.diagnostics.strictValidationErrors[0]).toContain("hostId");
     expect(preview!.diagnostics.normalizedFields).toContain("legacy-path: normalized legacy [x,z] route points to [x,y,z]");
