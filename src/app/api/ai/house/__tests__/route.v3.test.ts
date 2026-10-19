@@ -6,6 +6,7 @@ import { z } from "zod";
 import { BLANK_V3_SCENE, type V3Scene } from "@/lib/v3/scene";
 import { v3SceneOutputSchema } from "@/lib/v3/schema";
 import { toGenerationOutput } from "@/lib/v3/__tests__/generationFixture";
+import { blueprintProviderFixtures } from '@/lib/v3/__tests__/blueprintProviderFixtures';
 import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from "../route";
 
 const generateText = vi.fn();
@@ -57,10 +58,87 @@ function malformedJsonFailure(text: string, finishReason: "stop" | "length" = "s
   });
 }
 
-beforeEach(() => { vi.stubEnv("OPENAI_API_KEY", "test-key"); generateText.mockReset(); usageAssessments.length = 0; });
+beforeEach(() => { vi.stubEnv("OPENAI_API_KEY", "test-key"); vi.stubEnv('AI_V3_BLUEPRINT_FIRST','0'); generateText.mockReset(); usageAssessments.length = 0; });
 afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
 describe("POST /api/ai/house V3 scene mode", () => {
+  const generateOffline = async (prompt='Design a distinctive residence', terrainMode='flat') => {
+    const {POST}=await import('../route');
+    return POST(new NextRequest('http://localhost/api/ai/house',{method:'POST',body:JSON.stringify({mode:'generate',generationMode:'v3-scene',v3TerrainMode:terrainMode,prompt,currentHouseJson:JSON.stringify(BLANK_V3_SCENE)})}));
+  };
+
+  it.each(blueprintProviderFixtures())('evaluates flagged provider-shaped $name through the actual route offline',async({output})=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    generateText.mockResolvedValue({output,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(200);
+    const saved=JSON.parse((await res.json()).json).v3Scene;
+    expect(saved.metadata.blueprintContract).toBe('blueprint-first-v1');
+    expect(saved.estatePlan.blueprint).toEqual((output.estatePlan as {blueprint:unknown}).blueprint);
+    expect(generateText.mock.calls.length).toBeLessThanOrEqual(2);
+    for(const [call] of generateText.mock.calls){
+      expect(call.system).toContain('BLUEPRINT-FIRST AUTHORING v1');
+      expect(call.maxOutputTokens).toBe(V3_INITIAL_MAX_OUTPUT_TOKENS);
+    }
+  });
+
+  it('keeps legacy output and prompting unchanged while the flag is off',async()=>{
+    const output=blueprintProviderFixtures()[4].output as {estatePlan:{blueprint?:unknown}};delete output.estatePlan.blueprint;
+    generateText.mockResolvedValue({output,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(200);
+    const saved=JSON.parse((await res.json()).json).v3Scene;
+    expect(saved.estatePlan.blueprint).toBeUndefined();expect(saved.metadata.blueprintContract).toBeUndefined();
+    expect(generateText.mock.calls[0][0].system).not.toContain('BLUEPRINT-FIRST AUTHORING');
+  });
+
+  it('adds a missing index in the one existing objective attempt without changing the scene',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const fixed=blueprintProviderFixtures()[4].output, missing=structuredClone(fixed) as {estatePlan:{blueprint?:unknown}};
+    delete missing.estatePlan.blueprint;
+    generateText.mockResolvedValueOnce({output:missing,totalUsage:sdkUsage}).mockResolvedValueOnce({output:fixed,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(200);expect(generateText).toHaveBeenCalledTimes(2);
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('BLUEPRINT_MISSING');
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('BLUEPRINT PRESERVATION');
+    expect(JSON.parse((await res.json()).json).v3Scene.metadata.usage.attempts).toBe(2);
+  });
+
+  it('rejects two missing blueprints and stops at two mocked calls',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const missing=blueprintProviderFixtures()[4].output as {estatePlan:{blueprint?:unknown}};delete missing.estatePlan.blueprint;
+    generateText.mockResolvedValue({output:missing,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(2);
+    const body=await res.json();expect(body.error).toContain('BLUEPRINT_MISSING');expect(body.json).toBeUndefined();
+  });
+
+  it('keeps a contradictory blueprint within the existing roof-only repair budget',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const fixed=blueprintProviderFixtures()[2].output, bad=structuredClone(fixed) as {objects:{roofForm:string}[]};bad.objects[0].roofForm='gable';
+    generateText.mockResolvedValueOnce({output:bad,totalUsage:sdkUsage}).mockResolvedValueOnce({output:fixed,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(200);expect(generateText).toHaveBeenCalledTimes(2);
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('ROOF_FOOTPRINT_UNSUPPORTED');
+    expect(JSON.parse((await res.json()).json).v3Scene.objects[0].composition.footprint.kind).toBe('outline');
+  });
+
+  it.each([false,true])('preserves a preliminary approval during construction repair (redesign=%s)',async redesign=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const initial=blueprintProviderFixtures()[2].output as {objects:{architecture:{x:number};composition:{assemblies:unknown[]}}[];estatePlan:{character:string}};
+    const part={id:'entry-shade',type:'slab',facade:'north',segmentId:'rotunda',start:.7,end:.8,depth:-1};
+    initial.objects[0].composition.assemblies=[{id:'detail',intent:'Entry shade',parts:[part]}];
+    const redesigned=structuredClone(initial);
+    redesigned.objects[0].composition.assemblies=[{id:'detail',intent:'Entry shade',parts:[{...part,depth:.5}]}];
+    if(redesign){redesigned.objects[0].architecture.x+=2;redesigned.estatePlan.character='Replacement design';}
+    generateText.mockResolvedValueOnce({output:initial,totalUsage:sdkUsage}).mockResolvedValueOnce({output:redesigned,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(redesign?422:200);expect(generateText).toHaveBeenCalledTimes(2);
+    const body=await res.json();
+    if(redesign){expect(body.json).toBeUndefined();expect(body.error).toContain('BLUEPRINT_DECISION_DRIFT');}
+    else expect(JSON.parse(body.json).v3Scene.objects[0].composition.assemblies[0].parts[0].depth).toBe(.5);
+  });
+
+  it('leaves advanced generation outside the flat-site rollout',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');generateText.mockResolvedValue({output:generationScene(),totalUsage:sdkUsage});
+    expect((await generateOffline('A hillside residence','advanced')).status).toBe(200);
+    expect(generateText.mock.calls[0][0].system).not.toContain('BLUEPRINT-FIRST AUTHORING');
+  });
+
   it.each([
     'Design an ambitious mansion',
     'Design a mansion with a US$750,000 budget, maximum 250 m², on a 25 by 30 metre lot',
@@ -87,12 +165,16 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const { POST } = await import("../route");
     const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "Sophisticated mansion", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
     expect(response.status).toBe(200);
-    expect(generateText).toHaveBeenCalledTimes(1);
+    // The saved fixture has no stairs: one bounded completeness revision is requested, and the unchanged reply is declined.
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain("UNREACHABLE_STOREY");
     expect(generateText.mock.calls[0][0].system).toContain("FLAT LAND CONTRACT");
+    expect(generateText.mock.calls[1][0].system).toContain("FLAT LAND CONTRACT");
     const scene = JSON.parse((await response.json()).json).v3Scene;
     expect(scene.metadata.terrainMode).toBe("flat");
     expect(scene.site.baseElevation).toBe(0);
     expect(scene.objects.find((o: { id: string }) => o.id === "upper-wing").architecture.baseElevation).toBe(9);
+    expect(scene.metadata.designReview.revised).toBe(false);
   });
 
   it("uses the same flat contract on repair and never commits terrain that violates it", async () => {
@@ -139,13 +221,15 @@ describe("POST /api/ai/house V3 scene mode", () => {
     expect(body.rawResponse).toBeUndefined();
   });
 
-  it("accepts malformed cliffside drive metadata without a provider repair request", async () => {
+  it("accepts malformed cliffside drive metadata without an objective repair request", async () => {
     const { malformedCliffsideDrive } = await import("@/lib/v3/__tests__/cliffsideIngestionFixture");
     generateText.mockResolvedValue({ output: malformedCliffsideDrive(), totalUsage: sdkUsage });
     const { POST } = await import("../route");
     const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Offline cliffside mansion regression", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
     expect(response.status).toBe(200);
-    expect(generateText).toHaveBeenCalledTimes(1);
+    // No objective repair: the only follow-up is the bounded design/completeness revision, which keeps the drive.
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain("Revise this same valid scene plan");
     expect(JSON.parse((await response.json()).json).v3Scene.objects.some((o: { id: string }) => o.id === "upper-road-drive")).toBe(true);
   });
 
@@ -299,6 +383,15 @@ describe("POST /api/ai/house V3 scene mode", () => {
     expect(res.headers.get("x-ai-architect-resolved-mode")).toBe("v3-scene");
   });
 
+  it("unwraps a cosmetic scene envelope locally so the single repair call is not spent", async () => {
+    const modelFacing = toGenerationOutput(generationScene());
+    generateText.mockResolvedValue({ output: { version: 3, generationMode: "v3-scene", v3Scene: modelFacing }, totalUsage: { inputTokens: 120, outputTokens: 80, totalTokens: 200 } });
+    const { POST } = await import("../route");
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", v3TerrainMode: "advanced", projectId: "v3-test", prompt: "dramatic hillside mansion", currentHouseJson: JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: { version: 3, site: { width: 1, depth: 1, baseElevation: 0 }, objects: [], relationships: [], metadata: {} } }) }) }));
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(1);
+  });
+
   it("allows one bounded repair and keeps JSON-object instructions on both provider calls", async () => {
     const invalid = scene(); invalid.objects.push({ ...invalid.objects[1], id: "main-volume" });
     generateText
@@ -370,10 +463,31 @@ describe("POST /api/ai/house V3 scene mode", () => {
 });
 
 describe("POST /api/ai/house V3 architectural design revision", () => {
+  it("repairs a missing estate program object in the existing single bounded follow-up", async () => {
+    const { estateFixtures } = await import("@/lib/v3/__tests__/estatePlanFixtures");
+    const artifact = vi.spyOn(failureArtifacts, "retainV3RevisionArtifact").mockResolvedValue(undefined);
+    const fixed = estateFixtures()[1], missing = structuredClone(fixed);
+    missing.objects = missing.objects.filter(o => o.id !== "atelier");
+    generateText.mockResolvedValueOnce({ output: missing, totalUsage: sdkUsage }).mockResolvedValueOnce({ output: fixed, totalUsage: sdkUsage });
+    const { POST } = await import("../route");
+    const res = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "generate", generationMode: "v3-scene", prompt: "An orchard estate", currentHouseJson: JSON.stringify(BLANK_V3_SCENE) }) }));
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(artifact.mock.calls[0]?.[0], JSON.stringify(artifact.mock.calls[0]?.[0].reasons)).toMatchObject({ accepted: true });
+    const saved = JSON.parse(body.json).v3Scene;
+    expect(saved.estatePlan).toEqual(fixed.estatePlan);
+    expect(saved.objects.map((o: { id: string }) => o.id)).toContain("atelier");
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain("ESTATE_MISSING_OBJECT");
+  });
+
   const raw = async (weak: boolean) => {
     const { object } = await import("@/lib/v3/__tests__/flatMansionFixture");
-    const primary = { levels: 2, composition: { massHierarchy: "primary" } };
-    return { version: 3, site: { width: 120, depth: 120, baseElevation: 0 }, relationships: [], objects: weak ? [
+    // Functionally complete: an entrance, doors into both wings at each floor and one stair, so only composition is reviewed.
+    const door = (id: string, facade: string, floors = "all") => ({ id, type: "door", facade, floors, start: .42, end: .58 });
+    const primary = { levels: 2, composition: { massHierarchy: "primary", openings: [door("entry", "north", "ground"), door("to-west", "west"), door("to-east", "east")] } };
+    const circulation = [{ id: "main-stair", type: "stair", hostId: "main", fromLevel: 0, toLevel: 1, x: -3, z: 0, width: 2.6, depth: 4.6, stairType: "u-shaped", direction: "north" }];
+    return { version: 3, site: { width: 120, depth: 120, baseElevation: 0 }, relationships: [], circulation, objects: weak ? [
       object("main", "building-mass", 0, 0, 0, 12, 10, 7, primary),
       object("west", "building-mass", -10, 0, 0, 8, 10, 7, { levels: 2 }),
       object("east", "building-mass", 10, 0, 0, 8, 10, 7, { levels: 2 }),
@@ -439,6 +553,21 @@ describe("POST /api/ai/house V3 architectural design revision", () => {
     expect(body).not.toHaveProperty("revisedScene");
   });
 
+  it("spends the single revision on missing vertical circulation and keeps a reply that only adds the stair", async () => {
+    const incomplete = await raw(false) as Record<string, unknown>, complete = await raw(false);
+    delete incomplete.circulation;
+    generateText.mockResolvedValueOnce({ output: incomplete, totalUsage: sdkUsage }).mockResolvedValueOnce({ output: complete, totalUsage: sdkUsage });
+    const res = await post(), body = await res.json();
+    expect(res.status).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain("UNREACHABLE_STOREY [main]");
+    const saved = JSON.parse(body.json).v3Scene;
+    expect(saved.metadata.designReview).toMatchObject({ revised: true, initial: expect.arrayContaining(["UNREACHABLE_STOREY"]) });
+    expect(saved.metadata.designReview.final).not.toContain("UNREACHABLE_STOREY");
+    expect(saved.interior.circulation.map((c: { id: string }) => c.id)).toEqual(["main-stair"]);
+    expect(masses(body)).toContain("main:12,7,10");
+  });
+
   it("does not call revision for a symmetrical equal-height design with aligned facades", async () => {
     const coherent = await raw(true);
     coherent.objects = coherent.objects.filter(o => o.id !== "pool");
@@ -459,4 +588,44 @@ describe("POST /api/ai/house V3 architectural design revision", () => {
     expect((await post()).status).toBe(200);
     expect(generateText).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('V3 offline architecture acceptance safety',()=>{
+ const invoke=async()=>{const {POST}=await import('../route');return POST(new NextRequest('http://localhost/api/ai/house',{method:'POST',body:JSON.stringify({mode:'generate',generationMode:'v3-scene',prompt:'A circular luxury residence with a compatible roof',currentHouseJson:JSON.stringify(BLANK_V3_SCENE)})}));};
+ it('uses one roof-only repair, preserves the curve and accounts for both calls',async()=>{
+  const {curvedFixture}=await import('@/lib/v3/parity/curved');const valid=curvedFixture('circular-pavilion'),bad=structuredClone(valid);bad.objects[0].roofForm='hip';
+  generateText.mockResolvedValueOnce({output:bad,totalUsage:{inputTokens:100,outputTokens:200,totalTokens:300}}).mockResolvedValueOnce({output:valid,totalUsage:{inputTokens:120,outputTokens:210,totalTokens:330}});
+  const response=await invoke(),body=await response.json();expect(response.status,JSON.stringify(body)).toBe(200);
+  expect(generateText).toHaveBeenCalledTimes(2);const stored=JSON.parse(body.json).v3Scene;
+  expect(stored.objects[0].composition.footprint).toEqual(valid.objects[0].composition!.footprint);
+  expect(stored.metadata.usage).toMatchObject({attempts:2,inputTokens:220,outputTokens:410,totalTokens:630});
+  expect(generateText.mock.calls[1][0].messages[0].content).toContain('ROOF_FOOTPRINT_UNSUPPORTED');
+ });
+ it('never persists a roofless result or a repair that redesigns the mansion',async()=>{
+  const {curvedFixture}=await import('@/lib/v3/parity/curved');
+  for(const redesign of [false,true]){
+   generateText.mockReset();const bad=curvedFixture('circular-pavilion');bad.objects[0].roofForm='gable';const repair=structuredClone(bad);
+   if(redesign){repair.objects[0].roofForm='flat';delete repair.objects[0].composition!.footprint;}
+   generateText.mockResolvedValueOnce({output:bad,totalUsage:sdkUsage}).mockResolvedValueOnce({output:repair,totalUsage:sdkUsage});
+   const response=await invoke(),body=await response.json();expect(response.status).toBe(422);expect(body.json).toBeUndefined();expect(generateText).toHaveBeenCalledTimes(2);
+  }
+ });
+ it('rejects remaining mansion relationships before acceptance and sends all actionable findings in one offline repair',async()=>{
+  const {default:raw}=await import('@/lib/v3/__tests__/fixtures/canopy-meridian-attempt-1.json');
+  const candidate=structuredClone(raw);
+  // Remove the historical sole fatal blocker, leaving the new geometric acceptance checks to decide.
+  Object.assign(candidate.objects.find(o=>o.id==='sunsetLawn')!.architecture,{z:46.75,depth:20.5});
+  vi.spyOn(failureArtifacts,'retainV3FailureArtifact').mockResolvedValue(undefined);
+  generateText.mockResolvedValue({output:candidate,totalUsage:sdkUsage});
+  const response=await invoke(),body=await response.json();
+  expect(response.status).toBe(422);expect(body.json).toBeUndefined();
+  expect(generateText).toHaveBeenCalledTimes(2);
+  const feedback=generateText.mock.calls[1][0].messages[0].content;
+  for(const code of ['AUTHORED_SITE_OVERRUN','AUTHORED_ACCESS_DISCONNECTED','ESTATE_ALLOCATION_CONFLICT','AUTHORED_ACCESS_THRESHOLD','NO_OUTDOOR_LIVING_ACCESS'])expect(feedback).toContain(code);
+  expect(feedback).toContain('3.50m');expect(feedback).toContain('zone-wellness');
+ });
+ it('rejects a valid JSON prefix when the provider reports output truncation',async()=>{
+  const {curvedFixture}=await import('@/lib/v3/parity/curved');generateText.mockResolvedValue({output:curvedFixture('circular-pavilion'),finishReason:'length',totalUsage:sdkUsage});
+  const response=await invoke(),body=await response.json();expect(response.status).toBe(502);expect(body.code).toBe('V3_OUTPUT_TRUNCATED');expect(body.json).toBeUndefined();expect(generateText).toHaveBeenCalledTimes(1);
+ });
 });

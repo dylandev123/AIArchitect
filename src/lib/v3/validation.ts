@@ -1,3 +1,7 @@
+import { effectiveV3Scene } from './derivedSupport';
+import { BLOCKING_FOOTPRINT_CODES, curvedMassConflicts } from './architectureSafety';
+import { footprintDiagnostics } from './footprintDiagnostics';
+import { v3EstatePlanSchema, auditV3EstatePlan } from './estatePlan';
 import { resolveV3Fidelity } from './fidelity';
 import { deriveV3MassJunctions } from './junctions';
 import { resolveV3JunctionDatums } from './junctionDatums';
@@ -14,7 +18,7 @@ import { auditV3Interior, v3RelationshipTargetIds } from "./interior";
  * `advisory` = always a warning.
  */
 export type V3IssueSeverity = "fatal" | "physical" | "advisory";
-export interface V3Issue { code: string; targetId: string; message: string; severity: V3IssueSeverity; }
+export interface V3Issue { code: string; targetId: string; targetIds?: string[]; message: string; severity: V3IssueSeverity; }
 export interface V3Validation { ok: boolean; errors: string[]; warnings: string[]; issues: V3Issue[]; }
 export interface V3ValidationOptions {
   /**
@@ -54,11 +58,17 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
   };
   if (!scene || typeof scene !== "object") { add("fatal", "INVALID_ROOT", "scene", "V3 scene must be an object."); return finish(); }
   const s = scene as V3Scene;
+  if (s.estatePlan !== undefined) {
+    const plan = v3EstatePlanSchema.safeParse(s.estatePlan);
+    if (!plan.success) for (const issue of plan.error.issues) add("fatal", "INVALID_ESTATE_PLAN", "estatePlan", `Malformed estatePlan.${issue.path.join('.')}: ${issue.message}. Preserve authored commitments.`);
+  }
+
   if (s.version !== 3) add("fatal", "INVALID_ROOT", "scene", "V3 scene version must be 3.");
   if (!s.site || !finite(s.site.width) || !finite(s.site.depth) || s.site.width <= 0 || s.site.depth <= 0) add("fatal", "INVALID_SITE", "site", "Site needs finite positive width and depth.");
   if (!Array.isArray(s.objects)) { add("fatal", "INVALID_ROOT", "scene", "Scene objects must be an array."); return finish(); }
   if (options.requireObjects && s.objects.length === 0) add("fatal", "EMPTY_SCENE", "scene", "V3 scene needs at least one object with a stable id.");
   if (s.site?.baseElevation !== undefined && !finite(s.site.baseElevation)) add("fatal", "INVALID_SITE", "site", "Site baseElevation must be finite.");
+  for (const issue of footprintDiagnostics(s)) add(BLOCKING_FOOTPRINT_CODES.has(issue.code)?'fatal':'advisory',issue.code,issue.targetId,issue.message);
   const ids = new Set<string>(); const groups = new Set<string>();
   for (const o of s.objects) { if (o?.groupId) groups.add(o.groupId); }
   const hasObject = (id: string) => s.objects.some((candidate) => candidate?.id === id);
@@ -67,7 +77,7 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
     if (ids.has(o.id)) add("fatal", "DUPLICATE_OBJECT_ID", o.id, `Duplicate object id: ${o.id}.`); ids.add(o.id);
     const invalidBoxFields = [!vec(o.transform?.position) && "transform.position", !vec(o.transform?.rotation) && "transform.rotation", !positive(o.transform?.scale) && "transform.scale", !positive(o.dimensions) && "dimensions"].filter(Boolean);
     if (invalidBoxFields.length) add("fatal", "INVALID_TRANSFORM", o.id, `${o.id} has invalid transform or dimensions. Invalid fields: ${invalidBoxFields.join(", ")}.`);
-    if (o.composition !== undefined && !v3CompositionSchema.safeParse(o.composition).success) add("fatal", "INVALID_COMPOSITION", o.id, `${o.id} has invalid architectural composition.`);
+    if (o.composition !== undefined && !v3CompositionSchema.safeParse(o.composition).success && !v3CompositionSchema.safeParse({...o.composition,footprint:undefined}).success) add("fatal", "INVALID_COMPOSITION", o.id, `${o.id} has invalid architectural composition.`);
     if (o.architecture && !isV3ArchitecturalGeometry(o.architecture)) add("fatal", "INVALID_ARCHITECTURE", o.id, `${o.id} has invalid named architectural geometry.`);
     else if (o.architecture && !runtimeGeometryMatchesArchitecture(o)) add("fatal", "ARCHITECTURE_RUNTIME_DRIFT", o.id, `${o.id} runtime arrays do not match its named architectural geometry.`);
     if (!o.material || !/^#[0-9a-fA-F]{6}$/.test(o.material.color)) add("fatal", "INVALID_MATERIAL", o.id, `${o.id} has invalid material.`);
@@ -82,15 +92,22 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
     for (const endpoint of [o.fromSupportId, o.toSupportId].filter((id): id is string => !!id)) if (!hasObject(endpoint) && !s.siteHierarchy?.levels.some((level) => level.id === endpoint)) add("physical", "UNRESOLVED_CONNECTOR", o.id, `${o.id} references missing connector support ${endpoint}.`);
     if (o.groupId && !groups.has(o.groupId)) add("physical", "MISSING_GROUP", o.id, `${o.id} references missing group ${o.groupId}.`);
     if (o.source?.kind === "proxy" && (!vec(o.transform?.position) || !positive(o.dimensions))) add("fatal", "INVALID_TRANSFORM", o.id, `${o.id} proxy has no valid transform.`);
+    if(o.unsupportedIntent?.roofForm&&o.unsupportedIntent.roofForm!=='butterfly')add('fatal','ROOF_INTENT_UNSUPPORTED',o.id,`${o.id}: roof intent ${o.unsupportedIntent.roofForm} is not constructible. Preserve the building footprint. Use a compatible roof only if the brief permits that choice; an explicitly requested unsupported roof requires user clarification, not a silent substitute.`);
+    if(o.type==='building-mass'&&['cylinder','extrusion'].includes(o.geometryKind??'')&&!o.composition?.footprint)add('fatal','BUILDING_FORM_UNBUILT',o.id,`${o.id}: ${o.geometryKind} alone does not construct a building footprint. Author composition.footprint with line/arc segments and segment-addressed openings; no rectangular shell may stand in for this intent.`);
     const capability = v3Capability(o.type);
     if (capability?.validation?.requiresTerrainOperation && !o.terrain) add("physical", "INCOMPLETE_TERRAIN", o.id, `${o.id} terrain region needs a terrain operation.`);
     const levelLimit = Math.max(1, Math.min(20, Math.floor((o.architecture?.height ?? o.dimensions?.[1] ?? 0) / 2.2)));
-    if (finite(o.levels) && o.levels > (capability?.validation?.levelsBoundedByHeight ? levelLimit : 20)) add("advisory", "LEVEL_COUNT_APPROXIMATED", o.id, `${o.id} requests ${o.levels} levels; geometry fits ${levelLimit} while preserving authored intent.`);
+    if (o.composition?.spaceHeight!=='double-height' && finite(o.levels) && o.levels > (capability?.validation?.levelsBoundedByHeight ? levelLimit : 20)) add("fatal", "LEVEL_COUNT_APPROXIMATED", o.id, `${o.id} requests ${o.levels} levels but its height fits ${levelLimit}. Increase only this mass height if the brief permits; do not silently discard requested storeys. The current builder supports at most 20 levels.`);
   }
-  if (issues.some(issue => issue.severity === "fatal")) return finish();
+  if (issues.some(issue => issue.severity === 'fatal' && !BLOCKING_FOOTPRINT_CODES.has(issue.code) && issue.code!=='INVALID_ESTATE_PLAN')) return finish();
+  if(!issues.some(issue=>issue.severity==='fatal')&&s.objects.some(o=>o.composition?.footprint)){
+    const effective=resolveV3Fidelity(effectiveV3Scene(s)).scene;
+    for(const issue of footprintDiagnostics(effective))if(BLOCKING_FOOTPRINT_CODES.has(issue.code)&&!issues.some(i=>i.code===issue.code&&i.targetId===issue.targetId))add('fatal',issue.code,issue.targetId,issue.message);
+  }
+  for(const issue of curvedMassConflicts(s))add('fatal',issue.code,issue.targetId,issue.message);
   const interiorIssues = auditV3Interior(s);
   for (const item of interiorIssues.filter((candidate) => candidate.severity === "fatal")) add("fatal", item.code, item.targetId, item.message);
-  if (issues.some(issue => issue.severity === "fatal")) return finish();
+  if (issues.some(issue => issue.severity === 'fatal' && !BLOCKING_FOOTPRINT_CODES.has(issue.code) && issue.code!=='INVALID_ESTATE_PLAN')) return finish();
   const relationshipIds = v3RelationshipTargetIds(s);
   for (const r of s.relationships ?? []) if (!relationshipIds.has(r.from) || !relationshipIds.has(r.to)) add("physical", "MISSING_RELATIONSHIP_OBJECT", `${r.from}->${r.to}`, `Relationship ${r.kind} references a missing object.`);
   for (const item of interiorIssues.filter((candidate) => candidate.severity !== "fatal")) add(item.severity, item.code, item.targetId, item.message);
@@ -122,5 +139,9 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
     const datum = resolveV3JunctionDatums(fidelity.scene);
     for (const issue of [...datum.diagnostics, ...deriveV3MassJunctions(datum.scene).diagnostics]) add('advisory', issue.code, issue.junctionId, issue.message);
   }
+  // Independent construction failures must not hide estate diagnostics. Only malformed
+  // prerequisites prevent this audit; an unresolved canopy or roof does not.
+  const estateAuditSafe = !issues.some(issue => issue.severity === 'fatal' && !BLOCKING_FOOTPRINT_CODES.has(issue.code));
+  for (const finding of estateAuditSafe ? auditV3EstatePlan(s) : []) add(["ESTATE_FORM_UNBUILT","ESTATE_ROUTE_BLOCKED","ESTATE_POOL_CROSSING","ESTATE_ROUTE_UNSUPPORTED","ESTATE_ACCESS_POINT_MISSING"].includes(finding.code)?"fatal":"advisory", finding.code, finding.targetIds[0] ?? "estatePlan", finding.message);
   return finish();
 }

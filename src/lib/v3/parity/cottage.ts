@@ -5,6 +5,7 @@ import { DEFAULT_MATERIALS_CONFIG } from '@/types/house';
 import type { MassVolume, MassOpening, ArchitecturalDesignDocument } from '@/lib/architecture/document';
 import { compileV3Scene, type V3Scene, type V3SceneObject } from '../scene';
 import { materializeV3ArchitecturalObject } from '../architecture';
+import { builderOpening } from '../composition';
 
 const stone = { id: 'stone', color: '#d3c9b8', surface: 'stone' as const, roughness: .72 };
 export function cottageObject(id: string, type: string, x: number, z: number, width: number, depth: number, height: number, baseElevation = .25, extra: Partial<V3SceneObject> = {}): V3SceneObject {
@@ -36,7 +37,7 @@ export function expressiveCottage(): V3Scene {
 export function compileCottageV2(scene = expressiveCottage()) {
   const masses: MassVolume[] = scene.objects.filter(o=>o.type==='building-mass').map(o=>{
     const a=o.architecture!;
-    const openings = o.composition?.openings ?? (['north','east','south','west'] as const).flatMap<MassOpening>(facade=>{
+    const openings = o.composition?.openings?.map(builderOpening) ?? (['north','east','south','west'] as const).flatMap<MassOpening>(facade=>{
       const preset=o[`facade${facade[0].toUpperCase()+facade.slice(1)}` as 'facadeNorth']??o.facadePreset;
       if(preset==='solid') return [];
       return preset==='glass-heavy' ? [{type:'glazing-zone' as const,facade,start:.09,end:.91,heightRatio:.86}] : [{type:'opening-rhythm' as const,facade,count:Math.max(1,Math.floor((facade==='north'||facade==='south'?a.width:a.depth)/2.4)),width:1.2,height:1.5,sill:.8}];

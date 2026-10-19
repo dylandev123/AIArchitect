@@ -76,7 +76,9 @@ export function resolveV3Fidelity(input: V3Scene): { scene: V3Scene; diagnostics
     if (roof.type === 'roof-form' && host) {
       const [hw,,hd] = scaledDimensionsOf(host);
       if (e > 0 && Math.abs(w-hw-2*e)<.02 && Math.abs(d-hd-2*e)<.02 && Math.abs(roof.transform.rotation[1]-host.transform.rotation[1])<1e-6 && Math.hypot(roof.transform.position[0]-host.transform.position[0],roof.transform.position[2]-host.transform.position[2])<.02) {
-        roof.overhang = 0;
+        // Polygon roofs offset the host outline; their dimensions are only an
+        // envelope assertion. Keep eaves for that compiler, which applies them once.
+        if(!host.composition?.footprint)roof.overhang = 0;
         note('ROOF_OVERHANG_INCLUDED', roof.id, 'Authored footprint already includes both eaves; no second overhang added.', true);
       }
     }

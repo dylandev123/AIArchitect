@@ -1,3 +1,4 @@
+import { v3EstatePlanSchema, type V3EstatePlan } from './estatePlan';
 import { v3CompositionSchema, type V3Composition } from "./composition";
 import type { V3Scene, V3SceneObject, Vec3, V3Material } from "./scene";
 import type { V3SiteHierarchy, V3SupportRef } from "./siteHierarchy";
@@ -6,9 +7,11 @@ import { z } from "zod";
 import { normalizeV3GenerationOutput, repairV3GeneratedScene } from "./generation";
 import { compileV3Scene, validateV3CompiledGeometry } from "./scene";
 import { architectureFromRuntimeGeometry, materializeV3ArchitecturalObject, type V3ArchitecturalGeometry } from "./architecture";
-import { auditV3Interior, MAX_PARTITION_THICKNESS, pruneV3InteriorForDeletedObjects, pruneV3InteriorForRemovedRooms, type V3Door, type V3Partition, type V3Room, type V3Storey } from "./interior";
+import { auditV3Interior, MAX_PARTITION_THICKNESS, pruneV3InteriorForDeletedObjects, pruneV3InteriorForRemovedRooms, type V3Circulation, type V3Door, type V3Partition, type V3Room, type V3Storey } from "./interior";
+import { auditV3CirculationIntent } from "./circulation";
 
 export type V3SceneOperation =
+  | { op: "replaceEstatePlan"; estatePlan: V3EstatePlan }
   | { op: "setComposition"; target: string; composition: V3Composition }
   | { op: "create"; object: V3SceneObject } | { op: "delete"; target: string }
   | { op: "move"; target: string; position: Vec3 } | { op: "rotate"; target: string; rotation: Vec3 }
@@ -28,7 +31,10 @@ export type V3SceneOperation =
   | { op: "setPartition"; partition: V3Partition }
   | { op: "removePartition"; target: string }
   | { op: "setDoor"; door: V3Door }
-  | { op: "removeDoor"; target: string };
+  | { op: "removeDoor"; target: string }
+  // Authored vertical circulation (host-local footprint). Its stair/lift geometry is derived at compile time.
+  | { op: "setCirculation"; circulation: V3Circulation }
+  | { op: "removeCirculation"; target: string };
 export interface V3SceneEditPlan { intent: string; operations: V3SceneOperation[]; }
 
 const finiteNumber = z.preprocess((v) => typeof v === "string" && v.trim() ? Number(v) : v, z.number().finite());
@@ -41,6 +47,7 @@ const storeySchema = z.object({ id: target, hostMassId: target, index: z.number(
 const roomSchema = z.object({ id: target, storeyId: target, hostMassId: target, program: z.string().min(1).max(80), footprint: z.object({ x: finiteNumber, z: finiteNumber, width: finiteNumber.pipe(z.number().positive()), depth: finiteNumber.pipe(z.number().positive()) }).strict(), label, semanticRole: label }).strict();
 const partitionSchema = z.object({ id: target, storeyId: target, roomAId: target, roomBId: target.nullable(), boundaryId: target, partitionType: z.string().min(1).max(80), semanticRole: label, thickness: finiteNumber.pipe(z.number().positive().max(MAX_PARTITION_THICKNESS)).optional() }).strict();
 const doorSchema = z.object({ id: target, partitionId: target, offset: finiteNumber, width: finiteNumber.pipe(z.number().positive()), program: z.string().min(1).max(80), semanticRole: label }).strict();
+const circulationSchema = z.object({ id: target, type: z.enum(["stair", "lift"]), hostMassId: target, fromLevel: z.number().int().min(0).max(20), toLevel: z.number().int().min(1).max(20), footprint: roomSchema.shape.footprint, stairType: z.enum(["straight", "l-shaped", "u-shaped", "spiral"]).optional(), direction: z.enum(["north", "south", "east", "west"]).optional(), turn: z.enum(["left", "right"]).optional(), label: label.optional(), semanticRole: label.optional() }).strict();
 const operationSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("setComposition"), target, composition: v3CompositionSchema }),
   z.object({ op: z.literal("create"), object: z.record(z.string(), z.unknown()) }),
@@ -55,6 +62,7 @@ const operationSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("duplicate"), target, id: target, position: vector.optional() }),
   z.object({ op: z.literal("setSupport"), target, support: z.record(z.string(), z.unknown()) }),
   z.object({ op: z.literal("setConnectorEndpoints"), target, fromSupportId: target, toSupportId: target }),
+  z.object({ op: z.literal("replaceEstatePlan"), estatePlan: v3EstatePlanSchema }),
   z.object({ op: z.literal("replaceSiteHierarchy"), hierarchy: z.record(z.string(), z.unknown()) }),
   z.object({ op: z.literal("setStorey"), storey: storeySchema }),
   z.object({ op: z.literal("setRoom"), room: roomSchema }),
@@ -64,6 +72,8 @@ const operationSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("removePartition"), target }),
   z.object({ op: z.literal("setDoor"), door: doorSchema }),
   z.object({ op: z.literal("removeDoor"), target }),
+  z.object({ op: z.literal("setCirculation"), circulation: circulationSchema }),
+  z.object({ op: z.literal("removeCirculation"), target }),
 ]);
 
 /** Raw JSON enters here before canonical checks; operation intent itself remains strict. */
@@ -96,6 +106,7 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
   /** Partitions/doors written by this plan must be fully valid; ones a room edit invalidates are only reported. */
   const authored = new Set<string>();
   for (const operation of plan.operations ?? []) {
+    if (operation.op === "replaceEstatePlan") { next.estatePlan = operation.estatePlan; continue; }
     if (operation.op === "replaceSiteHierarchy") { next.siteHierarchy = operation.hierarchy; continue; }
     if (operation.op === "setStorey" || operation.op === "setRoom") {
       const interior = next.interior ??= { storeys: [], rooms: [] };
@@ -129,6 +140,18 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
       if (index < 0) { errors.push(`Missing ${operation.op === "removePartition" ? "partition" : "door"} ${operation.target}.`); continue; }
       list.splice(index, 1);
       if (operation.op === "removePartition" && interior?.doors) interior.doors = interior.doors.filter((door) => door.partitionId !== operation.target);
+      continue;
+    }
+    if (operation.op === "setCirculation") {
+      const interior = next.interior ??= { storeys: [], rooms: [] }, list = interior.circulation ??= [], index = list.findIndex((candidate) => candidate.id === operation.circulation.id);
+      if (index >= 0) list[index] = operation.circulation; else list.push(operation.circulation);
+      authored.add(operation.circulation.id);
+      continue;
+    }
+    if (operation.op === "removeCirculation") {
+      const list = next.interior?.circulation ?? [], index = list.findIndex((candidate) => candidate.id === operation.target);
+      if (index < 0) { errors.push(`Missing circulation ${operation.target}.`); continue; }
+      list.splice(index, 1);
       continue;
     }
     if (operation.op === "create") { if (get(operation.object.id)) errors.push(`Object ${operation.object.id} already exists.`); else next.objects.push(materializeV3ArchitecturalObject(operation.object)); continue; }
@@ -174,6 +197,9 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
   const repaired = repairV3GeneratedScene(next, [], { reportDerivedSupport: false, scopeIds: touched });
   const valid = validateV3Scene(next, { lenient: true }); errors.push(...valid.errors);
   if (authored.size && !errors.length) for (const issue of auditV3Interior(next)) if (issue.severity !== "advisory" && authored.has(issue.targetId)) errors.push(`${issue.code} [${issue.targetId}]: ${issue.message}`);
+  // An explicit circulation edit must be buildable; existing circulation an envelope edit invalidates is only reported.
+  const circulationIssues = auditV3CirculationIntent(next).filter((issue) => issue.code !== "CIRCULATION_OVERLAP");
+  if (!errors.length) for (const issue of circulationIssues) if (authored.has(issue.targetId)) errors.push(`${issue.code} [${issue.targetId}]: ${issue.message}`);
   if (!errors.length) errors.push(...validateV3CompiledGeometry(next, compileV3Scene(next), { lenient: true }).errors);
-  return errors.length ? { ok: false, scene: original, errors } : { ok: true, scene: next, errors: [], warnings: [...repaired.notes.map(note => `${note.code} [${note.targetId}]: ${note.message}`), ...valid.warnings] };
+  return errors.length ? { ok: false, scene: original, errors } : { ok: true, scene: next, errors: [], warnings: [...repaired.notes.map(note => `${note.code} [${note.targetId}]: ${note.message}`), ...valid.warnings, ...circulationIssues.filter((issue) => !authored.has(issue.targetId)).map((issue) => `${issue.code} [${issue.targetId}]: ${issue.message}`)] };
 }

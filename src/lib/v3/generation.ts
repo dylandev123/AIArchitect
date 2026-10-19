@@ -8,7 +8,7 @@ import { isV3SupportHintCompatible, v3HasDeterministicSupportPolicy } from "./su
 import type { V3Issue } from "./validation";
 import { inferV3GeometryKind, isKnownV3CompilerType, V3_GEOMETRY_KINDS } from "./renderability";
 import { isV3ArchitecturalGeometry, runtimeGeometryFromArchitecture, type V3ArchitecturalGeometry } from "./architecture";
-import { v3RelationshipTargetIds } from "./interior";
+import { v3RelationshipTargetIds, type V3Circulation } from "./interior";
 import { canonicalizeV3ProviderIntent, deriveV3NaturalGroundDatum } from "./intentCanonicalization";
 
 /** A deterministic note about something the normalizer/repair pass changed or could not resolve. */
@@ -140,7 +140,8 @@ export function normalizeObject(raw: unknown, notes: V3GenerationNote[]): unknow
   if (architecture && (raw.transform !== undefined || raw.dimensions !== undefined)) notes.push({ code: "RUNTIME_GEOMETRY_DERIVED", targetId: id, message: `${id} named architectural geometry overrode provider-authored runtime arrays.` });
   // New provider output can omit legacy `type`; retain a stable generic hint
   // so every persisted runtime object remains compatible with old tools.
-  if (!text(raw.type)) out.type = inferredGeometry === "path" ? "path" : inferredGeometry === "water" ? "water-surface" : inferredGeometry === "proxy" ? "proxy-asset" : inferredGeometry === "slab" ? "slab" : "volume";
+  if (!text(raw.type)&&architecture&&raw.composition)out.type="building-mass";
+  else if (!text(raw.type)) out.type = inferredGeometry === "path" ? "path" : inferredGeometry === "water" ? "water-surface" : inferredGeometry === "proxy" ? "proxy-asset" : inferredGeometry === "slab" ? "slab" : "volume";
   if (!text(raw.semanticRole) || !text(raw.label)) notes.push({ code: "IDENTITY_DEFAULTED", targetId: id, message: `${id} omitted a semantic role or label; the stable authored identity was retained with a readable default.` });
   if (typeof raw.collision !== "string" || !COLLISIONS.has(raw.collision)) delete out.collision;
   for (const [key, value] of Object.entries({ parentId, groupId, hostId, fromSupportId, toSupportId })) if (text(value)) out[key] = value;
@@ -178,7 +179,8 @@ export function normalizeObject(raw: unknown, notes: V3GenerationNote[]): unknow
   if (raw.composition !== undefined) {
     const composition = v3CompositionSchema.safeParse(raw.composition);
     if (composition.success) out.composition = composition.data;
-    else { delete out.composition; notes.push({ code: "COMPOSITION_FALLBACK", targetId: id, message: "Malformed composition omitted; facade preset geometry retained." }); }
+    else if(isRecord(raw.composition)&&raw.composition.footprint!==undefined){out.composition=raw.composition;notes.push({code:"FOOTPRINT_INVALID",targetId:id,message:"Invalid outline retained for validation; rectangular substitution is forbidden."});}
+    else {out.composition=raw.composition;notes.push({code:"INVALID_COMPOSITION",targetId:id,message:"Malformed composition retained for correction; no facade substitution is permitted."});}
   }
   const canonicalKeys = [
     "id", "type", "semanticRole", "label", "geometryKind", "architecture", "transform", "dimensions", "material", "collision",
@@ -229,7 +231,54 @@ function deriveArchitecturalBases(objects: unknown[], siteBase: number, notes: V
 }
 
 const RELATIONSHIP_KINDS = ["supports", "contains", "aligns", "connects", "hosts", "adjacent"];
-const INTERIOR_LISTS = ["storeys", "rooms", "partitions", "doors"] as const;
+const INTERIOR_LISTS = ["storeys", "rooms", "partitions", "doors", "circulation"] as const;
+const STAIR_TYPES = new Set(["straight", "l-shaped", "u-shaped", "spiral"]), PLAN_DIRECTIONS = new Set(["north", "south", "east", "west"]);
+
+/**
+ * Provider circulation (flat, world-space plan centre) → runtime `V3Circulation` (host-local footprint). Only
+ * identity and host are required here: an entry missing its location or storeys is kept so the completeness audit
+ * can diagnose it. Entries without a stable unique id or a known type are omitted with a note, never fatal.
+ */
+function normalizeCirculation(raw: unknown, objects: unknown[], claimed: Set<string>, notes: V3GenerationNote[]): V3Circulation[] {
+  if (raw === undefined) return [];
+  if (!Array.isArray(raw)) { notes.push({ code: "CIRCULATION_OMITTED", targetId: "circulation", message: "Circulation was not an array and was omitted." }); return []; }
+  const out: V3Circulation[] = [];
+  for (const entry of raw) {
+    const id = isRecord(entry) ? text(entry.id) : undefined;
+    if (!isRecord(entry) || !id || !/^[a-zA-Z][a-zA-Z0-9-]{1,63}$/.test(id) || claimed.has(id) || !["stair", "lift"].includes(String(entry.type))) {
+      notes.push({ code: "CIRCULATION_OMITTED", targetId: id ?? "circulation", message: `Circulation ${id ?? "(unnamed)"} needs a unique stable id and type stair or lift; it was omitted.` });
+      continue;
+    }
+    claimed.add(id);
+    const hostMassId = text(entry.hostId) ?? text(entry.hostMassId) ?? "";
+    const host = objects.find((object) => isRecord(object) && object.id === hostMassId) as Rec | undefined;
+    const footprint = isRecord(entry.footprint) ? entry.footprint : entry;
+    const [x, z, width, depth] = [number(footprint.x), number(footprint.z), number(footprint.width), number(footprint.depth)];
+    let local: V3Circulation["footprint"] | undefined;
+    if (x !== undefined && z !== undefined && width !== undefined && depth !== undefined && width > 0 && depth > 0) {
+      if (isRecord(entry.footprint)) local = { x, z, width, depth };
+      else {
+        // Provider plan centres are world-space like `architecture.x/z`; footprints are host-local.
+        const architecture = host && isRecord(host.architecture) ? host.architecture : undefined, position = host && isRecord(host.transform) ? vector(host.transform.position) : undefined;
+        const hx = number(architecture?.x) ?? position?.[0] ?? 0, hz = number(architecture?.z) ?? position?.[2] ?? 0, yaw = number(architecture?.rotationY) ?? (host && isRecord(host.transform) ? vector(host.transform.rotation)?.[1] : undefined) ?? 0;
+        const dx = x - hx, dz = z - hz;
+        local = { x: dx * Math.cos(yaw) - dz * Math.sin(yaw), z: dx * Math.sin(yaw) + dz * Math.cos(yaw), width, depth };
+      }
+    }
+    const fromLevel = number(entry.fromLevel), toLevel = number(entry.toLevel);
+    out.push({
+      id, type: entry.type as V3Circulation["type"], hostMassId,
+      fromLevel: fromLevel ?? Number.NaN, toLevel: toLevel ?? Number.NaN,
+      ...(local ? { footprint: local } : {}),
+      ...(STAIR_TYPES.has(String(entry.stairType)) ? { stairType: entry.stairType as V3Circulation["stairType"] } : {}),
+      ...(PLAN_DIRECTIONS.has(String(entry.direction)) ? { direction: entry.direction as V3Circulation["direction"] } : {}),
+      ...(entry.turn === "left" || entry.turn === "right" ? { turn: entry.turn } : {}),
+      ...(text(entry.label) ? { label: text(entry.label)!.slice(0, 100) } : {}),
+      ...(text(entry.semanticRole) ? { semanticRole: text(entry.semanticRole)!.slice(0, 80) } : {}),
+    } as V3Circulation);
+  }
+  return out;
+}
 
 /**
  * Preserves an already-canonical interior verbatim. Storeys/rooms/partitions/doors are never invented, reshaped or
@@ -245,7 +294,7 @@ function normalizeInterior(raw: unknown, notes: V3GenerationNote[]): V3Scene["in
   const interior: Rec = {};
   for (const key of INTERIOR_LISTS) {
     const list = raw[key];
-    if (list === undefined && (key === "partitions" || key === "doors")) continue;
+    if (list === undefined && (key === "partitions" || key === "doors" || key === "circulation")) continue;
     if (!Array.isArray(list)) { notes.push({ code: "INTERIOR_OMITTED", targetId: `interior.${key}`, message: `Interior ${key} was not an array and was omitted.` }); continue; }
     const records = list.filter(isRecord);
     if (records.length !== list.length) notes.push({ code: "INTERIOR_ENTRY_DROPPED", targetId: `interior.${key}`, message: `${list.length - records.length} non-object interior ${key} entries were dropped.` });
@@ -255,13 +304,29 @@ function normalizeInterior(raw: unknown, notes: V3GenerationNote[]): V3Scene["in
 }
 
 /**
+ * Lossless transport unwrap so a cosmetic envelope never spends the single repair call: a JSON-object string, or a root
+ * with no `objects` whose only scene is a nested `v3Scene`/`scene` record. Nothing is added or reinterpreted.
+ */
+function unwrapV3ProviderEnvelope(provider: unknown, notes: V3GenerationNote[]): unknown {
+  let value = provider;
+  if (typeof value === "string") {
+    try { const parsed: unknown = JSON.parse(value); if (isRecord(parsed)) value = parsed; } catch { return provider; }
+  }
+  if (isRecord(value) && value.objects === undefined) {
+    const inner = isRecord(value.v3Scene) ? value.v3Scene : isRecord(value.scene) ? value.scene : undefined;
+    if (inner) { notes.push({ code: "PROVIDER_ENVELOPE_UNWRAPPED", targetId: "scene", message: "Scene was nested in a transport envelope and was unwrapped without changes." }); return inner; }
+  }
+  return value;
+}
+
+/**
  * Immediately after the provider-facing parse: expands the flat generation shape into the runtime
  * `V3Scene`. Never throws and never rejects — structural judgement belongs to `validateV3Scene`.
  */
 export function normalizeV3GenerationOutput(provider: unknown, terrainMode?: V3TerrainMode): V3NormalizedGeneration {
   const notes: V3GenerationNote[] = [];
   // Provider vocabulary/placement drift is canonicalized first, so no authored intent is dropped below.
-  const raw = canonicalizeV3ProviderIntent(provider, notes);
+  const raw = canonicalizeV3ProviderIntent(unwrapV3ProviderEnvelope(provider, notes), notes);
   if (!isRecord(raw)) return { scene: raw as V3Scene, notes };
   const site = isRecord(raw.site) ? raw.site : raw.site;
   // Flat high-level natural-ground intent → runtime naturalGround / sea. Runtime-shaped input passes through.
@@ -278,10 +343,18 @@ export function normalizeV3GenerationOutput(provider: unknown, terrainMode?: V3T
     normalizedSite = { ...(number(site.width) !== undefined ? { width: number(site.width) } : {}), ...(number(site.depth) !== undefined ? { depth: number(site.depth) } : {}), ...(number(site.baseElevation) !== undefined ? { baseElevation: number(site.baseElevation) } : {}), ...(groundColor ? { groundMaterial: { id: "ground", color: groundColor, surface: "grass" } } : {}), ...naturalSite(site) };
   }
   const siteHierarchy = normalizeHierarchy(raw.siteHierarchy);
-  const interior = normalizeInterior(raw.interior, notes);
+  let interior = normalizeInterior(raw.interior, notes);
+  if (raw.circulation !== undefined) {
+    const objects = Array.isArray(raw.objects) ? raw.objects : [];
+    const claimed = new Set<string>([...objects.flatMap((object) => isRecord(object) && text(object.id) ? [text(object.id)!] : []), ...(interior ? [...interior.storeys, ...interior.rooms, ...(interior.partitions ?? []), ...(interior.doors ?? []), ...(interior.circulation ?? [])].map((datum) => datum?.id).filter((id): id is string => typeof id === "string") : [])]);
+    const circulation = normalizeCirculation(raw.circulation, objects, claimed, notes);
+    // Circulation alone yields an interior with empty storeys/rooms; the scene stays exterior-only otherwise.
+    if (circulation.length) interior = { ...(interior ?? { storeys: [], rooms: [] }), circulation: [...(interior?.circulation ?? []), ...circulation] };
+  }
   const scene = {
     version: number(raw.version) === 3 ? 3 : raw.version,
     site: normalizedSite,
+    ...(raw.estatePlan !== undefined ? { estatePlan: structuredClone(raw.estatePlan) } : {}),
     ...(siteHierarchy ? { siteHierarchy } : {}),
     objects: Array.isArray(raw.objects) ? deriveArchitecturalBases(raw.objects, terrainMode === "flat" ? 0 : isRecord(site) ? number(site.baseElevation) ?? 0 : 0, notes).map((object) => normalizeObject(object, notes)) : raw.objects,
     ...(interior ? { interior } : {}),

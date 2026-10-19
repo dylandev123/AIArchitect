@@ -114,3 +114,22 @@ describe('V3 architectural composition review: existing fixtures and invariants'
     expect(review.repairRecommended).toBe(false);
   });
 });
+
+describe('V3 architectural composition review: non-rectangular building intent', () => {
+  const intents = (s: V3Scene) => reviewV3ArchitecturalComposition(s).diagnostics.filter(d => d.code === 'UNSUPPORTED_ARCHITECTURAL_INTENT');
+  it('reports a cylinder hint or named curved form on a building mass as advisory, without revising it', () => {
+    const scene = ingest([
+      object('drum', 'building-mass', 0, 0, 0, 14, 14, 9, { geometryKind: 'cylinder', levels: 2 }),
+      object('rotunda-gallery', 'building-mass', 24, 0, 0, 10, 10, 6, { semanticRole: 'circular rotunda gallery' }),
+      object('east-wing', 'building-mass', -24, 0, 0, 12, 8, 6, { semanticRole: 'year-round guest wing' }),
+    ]), before = JSON.stringify(scene), found = intents(scene);
+    expect(found.map(d => d.targetIds[0]).sort()).toEqual(['drum', 'rotunda-gallery']);
+    expect(found.every(d => d.severity === 'advisory')).toBe(true);
+    expect(reviewV3ArchitecturalComposition(scene).repairRecommended).toBe(false);
+    expect(JSON.stringify(scene)).toBe(before);
+  });
+  it('leaves ordinary rectangular masses and the captured mansion without form findings', () => {
+    expect(intents(captured()).filter(d => /non-rectangular/.test(d.message))).toEqual([]);
+    expect(intents(ingest([object('house', 'building-mass', 0, 0, 0, 16, 12, 6)]))).toEqual([]);
+  });
+});

@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-19",
+  "fullSuite": {
+    "command": "CONSISTENCY_REPLAY_OUTPUT=docs/architecture/mansion-failure/consistency-replay.json npx vitest run --maxWorkers=2",
+    "filesPassed": 167,
+    "filesSkipped": 2,
+    "testsPassed": 1954,
+    "testsSkipped": 3,
+    "exitCode": 0
+  },
+  "focused": {
+    "command": "npx vitest run src/lib/v3/__tests__/designConsistency.test.ts src/lib/v3/__tests__/estatePlan.test.ts src/lib/v3/__tests__/estateSpatial.test.ts --maxWorkers=2",
+    "testsPassed": 29,
+    "exitCode": 0
+  },
+  "typescript": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
+  "lint": {
+    "command": "npm run lint",
+    "exitCode": 0,
+    "warnings": 0
+  },
+  "diff": {
+    "command": "git diff --check",
+    "exitCode": 0
+  },
+  "replay": {
+    "originalAccepted": false,
+    "capturedRepairAccepted": false,
+    "syntheticOriginalAccepted": true,
+    "syntheticRepairAccepted": true,
+    "rawFixturesModified": false,
+    "compiledModelsUnchangedByGate": true
+  },
+  "visualVerification": "Inspected retained before/after WebGL images; exact compiled-model comparison and saved-scene baseline tests. No fresh browser capture.",
+  "providerCalls": 0,
+  "commits": 0,
+  "pushes": 0,
+  "deployments": 0
+}

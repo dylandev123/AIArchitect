@@ -86,7 +86,7 @@ describe('creative freedom and safe targeted revision',()=>{
   });
   it.each(['floating butterfly','mansard','custom folded origami'])('preserves unsupported explicit roof intent %s with a diagnostic',(roofForm)=>{
     const result=ingestV3GenerationOutput({version:3,site:{width:60,depth:60},objects:[mass('main',0,0,{roofForm})]},'flat');
-    expect(result.ok).toBe(true);expect(result.scene.objects[0].unsupportedIntent?.roofForm).toBe(roofForm);
+    expect(result.ok).toBe(false);expect(result.validation.issues.some(i=>i.code==='ROOF_INTENT_UNSUPPORTED'&&i.severity==='fatal')).toBe(true);expect(result.scene.objects[0].unsupportedIntent?.roofForm).toBe(roofForm);
     expect(result.scene.objects[0].roofForm).toBeUndefined();expect(result.notes.some(n=>n.code==='UNSUPPORTED_ARCHITECTURAL_INTENT')).toBe(true);
     expect(ingestV3GenerationOutput(JSON.parse(JSON.stringify(result.scene)),'flat').scene.objects[0].unsupportedIntent).toEqual({roofForm});
   });

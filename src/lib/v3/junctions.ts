@@ -6,6 +6,9 @@ import { roofHostId } from './compositionPolicies';
 import { gableRoofGeometry, hipRoofGeometry } from '@/lib/architecture/geometry/pitchedRoof';
 import type { JunctionPlane } from './junctionGeometry';
 import { dot3 } from './junctionGeometry';
+import { builderOpening, stackedStoreyOpenings, WALKABLE_OPENING_TYPES } from './composition';
+import { openingBands } from '@/lib/architecture/geometry/openings';
+import { v3MassLevelCount, v3StoreyBase } from './stacking';
 
 export type JunctionFacade = 'north'|'south'|'east'|'west';
 export interface V3SharedWallRegion {
@@ -18,7 +21,9 @@ export interface V3MassJunction {
   roof:{a:string;b:string;relationship:'same-datum'|'stepped'|'near-datum'|'unsupported'};
   materialTransition:'continuous'|'expressed-edge'; priorityMassId:string;
 }
-export interface V3JunctionDiagnostic {code:string;junctionId:string;message:string;}
+export interface V3JunctionDiagnostic {code:string;junctionId:string;message:string;
+  /** JUNCTION_OPENING_REMOVED only: the authored opening lost on a shared face. */
+  massId?:string;openingId?:string;removal?:'removed'|'clipped';}
 const EPS=1e-5;
 export const junctionId=(a:string,b:string)=>`junction:${[a,b].sort().join('|')}:envelope`;
 export const massPriority=(o:V3SceneObject)=>({primary:2,secondary:1,connector:0}[o.composition?.massHierarchy??'secondary']);
@@ -47,6 +52,32 @@ export function roofForMass(s:V3Scene,m:V3SceneObject):V3SceneObject {
   const [w,,d]=scaledDimensionsOf(m);
   return {...m,architecture:undefined,type:'roof-form',dimensions:[w,.25,d],transform:{...m.transform,position:[m.transform.position[0],getObjectTopY(m)+.125,m.transform.position[2]],scale:[1,1,1]},roofForm:m.roofForm??'flat'};
 }
+/**
+ * Authored openings on a shared face whose wall the junction compiler does not build. The removal itself is correct
+ * (the face is interior), but it is reported so glazing intent is never lost silently.
+ */
+function removedOpenings(s:V3Scene,host:V3SceneObject,other:V3SceneObject,facade:JunctionFacade,span:[number,number],elevation:[number,number],junction:string):V3JunctionDiagnostic[] {
+  const openings=host.composition?.openings;
+  if(!openings?.length)return [];
+  const [w,h,d]=scaledDimensionsOf(host),levels=v3MassLevelCount(host),levelHeight=h/levels,storeyBase=v3StoreyBase(host,s),base=getObjectBaseY(host);
+  const length=facade==='north'||facade==='south'?w:d,found=new Map<string,{covered:number;total:number}>();
+  for(let floor=0;floor<levels;floor++) {
+    const y0=base+floor*levelHeight,y1=y0+levelHeight;
+    if(Math.min(y1,elevation[1])-Math.max(y0,elevation[0])<.5)continue;
+    const scoped=stackedStoreyOpenings(openings,storeyBase,floor).map(builderOpening);
+    for(const band of openingBands(facade,w,d,scoped,storeyBase+floor,levelHeight)) {
+      const op=openings.find(o=>o.id===band.key)??openings.find(o=>o.type==='opening-rhythm'&&band.key?.startsWith(`${o.id}-`));
+      if(!op||op.facade!==facade)continue;
+      const a=band.start*length-length/2,b=band.end*length-length/2,covered=Math.max(0,Math.min(b,span[1])-Math.max(a,span[0]));
+      const entry=found.get(op.id)??{covered:0,total:0};
+      entry.covered+=covered;entry.total+=b-a;found.set(op.id,entry);
+    }
+  }
+  return [...found].filter(([,v])=>v.covered>.05).map(([openingId,v])=>{
+    const removal=v.covered>=v.total-1e-3?'removed' as const:'clipped' as const;
+    return {code:'JUNCTION_OPENING_REMOVED',junctionId:junction,massId:host.id,openingId,removal,message:`${host.id} opening ${openingId} on its ${facade} facade lies on the face shared with ${other.id}; that wall is not built, so the opening is ${removal==='removed'?'removed':'clipped to the exposed facade'}. Move it to an exterior facade or author a door to make the shared face a partition.`};
+  });
+}
 export function deriveV3MassJunctions(input:V3Scene):{junctions:V3MassJunction[];diagnostics:V3JunctionDiagnostic[]} {
   const s=materializeV3ArchitecturalScene(input),masses=s.objects.filter(o=>o.type==='building-mass').sort((a,b)=>a.id.localeCompare(b.id));
   const junctions:V3MassJunction[]=[],diagnostics:V3JunctionDiagnostic[]=[];
@@ -59,7 +90,7 @@ export function deriveV3MassJunctions(input:V3Scene):{junctions:V3MassJunction[]
     if(!contact&&!explicit)continue;
     const id=junctionId(a.id,b.id),orthogonal=Math.abs(Math.sin(2*(a.transform.rotation[1]-b.transform.rotation[1])))<EPS;
     const upright=[a,b].every(o=>Math.abs(o.transform.rotation[0])+Math.abs(o.transform.rotation[2])<EPS);
-    const supported=contact&&orthogonal&&upright,priority=preferredMass(a,b);
+    const supported=contact&&orthogonal&&upright&&!a.composition?.footprint&&!b.composition?.footprint,priority=preferredMass(a,b);
     const sharedWalls:V3SharedWallRegion[]=[];
     if(supported)for(const [host,other] of [[a,b],[b,a]]) {
       const [hw,,hd]=scaledDimensionsOf(host),v=relativeRect(host,other);
@@ -70,15 +101,16 @@ export function deriveV3MassJunctions(input:V3Scene):{junctions:V3MassJunction[]
         const normal=nx||nz,probe=at+normal*.001;
         const internal=probe>nlo&&probe<nhi;
         if(!internal&&priority.id===host.id)continue;
-        const explicitDoor=host.composition?.openings?.some(op=>op.facade===facade&&op.type==='door'&&op.end*(alongX?hw:hd)-(alongX?hw:hd)/2>span[0]&&op.start*(alongX?hw:hd)-(alongX?hw:hd)/2<span[1]);
+        const explicitDoor=host.composition?.openings?.some(op=>op.facade===facade&&WALKABLE_OPENING_TYPES.has(op.type)&&'start' in op&&op.end*(alongX?hw:hd)-(alongX?hw:hd)/2>span[0]&&op.start*(alongX?hw:hd)-(alongX?hw:hd)/2<span[1]);
         // An authored connecting door is a deliberate partition, not an accidental exterior wall.
         const nworld=worldPoint(host,nx,0,nz),direction=localPoint(other,other.transform.position[0]+(nworld[0]-host.transform.position[0]),other.transform.position[2]+(nworld[2]-host.transform.position[2]));
         const otherFacade:JunctionFacade=Math.abs(direction[0])>Math.abs(direction[1])?(direction[0]>0?'west':'east'):(direction[1]>0?'north':'south');
-        const competingDoor=other.composition?.openings?.some(op=>op.facade===otherFacade&&op.type==='door');
+        const competingDoor=other.composition?.openings?.some(op=>op.facade===otherFacade&&WALKABLE_OPENING_TYPES.has(op.type));
         const keepDoor=explicitDoor&&(!competingDoor||priority.id===host.id);
         sharedWalls.push({massId:host.id,facade,at,span,elevation:[lo,hi],kind:keepDoor?'intentional-partition':internal?'internal':'coincident'});
         if(keepDoor)diagnostics.push({code:'JUNCTION_AUTHORED_PARTITION',junctionId:id,message:`${host.id} has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed.`});
         if(explicitDoor&&competingDoor)diagnostics.push({code:'JUNCTION_OPENING_CONFLICT',junctionId:id,message:'Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent.'});
+        if(!keepDoor)diagnostics.push(...removedOpenings(s,host,other,facade,span,[lo,hi],id));
       }
     }
     const ra=roofForMass(s,a),rb=roofForMass(s,b),delta=getObjectBaseY(rb)-getObjectBaseY(ra);

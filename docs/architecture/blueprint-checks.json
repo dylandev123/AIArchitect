@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-19",
+  "offline": true,
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "fullSuite": {
+    "command": "BLUEPRINT_REPLAY_OUTPUT=docs/architecture/blueprint-replay.json npx vitest run --maxWorkers=2",
+    "exitCode": 0,
+    "filesPassed": 169,
+    "filesSkipped": 2,
+    "testsPassed": 1991,
+    "testsSkipped": 3
+  },
+  "focusedSuite": {
+    "command": "BLUEPRINT_REPLAY_OUTPUT=docs/architecture/blueprint-replay.json npx vitest run src/lib/v3/__tests__/blueprint.test.ts src/store/__tests__/v3BlueprintPersistence.test.ts --maxWorkers=2",
+    "exitCode": 0,
+    "filesPassed": 2,
+    "testsPassed": 37
+  },
+  "typescript": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
+  "eslint": {
+    "command": "npm run lint",
+    "exitCode": 0,
+    "warnings": 0
+  },
+  "diff": {
+    "command": "git diff --check",
+    "exitCode": 0
+  },
+  "newFileWhitespace": "passed",
+  "proofs": {
+    "synthetic corrected recovered mansion": {
+      "blueprintOk": true,
+      "compiledGeometryOk": true
+    },
+    "sculptural contemporary estate": {
+      "blueprintOk": true,
+      "compiledGeometryOk": true
+    },
+    "Mediterranean compound": {
+      "blueprintOk": true,
+      "compiledGeometryOk": true
+    },
+    "circular residence": {
+      "blueprintOk": true,
+      "compiledGeometryOk": true
+    },
+    "rectangular home": {
+      "blueprintOk": true,
+      "compiledGeometryOk": true
+    }
+  },
+  "compatibility": [
+    "Exact compilation equality with and without blueprint metadata",
+    "Existing saved footprint baselines",
+    "Blueprint edits and round-trip through existing project persistence",
+    "Existing recovered mansion corrections reused unchanged",
+    "Additional synthetic containment-claim correction preserves geometry and relationship identity; recovered records unchanged"
+  ],
+  "changesExcluded": [
+    "Terra/provider orchestration rebuild",
+    "Additional provider calls",
+    "V2 source changes",
+    "Advanced terrain changes",
+    "New geometry/persistence systems",
+    "Commits, pushes and deployment"
+  ]
+}

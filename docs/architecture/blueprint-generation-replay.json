@@ -1,0 +1,340 @@
+{
+  "offline": true,
+  "providerCalls": 0,
+  "tokenEstimate": "characters / 4 heuristic; not a tokenizer measurement",
+  "addedPromptCharacters": 3379,
+  "estimatedAddedPromptTokens": 845,
+  "repairGuidanceCharacters": 749,
+  "estimatedRepairGuidanceTokens": 188,
+  "blueprintSchemaCharacters": 1767,
+  "addedTransmittedSchemaCharacters": 0,
+  "exactProviderSchemaTransmitted": false,
+  "fixtures": [
+    {
+      "name": "sculptural contemporary mansion",
+      "ok": true,
+      "fatalCodes": [],
+      "blueprintCharacters": 417,
+      "estimatedBlueprintTokens": 105,
+      "responseCharacters": 3006,
+      "legacyResponseCharacters": 2576,
+      "compiled": true
+    },
+    {
+      "name": "Mediterranean luxury estate",
+      "ok": true,
+      "fatalCodes": [],
+      "blueprintCharacters": 775,
+      "estimatedBlueprintTokens": 194,
+      "responseCharacters": 5595,
+      "legacyResponseCharacters": 4807,
+      "compiled": true
+    },
+    {
+      "name": "circular residence",
+      "ok": true,
+      "fatalCodes": [],
+      "blueprintCharacters": 301,
+      "estimatedBlueprintTokens": 76,
+      "responseCharacters": 2002,
+      "legacyResponseCharacters": 1688,
+      "compiled": true
+    },
+    {
+      "name": "multi-building compound",
+      "ok": true,
+      "fatalCodes": [],
+      "blueprintCharacters": 1973,
+      "estimatedBlueprintTokens": 494,
+      "responseCharacters": 21087,
+      "legacyResponseCharacters": 19101,
+      "compiled": true
+    },
+    {
+      "name": "conventional residence",
+      "ok": true,
+      "fatalCodes": [],
+      "blueprintCharacters": 409,
+      "estimatedBlueprintTokens": 103,
+      "responseCharacters": 3516,
+      "legacyResponseCharacters": 3094,
+      "compiled": true
+    }
+  ],
+  "rejected": [
+    {
+      "name": "dangling building identity",
+      "ok": false,
+      "expectedCode": "BLUEPRINT_REFERENCE",
+      "findings": [
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "fatal",
+          "targetIds": [
+            "bp-building-residence",
+            "missing-mass"
+          ],
+          "message": "bp-building-residence needs building-mass missing-mass."
+        },
+        {
+          "code": "BLUEPRINT_BUILDING_UNPLANNED",
+          "severity": "fatal",
+          "targetIds": [
+            "residence"
+          ],
+          "message": "Every building needs a spatial hierarchy entry."
+        }
+      ]
+    },
+    {
+      "name": "entrance on nonexistent wall",
+      "ok": false,
+      "expectedCode": "BLUEPRINT_ENTRANCE_WALL",
+      "findings": [
+        {
+          "code": "BLUEPRINT_ENTRANCE_WALL",
+          "severity": "fatal",
+          "targetIds": [
+            "residence",
+            "entry"
+          ],
+          "message": "bp-entry-residence-entry has no valid authored line/arc segment."
+        }
+      ]
+    },
+    {
+      "name": "unsupported circular gable",
+      "ok": false,
+      "expectedCode": "ROOF_FOOTPRINT_UNSUPPORTED",
+      "findings": [
+        {
+          "code": "ROOF_FOOTPRINT_UNSUPPORTED",
+          "severity": "fatal",
+          "targetIds": [
+            "residence",
+            "residence"
+          ],
+          "message": "gable roof over this footprint is unsupported. Supported: flat, terrace, floating-flat, mono-pitch. Correct only this roof choice if the brief permits; preserve the footprint and all unrelated design. No substitute roof is built."
+        }
+      ]
+    },
+    {
+      "name": "erased circular commitment",
+      "ok": false,
+      "expectedCode": "ESTATE_FORM_UNBUILT",
+      "findings": [
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "severity": "fatal",
+          "targetIds": [
+            "residence"
+          ],
+          "message": "residence: named nonrectangular building intent compiles as a rectangular mass."
+        }
+      ]
+    },
+    {
+      "name": "main entrance not indexed",
+      "ok": false,
+      "expectedCode": "BLUEPRINT_MAIN_ENTRY",
+      "findings": [
+        {
+          "code": "BLUEPRINT_MAIN_ENTRY",
+          "severity": "fatal",
+          "targetIds": [
+            "residence",
+            "entry"
+          ],
+          "message": "The composed main entrance must be designated in the blueprint on local level 0."
+        }
+      ]
+    },
+    {
+      "name": "missing planned route",
+      "ok": false,
+      "expectedCode": "BLUEPRINT_REFERENCE",
+      "findings": [
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "fatal",
+          "targetIds": [
+            "ghost-route"
+          ],
+          "message": "Missing estate circulation route."
+        }
+      ]
+    }
+  ],
+  "malformed": [
+    {
+      "blueprint": null,
+      "ok": false,
+      "findings": [
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint: Invalid input: expected object, received null"
+        }
+      ]
+    },
+    {
+      "blueprint": [],
+      "ok": false,
+      "findings": [
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint: Invalid input: expected object, received array"
+        }
+      ]
+    },
+    {
+      "blueprint": {
+        "version": 2
+      },
+      "ok": false,
+      "findings": [
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.version: Invalid input: expected 1"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.buildings: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.entrances: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.verticalCirculationIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.roofObjectIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.outdoorObjectIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.routeIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.allocations: Invalid input: expected array, received undefined"
+        }
+      ]
+    },
+    {
+      "blueprint": {
+        "version": 1,
+        "buildings": "wrong"
+      },
+      "ok": false,
+      "findings": [
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.buildings: Invalid input: expected array, received string"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.entrances: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.verticalCirculationIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.roofObjectIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.outdoorObjectIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.routeIds: Invalid input: expected array, received undefined"
+        },
+        {
+          "code": "BLUEPRINT_INVALID_INPUT",
+          "severity": "fatal",
+          "targetIds": [
+            "estatePlan"
+          ],
+          "message": "estatePlan.blueprint.allocations: Invalid input: expected array, received undefined"
+        }
+      ]
+    }
+  ],
+  "repairEvidence": {
+    "roofOnlyAccepted": true,
+    "approvedRelocationAccepted": false
+  },
+  "repeatedProviderSpatialContradictions": "Not measured: synthetic fixtures cannot establish a reduction in provider failures or creative quality."
+}

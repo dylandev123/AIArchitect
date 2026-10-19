@@ -1,0 +1,370 @@
+{
+  "offline": true,
+  "fixtures": [
+    {
+      "name": "synthetic corrected recovered mansion",
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-building-mainResidence",
+            "objectId": "mainResidence",
+            "role": "primary luxury residence"
+          },
+          {
+            "id": "bp-building-guestPavilion",
+            "objectId": "guestPavilion",
+            "role": "guest accommodation pavilion"
+          },
+          {
+            "id": "bp-building-wellnessPavilion",
+            "objectId": "wellnessPavilion",
+            "role": "wellness and spa pavilion"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-entry-mainResidence-mainEntryDoor",
+            "objectId": "mainResidence",
+            "openingId": "mainEntryDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-mainResidence-southLivingDoor",
+            "objectId": "mainResidence",
+            "openingId": "southLivingDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-mainResidence-southDiningDoor",
+            "objectId": "mainResidence",
+            "openingId": "southDiningDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-mainResidence-southUpperDoor",
+            "objectId": "mainResidence",
+            "openingId": "southUpperDoor",
+            "level": 1
+          },
+          {
+            "id": "bp-entry-mainResidence-eastWellnessDoor",
+            "objectId": "mainResidence",
+            "openingId": "eastWellnessDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-mainResidence-westGuestDoor",
+            "objectId": "mainResidence",
+            "openingId": "westGuestDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-guestPavilion-guestEastDoor",
+            "objectId": "guestPavilion",
+            "openingId": "guestEastDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-wellnessPavilion-wellnessWestDoor",
+            "objectId": "wellnessPavilion",
+            "openingId": "wellnessWestDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-wellnessPavilion-wellnessSouthGlass",
+            "objectId": "wellnessPavilion",
+            "openingId": "wellnessSouthGlass",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [
+          "mainStair"
+        ],
+        "roofObjectIds": [
+          "mainRoof",
+          "guestRoof",
+          "wellnessRoof"
+        ],
+        "outdoorObjectIds": [
+          "arrivalCourt",
+          "poolTerrace",
+          "reflectionPool",
+          "sunsetLawn",
+          "meditationCourt",
+          "arrivalGarden",
+          "westGarden",
+          "eastGarden",
+          "southGarden"
+        ],
+        "routeIds": [
+          "plan-arrival-drive",
+          "plan-entry-walk",
+          "plan-guest-walk",
+          "plan-wellness-walk",
+          "plan-pool-living"
+        ],
+        "allocations": [
+          {
+            "id": "bp-allocation-req-luxury",
+            "requirementId": "req-luxury",
+            "objectIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "poolTerrace",
+              "reflectionPool",
+              "sunsetLawn"
+            ],
+            "roomIds": []
+          }
+        ]
+      },
+      "site": {
+        "width": 150,
+        "depth": 120,
+        "groundMaterial": {
+          "id": "ground",
+          "color": "#496b45",
+          "surface": "grass"
+        },
+        "baseElevation": 0,
+        "naturalGround": {
+          "elevation": 0,
+          "grade": 0
+        }
+      },
+      "audit": {
+        "ok": true,
+        "findings": [
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "reflectionPool",
+              "poolTerrace"
+            ],
+            "message": "req-budget: budget is retained as intent; no deterministic verification is available."
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "mainRoof"
+            ],
+            "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified."
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "poolTerrace",
+              "reflectionPool",
+              "sunsetLawn"
+            ],
+            "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review."
+          }
+        ]
+      },
+      "geometry": true
+    },
+    {
+      "name": "sculptural contemporary estate",
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-building-residence",
+            "objectId": "residence",
+            "role": "residence"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-entry-residence-entry",
+            "objectId": "residence",
+            "openingId": "entry",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-residence-garden-door",
+            "objectId": "residence",
+            "openingId": "garden-door",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [
+          "west-wing-stair"
+        ],
+        "roofObjectIds": [],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "allocations": []
+      },
+      "site": {
+        "width": 70,
+        "depth": 50,
+        "groundMaterial": {
+          "id": "grass",
+          "color": "#738267",
+          "surface": "grass"
+        }
+      },
+      "audit": {
+        "ok": true,
+        "findings": []
+      },
+      "geometry": true
+    },
+    {
+      "name": "Mediterranean compound",
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-building-main-residence",
+            "objectId": "main-residence",
+            "role": "main-residence"
+          },
+          {
+            "id": "bp-building-guest-lodge",
+            "objectId": "guest-lodge",
+            "role": "guest-lodge"
+          },
+          {
+            "id": "bp-building-atelier",
+            "objectId": "atelier",
+            "role": "atelier"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-entry-main-residence-main-residence-door",
+            "objectId": "main-residence",
+            "openingId": "main-residence-door",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-guest-lodge-guest-lodge-door",
+            "objectId": "guest-lodge",
+            "openingId": "guest-lodge-door",
+            "level": 0
+          },
+          {
+            "id": "bp-entry-atelier-atelier-door",
+            "objectId": "atelier",
+            "openingId": "atelier-door",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [],
+        "roofObjectIds": [],
+        "outdoorObjectIds": [
+          "orchard"
+        ],
+        "routeIds": [
+          "pedestrian-arrival",
+          "route-guest-lodge",
+          "route-atelier"
+        ],
+        "allocations": []
+      },
+      "site": {
+        "width": 120,
+        "depth": 100,
+        "baseElevation": 0
+      },
+      "audit": {
+        "ok": true,
+        "findings": []
+      },
+      "geometry": true
+    },
+    {
+      "name": "circular residence",
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-building-residence",
+            "objectId": "residence",
+            "role": "residence"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-entry-residence-entry",
+            "objectId": "residence",
+            "openingId": "entry",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [],
+        "roofObjectIds": [],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "allocations": []
+      },
+      "site": {
+        "width": 70,
+        "depth": 50,
+        "groundMaterial": {
+          "id": "grass",
+          "color": "#738267",
+          "surface": "grass"
+        }
+      },
+      "audit": {
+        "ok": true,
+        "findings": []
+      },
+      "geometry": true
+    },
+    {
+      "name": "rectangular home",
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-building-urban-residence",
+            "objectId": "urban-residence",
+            "role": "urban-residence"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-entry-urban-residence-urban-residence-door",
+            "objectId": "urban-residence",
+            "openingId": "urban-residence-door",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [
+          "urban-stair"
+        ],
+        "roofObjectIds": [],
+        "outdoorObjectIds": [
+          "walled-garden"
+        ],
+        "routeIds": [
+          "pedestrian-arrival"
+        ],
+        "allocations": []
+      },
+      "site": {
+        "width": 20,
+        "depth": 36,
+        "baseElevation": 0
+      },
+      "audit": {
+        "ok": true,
+        "findings": []
+      },
+      "geometry": true
+    }
+  ]
+}

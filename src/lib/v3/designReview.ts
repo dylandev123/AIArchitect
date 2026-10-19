@@ -1,8 +1,11 @@
+import { realizesForm } from './authoredPlan';
+import { auditV3EstatePlan, type V3EstateCode } from './estatePlan';
 import type { V3Scene, V3SceneObject } from './scene';
 import { resolveV3Fidelity } from './fidelity';
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from './elevation';
 import { footprint, localPlan, footprintOverlap, footprintOverrun } from './reviewGeometry';
 import type { JunctionFacade } from './junctions';
+import { auditV3Completeness, type V3CompletenessCode } from './completeness';
 
 /**
  * Deterministic architectural composition review. Purely diagnostic: it never mutates, moves or invents geometry and is
@@ -12,7 +15,7 @@ import type { JunctionFacade } from './junctions';
 export type V3DesignReviewCode =
   | 'WEAK_MASS_HIERARCHY' | 'FLUSH_MASS_COMPOSITION' | 'SYMMETRICAL_COMPOSITION' | 'LIMITED_MASSING_DEPTH'
   | 'ENTRY_ARRIVAL_MISMATCH' | 'MISSING_MAIN_ENTRY' | 'BALCONY_ON_SHARED_WALL' | 'INCONSISTENT_MATERIAL_ZONING'
-  | 'OUTDOOR_PLACEMENT_CONFLICT' | 'MISSING_REQUESTED_FEATURE' | 'UNSUPPORTED_ARCHITECTURAL_INTENT';
+  | 'OUTDOOR_PLACEMENT_CONFLICT' | 'MISSING_REQUESTED_FEATURE' | 'UNSUPPORTED_ARCHITECTURAL_INTENT' | V3CompletenessCode | V3EstateCode;
 export interface V3DesignDiagnostic {
   code: V3DesignReviewCode;
   severity: 'significant' | 'advisory';
@@ -25,6 +28,8 @@ export interface V3DesignReview { diagnostics: V3DesignDiagnostic[]; significant
 
 /** Only objective conflicts justify revision; composition observations never do. */
 const CONFLICTS = new Set<V3DesignReviewCode>(['ENTRY_ARRIVAL_MISMATCH', 'BALCONY_ON_SHARED_WALL', 'OUTDOOR_PLACEMENT_CONFLICT', 'MISSING_REQUESTED_FEATURE']);
+/** Missing functional access is an objective conflict once V3 can represent and construct the fix. */
+export const V3_COMPLETENESS_CONFLICTS = new Set<V3DesignReviewCode>(['AUTHORED_ACCESS_DISCONNECTED', 'UNREACHABLE_STOREY', 'UNREACHABLE_WING', 'INACCESSIBLE_BALCONY', 'INACCESSIBLE_ROOF_TERRACE', 'NO_OUTDOOR_LIVING_ACCESS', 'CIRCULATION_INTENT_INCOMPLETE']);
 const TOUCH = .25, OVERLAP = .3, FULL_FACE = .8;
 const r1 = (v: number) => Math.round(v * 10) / 10;
 
@@ -61,9 +66,15 @@ function contact(a: Box, b: Box): Contact | undefined {
 const faceLength = (b: Box, f: JunctionFacade) => f === 'east' || f === 'west' ? b.d : b.w;
 const flip: Record<JunctionFacade, JunctionFacade> = { north: 'south', south: 'north', east: 'west', west: 'east' };
 
+/** A reflecting pool, rill or pond is a water feature unless its own name also declares a swimming programme. */
+const swimmable = (o: V3SceneObject) => /\b(swim(ming)?|lap|resort|plunge|infinity|lagoon)\b/i.test(text(o)) || !/reflect|rill|pond/i.test(text(o));
+/** Named roof families with no V3 roof system. Supported families (including butterfly) are never reported. */
+const UNSUPPORTED_ROOF_NAME = /\b(mansard|gambrel|sawtooth|barrel[- ]vault|dome|hyperbolic)\b/i;
+const NONRECTANGULAR_FORM_NAME = /\b(circular|curved|cylindrical|rotunda|polygonal|octagonal|hexagonal|oval|elliptical)\b/i;
+
 /** Requested features are read from the brief; satisfaction requires explicit authored objects or semantic fields. */
 const FEATURES: Array<{ name: string; asked: RegExp; present: (s: V3Scene, ground: Box[]) => boolean; guidance: string }> = [
-  { name: 'swimming pool', asked: /\b(swimming[- ]pool|pool)\b/, present: s => s.objects.some(o => o.type === 'pool' && !/reflect|rill|pond/i.test(text(o))), guidance: 'author a pool object on the garden/view side, hosted by or contained within its terrace' },
+  { name: 'swimming pool', asked: /\b(swimming[- ]pool|pool)\b/, present: s => s.objects.some(o => o.type === 'pool' && swimmable(o)), guidance: 'author a pool object on the garden/view side, hosted by or contained within its terrace' },
   { name: 'courtyard', asked: /\bcourt ?yards?\b/, present: s => s.objects.some(o => o.type === 'courtyard' || /courtyard/i.test(text(o))), guidance: 'author the requested courtyard as an intentional outdoor space' },
   { name: 'double-height space', asked: /\bdouble[- ]height\b/, present: s => s.objects.some(o => o.type === 'building-mass' && (o.composition?.spaceHeight === 'double-height' || ((o.levels ?? 1) === 1 && scaledDimensionsOf(o)[1] >= 5.5))), guidance: 'give the double-height mass composition.spaceHeight:"double-height" (or levels:1 with height of at least 5.5 m); a label alone does not create one' },
   { name: 'balcony', asked: /\bbalcon(y|ies)\b/, present: s => s.objects.some(o => o.type === 'balcony' || o.composition?.assemblies?.some(a => a.parts.some(p => p.type === 'slab' && (p.level ?? 0) > 0))), guidance: 'author an upper-level slab+railing assembly on an exterior, unshared private or view facade' },
@@ -159,7 +170,7 @@ export function reviewV3ArchitecturalComposition(input: V3Scene, options: { brie
       const [w,,depth] = scaledDimensionsOf(m);
       const approach = [...arrival.flatMap(o => footprint(o)), ...(scene.siteHierarchy?.connections ?? []).flatMap(c => c.route.map(p => [p[0],p[2]] as [number,number]))].map(p => localPlan(m,p));
       const behind = door && approach.length > 0 && approach.every(([x,z]) => door.facade === 'north' ? z > depth/2 : door.facade === 'south' ? z < -depth/2 : door.facade === 'east' ? x < -w/2 : x > w/2);
-      if (door && toward && door.facade !== toward && behind) add('ENTRY_ARRIVAL_MISMATCH', 'significant', [m.id, ...arrival.map(o => o.id)],
+      if (door && !door.segmentId && toward && door.facade !== toward && behind) add('ENTRY_ARRIVAL_MISMATCH', 'significant', [m.id, ...arrival.map(o => o.id)],
         `Main entry ${door.id} is on the ${door.facade} facade of ${m.id}, but the arrival objects lie to its ${toward}.`,
         `Move the mainEntry door (and the arrival facadeRole) of ${m.id} to its ${toward} facade, or relocate the arrival court/driveway in front of the door.`);
     }
@@ -171,7 +182,7 @@ export function reviewV3ArchitecturalComposition(input: V3Scene, options: { brie
   for (const m of masses) for (const assembly of m.composition?.assemblies ?? []) {
     const [w,h,d] = scaledDimensionsOf(m), base = getObjectBaseY(m), yaw = m.transform.rotation[1];
     for (const slab of assembly.parts) {
-      if (slab.type !== 'slab' || ((slab.level ?? 0) === 0 && (slab.elevation ?? 0) < 2)) continue;
+      if (slab.type !== 'slab' || slab.segmentId || ((slab.level ?? 0) === 0 && (slab.elevation ?? 0) < 2)) continue;
       const alongX = slab.facade === 'north' || slab.facade === 'south', span = alongX ? w : d;
       const along = ((slab.start+slab.end)/2-.5)*span;
       const across = (alongX ? d : w)/2+slab.depth/2;
@@ -219,13 +230,30 @@ export function reviewV3ArchitecturalComposition(input: V3Scene, options: { brie
 
   // A capability gap is explicit information, not an invitation to invent a substitute roof.
   for (const o of scene.objects) {
-    const intent = o.unsupportedIntent?.roofForm ?? (['roof-form','building-mass'].includes(o.type) ? /\b(butterfly|mansard|gambrel|sawtooth|barrel[- ]vault|dome|hyperbolic)\b/i.exec(`${o.label} ${o.semanticRole}`)?.[0] : undefined);
+    const intent = o.unsupportedIntent?.roofForm ?? (['roof-form','building-mass'].includes(o.type) ? UNSUPPORTED_ROOF_NAME.exec(`${o.label} ${o.semanticRole}`)?.[0] : undefined);
     if (intent) out.push({ code: 'UNSUPPORTED_ARCHITECTURAL_INTENT', severity: 'advisory', targetIds: [o.id], message: `Named roof intent "${intent}" is unsupported; displayed geometry is a preview, not that roof system.`, guidance: 'Preserve the named intent. Do not substitute another roof family or automatically revise it.' });
+  }
+  // Articulated footprints realize rectilinear/chamfered intent; other named forms still need diagnostics.
+  // Estate plans report named forms through ESTATE_FORM_UNBUILT, so only the geometry hint is checked there.
+  for (const o of scene.objects.filter(o => o.type === 'building-mass')) {
+    const form = o.geometryKind === 'cylinder' || o.geometryKind === 'extrusion' ? `geometryKind "${o.geometryKind}"` : !scene.estatePlan ? NONRECTANGULAR_FORM_NAME.exec(`${o.label} ${o.semanticRole}`)?.[0] : undefined;
+    if (form && !realizesForm(o,/circular|cylindrical|rotunda|cylinder/i.test(form)?'circular':/curved/i.test(form)?'curved':'polygonal')) out.push({ code: 'UNSUPPORTED_ARCHITECTURAL_INTENT', severity: 'advisory', targetIds: [o.id], message: `Building mass ${o.id} requests a non-rectangular form (${form}); it is constructed as a rectangular mass.`, guidance: 'Preserve the named form. Do not rename, simplify or automatically revise it; author a supported semantic line/arc footprint; oval/spline forms remain unsupported.' });
   }
 
   const significant = out.filter(d => d.severity === 'significant');
   const repairRecommended = significant.some(d => CONFLICTS.has(d.code));
   return { diagnostics: out, significant: significant.length, repairRecommended };
+}
+
+/**
+ * The review used by generation: composition review plus the architectural completeness audit. Significant
+ * completeness findings join the same single bounded repair; they never invalidate or discard the scene.
+ */
+export function reviewV3Architecture(input: V3Scene, options: { brief?: string } = {}): V3DesignReview {
+  const composition = reviewV3ArchitecturalComposition(input, options), completeness = auditV3Completeness(input);
+  const diagnostics: V3DesignDiagnostic[] = [...composition.diagnostics, ...auditV3EstatePlan(input), ...completeness.findings.map((f) => ({ ...f, severity: f.severity === 'significant' && V3_COMPLETENESS_CONFLICTS.has(f.code) ? 'significant' as const : 'advisory' as const }))];
+  const significant = diagnostics.filter(d => d.severity === 'significant');
+  return { diagnostics, significant: significant.length, repairRecommended: composition.repairRecommended || significant.some(d => V3_COMPLETENESS_CONFLICTS.has(d.code) || d.code.startsWith("ESTATE_") && !["ESTATE_FORM_UNBUILT", "ESTATE_ROUTE_UNSUPPORTED"].includes(d.code)) };
 }
 
 /** Bounded, specific feedback for the one design-repair request. */

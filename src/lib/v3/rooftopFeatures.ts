@@ -1,3 +1,5 @@
+import { footprintContains } from './footprint';
+import { v3MassLevelCount } from './stacking';
 import type { HousePrimitive } from '@/lib/house/types';
 import type { V3Scene, V3SceneObject } from './scene';
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from './elevation';
@@ -12,6 +14,7 @@ export function rooftopTerraces(scene: V3Scene): V3SceneObject[] {
   if (o.type !== 'terrace' || !host || (o.collision && o.collision !== 'walkable') || Math.abs(getObjectBaseY(o)-getObjectTopY(host)) > .35) return false;
   const [w,,d]=scaledDimensionsOf(host),[tw,,td]=scaledDimensionsOf(o),a=host.transform.rotation[1],dx=o.transform.position[0]-host.transform.position[0],dz=o.transform.position[2]-host.transform.position[2];
   const x=dx*Math.cos(a)-dz*Math.sin(a),z=dx*Math.sin(a)+dz*Math.cos(a),rel=o.transform.rotation[1]-a;
+  if (host.composition?.footprint && !footprintContains(host,[[-tw/2,-td/2],[tw/2,-td/2],[tw/2,td/2],[-tw/2,td/2]].map(([lx,lz])=>[x+lx*Math.cos(rel)+lz*Math.sin(rel),z-lx*Math.sin(rel)+lz*Math.cos(rel)]),v3MassLevelCount(host)-1)) return false;
   // Separating-axis test in both rectangle frames (no bounding-box false positives for skew terraces).
   const axes=[a,a+Math.PI/2,o.transform.rotation[1],o.transform.rotation[1]+Math.PI/2];
   return Math.abs(x)<w/2+(tw*Math.abs(Math.cos(rel))+td*Math.abs(Math.sin(rel)))/2 && Math.abs(z)<d/2+(tw*Math.abs(Math.sin(rel))+td*Math.abs(Math.cos(rel)))/2 && axes.every(axis=>{

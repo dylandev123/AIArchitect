@@ -1,4 +1,6 @@
+import { v3EstatePlanSchema, V3_ESTATE_PLAN_PROMPT, V3_CREATIVE_ARCHITECTURE_PROMPT } from './estatePlan';
 import { V3_LUXURY_SCALE_PROMPT } from "./luxuryScale";
+import { V3_BLUEPRINT_FIRST_PROMPT } from './blueprintGeneration';
 import { v3CompositionSchema, v3GenerationCompositionSchema, V3_COMPOSITION_PROMPT } from "./composition";
 import { z } from "zod";
 
@@ -85,6 +87,17 @@ const generationObject = z.object({
   if (!["path", "driveway"].includes(value.type ?? "") && !value.architecture && (!value.transform || !value.dimensions)) ctx.addIssue({ code: "custom", message: "Use architecture for a high-level object, or canonical transform and dimensions arrays for generic geometry.", path: ["architecture"] });
 });
 
+// Vertical circulation is compact authored intent: host, storeys, a world-space plan rectangle and a stair type.
+// V3 derives treads, landings, the floor opening, guards and lift shafts; nobody authors stair geometry.
+const generationCirculation = z.object({
+  id: z.string().regex(/^[a-zA-Z][a-zA-Z0-9-]{1,63}$/), type: z.enum(["stair", "lift"]), hostId: z.string(),
+  fromLevel: z.number().int().min(0).max(20), toLevel: z.number().int().min(1).max(20),
+  x: n, z: n, width: n.positive(), depth: n.positive(),
+  stairType: z.enum(["straight", "l-shaped", "u-shaped", "spiral"]).optional(),
+  direction: z.enum(["north", "south", "east", "west"]).optional(), turn: z.enum(["left", "right"]).optional(),
+  label: z.string().min(1).max(100).optional(),
+}).strict();
+
 const generationHierarchy = z.object({ levels: z.array(siteLevel).min(1), connections: z.array(siteConnection), transitions: z.array(siteTransition) }).strict();
 
 export const v3SceneOutputSchema = z.object({
@@ -93,10 +106,12 @@ export const v3SceneOutputSchema = z.object({
   // V3 derives the surface, pads, cut/fill, driveway profiles and retaining walls. Nobody authors terrain vertices.
   site: z.object({ width: n.positive(), depth: n.positive(), baseElevation: n.optional(), groundColor: generationHex.optional(),
     naturalFall: z.enum(["x", "-x", "z", "-z"]).optional(), naturalGrade: n.min(0).max(1.5).optional(), cliffAt: n.optional(), cliffDrop: n.positive().optional(), seaLevel: n.optional() }).strict(),
+  estatePlan: v3EstatePlanSchema.optional(),
   siteHierarchy: generationHierarchy.optional(),
   // Count is not an aesthetic validity rule: every structurally valid object
   // is independently renderable, including large estates and detailed sites.
   objects: z.array(generationObject).min(1),
+  circulation: z.array(generationCirculation).max(24).optional(),
   relationships: z.array(z.object({ from: z.string(), to: z.string(), kind: z.enum(["supports", "contains", "aligns", "connects", "hosts"]) }).strict()),
 }).strict();
 
@@ -106,12 +121,21 @@ export type V3GenerationOutput = z.infer<typeof v3SceneOutputSchema>;
 export const v3EditOutputSchema = z.object({
   intent: z.string().min(1).max(300),
   operations: z.array(z.object({
-    op: z.enum(["create", "delete", "move", "rotate", "resize", "editArchitecture", "changeMaterial", "attach", "detach", "duplicate", "setSupport", "setConnectorEndpoints", "replaceSiteHierarchy", "setComposition"]), target: z.string().optional(), object: object.optional(), position: vector.optional(), rotation: vector.optional(), dimensions: vector.optional(), architecture: architecturePatch.optional(), composition: v3CompositionSchema.optional(), material: material.optional(), hostId: z.string().optional(), support: supportRef.optional(), fromSupportId: z.string().optional(), toSupportId: z.string().optional(), id: z.string().optional(), hierarchy: hierarchy.optional(),
+    op: z.enum(["create", "delete", "move", "rotate", "resize", "editArchitecture", "changeMaterial", "attach", "detach", "duplicate", "setSupport", "setConnectorEndpoints", "replaceSiteHierarchy", "replaceEstatePlan", "setComposition"]), target: z.string().optional(), object: object.optional(), position: vector.optional(), rotation: vector.optional(), dimensions: vector.optional(), architecture: architecturePatch.optional(), composition: v3CompositionSchema.optional(), material: material.optional(), hostId: z.string().optional(), support: supportRef.optional(), fromSupportId: z.string().optional(), toSupportId: z.string().optional(), id: z.string().optional(), hierarchy: hierarchy.optional(), estatePlan: v3EstatePlanSchema.optional(),
   }).strict()).min(1).max(12),
 }).strict();
 
 /** Stored with usage so contract growth is observable without retaining model content. */
 export const V3_SCENE_SCHEMA_BYTES = JSON.stringify(z.toJSONSchema(v3SceneOutputSchema)).length;
+
+/** Functional principles, not templates: every authored space must be usable, without prescribing a layout. */
+export const V3_FUNCTIONAL_COMPLETENESS_PROMPT = `FUNCTIONAL COMPLETENESS: Design a building people can actually move through, automatically, even when the brief does not ask. These are functional principles, not a layout or style; you choose where and how.
+- Every storey above ground needs vertical circulation. Author top-level circulation:[{id,type:"stair"|"lift",hostId,fromLevel,toLevel,x,z,width,depth,stairType?,direction?,turn?}]. hostId is the building-mass containing it; levels are that mass's zero-based storeys and toLevel equal to its levels count reaches its roof (a rooftop terrace or a mass stacked on it). x,z is the world-space plan centre; width (local X) and depth (local Z) bound all stair geometry and must fit inside the host. stairType straight|l-shaped|u-shaped|spiral; direction (north/south/east/west, host-local) is the way the first flight climbs, or the side lift doors face; turn left|right for L/U stairs. Size it honestly: a straight stair needs about 1.0–1.2 m width and ~0.27 m of run per 0.18 m riser (≈4.5 m for 3.2 m floor-to-floor); a U stair ≈2.4×3.2 m; a lift ≥1.6×1.6 m. One stair in a connected mass serves wings joined to it at the same floor level. Stacked masses are reached by a stair in the mass below with toLevel equal to its levels, placed inside the stacked mass footprint.
+- Balconies need a walkable door from the storey they serve: on the same facade and floor, author a door or glazed-door opening overlapping the balcony slab span (serves may name the assembly). A glazing-zone is a window, never access.
+- Rooftop terraces need access: a stair/lift in the host reaching its roof (V3 builds the stair head enclosure), or a glazed-door from an adjoining storey at terrace level with that terrace edge listed in terraceOpenEdges.
+- Main outdoor living areas (terraces, decks, lanais, pool terraces, courtyards) need a walkable door from the house that opens onto them; connected masses need a door or an open connection between them.
+- glazed-door: {id,type:"glazed-door",facade,floors?,start,end,height?,operation?:"hinged"|"sliding",serves?}. It is floor-level glazing (a glass door or sliding door wall) and is walkable; use it for living rooms opening to terraces, pools and balconies.
+Do not author furniture or a full room-by-room interior; author only what makes the spaces reachable.`;
 
 export const V3_SCENE_ARCHITECT_PROMPT = `You are Terra, the single V3 Scene Architect. Return one compact persistent scene, never a V2 document.
 
@@ -119,18 +143,23 @@ Coordinate contract: X is left/right (east/west), Y is vertical elevation, and Z
 
 For high-level architectural objects—building-mass, slab, terrace, roof-form, balcony, pool, canopy, courtyard, and landscape-zone—do not calculate centre Y or author positional geometry arrays. Author architecture: {x,z,baseElevation,width,depth,height,rotationY?}. baseElevation is the object's bottom surface. The deterministic compiler derives centre Y as baseElevation + height/2, runtime position [x,centreY,z], dimensions [width,height,depth], construction slabs/walls/facades/roof, and pool/canopy vertical parts. A building-mass may additionally author levels, facade intent, roofForm, overhang and pitch. For a driveway/path surface owned by siteHierarchy.connections[].surfaceObjectId, author its stable object id, type (path or driveway), label and material, plus the connection route, width and endpoint level ids. Omit box geometry for these surfaces: V3 derives compatibility bounds and graded render geometry from the connection. Generic/unusual geometry without semantic geometry instead uses canonical transform and dimensions arrays.
 
-Top-level shape: {version:3, site, siteHierarchy?, objects, relationships?}. site: {width, depth (metres, origin-centred), naturalFall (downhill axis: "z" = toward south/+Z, "-z" = north, "x" = east, "-x" = west), naturalGrade?, cliffAt?, cliffDrop?, seaLevel?}. All elevations are absolute metres on one datum; V3 anchors the natural slope to your authored level elevations. siteHierarchy: {levels:[{id, elevation, region?:{x,z,width,depth}, supportType?: pad|terrace|terrain, access?: entry|arrival}], connections:[{id, type: driveway|path|stair|ramp, fromLevelId, toLevelId, route:[[x,y,z],...], width, surfaceObjectId?}]}. A level region may be omitted when the level's own objects (same baseElevation) and connection endpoints define it. A building-mass's levels, roofForm, overhang and pitch sit on the object (not inside architecture); massHierarchy, facadeRoles, roofDatumGroup and mainEntry sit inside its composition. material is {id, color:"#rrggbb", surface?} or a short finish description string. collision is solid|walkable|passable|water|none.
+Top-level shape: {version:3, site, estatePlan, siteHierarchy?, objects, circulation?, relationships?}. site: {width, depth (metres, origin-centred), naturalFall (downhill axis: "z" = toward south/+Z, "-z" = north, "x" = east, "-x" = west), naturalGrade?, cliffAt?, cliffDrop?, seaLevel?}. All elevations are absolute metres on one datum; V3 anchors the natural slope to your authored level elevations. siteHierarchy: {levels:[{id, elevation, region?:{x,z,width,depth}, supportType?: pad|terrace|terrain, access?: entry|arrival}], connections:[{id, type: driveway|path|stair|ramp, fromLevelId, toLevelId, route:[[x,y,z],...], width, surfaceObjectId?}]}. A level region may be omitted when the level's own objects (same baseElevation) and connection endpoints define it. A building-mass's levels, roofForm, overhang and pitch sit on the object (not inside architecture); massHierarchy, facadeRoles, roofDatumGroup and mainEntry sit inside its composition. material is {id, color:"#rrggbb", surface?} or a short finish description string. collision is solid|walkable|passable|water|none.
 
-Each object needs a stable id, semanticRole, label, geometryKind and material. geometryKind is one of box, slab, plane, cylinder, path, extrusion, water, proxy. Use semanticRole freely; type is an optional legacy/specialized compiler hint. Known hints receive richer rendering, while unknown objects always retain generic/proxy geometry.
+Each object needs a stable id, semanticRole, label, geometryKind and material. geometryKind is one of box, slab, plane, cylinder, path, extrusion, water, proxy. Use semanticRole freely; Use type:"building-mass" for inhabitable buildings and type:"roof-form" for separate roofs; geometryKind alone does not construct architecture. Supply the matching supported type for specialized amenities (pool, courtyard, terrace, canopy, veranda). Unknown types are only generic/proxy previews, not faithful fountains, sports equipment or other custom amenities. Do not present such proxies as fully constructed features.
 
 Support metadata is optional. Do not invent obvious support graphs. Omit support for buildings, slabs, roofs, balconies, canopies, pools/water, and landscape objects unless there is an unusual intentional condition such as suspension or cantilevering; deterministic geometry infers ordinary terrain/slab/host support and rejects incompatible hints. A stair/ramp may use fromSupportId and toSupportId. Keep object identity stable: edits address authored ids, never generated children. Include site hierarchy when useful; every route is world-space [x,y,z]. For sloped sites describe natural ground only at a high level (site.naturalFall = downhill axis, naturalGrade, optional cliffAt/cliffDrop distance downhill of centre, seaLevel) instead of stacking terrain regions; author pad/terrace level elevations and driveway route intent, and V3 grades the ground, driveway profiles and retaining walls. Use collision classes when known. Return one JSON object representing the V3 scene only, with no Markdown fences and no commentary before or after.
 
 ${V3_COMPOSITION_PROMPT}
 
+${V3_ESTATE_PLAN_PROMPT}\n${V3_CREATIVE_ARCHITECTURE_PROMPT}
+
+${V3_FUNCTIONAL_COMPLETENESS_PROMPT}
+
 ${V3_LUXURY_SCALE_PROMPT}`;
 
 /** Same V3 architecture/scene contract; only new-generation site policy differs. */
-export function v3SceneArchitectPrompt(terrainMode: "flat" | "advanced"): string {
+export function v3SceneArchitectPrompt(terrainMode: "flat" | "advanced", options: { blueprintFirst?: boolean } = {}): string {
+  if (options.blueprintFirst) return `${v3SceneArchitectPrompt(terrainMode)}\n\n${V3_BLUEPRINT_FIRST_PROMPT}`;
   if (terrainMode === "advanced") return V3_SCENE_ARCHITECT_PROMPT;
   return `You are Terra, the single V3 Scene Architect. Return one compact persistent scene, never a V2 document.
 
@@ -140,13 +169,17 @@ Design the architecture and site program together at the scale appropriate to th
 
 Coordinate contract: +X east, -X west, +Y up, +Z south, -Z north. Facade names are local to building yaw; site positions are world-space. Place arrival and view facades toward actual arrival courts and pools. Roof pitch is in degrees: author pitchUnit:"degrees" (or explicitly "ratio" for rise/run). Roof-form width/depth include eaves only when they equal host dimensions plus twice overhang; otherwise they are bearing dimensions. Runtime transform.position is [x,y,z] and dimensions is [width,height,depth]. High-level building-mass, slab, terrace, roof-form, balcony, pool, canopy, courtyard and landscape-zone objects use architecture: {x,z,baseElevation,width,depth,height,rotationY?}. baseElevation is the bottom, not the centre. The compiler derives runtime arrays. Preserve upper-floor elevations, storeys, roof pitch and roof geometry. Pools may be embedded below ground with their rim near ground/deck level. Ordinary decks, gardens and driveway surfaces stay near ground level. Generic geometry may use canonical transform and dimensions arrays.
 
-Top-level shape: {version:3, site:{width,depth,baseElevation:0,groundColor?}, objects, relationships?}. Omit siteHierarchy unless needed for a driveway/path route. If needed, use only elevation-0 levels, ground routes [[x,0,z],...], and no terrain transitions. Do not create site levels for architectural storeys or terraces. A connection uses {id,type:driveway|path,fromLevelId,toLevelId,route,width,surfaceObjectId?}; its surface owner needs only id, type, label and material because geometry is derived. An ordinary standalone driveway can instead be a thin ground-level slab with named architecture.
+Top-level shape: {version:3, site:{width,depth,baseElevation:0,groundColor?}, estatePlan, objects, circulation?, relationships?}. Omit siteHierarchy unless needed for a driveway/path route. If needed, use only elevation-0 levels, ground routes [[x,0,z],...], and no terrain transitions. Do not create site levels for architectural storeys or terraces. A connection uses {id,type:driveway|path,fromLevelId,toLevelId,route,width,surfaceObjectId?}; its surface owner needs only id, type, label and material because geometry is derived. An ordinary standalone driveway can instead be a thin ground-level slab with named architecture.
 
 Each object needs a stable id, semanticRole, label, material and geometryKind (box, slab, plane, cylinder, path, extrusion, water, proxy). Optional type selects specialized V3 rendering; use building-mass, roof-form, pool, terrace and other architectural types where appropriate. material is {id,color:"#rrggbb",surface?} or a short finish description. collision is solid|walkable|passable|water|none. Building levels, roofForm, overhang, pitch and facade intent belong on the object; massHierarchy, facadeRoles, roofDatumGroup and mainEntry belong inside composition. Use the full architectural composition capabilities below.
 
 Support metadata is optional for ordinary geometry; the compiler infers it. Upper architecture may use hostId or support:{kind:"object",hostId,relationship:"rests-on"}. Preserve intentional suspension/cantilevers using explicit support metadata. Architectural stairs/ramps may use fromSupportId and toSupportId referring to architectural supports. Keep object ids stable. Return one JSON object only, without Markdown or commentary.
 
 ${V3_COMPOSITION_PROMPT}
+
+${V3_ESTATE_PLAN_PROMPT}\n${V3_CREATIVE_ARCHITECTURE_PROMPT}
+
+${V3_FUNCTIONAL_COMPLETENESS_PROMPT}
 
 ${V3_LUXURY_SCALE_PROMPT}`;
 }

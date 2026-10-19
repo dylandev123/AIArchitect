@@ -13,9 +13,12 @@ const compile = (...objects: ReturnType<typeof object>[]) => {
 };
 
 describe("V3 architectural compiler audit invariants", () => {
-  it("bounds ambitious floors to height and never emits non-positive construction parts", () => {
+  it("rejects silently lost storeys while keeping legacy compilation finite", () => {
     for (const height of [.01, .2, 3, 6]) {
-      const { model, scene } = compile(object("mass", "building-mass", { levels: 100, facadePreset: "punched", architecture: { x: 0,z: 0,baseElevation: 0,width: .1,depth: .15,height } }));
+      const prepared = ingestV3GenerationOutput({ version: 3, site: { width: 50, depth: 50 }, objects: [object("mass", "building-mass", { levels: 100, facadePreset: "punched", architecture: { x: 0,z: 0,baseElevation: 0,width: .1,depth: .15,height } })] });
+      expect(prepared.ok).toBe(false);
+      expect(prepared.validation.errors.join(" ")).toContain("100 levels");
+      const scene = prepared.scene, model = compileV3Scene(scene);
       expect(model.primitives.filter((p) => p.kind === "box").every((p) => p.kind !== "box" || p.size.every((size) => size > 0))).toBe(true);
       expect(validateV3CompiledGeometry(scene, model, { lenient: true }).ok).toBe(true);
     }

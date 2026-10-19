@@ -1,0 +1,890 @@
+{
+  "attempts": [
+    {
+      "ok": false,
+      "findings": [
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "classification": "structural",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southDiningDoor crosses different south wall planes on level 0; span=[0.58,0.88], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "guidance": "Resolve this construction contract without changing unrelated forms, identities or materials."
+        },
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "classification": "structural",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southLivingDoor crosses different south wall planes on level 0; span=[0.12,0.42], local wall segments=[{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "guidance": "Resolve this construction contract without changing unrelated forms, identities or materials."
+        },
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "classification": "structural",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southUpperDoor crosses different south wall planes on level 1; span=[0.38,0.62], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "guidance": "Resolve this construction contract without changing unrelated forms, identities or materials."
+        },
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "classification": "repairable",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ],
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Pair gaps: poolTerrace→reflectionPool=0.00m; poolTerrace→sunsetLawn=10.00m; reflectionPool→sunsetLawn=0.50m; joined tolerance=0.05m.",
+          "guidance": "Preserve architectural intent and unrelated geometry. Correct only this authored route or missing access. Unsupported forms require a future geometry capability; never substitute boxes or erase commitments."
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "arrivalDrive"
+          ],
+          "message": "zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12]. arrivalDrive world plan=[[-4,-59],[4,-59],[4,-25],[-4,-25]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "entryWalk"
+          ],
+          "message": "zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12]. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "arrivalGarden"
+          ],
+          "message": "zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12]. arrivalGarden world plan=[[-26,-34],[26,-34],[26,-20],[-26,-20]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "sunsetLawn"
+          ],
+          "message": "zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56]. sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56]. southGarden world plan=[[-35,49],[35,49],[35,67],[-35,67]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "westGarden"
+          ],
+          "message": "zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27]. westGarden world plan=[[-61,11],[-25,11],[-25,41],[-61,41]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "guestWalk"
+          ],
+          "message": "zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27]. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "eastGarden"
+          ],
+          "message": "zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32]. eastGarden world plan=[[26,16],[60,16],[60,42],[26,42]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ],
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "guestWalk",
+            "guestPavilion"
+          ],
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessWalk",
+            "wellnessPavilion"
+          ],
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ],
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "advisory"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "mainRoof"
+          ],
+          "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; mainRoof world plan=[[-24.2,-13.2],[24.2,-13.2],[24.2,15.2],[-24.2,15.2]]",
+          "guidance": "Preserve supported roof choices; inspect junctions without inventing a new roof system.",
+          "classification": "advisory"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ],
+          "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]]",
+          "guidance": "Inspect the authored composition; preserve valid creative choices.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[6.439999999999998,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor threshold is 0.26 m; entryWalk surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "NO_OUTDOOR_LIVING_ACCESS",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "poolTerrace"
+          ],
+          "message": "Outdoor living area poolTerrace (700 m²) has no walkable door from the house; the facades of mainResidence toward it are glazing or solid. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Add a glazed-door (operation sliding for a door wall) on the south facade of mainResidence at ground level, overlapping poolTerrace, with serves:\"poolTerrace\"; keep the existing glazing and the area itself.",
+          "classification": "advisory"
+        },
+        {
+          "code": "NO_OUTDOOR_LIVING_ACCESS",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessPavilion",
+            "meditationCourt"
+          ],
+          "message": "Outdoor living area meditationCourt (112 m²) has no walkable door from the house; the facades of wellnessPavilion toward it are glazing or solid. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; meditationCourt world plan=[[35,19],[49,19],[49,27],[35,27]]",
+          "guidance": "Add a glazed-door (operation sliding for a door wall) on the south facade of wellnessPavilion at ground level, overlapping meditationCourt, with serves:\"meditationCourt\"; keep the existing glazing and the area itself.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_SITE_OVERRUN",
+          "classification": "repairable",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]].",
+          "guidance": "Author an in-site extent for this object. Preserve the site dimensions and unrelated architecture; do not silently clip it."
+        }
+      ],
+      "repair": [
+        "structural: FOOTPRINT_FACADE_AMBIGUOUS [mainResidence]: Opening southDiningDoor crosses different south wall planes on level 0; span=[0.58,0.88], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}}]. Author a single-plane span or explicit separate doors; it is retained but not placed. Decision required: Resolve this construction contract without changing unrelated forms, identities or materials.",
+        "structural: FOOTPRINT_FACADE_AMBIGUOUS [mainResidence]: Opening southLivingDoor crosses different south wall planes on level 0; span=[0.12,0.42], local wall segments=[{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed. Decision required: Resolve this construction contract without changing unrelated forms, identities or materials.",
+        "structural: FOOTPRINT_FACADE_AMBIGUOUS [mainResidence]: Opening southUpperDoor crosses different south wall planes on level 1; span=[0.38,0.62], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed. Decision required: Resolve this construction contract without changing unrelated forms, identities or materials.",
+        "repairable: ESTATE_FORM_UNBUILT [poolTerrace, reflectionPool, sunsetLawn]: arch-water-garden: declared connected composition lacks touching authored objects. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Pair gaps: poolTerrace→reflectionPool=0.00m; poolTerrace→sunsetLawn=10.00m; reflectionPool→sunsetLawn=0.50m; joined tolerance=0.05m. Decision required: Preserve architectural intent and unrelated geometry. Correct only this authored route or missing access. Unsupported forms require a future geometry capability; never substitute boxes or erase commitments.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [arrivalDrive]: zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12]. arrivalDrive world plan=[[-4,-59],[4,-59],[4,-25],[-4,-25]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [entryWalk]: zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12]. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [arrivalGarden]: zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12]. arrivalGarden world plan=[[-26,-34],[26,-34],[26,-20],[-26,-20]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [poolTerrace]: zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [poolTerrace]: zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [sunsetLawn]: zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56]. sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [southGarden]: zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56]. southGarden world plan=[[-35,49],[35,49],[35,67],[-35,67]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [westGarden]: zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27]. westGarden world plan=[[-61,11],[-25,11],[-25,41],[-61,41]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [guestWalk]: zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27]. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [eastGarden]: zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32]. eastGarden world plan=[[26,16],[60,16],[60,42],[26,42]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [entryWalk, mainResidence]: plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [mainResidence, guestWalk]: plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [guestWalk, guestPavilion]: plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [mainResidence, wellnessWalk]: plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [wellnessWalk, wellnessPavilion]: plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, entryWalk]: Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[6.439999999999998,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, wellnessWalk]: Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, guestWalk]: Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [guestPavilion, guestWalk]: Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [wellnessPavilion, wellnessWalk]: Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_SITE_OVERRUN [southGarden]: southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]]. Decision required: Author an in-site extent for this object. Preserve the site dimensions and unrelated architecture; do not silently clip it.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, entryWalk]: Door mainEntryDoor threshold is 0.26 m; entryWalk surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, wellnessWalk]: Door eastWellnessDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, guestWalk]: Door westGuestDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [guestPavilion, guestWalk]: Door guestEastDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [wellnessPavilion, wellnessWalk]: Door wellnessWestDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: NO_OUTDOOR_LIVING_ACCESS [mainResidence, poolTerrace]: Outdoor living area poolTerrace (700 m²) has no walkable door from the house; the facades of mainResidence toward it are glazing or solid. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: Add a glazed-door (operation sliding for a door wall) on the south facade of mainResidence at ground level, overlapping poolTerrace, with serves:\"poolTerrace\"; keep the existing glazing and the area itself.",
+        "advisory: NO_OUTDOOR_LIVING_ACCESS [wellnessPavilion, meditationCourt]: Outdoor living area meditationCourt (112 m²) has no walkable door from the house; the facades of wellnessPavilion toward it are glazing or solid. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; meditationCourt world plan=[[35,19],[49,19],[49,27],[35,27]] Decision required: Add a glazed-door (operation sliding for a door wall) on the south facade of wellnessPavilion at ground level, overlapping meditationCourt, with serves:\"meditationCourt\"; keep the existing glazing and the area itself."
+      ],
+      "corrected": {
+        "ok": true,
+        "findings": [
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "reflectionPool",
+              "poolTerrace"
+            ],
+            "message": "req-budget: budget is retained as intent; no deterministic verification is available. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+            "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "mainRoof"
+            ],
+            "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; mainRoof world plan=[[-24.2,-13.2],[24.2,-13.2],[24.2,15.2],[-24.2,15.2]]",
+            "guidance": "Preserve supported roof choices; inspect junctions without inventing a new roof system.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "poolTerrace",
+              "reflectionPool",
+              "sunsetLawn"
+            ],
+            "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,36.5],[28,36.5],[28,57],[-28,57]]",
+            "guidance": "Inspect the authored composition; preserve valid creative choices.",
+            "classification": "advisory"
+          }
+        ]
+      }
+    },
+    {
+      "ok": false,
+      "findings": [
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "classification": "repairable",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ],
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Pair gaps: poolTerrace→reflectionPool=0.00m; poolTerrace→sunsetLawn=10.00m; reflectionPool→sunsetLawn=0.50m; joined tolerance=0.05m.",
+          "guidance": "Preserve architectural intent and unrelated geometry. Correct only this authored route or missing access. Unsupported forms require a future geometry capability; never substitute boxes or erase commitments."
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "arrivalDrive"
+          ],
+          "message": "zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12]. arrivalDrive world plan=[[-4,-59],[4,-59],[4,-25],[-4,-25]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "entryWalk"
+          ],
+          "message": "zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12]. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "arrivalGarden"
+          ],
+          "message": "zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12]. arrivalGarden world plan=[[-26,-34],[26,-34],[26,-20],[-26,-20]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "sunsetLawn"
+          ],
+          "message": "zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56]. sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56]. southGarden world plan=[[-35,49],[35,49],[35,67],[-35,67]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "westGarden"
+          ],
+          "message": "zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27]. westGarden world plan=[[-61,11],[-25,11],[-25,41],[-61,41]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "guestWalk"
+          ],
+          "message": "zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27]. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ALLOCATION_CONFLICT",
+          "severity": "significant",
+          "targetIds": [
+            "eastGarden"
+          ],
+          "message": "zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32]. eastGarden world plan=[[26,16],[60,16],[60,42],[26,42]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ],
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "guestWalk",
+            "guestPavilion"
+          ],
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessWalk",
+            "wellnessPavilion"
+          ],
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "repairable"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ],
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+          "classification": "advisory"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "mainRoof"
+          ],
+          "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; mainRoof world plan=[[-23,-12],[23,-12],[23,14],[-23,14]]",
+          "guidance": "Preserve supported roof choices; inspect junctions without inventing a new roof system.",
+          "classification": "advisory"
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ],
+          "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]]",
+          "guidance": "Inspect the authored composition; preserve valid creative choices.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[4.600000000000001,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor threshold is 0.26 m; entryWalk surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "poolTerrace"
+          ],
+          "message": "Door southLivingDoor threshold is 0.26 m; poolTerrace surface is 0.14 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "poolTerrace"
+          ],
+          "message": "Door southDiningDoor threshold is 0.26 m; poolTerrace surface is 0.14 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "Author a landing or connecting path at the resolved wall; retain the door and destination.",
+          "classification": "repairable"
+        },
+        {
+          "code": "AUTHORED_ACCESS_THRESHOLD",
+          "severity": "advisory",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+          "classification": "advisory"
+        },
+        {
+          "code": "NO_OUTDOOR_LIVING_ACCESS",
+          "severity": "significant",
+          "targetIds": [
+            "wellnessPavilion",
+            "meditationCourt"
+          ],
+          "message": "Outdoor living area meditationCourt (112 m²) has no walkable door from the house; the facades of wellnessPavilion toward it are glazing or solid. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; meditationCourt world plan=[[35,19],[49,19],[49,27],[35,27]]",
+          "guidance": "Add a glazed-door (operation sliding for a door wall) on the south facade of wellnessPavilion at ground level, overlapping meditationCourt, with serves:\"meditationCourt\"; keep the existing glazing and the area itself.",
+          "classification": "advisory"
+        },
+        {
+          "code": "AUTHORED_SITE_OVERRUN",
+          "classification": "repairable",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]].",
+          "guidance": "Author an in-site extent for this object. Preserve the site dimensions and unrelated architecture; do not silently clip it."
+        }
+      ],
+      "repair": [
+        "repairable: ESTATE_FORM_UNBUILT [poolTerrace, reflectionPool, sunsetLawn]: arch-water-garden: declared connected composition lacks touching authored objects. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Pair gaps: poolTerrace→reflectionPool=0.00m; poolTerrace→sunsetLawn=10.00m; reflectionPool→sunsetLawn=0.50m; joined tolerance=0.05m. Decision required: Preserve architectural intent and unrelated geometry. Correct only this authored route or missing access. Unsupported forms require a future geometry capability; never substitute boxes or erase commitments.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [arrivalDrive]: zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12]. arrivalDrive world plan=[[-4,-59],[4,-59],[4,-25],[-4,-25]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [entryWalk]: zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12]. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [arrivalGarden]: zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12]. arrivalGarden world plan=[[-26,-34],[26,-34],[26,-20],[-26,-20]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [poolTerrace]: zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [poolTerrace]: zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56]. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [sunsetLawn]: zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56]. sunsetLawn world plan=[[-28,37],[28,37],[28,57],[-28,57]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [southGarden]: zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56]. southGarden world plan=[[-35,49],[35,49],[35,67],[-35,67]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [westGarden]: zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27]. westGarden world plan=[[-61,11],[-25,11],[-25,41],[-61,41]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [guestWalk]: zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27]. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ALLOCATION_CONFLICT [eastGarden]: zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32]. eastGarden world plan=[[26,16],[60,16],[60,42],[26,42]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [entryWalk, mainResidence]: plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [mainResidence, guestWalk]: plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [guestWalk, guestPavilion]: plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [mainResidence, wellnessWalk]: plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: ESTATE_ACCESS_DISCONNECTED [wellnessWalk, wellnessPavilion]: plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]] Decision required: Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, entryWalk]: Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[4.600000000000001,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, wellnessWalk]: Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [mainResidence, guestWalk]: Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [guestPavilion, guestWalk]: Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_ACCESS_DISCONNECTED [wellnessPavilion, wellnessWalk]: Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: Author a landing or connecting path at the resolved wall; retain the door and destination.",
+        "repairable: AUTHORED_SITE_OVERRUN [southGarden]: southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]]. Decision required: Author an in-site extent for this object. Preserve the site dimensions and unrelated architecture; do not silently clip it.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, entryWalk]: Door mainEntryDoor threshold is 0.26 m; entryWalk surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, wellnessWalk]: Door eastWellnessDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, poolTerrace]: Door southLivingDoor threshold is 0.26 m; poolTerrace surface is 0.14 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, poolTerrace]: Door southDiningDoor threshold is 0.26 m; poolTerrace surface is 0.14 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [mainResidence, guestWalk]: Door westGuestDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [guestPavilion, guestWalk]: Door guestEastDoor threshold is 0.26 m; guestWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: AUTHORED_ACCESS_THRESHOLD [wellnessPavilion, wellnessWalk]: Door wellnessWestDoor threshold is 0.26 m; wellnessWalk surface is 0.05 m. Direct stepped access may be possible, but no step-free transition is authored. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]] Decision required: If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "advisory: NO_OUTDOOR_LIVING_ACCESS [wellnessPavilion, meditationCourt]: Outdoor living area meditationCourt (112 m²) has no walkable door from the house; the facades of wellnessPavilion toward it are glazing or solid. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; meditationCourt world plan=[[35,19],[49,19],[49,27],[35,27]] Decision required: Add a glazed-door (operation sliding for a door wall) on the south facade of wellnessPavilion at ground level, overlapping meditationCourt, with serves:\"meditationCourt\"; keep the existing glazing and the area itself."
+      ],
+      "corrected": {
+        "ok": true,
+        "findings": [
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "reflectionPool",
+              "poolTerrace"
+            ],
+            "message": "req-budget: budget is retained as intent; no deterministic verification is available. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]",
+            "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "mainResidence",
+              "mainRoof"
+            ],
+            "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified. mainResidence world plan=[[-23,-12],[-4,-12],[-4,-9.6],[4.0000000000000036,-9.6],[4.0000000000000036,-12],[23,-12],[23,14],[5.059999999999999,14],[5.059999999999999,11.8],[-5.059999999999999,11.8],[-5.059999999999999,14],[-23,14]]; mainRoof world plan=[[-23,-12],[23,-12],[23,14],[-23,14]]",
+            "guidance": "Preserve supported roof choices; inspect junctions without inventing a new roof system.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "poolTerrace",
+              "reflectionPool",
+              "sunsetLawn"
+            ],
+            "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review. poolTerrace world plan=[[-25,13],[25,13],[25,27],[-25,27]]; reflectionPool world plan=[[-16,25.5],[16,25.5],[16,36.5],[-16,36.5]]; sunsetLawn world plan=[[-28,36.5],[28,36.5],[28,57],[-28,57]]",
+            "guidance": "Inspect the authored composition; preserve valid creative choices.",
+            "classification": "advisory"
+          }
+        ]
+      }
+    }
+  ]
+}

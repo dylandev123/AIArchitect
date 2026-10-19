@@ -1,9 +1,10 @@
-import { assessV3Revision } from '@/lib/v3/safeRevision';
+import { v3ConsistencyRepairInstructions } from '@/lib/v3/designConsistency';
+import { assessV3Revision, assessV3ObjectiveRevision } from '@/lib/v3/safeRevision';
 import { retainV3RevisionArtifact } from '@/lib/ai/v3FailureArtifact';
 import type { V3TerrainMode } from "@/lib/v3/terrainMode";
 import { retainV3FailureArtifact } from "@/lib/ai/v3FailureArtifact";
 import { V3_COMPOSITION_PROMPT } from "@/lib/v3/composition";
-import { reviewV3ArchitecturalComposition, v3DesignRepairInstructions } from "@/lib/v3/designReview";
+import { reviewV3Architecture, v3DesignRepairInstructions } from "@/lib/v3/designReview";
 import { NextRequest, NextResponse } from "next/server";
 import { generateText, JSONParseError, NoObjectGeneratedError, Output, TypeValidationError } from "ai";
 import { buildPatchResponseSchema, validateOperations } from "@/lib/ai/siteSchema";
@@ -64,6 +65,8 @@ import { v3SceneArchitectPrompt } from "@/lib/v3/schema";
 import { summarizeV3Generation } from "@/lib/v3/generation";
 import { recoverV3FailedPreview } from "@/lib/v3/failedPreview";
 import { ingestV3GenerationOutput } from "@/lib/v3/ingestion";
+import { v3BlueprintFirstEnabled, V3_BLUEPRINT_REPAIR_PROMPT } from '@/lib/v3/blueprintGeneration';
+import type { V3BlueprintApproval } from '@/lib/v3/blueprintApproval';
 import { fingerprint } from "@/lib/ai/usage/diagnostics";
 import type { UsageAssessment } from "@/lib/ai/usage/track";
 
@@ -465,24 +468,32 @@ export async function POST(req: NextRequest) {
 
 /** One authoritative Terra call for V3. A single repair may correct objective contract failures, never redesign it. */
 async function generateV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null, terrainMode: V3TerrainMode) {
-  const systemPrompt = v3SceneArchitectPrompt(terrainMode);
+  const blueprintFirst = v3BlueprintFirstEnabled(process.env.AI_V3_BLUEPRINT_FIRST, terrainMode);
+  const systemPrompt = v3SceneArchitectPrompt(terrainMode, { blueprintFirst });
+  let approvedBlueprint: V3BlueprintApproval | undefined;
+  let billedInput=0,billedOutput=0,billedTotal=0,billedCost=0;
   // At most one follow-up call: either an objective validation repair or, for a valid scene with genuine conflicts, one targeted revision.
-  const run = (repair?: { kind: "objective" | "design"; items: readonly string[]; plan: unknown }) => withUsageLogging(
+  const run = async (repair?: { kind: "objective" | "design"; items: readonly string[]; plan: unknown }) => { const value=await withUsageLogging(
     { projectId, requestType: "generation", scope: WORLD_SCOPE.level, model: getAiModelId(), generationMode: "v3-scene", stage: !repair ? "v3-scene-architect" : repair.kind === "design" ? "v3-scene-design-repair" : "v3-scene-repair", retryNumber: repair ? 1 : 0, retryReason: !repair ? undefined : repair.kind === "design" ? "architectural-composition-review" : "objective-scene-validation", maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS },
     // JSON mode asks the provider for JSON but deliberately supplies no exact
     // schema. The SDK may reject malformed JSON; our ingestion boundary owns
     // all normalization and canonical structural validation after parsing.
     () => generateText({ model: getAiModel(), maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS, system: systemPrompt, messages: [{ role: "user", content: !repair ? prompt
-      : repair.kind === "objective" ? `Repair this same scene plan only. Objective failures: ${JSON.stringify(repair.items.slice(0, 16))}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan ?? root.v3Scene)}`
-      : `Revise this same valid scene plan to resolve the architectural review findings below. Fix only the identified conflict. Preserve all existing object identities, mass positions/dimensions, roof families, materials, unrelated openings and assemblies, and site relationships. Collision counterpart ids are evidence, not permission to remodel them. Move or resize only the conflicting amenity; for an entry change only its door facade; for a balcony assembly change only that assembly facade. Add only an explicitly missing requested feature. Do not restart or restyle the design. Architectural review: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan)}` }], output: Output.json({ name: "v3_scene" }), providerOptions: AI_PROVIDER_OPTIONS }),
+      : repair.kind === "objective" ? `Repair this same scene plan only. Correct only diagnosed technical fields and geometric relationships. For diagnosed access gaps change only the named path extent/position, retaining the destination buildings and doors. For allocation conflicts change only the named zone allocation within the site; preserve its membership and commitments. For site overruns correct only the named non-building object extent. A joined composition requires touching geometry: correct only a diagnosed non-building member, never delete the claim. Threshold and inferred outdoor-access concerns are advisory; do not invent a redesign. Preserve object ids, materials, estatePlan intent, footprint family and segment/operation ids, all unrelated openings, geometry and relationships. An incompatible footprint roof may change only roofForm/pitch/overhang to flat, terrace, floating-flat or mono-pitch if the brief permits. Never replace a curved footprint with a rectangle, remove a required roof, or erase explicit unsupported user intent. Objective failures: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan ?? root.v3Scene)}`
+      : `Revise this same valid scene plan to resolve the architectural review findings below. Fix only the identified conflict. Preserve all existing object identities, mass positions/dimensions, roof families, materials, unrelated openings and assemblies, and site relationships. Collision counterpart ids are evidence, not permission to remodel them. Move or resize only the conflicting amenity; for an entry change only its door facade; for a balcony assembly change only that assembly facade. Add only an explicitly missing requested feature or an estate-plan object with its exact planned id. For estate access or relationship findings append only the missing planned relationship edges. Preserve estatePlan; never erase commitments to silence warnings. For a diagnosed spatial route conflict only, correct that route spatial.from, spatial.to or spatial.waypoints while preserving its ids, width, use and all other plan entries. For ESTATE_ACCESS_POINT_MISSING append only a ground door/glazed-door on the named mass if necessary. Never simplify unsupported architectural forms. For a completeness finding add only the missing access: a top-level circulation entry (stair or lift) inside the named host, door or glazed-door openings appended to that mass's existing openings, or terraceOpenEdges on that terrace. Never move masses, change roofs or materials, or rewrite existing openings to make room. Do not restart or restyle the design. Architectural review: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan)}` }], output: Output.json({ name: "v3_scene" }), providerOptions: AI_PROVIDER_OPTIONS }),
     (outcome) => "error" in outcome ? v3StructuredOutputUsageAssessment(outcome.error) : {}
   );
+    billedInput+=value.totalUsage.inputTokens??0;billedOutput+=value.totalUsage.outputTokens??0;billedTotal+=value.totalUsage.totalTokens??0;
+    billedCost+=computeCostUsd(getAiModelId(),{inputTokens:value.totalUsage.inputTokens??0,outputTokens:value.totalUsage.outputTokens??0,cachedInputTokens:value.totalUsage.inputTokenDetails?.cacheReadTokens??0})??0;
+    return value;
+  };
   let attempt: 0 | 1 = 0;
   const ingest = async (result: Awaited<ReturnType<typeof run>>) => {
     // Snapshot before normalization/repair can touch provider-owned values.
     const raw = process.env.NODE_ENV === "development" ? (result.text ?? JSON.stringify(result.output)) : undefined;
     try {
-      const prepared = ingestV3GenerationOutput(result.output, terrainMode);
+      if(result.finishReason==='length')throw new Error("V3_OUTPUT_TRUNCATED: repair reached output limit; no partial scene accepted.");
+      const prepared = ingestV3GenerationOutput(result.output, terrainMode, { requireDesignConsistency: true, requireBlueprint: blueprintFirst, approvedBlueprint });
       if (!prepared.ok) await retainV3FailureArtifact(raw, attempt, "ingestion", raw === undefined ? undefined : {
         terrainMode,
         decision: attempt === 0 ? "repair-requested" : "rejected",
@@ -500,19 +511,28 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
   };
   try {
     let result = await run();
+    if(result.finishReason==='length')return NextResponse.json({error:"Terra's V3 response reached its output limit; no incomplete scene was accepted.",code:"V3_OUTPUT_TRUNCATED"},{status:502});
     let prepared = await ingest(result);
+    approvedBlueprint = prepared.blueprintApproval;
     let repair = false, objectiveRepair = false;
     if (!prepared.ok) {
       repair = objectiveRepair = true;
       // Bounded: this is the only repair call V3 initial generation can make.
-      const failures = [...prepared.validation.errors, ...(prepared.geometryAudit?.errors ?? [])];
+      const coded=prepared.validation.issues.filter(i=>i.severity==='fatal').map(i=>`${i.code} [${(i.targetIds ?? [i.targetId]).join(', ')}]: ${i.message}`);
+      const failures=[...new Set([...(prepared.consistency ? v3ConsistencyRepairInstructions(prepared.consistency) : coded.length ? coded : prepared.validation.errors),...(prepared.geometryAudit?.errors??[])])];
+      if (blueprintFirst || prepared.blueprint) failures.unshift(V3_BLUEPRINT_REPAIR_PROMPT);
+      const originalPrepared=prepared;
       attempt = 1;
       // Repair Terra's own authored plan, not the normalized runtime scene: re-sending derived arrays
       // invites the model to rewrite intent it never authored (and a lossy copy loses intent it did).
       result = await run({ kind: "objective", items: failures, plan: result.output });
       prepared = await ingest(result);
+      if(prepared.ok){
+        const decision=assessV3ObjectiveRevision(originalPrepared.scene,prepared.scene,originalPrepared.validation.issues);
+        if(!decision.accepted){prepared.ok=false;prepared.validation.ok=false;prepared.validation.errors.push(...decision.reasons.map(r=>`OBJECTIVE_REPAIR_SCOPE: ${r}`));}
+      }
     }
-    let designReview = prepared.ok ? reviewV3ArchitecturalComposition(prepared.scene, { brief: prompt }) : undefined;
+    let designReview = prepared.ok ? reviewV3Architecture(prepared.scene, { brief: prompt }) : undefined;
     const initialDesignCodes = designReview?.diagnostics.map((d) => d.code);
     let designRevised = false;
     if (!repair && designReview?.repairRecommended) {
@@ -520,9 +540,9 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
       repair = true;
       attempt = 1;
       try {
-        const revised = await run({ kind: "design", items: v3DesignRepairInstructions(designReview), plan: result.output });
+        const revised = await run({ kind: "design", items: [...(blueprintFirst || prepared.blueprint ? [V3_BLUEPRINT_REPAIR_PROMPT] : []), ...v3DesignRepairInstructions(designReview)], plan: result.output });
         const revisedPrepared = await ingest(revised);
-        const revisedReview = revisedPrepared.ok ? reviewV3ArchitecturalComposition(revisedPrepared.scene, { brief: prompt }) : undefined;
+        const revisedReview = revisedPrepared.ok ? reviewV3Architecture(revisedPrepared.scene, { brief: prompt }) : undefined;
         const decision = revisedReview ? assessV3Revision(prepared.scene, revisedPrepared.scene, designReview, revisedReview)
           : { accepted: false, reasons: ['Revision failed objective validation.'], changedPaths: [] };
         await retainV3RevisionArtifact({ initialScene: prepared.scene, revisedScene: revisedPrepared.scene,
@@ -550,15 +570,16 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
     }
     validation.warnings.push(...(geometryAudit?.warnings ?? []));
     const audit = summarizeV3Generation(notes, validation.issues);
-    const usage = result.totalUsage;
+    const usage = {inputTokens:billedInput,outputTokens:billedOutput,totalTokens:billedTotal};
     scene.metadata = {
       ...scene.metadata,
       brief: prompt,
       terrainMode,
+      ...(blueprintFirst ? { blueprintContract: 'blueprint-first-v1' } : {}),
       generatedAt: new Date().toISOString(),
       audit: { status: audit.status, counts: audit.counts },
       designReview: { initial: initialDesignCodes ?? [], final: designReview?.diagnostics.map((d) => d.code) ?? [], revised: designRevised },
-      usage: { inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: usage.totalTokens, attempts: repair ? 2 : 1, estimatedCost: computeCostUsd(getAiModelId(), { inputTokens: usage.inputTokens ?? 0, cachedInputTokens: usage.inputTokenDetails?.cacheReadTokens ?? 0, outputTokens: usage.outputTokens ?? 0 }) ?? undefined, contextBytes: systemPrompt.length + prompt.length, schemaBytes: 0, repair },
+      usage: { inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: usage.totalTokens, attempts: repair ? 2 : 1, estimatedCost: billedCost || undefined, contextBytes: systemPrompt.length + prompt.length, schemaBytes: 0, repair },
     };
     const json = JSON.stringify({ version: 3, generationMode: "v3-scene", v3Scene: scene });
     const warnings = [...notes.map((note) => `${note.code} [${note.targetId}]: ${note.message}`), ...validation.warnings, ...(designReview?.diagnostics.filter((d) => d.severity === "significant" || d.code === "UNSUPPORTED_ARCHITECTURAL_INTENT").map((d) => `DESIGN_${d.code} [${d.targetIds.join(", ")}]: ${d.message}`) ?? [])];
@@ -591,7 +612,7 @@ async function editV3Scene(prompt: string, root: Record<string, unknown>, baseRe
   try {
     const { output } = await withUsageLogging(
       { projectId, requestType: "scoped_edit", scope: "component", model: getAiModelId(), generationMode: "v3-scene", stage: "v3-local-edit", maxOutputTokens: 1800 },
-      () => generateText({ model: getAiModel(), maxOutputTokens: 1800, system: "You are Terra editing a compact V3 scene. Return JSON {intent,operations}. Operations: setComposition {target,composition} replaces the target building mass composition (use {} to restore facade presets), create {object}, delete {target}, editArchitecture {target,architecture: partial named geometry}, changeMaterial {target,material}, duplicate {target,id,position?}, attach {target,hostId}, detach {target}, setSupport {target,support}, setConnectorEndpoints {target,fromSupportId,toSupportId}, replaceSiteHierarchy {hierarchy}. Legacy move/rotate/resize use position/rotation/dimensions. Target supplied authored stable ids only. New objects use named architecture and material intent; support metadata is optional. For an object with architecture, use editArchitecture and change named x, z, baseElevation, width, depth, or height; never rewrite its derived runtime arrays. X is left/right, Y is vertical, Z is forward/back. Canonical legacy arrays are position [x,y,z] and dimensions [width,height,depth]. Preserve unusual valid support relationships when geometry is unchanged; ordinary architectural support is compiler-inferred. If a stair/ramp changes, include setConnectorEndpoints. When an edit changes levels or routes, use replaceSiteHierarchy with the complete corrected hierarchy. Hierarchy routes are world-space [x,y,z]. Do not recreate or use V2 architecture documents." + "\n" + V3_COMPOSITION_PROMPT, messages: [{ role: "user", content: `Request: ${prompt}\nSite hierarchy: ${JSON.stringify(scene.siteHierarchy)}\nLocal scene subset: ${JSON.stringify(context)}` }], output: Output.json({ name: "v3_semantic_edit" }), providerOptions: AI_PROVIDER_OPTIONS })
+      () => generateText({ model: getAiModel(), maxOutputTokens: 1800, system: "You are Terra editing a compact V3 scene. Return JSON {intent,operations}. Operations: setComposition {target,composition} replaces the target building mass composition (use {} to restore facade presets), create {object}, delete {target}, editArchitecture {target,architecture: partial named geometry}, changeMaterial {target,material}, duplicate {target,id,position?}, attach {target,hostId}, detach {target}, setSupport {target,support}, setConnectorEndpoints {target,fromSupportId,toSupportId}, replaceSiteHierarchy {hierarchy}, replaceEstatePlan {estatePlan} (only for an explicit change of estate intent; preserve unrelated commitments and ids). Legacy move/rotate/resize use position/rotation/dimensions. Target supplied authored stable ids only. New objects use named architecture and material intent; support metadata is optional. For an object with architecture, use editArchitecture and change named x, z, baseElevation, width, depth, or height; never rewrite its derived runtime arrays. X is left/right, Y is vertical, Z is forward/back. Canonical legacy arrays are position [x,y,z] and dimensions [width,height,depth]. Preserve unusual valid support relationships when geometry is unchanged; ordinary architectural support is compiler-inferred. If a stair/ramp changes, include setConnectorEndpoints. When an edit changes levels or routes, use replaceSiteHierarchy with the complete corrected hierarchy. Hierarchy routes are world-space [x,y,z]. Do not recreate or use V2 architecture documents." + "\n" + V3_COMPOSITION_PROMPT, messages: [{ role: "user", content: `Request: ${prompt}\nEstate plan: ${JSON.stringify(scene.estatePlan)}\nSite hierarchy: ${JSON.stringify(scene.siteHierarchy)}\nLocal scene subset: ${JSON.stringify(context)}` }], output: Output.json({ name: "v3_semantic_edit" }), providerOptions: AI_PROVIDER_OPTIONS })
     );
     const applied = executeV3SceneOperations(scene, output);
     if (!applied.ok) return NextResponse.json({ error: `V3 edit was rejected atomically: ${applied.errors[0]}` }, { status: 422 });

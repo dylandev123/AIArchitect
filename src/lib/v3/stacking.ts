@@ -78,7 +78,7 @@ function localRect(o: V3SceneObject, frame: V3SceneObject) {
  * Overlap alone never qualifies: the terrace must name the host as its support and sit on its top.
  */
 export function v3RooftopTerrace(host: V3SceneObject, scene: V3Scene): V3SceneObject | undefined {
-  if (host.type !== "building-mass") return undefined;
+  if (host.type !== "building-mass" || host.composition?.footprint) return undefined;
   const [hw, , hd] = scaledDimensionsOf(host), top = getObjectTopY(host), roof = localRect(host, host);
   return scene.objects.find((o) => {
     if (o.type !== "terrace" || hostIdOf(o) !== host.id || (o.collision && o.collision !== "walkable")) return false;

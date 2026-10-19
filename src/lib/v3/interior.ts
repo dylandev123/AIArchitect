@@ -72,8 +72,34 @@ export interface V3Door {
   semanticRole: string;
 }
 
-/** `partitions`/`doors` are optional so storey/room-only scenes keep their exact persisted shape. */
-export interface V3Interior { storeys: V3Storey[]; rooms: V3Room[]; partitions?: V3Partition[]; doors?: V3Door[]; }
+export type V3StairType = "straight" | "l-shaped" | "u-shaped" | "spiral";
+export type V3PlanDirection = "north" | "south" | "east" | "west";
+
+/**
+ * Authored vertical circulation inside one host mass: a stair or lift connecting two of the host's storeys. Like
+ * rooms it carries no Y; storey indices resolve against the host's compiled floor datums. `toLevel` equal to the
+ * host's level count means its roof datum (rooftop terrace or a mass stacked on it). Treads, landings, floor
+ * openings, guards and lift shafts are derived at compile time (`circulation.ts`), never persisted.
+ */
+export interface V3Circulation {
+  id: string;
+  type: "stair" | "lift";
+  hostMassId: string;
+  fromLevel: number;
+  toLevel: number;
+  /** Plan rectangle in host-local metres (centred on the mass, before rotationY). All geometry stays inside it. */
+  footprint: V3RoomFootprint;
+  stairType?: V3StairType;
+  /** Host-local direction the first flight climbs toward (stairs), or the side the lift doors face. */
+  direction?: V3PlanDirection;
+  /** Which way an L/U stair turns at its landing, seen climbing the first flight. */
+  turn?: "left" | "right";
+  label?: string;
+  semanticRole?: string;
+}
+
+/** `partitions`/`doors`/`circulation` are optional so storey/room-only scenes keep their exact persisted shape. */
+export interface V3Interior { storeys: V3Storey[]; rooms: V3Room[]; partitions?: V3Partition[]; doors?: V3Door[]; circulation?: V3Circulation[]; }
 
 export type V3ExteriorSide = "x-" | "x+" | "z-" | "z+";
 /**
@@ -106,7 +132,7 @@ const finite = (value: unknown): value is number => typeof value === "number" &&
 const hostOf = (scene: V3Scene, id: string) => scene.objects.find((object) => object.id === id);
 
 /** Every id an interior datum owns. Object, storey, room, partition and door ids share one namespace. */
-export const v3InteriorIds = (scene: V3Scene): string[] => [...(scene.interior?.storeys ?? []), ...(scene.interior?.rooms ?? []), ...(scene.interior?.partitions ?? []), ...(scene.interior?.doors ?? [])].map((datum) => datum.id);
+export const v3InteriorIds = (scene: V3Scene): string[] => [...(scene.interior?.storeys ?? []), ...(scene.interior?.rooms ?? []), ...(scene.interior?.partitions ?? []), ...(scene.interior?.doors ?? []), ...(scene.interior?.circulation ?? [])].map((datum) => datum.id);
 
 /** Ids a scene relationship may reference: objects plus interior datums. */
 export const v3RelationshipTargetIds = (scene: V3Scene): Set<string> => new Set([...(scene.objects ?? []).map((object) => object?.id).filter((id): id is string => !!id), ...v3InteriorIds(scene)]);
@@ -228,7 +254,7 @@ export function auditV3Interior(scene: V3Scene): V3InteriorIssue[] {
   if (!Array.isArray(interior.storeys) || !Array.isArray(interior.rooms)) { issue("fatal", "INVALID_INTERIOR", "interior", "Interior needs storeys and rooms arrays."); return issues; }
   const objectIds = new Set(scene.objects.map((object) => object.id)), seen = new Set<string>();
   const claim = (id: unknown, kind: string) => {
-    if (typeof id !== "string" || !/^[a-z][a-z0-9-]{1,63}$/.test(id)) { issue("fatal", "INVALID_INTERIOR_ID", String(id), `${kind} id ${String(id)} is not a stable id.`); return false; }
+    if (typeof id !== "string" || !/^[a-zA-Z][a-zA-Z0-9-]{1,63}$/.test(id)) { issue("fatal", "INVALID_INTERIOR_ID", String(id), `${kind} id ${String(id)} is not a stable id.`); return false; }
     if (seen.has(id) || objectIds.has(id)) { issue("fatal", "DUPLICATE_SEMANTIC_ID", id, `${kind} id ${id} collides with another object, storey or room.`); return false; }
     seen.add(id); return true;
   };
@@ -279,6 +305,10 @@ export function auditV3Interior(scene: V3Scene): V3InteriorIssue[] {
     if (sharedBoundaryLength(a.footprint, b.footprint) < MIN_SHARED_BOUNDARY) issue("advisory", "ROOM_ADJACENCY_NO_SHARED_BOUNDARY", target, `Rooms ${a.id} and ${b.id} are declared adjacent but share no boundary.`);
   }
   auditPartitionsAndDoors(scene, storeys, rooms, claim, issue);
+  // Circulation is optional intent: its ids share the namespace, but its geometry findings are never fatal
+  // (`auditV3CirculationIntent` reports them so a valid exterior is never discarded for a stair detail).
+  if (interior.circulation !== undefined && !Array.isArray(interior.circulation)) issue("fatal", "INVALID_INTERIOR", "interior", "Interior circulation must be an array.");
+  else for (const entry of interior.circulation ?? []) claim(entry?.id, "Circulation");
   return issues;
 }
 
@@ -345,6 +375,11 @@ export function v3RoomAdjacency(scene: V3Scene): Map<string, Set<string>> {
  */
 export function pruneV3InteriorForDeletedObjects(scene: V3Scene, removedIds: ReadonlySet<string>): void {
   if (!scene.interior || !removedIds.size) return;
+  if (scene.interior.circulation?.some((entry) => removedIds.has(entry.hostMassId))) {
+    const dropped = new Set(scene.interior.circulation.filter((entry) => removedIds.has(entry.hostMassId)).map((entry) => entry.id));
+    scene.interior = { ...scene.interior, circulation: scene.interior.circulation.filter((entry) => !dropped.has(entry.id)) };
+    scene.relationships = scene.relationships.filter((relationship) => !dropped.has(relationship.from) && !dropped.has(relationship.to));
+  }
   const storeys = scene.interior.storeys.filter((storey) => !removedIds.has(storey.hostMassId));
   const removedStoreys = new Set(scene.interior.storeys.filter((storey) => removedIds.has(storey.hostMassId)).map((storey) => storey.id));
   const rooms = scene.interior.rooms.filter((room) => !removedIds.has(room.hostMassId) && !removedStoreys.has(room.storeyId));

@@ -136,13 +136,14 @@ describe("V3 provider-shape canonicalization", () => {
     expect(result.scene.siteHierarchy!.connections[0].route).toEqual(attempt0.siteHierarchy.connections[0].route);
   });
 
-  it("salvages a composition per entry instead of discarding all of it", () => {
+  it("retains malformed entries for rejection without discarding valid composition", () => {
     const input = mansion();
     const architecture = input.objects.find((object) => object.id === "primary-suite-wing")!.architecture as { composition: { openings: Record<string, unknown>[] } };
     architecture.composition.openings.push({ id: "broken", type: "glazing-zone", facade: "up", start: 2 });
-    const { scene, notes } = ingestV3GenerationOutput(input);
-    expect(codes(notes)).toContain("COMPOSITION_ENTRY_OMITTED:primary-suite-wing");
-    expect(scene.objects.find((object) => object.id === "primary-suite-wing")!.composition!.openings!.map((opening) => opening.id)).toEqual(["suite-south-glazing", "suite-east-rhythm", "suite-west-door"]);
+    const { scene, notes, ok } = ingestV3GenerationOutput(input);
+    expect(ok).toBe(false);
+    expect(codes(notes)).toContain("INVALID_COMPOSITION_ENTRY:primary-suite-wing");
+    expect(scene.objects.find((object) => object.id === "primary-suite-wing")!.composition!.openings!.map((opening) => opening.id)).toEqual(["suite-south-glazing", "suite-east-rhythm", "suite-west-door", "broken"]);
   });
 
   it("reads finish descriptions by their primary clause", () => {

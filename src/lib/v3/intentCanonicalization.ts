@@ -25,7 +25,7 @@ const point = (value: unknown): [number, number] | undefined => {
 };
 
 /** Building-mass design intent the compiler reads from `object.composition`. */
-const COMPOSITION_INTENT_KEYS = ["massHierarchy", "facadeRoles", "roofDatumGroup", "mainEntry"] as const;
+const COMPOSITION_INTENT_KEYS = ["footprint","spaceHeight","massHierarchy", "facadeRoles", "roofDatumGroup", "mainEntry"] as const;
 /** Object-level intent the compiler reads from the object itself. */
 const OBJECT_INTENT_KEYS = ["levels", "roofForm", "overhang", "pitch", "pitchUnit", "facadePreset", "facadeNorth", "facadeEast", "facadeSouth", "facadeWest", "composition"] as const;
 const CARDINAL_FALL: Record<string, string> = { north: "-z", south: "z", east: "x", west: "-x", "+z": "z", "+x": "x" };
@@ -57,8 +57,16 @@ export function materialFromDescription(description: string): Rec {
   return { id: slug(description), color, ...(match ? { surface: match.surface } : {}) };
 }
 
+/** Provider names for walkable floor-level glazing. Ordinary windows are never promoted to doors. */
+const GLAZED_DOOR_ALIASES: Record<string, "hinged" | "sliding"> = { "glazed-door": "hinged", "glass-door": "hinged", "french-door": "hinged", "french-doors": "hinged", "sliding-door": "sliding", "sliding-doors": "sliding", "sliding-door-wall": "sliding", "door-wall": "sliding", "glass-slider": "sliding" };
 function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Rec | undefined {
   const out: Rec = {};
+  if(raw.spaceHeight!==undefined)out.spaceHeight=raw.spaceHeight;
+  if (raw.footprint !== undefined) {
+    if (v3CompositionSchema.safeParse({footprint:raw.footprint}).success) out.footprint = raw.footprint;
+    else if(raw.footprint!==undefined){out.footprint=raw.footprint;notes.push({code:'FOOTPRINT_INVALID',targetId:id,message:`${id} malformed outline retained for rejection; no rectangular substitute is permitted.`});}
+    else notes.push({code:'FOOTPRINT_INVALID',targetId:id,message:`${id} malformed footprint omitted; rectangular fallback retained.`});
+  }
   const massHierarchy = text(raw.massHierarchy)?.toLowerCase();
   if (massHierarchy && ["primary", "secondary", "connector"].includes(massHierarchy)) out.massHierarchy = massHierarchy;
   else if (raw.massHierarchy !== undefined) notes.push({ code: "COMPOSITION_ENTRY_OMITTED", targetId: id, message: `${id} massHierarchy "${String(raw.massHierarchy)}" is not primary/secondary/connector and was omitted.` });
@@ -73,6 +81,9 @@ function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Re
   // Provider vocabulary drift on otherwise-valid entries: descriptive frame finishes and stray keys.
   const openings = (Array.isArray(raw.openings) ? raw.openings : []).filter(isRecord).map((opening): Rec => {
     const { frame, ...rest } = opening;
+    const alias = GLAZED_DOOR_ALIASES[String(rest.type ?? "").toLowerCase().replace(/[\s_]+/g, "-")];
+    // A glazed door has no structural surround; the descriptive finish is dropped rather than inventing one.
+    if (alias) return { ...rest, type: "glazed-door", ...(alias === "sliding" && rest.operation === undefined ? { operation: "sliding" } : {}) };
     return { ...rest, ...(frame === undefined ? {} : { frame: typeof frame === "boolean" ? frame : !!text(frame) }) };
   });
   const mainEntry = isRecord(raw.mainEntry) ? raw.mainEntry : undefined;
@@ -82,7 +93,7 @@ function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Re
     // A door named as the main entry is a ground-floor door by definition.
     const candidate = opening.type === "door" && opening.id === entryId && opening.floors === undefined ? { ...opening, floors: "ground" } : opening;
     if (v3CompositionSchema.safeParse({ openings: [candidate] }).success) keptOpenings.push(candidate);
-    else notes.push({ code: "COMPOSITION_ENTRY_OMITTED", targetId: id, message: `${id} opening ${String(opening.id ?? "(unnamed)")} is malformed and was omitted; the other openings were kept.` });
+    else {keptOpenings.push(candidate);notes.push({code:"INVALID_COMPOSITION_ENTRY",targetId:id,message:`${id} opening ${String(opening.id??"(unnamed)")} is invalid and retained for correction.`});}
   }
   // An empty openings list means "every facade solid"; when nothing authored survives, fall back to facade presets instead.
   if (keptOpenings.length) out.openings = keptOpenings;
@@ -92,7 +103,7 @@ function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Re
   for (const assembly of (Array.isArray(raw.assemblies) ? raw.assemblies : []).filter(isRecord)) {
     const candidate = { id: assembly.id, intent: text(assembly.intent) ?? String(assembly.id ?? "assembly"), parts: Array.isArray(assembly.parts) ? assembly.parts : [] };
     if (v3CompositionSchema.safeParse({ assemblies: [candidate] }).success) keptAssemblies.push(candidate);
-    else notes.push({ code: "COMPOSITION_ENTRY_OMITTED", targetId: id, message: `${id} assembly ${String(assembly.id ?? "(unnamed)")} is malformed and was omitted; the other assemblies were kept.` });
+    else {keptAssemblies.push(candidate);notes.push({code:"INVALID_COMPOSITION_ENTRY",targetId:id,message:`${id} assembly ${String(assembly.id??"(unnamed)")} is invalid and retained for correction.`});}
   }
   if (keptAssemblies.length) out.assemblies = keptAssemblies;
   if (mainEntry && entryId) {
@@ -100,13 +111,13 @@ function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Re
     const color = typeof mainEntry.color === "string" && /^#[0-9a-fA-F]{6}$/.test(mainEntry.color) ? mainEntry.color : undefined;
     const entry = { openingId: entryId, canopyDepth, ...(color ? { color } : {}) };
     if (v3CompositionSchema.safeParse({ ...out, mainEntry: entry }).success) out.mainEntry = entry;
-    else notes.push({ code: "COMPOSITION_ENTRY_OMITTED", targetId: id, message: `${id} mainEntry ${entryId} does not reference a kept ground-floor door and was omitted.` });
+    else {out.mainEntry=entry;notes.push({code:"INVALID_COMPOSITION_ENTRY",targetId:id,message:`${id} mainEntry ${entryId} is retained for validation against its authored door.`});}
   }
   if (!Object.keys(out).length) return undefined;
   const parsed = v3CompositionSchema.safeParse(out);
-  if (parsed.success) return out;
+  if (parsed.success || (out.footprint!==undefined)) return out;
   notes.push({ code: "COMPOSITION_FALLBACK", targetId: id, message: `${id} composition remained inconsistent after per-entry salvage (${parsed.error.issues[0]?.message ?? "invalid"}); facade presets are used.` });
-  return undefined;
+  return out;
 }
 
 function canonicalizeObject(raw: unknown, sceneMainEntry: Rec | undefined, notes: V3GenerationNote[]): unknown {
@@ -285,6 +296,14 @@ export function canonicalizeV3ProviderIntent(input: unknown, notes: V3Generation
   delete raw.mainEntry;
   if (Array.isArray(raw.objects)) raw.objects = raw.objects.map((object) => canonicalizeObject(object, sceneMainEntry, notes));
   if (sceneMainEntry && !(raw.objects as unknown[] ?? []).some((object) => isRecord(object) && isRecord(object.composition) && isRecord(object.composition.mainEntry))) notes.push({ code: "COMPOSITION_ENTRY_OMITTED", targetId: "scene", message: `mainEntry ${String(sceneMainEntry.openingId)} references no authored building door and was omitted.` });
+  // A textual commitment accidentally wrapped as range:{value} has one lossless
+  // representation. Numeric ranges and conflicting values remain validation errors.
+  if(isRecord(raw.estatePlan)&&Array.isArray(raw.estatePlan.requirements))raw.estatePlan={...raw.estatePlan,requirements:raw.estatePlan.requirements.map(req=>{
+    if(!isRecord(req)||req.value!==undefined||!isRecord(req.range)||Object.keys(req.range).length!==1||typeof req.range.value!=='string')return req;
+    const {range,...rest}=req;
+    notes.push({code:'INTENT_RELOCATED',targetId:String(req.id),message:'Textual estate requirement range.value moved to value without changing its content.'});
+    return {...rest,value:range.value};
+  })};
   canonicalizeSite(raw, notes);
   canonicalizeHierarchy(raw, notes);
   return raw;

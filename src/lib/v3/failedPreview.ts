@@ -1,3 +1,4 @@
+import { v3CompositionSchema } from './composition';
 import { normalizeV3FlatSite, v3FlatSiteErrors, type V3TerrainMode } from "./terrainMode";
 import { normalizeObject, normalizeV3GenerationOutput, normalizeV3SiteObjectGeometry, type V3GenerationNote } from "./generation";
 import { isV3ArchitecturalGeometry } from "./architecture";
@@ -98,7 +99,12 @@ function objectOf(value: unknown, index: number, diagnostics: V3FailedPreviewDia
   }
   if (!string(value.semanticRole, 80) || !string(value.label, 100)) diagnostics.normalizedFields.push(`${value.id}: filled missing semanticRole/label for preview`);
   const authoredLevels = finite(value.levels) && Number.isInteger(value.levels) && value.levels >= 1 ? value.levels : undefined;
+  const composition=value.composition===undefined?undefined:v3CompositionSchema.safeParse(value.composition);
+  if(composition&&!composition.success){diagnostics.skippedObjectIds.push(objectId);diagnostics.renderWarnings.push({code:'INVALID_COMPOSITION',targetId:objectId,message:'Invalid architectural composition omitted from failed preview; no rectangular substitute built.'});return undefined;}
   const object: V3SceneObject = {
+    ...(composition?.success?{composition:composition.data}:{}),
+    ...(isRecord(value.unsupportedIntent)&&typeof value.unsupportedIntent.roofForm==='string'?{unsupportedIntent:{roofForm:value.unsupportedIntent.roofForm}}:{}),
+    ...(value.pitchUnit==='ratio'||value.pitchUnit==='degrees'?{pitchUnit:value.pitchUnit}:{}),
     id: value.id,
     type: string(value.type, 80) ? value.type : value.geometryKind === "path" ? "path" : value.geometryKind === "water" ? "water-surface" : value.geometryKind === "proxy" ? "proxy-asset" : "volume",
     semanticRole: string(value.semanticRole, 80) ? value.semanticRole : string(value.type, 80) ? value.type : "unlabelled object",
@@ -118,7 +124,7 @@ function objectOf(value: unknown, index: number, diagnostics: V3FailedPreviewDia
     ...(value.facadeEast === "glass-heavy" || value.facadeEast === "punched" || value.facadeEast === "solid" || value.facadeEast === "privacy" ? { facadeEast: value.facadeEast } : {}),
     ...(value.facadeSouth === "glass-heavy" || value.facadeSouth === "punched" || value.facadeSouth === "solid" || value.facadeSouth === "privacy" ? { facadeSouth: value.facadeSouth } : {}),
     ...(value.facadeWest === "glass-heavy" || value.facadeWest === "punched" || value.facadeWest === "solid" || value.facadeWest === "privacy" ? { facadeWest: value.facadeWest } : {}),
-    ...(value.roofForm === "flat" || value.roofForm === "floating-flat" || value.roofForm === "mono-pitch" || value.roofForm === "hip" || value.roofForm === "gable" || value.roofForm === "terrace" ? { roofForm: value.roofForm } : {}),
+    ...(value.roofForm === "flat" || value.roofForm === "floating-flat" || value.roofForm === "mono-pitch" || value.roofForm === "hip" || value.roofForm === "butterfly" || value.roofForm === "gable" || value.roofForm === "terrace" ? { roofForm: value.roofForm } : {}),
     ...(finite(value.overhang) && value.overhang >= 0 ? { overhang: value.overhang } : {}),
     ...(finite(value.pitch) && value.pitch >= 0 ? { pitch: Math.min(value.pitch, 89) } : {}),
   };

@@ -74,13 +74,12 @@ describe("shared construction inside V3", () => {
     expect(bad.ok).toBe(false);
     expect(bad.scene).toEqual(before);
   });
-  it("falls back on malformed generation while rejecting malformed persisted composition", () => {
+  it("rejects malformed generated and persisted composition without discarding intent", () => {
     const input = raw();
     (input.objects[0] as unknown as { composition: unknown }).composition = { openings: [{ type: "bogus" }] };
     const result = ingestV3GenerationOutput(input);
-    expect(result.validation.ok).toBe(true);
-    expect(result.notes.some(n => n.code === "COMPOSITION_FALLBACK")).toBe(true);
-    expect(compileV3Scene(result.scene).primitives.some(p => p.componentRole === "facade glazing")).toBe(true);
+    expect(result.validation.ok).toBe(false);
+    expect(result.scene.objects[0].composition?.openings).toEqual([{ type: "bogus" }]);
     const persisted = scene();
     (persisted.objects[0] as unknown as { composition: unknown }).composition = { openings: "bad" };
     expect(validateV3Scene(persisted, { lenient: true }).ok).toBe(false);

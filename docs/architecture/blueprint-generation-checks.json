@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-19",
+  "offline": true,
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "flag": {
+    "name": "AI_V3_BLUEPRINT_FIRST",
+    "enabledValue": "1",
+    "defaultEnabled": false,
+    "enabledInEnvironmentByThisTask": false,
+    "scope": "new flat-site V3 generations only"
+  },
+  "checks": [
+    {
+      "command": "BLUEPRINT_GENERATION_REPLAY_OUTPUT=docs/architecture/blueprint-generation-replay.json npx vitest run src/lib/v3/__tests__/blueprintGeneration.test.ts src/lib/v3/__tests__/blueprint.test.ts src/store/__tests__/v3BlueprintPersistence.test.ts src/app/api/ai/house/__tests__/route.v3.test.ts --maxWorkers=2",
+      "exitCode": 0,
+      "passedFiles": 4,
+      "passedTests": 110
+    },
+    {
+      "command": "npx vitest run --maxWorkers=2",
+      "exitCode": 0,
+      "passedFiles": 170,
+      "skippedFiles": 2,
+      "passedTests": 2030,
+      "skippedTests": 3
+    },
+    { "command": "npx tsc --noEmit", "exitCode": 0 },
+    { "command": "npm run lint -- --max-warnings=0", "exitCode": 0 },
+    { "command": "git diff --check", "exitCode": 0 },
+    { "command": "explicit whitespace scan of new and previously untracked files touched by this task", "exitCode": 0 }
+  ],
+  "fixtureResults": {
+    "schemaValidProviderShapedDesigns": 5,
+    "validDesignsAccepted": 5,
+    "validDesignFailureRate": 0,
+    "contradictoryVariantsRejected": 6,
+    "malformedBlueprintVariantsRejected": 4,
+    "replay": "blueprint-generation-replay.json"
+  },
+  "providerFailureRateMeasured": false,
+  "creativeQualityImprovementEstablished": false,
+  "recommendedNextStep": "Keep the flag off for normal users; a small separately authorized development/staging live evaluation is justified."
+}

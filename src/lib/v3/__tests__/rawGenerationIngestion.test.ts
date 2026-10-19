@@ -95,10 +95,10 @@ describe("V3 raw generation ingestion", () => {
     delete (missingGeometry.objects[2] as Record<string, unknown>).geometryKind;
 
     const cases = [flatRoof, highLevels, missingHost, missingGeometry].map(raw => ingestV3GenerationOutput(raw));
-    expect(cases.every((result) => result.ok)).toBe(true);
+    expect(cases.map(result => result.ok)).toEqual([true, false, true, true]);
     expect(cases[0].scene.objects[8]).toMatchObject({ roofForm: "flat", pitch: 0 });
     expect(cases[1].scene.objects[8].levels).toBe(27);
-    expect(cases[1].validation.warnings.join("\n")).toContain("LEVEL_COUNT_APPROXIMATED [cottage-part-0]");
+    expect(cases[1].validation.errors.join("\n")).toContain("27 levels");
     expect(cases[2].notes).toEqual(expect.arrayContaining([expect.objectContaining({ code: "UNRESOLVED_SUPPORT", targetId: "main-terrace-slab" })]));
     expect(cases[3].scene.objects[2].geometryKind).toBe("slab");
   });
@@ -155,5 +155,18 @@ describe("V3 raw generation ingestion", () => {
     expect(ingestV3GenerationOutput(nonPositive).validation.issues).toEqual(expect.arrayContaining([expect.objectContaining({ code: "INVALID_TRANSFORM", severity: "fatal" })]));
     expect(ingestV3GenerationOutput(badSite).validation.issues).toEqual(expect.arrayContaining([expect.objectContaining({ code: "INVALID_SITE", severity: "fatal" })]));
     expect(ingestV3GenerationOutput(empty).validation.issues).toEqual(expect.arrayContaining([expect.objectContaining({ code: "EMPTY_SCENE", severity: "fatal" })]));
+  });
+
+  it("unwraps only a lossless transport envelope and never invents a scene", () => {
+    const scene = { version: 3, site: { width: 60, depth: 60, baseElevation: 0 }, objects: [rawObject("house", "volume", "main house", [8, 3, 8], [0, 1.5, 0])], relationships: [] };
+    const plain = ingestV3GenerationOutput(scene, "flat");
+    expect(plain.ok).toBe(true);
+    for (const wrapped of [{ version: 3, generationMode: "v3-scene", v3Scene: scene }, { scene }, JSON.stringify(scene)]) {
+      const result = ingestV3GenerationOutput(wrapped, "flat");
+      expect(result.ok).toBe(true);
+      expect(result.scene.objects).toEqual(plain.scene.objects);
+    }
+    expect(ingestV3GenerationOutput({ v3Scene: scene }, "flat").notes.map((n) => n.code)).toContain("PROVIDER_ENVELOPE_UNWRAPPED");
+    for (const bad of [{ v3Scene: {} }, { v3Scene: { objects: [] } }, [scene], "not json", null, { scene: "x" }]) expect(ingestV3GenerationOutput(bad, "flat").ok).toBe(false);
   });
 });

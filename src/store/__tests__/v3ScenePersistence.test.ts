@@ -10,6 +10,59 @@ function browser() {
 async function store() { vi.resetModules(); return (await import("../useProjectStore")).useProjectStore; }
 
 describe("V3 scene project persistence", () => {
+  it("refuses unsupported curved roofs and invalid outlines before appending a project version", async () => {
+    const { curvedFixture } = await import("@/lib/v3/parity/curved");
+    const projects = await store(), project = projects.getState().createProject("Curve safety", "house", "v3-scene");
+    const scene = curvedFixture("circular-pavilion");
+    const saved=JSON.stringify({...BLANK_V3_SCENE,v3Scene:scene});projects.getState().appendVersion(project.id,"Valid",saved);
+    scene.objects[0].roofForm='hip';
+    expect(()=>projects.getState().appendVersion(project.id,"Roofless",JSON.stringify({...BLANK_V3_SCENE,v3Scene:scene}))).toThrow('V3 commit rejected');
+    scene.objects[0].roofForm='flat';scene.objects[0].composition!.footprint!.segments![0].radius=99;
+    expect(()=>projects.getState().appendVersion(project.id,"Invalid outline",JSON.stringify({...BLANK_V3_SCENE,v3Scene:scene}))).toThrow('V3 commit rejected');
+    expect(projects.getState().getProject(project.id)!.houseConfigJson).toBe(saved);
+  });
+
+  it("reloads an edited semantic arc through project persistence", async () => {
+    const { curvedFixture } = await import("@/lib/v3/parity/curved");
+    const { compileV3Scene } = await import("@/lib/v3/scene");
+    const scene = curvedFixture("circular-pavilion");
+    scene.objects[0].composition!.footprint!.segments![0].radius = 7.5;
+    const projects = await store(), project = projects.getState().createProject("Curved", "house", "v3-scene");
+    projects.getState().appendVersion(project.id,"Arc edit",JSON.stringify({...BLANK_V3_SCENE,v3Scene:scene}));
+    const restored = JSON.parse((await store()).getState().getProject(project.id)!.houseConfigJson).v3Scene;
+    expect(restored).toEqual(scene);
+    expect(compileV3Scene(restored)).toEqual(compileV3Scene(scene));
+  });
+
+  it("persists and reloads an edited articulated footprint with stable semantic ids", async () => {
+    const { footprintFixture } = await import("@/lib/v3/parity/nonrectangular");
+    const { executeV3SceneOperations } = await import("@/lib/v3/operations");
+    const { compileV3Scene } = await import("@/lib/v3/scene");
+    const scene = footprintFixture("l-residence"), composition = structuredClone(scene.objects[0].composition!);
+    composition.footprint!.operations = [{id:"garden-cut",type:"notch",corner:"se",width:7,depth:5}];
+    const edited = executeV3SceneOperations(scene,{intent:"Edit footprint",operations:[{op:"setComposition",target:"residence",composition}]});
+    expect(edited.ok).toBe(true);
+    const projects = await store(), project = projects.getState().createProject("Articulated", "house", "v3-scene");
+    projects.getState().appendVersion(project.id,"Footprint edit",JSON.stringify({...BLANK_V3_SCENE,v3Scene:edited.scene}));
+    const restored = JSON.parse((await store()).getState().getProject(project.id)!.houseConfigJson).v3Scene;
+    expect(restored).toEqual(edited.scene);
+    expect(compileV3Scene(restored)).toEqual(compileV3Scene(edited.scene));
+  });
+  it("saves and reloads all estate concepts and stable references after local edits", async () => {
+    const { estateFixtures } = await import("@/lib/v3/__tests__/estatePlanFixtures");
+    const { executeV3SceneOperations } = await import("@/lib/v3/operations");
+    for (const scene of estateFixtures()) {
+      const projects = await store();
+      const project = projects.getState().createProject(scene.estatePlan!.concept, "house", "v3-scene");
+      const edited = executeV3SceneOperations(scene, { intent: "Finish change", operations: [{ op: "changeMaterial", target: scene.objects[0].id, material: { id: "stone", color: "#bbaa99" } }] });
+      expect(edited.ok).toBe(true);
+      projects.getState().appendVersion(project.id, "Estate", JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: edited.scene }));
+      const restored = JSON.parse((await store()).getState().getProject(project.id)!.houseConfigJson).v3Scene;
+      expect(restored.estatePlan).toEqual(scene.estatePlan);
+      expect(restored.objects.map((o: { id: string }) => o.id)).toEqual(scene.objects.map(o => o.id));
+      expect(Object.keys(restored)).not.toContain("construction");
+    }
+  });
   it("persists terrain preferences separately from scenes and leaves V2 unset", async () => {
     const projects = await store();
     const flat = projects.getState().createProject("Flat", "house", "v3-scene");
