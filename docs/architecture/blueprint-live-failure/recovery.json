@@ -1,0 +1,334 @@
+{
+  "attempts": [
+    {
+      "version": 2,
+      "capturedAt": "2026-10-19T20:17:49.057Z",
+      "attempt": 0,
+      "phase": "ingestion",
+      "source": "provider-output",
+      "originalBytes": 23007,
+      "redacted": false,
+      "sha256": "cd3e2f4ab055d2eabea7985c218f5c429d6837472bfb313153750191d4e16090",
+      "omittedForSize": false,
+      "diagnostics": {
+        "terrainMode": "flat",
+        "decision": "repair-requested",
+        "errors": [
+          "BLUEPRINT_SITE_BOUNDS: palmGarden, level 0 exceeds the fixed 150 \u00d7 120m site.",
+          "ESTATE_ALLOCATION_CONFLICT: zone-arrival: driveway exceeds allocation x=[-29,29], z=[-58,-16].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-arrival: entryWalk exceeds allocation x=[-29,29], z=[-58,-16].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-water-garden: palmGarden exceeds allocation x=[-23,23], z=[13,47].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-guests: eastGarden exceeds allocation x=[30,60], z=[-10,24].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-guests: guestPath exceeds allocation x=[30,60], z=[-10,24].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-wellness: westGarden exceeds allocation x=[-60,-30], z=[-8,26].",
+          "ESTATE_ALLOCATION_CONFLICT: zone-wellness: wellnessPath exceeds allocation x=[-60,-30], z=[-8,26].",
+          "ESTATE_RELATIONSHIP_MISSING: rel-court-entry: missing authored connects relationship.",
+          "ESTATE_RELATIONSHIP_MISSING: rel-main-roof: missing authored hosts relationship.",
+          "ESTATE_RELATIONSHIP_MISSING: rel-east-roof: missing authored hosts relationship.",
+          "ESTATE_RELATIONSHIP_MISSING: rel-west-roof: missing authored hosts relationship.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-guests: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-wellness: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-watercourt: planned destination has no authored estate access route.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-driveway: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-entry: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-pool: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-guest: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-wellness: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented."
+        ],
+        "warnings": [
+          "ESTATE_REQUIREMENT_UNVERIFIED: req-budget: budget is retained as intent; no deterministic verification is available.",
+          "ESTATE_REQUIREMENT_UNVERIFIED: arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "BLUEPRINT_ENTRY_UNDECIDED: No entrance is designated; access intent needs an authored decision.",
+          "BLUEPRINT_ENTRY_UNDECIDED: No entrance is designated; access intent needs an authored decision."
+        ],
+        "notes": [
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "mainRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "eastWingRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "westWingRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "mainResidence",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "eastResidenceWing",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "westResidenceWing",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestPavilion",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessPavilion",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "arrivalCourt",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "driveway",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "entryWalk",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "courtyardTerrace",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "poolWalk",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "poolDeck",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "pool",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestPath",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessPath",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "arrivalGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "palmGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "eastGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "westGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "FLAT_SITE_NORMALIZED",
+            "targetId": "site",
+            "message": "[REDACTED]"
+          }
+        ],
+        "omitted": []
+      }
+    },
+    {
+      "version": 2,
+      "capturedAt": "2026-10-19T20:18:50.098Z",
+      "attempt": 1,
+      "phase": "ingestion",
+      "source": "provider-output",
+      "originalBytes": 23558,
+      "redacted": false,
+      "sha256": "bb4c970ecd729ad7a7512797b9e20a31a945f922c899505f2178e93b7e4f86a6",
+      "omittedForSize": false,
+      "diagnostics": {
+        "terrainMode": "flat",
+        "decision": "rejected",
+        "errors": [
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-residence: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-guests: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-wellness: planned destination has no authored estate access route.",
+          "ESTATE_ACCESS_MISSING: program-watercourt: planned destination has no authored estate access route.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-driveway: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-entry: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-pool: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-guest: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented.",
+          "ESTATE_ROUTE_UNSUPPORTED: route-wellness: requires one exclusive path/driveway owner and nonzero flat-ground segments without a site hierarchy; no route was invented."
+        ],
+        "warnings": [
+          "ESTATE_REQUIREMENT_UNVERIFIED: req-budget: budget is retained as intent; no deterministic verification is available.",
+          "ESTATE_REQUIREMENT_UNVERIFIED: arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "BLUEPRINT_ENTRY_UNDECIDED: No entrance is designated; access intent needs an authored decision.",
+          "BLUEPRINT_ENTRY_UNDECIDED: No entrance is designated; access intent needs an authored decision."
+        ],
+        "notes": [
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "mainRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "eastWingRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "INTENT_RELOCATED",
+            "targetId": "westWingRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "mainResidence",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "eastResidenceWing",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "westResidenceWing",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestPavilion",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessPavilion",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessRoof",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "arrivalCourt",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "driveway",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "entryWalk",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "courtyardTerrace",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "poolWalk",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "poolDeck",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "pool",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "guestPath",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "wellnessPath",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "arrivalGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "palmGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "eastGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "UNRESOLVED_SUPPORT",
+            "targetId": "westGarden",
+            "message": "[REDACTED]"
+          },
+          {
+            "code": "FLAT_SITE_NORMALIZED",
+            "targetId": "site",
+            "message": "[REDACTED]"
+          }
+        ],
+        "omitted": []
+      }
+    }
+  ]
+}

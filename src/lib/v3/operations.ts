@@ -1,3 +1,4 @@
+import { estateRouteBounds } from './routeGeometry';
 import { v3EstatePlanSchema, type V3EstatePlan } from './estatePlan';
 import { v3CompositionSchema, type V3Composition } from "./composition";
 import type { V3Scene, V3SceneObject, Vec3, V3Material } from "./scene";
@@ -156,6 +157,9 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
     }
     if (operation.op === "create") { if (get(operation.object.id)) errors.push(`Object ${operation.object.id} already exists.`); else next.objects.push(materializeV3ArchitecturalObject(operation.object)); continue; }
     const target = get(operation.target); if (!target) { errors.push(`Missing target ${operation.target}.`); continue; }
+    if (['move','rotate','resize','editArchitecture'].includes(operation.op) && next.estatePlan?.circulation.some(r=>r.spatial&&r.via.includes(target.id))) {
+      errors.push(`Route surface ${target.id} derives its geometry from estatePlan.circulation. Edit the route's authored path or width using its stable id.`);continue;
+    }
     if (operation.op === "delete") {
       const before = new Set(next.objects.map((object) => object.id));
       next.objects = next.objects.filter((object) => object.id !== target.id && object.parentId !== target.id && object.hostId !== target.id);
@@ -192,6 +196,8 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
     }
     if (target.architecture) Object.assign(target, materializeV3ArchitecturalObject(target));
   }
+  // Refresh selectable compatibility envelopes after route or named-opening edits. Occupancy stays canonical.
+  for(const object of next.objects){const bounds=estateRouteBounds(next,object);if(bounds){Object.assign(object,bounds);delete object.architecture;}}
   // Edits persist only authored intent; derived support is re-resolved at compile/audit, never written here.
   const touched = new Set(plan.operations.flatMap((operation) => operation.op === "create" ? [operation.object.id] : operation.op === "duplicate" ? [operation.id, operation.target] : "target" in operation ? [operation.target] : []));
   const repaired = repairV3GeneratedScene(next, [], { reportDerivedSupport: false, scopeIds: touched });

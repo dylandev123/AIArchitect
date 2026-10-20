@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { estateFixtures } from './estatePlanFixtures';
-import { auditEstateSpatial, estateRouteSupported } from '../estateSpatial';
+import { auditEstateSpatial, estateRoutePoints, estateRouteSupported } from '../estateSpatial';
 import { auditV3EstatePlan, v3EstatePlanSchema } from '../estatePlan';
 import { compileV3Scene, type V3Scene } from '../scene';
 import { assessV3Revision } from '../safeRevision';
@@ -36,7 +36,7 @@ describe('estate spatial realization',()=>{
     expect(codes(scene)).toContain('ESTATE_POOL_CROSSING');
     scene.estatePlan!.circulation[0].spatial!.to.openingId='window';
     expect(codes(scene)).toContain('ESTATE_ACCESS_POINT_MISSING');
-    scene.estatePlan!.circulation[0].spatial!.to.point[1]=3;
+    scene.estatePlan!.circulation[0].spatial!.to.point![1]=3;
     expect(codes(scene)).toContain('ESTATE_ROUTE_UNSUPPORTED');
   });
   it('accepts a narrowly scoped authored detour and rejects unrelated restyling or width changes',()=>{
@@ -58,7 +58,7 @@ describe('estate spatial realization',()=>{
     route.from='guest-lodge';route.to='main-residence';
     route.spatial={from:{point:[-35,0,6],openingId:'guest-lodge-door'},to:{point:[0,0,9],openingId:'main-residence-door'},width:2,use:'pedestrian',waypoints:[[-35,0,12],[0,0,12]]};
     expect(auditEstateSpatial(scene)).toEqual([]);
-    route.spatial.from.point[0]=-30;
+    route.spatial.from.point![0]=-30;
     expect(codes(scene)).toContain('ESTATE_ACCESS_POINT_MISSING');
   });
   it('checks off-centre south doors and missing planned destination access',()=>{
@@ -70,14 +70,34 @@ describe('estate spatial realization',()=>{
     scene.estatePlan!.program.push({id:'guest-program',role:'Guest lodge',kind:'building',source:'design',objectIds:['guest-lodge']});
     expect(codes(scene)).toContain('ESTATE_ACCESS_MISSING');
   });
-  it('rejects ambiguous owners and zero segments without inventing geometry',()=>{
+  it('ignores repeated adjacent waypoints but rejects a collapsed route and ambiguous owners',()=>{
     const scene=estate(), route=scene.estatePlan!.circulation[0];
-    route.spatial!.waypoints=[route.spatial!.from.point];
+    const before=compileV3Scene(scene);
+    route.spatial!.waypoints=[route.spatial!.from.point!,route.spatial!.from.point!,route.spatial!.to.point!];
+    const authored=structuredClone(route);
+    expect(estateRouteSupported(scene,route)).toBe(true);
+    expect(estateRoutePoints(route)).toEqual([route.spatial!.from.point!,route.spatial!.to.point]);
+    expect(compileV3Scene(scene)).toEqual(before);
+    expect(route).toEqual(authored);
+    const destination=route.spatial!.to.point;
+    route.spatial!.to.point=route.spatial!.from.point;
+    route.spatial!.waypoints=[route.spatial!.from.point!];
     expect(estateRouteSupported(scene,route)).toBe(false);
     expect(compileV3Scene(scene).primitives.some(p=>p.id.includes('v3-connection-estate:'))).toBe(false);
+    route.spatial!.to.point=destination;
     delete route.spatial!.waypoints;
     scene.estatePlan!.circulation.push({...route,id:'duplicate'});
     expect(estateRouteSupported(scene,route)).toBe(false);
+  });
+  it('does not demand estate paths to grouped roof components while retaining building access findings',()=>{
+    const scene=estate(), roof=structuredClone(scene.objects[0]);
+    roof.id='groupedRoof';roof.type='roof-form';
+    scene.objects.push(roof);
+    scene.estatePlan!.program[0].objectIds.push(roof.id);
+    scene.estatePlan!.program.push({id:'detached-program',role:'Detached building',kind:'building',source:'design',objectIds:['guest-lodge']});
+    const missing=auditEstateSpatial(scene).filter(d=>d.code==='ESTATE_ACCESS_MISSING');
+    expect(missing.some(d=>d.targetIds.includes(roof.id))).toBe(false);
+    expect(missing.some(d=>d.targetIds.includes('guest-lodge'))).toBe(true);
   });
   it('preserves saved modern mansions and diagnoses circular concepts instead of certifying boxes',()=>{
     for (const id of SAVED_MANSIONS) {

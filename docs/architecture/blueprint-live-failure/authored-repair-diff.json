@@ -1,0 +1,234 @@
+[
+  {
+    "path": ".estatePlan.relationships[7].intent",
+    "before": "garden route reaches wellness pavilion",
+    "after": "wellness route reaches wellness pavilion"
+  },
+  {
+    "path": ".estatePlan.zones[0].allocation.depth",
+    "before": 42,
+    "after": 50
+  },
+  {
+    "path": ".estatePlan.zones[0].allocation.z",
+    "before": -37,
+    "after": -35
+  },
+  {
+    "path": ".estatePlan.zones[2].allocation.depth",
+    "before": 34,
+    "after": 47
+  },
+  {
+    "path": ".estatePlan.zones[2].allocation.z",
+    "before": 30,
+    "after": 36.5
+  },
+  {
+    "path": ".estatePlan.zones[3].allocation.depth",
+    "before": 34,
+    "after": 62
+  },
+  {
+    "path": ".estatePlan.zones[3].allocation.width",
+    "before": 30,
+    "after": 45
+  },
+  {
+    "path": ".estatePlan.zones[3].allocation.x",
+    "before": 45,
+    "after": 37.5
+  },
+  {
+    "path": ".estatePlan.zones[3].allocation.z",
+    "before": 7,
+    "after": 8
+  },
+  {
+    "path": ".estatePlan.zones[4].allocation.depth",
+    "before": 34,
+    "after": 64
+  },
+  {
+    "path": ".estatePlan.zones[4].allocation.width",
+    "before": 30,
+    "after": 45
+  },
+  {
+    "path": ".estatePlan.zones[4].allocation.x",
+    "before": -45,
+    "after": -37.5
+  },
+  {
+    "path": ".objects[17].architecture.width",
+    "before": 2,
+    "after": 23
+  },
+  {
+    "path": ".objects[17].architecture.x",
+    "before": 31,
+    "after": 26.5
+  },
+  {
+    "path": ".objects[18].architecture.width",
+    "before": 2,
+    "after": 23
+  },
+  {
+    "path": ".objects[18].architecture.x",
+    "before": -31,
+    "after": -26.5
+  },
+  {
+    "path": ".objects[20].architecture.depth",
+    "before": 28,
+    "after": 24
+  },
+  {
+    "path": ".relationships",
+    "before": [
+      {
+        "id": "scene-rel-drive-arrival",
+        "intent": "vehicle approach joins arrival court",
+        "from": "driveway",
+        "to": "arrivalCourt",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-entry",
+        "intent": "entry path joins principal residence",
+        "from": "entryWalk",
+        "to": "mainResidence",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-east-wing",
+        "intent": "east wing joins main residence",
+        "from": "mainResidence",
+        "to": "eastResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-west-wing",
+        "intent": "west wing joins main residence",
+        "from": "mainResidence",
+        "to": "westResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-pool",
+        "intent": "courtyard terrace joins pool deck",
+        "from": "courtyardTerrace",
+        "to": "poolDeck",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-water",
+        "intent": "pool deck contains pool",
+        "from": "poolDeck",
+        "to": "pool",
+        "kind": "contains"
+      },
+      {
+        "id": "scene-rel-guest",
+        "intent": "guest path joins guest pavilion",
+        "from": "guestPath",
+        "to": "guestPavilion",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-wellness",
+        "intent": "wellness path joins wellness pavilion",
+        "from": "wellnessPath",
+        "to": "wellnessPavilion",
+        "kind": "connects"
+      }
+    ],
+    "after": [
+      {
+        "id": "scene-rel-drive-arrival",
+        "intent": "vehicle approach joins arrival court",
+        "from": "driveway",
+        "to": "arrivalCourt",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-entry",
+        "intent": "entry path joins principal residence",
+        "from": "entryWalk",
+        "to": "mainResidence",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-east-wing",
+        "intent": "east wing joins main residence",
+        "from": "mainResidence",
+        "to": "eastResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-west-wing",
+        "intent": "west wing joins main residence",
+        "from": "mainResidence",
+        "to": "westResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-pool",
+        "intent": "courtyard terrace joins pool deck",
+        "from": "courtyardTerrace",
+        "to": "poolDeck",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-water",
+        "intent": "pool deck contains pool",
+        "from": "poolDeck",
+        "to": "pool",
+        "kind": "contains"
+      },
+      {
+        "id": "scene-rel-guest",
+        "intent": "guest path joins guest pavilion",
+        "from": "guestPath",
+        "to": "guestPavilion",
+        "kind": "connects"
+      },
+      {
+        "id": "scene-rel-wellness",
+        "intent": "wellness path joins wellness pavilion",
+        "from": "wellnessPath",
+        "to": "wellnessPavilion",
+        "kind": "connects"
+      },
+      {
+        "id": "rel-court-entry",
+        "intent": "arrival court connects to principal residence",
+        "from": "arrivalCourt",
+        "to": "mainResidence",
+        "kind": "connects"
+      },
+      {
+        "id": "rel-main-roof",
+        "intent": "main roof hosts on main residence",
+        "from": "mainRoof",
+        "to": "mainResidence",
+        "kind": "hosts"
+      },
+      {
+        "id": "rel-east-roof",
+        "intent": "east wing roof hosts on east residence wing",
+        "from": "eastWingRoof",
+        "to": "eastResidenceWing",
+        "kind": "hosts"
+      },
+      {
+        "id": "rel-west-roof",
+        "intent": "west wing roof hosts on west residence wing",
+        "from": "westWingRoof",
+        "to": "westResidenceWing",
+        "kind": "hosts"
+      }
+    ]
+  }
+]

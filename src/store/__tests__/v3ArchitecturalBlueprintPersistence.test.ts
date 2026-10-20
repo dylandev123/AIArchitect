@@ -1,0 +1,33 @@
+import { afterEach,expect,it,vi } from 'vitest';
+import { crescentEstateBlueprint } from '@/lib/v3/parity/architecturalBlueprint';
+import { planV3ArchitecturalBlueprint,constructV3ArchitecturalBlueprint,checkoutV3ArchitecturalBlueprint,reviseV3ArchitecturalBlueprint } from '@/lib/v3/architecturalBlueprint';
+import { BLANK_V3_SCENE,compileV3Scene } from '@/lib/v3/scene';
+import { executeV3SceneOperations } from '@/lib/v3/operations';
+
+afterEach(()=>vi.unstubAllGlobals());
+it('stores only editable V3, then reopens and revises the current design through real project-store serialization',async()=>{
+  const data=new Map<string,string>();
+  const localStorage={getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>void data.set(key,value),removeItem:(key:string)=>void data.delete(key)};
+  vi.stubGlobal('localStorage',localStorage);vi.stubGlobal('window',{localStorage,addEventListener:()=>{}});
+  vi.resetModules();
+  const {useProjectStore}=await import('../useProjectStore');
+  const planned=planV3ArchitecturalBlueprint(crescentEstateBlueprint()),built=constructV3ArchitecturalBlueprint(planned.approval!);
+  expect(built.ok).toBe(true);
+  const edited=executeV3SceneOperations(built.scene!,{intent:'Edit the atelier finish',operations:[{op:'changeMaterial',target:'orchard-atelier',material:{id:'ochre',color:'#c49a68',surface:'stucco'}}]});
+  expect(edited.ok).toBe(true);
+  const project=useProjectStore.getState().createProject('Independent blueprint offline proof','house','v3-scene');
+  useProjectStore.getState().appendVersion(project.id,'V3 construction',JSON.stringify({...BLANK_V3_SCENE,v3Scene:edited.scene}));
+  vi.resetModules();
+  const restored=(await import('../useProjectStore')).useProjectStore.getState().getProject(project.id)!;
+  expect(restored.houseConfigJson).not.toContain('v3-architectural-blueprint-1');
+  expect(restored.houseConfigJson).not.toContain('v3-architectural-approval');
+  const scene=JSON.parse(restored.houseConfigJson).v3Scene;
+  expect(compileV3Scene(scene)).toEqual(compileV3Scene(edited.scene));
+  const checkout=checkoutV3ArchitecturalBlueprint(scene);
+  expect(checkout.findings.filter(f=>f.severity==='fatal')).toEqual([]);
+  checkout.blueprint!.buildings[0].location.x=3;
+  const revised=reviseV3ArchitecturalBlueprint(scene,checkout.approval!,checkout.blueprint);
+  expect(revised.ok).toBe(true);
+  expect(revised.scene!.objects.find(o=>o.id==='orchard-atelier')!.material.color).toBe('#c49a68');
+  expect(revised.scene!.objects.find(o=>o.id==='crescent-roof')!.architecture!.x).toBe(3);
+},20_000);

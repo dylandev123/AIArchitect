@@ -305,8 +305,8 @@ export function auditV3Interior(scene: V3Scene): V3InteriorIssue[] {
     if (sharedBoundaryLength(a.footprint, b.footprint) < MIN_SHARED_BOUNDARY) issue("advisory", "ROOM_ADJACENCY_NO_SHARED_BOUNDARY", target, `Rooms ${a.id} and ${b.id} are declared adjacent but share no boundary.`);
   }
   auditPartitionsAndDoors(scene, storeys, rooms, claim, issue);
-  // Circulation is optional intent: its ids share the namespace, but its geometry findings are never fatal
-  // (`auditV3CirculationIntent` reports them so a valid exterior is never discarded for a stair detail).
+  // Saved-scene validation keeps circulation geometry advisory and its ids in the shared namespace.
+  // New-generation consistency separately rejects objectively unusable authored circulation.
   if (interior.circulation !== undefined && !Array.isArray(interior.circulation)) issue("fatal", "INVALID_INTERIOR", "interior", "Interior circulation must be an array.");
   else for (const entry of interior.circulation ?? []) claim(entry?.id, "Circulation");
   return issues;

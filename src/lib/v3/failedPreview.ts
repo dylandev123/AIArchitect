@@ -37,12 +37,13 @@ const CONNECTION_TYPES = new Set(["driveway", "path", "stair", "ramp"]);
 const TRANSITION_TYPES = new Set(["natural-slope", "graded-slope", "retaining-edge", "stair", "ramp"]);
 const SUPPORT_TYPES = new Set(["terrain", "pad", "terrace", "slab", "deck", "roof", "object"]);
 const RELATIONSHIP_KINDS = new Set(["supports", "contains", "aligns", "connects", "hosts"]);
-const ID = /^[a-z][a-z0-9-]{1,63}$/;
 
 const isRecord = (value: unknown): value is RecordValue => !!value && typeof value === "object" && !Array.isArray(value);
 const finite = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value);
 const string = (value: unknown, max = 100): value is string => typeof value === "string" && value.length > 0 && value.length <= max;
-const id = (value: unknown): value is string => typeof value === "string" && ID.test(value);
+// Runtime ingestion requires a nonempty stable id, not the stricter provider
+// spelling convention. Recovery must preserve camelCase identities and references.
+const id = (value: unknown): value is string => typeof value === "string" && !!value.trim();
 const vector = (value: unknown, positive = false): value is Vec3 => Array.isArray(value) && value.length === 3 && value.every(finite) && (!positive || value.every((n) => n > 0));
 
 function sourceOf(value: RecordValue): V3SceneObject["source"] | undefined {

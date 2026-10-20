@@ -43,23 +43,47 @@ function blueprintValidation(audit: V3BlueprintAudit): V3Validation {
 /** Legacy/offline ingestion keeps its historical policy. The new-generation API explicitly enables design consistency; saved scenes and edits keep their existing validation/compilation. */
 export function ingestV3GenerationOutput(raw: unknown, terrainMode?: V3TerrainMode, options: V3GenerationIngestionOptions = {}): V3GenerationIngestion {
   const normalized = normalizeV3GenerationOutput(raw, terrainMode);
-  // Blueprint-bearing generations must pass BEFORE reference repair or any detailed
-  // construction audit. Historical scenes without a blueprint keep their policy.
+  // Blueprint-bearing generations must pass before reference repair or acceptance.
+  // Rejected inspectable plans may collect read-only detail diagnostics below.
+  // Historical scenes without a blueprint keep their policy.
   const checkBlueprint = options.requireBlueprint || options.approvedBlueprint || normalized.scene?.estatePlan?.blueprint !== undefined;
   const planning = checkBlueprint && !options.approvedBlueprint ? approveV3Blueprint(normalized.scene) : undefined;
   let blueprint = options.approvedBlueprint ? auditV3BlueprintElaboration(options.approvedBlueprint, normalized.scene)
     : planning ? { ok: planning.ok, findings: planning.findings } : undefined;
-  if (blueprint && !blueprint.ok) {
-    return { ok: false, scene: normalized.scene, notes: normalized.notes, blueprint, validation: blueprintValidation(blueprint) };
+  const blueprintRejected = blueprint && !blueprint.ok ? blueprint : undefined;
+  // A failed, well-formed plan must not spend its only follow-up on a partial
+  // diagnostic list. Inspect independent detail read-only, without reference
+  // repair or approval. Malformed/ambiguous prerequisites still stop here.
+  const inspectRejectedPlan = blueprintRejected && options.requireDesignConsistency
+    && !options.approvedBlueprint
+    && !blueprintRejected.findings.some(f => ['BLUEPRINT_INVALID_INPUT', 'BLUEPRINT_DUPLICATE_ID', 'BLUEPRINT_FOOTPRINT'].includes(f.code));
+  if (blueprintRejected && !inspectRejectedPlan) {
+    return { ok: false, scene: normalized.scene, notes: normalized.notes, blueprint: blueprintRejected, validation: blueprintValidation(blueprintRejected) };
   }
   const planningApproval = options.approvedBlueprint ?? planning?.approval;
-  const repaired = repairV3GeneratedScene(normalized.scene, normalized.notes);
-  if (blueprint) {
+  const repaired = inspectRejectedPlan ? normalized : repairV3GeneratedScene(normalized.scene, normalized.notes);
+  if (blueprint && !blueprintRejected) {
     // Repair may drop invalid support hints. It cannot silently revise an approved plan.
     blueprint = auditV3BlueprintElaboration(planningApproval!, repaired.scene);
     if (!blueprint.ok) return { ok: false, scene: repaired.scene, notes: repaired.notes, blueprint, validation: blueprintValidation(blueprint) };
   }
   const validation = validateV3Scene(repaired.scene, { lenient: true, requireObjects: true });
+  if (blueprintRejected) {
+    // Keep every planning rejection and every independent detail finding. The
+    // estate audit also runs in validation; merge identical findings once,
+    // retaining the planning gate's stronger severity and all target ids.
+    for (const finding of blueprintValidation(blueprintRejected).issues) {
+      const ids = finding.targetIds ?? [finding.targetId];
+      const existing = validation.issues.find(i => i.code === finding.code && ids.includes(i.targetId) && i.message === finding.message);
+      if (existing) {
+        existing.targetIds = [...new Set([...(existing.targetIds ?? [existing.targetId]), ...ids])];
+        if (finding.severity === 'fatal') existing.severity = 'fatal';
+      } else validation.issues.push(finding);
+    }
+    validation.errors = validation.issues.filter(i => i.severity === 'fatal').map(i => `${i.code}: ${i.message}`);
+    validation.warnings = validation.issues.filter(i => i.severity !== 'fatal').map(i => `${i.code} [${i.targetId}]: ${i.message}`);
+    validation.ok = false;
+  }
   if (terrainMode === "flat" && validation.ok) {
     const errors = v3FlatSiteErrors(repaired.scene);
     validation.errors.push(...errors);
@@ -79,7 +103,7 @@ export function ingestV3GenerationOutput(raw: unknown, terrainMode?: V3TerrainMo
       validation.issues.push({ code: f.code, targetId: f.targetIds[0], targetIds: f.targetIds, message: f.message, severity: 'physical' });
     }
   }
-  if (!validation.ok) return { ok: false, scene: repaired.scene, notes: repaired.notes, consistency, blueprint, blueprintApproval: planningApproval, validation };
+  if (!validation.ok) return { ok: false, scene: repaired.scene, notes: repaired.notes, consistency, blueprint, blueprintApproval: consistency?.findings.some(f=>f.classification!=='advisory'&&(f.code.startsWith('STAIR_')||f.code.startsWith('CIRCULATION_')))?undefined:planningApproval, validation };
   const geometryAudit = validateV3CompiledGeometry(repaired.scene, compileV3Scene(repaired.scene), { lenient: true });
   return { ok: geometryAudit.ok, scene: repaired.scene, notes: repaired.notes, consistency, blueprint, blueprintApproval: planningApproval, validation, geometryAudit };
 }

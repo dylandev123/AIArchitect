@@ -115,7 +115,7 @@ describe('V3 architectural blueprint foundation (offline)',()=>{
     upper.architecture={...upper.architecture!,height:3,baseElevation:9,width:8,depth:10};upper.hostId=base.id;
     upper.composition={openings:[{id:'upper-local-door',type:'door',facade:'south',floors:'ground',start:.4,end:.6}]};
     scene.objects=[base,upper,...scene.objects.filter(o=>o.type!=='building-mass')];scene.relationships=[];
-    scene.interior!.circulation![0].toLevel=3;indexBlueprint(scene);
+    scene.interior!.circulation!.push({...structuredClone(scene.interior!.circulation![0]),id:'upper-mass-stair',fromLevel:2,toLevel:3});indexBlueprint(scene);
     expect(fatal(scene)).toEqual([]);
     upper.architecture.x=8;
     expect(fatal(scene).some(f=>f.code==='BLUEPRINT_VERTICAL'&&f.targetIds.includes('upper-mass'))).toBe(true);

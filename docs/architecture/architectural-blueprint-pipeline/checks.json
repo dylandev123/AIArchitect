@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-20",
+  "timezone": "America/St_Lucia",
+  "focused": {
+    "passed": 223,
+    "failed": 0,
+    "skipped": 0,
+    "files": 11,
+    "filesWithExecutedTests": 11,
+    "filesWithOnlySkippedTests": 0
+  },
+  "full": {
+    "passed": 2167,
+    "failed": 0,
+    "skipped": 3,
+    "files": 179,
+    "filesWithExecutedTests": 177,
+    "filesWithOnlySkippedTests": 2
+  },
+  "typescript": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
+  "lint": {
+    "command": "npm run lint -- --max-warnings=0",
+    "exitCode": 0
+  },
+  "whitespace": {
+    "command": "git diff --check + explicit new source whitespace check",
+    "exitCode": 0
+  },
+  "webgl": {
+    "captures": 10,
+    "contexts": 7,
+    "pageErrors": [],
+    "blockedProviderOrProjectAttempts": [],
+    "inspected": true
+  },
+  "providerCalls": 0,
+  "commits": 0,
+  "pushes": 0,
+  "deployments": 0,
+  "note": "All tests use NATIVE_LIVE_QA=0 TEST_DATABASE_URL=. Capture uses existing production rendering components from an offline DEV harness, not an alternate renderer. Project store uses an in-memory localStorage stub."
+}

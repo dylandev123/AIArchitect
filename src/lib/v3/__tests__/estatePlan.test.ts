@@ -33,7 +33,7 @@ describe('estate master planning',()=>{
     expect(reviewV3Architecture(normalized).repairRecommended).toBe(true);
   });
   it('checks rotated allocations, reserved space, access and explicit area',()=>{
-    const scene=estateFixtures()[0]; scene.estatePlan!.zones[0].allocation.width=10;
+    const scene=estateFixtures()[0]; scene.estatePlan!.zones[0].allocation!.width=10;
     scene.estatePlan!.zones[1].clearSpace!.z=0;
     scene.relationships=[];
     scene.estatePlan!.requirements[1].range={min:100,max:100};

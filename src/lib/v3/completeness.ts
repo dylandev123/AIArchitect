@@ -1,3 +1,5 @@
+import { auditV3StairUsability, type V3StairFailure } from './stairUsability';
+import { spatialParts } from './routeGeometry';
 import { segmentLength } from './curvedFootprint';
 import { probe, facadeLength, addressedStrips } from './accessPlanning';
 import type { HousePrimitive } from "@/lib/house/types";
@@ -35,7 +37,7 @@ export type V3AccessNodeKind = "exterior" | "storey" | "roof" | "balcony" | "roo
 export interface V3AccessNode { id: string; kind: V3AccessNodeKind; ownerId: string; level?: number; elevation: number; reachable: boolean; reachableFromHouse: boolean; }
 export type V3AccessEdgeKind = "door" | "junction" | "stair" | "lift" | "connector" | "surface";
 export interface V3AccessEdge { from: string; to: string; kind: V3AccessEdgeKind; via: string; }
-export interface V3CompletenessAudit { nodes: V3AccessNode[]; edges: V3AccessEdge[]; findings: V3CompletenessFinding[]; significant: number; }
+export interface V3CompletenessAudit { nodes: V3AccessNode[]; edges: V3AccessEdge[]; findings: V3CompletenessFinding[]; significant: number; circulationFailures: V3StairFailure[]; }
 
 const LEVEL_MATCH = .35, STEP_MATCH = .6, TOUCH = .3, DOOR_REACH = 1.6, ABUT = .2;
 const ARRIVAL = /\b(drive|driveway|arrival|motor|parking|turnaround|forecourt|entry|entrance|step|steps|walk|path|service|garage)\b/i;
@@ -147,9 +149,14 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
       if (!WALKABLE_OPENING_TYPES.has(op.type) || !("start" in op) || !appliesTo(op.floors, m.storeyBase + f) || !compiledOpening(m, op.id, f)) continue;
       const reaches=addressedStrips(m, `${m.o.id}:${op.id}:reach`,op.facade,op.start,op.end,DOOR_REACH,floorY-.5,op.segmentId,f),sills=addressedStrips(m,`${m.o.id}:${op.id}:sill`,op.facade,op.start,op.end,ABUT,floorY-.5,op.segmentId,f);
       if('serves' in op&&op.serves){
-        const target=surfaces.find(s=>s.id===op.serves)??scene.objects.filter(o=>o.id===op.serves&&['path','driveway'].includes(o.type)).map(o=>({probe:o,top:getObjectTopY(o)}))[0];
+        // One curved assembly has many tangent probes. Test its complete surface,
+        // rather than treating the first strip as the whole balcony.
+        const targets=surfaces.filter(s=>s.id===op.serves);
+        const target=targets[0]??scene.objects.filter(o=>o.id===op.serves&&['path','driveway'].includes(o.type)).flatMap(o=>spatialParts(scene,o).map(probe=>({probe,top:getObjectTopY(probe)})))[0];
+        const targetParts=scene.objects.find(o=>o.id===op.serves);
+        const probes=targetParts?spatialParts(scene,targetParts):targets.length?targets.map(s=>s.probe):target?[target.probe]:[];
         if(target){
-          const meets=sills.some(sill=>footprintOverlap(sill,target.probe)>.02);
+          const meets=sills.some(sill=>probes.some(part=>footprintOverlap(sill,part)>.02));
           if(!meets)finding('AUTHORED_ACCESS_DISCONNECTED',[...(scene.estatePlan?.relationships??[]),...(scene.relationships??[])].some(r=>r.kind==='connects'&&((r.from===m.o.id&&r.to===op.serves)||(r.to===m.o.id&&r.from===op.serves)))?'significant':'advisory',[m.o.id,op.serves],
             `Door ${op.id} does not meet ${op.serves} at its resolved wall; world threshold strips=${JSON.stringify(sills.map(s=>({position:s.transform.position,dimensions:s.dimensions})))}. Proximity is not a constructed connection.`,
             'Author a landing or connecting path at the resolved wall; retain the door and destination.');
@@ -191,8 +198,9 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
   }
 
   // Authored circulation (usable only); a lift serves every storey it passes, a stair its two ends.
-  const circulation = resolveV3Circulation(scene);
-  for (const r of circulation.filter((c) => c.usable)) {
+  const circulation = resolveV3Circulation(scene), circulationFailures=auditV3StairUsability(scene,model.primitives);
+  const failedCirculation=new Set(circulationFailures.map(f=>f.targetId));
+  for (const r of circulation.filter((c) => c.usable && !failedCirculation.has(c.entry.id))) {
     const host = r.host.id, stops = r.entry.type === "lift" ? Array.from({ length: r.entry.toLevel - r.entry.fromLevel + 1 }, (_, i) => r.entry.fromLevel + i) : [r.entry.fromLevel, r.entry.toLevel];
     const target = (level: number) => {
       if (level < (massById.get(host)?.levels ?? 0)) return storeyNode(host, level);
@@ -278,7 +286,8 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
   for (const d of v3StoreyTargetingDiagnostics(scene).filter((x) => /not rendered/.test(x.message))) finding("AUTHORED_OPENING_REMOVED", "advisory", [d.targetId], d.message, `Retarget opening ${d.openingId} of ${d.targetId} to a storey it has.`);
   for (const issue of auditV3CirculationIntent(scene)) finding("CIRCULATION_INTENT_INCOMPLETE", issue.code === "CIRCULATION_OVERLAP" ? "advisory" : "significant", [issue.targetId], issue.message, issue.code === "CIRCULATION_LOCATION_MISSING"
     ? `Give ${issue.targetId} a plan rectangle (x, z, width, depth) inside its host; it is never placed automatically.` : `Correct ${issue.targetId}'s storeys or plan rectangle so a usable ${/lift/i.test(issue.message) ? "lift" : "stair"} fits inside its host; keep the host unchanged.`);
-  return { nodes: [...nodes.values()], edges, findings, significant: findings.filter((f) => f.severity === "significant").length };
+  for(const failure of circulationFailures.filter(f=>f.code.startsWith('STAIR_')))finding('CIRCULATION_INTENT_INCOMPLETE','significant',[failure.targetId],failure.message,'Correct only this diagnosed stair; preserve its identity, host, intended levels and unrelated architecture.');
+  return { circulationFailures, nodes: [...nodes.values()], edges, findings, significant: findings.filter((f) => f.severity === "significant").length };
 }
 
 /** Facade of a mass facing a plan probe, by its dominant local offset. */

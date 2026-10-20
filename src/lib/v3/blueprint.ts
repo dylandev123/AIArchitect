@@ -1,3 +1,5 @@
+import { auditV3StairUsability } from './stairUsability';
+import { resolveV3Circulation, V3_FLOOR_SLAB } from './circulation';
 import { z } from 'zod';
 import type { V3Scene, V3SceneObject } from './scene';
 import { v3EstatePlanSchema, auditV3EstatePlan } from './estatePlan';
@@ -11,6 +13,7 @@ import { v3MassLevelCount, v3StoreyBase } from './stacking';
 import { resolveV3FootprintRoofPlan } from './roofPlanning';
 import { addressedStrips } from './accessPlanning';
 import { footprintOverlap } from './reviewGeometry';
+import { estateRouteAccess } from './routeGeometry';
 
 export interface V3BlueprintFinding { code: string; severity: 'fatal' | 'advisory'; targetIds: string[]; message: string; }
 export interface V3BlueprintAudit { ok: boolean; findings: V3BlueprintFinding[]; }
@@ -48,8 +51,9 @@ function localRectangleFits(host: V3SceneObject, r: Rect, floor: number) {
   return points.every(([x,z]) => Math.abs(x)<=w/2+.001 && Math.abs(z)<=d/2+.001) && footprintContains(host,points,floor);
 }
 
-/** Read-only preliminary geometry check. Intentionally never calls validation or a construction compiler. */
-export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
+/** Read-only planning gate. Shared estate access evidence may inspect compiled junction passages;
+ * this never invokes ingestion, changes construction decisions or calls a provider. */
+export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:boolean}={}): V3BlueprintAudit {
   const findings: V3BlueprintFinding[] = [];
   const add = (code: string, targetIds: string[], message: string, severity: 'fatal' | 'advisory' = 'fatal') => findings.push({ code, severity, targetIds, message });
   const finish = () => ({ ok: !findings.some(f => f.severity === 'fatal'), findings });
@@ -95,7 +99,7 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
   }
   // Existing plan audits already check allocations, clear space, explicit constraints,
   // joined groups, route corridors, real destination thresholds and relationship edges.
-  for (const finding of auditV3EstatePlan(scene)) add(finding.code,finding.targetIds,finding.message,finding.severity==='advisory'?'advisory':'fatal');
+  for (const finding of auditV3EstatePlan(scene,options)) add(finding.code,finding.targetIds,finding.message,finding.severity==='advisory'?'advisory':'fatal');
   for (const relationship of plan.relationships) {
     const from=objects.get(relationship.from),to=objects.get(relationship.to);
     if (!from || !to) continue; // Existing estate audit reports unresolved relationships.
@@ -137,7 +141,7 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
   for (const value of bp.routeIds) if (!plan.circulation.some(r=>r.id===value)) add('BLUEPRINT_REFERENCE',[value],'Missing estate circulation route.');
   for (const route of plan.circulation) {
     if (!bp.routeIds.includes(route.id)) add('BLUEPRINT_ROUTE_UNPLANNED',[route.id],'An authored estate route is absent from the blueprint.');
-    for (const side of ['from','to'] as const) if (objects.get(route[side])?.type==='building-mass' && !bp.entrances.some(e=>e.objectId===route[side] && (!route.spatial || e.openingId===route.spatial[side].openingId)))
+    for (const side of ['from','to'] as const) if (objects.get(route[side])?.type==='building-mass' && !bp.entrances.some(e=>e.objectId===route[side] && (!route.spatial || e.level===0 && e.openingId===estateRouteAccess(scene,route,side)?.openingId)))
       add('BLUEPRINT_ROUTE_ENTRY',[route.id,route[side]],'Building destinations must reference a designated entrance.');
     if (!route.spatial) for (const side of ['from','to'] as const) {
       const host = objects.get(route[side]), surface = objects.get(side==='from'?route.via[0]:route.via.at(-1)!);
@@ -171,9 +175,11 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
     }
   }
   const connectors = scene.interior?.circulation ?? [];
+  for (const failure of auditV3StairUsability(scene)) add(failure.code,[failure.targetId],failure.message);
+  const usable = new Set(resolveV3Circulation(scene).filter(c=>c.usable).map(c=>c.entry.id));
   for (const value of bp.verticalCirculationIds) if (!connectors.some(c=>c.id===value)) add('BLUEPRINT_REFERENCE',[value],'Missing authored vertical circulation.');
-  // Preliminary reachability graph, not stair engineering: an authored reservation
-  // connects local levels; touching, explicitly connected wings share equal datums.
+  // Preliminary graph uses resolved usable endpoints; detailed physical checks run before approval.
+  // Touching, explicitly connected wings share equal datums.
   const graph = new Map<string,Set<string>>(), node = (o: V3SceneObject,l: number) => `${o.id}:${l}`;
   const link = (a: string,b: string) => { graph.set(a,new Set([...(graph.get(a) ?? []),b])); graph.set(b,new Set([...(graph.get(b) ?? []),a])); };
   for (const c of connectors) {
@@ -183,7 +189,10 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
     let fits = true;
     for (let l=c.fromLevel;l<=Math.min(c.toLevel,v3MassLevelCount(host)-1);l++) fits = localRectangleFits(host,c.footprint,l) && fits;
     if (!fits) { add('BLUEPRINT_VERTICAL',[c.id,host.id],'Stair/lift reservation leaves its host footprint.'); continue; }
-    for (let l=c.fromLevel;l<c.toLevel;l++) link(node(host,l),node(host,l+1));
+    if (!usable.has(c.id)) continue;
+    // Stairs serve their actual endpoints; only a lift stops at intermediate storeys.
+    if(c.type==='lift') for (let l=c.fromLevel;l<c.toLevel;l++) link(node(host,l),node(host,l+1));
+    else link(node(host,c.fromLevel),node(host,c.toLevel));
   }
   for (const a of buildings) for (const b of buildings) if (a.id<b.id && scene.relationships.some(r=>r.kind==='connects' && (r.from===a.id&&r.to===b.id || r.from===b.id&&r.to===a.id))) {
     for (let la=0;la<v3MassLevelCount(a);la++) for (let lb=0;lb<v3MassLevelCount(b);lb++) {
@@ -195,7 +204,7 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
     const below = objects.get(hostId(b) ?? '');
     if (below?.type==='building-mass' && Math.abs(getObjectBaseY(b)-getObjectTopY(below))<.05) {
       // A connector's top must actually land within the stacked mass, not merely its host envelope.
-      const landing = connectors.some(c=>c.hostMassId===below.id && c.toLevel===v3MassLevelCount(below) && bp.verticalCirculationIds.includes(c.id) && rectangleLandsIn(below,c.footprint,b));
+      const landing = connectors.some(c=>usable.has(c.id) && c.hostMassId===below.id && c.toLevel===v3MassLevelCount(below) && bp.verticalCirculationIds.includes(c.id) && rectangleLandsIn(below,c.footprint,b));
       if (landing) link(node(below,v3MassLevelCount(below)),node(b,0));
       else add('BLUEPRINT_VERTICAL',[b.id,below.id],'Stacked mass has no planned vertical landing inside its footprint.');
     }
@@ -210,7 +219,9 @@ export function auditV3Blueprint(input: unknown): V3BlueprintAudit {
   const rooms = scene.interior?.rooms ?? [], storeys = scene.interior?.storeys ?? [];
   for (const s of storeys) {
     const host = objects.get(s.hostMassId);
-    if (host?.type!=='building-mass' || s.index>=v3MassLevelCount(host) || Math.abs(s.elevation-s.index*scaledDimensionsOf(host)[1]/v3MassLevelCount(host))>.05 || Math.abs(s.height-scaledDimensionsOf(host)[1]/v3MassLevelCount(host))>.05) add('BLUEPRINT_STOREYS',[s.id,s.hostMassId],'Storey datum/height contradicts its building level.');
+    // V3Storey.elevation is the finished floor, as used by rooms, partitions and
+    // stairs. The structural slab datum is lower by the shared slab thickness.
+    if (host?.type!=='building-mass' || s.index>=v3MassLevelCount(host) || Math.abs(s.elevation-(s.index*scaledDimensionsOf(host)[1]/v3MassLevelCount(host)+V3_FLOOR_SLAB))>.05 || Math.abs(s.height-scaledDimensionsOf(host)[1]/v3MassLevelCount(host))>.05) add('BLUEPRINT_STOREYS',[s.id,s.hostMassId],'Finished-floor datum/height contradicts its constructed building level.');
   }
   for (const room of rooms) {
     const host = objects.get(room.hostMassId), storey = storeys.find(s=>s.id===room.storeyId && s.hostMassId===room.hostMassId);

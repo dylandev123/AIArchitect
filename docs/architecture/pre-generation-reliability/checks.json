@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-20",
+  "timezone": "America/St_Lucia",
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "commits": 0,
+  "pushes": 0,
+  "deployments": 0,
+  "focused": {
+    "passedFiles": 7,
+    "passedTests": 139,
+    "failedTests": 0
+  },
+  "fullSuite": {
+    "passedFiles": 173,
+    "skippedFiles": 2,
+    "passedTests": 2082,
+    "skippedTests": 3,
+    "failedTests": 0
+  },
+  "typescript": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
+  "eslint": {
+    "command": "npm run lint -- --max-warnings=0",
+    "exitCode": 0
+  },
+  "whitespace": {
+    "trackedCommand": "git diff --check",
+    "exitCode": 0,
+    "newFileTrailingWhitespaceScan": "passed"
+  },
+  "compatibility": {
+    "fixtureFilesHashChecked": 10,
+    "changedFixtureFiles": [],
+    "untouchedPreexistingDiffsVerified": [
+      "src/app/dev/mansion-failure/page.tsx",
+      "src/app/dev/mansion-failure/viewer.tsx",
+      "src/lib/v3/__tests__/blueprintGeneration.test.ts",
+      "src/lib/v3/__tests__/designConsistency.test.ts",
+      "src/lib/v3/__tests__/estateSpatial.test.ts",
+      "src/lib/v3/blueprint.ts",
+      "src/lib/v3/completeness.ts",
+      "src/lib/v3/estateSpatial.ts",
+      "src/lib/v3/failedPreview.ts",
+      "src/lib/v3/generation.ts",
+      "src/lib/v3/operations.ts",
+      "src/lib/v3/safeRevision.ts"
+    ],
+    "constructionBaselineTests": "footprintBaseline.test.ts and featureBaseline.test.ts passed",
+    "savedProjectsWritten": false,
+    "rendererChanged": false,
+    "V2Changed": false,
+    "terrainImplementationChanged": false
+  },
+  "adversarial": {
+    "providerShapedCases": 11,
+    "acceptedValidCases": 4,
+    "rejectedInvalidCases": 7,
+    "knownAcceptanceGaps": 1,
+    "newSuiteTests": 19,
+    "mockedApiAcceptanceGapVerified": true
+  },
+  "decision": "NO-GO for another paid generation",
+  "commands": {
+    "focused": "NATIVE_LIVE_QA=0 TEST_DATABASE_URL= PRE_GENERATION_AUDIT_OUTPUT=docs/architecture/pre-generation-reliability/replay.json npx vitest run src/lib/v3/__tests__/preGenerationReliability.test.ts src/lib/v3/__tests__/blueprintGeneration.test.ts src/lib/v3/__tests__/blueprintLiveFailure.test.ts src/lib/v3/__tests__/unifiedSpatial.test.ts src/lib/v3/__tests__/designConsistency.test.ts src/lib/v3/__tests__/scene.test.ts src/app/api/ai/house/__tests__/route.v3.test.ts --maxWorkers=2",
+    "fullSuite": "NATIVE_LIVE_QA=0 TEST_DATABASE_URL= npx vitest run --maxWorkers=2"
+  }
+}

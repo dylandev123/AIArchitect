@@ -51,8 +51,8 @@ export function functionalMansion(id: SavedMansion): V3Scene {
     addCirculation(scene, [
       // Rises through the ground mass's roof into the stacked bedroom gallery above it.
       { id: "gallery-stair", type: "stair", hostMassId: ground.id, fromLevel: 0, toLevel: 1, stairType: "u-shaped", direction: "north", turn: "right", footprint: footprint(ground, -9, -3, 2.6, 4.6), label: "Gallery stair" },
-      // Reaches the guest wing's sky terrace, with a stair head enclosure clear of the pergola.
-      { id: "sky-terrace-stair", type: "stair", hostMassId: guest.id, fromLevel: 0, toLevel: 1, stairType: "l-shaped", direction: "east", turn: "left", footprint: footprint(guest, 15, -1.85, 4.4, 3.5), label: "Sky terrace stair" },
+      // Test-author landing correction: keep the exit approach inside the terrace, clear of the pergola.
+      { id: "sky-terrace-stair", type: "stair", hostMassId: guest.id, fromLevel: 0, toLevel: 1, stairType: "l-shaped", direction: "east", turn: "left", footprint: footprint(guest, 15, -1, 4.4, 3.5), label: "Sky terrace stair" },
     ]);
   }
   if (id === "f2149916") {

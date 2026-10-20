@@ -5,6 +5,7 @@ import { Suspense, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sky } from '@react-three/drei';
 import * as THREE from 'three';
+import { recoveredCloister, explicitlyCorrectedCloister } from '@/lib/v3/parity/unifiedSpatial';
 import { compileV3Scene } from '@/lib/v3/scene';
 import { footprintDiagnostics } from '@/lib/v3/footprintDiagnostics';
 import original from '@/lib/v3/__tests__/fixtures/canopy-meridian-attempt-0.json';
@@ -30,17 +31,17 @@ const VIEWS: Record<string, View> = {
  balcony: {camera:[14,9,36],target:[0,4,13]},
  pavilions: {camera:[0,38,-70],target:[0,2,0]},
 };
-export function MansionFailureViewer({attempt}:{attempt:0|1}) {
+export function MansionFailureViewer({attempt,estate='canopy'}:{attempt:0|1;estate?:'canopy'|'cloister'|'corrected'}) {
  const views=VIEWS,names=Object.keys(views);
  const [view,setView]=useState(names[0]);
  const {primitives,audit}=useMemo(()=>{
-  const scene=ingestV3GenerationOutput(structuredClone(attempt===0?original:repaired),'flat').scene;
+  const scene=estate==='corrected'?explicitlyCorrectedCloister():estate==='cloister'?recoveredCloister(attempt):ingestV3GenerationOutput(structuredClone(attempt===0?original:repaired),'flat').scene;
   return {primitives:applyEdgeDetail(compileV3Scene(scene).primitives,RENDER_BASE_BEVEL),audit:footprintDiagnostics(scene)};
- },[attempt]);
+ },[attempt,estate]);
   const cfg = TIME_OF_DAY.midday, current = views[view];
   return <main style={{height:'100vh', display:'flex', flexDirection:'column'}}>
     <nav style={{padding:12, display:'flex', gap:16, alignItems:'center'}}>
-      <strong>Recovered mansion · attempt {attempt} · {view}</strong>
+      <strong>Offline {estate} mansion · attempt {attempt} · {view}</strong>
       {names.map(v => <button key={v} onClick={() => setView(v)}>{v}</button>)}
     </nav>
     <div style={{flex:1, minHeight:0}}>

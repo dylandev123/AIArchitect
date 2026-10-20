@@ -86,7 +86,7 @@ function lShape(run: number, across: number) {
 export function resolveV3Circulation(input: V3Scene): V3ResolvedCirculation[] {
   return resolveAll(input).resolved;
 }
-/** Every circulation finding, including entries too malformed to resolve. Never fatal: circulation is optional intent. */
+/** Read-only findings, including entries too malformed to resolve. Saved-scene validation stays lenient; generation gates objective failures. */
 export function auditV3CirculationIntent(input: V3Scene): V3CirculationIssue[] {
   return resolveAll(input).issues;
 }
@@ -218,7 +218,7 @@ function buildCirculation(r: V3ResolvedCirculation): HousePrimitive[] {
       add(`tread-${i}`, "stair tread", "stairs", x + Math.cos(angle) * mid, r.fromY + i * riser - .03, z + Math.sin(angle) * mid, [radius - .04, .06, radius * SPIRAL_STEP * 1.05], TIMBER_TREAD, -angle);
     }
     // The final tread points at the exit side; the floor opening is open on that side only.
-    const ex = Math.cos(last + SPIRAL_STEP), ez = Math.sin(last + SPIRAL_STEP);
+    const ex = Math.cos(last + SPIRAL_STEP * (r.turn === 'left' ? -1 : 1)), ez = Math.sin(last + SPIRAL_STEP * (r.turn === 'left' ? -1 : 1));
     const side: V3PlanDirection = Math.abs(ex) >= Math.abs(ez) ? (ex > 0 ? "east" : "west") : (ez > 0 ? "south" : "north");
     exits = [edgeSegment(r, side)];
   } else if (r.stairType === "u-shaped") {
@@ -256,7 +256,7 @@ function edgeSegment(r: V3ResolvedCirculation, side: V3PlanDirection): [number, 
   const along = sx * frame.ax + sz * frame.az, across = sx * frame.rx + sz * frame.rz;
   if (along > .5) return [frame.run, frame.run, -half, half];
   if (along < -.5) return [0, 0, -half, half];
-  return across > 0 ? [0, frame.run, half, half] : [0, frame.run, -half, half];
+  return across > 0 ? [0, frame.run, half, half] : [0, frame.run, -half, -half];
 }
 
 type AddPart = (suffix: string, role: string, category: HousePrimitive["category"], lx: number, y: number, lz: number, size: Vec3, finish: object, rotationY?: number) => void;
@@ -365,7 +365,8 @@ export function applyV3Circulation(scene: V3Scene, primitives: HousePrimitive[])
     for (const o of scene.objects) if ((o.type === "roof-form" && owners.has(roofHostId(o) ?? "")) || (o.type === "terrace" && owners.has(hostIdOf(o) ?? ""))) owners.add(o.id);
     const bottom = r.fromY + .05, volume = openingVolume(r, bottom, r.cutTop);
     result = result.flatMap((p) => {
-      if (!CUTTABLE.has(p.category) || !owners.has(p.sourceObjectId ?? "")) return [p];
+      const hostedTerraceSurface = p.category === 'patio' && scene.objects.some(o=>o.id===p.sourceObjectId && o.type==='terrace');
+      if ((!CUTTABLE.has(p.category) && !hostedTerraceSurface) || !owners.has(p.sourceObjectId ?? "")) return [p];
       const [lo, hi] = verticalRange(p);
       if (hi <= bottom || lo >= r.cutTop) return [p];
       const cut = subtractJunctionVolume(p, volume);
@@ -374,4 +375,44 @@ export function applyV3Circulation(scene: V3Scene, primitives: HousePrimitive[])
     result = [...result, ...buildCirculation(r)];
   }
   return result;
+}
+
+/** Actual constructed tread centres and arrival portals, shared with functional auditing. No authored geometry. */
+export function v3StairAccessGeometry(r: V3ResolvedCirculation): { entry: Vec3; exit: Vec3; walk: Vec3[] } {
+  const frame = stairFrame(r), half = frame.across / 2, sign = r.turn === 'right' ? 1 : -1;
+  let entry: [number, number] = [0, 0], exit: [number, number] = [frame.run, 0];
+  if (r.stairType === 'u-shaped') { entry = [0, -sign * half / 2]; exit = [0, sign * half / 2]; }
+  if (r.stairType === 'l-shaped') {
+    const { flight, run1 } = lShape(frame.run, frame.across);
+    entry = [0, -sign * (half - flight / 2)]; exit = [(run1 + frame.run) / 2, sign * half];
+  }
+  const yaw = r.host.transform.rotation[1];
+  const world = (p: [number, number], y: number): Vec3 => [r.host.transform.position[0] + p[0]*Math.cos(yaw)+p[1]*Math.sin(yaw), y, r.host.transform.position[2]-p[0]*Math.sin(yaw)+p[1]*Math.cos(yaw)];
+  let start = frame.point(...entry), end = frame.point(...exit);
+  if (r.stairType === 'spiral') {
+    const radius = Math.min(r.entry.footprint.width,r.entry.footprint.depth)/2-.05;
+    const risers = Math.max(2,Math.ceil((r.toY-r.fromY)/TARGET_RISER-1e-6));
+    const angle = Math.atan2(frame.az,frame.ax), last = angle+(risers-1)*SPIRAL_STEP*(r.turn==='left'?-1:1);
+    // Matches the constructed first and final radial tread; portal is on its tangent continuation.
+    start = [r.entry.footprint.x+Math.cos(angle)*radius*.65,r.entry.footprint.z+Math.sin(angle)*radius*.65];
+    end = [r.entry.footprint.x+Math.cos(last)*radius*.65,r.entry.footprint.z+Math.sin(last)*radius*.65];
+  }
+  const walk = buildCirculation(r).filter(p => p.componentRole==='stair tread'||p.componentRole==='stair landing').map(p => {
+    const box = p as Extract<HousePrimitive,{kind:'box'}>;
+    return [box.position[0],box.position[1]+box.size[1]/2,box.position[2]] as Vec3;
+  });
+  // Approaches extend beyond the reservation only along the actual arrival direction.
+  const extend = (p:[number,number],a:[number,number],distance:number):[number,number] => [p[0]+a[0]*distance,p[1]+a[1]*distance];
+  const entryDir:[number,number]=[-frame.ax,-frame.az];
+  let exitDir:[number,number]=r.stairType==='u-shaped'?entryDir:r.stairType==='l-shaped'?[sign*frame.rx,sign*frame.rz]:[frame.ax,frame.az];
+  if(r.stairType==='spiral') {
+    const angle=Math.atan2(end[1]-r.entry.footprint.z,end[0]-r.entry.footprint.x),turn=r.turn==='left'?-1:1;
+    // Use the same open edge selected by buildCirculation, then step onto the actual destination floor.
+    const ex=Math.cos(angle+SPIRAL_STEP*turn),ez=Math.sin(angle+SPIRAL_STEP*turn);
+    exitDir=Math.abs(ex)>=Math.abs(ez)?[Math.sign(ex),0]:[0,Math.sign(ez)];
+    end=[r.entry.footprint.x+exitDir[0]*r.entry.footprint.width/2,r.entry.footprint.z+exitDir[1]*r.entry.footprint.depth/2];
+    const first=Math.atan2(start[1]-r.entry.footprint.z,start[0]-r.entry.footprint.x);
+    entryDir[0]=Math.sin(first)*turn;entryDir[1]=-Math.cos(first)*turn;
+  }
+  return {entry:world(extend(start,entryDir,.45),r.fromY),exit:world(extend(end,exitDir,.45),r.toY),walk};
 }

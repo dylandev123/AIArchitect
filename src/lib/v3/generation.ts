@@ -1,3 +1,5 @@
+import { estateRouteBounds } from './routeGeometry';
+import { v3EstatePlanSchema } from './estatePlan';
 import { normalizeV3FlatSite, type V3TerrainMode } from "./terrainMode";
 import { deriveV3ConnectionBox, hasValidV3Box, isV3OptionalSiteObject } from "./siteObjectGeometry";
 import { v3CompositionSchema } from "./composition";
@@ -371,9 +373,10 @@ export function normalizeV3GenerationOutput(provider: unknown, terrainMode?: V3T
 /** Shared by production ingestion and failed-preview recovery before box validation. */
 export function normalizeV3SiteObjectGeometry(scene: V3Scene, notes: V3GenerationNote[]): void {
   if (!Array.isArray(scene.objects)) return;
+  const estateGeometrySafe=v3EstatePlanSchema.safeParse(scene.estatePlan).success;
   scene.objects = scene.objects.filter(object => {
     if (!object || typeof object !== "object") return true;
-    const derived = deriveV3ConnectionBox(object, scene.siteHierarchy);
+    const derived = deriveV3ConnectionBox(object, scene.siteHierarchy) ?? (estateGeometrySafe && scene.site ? estateRouteBounds(scene,object) : undefined);
     if (derived) {
       if (JSON.stringify(object.transform) !== JSON.stringify(derived.transform) || JSON.stringify(object.dimensions) !== JSON.stringify(derived.dimensions) || object.architecture) {
         Object.assign(object, derived);

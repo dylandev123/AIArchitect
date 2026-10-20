@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20",
+  "timezone": "America/St_Lucia",
+  "suite": {
+    "command": "NATIVE_LIVE_QA=0 TEST_DATABASE_URL= npx vitest run --maxWorkers=2 --reporter=default --reporter=json --outputFile=/tmp/aiarchitect-production-gate-final.json",
+    "success": true,
+    "passed": 2259,
+    "failed": 0,
+    "skipped": 3,
+    "files": 183,
+    "executedFiles": 181,
+    "selectedFiles": [
+      {
+        "file": "src/lib/ai/__tests__/clientV3Routing.test.ts",
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "file": "src/lib/v3/__tests__/architecturalBlueprintReliability.test.ts",
+        "passed": 39,
+        "failed": 0
+      },
+      {
+        "file": "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+        "passed": 23,
+        "failed": 0
+      }
+    ]
+  },
+  "checks": {
+    "typescript": {
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "eslint": {
+      "command": "npm run lint -- --max-warnings=0",
+      "exitCode": 0
+    },
+    "gitDiffCheck": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "newSourceWhitespace": "passed"
+  },
+  "boundaries": {
+    "paidProviderCalls": 0,
+    "featureFlagsChanged": false,
+    "environmentFilesChanged": false,
+    "savedUserProjectsWritten": false,
+    "deploymentPerformed": false,
+    "newSdkRouteTestsForbidNetwork": true,
+    "persistenceUsesInMemoryStorage": true
+  },
+  "sourceSha256": {
+    "src/app/api/ai/house/route.ts": "48333d5e7d494de836cd435c337008b09f39d7b56fff0f33c9bde50ea83aca24",
+    "src/lib/v3/architecturalBlueprint.ts": "08495aa95bdaa670a68764a8bfae2bde4cef617b76f04b82c5e6a0b10d0017d1",
+    "src/lib/v3/architecturalBlueprintGeneration.ts": "2b41a40b02d53af4a1668ba1301aa752c53cf89fdcb99b8999c782593b0cbf26",
+    "src/lib/v3/architecturalBlueprintPreflight.ts": "ae84e8071268cf64365feda8aafb0315bb081d69a28cd9befe7af15f9ee427f0",
+    "src/lib/v3/architecturalConstructionFidelity.ts": "f31a2d9c6a9919b4ce894082502d40b7ed4c23146a2c8535f121cca2cd095d83",
+    "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts": "5572053a5df6b27b7e463bd89b444e47be943a00a586eedbdeeebd5b589bd84e",
+    "src/lib/v3/__tests__/architecturalBlueprintReliability.test.ts": "7bd39010fe583dc97b93a3cb490532d3ef00609701d3196049de088602a32c61",
+    "src/lib/ai/__tests__/clientV3Routing.test.ts": "40f58f50cfad6a25c2dfae23551ec047e1de1435270c5d68e72e7d24590b73ea"
+  }
+}

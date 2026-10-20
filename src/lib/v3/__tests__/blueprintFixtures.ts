@@ -52,6 +52,11 @@ export function diverseBlueprintFixtures(): {name:string;scene:V3Scene}[] {
   const circle = curvedFixture('circular-pavilion');
   circle.estatePlan={version:1,concept:'A circular architectural residence in an uninterrupted private landscape',character:'A full arc boundary with openings addressed on the rotunda itself',requirements:[],program:[{id:'circle-program',role:'Circular residence',kind:'residence',objectIds:['residence'],source:'design'}],zones:[],circulation:[],relationships:[],considerations:[{id:'circle-privacy',kind:'privacy',intent:'Quiet perimeter planting shelters the rotunda',objectIds:['residence']}]};
   const rectangle = estateFixtures()[2];
+  // Explicit test-author correction: a single 0→2 U-flight cannot fit the rise or serve level 1.
+  // Two existing-location, single-storey stairs provide the intended three-storey access.
+  const urbanStair=rectangle.interior!.circulation![0];
+  urbanStair.toLevel=1;
+  rectangle.interior!.circulation!.push({...structuredClone(urbanStair),id:'urban-upper-stair',fromLevel:1,toLevel:2,footprint:{...urbanStair.footprint,x:3.5}});
   rectangle.estatePlan!.circulation[0].spatial={from:{point:[0,0,9]},to:{point:[0,0,8],openingId:'urban-residence-door'},use:'pedestrian',width:1.5};
   return [{name:'sculptural contemporary estate',scene:sculpture},{name:'Mediterranean compound',scene:compound},{name:'circular residence',scene:circle},{name:'rectangular home',scene:rectangle}].map(f=>({...f,scene:indexBlueprint(f.scene)}));
 }

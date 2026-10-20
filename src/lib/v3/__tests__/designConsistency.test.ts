@@ -41,11 +41,13 @@ describe('new generation consistency contract (offline)',()=>{
   expect(validateV3CompiledGeometry(result.scene,model,{lenient:true}).ok).toBe(true);
   expect(model.primitives.some(p=>p.id.startsWith('mainStair:tread-'))).toBe(true);
  });
- it('permits bounded path and allocation repairs, but refuses unrelated material, mass or commitment changes',()=>{
+ it('permits local allocation repairs, but refuses path enlargement and unrelated material, mass or commitment changes',()=>{
   const initial=ingest(repaired),next=structuredClone(initial.scene);
   const path=next.objects.find(o=>o.id==='guestWalk')!;
   path.architecture!.width=10;path.dimensions[0]=10;
-  const zone=next.estatePlan!.zones.find(z=>z.id==='zone-guests')!;zone.allocation.width+=5;
+  expect(assessV3ObjectiveRevision(initial.scene,next,initial.validation.issues).accepted).toBe(false);
+  path.architecture=structuredClone(initial.scene.objects.find(o=>o.id===path.id)!.architecture);path.dimensions[0]=3;
+  const zone=next.estatePlan!.zones.find(z=>z.id==='zone-guests')!;zone.allocation!.width+=5;
   expect(assessV3ObjectiveRevision(initial.scene,next,initial.validation.issues).accepted).toBe(true);
   const mass=next.objects.find(o=>o.id==='mainResidence')!;mass.material.color='#ffffff';
   expect(assessV3ObjectiveRevision(initial.scene,next,initial.validation.issues).accepted).toBe(false);

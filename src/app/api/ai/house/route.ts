@@ -67,6 +67,7 @@ import { recoverV3FailedPreview } from "@/lib/v3/failedPreview";
 import { ingestV3GenerationOutput } from "@/lib/v3/ingestion";
 import { v3BlueprintFirstEnabled, V3_BLUEPRINT_REPAIR_PROMPT } from '@/lib/v3/blueprintGeneration';
 import type { V3BlueprintApproval } from '@/lib/v3/blueprintApproval';
+import { generateV3FromArchitecturalBlueprint, v3ArchitecturalBlueprintEnabled, v3ArchitecturalBlueprintPrompt } from '@/lib/v3/architecturalBlueprintGeneration';
 import { fingerprint } from "@/lib/ai/usage/diagnostics";
 import type { UsageAssessment } from "@/lib/ai/usage/track";
 
@@ -303,6 +304,18 @@ function logV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure
   return failure;
 }
 
+/** Safe flag diagnostics: no model, project data, credentials or provider call. */
+export async function GET() {
+  return NextResponse.json({
+    architecturalBlueprint: {
+      enabledForNewFlatGenerations: v3ArchitecturalBlueprintEnabled(process.env.AI_V3_ARCHITECTURAL_BLUEPRINT, 'flat'),
+      contract: 'v3-architectural-blueprint-1',
+      maxAuthoringAttempts: 2,
+      maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS,
+    },
+  }, { headers: { 'Cache-Control': 'no-store' } });
+}
+
 export async function POST(req: NextRequest) {
   let body: RequestBody;
   try {
@@ -468,6 +481,11 @@ export async function POST(req: NextRequest) {
 
 /** One authoritative Terra call for V3. A single repair may correct objective contract failures, never redesign it. */
 async function generateV3Scene(prompt: string, root: Record<string, unknown>, baseRevision: string, projectId: string | null, terrainMode: V3TerrainMode) {
+  if(v3ArchitecturalBlueprintEnabled(process.env.AI_V3_ARCHITECTURAL_BLUEPRINT,terrainMode)){
+    const response=await generateArchitecturalBlueprintV3(prompt,baseRevision,projectId);
+    response.headers.set('x-ai-architect-pipeline','v3-architectural-blueprint-1');
+    return response;
+  }
   const blueprintFirst = v3BlueprintFirstEnabled(process.env.AI_V3_BLUEPRINT_FIRST, terrainMode);
   const systemPrompt = v3SceneArchitectPrompt(terrainMode, { blueprintFirst });
   let approvedBlueprint: V3BlueprintApproval | undefined;
@@ -479,8 +497,8 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
     // schema. The SDK may reject malformed JSON; our ingestion boundary owns
     // all normalization and canonical structural validation after parsing.
     () => generateText({ model: getAiModel(), maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS, system: systemPrompt, messages: [{ role: "user", content: !repair ? prompt
-      : repair.kind === "objective" ? `Repair this same scene plan only. Correct only diagnosed technical fields and geometric relationships. For diagnosed access gaps change only the named path extent/position, retaining the destination buildings and doors. For allocation conflicts change only the named zone allocation within the site; preserve its membership and commitments. For site overruns correct only the named non-building object extent. A joined composition requires touching geometry: correct only a diagnosed non-building member, never delete the claim. Threshold and inferred outdoor-access concerns are advisory; do not invent a redesign. Preserve object ids, materials, estatePlan intent, footprint family and segment/operation ids, all unrelated openings, geometry and relationships. An incompatible footprint roof may change only roofForm/pitch/overhang to flat, terrace, floating-flat or mono-pitch if the brief permits. Never replace a curved footprint with a rectangle, remove a required roof, or erase explicit unsupported user intent. Objective failures: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan ?? root.v3Scene)}`
-      : `Revise this same valid scene plan to resolve the architectural review findings below. Fix only the identified conflict. Preserve all existing object identities, mass positions/dimensions, roof families, materials, unrelated openings and assemblies, and site relationships. Collision counterpart ids are evidence, not permission to remodel them. Move or resize only the conflicting amenity; for an entry change only its door facade; for a balcony assembly change only that assembly facade. Add only an explicitly missing requested feature or an estate-plan object with its exact planned id. For estate access or relationship findings append only the missing planned relationship edges. Preserve estatePlan; never erase commitments to silence warnings. For a diagnosed spatial route conflict only, correct that route spatial.from, spatial.to or spatial.waypoints while preserving its ids, width, use and all other plan entries. For ESTATE_ACCESS_POINT_MISSING append only a ground door/glazed-door on the named mass if necessary. Never simplify unsupported architectural forms. For a completeness finding add only the missing access: a top-level circulation entry (stair or lift) inside the named host, door or glazed-door openings appended to that mass's existing openings, or terraceOpenEdges on that terrace. Never move masses, change roofs or materials, or rewrite existing openings to make room. Do not restart or restyle the design. Architectural review: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan)}` }], output: Output.json({ name: "v3_scene" }), providerOptions: AI_PROVIDER_OPTIONS }),
+      : repair.kind === "objective" ? `Repair this same scene plan only. Correct only diagnosed technical fields and geometric relationships. For diagnosed access gaps on standalone paths change only the named path extent/position, retaining the destination buildings and doors. For a diagnosed spatial route change only its local endpoint coordinates or bends, preserving endpoint object/opening ids, width and use; its owner box is derived. For a diagnosed missing site-access identity, add only its boundary record at the already authored endpoint coordinate; never choose a new gate location. For allocation conflicts change only the explicitly diagnosed reserved zone allocation within the site; preserve mode, membership and commitments. Derived zone measurements are never authored or repaired. For diagnosed stair usability failures correct only that circulation entry footprint/location or stairType/direction/turn; preserve its id, host, intended origin/destination levels and every unrelated staircase. Only invalid level ranges may correct levels. Never delete stairs, remove requirements, change floor datums or move architecture to silence a failure. For site overruns correct only the named non-building object extent. A joined composition requires touching geometry: correct only a diagnosed non-building member, never delete the claim. Threshold and inferred outdoor-access concerns are advisory; do not invent a redesign. Preserve object ids, materials, estatePlan intent, footprint family and segment/operation ids, all unrelated openings, geometry and relationships. An incompatible footprint roof may change only roofForm/pitch/overhang to flat, terrace, floating-flat or mono-pitch if the brief permits. Never replace a curved footprint with a rectangle, remove a required roof, or erase explicit unsupported user intent. Objective failures: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan ?? root.v3Scene)}`
+      : `Revise this same valid scene plan to resolve the architectural review findings below. Fix only the identified conflict. Preserve all existing object identities, mass positions/dimensions, roof families, materials, unrelated openings and assemblies, and site relationships. Collision counterpart ids are evidence, not permission to remodel them. Move or resize only the conflicting amenity; for an entry change only its door facade; for a balcony assembly change only that assembly facade. Add only an explicitly missing requested feature or an estate-plan object with its exact planned id. For estate access or relationship findings append only the missing planned relationship edges. Preserve estatePlan; never erase commitments to silence warnings. For a diagnosed spatial route conflict only, correct that route spatial.from, spatial.to or spatial.waypoints while preserving its ids, width, use and all other plan entries. For ESTATE_ACCESS_POINT_MISSING on a mass append only a ground door/glazed-door if necessary. For a missing site-access identity add only its boundary record at the already authored endpoint coordinate; never choose a new gate location. Never simplify unsupported architectural forms. For a completeness finding add only the missing access: a top-level circulation entry (stair or lift) inside the named host, door or glazed-door openings appended to that mass's existing openings, or terraceOpenEdges on that terrace. Never move masses, change roofs or materials, or rewrite existing openings to make room. Do not restart or restyle the design. Architectural review: ${JSON.stringify(repair.items)}\nOriginal brief: ${prompt}\nCurrent plan: ${JSON.stringify(repair.plan)}` }], output: Output.json({ name: "v3_scene" }), providerOptions: AI_PROVIDER_OPTIONS }),
     (outcome) => "error" in outcome ? v3StructuredOutputUsageAssessment(outcome.error) : {}
   );
     billedInput+=value.totalUsage.inputTokens??0;billedOutput+=value.totalUsage.outputTokens??0;billedTotal+=value.totalUsage.totalTokens??0;
@@ -601,6 +619,47 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
     }
     logV3ProviderRequestRejection(error);
     return providerErrorResponse(error);
+  }
+}
+
+/** Blueprint-only authoring uses the same V3 request and maximum two-call budget. Default off. */
+async function generateArchitecturalBlueprintV3(prompt:string,baseRevision:string,projectId:string|null){
+  const system=v3ArchitecturalBlueprintPrompt();
+  let inputTokens=0,outputTokens=0,totalTokens=0,cost=0;
+  let lastBlueprint:unknown;
+  try{
+    const built=await generateV3FromArchitecturalBlueprint(prompt,async({repair})=>{
+      const result=await withUsageLogging(
+        {projectId,requestType:'generation',scope:WORLD_SCOPE.level,model:getAiModelId(),generationMode:'v3-scene',stage:repair?'v3-architectural-blueprint-repair':'v3-architectural-blueprint',retryNumber:repair?1:0,retryReason:repair?'objective-blueprint-validation':undefined,maxOutputTokens:V3_INITIAL_MAX_OUTPUT_TOKENS},
+        // Disable SDK transport retries: an ambiguous provider failure must not
+        // secretly repeat authoring outside the explicit two-attempt budget.
+        ()=>generateText({model:getAiModel(),maxRetries:0,maxOutputTokens:V3_INITIAL_MAX_OUTPUT_TOKENS,system,messages:[{role:'user',content:repair?
+          `Repair this SAME blueprint only. No detailed scene. This consumes the single existing objective repair attempt. Only diagnosed circulation ids may change footprint/stairType/direction/turn; preserve host, levels, type and ids. Only diagnosed connection ids may change waypoints; preserve endpoint references, approach distance, width/use and surface identity. All other design decisions, buildings, storeys, rooms, entrances, materials, features and requirements are immutable. If a different design is necessary, report the unresolved decision. Failures: ${JSON.stringify(repair.findings)}\nOriginal brief: ${prompt}\nBlueprint: ${JSON.stringify(repair.blueprint)}`:prompt}],output:Output.json({name:'v3_architectural_blueprint'}),providerOptions:AI_PROVIDER_OPTIONS}),
+        outcome=>'error' in outcome?v3StructuredOutputUsageAssessment(outcome.error):{},
+      );
+      inputTokens+=result.totalUsage.inputTokens??0;outputTokens+=result.totalUsage.outputTokens??0;totalTokens+=result.totalUsage.totalTokens??0;
+      cost+=computeCostUsd(getAiModelId(),{inputTokens:result.totalUsage.inputTokens??0,outputTokens:result.totalUsage.outputTokens??0,cachedInputTokens:result.totalUsage.inputTokenDetails?.cacheReadTokens??0})??0;
+      // SDK output is a lazy getter and can itself throw for nonterminal output.
+      // Diagnose the provider termination before attempting to consume JSON.
+      if(result.finishReason!==undefined&&result.finishReason!=='stop')return {output:undefined,finishReason:result.finishReason};
+      lastBlueprint=result.output;
+      return {output:lastBlueprint,finishReason:result.finishReason};
+    });
+    if(!built.ok||!built.scene){
+      const fatal=built.findings.filter(f=>f.severity==='fatal');
+      if(lastBlueprint!==undefined)await retainV3FailureArtifact(process.env.NODE_ENV==='development'?JSON.stringify(lastBlueprint):undefined,built.attempts===2?1:0,'ingestion',{
+        terrainMode:'flat',decision:'rejected',errors:fatal.map(f=>`${f.code}: ${f.message}`),warnings:built.findings.filter(f=>f.severity==='advisory').map(f=>f.message),notes:[],omitted:[],
+      });
+      return NextResponse.json({error:`Architectural blueprint ${built.phase} failed: ${fatal[0]?.message??'Complete supported design required.'}`,code:fatal[0]?.code,phase:built.phase,findings:built.findings,attempts:built.attempts},{status:built.phase==='output'?502:422});
+    }
+    built.scene.metadata={...built.scene.metadata,brief:prompt,terrainMode:'flat',blueprintContract:'v3-architectural-blueprint-1',generatedAt:new Date().toISOString(),
+      usage:{inputTokens,outputTokens,totalTokens,attempts:built.attempts,estimatedCost:cost||undefined,contextBytes:Buffer.byteLength(system+prompt),schemaBytes:Buffer.byteLength(system.slice(system.indexOf('{'))),repair:built.attempts===2}};
+    const json=JSON.stringify({version:3,generationMode:'v3-scene',v3Scene:built.scene});
+    return NextResponse.json({summary:`V3 property constructed from one architectural blueprint: ${built.scene.objects.length} persistent objects.`,json,baseRevision,revision:revisionOf(json),generationMode:'v3-scene',warnings:built.findings.filter(f=>f.severity==='advisory').map(f=>`${f.code}: ${f.message}`)});
+  }catch(error){
+    const failure=logV3StructuredOutputFailure(error);
+    if(failure)return NextResponse.json({error:'The architectural blueprint response was incomplete or invalid. No scene was constructed.',code:failure.code},{status:502});
+    logV3ProviderRequestRejection(error);return providerErrorResponse(error);
   }
 }
 

@@ -78,7 +78,7 @@ describe('blueprint-first generation contract (no provider)',()=>{
     const fixed=conventional(), bad=structuredClone(fixed);
     // Use the non-spatial path contract to exercise actual door contact and path repair permissions.
     delete fixed.estatePlan!.circulation[0].spatial;delete bad.estatePlan!.circulation[0].spatial;
-    const path=bad.objects.find(o=>o.type==='path')!;path.architecture!.z+=2;
+    const path=bad.objects.find(o=>o.type==='path')!;path.transform.position[2]+=2;
     bad.objects=bad.objects.map(materializeV3ArchitecturalObject);
     const failure=ingest(bad), candidate=ingest(fixed);
     expect(failure.ok).toBe(false);expect(failure.blueprintApproval).toBeUndefined();expect(candidate.ok).toBe(true);

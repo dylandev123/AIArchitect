@@ -45,6 +45,23 @@ export function openingEdges(edges:WallEdge[],facade:WallEdge['facade'],start:nu
  const original=matches.filter(e=>e.facade===facade&&facadeEdgeSpan(e,w,d).start<=start+1e-6&&facadeEdgeSpan(e,w,d).end>=end-1e-6);
  return original.length?original:matches;
 }
+/** Shared plan-only assembly attachment; neither planning nor construction chooses a wall. */
+export function assemblyWallOffset(fp:NonNullable<ReturnType<typeof resolveFootprint>>,anchor:Exclude<NonNullable<V3Composition['assemblies']>[number]['parts'][number],{type:'railing'}>,w=fp.frame.width,d=fp.frame.depth):{x:number;z:number}|undefined {
+ const start=anchor.type==='post'?anchor.at:anchor.start,end=anchor.type==='post'?anchor.at:anchor.end;
+ const matching=fp.edges.filter(e=>{const a=facadeEdgeSpan(e,w,d);return !e.open&&a.facade===anchor.facade&&a.start<=start+1e-6&&a.end>=end-1e-6;});
+ const original=matching.filter(e=>e.facade===anchor.facade);
+ let candidates=original.length?original:matching;
+ // A slab may bridge a recess only when both ends attach to real outer shoulders.
+ if(!candidates.length&&anchor.type==='slab'){
+  const spans=fp.edges.filter(e=>!e.open).map(edge=>({edge,...facadeEdgeSpan(edge,w,d)})).filter(a=>a.facade===anchor.facade&&a.start<end&&a.end>start);
+  const outer=spans.filter(a=>Math.abs(a.x)+Math.abs(a.z)<1e-6);
+  const starts=outer.find(a=>a.start<=start+1e-6&&a.end>start+1e-6),ends=outer.find(a=>a.end>=end-1e-6&&a.start<end-1e-6);
+  const inward=spans.every(a=>anchor.facade==='north'?a.z>=-1e-6:anchor.facade==='south'?a.z<=1e-6:anchor.facade==='west'?a.x>=-1e-6:a.x<=1e-6);
+  if(starts&&ends&&starts!==ends&&inward)candidates=[starts.edge];
+ }
+ if(candidates.length!==1)return;
+ const {x,z}=facadeEdgeSpan(candidates[0],w,d);return {x,z};
+}
 export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhang:number|undefined,roofMaterial:V3Material,storeyBase=0):{parts:HousePrimitive[];diagnostics:FootprintDiagnostic[]}|undefined {
  if(!o.composition?.footprint)return undefined;
  const levels=v3MassLevelCount(o),h=scaledDimensionsOf(o)[1],lh=h/levels;
@@ -138,23 +155,8 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
    local.push(...bend(built,segment,segments));continue;
   }
   const fp=fps[anchor.level??0];
-  const start=anchor.type==='post'?anchor.at:anchor.start,end=anchor.type==='post'?anchor.at:anchor.end;
-  const matching=fp?.edges.filter(e=>{const a=facadeEdgeSpan(e,w,d);return !e.open&&a.facade===anchor.facade&&a.start<=start+1e-6&&a.end>=end-1e-6;})??[];
-  const original=matching.filter(e=>e.facade===anchor.facade);
-  let candidates=original.length?original:matching;
-  // A rectangular slab can bridge an inward recess on the original facade
-  // plane when both ends attach to real outer shoulders. This is the existing
-  // hostedSlabRect contract, not a draped/stepped slab or a relocated attachment.
-  if(!candidates.length&&anchor.type==='slab'&&fp){
-   const spans=fp.edges.filter(e=>!e.open).map(edge=>({edge,...facadeEdgeSpan(edge,w,d)})).filter(a=>a.facade===anchor.facade&&a.start<end&&a.end>start);
-   const outer=spans.filter(a=>Math.abs(a.x)+Math.abs(a.z)<1e-6);
-   const starts=outer.find(a=>a.start<=start+1e-6&&a.end>start+1e-6);
-   const ends=outer.find(a=>a.end>=end-1e-6&&a.start<end-1e-6);
-   const inward=spans.every(a=>anchor.facade==='north'?a.z>=-1e-6:anchor.facade==='south'?a.z<=1e-6:anchor.facade==='west'?a.x>=-1e-6:a.x<=1e-6);
-   if(starts&&ends&&starts!==ends&&inward)candidates=[starts.edge];
-  }
-  if(candidates.length!==1){note('FOOTPRINT_ASSEMBLY_UNRESOLVED',`Assembly ${assembly.id}/${part.id} requires a unique wall plane or two outer shoulders bounding an inward recess; retained without arbitrary relocation.`);continue;}
-  const a=facadeEdgeSpan(candidates[0],w,d);
+  const a=fp&&assemblyWallOffset(fp,anchor,w,d);
+  if(!a){note('FOOTPRINT_ASSEMBLY_UNRESOLVED',`Assembly ${assembly.id}/${part.id} requires a unique wall plane or two outer shoulders bounding an inward recess; retained without arbitrary relocation.`);continue;}
   const parts=buildArchitecturalAssemblies({width:w,depth:d,height:h,floors:levels,assemblies:[{...assembly,parts:part.type==='railing'?[anchor,part]:[part]}]},lh,materials.exterior,trim,glass).filter(p=>part.type!=='railing'||p.label==='Assembly Railing');
   local.push(...shift(parts,a.x,a.z));
  }

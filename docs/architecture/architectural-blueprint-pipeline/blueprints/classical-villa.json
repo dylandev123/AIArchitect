@@ -1,0 +1,216 @@
+{
+  "format": "v3-architectural-blueprint-1",
+  "concept": "Orchard Villa: a compact classical garden house",
+  "character": "Symmetric entry and terracotta hip roof",
+  "site": {
+    "width": 130,
+    "depth": 120,
+    "baseElevation": 0,
+    "north": "-z",
+    "groundColor": "#61754b",
+    "access": [
+      {
+        "id": "north-gate",
+        "boundary": "north",
+        "point": [
+          -3,
+          0,
+          -60
+        ]
+      }
+    ]
+  },
+  "materials": [
+    {
+      "id": "limestone",
+      "color": "#d5c7ad",
+      "roughness": 0.78,
+      "surface": "stone"
+    },
+    {
+      "id": "copper",
+      "color": "#47665c",
+      "roughness": 0.55,
+      "metalness": 0.55,
+      "surface": "metal"
+    },
+    {
+      "id": "terracotta",
+      "color": "#ac6548",
+      "roughness": 0.8,
+      "surface": "stone"
+    },
+    {
+      "id": "water",
+      "color": "#2f8594",
+      "roughness": 0.1,
+      "opacity": 0.8,
+      "surface": "water"
+    },
+    {
+      "id": "paving",
+      "color": "#c7bda5",
+      "roughness": 0.82,
+      "surface": "paving"
+    },
+    {
+      "id": "court-paving",
+      "color": "#b8ad98",
+      "roughness": 0.74,
+      "surface": "paving"
+    },
+    {
+      "id": "meadow",
+      "color": "#61754b",
+      "roughness": 0.9,
+      "surface": "grass"
+    },
+    {
+      "id": "timber",
+      "color": "#84654b",
+      "roughness": 0.72,
+      "surface": "wood"
+    }
+  ],
+  "buildings": [
+    {
+      "id": "rotunda",
+      "label": "Crescent Lantern residence",
+      "role": "Primary residence",
+      "materialId": "limestone",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 24,
+        "depth": 18
+      },
+      "storeys": [
+        {
+          "id": "rotunda-floor",
+          "label": "Rotunda floor",
+          "role": "Open residence",
+          "height": 4,
+          "spaces": [
+            {
+              "id": "rotunda-salon",
+              "label": "Open salon",
+              "role": "Living and sleeping",
+              "program": "living",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 12,
+                "depth": 12
+              }
+            }
+          ]
+        }
+      ],
+      "facade": {
+        "openings": [
+          {
+            "id": "entry",
+            "type": "door",
+            "facade": "north",
+            "start": 0.45,
+            "end": 0.55,
+            "floors": "ground",
+            "height": 3
+          }
+        ]
+      },
+      "roof": {
+        "id": "crescent-roof",
+        "form": "hip",
+        "materialId": "terracotta",
+        "pitchDegrees": 28,
+        "overhang": 0.4,
+        "thickness": 0.25
+      }
+    }
+  ],
+  "entrances": [
+    {
+      "id": "round-entry",
+      "objectId": "rotunda",
+      "openingId": "entry",
+      "level": 0
+    }
+  ],
+  "features": [
+    {
+      "id": "arrival-court",
+      "label": "Lawn court with limestone perimeter",
+      "role": "Arrival and gathering",
+      "type": "courtyard",
+      "materialId": "court-paving",
+      "location": {
+        "x": -3,
+        "z": -27,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 24,
+      "depth": 12,
+      "height": 0.14
+    }
+  ],
+  "connections": [
+    {
+      "id": "principal-approach",
+      "surfaceId": "entry-walk",
+      "purpose": "Court to principal gallery",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          0,
+          6
+        ]
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "round-entry",
+        "approachDistance": 3
+      },
+      "use": "pedestrian",
+      "width": 2.8,
+      "waypoints": [],
+      "materialId": "paving"
+    }
+  ],
+  "verticalCirculation": [],
+  "requirements": [],
+  "program": [
+    {
+      "id": "round-program",
+      "role": "Open circular home",
+      "kind": "residence",
+      "objectIds": [
+        "rotunda"
+      ],
+      "source": "design"
+    }
+  ],
+  "zones": [],
+  "forms": [
+    {
+      "id": "villa-form",
+      "objectIds": [
+        "rotunda"
+      ],
+      "form": "rectangular",
+      "intent": "Compact classical pavilion"
+    }
+  ],
+  "relationships": [],
+  "considerations": [],
+  "roomAdjacencies": [],
+  "partitions": [],
+  "doors": []
+}

@@ -3,7 +3,7 @@ import { BLOCKING_FOOTPRINT_CODES } from './architectureSafety';
 import { resolveFootprint } from './footprint';
 import { footprintDiagnostics } from './footprintDiagnostics';
 import { compileFootprintMass, compileFootprintRoof } from './footprintConstruction';
-import { estateRoutePoints, estateRouteSupported } from './estateSpatial';
+import { estateRouteVertices, estateRouteSupported } from './routeGeometry';
 import type { V3EstatePlan } from './estatePlan';
 import { isSlattedCanopy } from './featureIntent';
 import { rooftopTerraces, finishRooftopTerraces } from './rooftopFeatures';
@@ -378,14 +378,14 @@ export function compileV3Scene(scene: V3Scene, options: V3CompileOptions = {}): 
       primitives.push(owner ? part(owner, "connection surface", ribbon) : ribbon);
     }
   }
-  // Estate routes reuse the existing ribbon construction without altering terrain or persisted hierarchy.
+  // Estate routes construct the canonical flat corridor without altering terrain or persisted hierarchy.
   for (const route of scene.estatePlan?.circulation ?? []) {
+    // Invalid canonical intent must never fall back to an unrelated compatibility box.
+    if (route.spatial) route.via.forEach(id=>connectionSurfaceIds.add(id));
     if (!estateRouteSupported(scene, route)) continue;
-    const levelId = `estate:${route.id}:ground`, owner = scene.objects.find(o => o.id === route.via[0])!;
-    const connection = { id: `estate:${route.id}`, type: route.spatial!.use === 'pedestrian' ? 'path' as const : 'driveway' as const, fromLevelId: levelId, toLevelId: levelId, route: estateRoutePoints(route), width: route.spatial!.width, surfaceObjectId: owner.id };
-    const routedScene: V3Scene = { ...scene, siteHierarchy: { levels: [{ id: levelId, elevation: scene.site.baseElevation ?? 0, region: { x: 0, z: 0, width: scene.site.width, depth: scene.site.depth }, supportType: "terrain" }], connections: [connection] } };
-    const ribbon = connectionRibbon(routedScene, connection);
-    if (ribbon) { primitives.push(part(owner, 'estate route surface', ribbon)); connectionSurfaceIds.add(owner.id); }
+    const owner = scene.objects.find(o => o.id === route.via[0])!;
+    const ribbon: TriMeshPrimitive = {kind:'triMesh',id:`v3-connection-estate:${route.id}`,category:'path',label:`${route.spatial!.use==='pedestrian'?'path':'driveway'} estate:${route.id}`,vertices:estateRouteVertices(scene,route),color:owner.material.color,roughness:owner.material.roughness??.84,metalness:owner.material.metalness??0,surface:'tile'};
+    primitives.push(part(owner, 'estate route surface', ribbon)); connectionSurfaceIds.add(owner.id);
   }
   const context: V3CompileContext = { scene, terrain, roofOverhangs, roofMaterial, connectionSurfaceIds, rooftopTerraceHosts };
   for (const o of scene.objects) {
@@ -450,6 +450,15 @@ export function validateV3CompiledGeometry(scene: V3Scene, model = compileV3Scen
   const siteLimit = Math.max(scene.site.width, scene.site.depth) * 1.25, ground = model.primitives.find((p) => p.id === "v3-terrain-surface");
   if (ground?.kind === "triMesh" && ground.vertices.some((v, i) => i % 3 !== 1 && Math.abs(v) > siteLimit)) physical.push("Terrain geometry exceeds site bounds.");
   const connectionSurfaceIds = new Set(resolveSiteHierarchy(scene).hierarchy.connections.flatMap((connection) => connection.surfaceObjectId ? [connection.surfaceObjectId] : []));
+  for (const route of scene.estatePlan?.circulation ?? []) {
+    if (!estateRouteSupported(scene, route)) continue;
+    route.via.forEach(id => connectionSurfaceIds.add(id));
+    const ribbon = model.primitives.find(p => p.id === `v3-connection-estate:${route.id}`);
+    const expected = estateRouteVertices(scene, route);
+    if (ribbon?.kind !== 'triMesh' || ribbon.sourceObjectId !== route.via[0] || ribbon.vertices.length !== expected.length
+      || ribbon.vertices.some((v, i) => Math.abs(v - expected[i]) > 1e-8))
+      errors.push(`${route.id} did not retain its canonical estate route ribbon.`);
+  }
   for (const o of scene.objects.filter((candidate) => v3Capability(candidate.type)?.validation?.compiledShape === "path-ribbon")) {
     if (connectionSurfaceIds.has(o.id)) continue;
     const p = model.primitives.find((candidate) => candidate.id === o.id);

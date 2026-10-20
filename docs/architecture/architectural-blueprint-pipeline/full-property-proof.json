@@ -1,0 +1,2173 @@
+{
+  "blueprint": {
+    "format": "v3-architectural-blueprint-1",
+    "concept": "Crescent Lantern, developed property: curved private balcony, atelier portico and slatted poolside room.",
+    "character": "A two-storey curved salon, low copper roof, deep arrival gallery and an independent terracotta atelier; the pool is offset to preserve dry garden circulation.",
+    "site": {
+      "width": 130,
+      "depth": 120,
+      "baseElevation": 0,
+      "north": "-z",
+      "groundColor": "#61754b",
+      "access": [
+        {
+          "id": "north-gate",
+          "boundary": "north",
+          "point": [
+            -3,
+            0,
+            -60
+          ]
+        }
+      ]
+    },
+    "materials": [
+      {
+        "id": "limestone",
+        "color": "#d5c7ad",
+        "roughness": 0.78,
+        "surface": "stone"
+      },
+      {
+        "id": "copper",
+        "color": "#47665c",
+        "roughness": 0.55,
+        "metalness": 0.55,
+        "surface": "metal"
+      },
+      {
+        "id": "terracotta",
+        "color": "#ac6548",
+        "roughness": 0.8,
+        "surface": "stone"
+      },
+      {
+        "id": "water",
+        "color": "#2f8594",
+        "roughness": 0.1,
+        "opacity": 0.8,
+        "surface": "water"
+      },
+      {
+        "id": "paving",
+        "color": "#c7bda5",
+        "roughness": 0.82,
+        "surface": "paving"
+      },
+      {
+        "id": "court-paving",
+        "color": "#b8ad98",
+        "roughness": 0.74,
+        "surface": "paving"
+      },
+      {
+        "id": "meadow",
+        "color": "#61754b",
+        "roughness": 0.9,
+        "surface": "grass"
+      },
+      {
+        "id": "timber",
+        "color": "#84654b",
+        "roughness": 0.72,
+        "surface": "wood"
+      }
+    ],
+    "buildings": [
+      {
+        "id": "crescent-house",
+        "label": "Crescent Lantern residence",
+        "role": "Primary residence",
+        "materialId": "limestone",
+        "location": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "plan": {
+          "kind": "outline",
+          "segments": [
+            {
+              "id": "arrival-wall",
+              "type": "line",
+              "start": [
+                -18,
+                -10
+              ],
+              "end": [
+                12,
+                -10
+              ]
+            },
+            {
+              "id": "inhabited-arc",
+              "type": "arc",
+              "center": [
+                12,
+                0
+              ],
+              "radius": 10,
+              "startAngle": -90,
+              "sweep": 180
+            },
+            {
+              "id": "garden-wall",
+              "type": "line",
+              "start": [
+                12,
+                10
+              ],
+              "end": [
+                -8,
+                10
+              ]
+            },
+            {
+              "id": "court-return",
+              "type": "line",
+              "start": [
+                -8,
+                10
+              ],
+              "end": [
+                -8,
+                4
+              ]
+            },
+            {
+              "id": "west-wing",
+              "type": "line",
+              "start": [
+                -8,
+                4
+              ],
+              "end": [
+                -18,
+                4
+              ]
+            },
+            {
+              "id": "west-wall",
+              "type": "line",
+              "start": [
+                -18,
+                4
+              ],
+              "end": [
+                -18,
+                -10
+              ]
+            }
+          ]
+        },
+        "storeys": [
+          {
+            "id": "house-ground",
+            "label": "Garden storey",
+            "role": "Reception and living",
+            "height": 4,
+            "spaces": [
+              {
+                "id": "west-study",
+                "label": "Library and stair gallery",
+                "role": "Quiet west wing",
+                "program": "study",
+                "footprint": {
+                  "x": -14,
+                  "z": -3,
+                  "width": 6,
+                  "depth": 10
+                }
+              },
+              {
+                "id": "arrival-gallery",
+                "label": "Arrival gallery",
+                "role": "Arrival circulation",
+                "program": "hall",
+                "footprint": {
+                  "x": -4,
+                  "z": -6,
+                  "width": 12,
+                  "depth": 6
+                }
+              },
+              {
+                "id": "kitchen",
+                "label": "Garden kitchen",
+                "role": "Cooking and service",
+                "program": "kitchen",
+                "footprint": {
+                  "x": 5,
+                  "z": -6,
+                  "width": 6,
+                  "depth": 6
+                }
+              },
+              {
+                "id": "service-room",
+                "label": "Service and powder room",
+                "role": "Ground services",
+                "program": "bathroom",
+                "footprint": {
+                  "x": 10,
+                  "z": -6,
+                  "width": 4,
+                  "depth": 6
+                }
+              },
+              {
+                "id": "garden-salon",
+                "label": "Garden salon and dining",
+                "role": "Open living suite",
+                "program": "living",
+                "footprint": {
+                  "x": 4,
+                  "z": 3,
+                  "width": 20,
+                  "depth": 10
+                }
+              }
+            ]
+          },
+          {
+            "id": "house-upper",
+            "label": "Private storey",
+            "role": "Family suites",
+            "height": 4,
+            "spaces": [
+              {
+                "id": "west-suite",
+                "label": "West suite",
+                "role": "Guest suite",
+                "program": "bedroom",
+                "footprint": {
+                  "x": -14,
+                  "z": -3,
+                  "width": 6,
+                  "depth": 10
+                }
+              },
+              {
+                "id": "upper-gallery",
+                "label": "Upper gallery",
+                "role": "Private circulation",
+                "program": "hall",
+                "footprint": {
+                  "x": -4,
+                  "z": -6,
+                  "width": 12,
+                  "depth": 6
+                }
+              },
+              {
+                "id": "arc-suite",
+                "label": "Arc suite",
+                "role": "Principal suite",
+                "program": "bedroom",
+                "footprint": {
+                  "x": 4,
+                  "z": 4,
+                  "width": 16,
+                  "depth": 8
+                }
+              },
+              {
+                "id": "family-bath",
+                "label": "Family bath and dressing",
+                "role": "Private services",
+                "program": "bathroom",
+                "footprint": {
+                  "x": 10,
+                  "z": -6,
+                  "width": 6,
+                  "depth": 6
+                }
+              }
+            ]
+          }
+        ],
+        "facade": {
+          "massHierarchy": "primary",
+          "openings": [
+            {
+              "id": "house-entry",
+              "type": "door",
+              "facade": "north",
+              "segmentId": "arrival-wall",
+              "start": 0.45,
+              "end": 0.55,
+              "height": 3,
+              "floors": "ground"
+            },
+            {
+              "id": "salon-glass",
+              "type": "glazing-zone",
+              "facade": "east",
+              "segmentId": "inhabited-arc",
+              "start": 0.06,
+              "end": 0.94,
+              "heightRatio": 0.76,
+              "floors": "ground"
+            },
+            {
+              "id": "garden-door",
+              "type": "glazed-door",
+              "facade": "south",
+              "segmentId": "garden-wall",
+              "start": 0.25,
+              "end": 0.45,
+              "height": 3,
+              "floors": "ground",
+              "operation": "sliding"
+            },
+            {
+              "id": "suite-balcony-door",
+              "type": "glazed-door",
+              "facade": "east",
+              "segmentId": "inhabited-arc",
+              "start": 0.3,
+              "end": 0.5,
+              "height": 2.8,
+              "floors": "upper",
+              "operation": "sliding",
+              "serves": "arc-balcony"
+            }
+          ],
+          "mainEntry": {
+            "openingId": "house-entry",
+            "canopyDepth": 1.6
+          },
+          "assemblies": [
+            {
+              "id": "arc-balcony",
+              "intent": "Private upper arc balcony",
+              "parts": [
+                {
+                  "id": "deck",
+                  "type": "slab",
+                  "facade": "east",
+                  "segmentId": "inhabited-arc",
+                  "start": 0.25,
+                  "end": 0.65,
+                  "depth": 1.6,
+                  "level": 1,
+                  "elevation": 0.06,
+                  "thickness": 0.2
+                },
+                {
+                  "id": "guard",
+                  "type": "railing",
+                  "slabId": "deck",
+                  "edges": [
+                    "outer",
+                    "start",
+                    "end"
+                  ],
+                  "height": 1.1
+                }
+              ]
+            }
+          ]
+        },
+        "roof": {
+          "id": "crescent-roof",
+          "form": "flat",
+          "materialId": "copper",
+          "pitchDegrees": 0,
+          "overhang": 0.4,
+          "thickness": 0.25
+        }
+      },
+      {
+        "id": "orchard-atelier",
+        "label": "Orchard atelier",
+        "role": "Independent studio",
+        "materialId": "limestone",
+        "location": {
+          "x": -36,
+          "z": 0,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "plan": {
+          "kind": "rectangle",
+          "width": 12,
+          "depth": 10
+        },
+        "storeys": [
+          {
+            "id": "atelier-ground",
+            "label": "Atelier floor",
+            "role": "Creative retreat",
+            "height": 3.6,
+            "spaces": [
+              {
+                "id": "atelier-room",
+                "label": "Orchard studio",
+                "role": "Art and music",
+                "program": "studio",
+                "footprint": {
+                  "x": 0,
+                  "z": 0,
+                  "width": 10,
+                  "depth": 8
+                }
+              }
+            ]
+          }
+        ],
+        "facade": {
+          "massHierarchy": "secondary",
+          "openings": [
+            {
+              "id": "atelier-entry",
+              "type": "door",
+              "facade": "north",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.7,
+              "floors": "ground"
+            }
+          ],
+          "assemblies": [
+            {
+              "id": "atelier-portico",
+              "intent": "Sheltered atelier entrance",
+              "parts": [
+                {
+                  "id": "cover",
+                  "type": "slab",
+                  "facade": "north",
+                  "start": 0.1,
+                  "end": 0.9,
+                  "depth": 2.4,
+                  "elevation": 3,
+                  "thickness": 0.2
+                },
+                {
+                  "id": "left-post",
+                  "type": "post",
+                  "facade": "north",
+                  "at": 0.15,
+                  "depth": 2.1,
+                  "height": 3,
+                  "size": 0.2
+                },
+                {
+                  "id": "right-post",
+                  "type": "post",
+                  "facade": "north",
+                  "at": 0.85,
+                  "depth": 2.1,
+                  "height": 3,
+                  "size": 0.2
+                },
+                {
+                  "id": "lintel",
+                  "type": "beam",
+                  "facade": "north",
+                  "start": 0.1,
+                  "end": 0.9,
+                  "depth": 2.1,
+                  "height": 0.22,
+                  "elevation": 2.8,
+                  "thickness": 0.2
+                }
+              ]
+            }
+          ]
+        },
+        "roof": {
+          "id": "atelier-roof",
+          "form": "hip",
+          "materialId": "terracotta",
+          "pitchDegrees": 25,
+          "overhang": 0.6,
+          "thickness": 0.25
+        }
+      }
+    ],
+    "entrances": [
+      {
+        "id": "principal-entry",
+        "objectId": "crescent-house",
+        "openingId": "house-entry",
+        "level": 0
+      },
+      {
+        "id": "atelier-entrance",
+        "objectId": "orchard-atelier",
+        "openingId": "atelier-entry",
+        "level": 0
+      },
+      {
+        "id": "salon-exit",
+        "objectId": "crescent-house",
+        "openingId": "garden-door",
+        "level": 0
+      }
+    ],
+    "features": [
+      {
+        "id": "arrival-court",
+        "label": "Lawn court with limestone perimeter",
+        "role": "Arrival and gathering",
+        "type": "courtyard",
+        "materialId": "court-paving",
+        "location": {
+          "x": -3,
+          "z": -27,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "width": 24,
+        "depth": 12,
+        "height": 0.14
+      },
+      {
+        "id": "pool-deck",
+        "label": "Deep timber pool belvedere",
+        "role": "Outdoor living",
+        "type": "terrace",
+        "materialId": "timber",
+        "location": {
+          "x": 5,
+          "z": 34,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "width": 26,
+        "depth": 26,
+        "height": 0.12
+      },
+      {
+        "id": "long-pool",
+        "label": "Long water garden",
+        "role": "Swimming pool",
+        "type": "pool",
+        "materialId": "water",
+        "location": {
+          "x": 5,
+          "z": 39,
+          "baseElevation": -1.4,
+          "rotationY": 0
+        },
+        "width": 18,
+        "depth": 12,
+        "height": 1.4
+      },
+      {
+        "id": "orchard",
+        "label": "Quiet orchard clearing",
+        "role": "Landscape and privacy",
+        "type": "landscape-zone",
+        "materialId": "meadow",
+        "location": {
+          "x": -35,
+          "z": 29,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "width": 24,
+        "depth": 25,
+        "height": 0.12
+      },
+      {
+        "id": "poolside-shade",
+        "label": "Slatted poolside room",
+        "role": "Covered outdoor living",
+        "type": "canopy",
+        "canopyStyle": "slatted",
+        "materialId": "timber",
+        "location": {
+          "x": 5,
+          "z": 27,
+          "baseElevation": 0.12,
+          "rotationY": 0
+        },
+        "width": 10,
+        "depth": 6,
+        "height": 3.2
+      }
+    ],
+    "connections": [
+      {
+        "id": "gate-arrival",
+        "surfaceId": "arrival-drive",
+        "purpose": "North gate to arrival court",
+        "from": {
+          "kind": "site-access",
+          "accessId": "north-gate"
+        },
+        "to": {
+          "kind": "surface",
+          "objectId": "arrival-court",
+          "local": [
+            0,
+            -6
+          ]
+        },
+        "use": "vehicle",
+        "width": 5,
+        "waypoints": [],
+        "materialId": "paving"
+      },
+      {
+        "id": "principal-approach",
+        "surfaceId": "entry-walk",
+        "purpose": "Court to principal gallery",
+        "from": {
+          "kind": "surface",
+          "objectId": "arrival-court",
+          "local": [
+            0,
+            6
+          ]
+        },
+        "to": {
+          "kind": "entrance",
+          "entranceId": "principal-entry",
+          "approachDistance": 3
+        },
+        "use": "pedestrian",
+        "width": 2.8,
+        "waypoints": [],
+        "materialId": "paving"
+      },
+      {
+        "id": "atelier-approach",
+        "surfaceId": "atelier-walk",
+        "purpose": "Sheltered arrival to orchard atelier",
+        "from": {
+          "kind": "surface",
+          "objectId": "arrival-court",
+          "local": [
+            -10,
+            0
+          ]
+        },
+        "to": {
+          "kind": "entrance",
+          "entranceId": "atelier-entrance",
+          "approachDistance": 3
+        },
+        "use": "pedestrian",
+        "width": 1.8,
+        "waypoints": [
+          [
+            -36,
+            0,
+            -27
+          ]
+        ],
+        "materialId": "paving"
+      },
+      {
+        "id": "garden-approach",
+        "surfaceId": "garden-walk",
+        "purpose": "Salon to dry pool belvedere",
+        "from": {
+          "kind": "entrance",
+          "entranceId": "salon-exit",
+          "approachDistance": 3
+        },
+        "to": {
+          "kind": "surface",
+          "objectId": "pool-deck",
+          "local": [
+            0,
+            -13
+          ]
+        },
+        "use": "pedestrian",
+        "width": 2,
+        "waypoints": [],
+        "materialId": "paving"
+      }
+    ],
+    "verticalCirculation": [
+      {
+        "id": "library-stair",
+        "type": "stair",
+        "hostMassId": "crescent-house",
+        "fromLevel": 0,
+        "toLevel": 1,
+        "footprint": {
+          "x": -14,
+          "z": -3,
+          "width": 1.6,
+          "depth": 8
+        },
+        "stairType": "straight",
+        "direction": "south",
+        "label": "Library gallery stair"
+      }
+    ],
+    "requirements": [],
+    "program": [
+      {
+        "id": "residence-program",
+        "role": "Primary family residence",
+        "kind": "residence",
+        "objectIds": [
+          "crescent-house"
+        ],
+        "source": "design"
+      },
+      {
+        "id": "atelier-program",
+        "role": "Independent creative retreat",
+        "kind": "building",
+        "objectIds": [
+          "orchard-atelier"
+        ],
+        "source": "design",
+        "access": "required"
+      },
+      {
+        "id": "outdoor-program",
+        "role": "Pool and dry outdoor living",
+        "kind": "amenity",
+        "objectIds": [
+          "pool-deck",
+          "long-pool"
+        ],
+        "source": "design"
+      },
+      {
+        "id": "orchard-program",
+        "role": "Orchard landscape",
+        "kind": "landscape",
+        "objectIds": [
+          "orchard"
+        ],
+        "source": "design",
+        "access": "optional"
+      },
+      {
+        "id": "shade-program",
+        "kind": "amenity",
+        "role": "Covered outdoor living",
+        "objectIds": [
+          "poolside-shade"
+        ],
+        "source": "design",
+        "access": "optional"
+      }
+    ],
+    "zones": [
+      {
+        "id": "inhabited-domain",
+        "purpose": "Residence, arrival and outdoor living",
+        "objectIds": [
+          "crescent-house",
+          "arrival-court",
+          "pool-deck",
+          "long-pool"
+        ],
+        "allocationMode": "derived"
+      }
+    ],
+    "forms": [
+      {
+        "id": "crescent-intent",
+        "objectIds": [
+          "crescent-house"
+        ],
+        "form": "curved",
+        "intent": "Preserve the inhabited east arc and articulated west library wing"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "deck-water-edge",
+        "from": "pool-deck",
+        "to": "long-pool",
+        "kind": "contains",
+        "intent": "Dry belvedere surrounds the offset water basin"
+      },
+      {
+        "id": "shade-on-deck",
+        "from": "pool-deck",
+        "to": "poolside-shade",
+        "kind": "contains",
+        "intent": "Shade occupies the dry north part of the pool belvedere"
+      }
+    ],
+    "considerations": [
+      {
+        "id": "orchard-privacy",
+        "kind": "privacy",
+        "intent": "The atelier turns toward its own orchard rather than the family water garden",
+        "objectIds": [
+          "orchard-atelier",
+          "orchard"
+        ]
+      }
+    ],
+    "roomAdjacencies": [
+      {
+        "from": "kitchen",
+        "to": "service-room"
+      }
+    ],
+    "partitions": [
+      {
+        "id": "service-partition",
+        "storeyId": "house-ground",
+        "roomAId": "kitchen",
+        "roomBId": "service-room",
+        "boundaryId": "boundary:kitchen|service-room",
+        "partitionType": "wall",
+        "semanticRole": "Service separation"
+      }
+    ],
+    "doors": [
+      {
+        "id": "service-door",
+        "partitionId": "service-partition",
+        "offset": 3,
+        "width": 0.9,
+        "program": "door",
+        "semanticRole": "Service access"
+      }
+    ]
+  },
+  "scene": {
+    "version": 3,
+    "site": {
+      "width": 130,
+      "depth": 120,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "Crescent Lantern, developed property: curved private balcony, atelier portico and slatted poolside room.",
+      "character": "A two-storey curved salon, low copper roof, deep arrival gallery and an independent terracotta atelier; the pool is offset to preserve dry garden circulation.",
+      "siteAccess": [
+        {
+          "id": "north-gate",
+          "boundary": "north",
+          "point": [
+            -3,
+            0,
+            -60
+          ]
+        }
+      ],
+      "requirements": [],
+      "program": [
+        {
+          "id": "residence-program",
+          "role": "Primary family residence",
+          "kind": "residence",
+          "objectIds": [
+            "crescent-house"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "atelier-program",
+          "role": "Independent creative retreat",
+          "kind": "building",
+          "objectIds": [
+            "orchard-atelier"
+          ],
+          "source": "design",
+          "access": "required"
+        },
+        {
+          "id": "outdoor-program",
+          "role": "Pool and dry outdoor living",
+          "kind": "amenity",
+          "objectIds": [
+            "pool-deck",
+            "long-pool"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "orchard-program",
+          "role": "Orchard landscape",
+          "kind": "landscape",
+          "objectIds": [
+            "orchard"
+          ],
+          "source": "design",
+          "access": "optional"
+        },
+        {
+          "id": "shade-program",
+          "role": "Covered outdoor living",
+          "kind": "amenity",
+          "objectIds": [
+            "poolside-shade"
+          ],
+          "source": "design",
+          "access": "optional"
+        }
+      ],
+      "zones": [
+        {
+          "id": "inhabited-domain",
+          "purpose": "Residence, arrival and outdoor living",
+          "objectIds": [
+            "crescent-house",
+            "arrival-court",
+            "pool-deck",
+            "long-pool"
+          ],
+          "allocationMode": "derived"
+        }
+      ],
+      "architecture": [
+        {
+          "id": "crescent-intent",
+          "objectIds": [
+            "crescent-house"
+          ],
+          "form": "curved",
+          "intent": "Preserve the inhabited east arc and articulated west library wing"
+        }
+      ],
+      "relationships": [
+        {
+          "id": "deck-water-edge",
+          "intent": "Dry belvedere surrounds the offset water basin",
+          "from": "pool-deck",
+          "to": "long-pool",
+          "kind": "contains"
+        },
+        {
+          "id": "shade-on-deck",
+          "intent": "Shade occupies the dry north part of the pool belvedere",
+          "from": "pool-deck",
+          "to": "poolside-shade",
+          "kind": "contains"
+        }
+      ],
+      "considerations": [
+        {
+          "id": "orchard-privacy",
+          "intent": "The atelier turns toward its own orchard rather than the family water garden",
+          "objectIds": [
+            "orchard-atelier",
+            "orchard"
+          ],
+          "kind": "privacy"
+        }
+      ],
+      "circulation": [
+        {
+          "id": "gate-arrival",
+          "purpose": "North gate to arrival court",
+          "from": "north-gate",
+          "to": "arrival-court",
+          "via": [
+            "arrival-drive"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "point": [
+                -3,
+                0,
+                -33
+              ]
+            },
+            "use": "vehicle",
+            "width": 5,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "principal-approach",
+          "purpose": "Court to principal gallery",
+          "from": "arrival-court",
+          "to": "crescent-house",
+          "via": [
+            "entry-walk"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -3,
+                0,
+                -21
+              ]
+            },
+            "to": {
+              "entranceId": "principal-entry",
+              "approachDistance": 3
+            },
+            "use": "pedestrian",
+            "width": 2.8,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "atelier-approach",
+          "purpose": "Sheltered arrival to orchard atelier",
+          "from": "arrival-court",
+          "to": "orchard-atelier",
+          "via": [
+            "atelier-walk"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -13,
+                0,
+                -27
+              ]
+            },
+            "to": {
+              "entranceId": "atelier-entrance",
+              "approachDistance": 3
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                -36,
+                0,
+                -27
+              ]
+            ]
+          }
+        },
+        {
+          "id": "garden-approach",
+          "purpose": "Salon to dry pool belvedere",
+          "from": "crescent-house",
+          "to": "pool-deck",
+          "via": [
+            "garden-walk"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "salon-exit",
+              "approachDistance": 3
+            },
+            "to": {
+              "point": [
+                5,
+                0,
+                21
+              ]
+            },
+            "use": "pedestrian",
+            "width": 2,
+            "waypoints": []
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-crescent-house",
+            "objectId": "crescent-house",
+            "role": "Primary residence"
+          },
+          {
+            "id": "bp-orchard-atelier",
+            "objectId": "orchard-atelier",
+            "role": "Independent studio"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "principal-entry",
+            "objectId": "crescent-house",
+            "openingId": "house-entry",
+            "level": 0
+          },
+          {
+            "id": "atelier-entrance",
+            "objectId": "orchard-atelier",
+            "openingId": "atelier-entry",
+            "level": 0
+          },
+          {
+            "id": "salon-exit",
+            "objectId": "crescent-house",
+            "openingId": "garden-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "crescent-roof",
+          "atelier-roof"
+        ],
+        "outdoorObjectIds": [
+          "arrival-court",
+          "pool-deck",
+          "long-pool",
+          "orchard",
+          "poolside-shade"
+        ],
+        "routeIds": [
+          "gate-arrival",
+          "principal-approach",
+          "atelier-approach",
+          "garden-approach"
+        ],
+        "verticalCirculationIds": [
+          "library-stair"
+        ],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "crescent-house",
+        "type": "building-mass",
+        "semanticRole": "Primary residence",
+        "label": "Crescent Lantern residence",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 44,
+          "depth": 20,
+          "height": 8,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            4,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          44,
+          8,
+          20
+        ],
+        "material": {
+          "id": "limestone",
+          "color": "#d5c7ad",
+          "roughness": 0.78,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "arrival-wall",
+                "type": "line",
+                "start": [
+                  -18,
+                  -10
+                ],
+                "end": [
+                  12,
+                  -10
+                ]
+              },
+              {
+                "id": "inhabited-arc",
+                "type": "arc",
+                "center": [
+                  12,
+                  0
+                ],
+                "radius": 10,
+                "startAngle": -90,
+                "sweep": 180
+              },
+              {
+                "id": "garden-wall",
+                "type": "line",
+                "start": [
+                  12,
+                  10
+                ],
+                "end": [
+                  -8,
+                  10
+                ]
+              },
+              {
+                "id": "court-return",
+                "type": "line",
+                "start": [
+                  -8,
+                  10
+                ],
+                "end": [
+                  -8,
+                  4
+                ]
+              },
+              {
+                "id": "west-wing",
+                "type": "line",
+                "start": [
+                  -8,
+                  4
+                ],
+                "end": [
+                  -18,
+                  4
+                ]
+              },
+              {
+                "id": "west-wall",
+                "type": "line",
+                "start": [
+                  -18,
+                  4
+                ],
+                "end": [
+                  -18,
+                  -10
+                ]
+              }
+            ],
+            "operations": []
+          },
+          "massHierarchy": "primary",
+          "mainEntry": {
+            "openingId": "house-entry",
+            "canopyDepth": 1.6
+          },
+          "openings": [
+            {
+              "id": "house-entry",
+              "facade": "north",
+              "segmentId": "arrival-wall",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.45,
+              "end": 0.55,
+              "height": 3
+            },
+            {
+              "id": "salon-glass",
+              "facade": "east",
+              "segmentId": "inhabited-arc",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.06,
+              "end": 0.94,
+              "heightRatio": 0.76
+            },
+            {
+              "id": "garden-door",
+              "facade": "south",
+              "segmentId": "garden-wall",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.25,
+              "end": 0.45,
+              "height": 3,
+              "operation": "sliding"
+            },
+            {
+              "id": "suite-balcony-door",
+              "facade": "east",
+              "segmentId": "inhabited-arc",
+              "floors": "upper",
+              "type": "glazed-door",
+              "start": 0.3,
+              "end": 0.5,
+              "height": 2.8,
+              "operation": "sliding",
+              "serves": "arc-balcony"
+            }
+          ],
+          "assemblies": [
+            {
+              "id": "arc-balcony",
+              "intent": "Private upper arc balcony",
+              "parts": [
+                {
+                  "id": "deck",
+                  "facade": "east",
+                  "segmentId": "inhabited-arc",
+                  "level": 1,
+                  "elevation": 0.06,
+                  "type": "slab",
+                  "start": 0.25,
+                  "end": 0.65,
+                  "depth": 1.6,
+                  "thickness": 0.2
+                },
+                {
+                  "id": "guard",
+                  "type": "railing",
+                  "slabId": "deck",
+                  "edges": [
+                    "outer",
+                    "start",
+                    "end"
+                  ],
+                  "height": 1.1
+                }
+              ]
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "crescent-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of crescent-house",
+        "label": "Crescent Lantern residence roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 8,
+          "width": 44,
+          "depth": 20,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            8.125,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          44,
+          0.25,
+          20
+        ],
+        "material": {
+          "id": "copper",
+          "color": "#47665c",
+          "roughness": 0.55,
+          "metalness": 0.55,
+          "surface": "metal"
+        },
+        "hostId": "crescent-house",
+        "roofForm": "flat",
+        "overhang": 0.4,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "orchard-atelier",
+        "type": "building-mass",
+        "semanticRole": "Independent studio",
+        "label": "Orchard atelier",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -36,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 12,
+          "depth": 10,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -36,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          3.6,
+          10
+        ],
+        "material": {
+          "id": "limestone",
+          "color": "#d5c7ad",
+          "roughness": 0.78,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "openings": [
+            {
+              "id": "atelier-entry",
+              "facade": "north",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.7
+            }
+          ],
+          "assemblies": [
+            {
+              "id": "atelier-portico",
+              "intent": "Sheltered atelier entrance",
+              "parts": [
+                {
+                  "id": "cover",
+                  "facade": "north",
+                  "elevation": 3,
+                  "type": "slab",
+                  "start": 0.1,
+                  "end": 0.9,
+                  "depth": 2.4,
+                  "thickness": 0.2
+                },
+                {
+                  "id": "left-post",
+                  "facade": "north",
+                  "type": "post",
+                  "at": 0.15,
+                  "depth": 2.1,
+                  "height": 3,
+                  "size": 0.2
+                },
+                {
+                  "id": "right-post",
+                  "facade": "north",
+                  "type": "post",
+                  "at": 0.85,
+                  "depth": 2.1,
+                  "height": 3,
+                  "size": 0.2
+                },
+                {
+                  "id": "lintel",
+                  "facade": "north",
+                  "elevation": 2.8,
+                  "type": "beam",
+                  "start": 0.1,
+                  "end": 0.9,
+                  "depth": 2.1,
+                  "height": 0.22,
+                  "thickness": 0.2
+                }
+              ]
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "atelier-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of orchard-atelier",
+        "label": "Orchard atelier roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -36,
+          "z": 0,
+          "baseElevation": 3.6,
+          "width": 12,
+          "depth": 10,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -36,
+            3.725,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          0.25,
+          10
+        ],
+        "material": {
+          "id": "terracotta",
+          "color": "#ac6548",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "hostId": "orchard-atelier",
+        "roofForm": "hip",
+        "overhang": 0.6,
+        "pitch": 25,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "arrival-court",
+        "type": "courtyard",
+        "semanticRole": "Arrival and gathering",
+        "label": "Lawn court with limestone perimeter",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -3,
+          "z": -27,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 12,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -3,
+            0.07,
+            -27
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.14,
+          12
+        ],
+        "material": {
+          "id": "court-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "pool-deck",
+        "type": "terrace",
+        "semanticRole": "Outdoor living",
+        "label": "Deep timber pool belvedere",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 5,
+          "z": 34,
+          "baseElevation": 0,
+          "width": 26,
+          "depth": 26,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            5,
+            0.06,
+            34
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          26,
+          0.12,
+          26
+        ],
+        "material": {
+          "id": "timber",
+          "color": "#84654b",
+          "roughness": 0.72,
+          "surface": "wood"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "long-pool",
+        "type": "pool",
+        "semanticRole": "Swimming pool",
+        "label": "Long water garden",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 5,
+          "z": 39,
+          "baseElevation": -1.4,
+          "width": 18,
+          "depth": 12,
+          "height": 1.4,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            5,
+            -0.7,
+            39
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          1.4,
+          12
+        ],
+        "material": {
+          "id": "water",
+          "color": "#2f8594",
+          "roughness": 0.1,
+          "opacity": 0.8,
+          "surface": "water"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "orchard",
+        "type": "landscape-zone",
+        "semanticRole": "Landscape and privacy",
+        "label": "Quiet orchard clearing",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -35,
+          "z": 29,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 25,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -35,
+            0.06,
+            29
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.12,
+          25
+        ],
+        "material": {
+          "id": "meadow",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "poolside-shade",
+        "type": "canopy",
+        "semanticRole": "Covered outdoor living",
+        "label": "Slatted poolside room",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 5,
+          "z": 27,
+          "baseElevation": 0.12,
+          "width": 10,
+          "depth": 6,
+          "height": 3.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            5,
+            1.7200000000000002,
+            27
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          10,
+          3.2,
+          6
+        ],
+        "material": {
+          "id": "timber",
+          "color": "#84654b",
+          "roughness": 0.72,
+          "surface": "wood"
+        },
+        "collision": "solid",
+        "canopyStyle": "slatted"
+      },
+      {
+        "id": "arrival-drive",
+        "type": "driveway",
+        "semanticRole": "North gate to arrival court",
+        "label": "North gate to arrival court",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -3,
+            0.05,
+            -46.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          5,
+          0.01,
+          27
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#c7bda5",
+          "roughness": 0.82,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "entry-walk",
+        "type": "path",
+        "semanticRole": "Court to principal gallery",
+        "label": "Court to principal gallery",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -3,
+            0.05,
+            -15.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          2.8000000000000003,
+          0.01,
+          11
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#c7bda5",
+          "roughness": 0.82,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "atelier-walk",
+        "type": "path",
+        "semanticRole": "Sheltered arrival to orchard atelier",
+        "label": "Sheltered arrival to orchard atelier",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -24.95,
+            0.05,
+            -16.45
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          23.9,
+          0.01,
+          22.9
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#c7bda5",
+          "roughness": 0.82,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "garden-walk",
+        "type": "path",
+        "semanticRole": "Salon to dry pool belvedere",
+        "label": "Salon to dry pool belvedere",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            5,
+            0.05,
+            15.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          2,
+          0.01,
+          11
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#c7bda5",
+          "roughness": 0.82,
+          "surface": "paving"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "house-ground",
+          "label": "Garden storey",
+          "semanticRole": "Reception and living",
+          "hostMassId": "crescent-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4
+        },
+        {
+          "id": "house-upper",
+          "label": "Private storey",
+          "semanticRole": "Family suites",
+          "hostMassId": "crescent-house",
+          "index": 1,
+          "elevation": 4.26,
+          "height": 4
+        },
+        {
+          "id": "atelier-ground",
+          "label": "Atelier floor",
+          "semanticRole": "Creative retreat",
+          "hostMassId": "orchard-atelier",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "west-study",
+          "label": "Library and stair gallery",
+          "semanticRole": "Quiet west wing",
+          "program": "study",
+          "storeyId": "house-ground",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": -14,
+            "z": -3,
+            "width": 6,
+            "depth": 10
+          }
+        },
+        {
+          "id": "arrival-gallery",
+          "label": "Arrival gallery",
+          "semanticRole": "Arrival circulation",
+          "program": "hall",
+          "storeyId": "house-ground",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": -4,
+            "z": -6,
+            "width": 12,
+            "depth": 6
+          }
+        },
+        {
+          "id": "kitchen",
+          "label": "Garden kitchen",
+          "semanticRole": "Cooking and service",
+          "program": "kitchen",
+          "storeyId": "house-ground",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": 5,
+            "z": -6,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "service-room",
+          "label": "Service and powder room",
+          "semanticRole": "Ground services",
+          "program": "bathroom",
+          "storeyId": "house-ground",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": 10,
+            "z": -6,
+            "width": 4,
+            "depth": 6
+          }
+        },
+        {
+          "id": "garden-salon",
+          "label": "Garden salon and dining",
+          "semanticRole": "Open living suite",
+          "program": "living",
+          "storeyId": "house-ground",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": 4,
+            "z": 3,
+            "width": 20,
+            "depth": 10
+          }
+        },
+        {
+          "id": "west-suite",
+          "label": "West suite",
+          "semanticRole": "Guest suite",
+          "program": "bedroom",
+          "storeyId": "house-upper",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": -14,
+            "z": -3,
+            "width": 6,
+            "depth": 10
+          }
+        },
+        {
+          "id": "upper-gallery",
+          "label": "Upper gallery",
+          "semanticRole": "Private circulation",
+          "program": "hall",
+          "storeyId": "house-upper",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": -4,
+            "z": -6,
+            "width": 12,
+            "depth": 6
+          }
+        },
+        {
+          "id": "arc-suite",
+          "label": "Arc suite",
+          "semanticRole": "Principal suite",
+          "program": "bedroom",
+          "storeyId": "house-upper",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": 4,
+            "z": 4,
+            "width": 16,
+            "depth": 8
+          }
+        },
+        {
+          "id": "family-bath",
+          "label": "Family bath and dressing",
+          "semanticRole": "Private services",
+          "program": "bathroom",
+          "storeyId": "house-upper",
+          "hostMassId": "crescent-house",
+          "footprint": {
+            "x": 10,
+            "z": -6,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "atelier-room",
+          "label": "Orchard studio",
+          "semanticRole": "Art and music",
+          "program": "studio",
+          "storeyId": "atelier-ground",
+          "hostMassId": "orchard-atelier",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 10,
+            "depth": 8
+          }
+        }
+      ],
+      "partitions": [
+        {
+          "id": "service-partition",
+          "storeyId": "house-ground",
+          "roomAId": "kitchen",
+          "roomBId": "service-room",
+          "boundaryId": "boundary:kitchen|service-room",
+          "partitionType": "wall",
+          "semanticRole": "Service separation"
+        }
+      ],
+      "doors": [
+        {
+          "id": "service-door",
+          "partitionId": "service-partition",
+          "offset": 3,
+          "width": 0.9,
+          "program": "door",
+          "semanticRole": "Service access"
+        }
+      ],
+      "circulation": [
+        {
+          "id": "library-stair",
+          "type": "stair",
+          "hostMassId": "crescent-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -14,
+            "z": -3,
+            "width": 1.6,
+            "depth": 8
+          },
+          "stairType": "straight",
+          "direction": "south",
+          "label": "Library gallery stair"
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "pool-deck",
+        "to": "long-pool",
+        "kind": "contains"
+      },
+      {
+        "from": "pool-deck",
+        "to": "poolside-shade",
+        "kind": "contains"
+      },
+      {
+        "from": "kitchen",
+        "to": "service-room",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {}
+  },
+  "primitives": 154,
+  "findings": [
+    {
+      "code": "STOREY_OUTSIDE_HOST",
+      "severity": "advisory",
+      "targetIds": [
+        "house-upper"
+      ],
+      "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m."
+    },
+    {
+      "code": "STOREY_OUTSIDE_HOST",
+      "severity": "advisory",
+      "targetIds": [
+        "atelier-ground"
+      ],
+      "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m."
+    },
+    {
+      "code": "FALLBACK_RENDER_USED",
+      "severity": "advisory",
+      "targetIds": [
+        "arrival-drive"
+      ],
+      "message": "North gate to arrival court renders as generic path geometry."
+    }
+  ],
+  "blueprintCharacters": 10505,
+  "promptCharacters": 28644
+}

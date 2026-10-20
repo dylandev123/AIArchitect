@@ -1,3 +1,4 @@
+import { explicitlyCorrectedCloister, recoveredCloister } from '@/lib/v3/parity/unifiedSpatial';
 import * as failureArtifacts from "@/lib/ai/v3FailureArtifact";
 import { NextRequest } from "next/server";
 import { APICallError, JSONParseError, NoObjectGeneratedError, TypeValidationError } from "ai";
@@ -7,6 +8,13 @@ import { BLANK_V3_SCENE, type V3Scene } from "@/lib/v3/scene";
 import { v3SceneOutputSchema } from "@/lib/v3/schema";
 import { toGenerationOutput } from "@/lib/v3/__tests__/generationFixture";
 import { blueprintProviderFixtures } from '@/lib/v3/__tests__/blueprintProviderFixtures';
+import { preGenerationFixtures } from '@/lib/v3/__tests__/preGenerationFixtures';
+import { fullPropertyBlueprint } from '@/lib/v3/parity/fullPropertyBlueprint';
+import { checkoutV3ArchitecturalBlueprint } from '@/lib/v3/architecturalBlueprint';
+import { executeV3SceneOperations } from '@/lib/v3/operations';
+import * as sceneCompiler from '@/lib/v3/scene';
+import cloisterInitial from '@/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-0.json';
+import cloisterRepair from '@/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-1.json';
 import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from "../route";
 
 const generateText = vi.fn();
@@ -58,7 +66,7 @@ function malformedJsonFailure(text: string, finishReason: "stop" | "length" = "s
   });
 }
 
-beforeEach(() => { vi.stubEnv("OPENAI_API_KEY", "test-key"); vi.stubEnv('AI_V3_BLUEPRINT_FIRST','0'); generateText.mockReset(); usageAssessments.length = 0; });
+beforeEach(() => { vi.stubEnv("OPENAI_API_KEY", "test-key"); vi.stubEnv('AI_V3_BLUEPRINT_FIRST','0'); vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','0'); generateText.mockReset(); usageAssessments.length = 0; });
 afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
 describe("POST /api/ai/house V3 scene mode", () => {
@@ -66,6 +74,148 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const {POST}=await import('../route');
     return POST(new NextRequest('http://localhost/api/ai/house',{method:'POST',body:JSON.stringify({mode:'generate',generationMode:'v3-scene',v3TerrainMode:terrainMode,prompt,currentHouseJson:JSON.stringify(BLANK_V3_SCENE)})}));
   };
+
+  it('constructs the new blueprint-only provider response with one mocked call and editable save/reload semantics',async()=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const bp=fullPropertyBlueprint();generateText.mockResolvedValueOnce({output:bp,totalUsage:sdkUsage});
+    const res=await generateOffline('A curved residence with balcony, pool and covered outdoor living');
+    expect(res.status).toBe(200);expect(generateText).toHaveBeenCalledTimes(1);
+    const request=generateText.mock.calls[0][0];expect(request.maxOutputTokens).toBe(V3_INITIAL_MAX_OUTPUT_TOKENS);
+    expect(request.system).toContain('ONE complete independent architectural blueprint');expect(request.system).toContain('"$schema"');
+    expect(request.system).not.toContain('BLUEPRINT-FIRST AUTHORING');expect(request.system).not.toContain('Current plan:');
+    const body=await res.json(),root=JSON.parse(body.json);expect(body.baseRevision).toBeTruthy();
+    expect(root.v3Scene.metadata.blueprintContract).toBe('v3-architectural-blueprint-1');expect(root.v3Scene.metadata.usage.attempts).toBe(1);
+    expect(root.v3Scene.objects[0].composition.footprint.segments).toEqual(bp.buildings[0].plan.kind==='outline'?bp.buildings[0].plan.segments:[]);
+    expect(JSON.stringify(root.v3Scene)).not.toContain('"buildings":'+JSON.stringify(bp.buildings));
+    const edited=executeV3SceneOperations(root.v3Scene,{intent:'Edit constructed property',operations:[{op:'changeMaterial',target:'orchard-atelier',material:{id:'local-ochre',color:'#c9a86b',surface:'stucco'}}]});
+    expect(edited.ok).toBe(true);expect(checkoutV3ArchitecturalBlueprint(JSON.parse(JSON.stringify(edited.scene))).ok).toBe(true);
+  });
+
+  it.each(['decision','capability','double-output'] as const)('rejects %s before full compilation with no scene fallback or repair',async kind=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');
+    const bp=fullPropertyBlueprint();
+    if(kind==='decision')bp.entrances=[];
+    if(kind==='capability')bp.buildings[0].roof.form='dome';
+    const output=kind==='double-output'?{...bp,objects:[]}:bp;
+    const compile=vi.spyOn(sceneCompiler,'compileV3Scene');generateText.mockResolvedValue({output,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(1);expect(compile).not.toHaveBeenCalled();
+    const body=await res.json();expect(body.json).toBeUndefined();expect(body.v3FailedPreview).toBeUndefined();expect(body.phase).toBe('planning');
+  });
+
+  it.each([false,true])('uses only the existing bounded objective repair and blocks redesign (redesign=%s)',async redesign=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');
+    const bad=fullPropertyBlueprint(),fixed=fullPropertyBlueprint();bad.verticalCirculation[0].footprint.depth=.5;
+    if(redesign)fixed.buildings[0].location.x+=2;
+    generateText.mockResolvedValueOnce({output:bad,totalUsage:sdkUsage}).mockResolvedValueOnce({output:fixed,totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(redesign?422:200);expect(generateText).toHaveBeenCalledTimes(2);
+    const body=await res.json();
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('Only diagnosed');
+    if(redesign){expect(body.code).toBe('ARCHITECTURAL_REPAIR_SCOPE');expect(body.json).toBeUndefined();}
+    else expect(JSON.parse(body.json).v3Scene.metadata.usage).toMatchObject({attempts:2,repair:true,inputTokens:200,outputTokens:100});
+  });
+
+  it('returns detailed construction failure without a partial save or an extra creative call',async()=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');
+    const compile=sceneCompiler.compileV3Scene;
+    vi.spyOn(sceneCompiler,'compileV3Scene').mockImplementation(s=>{const model=compile(s);return {...model,primitives:model.primitives.filter(p=>p.sourceObjectId!=='atelier-roof')};});
+    generateText.mockResolvedValue({output:fullPropertyBlueprint(),totalUsage:sdkUsage});
+    const res=await generateOffline();expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(1);
+    const body=await res.json();expect(body.phase).toBe('construction');expect(body.json).toBeUndefined();expect(body.findings.some((f:{code:string})=>f.code==='ARCHITECTURAL_COMPONENT_UNBUILT')).toBe(true);
+  });
+
+  it('rejects truncated and malformed blueprint JSON without retrying or using the scene preview path',async()=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');
+    generateText.mockResolvedValue({output:fullPropertyBlueprint(),finishReason:'length',totalUsage:sdkUsage});
+    let res=await generateOffline();expect(res.status).toBe(502);expect((await res.json()).code).toBe('V3_OUTPUT_TRUNCATED');expect(generateText).toHaveBeenCalledTimes(1);
+    generateText.mockReset().mockRejectedValue(malformedJsonFailure('{"format":'));
+    res=await generateOffline();expect(res.status).toBe(502);const body=await res.json();expect(body.json).toBeUndefined();expect(body.v3FailedPreview).toBeUndefined();expect(generateText).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps advanced-site generation on the existing scene route when the new flag is set',async()=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');generateText.mockResolvedValue({output:toGenerationOutput(generationScene()),totalUsage:sdkUsage});
+    await generateOffline('A hillside home','advanced');expect(generateText.mock.calls[0][0].system).not.toContain('ONE complete independent architectural blueprint');
+  });
+
+  it('reports an omitted explicitly requested feature instead of asking for a second creative scene',async()=>{
+    vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');generateText.mockResolvedValue({output:fullPropertyBlueprint(),totalUsage:sdkUsage});
+    const res=await generateOffline('A house with a rooftop terrace');expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(1);
+    const body=await res.json();expect(body.phase).toBe('brief');expect(body.json).toBeUndefined();
+  });
+
+  it('sends independent blueprint, roof and exterior-detail failures to its one mocked repair', async () => {
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST', '1');
+    const output = preGenerationFixtures().find(f => f.name.startsWith('allocation rejection'))!.output;
+    generateText.mockResolvedValue({ output, totalUsage: sdkUsage });
+    const response = await generateOffline('Design an original sculptural mansion');
+    expect(response.status).toBe(422);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    const repair = generateText.mock.calls[1][0].messages[0].content;
+    for (const code of ['ESTATE_ALLOCATION_CONFLICT', 'ROOF_FOOTPRINT_UNSUPPORTED', 'FOOTPRINT_ASSEMBLY_UNRESOLVED']) expect(repair).toContain(code);
+    expect(repair).toContain('sunshade/canopy');
+    expect(repair).toContain('width and use');
+    expect((await response.json()).json).toBeUndefined();
+  });
+
+  it('rejects an unusable stair after the single bounded repair fails', async () => {
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST', '1');
+    const output = preGenerationFixtures()[0].output;
+    output.circulation![0].width = .4; output.circulation![0].depth = .5;
+    generateText.mockResolvedValue({ output, totalUsage: sdkUsage });
+    const response = await generateOffline('Design an original two-storey sculptural residence');
+    expect(response.status).toBe(422);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    const body = await response.json();
+    expect(body.json).toBeUndefined();
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('CIRCULATION_NOT_USABLE');
+  });
+
+  it('accepts a separately authored stair correction in the one objective follow-up', async () => {
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST', '1');
+    const good=preGenerationFixtures()[0].output,bad=structuredClone(good);
+    bad.circulation![0].width=.4;bad.circulation![0].depth=.5;
+    generateText.mockResolvedValueOnce({output:bad,totalUsage:sdkUsage}).mockResolvedValueOnce({output:good,totalUsage:sdkUsage});
+    const response=await generateOffline('Design an original two-storey sculptural residence');
+    expect(response.status).toBe(200);expect(generateText).toHaveBeenCalledTimes(2);
+    const body=await response.json();expect(body.json).toBeDefined();
+  });
+
+  it('replays the live blueprint-first mansion with two mocked responses and a complete failed preview',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    generateText.mockResolvedValueOnce({output:cloisterInitial,totalUsage:sdkUsage}).mockResolvedValueOnce({output:cloisterRepair,totalUsage:sdkUsage});
+    const response=await generateOffline('Design a $15 million Saint Lucia luxury estate');
+    expect(response.status).toBe(422);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    const body=await response.json();
+    expect(body.json).toBeUndefined();
+    expect(body.v3FailedPreview.scene.objects.map((o:{id:string})=>o.id)).toEqual(cloisterRepair.objects.map(o=>o.id));
+    expect(body.v3FailedPreview.diagnostics.skippedObjectIds).toEqual([]);
+    expect(generateText.mock.calls[0][0].system).toContain('BLUEPRINT-FIRST AUTHORING v1');
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('ESTATE_ROUTE_BLOCKED');
+    expect(generateText.mock.calls[1][0].messages[0].content).toContain('BLUEPRINT PRESERVATION');
+  });
+
+  it('constructs a canonical mansion plan with identity-only route owners through the actual API offline',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    const output=JSON.parse(JSON.stringify(explicitlyCorrectedCloister()));
+    for(const o of output.objects.filter((o:{type:string})=>['path','driveway'].includes(o.type))){delete o.architecture;delete o.dimensions;delete o.transform;}
+    generateText.mockResolvedValue({output,totalUsage:sdkUsage});
+    const response=await generateOffline('Design a distinctive luxury estate');
+    expect(response.status).toBe(200);
+    const saved=JSON.parse((await response.json()).json).v3Scene;
+    expect(saved.estatePlan.siteAccess).toEqual(output.estatePlan.siteAccess);
+    expect(saved.objects).toHaveLength(23);
+    expect(generateText.mock.calls.length).toBeLessThanOrEqual(2);
+  });
+
+  it('accepts a locally corrected recovered plan in the single objective follow-up offline',async()=>{
+    vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');
+    generateText.mockResolvedValueOnce({output:recoveredCloister(1),totalUsage:sdkUsage}).mockResolvedValueOnce({output:explicitlyCorrectedCloister(),totalUsage:sdkUsage});
+    const response=await generateOffline('Design a distinctive luxury estate');
+    const body=await response.json();
+    expect(response.status,JSON.stringify(body)).toBe(200);
+    expect(generateText).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(body.json).v3Scene.objects).toHaveLength(23);
+  });
 
   it.each(blueprintProviderFixtures())('evaluates flagged provider-shaped $name through the actual route offline',async({output})=>{
     vi.stubEnv('AI_V3_BLUEPRINT_FIRST','1');

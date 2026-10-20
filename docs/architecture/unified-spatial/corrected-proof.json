@@ -1,0 +1,2372 @@
+{
+  "ok": true,
+  "blueprint": {
+    "ok": true,
+    "findings": [
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "guestPavilion",
+          "wellnessPavilion",
+          "pool",
+          "arrivalCourt"
+        ],
+        "message": "req-budget: budget is retained as intent; no deterministic verification is available."
+      },
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "eastResidenceWing",
+          "westResidenceWing"
+        ],
+        "message": "arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review."
+      },
+      {
+        "code": "BLUEPRINT_ENTRY_UNDECIDED",
+        "severity": "advisory",
+        "targetIds": [
+          "eastResidenceWing"
+        ],
+        "message": "No entrance is designated; access intent needs an authored decision."
+      },
+      {
+        "code": "BLUEPRINT_ENTRY_UNDECIDED",
+        "severity": "advisory",
+        "targetIds": [
+          "westResidenceWing"
+        ],
+        "message": "No entrance is designated; access intent needs an authored decision."
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "FALLBACK_RENDER_USED [driveway]: Palm-Lined Arrival Drive renders as generic slab geometry.",
+      "ORIENTATION_CONFLICT [scene]: Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained.",
+      "JUNCTION_OPENING_CONFLICT [junction:eastResidenceWing|mainResidence:envelope]: Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent.",
+      "JUNCTION_OPENING_REMOVED [junction:eastResidenceWing|mainResidence:envelope]: eastResidenceWing opening eastWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition.",
+      "JUNCTION_AUTHORED_PARTITION [junction:eastResidenceWing|mainResidence:envelope]: mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed.",
+      "JUNCTION_OPENING_CONFLICT [junction:eastResidenceWing|mainResidence:envelope]: Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent.",
+      "JUNCTION_AUTHORED_PARTITION [junction:mainResidence|westResidenceWing:envelope]: mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed.",
+      "JUNCTION_OPENING_CONFLICT [junction:mainResidence|westResidenceWing:envelope]: Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent.",
+      "JUNCTION_OPENING_CONFLICT [junction:mainResidence|westResidenceWing:envelope]: Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent.",
+      "JUNCTION_OPENING_REMOVED [junction:mainResidence|westResidenceWing:envelope]: westResidenceWing opening westWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition.",
+      "ESTATE_REQUIREMENT_UNVERIFIED [mainResidence]: req-budget: budget is retained as intent; no deterministic verification is available.",
+      "ESTATE_REQUIREMENT_UNVERIFIED [mainResidence]: arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review."
+    ],
+    "issues": [
+      {
+        "severity": "advisory",
+        "code": "FALLBACK_RENDER_USED",
+        "targetId": "driveway",
+        "message": "Palm-Lined Arrival Drive renders as generic slab geometry."
+      },
+      {
+        "severity": "advisory",
+        "code": "ORIENTATION_CONFLICT",
+        "targetId": "scene",
+        "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_CONFLICT",
+        "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+        "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_REMOVED",
+        "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+        "message": "eastResidenceWing opening eastWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_AUTHORED_PARTITION",
+        "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+        "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_CONFLICT",
+        "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+        "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_AUTHORED_PARTITION",
+        "targetId": "junction:mainResidence|westResidenceWing:envelope",
+        "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_CONFLICT",
+        "targetId": "junction:mainResidence|westResidenceWing:envelope",
+        "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_CONFLICT",
+        "targetId": "junction:mainResidence|westResidenceWing:envelope",
+        "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+      },
+      {
+        "severity": "advisory",
+        "code": "JUNCTION_OPENING_REMOVED",
+        "targetId": "junction:mainResidence|westResidenceWing:envelope",
+        "message": "westResidenceWing opening westWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+      },
+      {
+        "severity": "advisory",
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "targetId": "mainResidence",
+        "message": "req-budget: budget is retained as intent; no deterministic verification is available."
+      },
+      {
+        "severity": "advisory",
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "targetId": "mainResidence",
+        "message": "arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review."
+      }
+    ]
+  },
+  "consistency": {
+    "ok": true,
+    "findings": [
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "guestPavilion",
+          "wellnessPavilion",
+          "pool",
+          "arrivalCourt"
+        ],
+        "message": "req-budget: budget is retained as intent; no deterministic verification is available. mainResidence world plan=[[-18,-10],[18,-10],[18,2],[-18,2]]; guestPavilion world plan=[[38,2],[52,2],[52,12],[38,12]]; wellnessPavilion world plan=[[-52,3],[-38,3],[-38,15],[-52,15]]; pool world plan=[[-9,26.25],[9,26.25],[9,31.75],[-9,31.75]]; arrivalCourt world plan=[[-15,-30],[15,-30],[15,-16],[-15,-16]]",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding.",
+        "classification": "advisory"
+      },
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "eastResidenceWing",
+          "westResidenceWing"
+        ],
+        "message": "arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review. mainResidence world plan=[[-18,-10],[18,-10],[18,2],[-18,2]]; eastResidenceWing world plan=[[10,2],[18,2],[18,22],[10,22]]; westResidenceWing world plan=[[-18,2],[-10,2],[-10,22],[-18,22]]",
+        "guidance": "Inspect the authored composition; preserve valid creative choices.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "entryWalk"
+        ],
+        "message": "Door mainEntryDoor threshold is 0.26 m; entryWalk surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-18,-10],[18,-10],[18,2],[-18,2]]; entryWalk world plan=[[-1.5,-16],[1.5,-16],[1.5,-10],[-1.5,-10]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "mainResidence",
+          "courtyardTerrace"
+        ],
+        "message": "Door courtDoor threshold is 0.26 m; courtyardTerrace surface is 0.12 m. Direct stepped access may be possible, but no step-free transition is authored. mainResidence world plan=[[-18,-10],[18,-10],[18,2],[-18,2]]; courtyardTerrace world plan=[[-9.5,2],[9.5,2],[9.5,20],[-9.5,20]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "eastResidenceWing",
+          "poolDeck"
+        ],
+        "message": "Door eastPoolDoor threshold is 0.26 m; poolDeck surface is 0.12 m. Direct stepped access may be possible, but no step-free transition is authored. eastResidenceWing world plan=[[10,2],[18,2],[18,22],[10,22]]; poolDeck world plan=[[-15,20],[15,20],[15,38],[-15,38]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "westResidenceWing",
+          "poolDeck"
+        ],
+        "message": "Door westPoolDoor threshold is 0.26 m; poolDeck surface is 0.12 m. Direct stepped access may be possible, but no step-free transition is authored. westResidenceWing world plan=[[-18,2],[-10,2],[-10,22],[-18,22]]; poolDeck world plan=[[-15,20],[15,20],[15,38],[-15,38]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "guestPavilion",
+          "guestPath"
+        ],
+        "message": "Door guestEntry threshold is 0.26 m; guestPath surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. guestPavilion world plan=[[38,2],[52,2],[52,12],[38,12]]; guestPath world plan=[[15,-22],[15,-24],[28,-24],[28,-22],[27.093816860004736,-22.577114534668876],[28.906183139995264,-23.422885465331124],[35.906183139995264,-8.422885465331124],[34.093816860004736,-7.577114534668876],[34,-8],[36,-8],[36,7],[34,7],[35,8],[35,6],[38,6],[38,8]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_ACCESS_THRESHOLD",
+        "severity": "advisory",
+        "targetIds": [
+          "wellnessPavilion",
+          "wellnessPath"
+        ],
+        "message": "Door wellnessEntry threshold is 0.26 m; wellnessPath surface is 0.06 m. Direct stepped access may be possible, but no step-free transition is authored. wellnessPavilion world plan=[[-52,3],[-38,3],[-38,15],[-52,15]]; wellnessPath world plan=[[-15,-24],[-15,-22],[-28,-22],[-28,-24],[-28.906183139995264,-23.422885465331124],[-27.093816860004736,-22.577114534668876],[-34.093816860004736,-7.577114534668876],[-35.906183139995264,-8.422885465331124],[-36,-8],[-34,-8],[-34,9],[-36,9],[-35,8],[-35,10],[-38,10],[-38,8]]",
+        "guidance": "If continuous or step-free access is intended, author the landing/step/ramp; no transition is inferred.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_OPENING_REMOVED",
+        "severity": "advisory",
+        "targetIds": [
+          "eastResidenceWing"
+        ],
+        "message": "eastResidenceWing opening eastWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition. eastResidenceWing world plan=[[10,2],[18,2],[18,22],[10,22]]",
+        "guidance": "Move opening eastWingLink to an exterior facade of eastResidenceWing, or make the shared face a partition with a door; nothing is removed automatically.",
+        "classification": "advisory"
+      },
+      {
+        "code": "AUTHORED_OPENING_REMOVED",
+        "severity": "advisory",
+        "targetIds": [
+          "westResidenceWing"
+        ],
+        "message": "westResidenceWing opening westWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition. westResidenceWing world plan=[[-18,2],[-10,2],[-10,22],[-18,22]]",
+        "guidance": "Move opening westWingLink to an exterior facade of westResidenceWing, or make the shared face a partition with a door; nothing is removed automatically.",
+        "classification": "advisory"
+      }
+    ]
+  },
+  "repair": {
+    "accepted": true,
+    "reasons": [
+      "Only diagnosed technical fields changed."
+    ],
+    "changedPaths": [
+      "scene.estatePlan.zones",
+      "scene.estatePlan.circulation",
+      "scene.estatePlan.siteAccess",
+      "guestPath.transform.position",
+      "guestPath.dimensions",
+      "wellnessPath.transform.position",
+      "wellnessPath.dimensions"
+    ]
+  },
+  "scene": {
+    "version": 3,
+    "site": {
+      "width": 150,
+      "depth": 120,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#6f8d57",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "A flat-land Caribbean sanctuary organized as a luminous contemporary cloister: a protected arrival house frames a long water garden and pool court, while detached guest and wellness pavilions occupy quiet palm-garden clearings.",
+      "character": "The estate pairs pale limestone, warm timber screens, bronze-framed glass and deep floating roof planes. Its plan creates a calm sequence from a ceremonial northern arrival court through a private shaded courtyard to a resort-scale southern pool garden, with separate guest and wellness retreats.",
+      "requirements": [
+        {
+          "id": "req-budget",
+          "source": "user",
+          "statement": "$15 million luxury estate in Saint Lucia",
+          "metric": "budget",
+          "objectIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "arrivalCourt"
+          ],
+          "value": "USD 15000000"
+        },
+        {
+          "id": "req-luxury-estate",
+          "source": "user",
+          "statement": "An extraordinary luxury estate with complete creative freedom for buildings, amenities, gardens, and outdoor entertainment spaces.",
+          "metric": "feature",
+          "objectIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "courtyardTerrace",
+            "poolDeck",
+            "palmGarden"
+          ]
+        }
+      ],
+      "program": [
+        {
+          "id": "program-residence",
+          "role": "primary residence",
+          "kind": "residence",
+          "objectIds": [
+            "mainResidence",
+            "eastResidenceWing",
+            "westResidenceWing",
+            "mainRoof",
+            "eastWingRoof",
+            "westWingRoof"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "program-guests",
+          "role": "private guest retreat",
+          "kind": "building",
+          "objectIds": [
+            "guestPavilion",
+            "guestRoof"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "program-wellness",
+          "role": "spa and wellness pavilion",
+          "kind": "amenity",
+          "objectIds": [
+            "wellnessPavilion",
+            "wellnessRoof"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "program-watercourt",
+          "role": "outdoor entertaining and swimming court",
+          "kind": "amenity",
+          "objectIds": [
+            "courtyardTerrace",
+            "poolDeck",
+            "pool"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "program-landscape",
+          "role": "arrival gardens and palm clearings",
+          "kind": "landscape",
+          "objectIds": [
+            "arrivalGarden",
+            "palmGarden",
+            "eastGarden",
+            "westGarden"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [
+        {
+          "id": "zone-arrival",
+          "purpose": "formal vehicle arrival and pedestrian entry",
+          "objectIds": [
+            "driveway",
+            "arrivalCourt",
+            "entryWalk",
+            "arrivalGarden"
+          ],
+          "allocation": {
+            "x": 0,
+            "z": -35,
+            "width": 58,
+            "depth": 50
+          },
+          "clearSpace": {
+            "x": 0,
+            "z": -23,
+            "width": 30,
+            "depth": 14,
+            "baseElevation": 0,
+            "height": 4
+          }
+        },
+        {
+          "id": "zone-residence",
+          "purpose": "two-storey cloister residence surrounding a private outdoor court",
+          "objectIds": [
+            "mainResidence",
+            "eastResidenceWing",
+            "westResidenceWing",
+            "mainRoof",
+            "eastWingRoof",
+            "westWingRoof",
+            "courtyardTerrace"
+          ],
+          "allocation": {
+            "x": 0,
+            "z": 5,
+            "width": 44,
+            "depth": 34
+          }
+        },
+        {
+          "id": "zone-water-garden",
+          "purpose": "pool, sun deck and outdoor entertaining lawn",
+          "objectIds": [
+            "poolDeck",
+            "pool",
+            "palmGarden"
+          ],
+          "allocation": {
+            "x": 0,
+            "z": 36.5,
+            "width": 46,
+            "depth": 47
+          }
+        },
+        {
+          "id": "zone-guests",
+          "purpose": "detached guest pavilion within eastern garden privacy buffer",
+          "objectIds": [
+            "guestPavilion",
+            "guestRoof",
+            "eastGarden",
+            "guestPath"
+          ],
+          "allocation": {
+            "x": 37.5,
+            "z": 7.5,
+            "width": 45,
+            "depth": 63
+          }
+        },
+        {
+          "id": "zone-wellness",
+          "purpose": "detached wellness pavilion within western garden privacy buffer",
+          "objectIds": [
+            "wellnessPavilion",
+            "wellnessRoof",
+            "westGarden",
+            "wellnessPath"
+          ],
+          "allocation": {
+            "x": -37.5,
+            "z": 8.5,
+            "width": 45,
+            "depth": 65
+          }
+        }
+      ],
+      "circulation": [
+        {
+          "id": "route-driveway",
+          "purpose": "vehicle arrival from northern site edge to arrival court",
+          "from": "siteNorth",
+          "to": "arrivalCourt",
+          "via": [
+            "driveway"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                -60
+              ]
+            },
+            "to": {
+              "point": [
+                0,
+                0,
+                -30
+              ]
+            },
+            "use": "vehicle",
+            "width": 6,
+            "waypoints": [
+              [
+                0,
+                0,
+                -48
+              ],
+              [
+                0,
+                0,
+                -30
+              ]
+            ]
+          }
+        },
+        {
+          "id": "route-entry",
+          "purpose": "pedestrian approach to the principal entry",
+          "from": "arrivalCourt",
+          "to": "mainResidence",
+          "via": [
+            "entryWalk"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                -16
+              ]
+            },
+            "to": {
+              "point": [
+                0,
+                0,
+                -10
+              ],
+              "openingId": "mainEntryDoor"
+            },
+            "use": "pedestrian",
+            "width": 3,
+            "waypoints": [
+              [
+                0,
+                0,
+                -16
+              ],
+              [
+                0,
+                0,
+                -10
+              ]
+            ]
+          }
+        },
+        {
+          "id": "route-pool",
+          "purpose": "courtyard connection to pool entertaining deck",
+          "from": "courtyardTerrace",
+          "to": "poolDeck",
+          "via": [
+            "poolWalk"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                18
+              ]
+            },
+            "to": {
+              "point": [
+                0,
+                0,
+                20
+              ]
+            },
+            "use": "pedestrian",
+            "width": 4,
+            "waypoints": [
+              [
+                0,
+                0,
+                18
+              ],
+              [
+                0,
+                0,
+                20
+              ]
+            ]
+          }
+        },
+        {
+          "id": "route-guest",
+          "purpose": "private garden path to guest pavilion",
+          "from": "arrivalCourt",
+          "to": "guestPavilion",
+          "via": [
+            "guestPath"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                15,
+                0,
+                -23
+              ]
+            },
+            "to": {
+              "point": [
+                38,
+                0,
+                7
+              ],
+              "openingId": "guestEntry"
+            },
+            "use": "pedestrian",
+            "width": 2,
+            "waypoints": [
+              [
+                28,
+                0,
+                -23
+              ],
+              [
+                35,
+                0,
+                -8
+              ],
+              [
+                35,
+                0,
+                7
+              ]
+            ]
+          }
+        },
+        {
+          "id": "route-wellness",
+          "purpose": "private garden path to wellness pavilion",
+          "from": "arrivalCourt",
+          "to": "wellnessPavilion",
+          "via": [
+            "wellnessPath"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -15,
+                0,
+                -23
+              ]
+            },
+            "to": {
+              "point": [
+                -38,
+                0,
+                9
+              ],
+              "openingId": "wellnessEntry"
+            },
+            "use": "pedestrian",
+            "width": 2,
+            "waypoints": [
+              [
+                -28,
+                0,
+                -23
+              ],
+              [
+                -35,
+                0,
+                -8
+              ],
+              [
+                -35,
+                0,
+                9
+              ]
+            ]
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "rel-drive-arrival",
+          "intent": "driveway reaches formal arrival court",
+          "from": "driveway",
+          "to": "arrivalCourt",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-court-entry",
+          "intent": "entry walk terminates at principal door",
+          "from": "arrivalCourt",
+          "to": "mainResidence",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-central-east",
+          "intent": "east residential wing is joined to main residence",
+          "from": "mainResidence",
+          "to": "eastResidenceWing",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-central-west",
+          "intent": "west residential wing is joined to main residence",
+          "from": "mainResidence",
+          "to": "westResidenceWing",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-courtyard-pool",
+          "intent": "outdoor court extends to pool deck",
+          "from": "courtyardTerrace",
+          "to": "poolDeck",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-pool-deck-water",
+          "intent": "pool is embedded in the entertaining deck",
+          "from": "poolDeck",
+          "to": "pool",
+          "kind": "contains"
+        },
+        {
+          "id": "rel-guest-route",
+          "intent": "garden route reaches guest pavilion",
+          "from": "guestPath",
+          "to": "guestPavilion",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-wellness-route",
+          "intent": "wellness route reaches wellness pavilion",
+          "from": "wellnessPath",
+          "to": "wellnessPavilion",
+          "kind": "connects"
+        },
+        {
+          "id": "rel-main-roof",
+          "intent": "floating roof shelters main residence",
+          "from": "mainRoof",
+          "to": "mainResidence",
+          "kind": "hosts"
+        },
+        {
+          "id": "rel-east-roof",
+          "intent": "floating roof shelters east wing",
+          "from": "eastWingRoof",
+          "to": "eastResidenceWing",
+          "kind": "hosts"
+        },
+        {
+          "id": "rel-west-roof",
+          "intent": "floating roof shelters west wing",
+          "from": "westWingRoof",
+          "to": "westResidenceWing",
+          "kind": "hosts"
+        }
+      ],
+      "considerations": [
+        {
+          "id": "consider-pool-view",
+          "intent": "south-facing living spaces overlook the water garden",
+          "objectIds": [
+            "mainResidence",
+            "courtyardTerrace",
+            "poolDeck",
+            "pool"
+          ],
+          "kind": "view"
+        },
+        {
+          "id": "consider-guest-privacy",
+          "intent": "guest retreat is separated by a planted eastern clearing",
+          "objectIds": [
+            "guestPavilion",
+            "eastGarden"
+          ],
+          "kind": "privacy"
+        },
+        {
+          "id": "consider-wellness-privacy",
+          "intent": "wellness pavilion is buffered by western palms",
+          "objectIds": [
+            "wellnessPavilion",
+            "westGarden"
+          ],
+          "kind": "privacy"
+        },
+        {
+          "id": "consider-courtyard",
+          "intent": "the central courtyard remains a protected open-air entertaining room",
+          "objectIds": [
+            "courtyardTerrace"
+          ],
+          "kind": "open-space"
+        },
+        {
+          "id": "consider-landscape",
+          "intent": "arrival, pavilions and pool court are unified by tropical garden rooms",
+          "objectIds": [
+            "arrivalGarden",
+            "palmGarden",
+            "eastGarden",
+            "westGarden"
+          ],
+          "kind": "landscape"
+        }
+      ],
+      "architecture": [
+        {
+          "id": "arch-cloister",
+          "objectIds": [
+            "mainResidence",
+            "eastResidenceWing",
+            "westResidenceWing"
+          ],
+          "form": "joined",
+          "intent": "A two-storey three-part cloister residence enclosing a shaded south-facing outdoor court.",
+          "minWidth": 36,
+          "minDepth": 32,
+          "minHeight": 7.2
+        },
+        {
+          "id": "arch-arrival",
+          "objectIds": [
+            "arrivalCourt",
+            "driveway"
+          ],
+          "form": "rectangular",
+          "intent": "A ceremonial arrival forecourt sized for multiple vehicles and a clear approach.",
+          "minWidth": 30,
+          "minDepth": 14
+        },
+        {
+          "id": "arch-watergarden",
+          "objectIds": [
+            "courtyardTerrace",
+            "poolDeck",
+            "pool"
+          ],
+          "form": "rectangular",
+          "intent": "A continuous outdoor entertaining sequence from shaded court to swimming pool.",
+          "minWidth": 30,
+          "minDepth": 36
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-main",
+            "objectId": "mainResidence",
+            "role": "principal living and entertaining bar"
+          },
+          {
+            "id": "bp-east-wing",
+            "objectId": "eastResidenceWing",
+            "role": "private family and suite wing"
+          },
+          {
+            "id": "bp-west-wing",
+            "objectId": "westResidenceWing",
+            "role": "private family and suite wing"
+          },
+          {
+            "id": "bp-guest",
+            "objectId": "guestPavilion",
+            "role": "guest retreat"
+          },
+          {
+            "id": "bp-wellness",
+            "objectId": "wellnessPavilion",
+            "role": "spa and wellness retreat"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "bp-main-entry",
+            "objectId": "mainResidence",
+            "openingId": "mainEntryDoor",
+            "level": 0
+          },
+          {
+            "id": "bp-guest-entry",
+            "objectId": "guestPavilion",
+            "openingId": "guestEntry",
+            "level": 0
+          },
+          {
+            "id": "bp-wellness-entry",
+            "objectId": "wellnessPavilion",
+            "openingId": "wellnessEntry",
+            "level": 0
+          }
+        ],
+        "verticalCirculationIds": [
+          "mainStair",
+          "eastWingStair",
+          "westWingStair"
+        ],
+        "roofObjectIds": [
+          "mainRoof",
+          "eastWingRoof",
+          "westWingRoof",
+          "guestRoof",
+          "wellnessRoof"
+        ],
+        "outdoorObjectIds": [
+          "arrivalCourt",
+          "courtyardTerrace",
+          "poolDeck",
+          "pool",
+          "arrivalGarden",
+          "palmGarden",
+          "eastGarden",
+          "westGarden"
+        ],
+        "routeIds": [
+          "route-driveway",
+          "route-entry",
+          "route-pool",
+          "route-guest",
+          "route-wellness"
+        ],
+        "allocations": [
+          {
+            "id": "alloc-budget",
+            "requirementId": "req-budget",
+            "objectIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "pool",
+              "arrivalCourt"
+            ],
+            "roomIds": []
+          },
+          {
+            "id": "alloc-luxury",
+            "requirementId": "req-luxury-estate",
+            "objectIds": [
+              "mainResidence",
+              "guestPavilion",
+              "wellnessPavilion",
+              "pool",
+              "courtyardTerrace",
+              "poolDeck",
+              "palmGarden"
+            ],
+            "roomIds": []
+          }
+        ]
+      },
+      "siteAccess": [
+        {
+          "id": "siteNorth",
+          "boundary": "north",
+          "point": [
+            0,
+            0,
+            -60
+          ]
+        }
+      ]
+    },
+    "objects": [
+      {
+        "id": "mainResidence",
+        "type": "building-mass",
+        "semanticRole": "primary-residence",
+        "label": "Cloister Main House",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": -4,
+          "baseElevation": 0,
+          "width": 36,
+          "depth": 12,
+          "height": 7.2
+        },
+        "transform": {
+          "position": [
+            0,
+            3.6,
+            -4
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          36,
+          7.2,
+          12
+        ],
+        "material": {
+          "id": "limestone",
+          "color": "#e7dfd0"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "primary",
+          "facadeRoles": {
+            "north": "arrival",
+            "east": "private",
+            "south": "view",
+            "west": "private"
+          },
+          "mainEntry": {
+            "openingId": "mainEntryDoor",
+            "canopyDepth": 2.4,
+            "color": "#8c6947"
+          },
+          "openings": [
+            {
+              "id": "mainEntryDoor",
+              "facade": "north",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.8,
+              "frame": true,
+              "serves": "entryWalk"
+            },
+            {
+              "id": "northUpperGlazing",
+              "facade": "north",
+              "floors": "upper",
+              "type": "glazing-zone",
+              "start": 0.16,
+              "end": 0.84,
+              "heightRatio": 0.62,
+              "frame": true,
+              "reveal": 0.18
+            },
+            {
+              "id": "eastLinkDoor",
+              "facade": "south",
+              "floors": "all",
+              "type": "door",
+              "start": 0.05,
+              "end": 0.22,
+              "height": 2.5,
+              "frame": true,
+              "serves": "eastResidenceWing"
+            },
+            {
+              "id": "courtDoor",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.38,
+              "end": 0.62,
+              "height": 2.9,
+              "operation": "sliding",
+              "serves": "courtyardTerrace"
+            },
+            {
+              "id": "westLinkDoor",
+              "facade": "south",
+              "floors": "all",
+              "type": "door",
+              "start": 0.78,
+              "end": 0.95,
+              "height": 2.5,
+              "frame": true,
+              "serves": "westResidenceWing"
+            },
+            {
+              "id": "eastWindowRhythm",
+              "facade": "east",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 2.1,
+              "sill": 0.75
+            },
+            {
+              "id": "westWindowRhythm",
+              "facade": "west",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 2.1,
+              "sill": 0.75
+            }
+          ]
+        },
+        "levels": 2,
+        "roofForm": "floating-flat",
+        "pitch": 0
+      },
+      {
+        "id": "eastResidenceWing",
+        "type": "building-mass",
+        "semanticRole": "residential-wing",
+        "label": "East Suite Wing",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 14,
+          "z": 12,
+          "baseElevation": 0,
+          "width": 8,
+          "depth": 20,
+          "height": 7.2
+        },
+        "transform": {
+          "position": [
+            14,
+            3.6,
+            12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          7.2,
+          20
+        ],
+        "material": {
+          "id": "limestone",
+          "color": "#e7dfd0"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "facadeRoles": {
+            "north": "service",
+            "east": "private",
+            "south": "view",
+            "west": "private"
+          },
+          "openings": [
+            {
+              "id": "eastWingLink",
+              "facade": "north",
+              "floors": "all",
+              "type": "door",
+              "start": 0.18,
+              "end": 0.82,
+              "height": 2.5,
+              "frame": true,
+              "serves": "mainResidence"
+            },
+            {
+              "id": "eastPoolDoor",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.2,
+              "end": 0.8,
+              "height": 2.8,
+              "operation": "sliding",
+              "serves": "poolDeck"
+            },
+            {
+              "id": "eastOuterWindows",
+              "facade": "east",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 3,
+              "width": 1.5,
+              "height": 2,
+              "sill": 0.8
+            },
+            {
+              "id": "eastCourtWindows",
+              "facade": "west",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 3,
+              "width": 1.5,
+              "height": 2,
+              "sill": 0.8
+            }
+          ]
+        },
+        "levels": 2,
+        "roofForm": "floating-flat",
+        "pitch": 0
+      },
+      {
+        "id": "westResidenceWing",
+        "type": "building-mass",
+        "semanticRole": "residential-wing",
+        "label": "West Suite Wing",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -14,
+          "z": 12,
+          "baseElevation": 0,
+          "width": 8,
+          "depth": 20,
+          "height": 7.2
+        },
+        "transform": {
+          "position": [
+            -14,
+            3.6,
+            12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          7.2,
+          20
+        ],
+        "material": {
+          "id": "limestone",
+          "color": "#e7dfd0"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "facadeRoles": {
+            "north": "service",
+            "east": "private",
+            "south": "view",
+            "west": "private"
+          },
+          "openings": [
+            {
+              "id": "westWingLink",
+              "facade": "north",
+              "floors": "all",
+              "type": "door",
+              "start": 0.18,
+              "end": 0.82,
+              "height": 2.5,
+              "frame": true,
+              "serves": "mainResidence"
+            },
+            {
+              "id": "westPoolDoor",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.2,
+              "end": 0.8,
+              "height": 2.8,
+              "operation": "sliding",
+              "serves": "poolDeck"
+            },
+            {
+              "id": "westOuterWindows",
+              "facade": "west",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 3,
+              "width": 1.5,
+              "height": 2,
+              "sill": 0.8
+            },
+            {
+              "id": "westCourtWindows",
+              "facade": "east",
+              "floors": "all",
+              "type": "opening-rhythm",
+              "count": 3,
+              "width": 1.5,
+              "height": 2,
+              "sill": 0.8
+            }
+          ]
+        },
+        "levels": 2,
+        "roofForm": "floating-flat",
+        "pitch": 0
+      },
+      {
+        "id": "mainRoof",
+        "type": "roof-form",
+        "semanticRole": "primary-roof",
+        "label": "Floating Bronze Roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -4,
+          "baseElevation": 7.2,
+          "width": 36,
+          "depth": 12,
+          "height": 0.45
+        },
+        "transform": {
+          "position": [
+            0,
+            7.425,
+            -4
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          36,
+          0.45,
+          12
+        ],
+        "material": {
+          "id": "bronzeRoof",
+          "color": "#5d5144"
+        },
+        "collision": "solid",
+        "hostId": "mainResidence",
+        "support": {
+          "kind": "object",
+          "hostId": "mainResidence",
+          "relationship": "rests-on"
+        },
+        "composition": {
+          "roofDatumGroup": "cloisterRoofDatum"
+        },
+        "roofForm": "floating-flat",
+        "overhang": 1.2,
+        "pitch": 0
+      },
+      {
+        "id": "eastWingRoof",
+        "type": "roof-form",
+        "semanticRole": "wing-roof",
+        "label": "East Wing Floating Roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 14,
+          "z": 12,
+          "baseElevation": 7.2,
+          "width": 8,
+          "depth": 20,
+          "height": 0.45
+        },
+        "transform": {
+          "position": [
+            14,
+            7.425,
+            12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          0.45,
+          20
+        ],
+        "material": {
+          "id": "bronzeRoof",
+          "color": "#5d5144"
+        },
+        "collision": "solid",
+        "hostId": "eastResidenceWing",
+        "support": {
+          "kind": "object",
+          "hostId": "eastResidenceWing",
+          "relationship": "rests-on"
+        },
+        "composition": {
+          "roofDatumGroup": "cloisterRoofDatum"
+        },
+        "roofForm": "floating-flat",
+        "overhang": 1.1,
+        "pitch": 0
+      },
+      {
+        "id": "westWingRoof",
+        "type": "roof-form",
+        "semanticRole": "wing-roof",
+        "label": "West Wing Floating Roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -14,
+          "z": 12,
+          "baseElevation": 7.2,
+          "width": 8,
+          "depth": 20,
+          "height": 0.45
+        },
+        "transform": {
+          "position": [
+            -14,
+            7.425,
+            12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          0.45,
+          20
+        ],
+        "material": {
+          "id": "bronzeRoof",
+          "color": "#5d5144"
+        },
+        "collision": "solid",
+        "hostId": "westResidenceWing",
+        "support": {
+          "kind": "object",
+          "hostId": "westResidenceWing",
+          "relationship": "rests-on"
+        },
+        "composition": {
+          "roofDatumGroup": "cloisterRoofDatum"
+        },
+        "roofForm": "floating-flat",
+        "overhang": 1.1,
+        "pitch": 0
+      },
+      {
+        "id": "guestPavilion",
+        "type": "building-mass",
+        "semanticRole": "guesthouse",
+        "label": "Garden Guest Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 45,
+          "z": 7,
+          "baseElevation": 0,
+          "width": 14,
+          "depth": 10,
+          "height": 3.8
+        },
+        "transform": {
+          "position": [
+            45,
+            1.9,
+            7
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          14,
+          3.8,
+          10
+        ],
+        "material": {
+          "id": "guestStone",
+          "color": "#ded6c7"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "facadeRoles": {
+            "north": "private",
+            "east": "private",
+            "south": "view",
+            "west": "arrival"
+          },
+          "openings": [
+            {
+              "id": "guestEntry",
+              "facade": "west",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.34,
+              "end": 0.66,
+              "height": 2.7,
+              "operation": "sliding",
+              "serves": "guestPath"
+            },
+            {
+              "id": "guestGardenDoors",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.2,
+              "end": 0.8,
+              "height": 2.7,
+              "operation": "sliding",
+              "serves": "eastGarden"
+            },
+            {
+              "id": "guestNorthWindows",
+              "facade": "north",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 1.8,
+              "sill": 0.9
+            },
+            {
+              "id": "guestEastWindows",
+              "facade": "east",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 1.8,
+              "sill": 0.9
+            }
+          ]
+        },
+        "levels": 1,
+        "roofForm": "flat",
+        "pitch": 0
+      },
+      {
+        "id": "guestRoof",
+        "type": "roof-form",
+        "semanticRole": "guest-roof",
+        "label": "Guest Pavilion Roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 45,
+          "z": 7,
+          "baseElevation": 3.8,
+          "width": 14,
+          "depth": 10,
+          "height": 0.35
+        },
+        "transform": {
+          "position": [
+            45,
+            3.9749999999999996,
+            7
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          14,
+          0.35,
+          10
+        ],
+        "material": {
+          "id": "bronzeRoof",
+          "color": "#5d5144"
+        },
+        "collision": "solid",
+        "hostId": "guestPavilion",
+        "roofForm": "flat",
+        "overhang": 0.8,
+        "pitch": 0
+      },
+      {
+        "id": "wellnessPavilion",
+        "type": "building-mass",
+        "semanticRole": "wellness-building",
+        "label": "Wellness Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -45,
+          "z": 9,
+          "baseElevation": 0,
+          "width": 14,
+          "depth": 12,
+          "height": 3.8
+        },
+        "transform": {
+          "position": [
+            -45,
+            1.9,
+            9
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          14,
+          3.8,
+          12
+        ],
+        "material": {
+          "id": "wellnessStone",
+          "color": "#d8d0c2"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "facadeRoles": {
+            "north": "private",
+            "east": "arrival",
+            "south": "view",
+            "west": "private"
+          },
+          "openings": [
+            {
+              "id": "wellnessEntry",
+              "facade": "east",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.34,
+              "end": 0.66,
+              "height": 2.7,
+              "operation": "sliding",
+              "serves": "wellnessPath"
+            },
+            {
+              "id": "wellnessGardenDoors",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.18,
+              "end": 0.82,
+              "height": 2.7,
+              "operation": "sliding",
+              "serves": "westGarden"
+            },
+            {
+              "id": "wellnessNorthWindows",
+              "facade": "north",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 1.8,
+              "sill": 0.9
+            },
+            {
+              "id": "wellnessWestWindows",
+              "facade": "west",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.8,
+              "height": 1.8,
+              "sill": 0.9
+            }
+          ]
+        },
+        "levels": 1,
+        "roofForm": "flat",
+        "pitch": 0
+      },
+      {
+        "id": "wellnessRoof",
+        "type": "roof-form",
+        "semanticRole": "wellness-roof",
+        "label": "Wellness Pavilion Roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -45,
+          "z": 9,
+          "baseElevation": 3.8,
+          "width": 14,
+          "depth": 12,
+          "height": 0.35
+        },
+        "transform": {
+          "position": [
+            -45,
+            3.9749999999999996,
+            9
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          14,
+          0.35,
+          12
+        ],
+        "material": {
+          "id": "bronzeRoof",
+          "color": "#5d5144"
+        },
+        "collision": "solid",
+        "hostId": "wellnessPavilion",
+        "roofForm": "flat",
+        "overhang": 0.8,
+        "pitch": 0
+      },
+      {
+        "id": "arrivalCourt",
+        "type": "terrace",
+        "semanticRole": "arrival-court",
+        "label": "Limestone Arrival Court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -23,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 14,
+          "height": 0.12
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            -23
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.12,
+          14
+        ],
+        "material": {
+          "id": "arrivalPaving",
+          "color": "#c9c0ae"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "driveway",
+        "type": "driveway",
+        "semanticRole": "vehicle-access",
+        "label": "Palm-Lined Arrival Drive",
+        "geometryKind": "slab",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            -45
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          6,
+          0.01,
+          30
+        ],
+        "material": {
+          "id": "drivePaving",
+          "color": "#8f887d"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "entryWalk",
+        "type": "path",
+        "semanticRole": "pedestrian-entry",
+        "label": "Principal Entry Walk",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            -13
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          3,
+          0.01,
+          6
+        ],
+        "material": {
+          "id": "entryPaving",
+          "color": "#d8d0c2"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "courtyardTerrace",
+        "type": "terrace",
+        "semanticRole": "outdoor-living",
+        "label": "Shaded Courtyard Terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 11,
+          "baseElevation": 0,
+          "width": 19,
+          "depth": 18,
+          "height": 0.12
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            11
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          19,
+          0.12,
+          18
+        ],
+        "material": {
+          "id": "courtyardStone",
+          "color": "#d6cbb8"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "poolWalk",
+        "type": "path",
+        "semanticRole": "pool-connection",
+        "label": "Pool Court Transition",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            19
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          4,
+          0.01,
+          2
+        ],
+        "material": {
+          "id": "courtyardStone",
+          "color": "#d6cbb8"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "poolDeck",
+        "type": "terrace",
+        "semanticRole": "pool-terrace",
+        "label": "Water Garden Entertaining Deck",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 29,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 18,
+          "height": 0.12
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            29
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.12,
+          18
+        ],
+        "material": {
+          "id": "poolStone",
+          "color": "#cfc3ae"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "pool",
+        "type": "pool",
+        "semanticRole": "swimming-pool",
+        "label": "Long Reflecting Pool",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": 29,
+          "baseElevation": -1.35,
+          "width": 18,
+          "depth": 5.5,
+          "height": 1.45
+        },
+        "transform": {
+          "position": [
+            0,
+            -0.6250000000000001,
+            29
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          1.45,
+          5.5
+        ],
+        "material": {
+          "id": "poolWater",
+          "color": "#39a9bc"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "guestPath",
+        "type": "path",
+        "semanticRole": "guest-access",
+        "label": "East Garden Guest Path",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            26.5,
+            0.05,
+            -8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          23,
+          0.01,
+          32
+        ],
+        "material": {
+          "id": "gardenPath",
+          "color": "#b9ad99"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "wellnessPath",
+        "type": "path",
+        "semanticRole": "wellness-access",
+        "label": "West Garden Wellness Path",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -26.5,
+            0.05,
+            -7
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          23,
+          0.01,
+          34
+        ],
+        "material": {
+          "id": "gardenPath",
+          "color": "#b9ad99"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "arrivalGarden",
+        "type": "landscape-zone",
+        "semanticRole": "arrival-landscape",
+        "label": "Arrival Palm Garden",
+        "geometryKind": "plane",
+        "architecture": {
+          "x": 0,
+          "z": -34,
+          "baseElevation": 0,
+          "width": 58,
+          "depth": 22,
+          "height": 0.01
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            -34
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          58,
+          0.01,
+          22
+        ],
+        "material": {
+          "id": "planting",
+          "color": "#587a45"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "palmGarden",
+        "type": "landscape-zone",
+        "semanticRole": "water-garden",
+        "label": "Southern Palm Water Garden",
+        "geometryKind": "plane",
+        "architecture": {
+          "x": 0,
+          "z": 48,
+          "baseElevation": 0,
+          "width": 46,
+          "depth": 24,
+          "height": 0.01
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            48
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          46,
+          0.01,
+          24
+        ],
+        "material": {
+          "id": "planting",
+          "color": "#63854b"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "eastGarden",
+        "type": "landscape-zone",
+        "semanticRole": "guest-garden",
+        "label": "East Guest Garden",
+        "geometryKind": "plane",
+        "architecture": {
+          "x": 45,
+          "z": 25,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 28,
+          "height": 0.01
+        },
+        "transform": {
+          "position": [
+            45,
+            0.005,
+            25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.01,
+          28
+        ],
+        "material": {
+          "id": "planting",
+          "color": "#63854b"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "westGarden",
+        "type": "landscape-zone",
+        "semanticRole": "wellness-garden",
+        "label": "West Wellness Garden",
+        "geometryKind": "plane",
+        "architecture": {
+          "x": -45,
+          "z": 27,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 28,
+          "height": 0.01
+        },
+        "transform": {
+          "position": [
+            -45,
+            0.005,
+            27
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.01,
+          28
+        ],
+        "material": {
+          "id": "planting",
+          "color": "#63854b"
+        },
+        "collision": "none"
+      }
+    ],
+    "interior": {
+      "storeys": [],
+      "rooms": [],
+      "circulation": [
+        {
+          "id": "mainStair",
+          "type": "stair",
+          "hostMassId": "mainResidence",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -5,
+            "z": 0,
+            "width": 2.5,
+            "depth": 4
+          },
+          "stairType": "u-shaped",
+          "direction": "south",
+          "turn": "left"
+        },
+        {
+          "id": "eastWingStair",
+          "type": "stair",
+          "hostMassId": "eastResidenceWing",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 0,
+            "z": -5,
+            "width": 2.4,
+            "depth": 3.4
+          },
+          "stairType": "u-shaped",
+          "direction": "south",
+          "turn": "right"
+        },
+        {
+          "id": "westWingStair",
+          "type": "stair",
+          "hostMassId": "westResidenceWing",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 0,
+            "z": -5,
+            "width": 2.4,
+            "depth": 3.4
+          },
+          "stairType": "u-shaped",
+          "direction": "south",
+          "turn": "left"
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "driveway",
+        "to": "arrivalCourt",
+        "kind": "connects"
+      },
+      {
+        "from": "entryWalk",
+        "to": "mainResidence",
+        "kind": "connects"
+      },
+      {
+        "from": "mainResidence",
+        "to": "eastResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "from": "mainResidence",
+        "to": "westResidenceWing",
+        "kind": "connects"
+      },
+      {
+        "from": "courtyardTerrace",
+        "to": "poolDeck",
+        "kind": "connects"
+      },
+      {
+        "from": "poolDeck",
+        "to": "pool",
+        "kind": "contains"
+      },
+      {
+        "from": "guestPath",
+        "to": "guestPavilion",
+        "kind": "connects"
+      },
+      {
+        "from": "wellnessPath",
+        "to": "wellnessPavilion",
+        "kind": "connects"
+      },
+      {
+        "from": "arrivalCourt",
+        "to": "mainResidence",
+        "kind": "connects"
+      },
+      {
+        "from": "mainRoof",
+        "to": "mainResidence",
+        "kind": "hosts"
+      },
+      {
+        "from": "eastWingRoof",
+        "to": "eastResidenceWing",
+        "kind": "hosts"
+      },
+      {
+        "from": "westWingRoof",
+        "to": "westResidenceWing",
+        "kind": "hosts"
+      }
+    ],
+    "metadata": {}
+  }
+}

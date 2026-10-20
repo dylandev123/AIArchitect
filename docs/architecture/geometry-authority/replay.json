@@ -1,0 +1,1084 @@
+[
+  {
+    "name": "canopy-initial",
+    "sha256": "a8cd16298ef686e04b9543c67465fe0fbb78bc48486f83856d35ae897da0a30f",
+    "originalAccepted": false,
+    "originalAllocations": [
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "arrivalDrive"
+        ],
+        "message": "zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "entryWalk"
+        ],
+        "message": "zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "arrivalGarden"
+        ],
+        "message": "zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "poolTerrace"
+        ],
+        "message": "zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "poolTerrace"
+        ],
+        "message": "zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "sunsetLawn"
+        ],
+        "message": "zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "southGarden"
+        ],
+        "message": "zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "westGarden"
+        ],
+        "message": "zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "guestWalk"
+        ],
+        "message": "zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "eastGarden"
+        ],
+        "message": "zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      }
+    ],
+    "authoredStairs": [],
+    "derivedModeCounterfactual": {
+      "accepted": false,
+      "allocations": [],
+      "issues": [
+        {
+          "severity": "fatal",
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetId": "mainResidence",
+          "message": "Opening southDiningDoor crosses different south wall planes on level 0; span=[0.58,0.88], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "targetIds": [
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetId": "mainResidence",
+          "message": "Opening southLivingDoor crosses different south wall planes on level 0; span=[0.12,0.42], local wall segments=[{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "targetIds": [
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetId": "mainResidence",
+          "message": "Opening southUpperDoor crosses different south wall planes on level 1; span=[0.38,0.62], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "targetIds": [
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "FALLBACK_RENDER_USED",
+          "targetId": "arrivalDrive",
+          "message": "Palm-lined arrival drive renders as generic path geometry."
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "entryWalk",
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "guestWalk",
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "wellnessWalk",
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_FORM_UNBUILT",
+          "targetId": "poolTerrace",
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects.",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "poolTerrace",
+          "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "entryWalk",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ],
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "guestWalk",
+          "targetIds": [
+            "guestWalk",
+            "guestPavilion"
+          ],
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "wellnessWalk",
+          "targetIds": [
+            "wellnessWalk",
+            "wellnessPavilion"
+          ],
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[6.439999999999998,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "guestPavilion",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "wellnessPavilion",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_SITE_OVERRUN",
+          "targetId": "southGarden",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]].",
+          "severity": "physical"
+        }
+      ]
+    },
+    "note": "All legacy allocations remain intentional reservations in production. Counterfactual explicitly opts each zone into derived mode; no stair, object, route, boundary or requirement correction is inferred."
+  },
+  {
+    "name": "canopy-repair",
+    "sha256": "49d4d75dfb84388296b25daf1474e34c65aebcf526b24cad2580128e28aee026",
+    "originalAccepted": false,
+    "originalAllocations": [
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "arrivalDrive"
+        ],
+        "message": "zone-arrival: arrivalDrive exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "entryWalk"
+        ],
+        "message": "zone-arrival: entryWalk exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "arrivalGarden"
+        ],
+        "message": "zone-arrival: arrivalGarden exceeds allocation x=[-21,21], z=[-54,-12].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "poolTerrace"
+        ],
+        "message": "zone-residence: poolTerrace exceeds allocation x=[-26,26], z=[-18,24].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "poolTerrace"
+        ],
+        "message": "zone-water: poolTerrace exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "sunsetLawn"
+        ],
+        "message": "zone-water: sunsetLawn exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "southGarden"
+        ],
+        "message": "zone-water: southGarden exceeds allocation x=[-31,31], z=[14,56].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "westGarden"
+        ],
+        "message": "zone-guests: westGarden exceeds allocation x=[-62,-28], z=[-7,27].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "guestWalk"
+        ],
+        "message": "zone-guests: guestWalk exceeds allocation x=[-62,-28], z=[-7,27].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "eastGarden"
+        ],
+        "message": "zone-wellness: eastGarden exceeds allocation x=[26,60], z=[-6,32].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      }
+    ],
+    "authoredStairs": [],
+    "derivedModeCounterfactual": {
+      "accepted": false,
+      "allocations": [],
+      "issues": [
+        {
+          "severity": "advisory",
+          "code": "FALLBACK_RENDER_USED",
+          "targetId": "arrivalDrive",
+          "message": "Palm-lined arrival drive renders as generic path geometry."
+        },
+        {
+          "severity": "advisory",
+          "code": "ORIENTATION_CONFLICT",
+          "targetId": "scene",
+          "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained."
+        },
+        {
+          "severity": "advisory",
+          "code": "ROOF_OVERHANG_INCLUDED",
+          "targetId": "guestRoof",
+          "message": "Authored footprint already includes both eaves; no second overhang added."
+        },
+        {
+          "severity": "advisory",
+          "code": "ROOF_OVERHANG_INCLUDED",
+          "targetId": "wellnessRoof",
+          "message": "Authored footprint already includes both eaves; no second overhang added."
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "entryWalk",
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "guestWalk",
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "wellnessWalk",
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening.",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "arch-main: supported individual roof forms are present; arbitrary roof intersections and the subjective complexity claim are not certified.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_FORM_UNBUILT",
+          "targetId": "poolTerrace",
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects.",
+          "targetIds": [
+            "poolTerrace",
+            "reflectionPool",
+            "sunsetLawn"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "poolTerrace",
+          "message": "arch-water-garden: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "reflectionPool",
+            "poolTerrace"
+          ]
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "entryWalk",
+          "targetIds": [
+            "entryWalk",
+            "mainResidence"
+          ],
+          "message": "plan-entry-walk: entryWalk → mainResidence gap=1.40m; author a continuous route to the actual destination opening. entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]; mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "plan-guest-walk: mainResidence → guestWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "guestWalk",
+          "targetIds": [
+            "guestWalk",
+            "guestPavilion"
+          ],
+          "message": "plan-guest-walk: guestWalk → guestPavilion gap=3.50m; author a continuous route to the actual destination opening. guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]; guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "plan-wellness-walk: mainResidence → wellnessWalk gap=3.50m; author a continuous route to the actual destination opening. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetId": "wellnessWalk",
+          "targetIds": [
+            "wellnessWalk",
+            "wellnessPavilion"
+          ],
+          "message": "plan-wellness-walk: wellnessWalk → wellnessPavilion gap=2.50m; author a continuous route to the actual destination opening. wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]; wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "entryWalk"
+          ],
+          "message": "Door mainEntryDoor does not meet entryWalk at its resolved wall; world threshold strips=[{\"position\":[0,0.26,-9.7],\"dimensions\":[4.600000000000001,1,0.2]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; entryWalk world plan=[[-1.5,-20],[1.5,-20],[1.5,-11],[-1.5,-11]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "wellnessWalk"
+          ],
+          "message": "Door eastWellnessDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[23.1,0.26,1.3899999999999997],\"dimensions\":[0.2,1,4.9399999999999995]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "mainResidence",
+          "targetIds": [
+            "mainResidence",
+            "guestWalk"
+          ],
+          "message": "Door westGuestDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-23.1,0.26,0.6100000000000003],\"dimensions\":[0.2,1,5.459999999999999]}]. Proximity is not a constructed connection. mainResidence world plan={\"min\":[-23,-12],\"max\":[23,14]}; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "guestPavilion",
+          "targetIds": [
+            "guestPavilion",
+            "guestWalk"
+          ],
+          "message": "Door guestEastDoor does not meet guestWalk at its resolved wall; world threshold strips=[{\"position\":[-32.9,0.26,7.58],\"dimensions\":[0.2,1,4.199999999999999]}]. Proximity is not a constructed connection. guestPavilion world plan=[[-51,1],[-33,1],[-33,15],[-51,15]]; guestWalk world plan=[[-29.5,-7],[-26.5,-7],[-26.5,15],[-29.5,15]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_ACCESS_DISCONNECTED",
+          "targetId": "wellnessPavilion",
+          "targetIds": [
+            "wellnessPavilion",
+            "wellnessWalk"
+          ],
+          "message": "Door wellnessWestDoor does not meet wellnessWalk at its resolved wall; world threshold strips=[{\"position\":[31.9,0.26,9.36],\"dimensions\":[0.2,1,5.12]}]. Proximity is not a constructed connection. wellnessPavilion world plan=[[32,2],[52,2],[52,18],[32,18]]; wellnessWalk world plan=[[26.5,-5],[29.5,-5],[29.5,19],[26.5,19]]",
+          "severity": "physical"
+        },
+        {
+          "code": "AUTHORED_SITE_OVERRUN",
+          "targetId": "southGarden",
+          "targetIds": [
+            "southGarden"
+          ],
+          "message": "southGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[35,67],[-35,67]].",
+          "severity": "physical"
+        }
+      ]
+    },
+    "note": "All legacy allocations remain intentional reservations in production. Counterfactual explicitly opts each zone into derived mode; no stair, object, route, boundary or requirement correction is inferred."
+  },
+  {
+    "name": "cloister-initial",
+    "sha256": "742fc6d69aac4f1fa849803aeb305ea740c09af039f907e11c635786282b3d36",
+    "originalAccepted": false,
+    "originalAllocations": [
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "driveway"
+        ],
+        "message": "zone-arrival: driveway exceeds allocation x=[-29,29], z=[-58,-16].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "entryWalk"
+        ],
+        "message": "zone-arrival: entryWalk exceeds allocation x=[-29,29], z=[-58,-16].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "palmGarden"
+        ],
+        "message": "zone-water-garden: palmGarden exceeds allocation x=[-23,23], z=[13,47].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "eastGarden"
+        ],
+        "message": "zone-guests: eastGarden exceeds allocation x=[30,60], z=[-10,24].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "guestPath"
+        ],
+        "message": "zone-guests: guestPath exceeds allocation x=[30,60], z=[-10,24].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "westGarden"
+        ],
+        "message": "zone-wellness: westGarden exceeds allocation x=[-60,-30], z=[-8,26].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "wellnessPath"
+        ],
+        "message": "zone-wellness: wellnessPath exceeds allocation x=[-60,-30], z=[-8,26].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      }
+    ],
+    "authoredStairs": [],
+    "derivedModeCounterfactual": {
+      "accepted": false,
+      "allocations": [],
+      "issues": [
+        {
+          "severity": "advisory",
+          "code": "FALLBACK_RENDER_USED",
+          "targetId": "driveway",
+          "message": "Palm-Lined Arrival Drive renders as generic slab geometry."
+        },
+        {
+          "severity": "advisory",
+          "code": "ORIENTATION_CONFLICT",
+          "targetId": "scene",
+          "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_REMOVED",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "eastResidenceWing opening eastWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_AUTHORED_PARTITION",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_AUTHORED_PARTITION",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_REMOVED",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "westResidenceWing opening westWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "arrivalCourt"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "arrivalCourt"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ACCESS_POINT_MISSING",
+          "targetId": "siteNorth",
+          "message": "route-driveway: from endpoint does not meet its destination surface or a suitable ground-level opening.",
+          "targetIds": [
+            "siteNorth",
+            "driveway"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetId": "guestPath",
+          "message": "route-guest: route width intersects guestPavilion; an authored detour or explicit supported bridge is required.",
+          "targetIds": [
+            "guestPath",
+            "guestPavilion"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetId": "wellnessPath",
+          "message": "route-wellness: route width intersects wellnessPavilion; an authored detour or explicit supported bridge is required.",
+          "targetIds": [
+            "wellnessPath",
+            "wellnessPavilion"
+          ]
+        },
+        {
+          "code": "BLUEPRINT_SITE_BOUNDS",
+          "targetId": "palmGarden",
+          "targetIds": [
+            "palmGarden"
+          ],
+          "message": "palmGarden, level 0 exceeds the fixed 150 × 120m site.",
+          "severity": "fatal"
+        },
+        {
+          "code": "BLUEPRINT_ENTRY_UNDECIDED",
+          "targetId": "eastResidenceWing",
+          "targetIds": [
+            "eastResidenceWing"
+          ],
+          "message": "No entrance is designated; access intent needs an authored decision.",
+          "severity": "advisory"
+        },
+        {
+          "code": "BLUEPRINT_ENTRY_UNDECIDED",
+          "targetId": "westResidenceWing",
+          "targetIds": [
+            "westResidenceWing"
+          ],
+          "message": "No entrance is designated; access intent needs an authored decision.",
+          "severity": "advisory"
+        },
+        {
+          "code": "AUTHORED_SITE_OVERRUN",
+          "targetId": "palmGarden",
+          "targetIds": [
+            "palmGarden"
+          ],
+          "message": "palmGarden: outside site x=[-75,75], z=[-60,60]; offending world points=[[23,62],[-23,62]].",
+          "severity": "physical"
+        }
+      ]
+    },
+    "note": "All legacy allocations remain intentional reservations in production. Counterfactual explicitly opts each zone into derived mode; no stair, object, route, boundary or requirement correction is inferred."
+  },
+  {
+    "name": "cloister-repair",
+    "sha256": "bb4c970ecd729ad7a7512797b9e20a31a945f922c899505f2178e93b7e4f86a6",
+    "originalAccepted": false,
+    "originalAllocations": [
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "guestPath"
+        ],
+        "message": "zone-guests: guestPath exceeds allocation x=[15,60], z=[-23,39].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      },
+      {
+        "code": "ESTATE_ALLOCATION_CONFLICT",
+        "severity": "significant",
+        "targetIds": [
+          "wellnessPath"
+        ],
+        "message": "zone-wellness: wellnessPath exceeds allocation x=[-60,-15], z=[-23,41].",
+        "guidance": "Resolve only this estate commitment using its stable ids. Preserve estatePlan and unrelated objects, materials, roofs and geometry. Never erase a commitment to silence a finding."
+      }
+    ],
+    "authoredStairs": [],
+    "derivedModeCounterfactual": {
+      "accepted": false,
+      "allocations": [],
+      "issues": [
+        {
+          "severity": "advisory",
+          "code": "FALLBACK_RENDER_USED",
+          "targetId": "driveway",
+          "message": "Palm-Lined Arrival Drive renders as generic slab geometry."
+        },
+        {
+          "severity": "advisory",
+          "code": "ORIENTATION_CONFLICT",
+          "targetId": "scene",
+          "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_REMOVED",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "eastResidenceWing opening eastWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_AUTHORED_PARTITION",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:eastResidenceWing|mainResidence:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_AUTHORED_PARTITION",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "mainResidence has an authored door on the shared face; its aperture/partition is retained and the opposite exterior facade is removed."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_CONFLICT",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "Both meeting facades author doors. Semantic hierarchy selects one partition; review the conflicting opening intent."
+        },
+        {
+          "severity": "advisory",
+          "code": "JUNCTION_OPENING_REMOVED",
+          "targetId": "junction:mainResidence|westResidenceWing:envelope",
+          "message": "westResidenceWing opening westWingLink on its north facade lies on the face shared with mainResidence; that wall is not built, so the opening is removed. Move it to an exterior facade or author a door to make the shared face a partition."
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "req-budget: budget is retained as intent; no deterministic verification is available.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "arrivalCourt"
+          ]
+        },
+        {
+          "severity": "advisory",
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "targetId": "mainResidence",
+          "message": "arch-cloister: composition connectivity checked; exact joined silhouette and roof intersections require review.",
+          "targetIds": [
+            "mainResidence",
+            "guestPavilion",
+            "wellnessPavilion",
+            "pool",
+            "arrivalCourt"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ACCESS_POINT_MISSING",
+          "targetId": "siteNorth",
+          "message": "route-driveway: from endpoint does not meet its destination surface or a suitable ground-level opening.",
+          "targetIds": [
+            "siteNorth",
+            "driveway"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetId": "guestPath",
+          "message": "route-guest: route width intersects guestPavilion; an authored detour or explicit supported bridge is required.",
+          "targetIds": [
+            "guestPath",
+            "guestPavilion"
+          ]
+        },
+        {
+          "severity": "fatal",
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetId": "wellnessPath",
+          "message": "route-wellness: route width intersects wellnessPavilion; an authored detour or explicit supported bridge is required.",
+          "targetIds": [
+            "wellnessPath",
+            "wellnessPavilion"
+          ]
+        },
+        {
+          "code": "BLUEPRINT_ENTRY_UNDECIDED",
+          "targetId": "eastResidenceWing",
+          "targetIds": [
+            "eastResidenceWing"
+          ],
+          "message": "No entrance is designated; access intent needs an authored decision.",
+          "severity": "advisory"
+        },
+        {
+          "code": "BLUEPRINT_ENTRY_UNDECIDED",
+          "targetId": "westResidenceWing",
+          "targetIds": [
+            "westResidenceWing"
+          ],
+          "message": "No entrance is designated; access intent needs an authored decision.",
+          "severity": "advisory"
+        }
+      ]
+    },
+    "note": "All legacy allocations remain intentional reservations in production. Counterfactual explicitly opts each zone into derived mode; no stair, object, route, boundary or requirement correction is inferred."
+  }
+]

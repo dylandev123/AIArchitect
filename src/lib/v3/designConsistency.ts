@@ -1,3 +1,4 @@
+import { spatialPlanPoints } from './routeGeometry';
 import { authoredPlan, authoredSeparation } from './authoredPlan';
 import { auditV3Completeness } from './completeness';
 import { auditV3EstatePlan } from './estatePlan';
@@ -16,19 +17,24 @@ const repairable = new Set(['ESTATE_ACCESS_DISCONNECTED', 'ESTATE_ALLOCATION_CON
 /** New-generation acceptance only. Never changes saved-scene validation or compilation. */
 export function auditV3DesignConsistency(scene: V3Scene, issues: readonly V3Issue[]): V3DesignConsistency {
   const findings: V3ConsistencyFinding[] = issues.filter(i => i.severity === 'fatal').map(i => ({
-    code: i.code, classification: i.code === 'ESTATE_FORM_UNBUILT' && /connected composition/.test(i.message) ? 'repairable' : 'structural', targetIds: [i.targetId], message: i.message,
+    code: i.code, classification: repairable.has(i.code) || i.code === 'ESTATE_FORM_UNBUILT' && /connected composition/.test(i.message) ? 'repairable' : 'structural', targetIds: i.targetIds ?? [i.targetId], message: i.message,
     guidance: 'Resolve this construction contract without changing unrelated forms, identities or materials.',
   }));
   // Do not compile malformed prerequisites. Footprint construction failures are independently auditable.
   if (issues.some(i => i.severity === 'fatal' && (i.code.startsWith('INVALID_') || i.code.startsWith('DUPLICATE_')))) return { ok: false, findings };
+  const completeness = auditV3Completeness(scene), stairFailures=completeness.circulationFailures;
+  for(const failure of stairFailures) if(!findings.some(f=>f.code===failure.code&&f.targetIds.includes(failure.targetId))) findings.push({
+    code:failure.code,classification:'repairable',targetIds:[failure.targetId],message:failure.message,
+    guidance:'Correct only this authored circulation entry location, footprint, stairType/direction/turn or diagnosed levels. Preserve its id, host, intended endpoints, requirements and every unrelated stair. Never delete access to silence a failure.',
+  });
   const evidence = (ids: string[]) => ids.flatMap(id => {
     const o = scene.objects.find(o => o.id === id);
     if (!o) return [];
-    const points=authoredPlan(o);
+    const points=spatialPlanPoints(scene,o);
     const plan=points.length<=16 ? points : { min:[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1]))], max:[Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))] };
     return [`${id} world plan=${JSON.stringify(plan)}`];
   }).join('; ');
-  for (const d of [...auditV3EstatePlan(scene), ...auditV3Completeness(scene).findings]) {
+  for (const d of [...auditV3EstatePlan(scene), ...completeness.findings]) {
     const existing = findings.find(f => f.code === d.code && f.message === d.message);
     if (existing) { existing.targetIds = d.targetIds; existing.message += ` ${evidence(d.targetIds)}`;
       if(d.code==='ESTATE_FORM_UNBUILT'&&/connected composition/.test(d.message)) {

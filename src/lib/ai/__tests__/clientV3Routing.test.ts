@@ -21,6 +21,21 @@ beforeEach(browser);
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe("V3 initial client request", () => {
+  it.each(['planning', 'construction', 'brief', 'repair', 'output'])('never commits a rejected blueprint %s attempt', async phase => {
+    const { useProjectStore, requestHouseEdit } = await load();
+    const { useV3FailedPreviewStore } = await import('@/store/useV3FailedPreviewStore');
+    useV3FailedPreviewStore.getState().clear();
+    const project = useProjectStore.getState().createProject('Blueprint rejection safety', 'house', 'v3-scene');
+    const before = structuredClone(useProjectStore.getState().getProject(project.id));
+    const status = phase === 'output' ? 502 : 422;
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: 'Incomplete supported design', phase, attempts: 1, findings: [{ code: 'OFFLINE_REJECTION', severity: 'fatal', targetIds: ['blueprint'], message: 'Rejected' }] }),
+      { status, headers: { 'Content-Type': 'application/json', 'x-ai-architect-resolved-mode': 'v3-scene', 'x-ai-architect-pipeline': 'v3-architectural-blueprint-1' } })));
+    const apply = vi.fn();
+    expect(await requestHouseEdit({ projectId: project.id, prompt: 'Independent home', apply })).toMatchObject({ ok: false, status });
+    expect(apply).not.toHaveBeenCalled(); expect(useProjectStore.getState().getProject(project.id)).toEqual(before);
+    expect(useV3FailedPreviewStore.getState().candidate).toBeNull();
+  });
+
   it("sends the persisted V3 mode and V3 root, then preserves V3 on commit", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
     const project = useProjectStore.getState().createProject("V3 mansion", "house", "v3-scene");

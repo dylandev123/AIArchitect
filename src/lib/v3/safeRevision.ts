@@ -1,3 +1,8 @@
+import { authoredOverlap } from './authoredPlan';
+import { getObjectBaseY, getObjectTopY } from './elevation';
+import { materializeV3ArchitecturalScene } from './architecture';
+import { estateRoutePoints, estateRouteBounds, siteAccessFits } from './routeGeometry';
+import { auditEstateSpatial } from './estateSpatial';
 import { v3CompositionSchema } from './composition';
 import type { V3Scene, V3SceneObject } from './scene';
 import type { V3DesignDiagnostic, V3DesignReview } from './designReview';
@@ -104,26 +109,26 @@ function requestedAddition(o: V3SceneObject, findings: V3DesignDiagnostic[]): bo
  * circulation finding may be corrected. Every other authored circulation entry and interior datum is protected.
  */
 function circulationChangeAllowed(path: string, original: V3Scene, revised: V3Scene, findings: V3DesignDiagnostic[]): boolean {
-  const hosts = accessTargets(findings, CIRCULATION_CODES), fixable = new Set(findings.filter(d => d.code === 'CIRCULATION_INTENT_INCOMPLETE').flatMap(d => d.targetIds));
-  if (!hosts.size) return false;
+  const hosts = accessTargets(findings, CIRCULATION_CODES), fixable = new Set(findings.filter(d => d.code === 'CIRCULATION_INTENT_INCOMPLETE' || d.code.startsWith('STAIR_') || d.code.startsWith('CIRCULATION_') || String(d.code)==='ROOF_EXIT_UNSUPPORTED').flatMap(d => d.targetIds));
+  if (!hosts.size && !fixable.size) return false;
   // A circulation-only interior is created with empty storey/room lists.
   if ((path === 'interior.storeys' || path === 'interior.rooms') && !original.interior) return (revised.interior?.[path === 'interior.storeys' ? 'storeys' : 'rooms'] ?? []).length === 0;
   if (path !== 'interior.circulation') return false;
   const before = original.interior?.circulation ?? [], after = revised.interior?.circulation ?? [];
-  if (!before.every(entry => fixable.has(entry.id) || after.some(next => stable(next) === stable(entry)))) return false;
+  if (!before.every(entry => after.some(next => next.id===entry.id && (stable(next)===stable(entry) || fixable.has(entry.id) && next.hostMassId===entry.hostMassId && next.type===entry.type && (next.fromLevel===entry.fromLevel && next.toLevel===entry.toLevel || findings.some(d=>String(d.code)==='CIRCULATION_LEVELS_INVALID'&&d.targetIds.includes(entry.id))) && next.label===entry.label && next.semanticRole===entry.semanticRole)))) return false;
   return after.filter(entry => !before.some(prev => stable(prev) === stable(entry))).every(entry => fixable.has(entry.id) || hosts.has(entry.hostMassId));
 }
 export interface V3RevisionDecision { accepted: boolean; reasons: string[]; changedPaths: string[] }
 /** Conservative allowlist: declining a repair is safer than accepting an unrelated redesign. */
 export function assessV3Revision(original: V3Scene, revised: V3Scene, initial: V3DesignReview, final: V3DesignReview): V3RevisionDecision {
-  const reasons:string[]=blueprintPreservationReasons(original,revised), changedPaths:string[]=[], findings=conflicts(initial).slice(0,12), after=conflicts(final);
+  const reasons:string[]=[...blueprintPreservationReasons(original,revised),...routeRepairSafety(original,revised)], changedPaths:string[]=[], findings=conflicts(initial).slice(0,12), after=conflicts(final);
   const beforeKeys=new Set(conflicts(initial).map(key)), afterKeys=new Set(after.map(key));
   if(!findings.some(d=>!afterKeys.has(key(d)))) reasons.push('No targeted conflict was resolved.');
   if(after.some(d=>!beforeKeys.has(key(d)))) reasons.push('Revision introduced a new conflict or unmet requirement.');
   const {objects: oldObjects, ...oldScene}=original, {objects: newObjects, ...newScene}=revised;
   for(const path of changes(oldScene,newScene)) {
     changedPaths.push(`scene.${path}`);
-    if(!estateRouteChangeAllowed(path, original, revised, findings) && !estateRelationshipChangeAllowed(path, original, revised, findings) && !circulationChangeAllowed(path, original, revised, findings)) reasons.push(`Protected scene field changed: ${path}.`);
+    if(!estateRouteChangeAllowed(path, original, revised, findings) && !estateSiteAccessChangeAllowed(path,original,revised,findings) && !estateRelationshipChangeAllowed(path, original, revised, findings) && !circulationChangeAllowed(path, original, revised, findings)) reasons.push(`Protected scene field changed: ${path}.`);
   }
   const byId=new Map(newObjects.map(o=>[o.id,o]));
   if(byId.size!==newObjects.length) reasons.push('Duplicate object identities.');
@@ -132,7 +137,8 @@ export function assessV3Revision(original: V3Scene, revised: V3Scene, initial: V
     if(!afterObject) { reasons.push(`Object removed or renamed: ${before.id}.`); continue; }
     changedPaths.push(...changes(before,afterObject).map(p=>`${before.id}.${p}`));
     const paths=changes(before,localizedComposition(before,afterObject,findings)), allowed=allowedPaths(before,findings);
-    for(const path of paths) if(!allowed.has(path)) reasons.push(`Unrelated change: ${before.id}.${path}.`);
+    if(derivedRouteChangeAllowed(before,afterObject,original,revised,findings))['architecture','dimensions','transform.position','transform.rotation','transform.scale'].forEach(p=>allowed.add(p));
+    for(const path of paths) if(![...allowed].some(p=>path===p||path.startsWith(p+'.'))) reasons.push(`Unrelated change: ${before.id}.${path}.`);
   }
   for(const added of newObjects.filter(o=>!oldObjects.some(b=>b.id===o.id))) {
     changedPaths.push(`${added.id} (added)`);
@@ -170,7 +176,7 @@ function estateRouteChangeAllowed(path: string, original: V3Scene, revised: V3Sc
 /** Objective repair has the same preservation obligation as design repair. Invalid roots have no
  * usable scene authority; once objects exist, every unrelated field remains protected. */
 export function assessV3ObjectiveRevision(original:V3Scene,revised:V3Scene,issues:readonly {code:string;targetId:string;targetIds?:string[];message:string}[]):V3RevisionDecision{
- const reasons:string[]=blueprintPreservationReasons(original,revised),changedPaths:string[]=[];
+ const reasons:string[]=[...blueprintPreservationReasons(original,revised),...routeRepairSafety(original,revised)],changedPaths:string[]=[];
  if(!Array.isArray(original?.objects)||!original.objects.length)return {accepted:true,reasons:['No initial object authority to compare; repaired scene must pass validation.'],changedPaths};
  const byId=new Map(revised.objects.map(o=>[o.id,o]));
  const {objects:_,...beforeRoot}=original,{objects:__,...afterRoot}=revised;
@@ -180,12 +186,13 @@ export function assessV3ObjectiveRevision(original:V3Scene,revised:V3Scene,issue
   changedPaths.push(`scene.${path}`);
   const missingIndexOnly = (path === 'estatePlan.blueprint' || path.startsWith('estatePlan.blueprint.')) && original.estatePlan?.blueprint === undefined
     && issues.some(i=>i.code==='BLUEPRINT_MISSING') && v3BlueprintSchema.safeParse(revised.estatePlan?.blueprint).success;
-  if(!missingIndexOnly&&!(path.startsWith('site.')&&issues.some(i=>['INVALID_SITE','FLAT_SITE_CONTRACT'].includes(i.code)))&&!path.startsWith('metadata')&&!estateRouteChangeAllowed(path,original,revised,findings)&&!allocationChangeAllowed(path,original,revised,findings))reasons.push(`Protected scene field changed: ${path}.`);
+  if(!missingIndexOnly&&!(path.startsWith('site.')&&issues.some(i=>['INVALID_SITE','FLAT_SITE_CONTRACT'].includes(i.code)))&&!path.startsWith('metadata')&&!estateRouteChangeAllowed(path,original,revised,findings)&&!estateSiteAccessChangeAllowed(path,original,revised,findings)&&!allocationChangeAllowed(path,original,revised,findings)&&!circulationChangeAllowed(path,original,revised,findings))reasons.push(`Protected scene field changed: ${path}.`);
  }
  for(const before of original.objects){
   const after=byId.get(before.id);if(!after){reasons.push(`Object removed: ${before.id}`);continue;}
   const target=issues.filter(i=>i.targetId===before.id),codes=new Set(target.map(i=>i.code));
   const allowed=new Set<string>();
+  if(derivedRouteChangeAllowed(before,after,original,revised,findings))['architecture','dimensions','transform.position','transform.rotation','transform.scale'].forEach(p=>allowed.add(p));
   const related=issues.filter(i=>(i.targetIds??[i.targetId]).includes(before.id));
   if (before.type!=='building-mass' && before.type!=='roof-form' && related.some(i=>['AUTHORED_SITE_OVERRUN','BLUEPRINT_SITE_BOUNDS'].includes(i.code) || i.code==='ESTATE_FORM_UNBUILT' && /connected composition/.test(i.message) || ['ESTATE_ACCESS_DISCONNECTED','AUTHORED_ACCESS_DISCONNECTED','BLUEPRINT_ROUTE_THRESHOLD'].includes(i.code) && ['path','driveway'].includes(before.type))) geometry.forEach(p=>allowed.add(p));
   if([...codes].some(c=>c.startsWith('ROOF_FOOTPRINT_')))['roofForm','pitch','pitchUnit','overhang'].forEach(p=>allowed.add(p));
@@ -239,6 +246,68 @@ function allocationChangeAllowed(path: string, original: V3Scene, revised: V3Sce
   return before.length===after.length && before.every((zone,i)=>{
     const next=after[i];
     if(stable(zone)===stable(next))return true;
-    return findings.some(d=>d.code==='ESTATE_ALLOCATION_CONFLICT'&&d.message.startsWith(`${zone.id}:`)) && stable({...next,allocation:zone.allocation})===stable(zone);
+    return zone.allocationMode!=='derived' && next?.allocation!==undefined && findings.some(d=>d.code==='ESTATE_ALLOCATION_CONFLICT'&&d.message.startsWith(`${zone.id}:`)) && stable({...next,allocation:zone.allocation})===stable(zone);
   });
+}
+
+/** Geometry repair is not permission to turn a path into a plaza, move architecture or cross an obstacle.
+ * Routed owners have no independent footprint to repair. Local route edits retain width and endpoint identities. */
+function routeRepairSafety(original:V3Scene,revised:V3Scene):string[]{
+ const reasons:string[]=[], touched=new Set<string>();
+ if(!Array.isArray(original?.objects)||!Array.isArray(revised?.objects))return reasons;
+ const before=materializeV3ArchitecturalScene(original),after=materializeV3ArchitecturalScene(revised);
+ const geometryOf=(o:V3SceneObject)=>({architecture:o.architecture,dimensions:o.dimensions,transform:o.transform});
+ for(const o of before.objects.filter(o=>['path','driveway'].includes(o.type))){
+  const next=after.objects.find(n=>n.id===o.id);if(!next)continue;
+  const routes=before.estatePlan?.circulation.filter(r=>r.spatial&&r.via.includes(o.id))??[];
+  if(stable(geometryOf(o))!==stable(geometryOf(next))){
+   if(routes.length && !isDerivedRouteChange(o,next,before,after))reasons.push(`Canonical route owner geometry is derived; edit only its diagnosed route: ${o.id}.`);
+   else if(!routes.length && !before.siteHierarchy) {
+    const [w,,d]=o.dimensions,[nw,,nd]=next.dimensions;
+    if(nw>w*1.5+.01 || nd>d*1.5+.01)reasons.push(`Unreasonable route enlargement: ${o.id}. A local approach must retain its architectural width.`);
+   }
+   touched.add(o.id);
+  }
+ }
+ for(const route of before.estatePlan?.circulation??[]){
+  const next=after.estatePlan?.circulation.find(r=>r.id===route.id);
+  if(!route.spatial||!next?.spatial||stable(route)===stable(next))continue;
+  route.via.forEach(id=>touched.add(id));
+  if(route.spatial.width!==next.spatial.width)reasons.push(`Route repair changed protected width: ${route.id}.`);
+  for(const side of ['from','to'] as const)if(route[side]!==next[side] || route.spatial[side].openingId!==next.spatial[side].openingId || route.spatial[side].entranceId!==next.spatial[side].entranceId)reasons.push(`Route repair changed destination identity: ${route.id}.`);
+  const old=estateRoutePoints(route,before),points=estateRoutePoints(next,after),limit=Math.max(2,route.spatial.width*2);
+  const distance=(p:number[],a:number[],b:number[])=>{const dx=b[0]-a[0],dz=b[2]-a[2],t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[2]-a[2])*dz)/(dx*dx+dz*dz||1)));return Math.hypot(p[0]-a[0]-t*dx,p[2]-a[2]-t*dz);};
+  const samples=(path:typeof points)=>path.slice(1).flatMap((b,i)=>{const a=path[i],steps=Math.max(1,Math.min(256,Math.ceil(Math.hypot(b[0]-a[0],b[2]-a[2]))));return Array.from({length:steps+1},(_,j)=>[a[0]+(b[0]-a[0])*j/steps,0,a[2]+(b[2]-a[2])*j/steps]);});
+  if(samples(points).some(p=>Math.min(...old.slice(1).map((b,i)=>distance(p,old[i],b)))>limit) || samples(old).some(p=>Math.min(...points.slice(1).map((b,i)=>distance(p,points[i],b)))>limit))reasons.push(`Route correction exceeds local repair scope: ${route.id}. Explicit replanning is required.`);
+ }
+ if(!before.siteHierarchy)for(const id of touched){
+  const o=after.objects.find(o=>o.id===id);
+  if(!o || after.estatePlan?.circulation.some(r=>r.spatial&&r.via.includes(id)))continue;
+  for(const obstacle of after.objects)if(obstacle.id!==id && (obstacle.type==='building-mass'||obstacle.type==='pool'||['solid','water'].includes(obstacle.collision??'')) && getObjectTopY(obstacle)>getObjectBaseY(o) && getObjectBaseY(obstacle)<getObjectTopY(o)+2 && authoredOverlap(o,obstacle)>.02)reasons.push(`Unsafe route repair: ${id} intersects ${obstacle.id}.`);
+ }
+ if(touched.size)for(const finding of auditEstateSpatial(after))if(['ESTATE_ROUTE_BLOCKED','ESTATE_POOL_CROSSING','ESTATE_ROUTE_UNSUPPORTED','ESTATE_ACCESS_POINT_MISSING','ESTATE_ACCESS_DISCONNECTED'].includes(finding.code)&&finding.targetIds.some(id=>touched.has(id)))reasons.push(`Unsafe route repair: ${finding.code} ${finding.message}`);
+ return reasons;
+}
+
+function isDerivedRouteChange(before:V3SceneObject,after:V3SceneObject,original:V3Scene,revised:V3Scene):boolean{
+ const routes=original.estatePlan?.circulation.filter(r=>r.spatial&&r.via.includes(before.id))??[];
+ // A diagnosed opening repair may move derived contact/approach geometry without editing the
+ // route record. The opening itself is still checked by the independent preservation allowlist.
+ if(!routes.length || !routes.some(r=>{
+  const next=revised.estatePlan?.circulation.find(n=>n.id===r.id);
+  return next && (stable(r)!==stable(next) || stable(estateRoutePoints(r,original))!==stable(estateRoutePoints(next,revised)));
+ }))return false;
+ const bounds=estateRouteBounds(revised,after);
+ return !!bounds && !after.architecture && stable(bounds.transform)===stable(after.transform) && stable(bounds.dimensions)===stable(after.dimensions);
+}
+function derivedRouteChangeAllowed(before:V3SceneObject,after:V3SceneObject,original:V3Scene,revised:V3Scene,findings:V3DesignDiagnostic[]):boolean{
+ return isDerivedRouteChange(before,after,original,revised) && estateRouteChangeAllowed('estatePlan.circulation',original,revised,findings);
+}
+/** Explicit repair may index an ALREADY AUTHORED boundary endpoint; it cannot choose a new gate or road. */
+function estateSiteAccessChangeAllowed(path:string,original:V3Scene,revised:V3Scene,findings:V3DesignDiagnostic[]):boolean{
+ if(path!=='estatePlan.siteAccess')return false;
+ const before=original.estatePlan?.siteAccess??[],after=revised.estatePlan?.siteAccess??[];
+ return before.every(a=>after.some(b=>stable(a)===stable(b))) && after.filter(a=>!before.some(b=>stable(a)===stable(b))).every(a=>
+  findings.some(f=>f.code==='ESTATE_ACCESS_POINT_MISSING'&&f.targetIds.includes(a.id)) && siteAccessFits(revised,a.id,a.point) &&
+  original.estatePlan?.circulation.some(r=>r.spatial&&(['from','to'] as const).some(side=>r[side]===a.id&&stable(r.spatial![side].point)===stable(a.point))));
 }
