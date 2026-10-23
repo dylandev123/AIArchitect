@@ -1,0 +1,288 @@
+{
+  "materials": [
+    {
+      "id": "ivory-stucco",
+      "color": "#e5dfd1",
+      "roughness": 0.78,
+      "metalness": 0,
+      "opacity": 1,
+      "surface": "stucco"
+    },
+    {
+      "id": "volcanic-stone",
+      "color": "#4b4944",
+      "roughness": 0.86,
+      "metalness": 0,
+      "opacity": 1,
+      "surface": "stone"
+    },
+    {
+      "id": "teak",
+      "color": "#875c35",
+      "roughness": 0.62,
+      "metalness": 0,
+      "opacity": 1,
+      "surface": "wood"
+    },
+    {
+      "id": "bronze-metal",
+      "color": "#292b29",
+      "roughness": 0.34,
+      "metalness": 0.78,
+      "opacity": 1,
+      "surface": "metal"
+    },
+    {
+      "id": "clear-glass",
+      "color": "#a9c8cf",
+      "roughness": 0.08,
+      "metalness": 0,
+      "opacity": 0.42,
+      "surface": "glass"
+    },
+    {
+      "id": "travertine-paving",
+      "color": "#c9bea9",
+      "roughness": 0.71,
+      "metalness": 0,
+      "opacity": 1,
+      "surface": "paving"
+    },
+    {
+      "id": "pool-water",
+      "color": "#3f9db3",
+      "roughness": 0.06,
+      "metalness": 0,
+      "opacity": 0.72,
+      "surface": "water"
+    },
+    {
+      "id": "lawn-grass",
+      "color": "#638451",
+      "roughness": 0.9,
+      "metalness": 0,
+      "opacity": 1,
+      "surface": "grass"
+    }
+  ],
+  "buildings": [
+    {
+      "id": "main-villa",
+      "materialId": "ivory-stucco",
+      "roof": {
+        "form": "floating-flat",
+        "materialId": "bronze-metal",
+        "pitchDegrees": 0,
+        "overhang": 0.6,
+        "thickness": 0.28
+      },
+      "facade": {
+        "openings": [
+          {
+            "id": "garden-wing-glass",
+            "facade": "north",
+            "type": "glazing-zone",
+            "start": 0.73,
+            "end": 0.96,
+            "heightRatio": 0.72,
+            "reveal": 0.2
+          },
+          {
+            "id": "upper-view-glass",
+            "facade": "east",
+            "floors": "upper",
+            "type": "glazing-zone",
+            "start": 0.15,
+            "end": 0.85,
+            "heightRatio": 0.64,
+            "reveal": 0.2
+          },
+          {
+            "id": "arrival-west-glass",
+            "facade": "south",
+            "floors": "ground",
+            "type": "glazing-zone",
+            "start": 0.05,
+            "end": 0.34,
+            "heightRatio": 0.68,
+            "reveal": 0.18
+          },
+          {
+            "id": "arrival-east-glass",
+            "facade": "south",
+            "floors": "ground",
+            "type": "glazing-zone",
+            "start": 0.66,
+            "end": 0.95,
+            "heightRatio": 0.68,
+            "reveal": 0.18
+          },
+          {
+            "id": "arrival-upper-windows",
+            "facade": "south",
+            "floors": "upper",
+            "type": "opening-rhythm",
+            "count": 4,
+            "width": 1.5,
+            "height": 1.6,
+            "sill": 0.8
+          }
+        ],
+        "mainEntry": {
+          "openingId": "villa-south-entry",
+          "canopyDepth": 2,
+          "color": "#292b29"
+        },
+        "massHierarchy": "primary",
+        "assemblies": [
+          {
+            "id": "arrival-gallery-shade",
+            "intent": "A real shaded arrival gallery gives the main entrance depth",
+            "parts": [
+              {
+                "id": "gallery-cover",
+                "facade": "south",
+                "elevation": 3.8,
+                "type": "slab",
+                "start": 0.04,
+                "end": 0.96,
+                "depth": 2.4,
+                "thickness": 0.2
+              },
+              {
+                "id": "gallery-post-0",
+                "facade": "south",
+                "type": "post",
+                "at": 0.06,
+                "depth": 2.2,
+                "height": 3.8,
+                "size": 0.24
+              },
+              {
+                "id": "gallery-post-1",
+                "facade": "south",
+                "type": "post",
+                "at": 0.34,
+                "depth": 2.2,
+                "height": 3.8,
+                "size": 0.24
+              },
+              {
+                "id": "gallery-post-2",
+                "facade": "south",
+                "type": "post",
+                "at": 0.66,
+                "depth": 2.2,
+                "height": 3.8,
+                "size": 0.24
+              },
+              {
+                "id": "gallery-post-3",
+                "facade": "south",
+                "type": "post",
+                "at": 0.94,
+                "depth": 2.2,
+                "height": 3.8,
+                "size": 0.24
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "guest-pavilion",
+      "materialId": "volcanic-stone",
+      "roof": {
+        "form": "hip",
+        "materialId": "bronze-metal",
+        "pitchDegrees": 18,
+        "overhang": 0.6,
+        "thickness": 0.24
+      },
+      "facade": {
+        "openings": [
+          {
+            "id": "guest-garden-glass",
+            "facade": "north",
+            "type": "glazing-zone",
+            "start": 0.08,
+            "end": 0.92,
+            "heightRatio": 0.7,
+            "reveal": 0.18
+          }
+        ],
+        "mainEntry": {
+          "openingId": "guest-south-entry",
+          "canopyDepth": 1.6
+        },
+        "massHierarchy": "secondary"
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "arrival-court",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "view-terrace",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "infinity-pool",
+      "materialId": "pool-water"
+    },
+    {
+      "id": "guest-terrace",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "ocean-court-floor",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "west-wing-porch",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "east-wing-porch",
+      "materialId": "travertine-paving",
+      "railing": "none"
+    },
+    {
+      "id": "tropical-garden",
+      "materialId": "lawn-grass"
+    },
+    {
+      "id": "garden-shade",
+      "materialId": "travertine-paving",
+      "canopyStyle": "slatted"
+    }
+  ],
+  "connections": [
+    {
+      "id": "arrival-drive",
+      "materialId": "travertine-paving"
+    },
+    {
+      "id": "guest-walk",
+      "materialId": "travertine-paving"
+    },
+    {
+      "id": "west-garden-walk",
+      "materialId": "travertine-paving"
+    },
+    {
+      "id": "court-to-water",
+      "materialId": "travertine-paving"
+    }
+  ],
+  "partitions": [],
+  "doors": []
+}

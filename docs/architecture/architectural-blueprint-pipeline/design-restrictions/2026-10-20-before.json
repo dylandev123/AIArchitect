@@ -1,0 +1,2517 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 90,
+      "depth": 100,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#9b987f",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "A $15 million Saint Lucian cliffside estate composed as a low-slung tropical-modern villa and a discreet guest pavilion, arranged around an elevated infinity pool terrace oriented to northern Caribbean views. The architecture uses deep shade, pale mineral walls, volcanic stone, warm timber and dark bronze framing to give a refined, climate-responsive character.",
+      "character": "Contemporary Caribbean resort architecture with strong horizontal rooflines, sheltered indoor-outdoor rooms, carefully controlled arrival privacy, expansive north-facing glazing and substantial shaded exterior living. The main villa is the primary view-facing residence; the smaller pavilion offers independent guest privacy without competing with the principal mass.",
+      "siteAccess": [
+        {
+          "id": "south-gate",
+          "boundary": "south",
+          "point": [
+            0,
+            0,
+            50
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "id": "budget-target",
+          "source": "user",
+          "statement": "Design an extraordinary luxury estate in Saint Lucia with a construction and estate-design target of $15 million.",
+          "metric": "budget",
+          "objectIds": [
+            "main-villa",
+            "guest-pavilion",
+            "infinity-pool",
+            "view-terrace"
+          ],
+          "range": {
+            "min": 15000000,
+            "max": 15000000
+          },
+          "value": "$15 million target"
+        },
+        {
+          "id": "saint-lucia-character",
+          "source": "user",
+          "statement": "The estate shall respond to Saint Lucia through a climate-responsive, view-oriented Caribbean luxury architectural character.",
+          "metric": "style",
+          "objectIds": [
+            "main-villa",
+            "guest-pavilion",
+            "view-terrace"
+          ],
+          "value": "Contemporary Caribbean tropical modern"
+        },
+        {
+          "id": "north-view-priority",
+          "source": "design",
+          "statement": "North-facing principal rooms, terraces and pool are reserved for ocean and sunset outlook while the south side handles private arrival.",
+          "metric": "feature",
+          "objectIds": [
+            "main-villa",
+            "view-terrace",
+            "infinity-pool",
+            "arrival-court"
+          ],
+          "value": "North view axis and south arrival separation"
+        }
+      ],
+      "program": [
+        {
+          "id": "estate-residence-program",
+          "role": "Primary owner residence with formal entertaining, chef service spaces and two private bedroom suites.",
+          "kind": "residence",
+          "objectIds": [
+            "main-villa"
+          ],
+          "source": "design",
+          "access": "required"
+        },
+        {
+          "id": "guest-accommodation-program",
+          "role": "Independent one-bedroom guest accommodation with lounge, dressing and private terrace.",
+          "kind": "building",
+          "objectIds": [
+            "guest-pavilion",
+            "guest-terrace"
+          ],
+          "source": "design",
+          "access": "required"
+        },
+        {
+          "id": "outdoor-living-program",
+          "role": "Ocean-oriented terrace, infinity pool and private tropical garden landscape.",
+          "kind": "amenity",
+          "objectIds": [
+            "view-terrace",
+            "infinity-pool",
+            "tropical-garden"
+          ],
+          "source": "design",
+          "access": "required"
+        }
+      ],
+      "zones": [
+        {
+          "id": "arrival-zone",
+          "purpose": "Secure south-side vehicle arrival, turning and formal approach to the main residence.",
+          "objectIds": [
+            "south-gate",
+            "arrival-court",
+            "main-residence-entry"
+          ],
+          "allocationMode": "reserved",
+          "allocation": {
+            "x": -19,
+            "z": 11,
+            "width": 30,
+            "depth": 26
+          }
+        },
+        {
+          "id": "view-living-zone",
+          "purpose": "Protected north-side outdoor living zone for dining, lounging, swimming and Caribbean views.",
+          "objectIds": [
+            "view-terrace",
+            "infinity-pool",
+            "main-villa"
+          ],
+          "allocationMode": "reserved",
+          "allocation": {
+            "x": -19,
+            "z": -50,
+            "width": 28,
+            "depth": 36
+          }
+        },
+        {
+          "id": "guest-garden-zone",
+          "purpose": "Quiet east-side guest compound buffered by lawn and planted garden reserve.",
+          "objectIds": [
+            "guest-pavilion",
+            "guest-terrace",
+            "tropical-garden"
+          ],
+          "allocationMode": "reserved",
+          "allocation": {
+            "x": 21,
+            "z": -40,
+            "width": 40,
+            "depth": 50
+          }
+        }
+      ],
+      "architecture": [
+        {
+          "id": "villa-form",
+          "objectIds": [
+            "main-villa"
+          ],
+          "form": "rectangular",
+          "intent": "A long, disciplined two-storey horizontal bar frames the northern ocean outlook and creates deep shaded edges."
+        },
+        {
+          "id": "guest-form",
+          "objectIds": [
+            "guest-pavilion"
+          ],
+          "form": "rectangular",
+          "intent": "A compact single-storey stone pavilion remains subordinate to the primary residence and opens toward its own garden terrace."
+        }
+      ],
+      "relationships": [
+        {
+          "id": "villa-terrace-relationship",
+          "intent": "The main villa directly addresses the ocean-view terrace through full-height north glazing.",
+          "from": "main-villa",
+          "to": "view-terrace",
+          "kind": "connects"
+        },
+        {
+          "id": "terrace-pool-relationship",
+          "intent": "The outdoor living terrace supports and visually extends to the infinity pool.",
+          "from": "view-terrace",
+          "to": "infinity-pool",
+          "kind": "supports"
+        },
+        {
+          "id": "guest-garden-relationship",
+          "intent": "The guest pavilion is paired with an independent terrace and planted privacy reserve.",
+          "from": "guest-pavilion",
+          "to": "tropical-garden",
+          "kind": "aligns"
+        },
+        {
+          "id": "arrival-main-relationship",
+          "intent": "The formal south arrival court connects the site gate with the principal entry.",
+          "from": "arrival-court",
+          "to": "main-villa",
+          "kind": "connects"
+        }
+      ],
+      "considerations": [
+        {
+          "id": "view-consideration",
+          "intent": "Keep northern facades visually open to Caribbean views; pool and terrace remain lower than the villa roofline.",
+          "objectIds": [
+            "main-villa",
+            "view-terrace",
+            "infinity-pool"
+          ],
+          "kind": "view"
+        },
+        {
+          "id": "arrival-privacy-consideration",
+          "intent": "South-side arrival glazing is controlled and the guest pavilion is offset eastward to preserve owner privacy.",
+          "objectIds": [
+            "arrival-court",
+            "main-villa",
+            "guest-pavilion"
+          ],
+          "kind": "privacy"
+        },
+        {
+          "id": "open-space-consideration",
+          "intent": "Maintain a generous unbuilt northern outdoor room between residence, terrace and pool.",
+          "objectIds": [
+            "main-villa",
+            "view-terrace",
+            "infinity-pool"
+          ],
+          "kind": "open-space"
+        },
+        {
+          "id": "garden-consideration",
+          "intent": "The garden reserve creates a soft private landscape setting for the guest accommodation.",
+          "objectIds": [
+            "tropical-garden",
+            "guest-pavilion"
+          ],
+          "kind": "landscape"
+        }
+      ],
+      "circulation": [
+        {
+          "id": "arrival-drive",
+          "purpose": "Private vehicular arrival from the south gate to the covered main-residence entry.",
+          "from": "south-gate",
+          "to": "main-villa",
+          "via": [
+            "route-arrival-drive"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "entranceId": "main-residence-entry",
+              "approachDistance": 2
+            },
+            "use": "vehicle",
+            "width": 4.8,
+            "waypoints": [
+              [
+                -4,
+                0,
+                31
+              ],
+              [
+                -4,
+                0,
+                13
+              ]
+            ]
+          }
+        },
+        {
+          "id": "guest-walk",
+          "purpose": "Pedestrian route from the main arrival entry to the independent guest pavilion.",
+          "from": "main-villa",
+          "to": "guest-pavilion",
+          "via": [
+            "route-guest-walk"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "main-residence-entry",
+              "approachDistance": 1.5
+            },
+            "to": {
+              "entranceId": "guest-pavilion-entry",
+              "approachDistance": 1.5
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                11,
+                0,
+                11
+              ]
+            ]
+          }
+        },
+        {
+          "id": "ocean-terrace-walk",
+          "purpose": "Protected pedestrian connection from the arrival side of the residence around the western garden edge to the ocean-view terrace.",
+          "from": "main-villa",
+          "to": "view-terrace",
+          "via": [
+            "route-ocean-terrace-walk"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "main-residence-entry",
+              "approachDistance": 1.5
+            },
+            "to": {
+              "point": [
+                -17,
+                0,
+                -14
+              ]
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                -18,
+                0,
+                4
+              ],
+              [
+                -18,
+                0,
+                -14
+              ]
+            ]
+          }
+        },
+        {
+          "id": "pool-approach",
+          "purpose": "Direct pedestrian approach from the principal outdoor terrace to the infinity pool.",
+          "from": "view-terrace",
+          "to": "view-terrace",
+          "via": [
+            "route-pool-approach"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -5,
+                0,
+                -32
+              ]
+            },
+            "to": {
+              "point": [
+                -5,
+                0,
+                -31
+              ]
+            },
+            "use": "pedestrian",
+            "width": 2.4,
+            "waypoints": [
+              [
+                -5,
+                0,
+                -33
+              ]
+            ]
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-main-villa",
+            "objectId": "main-villa",
+            "role": "Primary luxury residence"
+          },
+          {
+            "id": "bp-guest-pavilion",
+            "objectId": "guest-pavilion",
+            "role": "Independent guest accommodation"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-residence-entry",
+            "objectId": "main-villa",
+            "openingId": "villa-south-entry",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-entry",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-south-entry",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "villa-roof",
+          "guest-roof"
+        ],
+        "outdoorObjectIds": [
+          "arrival-court",
+          "view-terrace",
+          "infinity-pool",
+          "guest-terrace",
+          "tropical-garden"
+        ],
+        "routeIds": [
+          "arrival-drive",
+          "guest-walk",
+          "ocean-terrace-walk",
+          "pool-approach"
+        ],
+        "verticalCirculationIds": [
+          "main-stair"
+        ],
+        "allocations": [
+          {
+            "id": "bp-north-view-priority",
+            "requirementId": "north-view-priority",
+            "objectIds": [
+              "main-villa",
+              "view-terrace",
+              "infinity-pool",
+              "arrival-court"
+            ],
+            "roomIds": []
+          }
+        ]
+      }
+    },
+    "objects": [
+      {
+        "id": "main-villa",
+        "type": "building-mass",
+        "semanticRole": "Primary luxury residence",
+        "label": "Belvedere House",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -5,
+          "z": -5,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 18,
+          "height": 7.7,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -5,
+            3.85,
+            -5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          7.7,
+          18
+        ],
+        "material": {
+          "id": "ivory-stucco",
+          "color": "#e5dfd1",
+          "roughness": 0.78,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "stucco"
+        },
+        "collision": "solid",
+        "composition": {
+          "spaceHeight": "standard",
+          "massHierarchy": "primary",
+          "facadeRoles": {
+            "north": "view",
+            "east": "private",
+            "south": "arrival",
+            "west": "service"
+          },
+          "mainEntry": {
+            "openingId": "villa-south-entry",
+            "canopyDepth": 2.4,
+            "color": "#292b29"
+          },
+          "openings": [
+            {
+              "id": "villa-south-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.43,
+              "end": 0.57,
+              "height": 3,
+              "operation": "hinged",
+              "reveal": 0.18,
+              "serves": "entry-foyer"
+            },
+            {
+              "id": "villa-south-glass-west",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.08,
+              "end": 0.36,
+              "heightRatio": 0.72,
+              "frame": true,
+              "reveal": 0.12
+            },
+            {
+              "id": "villa-south-glass-east",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.64,
+              "end": 0.9,
+              "heightRatio": 0.72,
+              "frame": true,
+              "reveal": 0.12
+            },
+            {
+              "id": "villa-north-salon-glass",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.05,
+              "end": 0.58,
+              "heightRatio": 0.83,
+              "frame": true,
+              "reveal": 0.1
+            },
+            {
+              "id": "villa-north-dining-glass",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.62,
+              "end": 0.95,
+              "heightRatio": 0.83,
+              "frame": true,
+              "reveal": 0.1
+            },
+            {
+              "id": "villa-north-primary-door",
+              "facade": "north",
+              "floors": "upper",
+              "type": "glazed-door",
+              "start": 0.12,
+              "end": 0.46,
+              "height": 2.7,
+              "operation": "sliding",
+              "reveal": 0.08,
+              "serves": "primary-suite"
+            },
+            {
+              "id": "villa-north-guest-glass",
+              "facade": "north",
+              "floors": "upper",
+              "type": "glazing-zone",
+              "start": 0.62,
+              "end": 0.93,
+              "heightRatio": 0.74,
+              "frame": true,
+              "reveal": 0.1
+            },
+            {
+              "id": "villa-east-kitchen-glass",
+              "facade": "east",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.24,
+              "end": 0.7,
+              "heightRatio": 0.68,
+              "frame": true,
+              "reveal": 0.12
+            },
+            {
+              "id": "villa-west-service-rhythm",
+              "facade": "west",
+              "floors": "ground",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.1,
+              "height": 1.3,
+              "sill": 1.35
+            },
+            {
+              "id": "villa-east-upper-rhythm",
+              "facade": "east",
+              "floors": "upper",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.2,
+              "height": 1.55,
+              "sill": 0.8
+            },
+            {
+              "id": "villa-west-upper-rhythm",
+              "facade": "west",
+              "floors": "upper",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 1.1,
+              "height": 1.5,
+              "sill": 0.9
+            }
+          ],
+          "assemblies": []
+        },
+        "levels": 2
+      },
+      {
+        "id": "villa-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of main-villa",
+        "label": "Belvedere House roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -5,
+          "z": -5,
+          "baseElevation": 7.7,
+          "width": 24,
+          "depth": 18,
+          "height": 0.28,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -5,
+            7.84,
+            -5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.28,
+          18
+        ],
+        "material": {
+          "id": "bronze-metal",
+          "color": "#292b29",
+          "roughness": 0.34,
+          "metalness": 0.78,
+          "opacity": 1,
+          "surface": "metal"
+        },
+        "hostId": "main-villa",
+        "roofForm": "floating-flat",
+        "overhang": 1.2,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "guest-pavilion",
+        "type": "building-mass",
+        "semanticRole": "Independent guest accommodation",
+        "label": "Garden Guest Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 30,
+          "z": 4,
+          "baseElevation": 0,
+          "width": 18,
+          "depth": 12,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            30,
+            1.8,
+            4
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          3.6,
+          12
+        ],
+        "material": {
+          "id": "volcanic-stone",
+          "color": "#4b4944",
+          "roughness": 0.86,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "spaceHeight": "standard",
+          "massHierarchy": "secondary",
+          "facadeRoles": {
+            "north": "view",
+            "east": "private",
+            "south": "arrival",
+            "west": "private"
+          },
+          "mainEntry": {
+            "openingId": "guest-south-entry",
+            "canopyDepth": 1.8,
+            "color": "#292b29"
+          },
+          "openings": [
+            {
+              "id": "guest-south-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.22,
+              "end": 0.38,
+              "height": 2.7,
+              "operation": "hinged",
+              "reveal": 0.12,
+              "serves": "guest-lounge"
+            },
+            {
+              "id": "guest-north-lounge-glass",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.08,
+              "end": 0.53,
+              "heightRatio": 0.78,
+              "frame": true,
+              "reveal": 0.1
+            },
+            {
+              "id": "guest-north-bedroom-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.64,
+              "end": 0.92,
+              "height": 2.7,
+              "operation": "sliding",
+              "reveal": 0.1,
+              "serves": "guest-bedroom"
+            },
+            {
+              "id": "guest-east-bath-window",
+              "facade": "east",
+              "floors": "ground",
+              "type": "opening-rhythm",
+              "count": 2,
+              "width": 0.8,
+              "height": 1.1,
+              "sill": 1.5
+            },
+            {
+              "id": "guest-west-lounge-glass",
+              "facade": "west",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.2,
+              "end": 0.72,
+              "heightRatio": 0.68,
+              "frame": true,
+              "reveal": 0.12
+            }
+          ],
+          "assemblies": []
+        },
+        "levels": 1
+      },
+      {
+        "id": "guest-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of guest-pavilion",
+        "label": "Garden Guest Pavilion roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 30,
+          "z": 4,
+          "baseElevation": 3.6,
+          "width": 18,
+          "depth": 12,
+          "height": 0.24,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            30,
+            3.72,
+            4
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          0.24,
+          12
+        ],
+        "material": {
+          "id": "bronze-metal",
+          "color": "#292b29",
+          "roughness": 0.34,
+          "metalness": 0.78,
+          "opacity": 1,
+          "surface": "metal"
+        },
+        "hostId": "guest-pavilion",
+        "roofForm": "flat",
+        "overhang": 0.9,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "arrival-court",
+        "type": "terrace",
+        "semanticRole": "Vehicle arrival and turning forecourt",
+        "label": "Arrival Court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -4,
+          "z": 18,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 14,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -4,
+            0.09,
+            18
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.18,
+          14
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "terraceOpenEdges": []
+      },
+      {
+        "id": "view-terrace",
+        "type": "terrace",
+        "semanticRole": "Primary outdoor living and dining terrace",
+        "label": "Ocean View Terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -5,
+          "z": -23,
+          "baseElevation": 0,
+          "width": 28,
+          "depth": 18,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -5,
+            0.09,
+            -23
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          28,
+          0.18,
+          18
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "terraceOpenEdges": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "id": "infinity-pool",
+        "type": "pool",
+        "semanticRole": "Swimming and horizon amenity",
+        "label": "Infinity Reflection Pool",
+        "geometryKind": "water",
+        "architecture": {
+          "x": -5,
+          "z": -42,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 12,
+          "height": 1.5,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -5,
+            0.75,
+            -42
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          1.5,
+          12
+        ],
+        "material": {
+          "id": "pool-water",
+          "color": "#3f9db3",
+          "roughness": 0.06,
+          "metalness": 0,
+          "opacity": 0.72,
+          "surface": "water"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "guest-terrace",
+        "type": "terrace",
+        "semanticRole": "Private guest outdoor living",
+        "label": "Guest Garden Terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 30,
+          "z": -6,
+          "baseElevation": 0,
+          "width": 18,
+          "depth": 8,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            30,
+            0.09,
+            -6
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          0.18,
+          8
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "terraceOpenEdges": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "id": "tropical-garden",
+        "type": "landscape-zone",
+        "semanticRole": "Private planted landscape and view buffer",
+        "label": "Tropical Garden Reserve",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 31,
+          "z": -27,
+          "baseElevation": 0,
+          "width": 22,
+          "depth": 26,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            31,
+            0.06,
+            -27
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          22,
+          0.12,
+          26
+        ],
+        "material": {
+          "id": "lawn-grass",
+          "color": "#638451",
+          "roughness": 0.9,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "route-arrival-drive",
+        "type": "driveway",
+        "semanticRole": "Private vehicular arrival from the south gate to the covered main-residence entry.",
+        "label": "Private vehicular arrival from the south gate to the covered main-residence entry.",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -2.5257402580159014,
+            0.05,
+            27
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          9.748519483968199,
+          0.01,
+          46
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-guest-walk",
+        "type": "path",
+        "semanticRole": "Pedestrian route from the main arrival entry to the independent guest pavilion.",
+        "label": "Pedestrian route from the main arrival entry to the independent guest pavilion.",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            10.7,
+            0.05,
+            8.199763005703025
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          33.199999999999996,
+          0.01,
+          8.39952601140605
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-ocean-terrace-walk",
+        "type": "path",
+        "semanticRole": "Protected pedestrian connection from the arrival side of the residence around the western garden edg",
+        "label": "Protected pedestrian connection from the arrival side of the residence around the western garden edg",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -11.5,
+            0.05,
+            -4.252965978857992
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          14.799999999999999,
+          0.01,
+          21.294068042284017
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-pool-approach",
+        "type": "path",
+        "semanticRole": "Direct pedestrian approach from the principal outdoor terrace to the infinity pool.",
+        "label": "Direct pedestrian approach from the principal outdoor terrace to the infinity pool.",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -5,
+            0.05,
+            -32
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          2.4000000000000004,
+          0.01,
+          2
+        ],
+        "material": {
+          "id": "travertine-paving",
+          "color": "#c9bea9",
+          "roughness": 0.71,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "villa-ground",
+          "label": "Garden Level",
+          "semanticRole": "Arrival, entertaining and service",
+          "hostMassId": "main-villa",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2
+        },
+        {
+          "id": "villa-upper",
+          "label": "Private Level",
+          "semanticRole": "Bedrooms and private retreat",
+          "hostMassId": "main-villa",
+          "index": 1,
+          "elevation": 4.46,
+          "height": 3.5
+        },
+        {
+          "id": "guest-ground",
+          "label": "Guest Level",
+          "semanticRole": "Guest accommodation",
+          "hostMassId": "guest-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "living-salon",
+          "label": "Great Salon",
+          "semanticRole": "Public entertaining",
+          "program": "Formal and informal living",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -12,
+            "z": -9,
+            "width": 14,
+            "depth": 8
+          }
+        },
+        {
+          "id": "dining-room",
+          "label": "Dining Pavilion",
+          "semanticRole": "Public entertaining",
+          "program": "Twelve-seat dining",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 2,
+            "z": -9,
+            "width": 10,
+            "depth": 4
+          }
+        },
+        {
+          "id": "show-kitchen",
+          "label": "Open Kitchen",
+          "semanticRole": "Entertaining support",
+          "program": "Chef kitchen and breakfast preparation",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 2,
+            "z": -5,
+            "width": 10,
+            "depth": 6
+          }
+        },
+        {
+          "id": "entry-foyer",
+          "label": "Arrival Gallery",
+          "semanticRole": "Arrival",
+          "program": "Main entry and art foyer",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -3,
+            "z": 3,
+            "width": 5,
+            "depth": 4
+          }
+        },
+        {
+          "id": "main-stair-hall",
+          "label": "Stair Hall",
+          "semanticRole": "Vertical circulation",
+          "program": "Private upper-level circulation",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -3,
+            "z": -1,
+            "width": 5,
+            "depth": 4
+          }
+        },
+        {
+          "id": "service-pantry",
+          "label": "Service Pantry",
+          "semanticRole": "Service",
+          "program": "Back kitchen and catering storage",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -12,
+            "z": 3,
+            "width": 7,
+            "depth": 6
+          }
+        },
+        {
+          "id": "laundry",
+          "label": "Laundry",
+          "semanticRole": "Service",
+          "program": "Linen and laundry",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -5,
+            "z": 3,
+            "width": 2,
+            "depth": 4
+          }
+        },
+        {
+          "id": "primary-suite",
+          "label": "Primary Suite",
+          "semanticRole": "Private",
+          "program": "Owner bedroom and sea-view sitting area",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -12,
+            "z": -9,
+            "width": 12,
+            "depth": 9
+          }
+        },
+        {
+          "id": "primary-ensuite",
+          "label": "Primary Bath",
+          "semanticRole": "Private",
+          "program": "Owner bathing suite",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": -9,
+            "width": 4,
+            "depth": 5
+          }
+        },
+        {
+          "id": "primary-dressing",
+          "label": "Primary Dressing",
+          "semanticRole": "Private",
+          "program": "Owner wardrobe",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": -4,
+            "width": 4,
+            "depth": 5
+          }
+        },
+        {
+          "id": "bedroom-two",
+          "label": "Guest Suite Two",
+          "semanticRole": "Private",
+          "program": "En-suite guest bedroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 4,
+            "z": -9,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "bedroom-two-bath",
+          "label": "Guest Suite Two Bath",
+          "semanticRole": "Private",
+          "program": "Guest bathroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 4,
+            "z": -1,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "upper-landing",
+          "label": "Upper Landing",
+          "semanticRole": "Vertical circulation",
+          "program": "Private bedroom landing",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -3,
+            "z": 1,
+            "width": 5,
+            "depth": 4
+          }
+        },
+        {
+          "id": "guest-lounge",
+          "label": "Guest Lounge",
+          "semanticRole": "Guest",
+          "program": "Private guest living room",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": -9,
+            "z": -6,
+            "width": 10,
+            "depth": 12
+          }
+        },
+        {
+          "id": "guest-bedroom",
+          "label": "Garden Suite",
+          "semanticRole": "Guest",
+          "program": "Guest bedroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 1,
+            "z": -6,
+            "width": 8,
+            "depth": 7
+          }
+        },
+        {
+          "id": "guest-bath",
+          "label": "Garden Suite Bath",
+          "semanticRole": "Guest",
+          "program": "Guest bathroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 1,
+            "z": 1,
+            "width": 4,
+            "depth": 5
+          }
+        },
+        {
+          "id": "guest-dressing",
+          "label": "Garden Suite Dressing",
+          "semanticRole": "Guest",
+          "program": "Guest wardrobe",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 5,
+            "z": 1,
+            "width": 4,
+            "depth": 5
+          }
+        }
+      ],
+      "partitions": [
+        {
+          "id": "living-dining-partition",
+          "storeyId": "villa-ground",
+          "roomAId": "living-salon",
+          "roomBId": "dining-room",
+          "boundaryId": "shared-east-west-01",
+          "partitionType": "glazed",
+          "semanticRole": "Flexible entertaining divider",
+          "thickness": 0.1
+        },
+        {
+          "id": "dining-kitchen-partition",
+          "storeyId": "villa-ground",
+          "roomAId": "dining-room",
+          "roomBId": "show-kitchen",
+          "boundaryId": "shared-north-south-01",
+          "partitionType": "open",
+          "semanticRole": "Open entertaining threshold",
+          "thickness": 0.12
+        },
+        {
+          "id": "kitchen-foyer-partition",
+          "storeyId": "villa-ground",
+          "roomAId": "show-kitchen",
+          "roomBId": "entry-foyer",
+          "boundaryId": "shared-east-west-02",
+          "partitionType": "wall",
+          "semanticRole": "Arrival-to-kitchen privacy wall",
+          "thickness": 0.18
+        },
+        {
+          "id": "foyer-stair-partition",
+          "storeyId": "villa-ground",
+          "roomAId": "entry-foyer",
+          "roomBId": "main-stair-hall",
+          "boundaryId": "shared-north-south-02",
+          "partitionType": "screen",
+          "semanticRole": "Filtered stair screen",
+          "thickness": 0.08
+        },
+        {
+          "id": "primary-bath-partition",
+          "storeyId": "villa-upper",
+          "roomAId": "primary-suite",
+          "roomBId": "primary-ensuite",
+          "boundaryId": "shared-east-west-03",
+          "partitionType": "wall",
+          "semanticRole": "Primary suite privacy wall",
+          "thickness": 0.18
+        },
+        {
+          "id": "primary-dressing-partition",
+          "storeyId": "villa-upper",
+          "roomAId": "primary-suite",
+          "roomBId": "primary-dressing",
+          "boundaryId": "shared-east-west-04",
+          "partitionType": "wall",
+          "semanticRole": "Primary dressing privacy wall",
+          "thickness": 0.18
+        },
+        {
+          "id": "guest-bedroom-bath-partition",
+          "storeyId": "villa-upper",
+          "roomAId": "bedroom-two",
+          "roomBId": "bedroom-two-bath",
+          "boundaryId": "shared-north-south-03",
+          "partitionType": "wall",
+          "semanticRole": "Guest suite bathroom wall",
+          "thickness": 0.18
+        },
+        {
+          "id": "pavilion-bedroom-bath-partition",
+          "storeyId": "guest-ground",
+          "roomAId": "guest-bedroom",
+          "roomBId": "guest-bath",
+          "boundaryId": "shared-north-south-04",
+          "partitionType": "wall",
+          "semanticRole": "Guest bathroom privacy wall",
+          "thickness": 0.18
+        },
+        {
+          "id": "pavilion-bath-dressing-partition",
+          "storeyId": "guest-ground",
+          "roomAId": "guest-bath",
+          "roomBId": "guest-dressing",
+          "boundaryId": "shared-east-west-05",
+          "partitionType": "wall",
+          "semanticRole": "Bath-to-dressing divider",
+          "thickness": 0.15
+        }
+      ],
+      "doors": [
+        {
+          "id": "living-dining-opening",
+          "partitionId": "living-dining-partition",
+          "offset": 1.2,
+          "width": 2.4,
+          "program": "sliding-door",
+          "semanticRole": "Entertaining connection"
+        },
+        {
+          "id": "kitchen-foyer-door",
+          "partitionId": "kitchen-foyer-partition",
+          "offset": 0.5,
+          "width": 1,
+          "program": "pocket-door",
+          "semanticRole": "Kitchen privacy door"
+        },
+        {
+          "id": "foyer-stair-opening",
+          "partitionId": "foyer-stair-partition",
+          "offset": 1,
+          "width": 1.4,
+          "program": "opening",
+          "semanticRole": "Stair hall passage"
+        },
+        {
+          "id": "primary-bath-door",
+          "partitionId": "primary-bath-partition",
+          "offset": 1.1,
+          "width": 1,
+          "program": "pocket-door",
+          "semanticRole": "Primary bath access"
+        },
+        {
+          "id": "primary-dressing-door",
+          "partitionId": "primary-dressing-partition",
+          "offset": 1.4,
+          "width": 1,
+          "program": "door",
+          "semanticRole": "Primary wardrobe access"
+        },
+        {
+          "id": "guest-suite-bath-door",
+          "partitionId": "guest-bedroom-bath-partition",
+          "offset": 1.2,
+          "width": 0.9,
+          "program": "door",
+          "semanticRole": "Guest bathroom access"
+        },
+        {
+          "id": "pavilion-bath-door",
+          "partitionId": "pavilion-bedroom-bath-partition",
+          "offset": 1.2,
+          "width": 0.9,
+          "program": "door",
+          "semanticRole": "Garden suite bathroom access"
+        },
+        {
+          "id": "pavilion-dressing-door",
+          "partitionId": "pavilion-bath-dressing-partition",
+          "offset": 1.1,
+          "width": 0.9,
+          "program": "door",
+          "semanticRole": "Garden suite dressing access"
+        }
+      ],
+      "circulation": [
+        {
+          "id": "main-stair",
+          "type": "stair",
+          "hostMassId": "main-villa",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -3,
+            "z": -1,
+            "width": 5,
+            "depth": 4
+          },
+          "stairType": "u-shaped",
+          "direction": "north",
+          "turn": "left",
+          "label": "Sculptural U Stair",
+          "semanticRole": "Primary private vertical circulation"
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "main-villa",
+        "to": "view-terrace",
+        "kind": "connects"
+      },
+      {
+        "from": "view-terrace",
+        "to": "infinity-pool",
+        "kind": "supports"
+      },
+      {
+        "from": "guest-pavilion",
+        "to": "tropical-garden",
+        "kind": "aligns"
+      },
+      {
+        "from": "arrival-court",
+        "to": "main-villa",
+        "kind": "connects"
+      },
+      {
+        "from": "living-salon",
+        "to": "dining-room",
+        "kind": "adjacent"
+      },
+      {
+        "from": "dining-room",
+        "to": "show-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "show-kitchen",
+        "to": "entry-foyer",
+        "kind": "adjacent"
+      },
+      {
+        "from": "entry-foyer",
+        "to": "main-stair-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-suite",
+        "to": "primary-ensuite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-suite",
+        "to": "primary-dressing",
+        "kind": "adjacent"
+      },
+      {
+        "from": "bedroom-two",
+        "to": "bedroom-two-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-bedroom",
+        "to": "guest-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-bath",
+        "to": "guest-dressing",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "draft",
+        "diagnostics": [
+          {
+            "code": "ARCHITECTURAL_IDENTITY_NORMALIZED",
+            "severity": "advisory",
+            "targetIds": [
+              "arrival-drive",
+              "arrival-court",
+              "route-arrival-drive"
+            ],
+            "message": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved. connections.0.surfaceId: arrival-court → route-arrival-drive.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ARCHITECTURAL_IDENTITY_NORMALIZED",
+            "severity": "advisory",
+            "targetIds": [
+              "guest-walk",
+              "arrival-court",
+              "route-guest-walk"
+            ],
+            "message": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved. connections.1.surfaceId: arrival-court → route-guest-walk.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ARCHITECTURAL_IDENTITY_NORMALIZED",
+            "severity": "advisory",
+            "targetIds": [
+              "ocean-terrace-walk",
+              "view-terrace",
+              "route-ocean-terrace-walk"
+            ],
+            "message": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved. connections.2.surfaceId: view-terrace → route-ocean-terrace-walk.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ARCHITECTURAL_IDENTITY_NORMALIZED",
+            "severity": "advisory",
+            "targetIds": [
+              "pool-approach",
+              "view-terrace",
+              "route-pool-approach"
+            ],
+            "message": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved. connections.3.surfaceId: view-terrace → route-pool-approach.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "arrival-court"
+            ],
+            "message": "arrival-zone: arrival-court exceeds allocation x=[-34,-4], z=[-2,24].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "view-terrace",
+              "infinity-pool",
+              "main-villa"
+            ],
+            "message": "view-living-zone: allocation exceeds the site boundary.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "view-terrace"
+            ],
+            "message": "view-living-zone: view-terrace exceeds allocation x=[-33,-5], z=[-68,-32].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "infinity-pool"
+            ],
+            "message": "view-living-zone: infinity-pool exceeds allocation x=[-33,-5], z=[-68,-32].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "main-villa"
+            ],
+            "message": "view-living-zone: main-villa exceeds allocation x=[-33,-5], z=[-68,-32].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-pavilion",
+              "guest-terrace",
+              "tropical-garden"
+            ],
+            "message": "guest-garden-zone: allocation exceeds the site boundary.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-pavilion"
+            ],
+            "message": "guest-garden-zone: guest-pavilion exceeds allocation x=[1,41], z=[-65,-15].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-terrace"
+            ],
+            "message": "guest-garden-zone: guest-terrace exceeds allocation x=[1,41], z=[-65,-15].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "severity": "fatal",
+            "targetIds": [
+              "tropical-garden"
+            ],
+            "message": "guest-garden-zone: tropical-garden exceeds allocation x=[1,41], z=[-65,-15].",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "main-villa",
+              "guest-pavilion",
+              "infinity-pool",
+              "view-terrace"
+            ],
+            "message": "budget-target: budget is retained as intent; no deterministic verification is available.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "main-villa",
+              "guest-pavilion",
+              "view-terrace"
+            ],
+            "message": "saint-lucia-character: style is retained as intent; no deterministic verification is available.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ESTATE_ACCESS_MISSING",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-terrace"
+            ],
+            "message": "guest-accommodation-program: planned destination has no authored route or proven architectural passage/dry approach.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ACCESS_MISSING",
+            "severity": "fatal",
+            "targetIds": [
+              "infinity-pool"
+            ],
+            "message": "outdoor-living-program: planned destination has no authored route or proven architectural passage/dry approach.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ROUTE_BLOCKED",
+            "severity": "fatal",
+            "targetIds": [
+              "route-ocean-terrace-walk",
+              "main-villa"
+            ],
+            "message": "ocean-terrace-walk: route width intersects main-villa; an authored detour or explicit supported bridge is required.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "terrace-pool-relationship",
+              "view-terrace",
+              "infinity-pool"
+            ],
+            "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract.",
+            "classification": "advisory"
+          },
+          {
+            "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "guest-garden-relationship",
+              "guest-pavilion",
+              "tropical-garden"
+            ],
+            "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract.",
+            "classification": "advisory"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "living-salon"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "dining-room"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OVERLAP",
+            "severity": "fatal",
+            "targetIds": [
+              "dining-room",
+              "show-kitchen"
+            ],
+            "message": "Two allocated rooms occupy the same floor area.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OVERLAP",
+            "severity": "fatal",
+            "targetIds": [
+              "entry-foyer",
+              "laundry"
+            ],
+            "message": "Two allocated rooms occupy the same floor area.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OVERLAP",
+            "severity": "fatal",
+            "targetIds": [
+              "main-stair-hall",
+              "show-kitchen"
+            ],
+            "message": "Two allocated rooms occupy the same floor area.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "service-pantry"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "primary-suite"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "primary-ensuite"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "bedroom-two"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OVERLAP",
+            "severity": "fatal",
+            "targetIds": [
+              "bedroom-two",
+              "primary-ensuite"
+            ],
+            "message": "Two allocated rooms occupy the same floor area.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OVERLAP",
+            "severity": "fatal",
+            "targetIds": [
+              "bedroom-two",
+              "primary-dressing"
+            ],
+            "message": "Two allocated rooms occupy the same floor area.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-lounge"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+            "severity": "fatal",
+            "targetIds": [
+              "guest-bedroom"
+            ],
+            "message": "Allocated room must lie inside its actual host storey footprint.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "living-dining-partition"
+            ],
+            "message": "Partition living-dining-partition: rooms living-salon and dining-room no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "dining-kitchen-partition"
+            ],
+            "message": "Partition dining-kitchen-partition: rooms dining-room and show-kitchen no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "kitchen-foyer-partition"
+            ],
+            "message": "Partition kitchen-foyer-partition: rooms show-kitchen and entry-foyer no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "primary-bath-partition"
+            ],
+            "message": "Partition primary-bath-partition: rooms primary-suite and primary-ensuite no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "primary-dressing-partition"
+            ],
+            "message": "Partition primary-dressing-partition: rooms primary-suite and primary-dressing no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "guest-bedroom-bath-partition"
+            ],
+            "message": "Partition guest-bedroom-bath-partition: rooms bedroom-two and bedroom-two-bath no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "PARTITION_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "pavilion-bedroom-bath-partition"
+            ],
+            "message": "Partition pavilion-bedroom-bath-partition: rooms guest-bedroom and guest-bath no longer share a declared adjacent boundary of at least 0.3m.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "living-dining-opening"
+            ],
+            "message": "Door living-dining-opening sits on partition living-dining-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "kitchen-foyer-door"
+            ],
+            "message": "Door kitchen-foyer-door sits on partition kitchen-foyer-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "primary-bath-door"
+            ],
+            "message": "Door primary-bath-door sits on partition primary-bath-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "primary-dressing-door"
+            ],
+            "message": "Door primary-dressing-door sits on partition primary-dressing-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "guest-suite-bath-door"
+            ],
+            "message": "Door guest-suite-bath-door sits on partition guest-bedroom-bath-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "DOOR_BOUNDARY_UNRESOLVED",
+            "targetIds": [
+              "pavilion-bath-door"
+            ],
+            "message": "Door pavilion-bath-door sits on partition pavilion-bedroom-bath-partition, whose boundary no longer resolves.",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ARCHITECTURAL_DOOR_CLIPPED",
+            "targetIds": [
+              "foyer-stair-partition",
+              "foyer-stair-opening"
+            ],
+            "severity": "fatal",
+            "message": "Interior door would be omitted or resized. Door records support rectangular cutouts in constructed partitions; exterior doors belong in facade openings.",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "living-salon"
+            ],
+            "message": "Room living-salon footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "dining-room"
+            ],
+            "message": "Room dining-room footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "service-pantry"
+            ],
+            "message": "Room service-pantry footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "primary-suite"
+            ],
+            "message": "Room primary-suite footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "primary-ensuite"
+            ],
+            "message": "Room primary-ensuite footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "bedroom-two"
+            ],
+            "message": "Room bedroom-two footprint extends beyond host main-villa.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "guest-lounge"
+            ],
+            "message": "Room guest-lounge footprint extends beyond host guest-pavilion.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OUTSIDE_HOST",
+            "targetIds": [
+              "guest-bedroom"
+            ],
+            "message": "Room guest-bedroom footprint extends beyond host guest-pavilion.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OVERLAP",
+            "targetIds": [
+              "show-kitchen"
+            ],
+            "message": "Rooms dining-room and show-kitchen overlap on storey villa-ground.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OVERLAP",
+            "targetIds": [
+              "main-stair-hall"
+            ],
+            "message": "Rooms show-kitchen and main-stair-hall overlap on storey villa-ground.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OVERLAP",
+            "targetIds": [
+              "laundry"
+            ],
+            "message": "Rooms entry-foyer and laundry overlap on storey villa-ground.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OVERLAP",
+            "targetIds": [
+              "bedroom-two"
+            ],
+            "message": "Rooms primary-ensuite and bedroom-two overlap on storey villa-upper.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_OVERLAP",
+            "targetIds": [
+              "bedroom-two"
+            ],
+            "message": "Rooms primary-dressing and bedroom-two overlap on storey villa-upper.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "living-salon->dining-room"
+            ],
+            "message": "Rooms living-salon and dining-room are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "dining-room->show-kitchen"
+            ],
+            "message": "Rooms dining-room and show-kitchen are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "show-kitchen->entry-foyer"
+            ],
+            "message": "Rooms show-kitchen and entry-foyer are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "primary-suite->primary-ensuite"
+            ],
+            "message": "Rooms primary-suite and primary-ensuite are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "primary-suite->primary-dressing"
+            ],
+            "message": "Rooms primary-suite and primary-dressing are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "bedroom-two->bedroom-two-bath"
+            ],
+            "message": "Rooms bedroom-two and bedroom-two-bath are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+            "targetIds": [
+              "guest-bedroom->guest-bath"
+            ],
+            "message": "Rooms guest-bedroom and guest-bath are declared adjacent but share no boundary.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "ARCHITECTURAL_RAISED_POOL",
+            "targetIds": [
+              "infinity-pool"
+            ],
+            "message": "The authored pool basin rests on the flat ground datum. Its elevated water surface is retained; dry access is audited separately.",
+            "severity": "advisory",
+            "classification": "advisory"
+          },
+          {
+            "code": "STAIR_ACCESS_BLOCKED",
+            "targetId": "main-stair",
+            "obstacleId": "foyer-stair-partition",
+            "message": "main-stair: walking approach intersects foyer-stair-partition:wall:foyer-stair-opening~end.",
+            "targetIds": [
+              "main-stair",
+              "foyer-stair-partition"
+            ],
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "arrival-court"
+            ],
+            "message": "arrival-zone: arrival-court exceeds allocation x=[-34,-4], z=[-2,24]. arrival-court world plan=[[-19,11],[11,11],[11,25],[-19,25]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "view-terrace",
+              "infinity-pool",
+              "main-villa"
+            ],
+            "message": "view-living-zone: allocation exceeds the site boundary. view-terrace world plan=[[-19,-32],[9,-32],[9,-14],[-19,-14]]; infinity-pool world plan=[[-15,-48],[5,-48],[5,-36],[-15,-36]]; main-villa world plan=[[-17,-14],[7,-14],[7,4],[-17,4],[-17,-14],[7,-14],[7,4],[-17,4]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "view-terrace"
+            ],
+            "message": "view-living-zone: view-terrace exceeds allocation x=[-33,-5], z=[-68,-32]. view-terrace world plan=[[-19,-32],[9,-32],[9,-14],[-19,-14]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "infinity-pool"
+            ],
+            "message": "view-living-zone: infinity-pool exceeds allocation x=[-33,-5], z=[-68,-32]. infinity-pool world plan=[[-15,-48],[5,-48],[5,-36],[-15,-36]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "main-villa"
+            ],
+            "message": "view-living-zone: main-villa exceeds allocation x=[-33,-5], z=[-68,-32]. main-villa world plan=[[-17,-14],[7,-14],[7,4],[-17,4],[-17,-14],[7,-14],[7,4],[-17,4]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "guest-pavilion",
+              "guest-terrace",
+              "tropical-garden"
+            ],
+            "message": "guest-garden-zone: allocation exceeds the site boundary. guest-pavilion world plan=[[21,-2],[39,-2],[39,10],[21,10]]; guest-terrace world plan=[[21,-10],[39,-10],[39,-2],[21,-2]]; tropical-garden world plan=[[20,-40],[42,-40],[42,-14],[20,-14]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "guest-pavilion"
+            ],
+            "message": "guest-garden-zone: guest-pavilion exceeds allocation x=[1,41], z=[-65,-15]. guest-pavilion world plan=[[21,-2],[39,-2],[39,10],[21,10]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "guest-terrace"
+            ],
+            "message": "guest-garden-zone: guest-terrace exceeds allocation x=[1,41], z=[-65,-15]. guest-terrace world plan=[[21,-10],[39,-10],[39,-2],[21,-2]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          },
+          {
+            "code": "ESTATE_ALLOCATION_CONFLICT",
+            "targetIds": [
+              "tropical-garden"
+            ],
+            "message": "guest-garden-zone: tropical-garden exceeds allocation x=[1,41], z=[-65,-15]. tropical-garden world plan=[[20,-40],[42,-40],[42,-14],[20,-14]]",
+            "severity": "fatal",
+            "classification": "draft-tolerable"
+          }
+        ]
+      }
+    }
+  }
+}

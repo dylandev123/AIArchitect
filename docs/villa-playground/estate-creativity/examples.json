@@ -1,0 +1,931 @@
+[
+  {
+    "version": 1,
+    "id": "estate-palmhaven",
+    "name": "Palmhaven Estate",
+    "character": "A winding palm avenue. A formal island arrival.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "limestone",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "great-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -5,
+        "width": 24,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.3,
+        "veranda": 2.5,
+        "balcony": 1.7
+      },
+      {
+        "id": "sunset-salon",
+        "role": "living",
+        "parentId": "great-house",
+        "detached": false,
+        "x": -21,
+        "z": -2,
+        "width": 12,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 2.2,
+        "balcony": 0
+      },
+      {
+        "id": "garden-suites",
+        "role": "guest",
+        "parentId": "great-house",
+        "detached": true,
+        "x": 22,
+        "z": 0,
+        "width": 12,
+        "depth": 8,
+        "orientation": 270,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 2.1,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "breeze-link",
+        "from": "great-house",
+        "to": "sunset-salon",
+        "width": 2.6
+      }
+    ],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -10.9,
+        "width": 4.5,
+        "depth": 1.8,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 5,
+        "width": 26,
+        "depth": 6,
+        "id": "great-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 10.3,
+        "width": 18,
+        "depth": 4.6,
+        "id": "pool-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 17,
+        "z": 4,
+        "width": 3,
+        "depth": 8,
+        "id": "suite-garden",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -21,
+        "z": 5,
+        "width": 14,
+        "depth": 5,
+        "id": "salon-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": -12,
+        "z": 16,
+        "width": 6,
+        "depth": 10,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 12,
+        "z": 16,
+        "width": 6,
+        "depth": 10,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 22,
+        "width": 30,
+        "depth": 2,
+        "id": "pool-end",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 16,
+      "width": 16,
+      "depth": 6
+    },
+    "garden": {
+      "x": -4.255979032849886,
+      "z": -19.450000000000003,
+      "width": 87.28804193430022,
+      "depth": 92.9
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 4,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "palm-avenue",
+          "kind": "drive",
+          "width": 4.8,
+          "points": [
+            {
+              "x": -35,
+              "z": -53
+            },
+            {
+              "x": -29,
+              "z": -43
+            },
+            {
+              "x": -34,
+              "z": -33
+            },
+            {
+              "x": -23,
+              "z": -23
+            },
+            {
+              "x": -9,
+              "z": -25
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "front-door-walk",
+          "kind": "walk",
+          "width": 2.4,
+          "points": [
+            {
+              "x": 0,
+              "z": -17
+            },
+            {
+              "x": 0,
+              "z": -14
+            },
+            {
+              "x": 0,
+              "z": -11.4
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-garden-walk",
+          "kind": "walk",
+          "width": 1.7,
+          "points": [
+            {
+              "x": -9,
+              "z": -20
+            },
+            {
+              "x": -28,
+              "z": -17
+            },
+            {
+              "x": -31,
+              "z": -7
+            },
+            {
+              "x": -30,
+              "z": 6
+            },
+            {
+              "x": -24,
+              "z": 8
+            },
+            {
+              "x": -16,
+              "z": 9
+            },
+            {
+              "x": -12,
+              "z": 10.4
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-garden-walk",
+          "kind": "walk",
+          "width": 1.7,
+          "points": [
+            {
+              "x": 9,
+              "z": -20
+            },
+            {
+              "x": 20,
+              "z": -15
+            },
+            {
+              "x": 31,
+              "z": -10
+            },
+            {
+              "x": 32,
+              "z": 6
+            },
+            {
+              "x": 27,
+              "z": 9
+            },
+            {
+              "x": 17,
+              "z": 8.6
+            },
+            {
+              "x": 12,
+              "z": 10.4
+            }
+          ],
+          "planting": "border"
+        }
+      ],
+      "court": {
+        "id": "fountain-court",
+        "x": 0,
+        "z": -25,
+        "width": 22,
+        "depth": 18,
+        "island": "fountain",
+        "islandWidth": 6,
+        "islandDepth": 5
+      },
+      "beds": []
+    }
+  },
+  {
+    "version": 1,
+    "id": "estate-splay",
+    "name": "Splay House",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "sky-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -8,
+        "width": 14,
+        "depth": 9,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.1,
+        "veranda": 1.6,
+        "balcony": 1.8
+      },
+      {
+        "id": "west-salon",
+        "role": "living",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": -19,
+        "z": 6,
+        "width": 16,
+        "depth": 7,
+        "orientation": 330,
+        "storeys": 1,
+        "storeyHeight": 4.3,
+        "veranda": 2.2,
+        "balcony": 0
+      },
+      {
+        "id": "east-retreat",
+        "role": "guest",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": 19,
+        "z": 6,
+        "width": 12,
+        "depth": 7,
+        "orientation": 30,
+        "storeys": 1,
+        "storeyHeight": 3.6,
+        "veranda": 1.8,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -13.1,
+        "width": 3.5,
+        "depth": 1.2,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 2.2,
+        "width": 12,
+        "depth": 8.2,
+        "id": "central-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -22,
+        "z": 12,
+        "width": 8,
+        "depth": 3,
+        "id": "salon-garden-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 22,
+        "z": 12,
+        "width": 7,
+        "depth": 3,
+        "id": "retreat-garden-deck",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 15,
+        "width": 15,
+        "depth": 1.4,
+        "id": "water-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 10.3,
+        "width": 4,
+        "depth": 8,
+        "id": "water-axis",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -10,
+        "z": 19,
+        "width": 5,
+        "depth": 9,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 10,
+        "z": 19,
+        "width": 5,
+        "depth": 9,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 24,
+        "width": 26,
+        "depth": 2,
+        "id": "pool-end",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 19,
+      "width": 12,
+      "depth": 6
+    },
+    "garden": {
+      "x": -1.585505539951086,
+      "z": -7.800000000000001,
+      "width": 78.19880533194458,
+      "depth": 73.6
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 4,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "sculpture-drive",
+          "kind": "drive",
+          "width": 4.2,
+          "points": [
+            {
+              "x": -26,
+              "z": -32
+            },
+            {
+              "x": -16,
+              "z": -29
+            },
+            {
+              "x": -10,
+              "z": -22
+            },
+            {
+              "x": 0,
+              "z": -20
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "entry-walk",
+          "kind": "walk",
+          "width": 1.8,
+          "points": [
+            {
+              "x": 0,
+              "z": -20
+            },
+            {
+              "x": 0,
+              "z": -17
+            },
+            {
+              "x": 0,
+              "z": -13.6
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-link",
+          "kind": "walk",
+          "width": 1.5,
+          "points": [
+            {
+              "x": 0,
+              "z": -18
+            },
+            {
+              "x": -12,
+              "z": -15
+            },
+            {
+              "x": -29,
+              "z": -9
+            },
+            {
+              "x": -34,
+              "z": 1
+            },
+            {
+              "x": -33,
+              "z": 12
+            },
+            {
+              "x": -24,
+              "z": 17
+            },
+            {
+              "x": -15,
+              "z": 15
+            },
+            {
+              "x": -10,
+              "z": 14
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-link",
+          "kind": "walk",
+          "width": 1.5,
+          "points": [
+            {
+              "x": 0,
+              "z": -18
+            },
+            {
+              "x": 13,
+              "z": -15
+            },
+            {
+              "x": 28,
+              "z": -10
+            },
+            {
+              "x": 31,
+              "z": 3
+            },
+            {
+              "x": 30,
+              "z": 13
+            },
+            {
+              "x": 20,
+              "z": 16
+            },
+            {
+              "x": 11.5,
+              "z": 14.5
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "salon-approach",
+          "kind": "walk",
+          "width": 1.4,
+          "points": [
+            {
+              "x": -24,
+              "z": 17
+            },
+            {
+              "x": -23,
+              "z": 14.1
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "retreat-approach",
+          "kind": "walk",
+          "width": 1.4,
+          "points": [
+            {
+              "x": 20,
+              "z": 16
+            },
+            {
+              "x": 22,
+              "z": 13.5
+            }
+          ],
+          "planting": "none"
+        }
+      ],
+      "beds": []
+    }
+  },
+  {
+    "version": 1,
+    "id": "estate-cortile",
+    "name": "Cortile degli Ulivi",
+    "character": "An oval forecourt. An olive cloister. A water axis.",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "gable",
+      "exterior": "warm-stone",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "id": "casa",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -10,
+        "width": 22,
+        "depth": 9,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.2,
+        "veranda": 1.7,
+        "balcony": 1.4
+      },
+      {
+        "id": "west-loggia",
+        "role": "living",
+        "parentId": "casa",
+        "detached": false,
+        "x": -12,
+        "z": 6,
+        "width": 16,
+        "depth": 7,
+        "orientation": 90,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 1.6,
+        "balcony": 0
+      },
+      {
+        "id": "east-loggia",
+        "role": "guest",
+        "parentId": "casa",
+        "detached": false,
+        "x": 12,
+        "z": 6,
+        "width": 16,
+        "depth": 7,
+        "orientation": 270,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 1.6,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "west-passage",
+        "from": "casa",
+        "to": "west-loggia",
+        "width": 2.3
+      },
+      {
+        "id": "east-passage",
+        "from": "casa",
+        "to": "east-loggia",
+        "width": 2.3
+      }
+    ],
+    "terraces": [
+      {
+        "x": -0.8,
+        "z": -15.2,
+        "width": 5,
+        "depth": 1.4,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 5,
+        "width": 13,
+        "depth": 1.8,
+        "id": "court-cross-walk",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 15,
+        "width": 23,
+        "depth": 4,
+        "id": "pool-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -11,
+        "z": 22,
+        "width": 5,
+        "depth": 8,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 11,
+        "z": 22,
+        "width": 5,
+        "depth": 8,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 27,
+        "width": 28,
+        "depth": 2,
+        "id": "belvedere",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 22,
+      "width": 14,
+      "depth": 6
+    },
+    "garden": {
+      "x": 7.385866360844226,
+      "z": -13.375,
+      "width": 72.72826727831155,
+      "depth": 90.75
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 4,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "cypress-approach",
+          "kind": "drive",
+          "width": 4.5,
+          "points": [
+            {
+              "x": 31,
+              "z": -46
+            },
+            {
+              "x": 23,
+              "z": -43
+            },
+            {
+              "x": 19,
+              "z": -35
+            },
+            {
+              "x": 10,
+              "z": -29
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "door-axis",
+          "kind": "walk",
+          "width": 2,
+          "points": [
+            {
+              "x": 0,
+              "z": -21.5
+            },
+            {
+              "x": 0,
+              "z": -18.5
+            },
+            {
+              "x": 0,
+              "z": -15.8
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "cloister-axis",
+          "kind": "walk",
+          "width": 1.8,
+          "points": [
+            {
+              "x": 0,
+              "z": -4.4
+            },
+            {
+              "x": 0,
+              "z": 2
+            },
+            {
+              "x": 0,
+              "z": 9
+            },
+            {
+              "x": 0,
+              "z": 15
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-procession",
+          "kind": "walk",
+          "width": 1.6,
+          "points": [
+            {
+              "x": -10,
+              "z": -25
+            },
+            {
+              "x": -21,
+              "z": -20
+            },
+            {
+              "x": -22,
+              "z": -5
+            },
+            {
+              "x": -22,
+              "z": 10
+            },
+            {
+              "x": -17,
+              "z": 15
+            },
+            {
+              "x": -11,
+              "z": 16
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-procession",
+          "kind": "walk",
+          "width": 1.6,
+          "points": [
+            {
+              "x": 10,
+              "z": -25
+            },
+            {
+              "x": 21,
+              "z": -20
+            },
+            {
+              "x": 22,
+              "z": -5
+            },
+            {
+              "x": 22,
+              "z": 10
+            },
+            {
+              "x": 17,
+              "z": 15
+            },
+            {
+              "x": 11,
+              "z": 16
+            }
+          ],
+          "planting": "border"
+        }
+      ],
+      "court": {
+        "id": "olive-forecourt",
+        "x": 0,
+        "z": -29,
+        "width": 24,
+        "depth": 17,
+        "island": "planted",
+        "islandWidth": 8,
+        "islandDepth": 4
+      },
+      "beds": [
+        {
+          "id": "northwest-parterre",
+          "x": -4.1,
+          "z": 0.4,
+          "width": 4.5,
+          "depth": 4.5
+        },
+        {
+          "id": "northeast-parterre",
+          "x": 4.1,
+          "z": 0.4,
+          "width": 4.5,
+          "depth": 4.5
+        },
+        {
+          "id": "southwest-parterre",
+          "x": -4.1,
+          "z": 9.5,
+          "width": 4.5,
+          "depth": 4.5
+        },
+        {
+          "id": "southeast-parterre",
+          "x": 4.1,
+          "z": 9.5,
+          "width": 4.5,
+          "depth": 4.5
+        }
+      ]
+    }
+  }
+]

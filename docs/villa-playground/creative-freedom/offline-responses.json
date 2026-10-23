@@ -1,0 +1,485 @@
+[
+  {
+    "changes": {
+      "version": 1,
+      "id": "family-breeze",
+      "name": "Breeze Family Villa",
+      "character": "A veranda, a garden, a place to grow.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "family-home",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -4,
+          "width": 13,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 0
+        }
+      ],
+      "connections": [],
+      "terraces": [
+        {
+          "x": 0,
+          "z": 3.5,
+          "width": 15,
+          "depth": 5,
+          "id": "family-terrace",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 7,
+          "z": 10,
+          "width": 3,
+          "depth": 7,
+          "id": "pool-deck",
+          "kind": "terrace",
+          "timber": true
+        }
+      ],
+      "pool": {
+        "x": 0,
+        "z": 10,
+        "width": 8,
+        "depth": 4
+      },
+      "garden": {
+        "x": 0.4249999999999998,
+        "z": 2.5249999999999995,
+        "width": 22.15,
+        "depth": 29.35
+      },
+      "siteMode": "derived",
+      "landscapeMargin": 3
+    },
+    "summary": "Deterministic offline example: Breeze Family Villa.",
+    "unsupported": []
+  },
+  {
+    "changes": {
+      "version": 1,
+      "id": "caribbean-grande",
+      "name": "Caribbean Grande Estate",
+      "character": "An island residence unfolding toward the sea.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "limestone",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "great-house",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -18,
+          "width": 28,
+          "depth": 12,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.4,
+          "veranda": 2.8,
+          "balcony": 2
+        },
+        {
+          "id": "sunset-salon",
+          "role": "living",
+          "parentId": "great-house",
+          "detached": false,
+          "x": -27,
+          "z": -12,
+          "width": 18,
+          "depth": 10,
+          "orientation": 0,
+          "storeys": 1,
+          "storeyHeight": 4.2,
+          "veranda": 2.4,
+          "balcony": 0
+        },
+        {
+          "id": "east-suites",
+          "role": "guest",
+          "parentId": "great-house",
+          "detached": false,
+          "x": 28,
+          "z": -18,
+          "width": 16,
+          "depth": 10,
+          "orientation": 180,
+          "storeys": 2,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 1.6
+        },
+        {
+          "id": "west-retreat",
+          "role": "guest",
+          "parentId": "great-house",
+          "detached": true,
+          "x": -32,
+          "z": 12,
+          "width": 10,
+          "depth": 8,
+          "orientation": 90,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 0
+        },
+        {
+          "id": "garden-retreat",
+          "role": "guest",
+          "parentId": "great-house",
+          "detached": true,
+          "x": 34,
+          "z": 8,
+          "width": 10,
+          "depth": 8,
+          "orientation": 270,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "sunset-gallery",
+          "from": "great-house",
+          "to": "sunset-salon",
+          "width": 3
+        },
+        {
+          "id": "east-gallery",
+          "from": "great-house",
+          "to": "east-suites",
+          "width": 3
+        }
+      ],
+      "terraces": [
+        {
+          "x": 0,
+          "z": -3,
+          "width": 32,
+          "depth": 10,
+          "id": "grand-veranda-terrace",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": -27,
+          "z": -2,
+          "width": 20,
+          "depth": 7,
+          "id": "sunset-dining",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": -25,
+          "z": 5,
+          "width": 2,
+          "depth": 12,
+          "id": "west-garden-walk",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 25,
+          "z": 1,
+          "width": 2,
+          "depth": 24,
+          "id": "east-garden-walk",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 3,
+          "z": 11,
+          "width": 32,
+          "depth": 6,
+          "id": "pool-promenade",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": -15,
+          "z": 19,
+          "width": 6,
+          "depth": 12,
+          "id": "pool-west-deck",
+          "kind": "terrace",
+          "timber": true
+        },
+        {
+          "x": 21,
+          "z": 19,
+          "width": 6,
+          "depth": 12,
+          "id": "pool-east-deck",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 3,
+          "z": 26,
+          "width": 36,
+          "depth": 4,
+          "id": "pool-view-terrace",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 0,
+          "z": -32,
+          "width": 34,
+          "depth": 9,
+          "id": "arrival-court",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": -21,
+          "z": 7,
+          "width": 10,
+          "depth": 2,
+          "id": "retreat-approach",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": 3,
+        "z": 19,
+        "width": 28,
+        "depth": 8
+      },
+      "garden": {
+        "x": 1,
+        "z": -4.25,
+        "width": 96.3,
+        "depth": 84.5
+      },
+      "siteMode": "derived",
+      "landscapeMargin": 10,
+      "components": [
+        {
+          "id": "elliptical-lounge",
+          "builder": "curved-pavilion@1",
+          "x": -18,
+          "z": 3,
+          "orientation": 25,
+          "width": 10,
+          "depth": 7,
+          "height": 3.8,
+          "material": "limestone"
+        }
+      ]
+    },
+    "summary": "Deterministic offline example: Caribbean Grande Estate.",
+    "unsupported": []
+  },
+  {
+    "changes": {
+      "version": 1,
+      "id": "tuscan-belvedere",
+      "name": "Tenuta Belvedere",
+      "character": "A stone court framed by layered terracotta roofs.",
+      "appearance": {
+        "style": "tuscan",
+        "roof": "gable",
+        "exterior": "warm-stone",
+        "glazing": "divided",
+        "landscape": "mediterranean"
+      },
+      "wings": [
+        {
+          "id": "casa-grande",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -20,
+          "width": 24,
+          "depth": 12,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.3,
+          "veranda": 1.6,
+          "balcony": 1.5
+        },
+        {
+          "id": "west-loggia",
+          "role": "living",
+          "parentId": "casa-grande",
+          "detached": false,
+          "x": -13.5,
+          "z": 0,
+          "width": 18,
+          "depth": 8,
+          "orientation": 90,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.6,
+          "balcony": 0
+        },
+        {
+          "id": "east-loggia",
+          "role": "living",
+          "parentId": "casa-grande",
+          "detached": false,
+          "x": 13.5,
+          "z": 0,
+          "width": 18,
+          "depth": 8,
+          "orientation": 270,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.6,
+          "balcony": 0
+        },
+        {
+          "id": "arrival-lodge",
+          "role": "guest",
+          "parentId": "casa-grande",
+          "detached": true,
+          "x": 0,
+          "z": -43,
+          "width": 14,
+          "depth": 8,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.5,
+          "balcony": 0
+        },
+        {
+          "id": "olive-casita",
+          "role": "guest",
+          "parentId": "casa-grande",
+          "detached": true,
+          "x": 32,
+          "z": 4,
+          "width": 12,
+          "depth": 8,
+          "orientation": 270,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.6,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "west-passage",
+          "from": "casa-grande",
+          "to": "west-loggia",
+          "width": 2.4
+        },
+        {
+          "id": "east-passage",
+          "from": "casa-grande",
+          "to": "east-loggia",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": 0,
+          "z": 0,
+          "width": 14,
+          "depth": 16,
+          "id": "olive-court",
+          "kind": "courtyard",
+          "timber": false
+        },
+        {
+          "x": 0,
+          "z": -32,
+          "width": 24,
+          "depth": 9,
+          "id": "arrival-piazza",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 0,
+          "z": 13,
+          "width": 24,
+          "depth": 7,
+          "id": "axial-promenade",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": -13,
+          "z": 22,
+          "width": 6,
+          "depth": 10,
+          "id": "pool-west",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 13,
+          "z": 22,
+          "width": 6,
+          "depth": 10,
+          "id": "pool-east",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 0,
+          "z": 28,
+          "width": 32,
+          "depth": 3,
+          "id": "belvedere",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 24,
+          "z": 4,
+          "width": 8,
+          "depth": 2,
+          "id": "casita-walk",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": 0,
+        "z": 22,
+        "width": 18,
+        "depth": 6
+      },
+      "garden": {
+        "x": 9.25,
+        "z": -9.075,
+        "width": 72.8,
+        "depth": 95.15
+      },
+      "siteMode": "derived",
+      "landscapeMargin": 9
+    },
+    "summary": "Deterministic offline example: Tenuta Belvedere.",
+    "unsupported": []
+  }
+]

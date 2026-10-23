@@ -1,0 +1,393 @@
+{
+  "result": "PASS",
+  "externalProviderCalls": 0,
+  "savedUserProjectWrites": 0,
+  "newAgents": 0,
+  "naturalFixture": {
+    "sourceHash": "65036c5f32b6c9b8be56fc6c57886715bb9bd469b2480fe938199f4427eb88ad",
+    "beforeWarnings": 17,
+    "proposalWarnings": 9,
+    "ambiguityPreserved": true
+  },
+  "examples": [
+    {
+      "name": "garden-home",
+      "rooms": 7,
+      "buildings": [
+        {
+          "id": "garden-house",
+          "kind": "rectangle",
+          "storeys": 1
+        }
+      ],
+      "warnings": [],
+      "saveReloadLossless": true,
+      "exactPlanPreserved": true,
+      "construction": "complete",
+      "primitives": 19,
+      "fidelityFindings": [],
+      "relationships": [
+        {
+          "from": "garden-entry",
+          "to": "garden-gallery"
+        },
+        {
+          "from": "garden-gallery",
+          "to": "garden-living"
+        },
+        {
+          "from": "garden-gallery",
+          "to": "garden-kitchen"
+        },
+        {
+          "from": "garden-gallery",
+          "to": "garden-bedroom"
+        },
+        {
+          "from": "garden-gallery",
+          "to": "garden-bath"
+        },
+        {
+          "from": "garden-entry",
+          "to": "garden-utility"
+        }
+      ],
+      "stairLiftReservations": []
+    },
+    {
+      "name": "listening-home",
+      "rooms": 6,
+      "buildings": [
+        {
+          "id": "listening-house",
+          "kind": "outline",
+          "storeys": 1
+        }
+      ],
+      "warnings": [],
+      "saveReloadLossless": true,
+      "exactPlanPreserved": true,
+      "construction": "complete",
+      "primitives": 15,
+      "fidelityFindings": [],
+      "relationships": [
+        {
+          "from": "listening-gallery",
+          "to": "listening-entry"
+        },
+        {
+          "from": "listening-gallery",
+          "to": "listening-studio"
+        },
+        {
+          "from": "listening-gallery",
+          "to": "listening-kitchen"
+        },
+        {
+          "from": "listening-entry",
+          "to": "listening-bedroom"
+        },
+        {
+          "from": "listening-entry",
+          "to": "listening-bath"
+        }
+      ],
+      "stairLiftReservations": []
+    },
+    {
+      "name": "three-storey-estate",
+      "rooms": 32,
+      "buildings": [
+        {
+          "id": "court-house",
+          "kind": "articulated",
+          "storeys": 3
+        },
+        {
+          "id": "work-pavilion",
+          "kind": "rectangle",
+          "storeys": 1
+        }
+      ],
+      "warnings": [],
+      "saveReloadLossless": true,
+      "exactPlanPreserved": true,
+      "construction": "complete",
+      "primitives": 122,
+      "fidelityFindings": [],
+      "relationships": [
+        {
+          "from": "court-0-gallery",
+          "to": "court-0-west-hall"
+        },
+        {
+          "from": "court-0-gallery",
+          "to": "court-0-east-hall"
+        },
+        {
+          "from": "court-0-gallery",
+          "to": "court-0-service"
+        },
+        {
+          "from": "court-0-gallery",
+          "to": "court-0-entry"
+        },
+        {
+          "from": "court-0-gallery",
+          "to": "court-0-stair-hall"
+        },
+        {
+          "from": "court-0-west-hall",
+          "to": "court-0-west-suite"
+        },
+        {
+          "from": "court-0-west-hall",
+          "to": "court-0-west-bath"
+        },
+        {
+          "from": "court-0-east-hall",
+          "to": "court-0-east-studio"
+        },
+        {
+          "from": "court-0-east-hall",
+          "to": "court-0-east-study"
+        },
+        {
+          "from": "court-1-gallery",
+          "to": "court-1-west-hall"
+        },
+        {
+          "from": "court-1-gallery",
+          "to": "court-1-east-hall"
+        },
+        {
+          "from": "court-1-gallery",
+          "to": "court-1-service"
+        },
+        {
+          "from": "court-1-gallery",
+          "to": "court-1-entry"
+        },
+        {
+          "from": "court-1-gallery",
+          "to": "court-1-stair-hall"
+        },
+        {
+          "from": "court-1-west-hall",
+          "to": "court-1-west-suite"
+        },
+        {
+          "from": "court-1-west-hall",
+          "to": "court-1-west-bath"
+        },
+        {
+          "from": "court-1-east-hall",
+          "to": "court-1-east-studio"
+        },
+        {
+          "from": "court-1-east-hall",
+          "to": "court-1-east-study"
+        },
+        {
+          "from": "court-2-gallery",
+          "to": "court-2-west-hall"
+        },
+        {
+          "from": "court-2-gallery",
+          "to": "court-2-east-hall"
+        },
+        {
+          "from": "court-2-gallery",
+          "to": "court-2-service"
+        },
+        {
+          "from": "court-2-gallery",
+          "to": "court-2-entry"
+        },
+        {
+          "from": "court-2-gallery",
+          "to": "court-2-stair-hall"
+        },
+        {
+          "from": "court-2-west-hall",
+          "to": "court-2-west-suite"
+        },
+        {
+          "from": "court-2-west-hall",
+          "to": "court-2-west-bath"
+        },
+        {
+          "from": "court-2-east-hall",
+          "to": "court-2-east-studio"
+        },
+        {
+          "from": "court-2-east-hall",
+          "to": "court-2-east-study"
+        },
+        {
+          "from": "work-studio",
+          "to": "work-entry"
+        }
+      ],
+      "stairLiftReservations": [
+        {
+          "id": "court-stair",
+          "type": "stair",
+          "hostMassId": "court-house",
+          "fromLevel": 0,
+          "toLevel": 2,
+          "footprint": {
+            "x": 6,
+            "z": 6,
+            "width": 3,
+            "depth": 6
+          }
+        },
+        {
+          "id": "court-lift",
+          "type": "lift",
+          "hostMassId": "court-house",
+          "fromLevel": 0,
+          "toLevel": 2,
+          "footprint": {
+            "x": 10,
+            "z": 4,
+            "width": 2,
+            "depth": 2
+          }
+        }
+      ]
+    }
+  ],
+  "unresolvedDraft": {
+    "retained": true,
+    "drawnRooms": 0,
+    "constructionBlockers": [
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-entry|garden-gallery"
+        ],
+        "message": "Unresolved adjacency garden-entry|garden-gallery is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-gallery|garden-living"
+        ],
+        "message": "Unresolved adjacency garden-gallery|garden-living is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-gallery|garden-kitchen"
+        ],
+        "message": "Unresolved adjacency garden-gallery|garden-kitchen is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-gallery|garden-bedroom"
+        ],
+        "message": "Unresolved adjacency garden-gallery|garden-bedroom is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-gallery|garden-bath"
+        ],
+        "message": "Unresolved adjacency garden-gallery|garden-bath is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_UNRESOLVED",
+        "targetIds": [
+          "garden-entry|garden-utility"
+        ],
+        "message": "Unresolved adjacency garden-entry|garden-utility is retained but not drawn. Correct it in the 2D plan before building.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-entry|garden-gallery",
+          "garden-entry",
+          "garden-gallery"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-gallery|garden-living",
+          "garden-gallery",
+          "garden-living"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-gallery|garden-kitchen",
+          "garden-gallery",
+          "garden-kitchen"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-gallery|garden-bedroom",
+          "garden-gallery",
+          "garden-bedroom"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-gallery|garden-bath",
+          "garden-gallery",
+          "garden-bath"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "garden-entry|garden-utility",
+          "garden-entry",
+          "garden-utility"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "fatal",
+        "targetIds": [
+          "garden-floor"
+        ],
+        "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "fatal",
+        "targetIds": [
+          "garden-floor",
+          "garden-living"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      }
+    ]
+  }
+}

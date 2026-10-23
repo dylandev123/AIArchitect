@@ -1,0 +1,1188 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 140,
+      "depth": 120,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE REFERENCE — Two garden courts separate parallel two-storey wings, joined by an inhabited stair bridge. Continuous internal galleries connect the rooms without passing through bedrooms. The aligned upper bridge connects the private wings. A one-storey east library volume touches the ground wing and stays absent on the upper floor. This independently authored H arrangement proves articulated massing and stack fidelity, not generated design quality.",
+      "character": "OFFLINE REFERENCE — Two garden courts separate parallel two-storey wings, joined by an inhabited stair bridge. Continuous internal galleries connect the rooms without passing through bedrooms. The aligned upper bridge connects the private wings. A one-storey east library volume touches the ground wing and stays absent on the upper floor. This independently authored H arrangement proves articulated massing and stack fidelity, not generated design quality.",
+      "siteAccess": [],
+      "requirements": [],
+      "program": [
+        {
+          "id": "garden-wings-program",
+          "role": "Garden wings residence",
+          "kind": "building",
+          "objectIds": [
+            "garden-wings"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "low-library-program",
+          "role": "Single-storey library wing",
+          "kind": "building",
+          "objectIds": [
+            "low-library"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [
+        {
+          "id": "joined-library",
+          "intent": "Single-storey library meets the east wing at the shared ground datum",
+          "from": "garden-wings",
+          "to": "low-library",
+          "kind": "connects"
+        }
+      ],
+      "considerations": [],
+      "circulation": [],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-garden-wings",
+            "objectId": "garden-wings",
+            "role": "Garden wings residence"
+          },
+          {
+            "id": "bp-low-library",
+            "objectId": "low-library",
+            "role": "Single-storey library wing"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "garden-wings-bridge-entry-entry",
+            "objectId": "garden-wings",
+            "openingId": "bridge-entry",
+            "level": 0
+          },
+          {
+            "id": "garden-wings-north-gallery-entry-entry",
+            "objectId": "garden-wings",
+            "openingId": "north-gallery-entry",
+            "level": 0
+          },
+          {
+            "id": "low-library-library-door-entry",
+            "objectId": "low-library",
+            "openingId": "library-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "garden-wings-roof",
+          "low-library-roof"
+        ],
+        "outdoorObjectIds": [
+          "north-garden",
+          "north-court-rim",
+          "south-arrival",
+          "library-terrace"
+        ],
+        "routeIds": [],
+        "verticalCirculationIds": [
+          "bridge-stair",
+          "bridge-lift"
+        ],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "garden-wings",
+        "type": "building-mass",
+        "semanticRole": "Garden wings residence",
+        "label": "Garden wings residence",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 48,
+          "depth": 36,
+          "height": 7.800000000000001,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            3.9000000000000004,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          48,
+          7.800000000000001,
+          36
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "north-court",
+                "facade": "north",
+                "start": 0.25,
+                "end": 0.75,
+                "depth": 14,
+                "type": "recess"
+              },
+              {
+                "id": "south-court",
+                "facade": "south",
+                "start": 0.25,
+                "end": 0.75,
+                "depth": 14,
+                "type": "recess"
+              }
+            ]
+          },
+          "openings": [
+            {
+              "id": "bridge-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.46,
+              "end": 0.54,
+              "height": 2.4,
+              "serves": "ground-stair-hall"
+            },
+            {
+              "id": "north-gallery-entry",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.46,
+              "end": 0.54,
+              "height": 2.4,
+              "operation": "sliding",
+              "serves": "ground-stair-hall"
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "garden-wings-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of garden-wings",
+        "label": "Garden wings residence roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 7.800000000000001,
+          "width": 48,
+          "depth": 36,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            7.925000000000001,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          48,
+          0.25,
+          36
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "garden-wings",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "low-library",
+        "type": "building-mass",
+        "semanticRole": "Single-storey library wing",
+        "label": "Single-storey library wing",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 32,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 8,
+          "height": 4.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            32,
+            2.1,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          4.2,
+          8
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "library-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.4,
+              "serves": "library-reading"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "low-library-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of low-library",
+        "label": "Single-storey library wing roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 32,
+          "z": 0,
+          "baseElevation": 4.2,
+          "width": 16,
+          "depth": 8,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            32,
+            4.325,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.25,
+          8
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "low-library",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "north-garden",
+        "type": "landscape-zone",
+        "semanticRole": "North planted court",
+        "label": "North planted court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -11,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 8,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            -11
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.12,
+          8
+        ],
+        "material": {
+          "id": "grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "edge-0",
+                "type": "line",
+                "start": [
+                  -8,
+                  -4
+                ],
+                "end": [
+                  8,
+                  -4
+                ]
+              },
+              {
+                "id": "edge-1",
+                "type": "line",
+                "start": [
+                  8,
+                  -4
+                ],
+                "end": [
+                  7,
+                  4
+                ]
+              },
+              {
+                "id": "edge-2",
+                "type": "line",
+                "start": [
+                  7,
+                  4
+                ],
+                "end": [
+                  -7,
+                  4
+                ]
+              },
+              {
+                "id": "edge-3",
+                "type": "line",
+                "start": [
+                  -7,
+                  4
+                ],
+                "end": [
+                  -8,
+                  -4
+                ]
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "north-court-rim",
+        "type": "courtyard",
+        "semanticRole": "North courtyard perimeter",
+        "label": "North courtyard perimeter",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -11,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 12,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.07,
+            -11
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          0.14,
+          12
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "edge-0",
+                "type": "line",
+                "start": [
+                  -10,
+                  -6
+                ],
+                "end": [
+                  10,
+                  -6
+                ]
+              },
+              {
+                "id": "edge-1",
+                "type": "line",
+                "start": [
+                  10,
+                  -6
+                ],
+                "end": [
+                  8,
+                  6
+                ]
+              },
+              {
+                "id": "edge-2",
+                "type": "line",
+                "start": [
+                  8,
+                  6
+                ],
+                "end": [
+                  -8,
+                  6
+                ]
+              },
+              {
+                "id": "edge-3",
+                "type": "line",
+                "start": [
+                  -8,
+                  6
+                ],
+                "end": [
+                  -10,
+                  -6
+                ]
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "south-arrival",
+        "type": "terrace",
+        "semanticRole": "Sheltered entry court",
+        "label": "Sheltered entry court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 12,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 14,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.07,
+            12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          0.14,
+          14
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "entry-court",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 7,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "library-terrace",
+        "type": "terrace",
+        "semanticRole": "Library garden terrace",
+        "label": "Library garden terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 32,
+          "z": 11,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 10,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            32,
+            0.07,
+            11
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          0.14,
+          10
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none"
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "wings-ground",
+          "label": "Public garden wings",
+          "semanticRole": "Public garden wings",
+          "hostMassId": "garden-wings",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2
+        },
+        {
+          "id": "wings-upper",
+          "label": "Private upper wings",
+          "semanticRole": "Private upper wings",
+          "hostMassId": "garden-wings",
+          "index": 1,
+          "elevation": 4.46,
+          "height": 3.6
+        },
+        {
+          "id": "library-ground",
+          "label": "Library level",
+          "semanticRole": "Library level",
+          "hostMassId": "low-library",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2
+        }
+      ],
+      "rooms": [
+        {
+          "id": "ground-stair-hall",
+          "label": "Entrance and stair bridge",
+          "semanticRole": "Entrance and stair bridge",
+          "program": "stair circulation gallery",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 24,
+            "depth": 8
+          }
+        },
+        {
+          "id": "ground-west-gallery",
+          "label": "west wing gallery",
+          "semanticRole": "west wing gallery",
+          "program": "circulation gallery",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -13.5,
+            "z": 0,
+            "width": 3,
+            "depth": 36
+          }
+        },
+        {
+          "id": "ground-west-0",
+          "label": "west salon",
+          "semanticRole": "west salon",
+          "program": "living",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": -13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-west-1",
+          "label": "west dining",
+          "semanticRole": "west dining",
+          "program": "dining",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": -4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-west-2",
+          "label": "west kitchen",
+          "semanticRole": "west kitchen",
+          "program": "kitchen",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": 4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-west-3",
+          "label": "west service",
+          "semanticRole": "west service",
+          "program": "service",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": 13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-east-gallery",
+          "label": "east wing gallery",
+          "semanticRole": "east wing gallery",
+          "program": "circulation gallery",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 13.5,
+            "z": 0,
+            "width": 3,
+            "depth": 36
+          }
+        },
+        {
+          "id": "ground-east-0",
+          "label": "east salon",
+          "semanticRole": "east salon",
+          "program": "living",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": -13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-east-1",
+          "label": "east dining",
+          "semanticRole": "east dining",
+          "program": "dining",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": -4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-east-2",
+          "label": "east kitchen",
+          "semanticRole": "east kitchen",
+          "program": "kitchen",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": 4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "ground-east-3",
+          "label": "east service",
+          "semanticRole": "east service",
+          "program": "service",
+          "storeyId": "wings-ground",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": 13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-stair-hall",
+          "label": "Upper bridge and landing",
+          "semanticRole": "Upper bridge and landing",
+          "program": "stair circulation gallery",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 24,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-west-gallery",
+          "label": "west wing gallery",
+          "semanticRole": "west wing gallery",
+          "program": "circulation gallery",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -13.5,
+            "z": 0,
+            "width": 3,
+            "depth": 36
+          }
+        },
+        {
+          "id": "upper-west-0",
+          "label": "west bedroom",
+          "semanticRole": "west bedroom",
+          "program": "bedroom",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": -13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-west-1",
+          "label": "west dressing and bath",
+          "semanticRole": "west dressing and bath",
+          "program": "bathroom dressing",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": -4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-west-2",
+          "label": "west study",
+          "semanticRole": "west study",
+          "program": "study",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": 4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-west-3",
+          "label": "west bedroom",
+          "semanticRole": "west bedroom",
+          "program": "bedroom",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": -19.5,
+            "z": 13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-east-gallery",
+          "label": "east wing gallery",
+          "semanticRole": "east wing gallery",
+          "program": "circulation gallery",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 13.5,
+            "z": 0,
+            "width": 3,
+            "depth": 36
+          }
+        },
+        {
+          "id": "upper-east-0",
+          "label": "east bedroom",
+          "semanticRole": "east bedroom",
+          "program": "bedroom",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": -13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-east-1",
+          "label": "east dressing and bath",
+          "semanticRole": "east dressing and bath",
+          "program": "bathroom dressing",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": -4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-east-2",
+          "label": "east study",
+          "semanticRole": "east study",
+          "program": "study",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": 4.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "upper-east-3",
+          "label": "east bedroom",
+          "semanticRole": "east bedroom",
+          "program": "bedroom",
+          "storeyId": "wings-upper",
+          "hostMassId": "garden-wings",
+          "footprint": {
+            "x": 19.5,
+            "z": 13.5,
+            "width": 9,
+            "depth": 9
+          }
+        },
+        {
+          "id": "library-reading",
+          "label": "Garden reading room",
+          "semanticRole": "Garden reading room",
+          "program": "library",
+          "storeyId": "library-ground",
+          "hostMassId": "low-library",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 16,
+            "depth": 8
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "bridge-stair",
+          "type": "stair",
+          "hostMassId": "garden-wings",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 10,
+            "depth": 4
+          },
+          "stairType": "straight",
+          "direction": "east"
+        },
+        {
+          "id": "bridge-lift",
+          "type": "lift",
+          "hostMassId": "garden-wings",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -8,
+            "z": 0,
+            "width": 3,
+            "depth": 3
+          }
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "garden-wings",
+        "to": "low-library",
+        "kind": "connects"
+      },
+      {
+        "from": "ground-stair-hall",
+        "to": "ground-west-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-west-gallery",
+        "to": "ground-west-0",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-west-gallery",
+        "to": "ground-west-1",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-west-gallery",
+        "to": "ground-west-2",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-west-gallery",
+        "to": "ground-west-3",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-stair-hall",
+        "to": "ground-east-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-east-gallery",
+        "to": "ground-east-0",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-east-gallery",
+        "to": "ground-east-1",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-east-gallery",
+        "to": "ground-east-2",
+        "kind": "adjacent"
+      },
+      {
+        "from": "ground-east-gallery",
+        "to": "ground-east-3",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-stair-hall",
+        "to": "upper-west-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-west-gallery",
+        "to": "upper-west-0",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-west-gallery",
+        "to": "upper-west-1",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-west-gallery",
+        "to": "upper-west-2",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-west-gallery",
+        "to": "upper-west-3",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-stair-hall",
+        "to": "upper-east-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-east-gallery",
+        "to": "upper-east-0",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-east-gallery",
+        "to": "upper-east-1",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-east-gallery",
+        "to": "upper-east-2",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-east-gallery",
+        "to": "upper-east-3",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "complete",
+        "diagnostics": [
+          {
+            "code": "JUNCTION_SKEW_UNSUPPORTED",
+            "targetIds": [
+              "junction:garden-wings|low-library:envelope"
+            ],
+            "message": "Skew or tilted mass junction retained; rectangular orthogonal junctions only.",
+            "severity": "advisory",
+            "classification": "advisory"
+          }
+        ]
+      }
+    }
+  }
+}

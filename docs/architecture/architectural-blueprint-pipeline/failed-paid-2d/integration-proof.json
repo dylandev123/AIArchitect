@@ -1,0 +1,41 @@
+{
+  "result": "PASS",
+  "runtime": "next build --webpack + next start",
+  "route": "/api/ai/plan",
+  "originalResponseReplay": false,
+  "reason": "Original latest attempt had HTTP 429 with no retained design response or HTTP body",
+  "syntheticFailureClassReplay": true,
+  "realProviderCalls": 0,
+  "retries": 0,
+  "realProjectsChanged": 0,
+  "results": [
+    {
+      "name": "recorded-429-class-only",
+      "status": 502,
+      "category": "provider",
+      "code": "provider_429",
+      "responseCaptured": false
+    },
+    {
+      "name": "invalid-json",
+      "status": 502,
+      "category": "parsing",
+      "code": "invalid_json",
+      "responseCaptured": true
+    },
+    {
+      "name": "schema",
+      "status": 422,
+      "category": "schema",
+      "code": "plan_schema",
+      "responseCaptured": true
+    },
+    {
+      "name": "geometry",
+      "status": 422,
+      "category": "geometry",
+      "code": "plan_geometry",
+      "responseCaptured": true
+    }
+  ]
+}

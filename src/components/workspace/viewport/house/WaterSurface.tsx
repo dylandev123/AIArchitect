@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getWaterNormalMap } from "@/lib/proceduralTextures";
@@ -9,6 +9,10 @@ interface WaterSurfaceProps {
   position: [number, number, number];
   width: number;
   depth: number;
+  /** Optional art direction; workspace pools retain their existing defaults. */
+  color?: string;
+  rippleSize?: number;
+  rippleStrength?: number;
 }
 
 /** Wave metres covered by one normal-map repeat. */
@@ -18,18 +22,20 @@ const RIPPLE_METERS = 1.4;
  * Sims-style pool water: clear turquoise with sky reflections and two counter-scrolling ripple normal maps.
  * Ripples move in the texture (no per-frame geometry work), so many pools stay cheap.
  */
-export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
+export function WaterSurface({ position, width, depth, color = "#0a9fd0", rippleSize = RIPPLE_METERS, rippleStrength = 1 }: WaterSurfaceProps) {
   const [ripplesA, ripplesB] = useMemo(() => {
     const base = getWaterNormalMap();
     const a = base.clone();
     const b = base.clone();
     for (const [tex, scale] of [[a, 1], [b, 1.7]] as const) {
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(width / RIPPLE_METERS / scale, depth / RIPPLE_METERS / scale);
+      tex.repeat.set(width / rippleSize / scale, depth / rippleSize / scale);
       tex.needsUpdate = true;
     }
     return [a, b];
-  }, [width, depth]);
+  }, [width, depth, rippleSize]);
+
+  useEffect(() => () => { ripplesA.dispose(); ripplesB.dispose(); }, [ripplesA, ripplesB]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
@@ -43,7 +49,7 @@ export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[width, depth]} />
         <meshPhysicalMaterial
-          color="#0a9fd0"
+          color={color}
           roughness={0.08}
           metalness={0}
           transparent
@@ -52,7 +58,7 @@ export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
           clearcoat={0.6}
           clearcoatRoughness={0.1}
           normalMap={ripplesA}
-          normalScale={new THREE.Vector2(0.12, 0.12)}
+          normalScale={new THREE.Vector2(0.12 * rippleStrength, 0.12 * rippleStrength)}
           specularIntensity={1}
         />
       </mesh>
@@ -65,7 +71,7 @@ export function WaterSurface({ position, width, depth }: WaterSurfaceProps) {
           transparent
           opacity={0.05}
           normalMap={ripplesB}
-          normalScale={new THREE.Vector2(0.2, 0.2)}
+          normalScale={new THREE.Vector2(0.2 * rippleStrength, 0.2 * rippleStrength)}
           depthWrite={false}
         />
       </mesh>

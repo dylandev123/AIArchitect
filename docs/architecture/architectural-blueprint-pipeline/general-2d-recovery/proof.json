@@ -1,0 +1,57 @@
+{
+  "result": "PASS",
+  "runtime": "next build --webpack + next start, isolated source copy",
+  "originalResponseSha256": "9591e1203eb1b81f33d35fb709c31b14e982bfa002fb75ceb432e3869e2877fd",
+  "replayedUnchanged": true,
+  "manualRetargeting": false,
+  "realProviderCalls": 0,
+  "mockedProviderCalls": 1,
+  "steps": [
+    {
+      "step": "original response displayed",
+      "status": 200,
+      "unresolved": [
+        "arrival-route",
+        "guest-walk",
+        "pool-walk"
+      ],
+      "buildings": 2,
+      "rooms": 19
+    },
+    {
+      "step": "edit, save, undo, redo, reload",
+      "unresolvedPreserved": true,
+      "guestPavilionWidth": 26
+    },
+    {
+      "step": "author retargets pool-walk",
+      "unresolved": [
+        "arrival-route",
+        "guest-walk"
+      ],
+      "drawn": [
+        "pool-walk"
+      ]
+    },
+    {
+      "step": "author fits main-entry inside its recess",
+      "unresolved": [],
+      "drawn": [
+        "arrival-route",
+        "guest-walk",
+        "pool-walk"
+      ]
+    }
+  ],
+  "captures": [
+    "1-estate-master-plan-with-unresolved-diagnostics.jpg",
+    "1b-estate-master-plan-panel-hidden.jpg",
+    "2-ground-floor-plan.jpg",
+    "3-upper-floor-plan.jpg",
+    "4-edited-and-reloaded.jpg",
+    "5-pool-walk-corrected.jpg",
+    "6-all-routes-resolved.jpg"
+  ],
+  "pageErrors": [],
+  "forbiddenRequests": []
+}

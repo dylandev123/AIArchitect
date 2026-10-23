@@ -1,0 +1,602 @@
+{
+  "cases": [
+    {
+      "name": "complete full property",
+      "expected": "complete",
+      "actual": "complete",
+      "objects": 13,
+      "primitives": 154,
+      "findings": [
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        }
+      ]
+    },
+    {
+      "name": "one faulty interior door",
+      "expected": "draft",
+      "actual": "draft",
+      "objects": 13,
+      "primitives": 153,
+      "findings": [
+        {
+          "code": "DOOR_OUTSIDE_BOUNDARY",
+          "targetIds": [
+            "service-door"
+          ],
+          "message": "Door service-door (0.9m at 0.1m) does not fit boundary boundary:kitchen|service-room (6.00m).",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_DOOR_CLIPPED",
+          "targetIds": [
+            "service-partition",
+            "service-door"
+          ],
+          "severity": "fatal",
+          "message": "Interior door would be omitted or resized. Door records support rectangular cutouts in constructed partitions; exterior doors belong in facade openings."
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        }
+      ]
+    },
+    {
+      "name": "overlapping internal doors",
+      "expected": "draft",
+      "actual": "draft",
+      "objects": 13,
+      "primitives": 154,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_DOOR_OVERLAP",
+          "targetIds": [
+            "service-door",
+            "overlapping-service-door"
+          ],
+          "message": "Interior openings overlap; merging their gaps would lose independently authored door intent.",
+          "severity": "fatal"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "DOOR_OVERLAP",
+          "targetIds": [
+            "overlapping-service-door"
+          ],
+          "message": "Doors service-door and overlapping-service-door overlap on partition service-partition.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        }
+      ]
+    },
+    {
+      "name": "blocked secondary stair with working alternative",
+      "expected": "draft",
+      "actual": "draft",
+      "objects": 13,
+      "primitives": 183,
+      "findings": [
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STAIR_ACCESS_BLOCKED",
+          "targetId": "library-stair",
+          "message": "library-stair: walking approach intersects blocked-stair-wall:wall:start~end.",
+          "targetIds": [
+            "library-stair"
+          ],
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "only stair blocked",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STAIR_ACCESS_BLOCKED",
+          "targetIds": [
+            "library-stair"
+          ],
+          "message": "library-stair: walking approach intersects blocked-stair-wall:wall:start~end.",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "minor route overrun",
+      "expected": "draft",
+      "actual": "draft",
+      "objects": 13,
+      "primitives": 154,
+      "findings": [
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "fatal",
+          "targetIds": [
+            "atelier-walk"
+          ],
+          "message": "atelier-approach: route corridor leaves the site."
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetIds": [
+            "atelier-walk"
+          ],
+          "message": "atelier-approach: route corridor leaves the site. atelier-walk world plan={\"min\":[-36.9,-27.900000000000002],\"max\":[65.10000000000001,-5]}",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "invalid main footprint",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_OPENING_TARGET",
+          "targetIds": [
+            "crescent-house",
+            "house-entry"
+          ],
+          "message": "Opening must address its actual supported wall: an existing segment for outlines, a facade otherwise.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_OPENING_TARGET",
+          "targetIds": [
+            "crescent-house",
+            "salon-glass"
+          ],
+          "message": "Opening must address its actual supported wall: an existing segment for outlines, a facade otherwise.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_OPENING_TARGET",
+          "targetIds": [
+            "crescent-house",
+            "garden-door"
+          ],
+          "message": "Opening must address its actual supported wall: an existing segment for outlines, a facade otherwise.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_OPENING_TARGET",
+          "targetIds": [
+            "crescent-house",
+            "suite-balcony-door"
+          ],
+          "message": "Opening must address its actual supported wall: an existing segment for outlines, a facade otherwise.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_ASSEMBLY_HOST",
+          "targetIds": [
+            "crescent-house",
+            "arc-balcony",
+            "deck"
+          ],
+          "message": "Line/arc assemblies require an explicit existing segmentId.",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "missing essential building",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_REFERENCE",
+          "targetIds": [
+            "kitchen"
+          ],
+          "message": "Room adjacency must reference an existing functional space.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_REFERENCE",
+          "targetIds": [
+            "service-room"
+          ],
+          "message": "Room adjacency must reference an existing functional space.",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "unsupported primary roof",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_ROOF_UNSUPPORTED",
+          "targetIds": [
+            "crescent-house",
+            "crescent-roof"
+          ],
+          "message": "V3 cannot construct requested roof dome.",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "unsupported primary form",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_STOREYS_UNSUPPORTED",
+          "targetIds": [
+            "crescent-house"
+          ],
+          "message": "V3 constructs uniform storey heights per mass; use explicit separate masses or retain this unresolved design.",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "multiple local faults",
+      "expected": "draft",
+      "actual": "draft",
+      "objects": 13,
+      "primitives": 182,
+      "findings": [
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "severity": "fatal",
+          "targetIds": [
+            "atelier-walk"
+          ],
+          "message": "atelier-approach: route corridor leaves the site."
+        },
+        {
+          "code": "DOOR_OUTSIDE_BOUNDARY",
+          "targetIds": [
+            "service-door"
+          ],
+          "message": "Door service-door (0.9m at 0.1m) does not fit boundary boundary:kitchen|service-room (6.00m).",
+          "severity": "fatal"
+        },
+        {
+          "code": "ARCHITECTURAL_DOOR_CLIPPED",
+          "targetIds": [
+            "service-partition",
+            "service-door"
+          ],
+          "severity": "fatal",
+          "message": "Interior door would be omitted or resized. Door records support rectangular cutouts in constructed partitions; exterior doors belong in facade openings."
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ],
+          "message": "Storey house-upper (4.26–8.26m) exceeds host crescent-house height 8m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ],
+          "message": "Storey atelier-ground (0.26–3.8600000000000003m) exceeds host orchard-atelier height 3.6m.",
+          "severity": "advisory"
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ],
+          "message": "North gate to arrival court renders as generic path geometry.",
+          "severity": "advisory"
+        },
+        {
+          "code": "STAIR_ACCESS_BLOCKED",
+          "targetId": "library-stair",
+          "message": "library-stair: walking approach intersects blocked-stair-wall:wall:start~end.",
+          "targetIds": [
+            "library-stair"
+          ],
+          "severity": "fatal"
+        },
+        {
+          "code": "ESTATE_ACCESS_DISCONNECTED",
+          "targetIds": [
+            "atelier-walk"
+          ],
+          "message": "atelier-approach: route corridor leaves the site. atelier-walk world plan={\"min\":[-36.9,-27.900000000000002],\"max\":[65.10000000000001,-5]}",
+          "severity": "fatal"
+        }
+      ]
+    },
+    {
+      "name": "broken essential entrance",
+      "expected": "cannot-construct",
+      "actual": "cannot-construct",
+      "objects": 0,
+      "primitives": 0,
+      "findings": [
+        {
+          "code": "ARCHITECTURAL_OPENING_CLIPPED",
+          "targetIds": [
+            "crescent-house",
+            "house-entry"
+          ],
+          "message": "Opening on level 0 would be dropped or resized by construction; resolve its height, sill and span explicitly.",
+          "severity": "fatal"
+        }
+      ]
+    }
+  ],
+  "recovered": [
+    {
+      "sha256": "a8cd16298ef686e04b9543c67465fe0fbb78bc48486f83856d35ae897da0a30f",
+      "outcome": "cannot-construct",
+      "diagnostics": [
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southDiningDoor crosses different south wall planes on level 0; span=[0.58,0.88], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southLivingDoor crosses different south wall planes on level 0; span=[0.12,0.42], local wall segments=[{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "FOOTPRINT_FACADE_AMBIGUOUS",
+          "targetIds": [
+            "mainResidence"
+          ],
+          "message": "Opening southUpperDoor crosses different south wall planes on level 1; span=[0.38,0.62], local wall segments=[{\"a\":[23,13],\"b\":[5.059999999999999,13],\"span\":{\"facade\":\"south\",\"start\":0.61,\"end\":1,\"x\":0,\"z\":0}},{\"a\":[5.059999999999999,10.8],\"b\":[-5.059999999999999,10.8],\"span\":{\"facade\":\"south\",\"start\":0.39,\"end\":0.61,\"x\":0,\"z\":-2.1999999999999993}},{\"a\":[-5.059999999999999,13],\"b\":[-23,13],\"span\":{\"facade\":\"south\",\"start\":0,\"end\":0.39,\"x\":0,\"z\":0}}]. Author a single-plane span or explicit separate doors; it is retained but not placed.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        }
+      ]
+    },
+    {
+      "sha256": "49d4d75dfb84388296b25daf1474e34c65aebcf526b24cad2580128e28aee026",
+      "outcome": "cannot-construct",
+      "diagnostics": [
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "targetIds": [
+            "poolTerrace"
+          ],
+          "message": "arch-water-garden: declared connected composition lacks touching authored objects.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        }
+      ]
+    },
+    {
+      "sha256": "742fc6d69aac4f1fa849803aeb305ea740c09af039f907e11c635786282b3d36",
+      "outcome": "cannot-construct",
+      "diagnostics": [
+        {
+          "code": "ESTATE_ACCESS_POINT_MISSING",
+          "targetIds": [
+            "siteNorth"
+          ],
+          "message": "route-driveway: from endpoint needs an unambiguous blueprint entrance on this host, a suitable ground-level opening or an explicit surface/site point. No entrance or route is chosen automatically.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetIds": [
+            "guestPath"
+          ],
+          "message": "route-guest: route width intersects guestPavilion; an authored detour or explicit supported bridge is required.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetIds": [
+            "wellnessPath"
+          ],
+          "message": "route-wellness: route width intersects wellnessPavilion; an authored detour or explicit supported bridge is required.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        }
+      ]
+    },
+    {
+      "sha256": "bb4c970ecd729ad7a7512797b9e20a31a945f922c899505f2178e93b7e4f86a6",
+      "outcome": "cannot-construct",
+      "diagnostics": [
+        {
+          "code": "ESTATE_ACCESS_POINT_MISSING",
+          "targetIds": [
+            "siteNorth"
+          ],
+          "message": "route-driveway: from endpoint needs an unambiguous blueprint entrance on this host, a suitable ground-level opening or an explicit surface/site point. No entrance or route is chosen automatically.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetIds": [
+            "guestPath"
+          ],
+          "message": "route-guest: route width intersects guestPavilion; an authored detour or explicit supported bridge is required.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "targetIds": [
+            "wellnessPath"
+          ],
+          "message": "route-wellness: route width intersects wellnessPavilion; an authored detour or explicit supported bridge is required.",
+          "severity": "fatal",
+          "classification": "core-blocking"
+        }
+      ]
+    }
+  ]
+}

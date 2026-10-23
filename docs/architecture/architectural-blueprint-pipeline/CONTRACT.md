@@ -1,5 +1,9 @@
 # Independent V3 architectural blueprint contract
 
+**Current authoring:** new flagged flat-site requests use the plan-first input described at the end of this document. [Design restrictions audit](DESIGN_RESTRICTIONS_AUDIT.md) records the current prompt, optional conceptual-detail collections and remaining capability limits. Earlier complete-blueprint sections describe the downstream/recovery contract, not a second production authoring response.
+
+**Build-first update:** [BUILD_FIRST_REPORT.md](BUILD_FIRST_REPORT.md) supersedes the all-or-nothing behavior described below for the opt-in independent production branch. Strict/offline callers retain their existing default; production can save explicitly labelled, editable drafts with localized defects. Primary architectural checks remain blocking.
+
 20 October 2026, America/St_Lucia. Independent construction contract, with a default-off production authoring branch. It is not a stored project format. See [full-property expansion](FULL_PROPERTY_REPORT.md).
 
 The current [production reliability gate](PRODUCTION_RELIABILITY_REPORT.md) adds plan-only opening/door clipping and identity checks, complete construction-part receipts, abnormal-output rejection, explicit zero SDK transport retries and read-only flag diagnostics. Interior door records construct rectangular partition cutouts without leaves/hardware; archways and door records on unconstructed partitions are refused. Exterior doors belong in facade openings. These acceptance checks apply to the independent blueprint workflow; they do not migrate legacy scenes.
@@ -83,3 +87,25 @@ The production V3 generation route now selects `architecturalBlueprintGeneration
 The happy path makes one authoring call. The same one objective follow-up may correct only a diagnosed stair footprint/type/direction/turn or diagnosed route waypoints. IDs, hosts, served levels, entrance references, widths/use, requirements and every other decision are preserved by a local comparison. Missing design, unsupported forms, malformed/incomplete JSON, output truncation and unrepairable construction failure return no saveable scene and do not start another creative stage. An explicit known unsupported roof request is rejected before spending a provider call; this vocabulary check is deliberately limited. A repaired response must pass the whole planning/construction gate again. There is no third call, separate elaboration call, optional aesthetic revision or detailed-scene fallback in this branch.
 
 Only mocked provider requests were executed. Natural-model authorship and general brief satisfaction remain unproven; the existing brief feature review covers a finite vocabulary, some checks remain advisory, and independent requirement review is still needed before broad provider testing.
+
+## Architectural Planning Studio presentation
+
+The ordinary V3 workspace exposes 2D Floor Plan, 3D Blueprint and Finished House over the same active `V3Scene`. The 2D drawing projects actual compiled geometry and resolved room/storey datums; the neutral 3D view reuses production primitives with presentation materials and per-host cutaways. Optional project-level `architecturalView` preferences contain no design geometry and do not append versions. Supported storey-height/building-placement edits reuse lossless checkout and architectural revision; unsupported round trips retain the saved scene and report the refusal. See [Planning Studio report](PLANNING_STUDIO_REPORT.md) for offline evidence, limitations and the paid-generation recommendation.
+
+## 21 October 2026 follow-up: authoritative plan-first production input
+
+New flat generations behind the same architectural-blueprint flag now require `v3-plan-first-1`: a separately parsable `v3-architectural-plan-1` plan followed by host-relative exterior decisions. Exterior input cannot declare placements, footprints, storeys, room extents or route geometry. The existing `v3-architectural-blueprint-1` adapter remains the deterministic downstream handoff and offline recovery contract.
+
+The plan-only gate, massing compilation and exterior construction run in that order through the existing V3 compiler. Canonical named geometry, footprints, interior datums and estate relationships remain the persisted plan authority; no duplicate mutable scene/plan is saved. See [PLAN_FIRST_REPORT.md](PLAN_FIRST_REPORT.md), [stage/geometry proof](plan-first/proof.json) and [production-workspace evidence](plan-first/capture.json). One buffered author response remains distinct from a live human review/AI feedback cycle; no additional creative call is introduced.
+
+## 21 October 2026: composition-first authoring and optional detail
+
+The actual production prompt now prioritizes site composition, the coordinated footprint/room plan, and development of that same geometry. It removes “simple 2D” and duplicate stage guidance. No style, house template, object-count target or amenity is required. Claims about climate, arrival, outdoor space and character should be supported by real geometry rather than additional prose fields.
+
+In `v3-architectural-plan-1`, omitted `forms`, `considerations`, `relationships`, `roomAdjacencies` and `zones` default to empty arrays. In exterior, omitted `partitions`/`doors` default to empty arrays. The transmitted JSON schema uses input mode, so these omissions are permitted on the actual author wire. Explicit values remain strictly validated; an authored reservation, malformed collection, unsupported part or contradictory relationship is never discarded by a default. Requirements and building program remain required. Empty detailed-interior arrays mean no private walls/cutouts have been designed; construction does not infer them.
+
+Prefer derived zone membership where no independent reservation is intended. Main room zones, meaningful entrance addresses and usable vertical reservations remain part of the initial plan. Room/stair rectangle descriptions now state that x/z are host-local centres in metres. V3 continues deriving wall/floor geometry, floor datums, roof placement, route endpoint coordinates and selectable owner bounds.
+
+An explicit entrance approach denotes a vehicle drop-off consistently for rectangular, articulated and line/arc hosts; it no longer requires a vehicle-width front door solely because the footprint is nonrectangular. Direct vehicle entry without an approach still requires full vehicle clearance. Wall contacts, widths, route collisions and all other essential audits remain active.
+
+The 10,000 output-token cap, single initial provider response, at most one objective stair/waypoint repair, zero SDK transport retries, plan-authority checks and Draft acceptance policy remain unchanged. No additional provider call, construction engine, scene format, saved-project migration or paid evaluation is introduced. See [the audit and matching offline production comparisons](DESIGN_RESTRICTIONS_AUDIT.md).

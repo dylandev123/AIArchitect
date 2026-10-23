@@ -1,0 +1,800 @@
+{
+  "result": "PASS",
+  "liveProviderCalls": 0,
+  "savedProjectWrites": 0,
+  "syntheticExamplesAreNotModelQualityEvidence": true,
+  "before": {
+    "label": "Retained paid composition with previously documented local preflight corrections, offline only",
+    "paidResponseFixtureSha256": "9591e1203eb1b81f33d35fb709c31b14e982bfa002fb75ceb432e3869e2877fd",
+    "plan": {
+      "format": "v3-architectural-plan-1",
+      "concept": "A sea-facing estate organized as a sheltered arrival court behind a long, quiet main house and a separate guest pavilion. The Caribbean outlook is assumed to be north, so the principal rooms, shaded terrace and pool form a descending sequence toward that edge while bedrooms retain privacy on the east and upper level. A planted court between the two buildings makes the guest wing feel independent yet close. The $15 million budget supports a substantial six-bedroom compound, generous covered outdoor living and a deliberate landscape setting; construction systems, finishes, roofs and interiors remain deferred.",
+      "site": {
+        "width": 140,
+        "depth": 120,
+        "groundColor": "#61754b",
+        "north": "-z",
+        "access": [
+          {
+            "id": "south-gate",
+            "boundary": "south",
+            "point": [
+              22,
+              0,
+              60
+            ]
+          }
+        ]
+      },
+      "buildings": [
+        {
+          "id": "main-house",
+          "label": "Caribbean View House",
+          "role": "Primary residence",
+          "location": {
+            "x": 7,
+            "z": -10
+          },
+          "plan": {
+            "kind": "articulated",
+            "width": 58,
+            "depth": 34,
+            "operations": [
+              {
+                "id": "arrival-recess",
+                "type": "entry-recess",
+                "facade": "south",
+                "width": 8,
+                "depth": 3
+              },
+              {
+                "id": "east-loggia",
+                "type": "recess",
+                "facade": "north",
+                "start": 0.78,
+                "end": 0.94,
+                "depth": 3,
+                "open": true,
+                "postSpacing": 3
+              }
+            ]
+          },
+          "storeys": [
+            {
+              "id": "main-ground",
+              "label": "Ground level",
+              "role": "Public living and primary suite",
+              "spaces": [
+                {
+                  "id": "entry-hall",
+                  "label": "Arrival hall",
+                  "program": "Reception and gallery",
+                  "footprint": {
+                    "x": 0,
+                    "z": 10,
+                    "width": 12,
+                    "depth": 10
+                  }
+                },
+                {
+                  "id": "great-room",
+                  "label": "Great room",
+                  "program": "Sea-view living",
+                  "footprint": {
+                    "x": 3,
+                    "z": -7,
+                    "width": 27,
+                    "depth": 16
+                  }
+                },
+                {
+                  "id": "dining-room",
+                  "label": "Dining room",
+                  "program": "Formal and family dining",
+                  "footprint": {
+                    "x": -14,
+                    "z": -7,
+                    "width": 7,
+                    "depth": 16
+                  }
+                },
+                {
+                  "id": "show-kitchen",
+                  "label": "Show kitchen",
+                  "program": "Open kitchen",
+                  "footprint": {
+                    "x": -15,
+                    "z": 7,
+                    "width": 13,
+                    "depth": 12
+                  }
+                },
+                {
+                  "id": "service-kitchen",
+                  "label": "Service kitchen",
+                  "program": "Back kitchen and pantry",
+                  "footprint": {
+                    "x": -23.5,
+                    "z": 7,
+                    "width": 4,
+                    "depth": 12
+                  }
+                },
+                {
+                  "id": "media-lounge",
+                  "label": "Media lounge",
+                  "program": "Private lounge",
+                  "footprint": {
+                    "x": 13,
+                    "z": 9,
+                    "width": 11,
+                    "depth": 10
+                  }
+                },
+                {
+                  "id": "primary-suite",
+                  "label": "Primary suite",
+                  "program": "Bedroom, dressing and bath",
+                  "footprint": {
+                    "x": 21.5,
+                    "z": -6,
+                    "width": 14,
+                    "depth": 18
+                  }
+                },
+                {
+                  "id": "powder-room",
+                  "label": "Powder room",
+                  "program": "Guest WC",
+                  "footprint": {
+                    "x": 7,
+                    "z": 9,
+                    "width": 3,
+                    "depth": 4
+                  }
+                },
+                {
+                  "id": "service-store",
+                  "label": "Service store",
+                  "program": "Housekeeping and storage",
+                  "footprint": {
+                    "x": -23,
+                    "z": -8,
+                    "width": 5,
+                    "depth": 12
+                  }
+                }
+              ]
+            },
+            {
+              "id": "main-upper",
+              "label": "Upper level",
+              "role": "Family and guest accommodation",
+              "spaces": [
+                {
+                  "id": "upper-landing",
+                  "label": "Upper landing",
+                  "program": "Gallery and circulation",
+                  "footprint": {
+                    "x": 0,
+                    "z": 9,
+                    "width": 10,
+                    "depth": 8
+                  }
+                },
+                {
+                  "id": "suite-two",
+                  "label": "Suite two",
+                  "program": "Sea-view bedroom suite",
+                  "footprint": {
+                    "x": -17,
+                    "z": -5,
+                    "width": 15,
+                    "depth": 18
+                  }
+                },
+                {
+                  "id": "suite-three",
+                  "label": "Suite three",
+                  "program": "Sea-view bedroom suite",
+                  "footprint": {
+                    "x": 1,
+                    "z": -5,
+                    "width": 15,
+                    "depth": 18
+                  }
+                },
+                {
+                  "id": "suite-four",
+                  "label": "Suite four",
+                  "program": "Sea-view bedroom suite",
+                  "footprint": {
+                    "x": 19,
+                    "z": -5,
+                    "width": 15,
+                    "depth": 18
+                  }
+                },
+                {
+                  "id": "family-library",
+                  "label": "Family library",
+                  "program": "Reading lounge",
+                  "footprint": {
+                    "x": -14,
+                    "z": 10,
+                    "width": 16,
+                    "depth": 8
+                  }
+                },
+                {
+                  "id": "fitness-room",
+                  "label": "Fitness room",
+                  "program": "Gym and wellness training",
+                  "footprint": {
+                    "x": 15,
+                    "z": 10,
+                    "width": 18,
+                    "depth": 8
+                  }
+                }
+              ]
+            }
+          ],
+          "accessOpenings": [
+            {
+              "id": "main-entry",
+              "facade": "south",
+              "type": "door",
+              "start": 0.432,
+              "end": 0.568,
+              "serves": "entry-hall"
+            },
+            {
+              "id": "great-room-terrace",
+              "facade": "north",
+              "type": "glazed-door",
+              "start": 0.36,
+              "end": 0.64,
+              "operation": "sliding",
+              "serves": "great-room"
+            },
+            {
+              "id": "dining-terrace",
+              "facade": "north",
+              "type": "glazed-door",
+              "start": 0.18,
+              "end": 0.31,
+              "operation": "sliding",
+              "serves": "dining-room"
+            },
+            {
+              "id": "primary-loggia-door",
+              "facade": "north",
+              "type": "glazed-door",
+              "start": 0.94,
+              "end": 1,
+              "operation": "sliding",
+              "serves": "primary-suite"
+            },
+            {
+              "id": "service-entry",
+              "facade": "west",
+              "type": "door",
+              "start": 0.54,
+              "end": 0.64,
+              "serves": "service-kitchen"
+            }
+          ]
+        },
+        {
+          "id": "guest-pavilion",
+          "label": "Garden Guest Pavilion",
+          "role": "Guest accommodation",
+          "location": {
+            "x": -39,
+            "z": -10
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 24,
+            "depth": 20
+          },
+          "storeys": [
+            {
+              "id": "guest-ground",
+              "label": "Guest level",
+              "role": "Independent guest accommodation",
+              "spaces": [
+                {
+                  "id": "guest-lounge",
+                  "label": "Guest lounge",
+                  "program": "Shared sitting room",
+                  "footprint": {
+                    "x": 0,
+                    "z": 5.5,
+                    "width": 16,
+                    "depth": 7
+                  }
+                },
+                {
+                  "id": "guest-suite-one",
+                  "label": "Guest suite one",
+                  "program": "Bedroom suite",
+                  "footprint": {
+                    "x": -6,
+                    "z": -4,
+                    "width": 10,
+                    "depth": 10
+                  }
+                },
+                {
+                  "id": "guest-suite-two",
+                  "label": "Guest suite two",
+                  "program": "Bedroom suite",
+                  "footprint": {
+                    "x": 6,
+                    "z": -4,
+                    "width": 10,
+                    "depth": 10
+                  }
+                },
+                {
+                  "id": "guest-pantry",
+                  "label": "Guest pantry",
+                  "program": "Refreshment pantry",
+                  "footprint": {
+                    "x": -9,
+                    "z": 6,
+                    "width": 4,
+                    "depth": 6
+                  }
+                }
+              ]
+            }
+          ],
+          "accessOpenings": [
+            {
+              "id": "guest-entry",
+              "facade": "south",
+              "type": "door",
+              "start": 0.43,
+              "end": 0.57,
+              "serves": "guest-lounge"
+            },
+            {
+              "id": "guest-garden-door",
+              "facade": "north",
+              "type": "glazed-door",
+              "start": 0.35,
+              "end": 0.65,
+              "operation": "sliding",
+              "serves": "guest-lounge"
+            }
+          ]
+        }
+      ],
+      "features": [
+        {
+          "id": "arrival-drive",
+          "label": "Arrival drive",
+          "role": "Vehicular approach and turning court",
+          "type": "driveway",
+          "location": {
+            "x": 19,
+            "z": 29
+          },
+          "width": 18,
+          "depth": 60
+        },
+        {
+          "id": "arrival-garden",
+          "label": "Arrival garden",
+          "role": "Planted forecourt",
+          "type": "landscape-zone",
+          "location": {
+            "x": -4,
+            "z": 27
+          },
+          "width": 36,
+          "depth": 25
+        },
+        {
+          "id": "guest-court",
+          "label": "Guest court",
+          "role": "Shaded planted court between residences",
+          "type": "courtyard",
+          "location": {
+            "x": -25.5,
+            "z": -10
+          },
+          "width": 8,
+          "depth": 22
+        },
+        {
+          "id": "sea-terrace",
+          "label": "Sea terrace",
+          "role": "Covered outdoor living and dining apron",
+          "type": "terrace",
+          "location": {
+            "x": 7,
+            "z": -30.5
+          },
+          "width": 52,
+          "depth": 7
+        },
+        {
+          "id": "infinity-pool",
+          "label": "Caribbean pool",
+          "role": "Swimming and outlook water plane",
+          "type": "pool",
+          "location": {
+            "x": 7,
+            "z": -42
+          },
+          "width": 32,
+          "depth": 10
+        },
+        {
+          "id": "pool-garden",
+          "label": "Coastal garden",
+          "role": "Lawn and tropical planting around pool",
+          "type": "landscape-zone",
+          "location": {
+            "x": 7,
+            "z": -50
+          },
+          "width": 64,
+          "depth": 20
+        },
+        {
+          "id": "service-garden",
+          "label": "Service garden",
+          "role": "Screened utility planting",
+          "type": "landscape-zone",
+          "location": {
+            "x": -28,
+            "z": 8
+          },
+          "width": 14,
+          "depth": 20
+        }
+      ],
+      "connections": [
+        {
+          "id": "arrival-route",
+          "purpose": "Vehicle approach from south gate to the recessed main entrance",
+          "from": {
+            "kind": "site-access",
+            "accessId": "south-gate"
+          },
+          "to": {
+            "kind": "entrance",
+            "entranceId": "main-entry",
+            "approachDistance": 5
+          },
+          "use": "vehicle",
+          "width": 5.5,
+          "waypoints": [
+            [
+              22,
+              0,
+              27
+            ],
+            [
+              14,
+              0,
+              14
+            ]
+          ]
+        },
+        {
+          "id": "guest-walk",
+          "purpose": "Pedestrian route between the primary arrival and guest pavilion",
+          "from": {
+            "kind": "entrance",
+            "entranceId": "main-entry",
+            "approachDistance": 4
+          },
+          "to": {
+            "kind": "entrance",
+            "entranceId": "guest-entry",
+            "approachDistance": 4
+          },
+          "use": "pedestrian",
+          "width": 2,
+          "waypoints": [
+            [
+              -8,
+              0,
+              12
+            ],
+            [
+              -27,
+              0,
+              10
+            ]
+          ]
+        },
+        {
+          "id": "pool-walk",
+          "purpose": "Direct pedestrian route from great room to sea terrace and pool",
+          "from": {
+            "kind": "entrance",
+            "entranceId": "great-room-terrace",
+            "approachDistance": 3
+          },
+          "to": {
+            "kind": "surface",
+            "objectId": "sea-terrace",
+            "local": [
+              0,
+              0
+            ]
+          },
+          "use": "pedestrian",
+          "width": 2.4
+        }
+      ],
+      "verticalCirculation": [
+        {
+          "id": "main-stair",
+          "type": "stair",
+          "hostMassId": "main-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -1,
+            "z": 4,
+            "width": 5,
+            "depth": 7
+          }
+        },
+        {
+          "id": "main-lift",
+          "type": "lift",
+          "hostMassId": "main-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 4,
+            "z": 4,
+            "width": 3,
+            "depth": 3
+          }
+        }
+      ],
+      "requirements": [
+        {
+          "id": "budget-brief",
+          "source": "user",
+          "statement": "Design an extraordinary luxury estate guided by a $15 million budget.",
+          "metric": "budget",
+          "objectIds": [
+            "main-house",
+            "guest-pavilion",
+            "infinity-pool"
+          ],
+          "range": {
+            "min": 15000000,
+            "max": 15000000
+          }
+        },
+        {
+          "id": "saint-lucia-brief",
+          "source": "user",
+          "statement": "Estate is to overlook the Caribbean Sea in Saint Lucia.",
+          "metric": "feature",
+          "objectIds": [
+            "main-house",
+            "sea-terrace",
+            "infinity-pool"
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "id": "house-to-terrace",
+          "intent": "Principal sea-facing living rooms open directly onto the outdoor living terrace.",
+          "from": "main-house",
+          "to": "sea-terrace",
+          "kind": "connects"
+        },
+        {
+          "id": "terrace-to-pool",
+          "intent": "The terrace is aligned with and supports access to the pool and Caribbean outlook.",
+          "from": "sea-terrace",
+          "to": "infinity-pool",
+          "kind": "aligns"
+        },
+        {
+          "id": "pavilion-to-court",
+          "intent": "The guest pavilion fronts the shaded planted court.",
+          "from": "guest-pavilion",
+          "to": "guest-court",
+          "kind": "aligns"
+        },
+        {
+          "id": "main-stair-host",
+          "intent": "Primary stair serves both levels of the main house.",
+          "from": "main-stair",
+          "to": "main-house",
+          "kind": "hosts"
+        },
+        {
+          "id": "main-lift-host",
+          "intent": "Lift serves both levels of the main house.",
+          "from": "main-lift",
+          "to": "main-house",
+          "kind": "hosts"
+        }
+      ]
+    },
+    "drawings": [
+      "before-paid-estate.svg",
+      "before-paid-ground.svg"
+    ]
+  },
+  "demonstrations": [
+    {
+      "name": "formal-arrival",
+      "synthetic": true,
+      "providerOutput": false,
+      "buildings": 2,
+      "rooms": 45,
+      "roomAdjacencies": 19,
+      "features": [
+        {
+          "id": "motor-court",
+          "type": "driveway",
+          "shaped": true
+        },
+        {
+          "id": "arrival-fountain",
+          "type": "fountain",
+          "shaped": true
+        },
+        {
+          "id": "west-arrival-garden",
+          "type": "landscape-zone",
+          "shaped": true
+        },
+        {
+          "id": "east-arrival-garden",
+          "type": "landscape-zone",
+          "shaped": true
+        },
+        {
+          "id": "court-garden",
+          "type": "landscape-zone",
+          "shaped": true
+        },
+        {
+          "id": "sea-terrace",
+          "type": "terrace",
+          "shaped": true
+        },
+        {
+          "id": "sea-pool",
+          "type": "pool",
+          "shaped": true
+        },
+        {
+          "id": "west-shade",
+          "type": "canopy",
+          "shaped": false
+        },
+        {
+          "id": "east-shade",
+          "type": "canopy",
+          "shaped": false
+        },
+        {
+          "id": "guest-court",
+          "type": "terrace",
+          "shaped": true
+        }
+      ],
+      "exactCurvedPaths": 1,
+      "unresolved": [],
+      "preflightBlockers": [],
+      "construction": "complete",
+      "planGeometryPreserved": true,
+      "reloadedLosslessly": true,
+      "constructionFidelityFindings": [],
+      "drawingFloors": [
+        {
+          "floor": 0,
+          "visibleBuildingIds": [
+            "sea-court-house",
+            "guest-house"
+          ]
+        },
+        {
+          "floor": 1,
+          "visibleBuildingIds": [
+            "sea-court-house"
+          ]
+        }
+      ],
+      "primitives": 216,
+      "drawings": [
+        "formal-arrival-master.svg",
+        "formal-arrival-ground.svg",
+        "formal-arrival-upper.svg"
+      ]
+    },
+    {
+      "name": "articulated-wings",
+      "synthetic": true,
+      "providerOutput": false,
+      "buildings": 2,
+      "rooms": 23,
+      "roomAdjacencies": 20,
+      "features": [
+        {
+          "id": "north-garden",
+          "type": "landscape-zone",
+          "shaped": true
+        },
+        {
+          "id": "north-court-rim",
+          "type": "courtyard",
+          "shaped": true
+        },
+        {
+          "id": "south-arrival",
+          "type": "terrace",
+          "shaped": true
+        },
+        {
+          "id": "library-terrace",
+          "type": "terrace",
+          "shaped": false
+        }
+      ],
+      "exactCurvedPaths": 0,
+      "unresolved": [],
+      "preflightBlockers": [],
+      "construction": "complete",
+      "planGeometryPreserved": true,
+      "reloadedLosslessly": true,
+      "constructionFidelityFindings": [],
+      "drawingFloors": [
+        {
+          "floor": 0,
+          "visibleBuildingIds": [
+            "garden-wings",
+            "low-library"
+          ]
+        },
+        {
+          "floor": 1,
+          "visibleBuildingIds": [
+            "garden-wings"
+          ]
+        }
+      ],
+      "primitives": 117,
+      "drawings": [
+        "articulated-wings-master.svg",
+        "articulated-wings-ground.svg",
+        "articulated-wings-upper.svg"
+      ]
+    }
+  ],
+  "baselineCodeLimitations": {
+    "nonrectangularFeatureConstruction": "Every features[].footprint was rejected by ARCHITECTURAL_FEATURE_CONSTRUCTION_DEFERRED and EXTERIOR_PLAN_DEFERRED; 2D itself already supported line/arc boundaries.",
+    "curvedConnectionAuthoring": "Only waypoints; no exact semantic arc centreline.",
+    "fountain": "Unknown feature type; no basin/jet capability.",
+    "compactRoomAdjacencies": "Accepted as compatible legacy input, absent from the advertised compact authoring schema.",
+    "upperFloorView": "All buildings drawn, including ground-only pavilions."
+  },
+  "remainingLimits": [
+    "Room regions and partition derivation remain rectangular; polygonal/curved room partitions are not supported.",
+    "No outline holes, splines or overlapping curved-mass Boolean unions. Use supported connected rectilinear wings for enclosed courts.",
+    "Nonrectangular canopies and site perimeter railings remain explicitly unsupported; test gates retain them as blockers.",
+    "Basin/perimeter offsets reject narrow or folded outlines; curves tessellate at the shared V3 sampling tolerance.",
+    "Rooms and adjacencies are conceptual allocations; door scheduling, floor voids, automatic functional access certification and construction documents remain out of scope.",
+    "A mock complete build proves representability and geometric fidelity; no claim is made about future Terra design quality, measured site conditions, engineering or budget accuracy."
+  ]
+}

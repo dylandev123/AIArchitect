@@ -11,7 +11,7 @@ import { resolvedFacadeComposition, stackedStoreyOpenings, WALKABLE_OPENING_TYPE
 import { deriveV3MassJunctions, worldPoint, type JunctionFacade } from "./junctions";
 import { primitiveTriangles } from "./junctionGeometry";
 import { rooftopTerraces } from "./rooftopFeatures";
-import { v3MassLevelCount, v3StoreyBase, v3StoreyTargetingDiagnostics } from "./stacking";
+import { v3MassStoreys, v3MassLevelCount, v3StoreyBase, v3StoreyTargetingDiagnostics } from "./stacking";
 import { auditV3CirculationIntent, resolveV3Circulation, V3_FLOOR_SLAB } from "./circulation";
 
 /**
@@ -46,7 +46,7 @@ const hostIdOf = (o: V3SceneObject) => o.hostId ?? o.support?.hostId ?? o.suppor
 const storeyNode = (massId: string, floor: number) => `${massId}#${floor}`;
 
 interface Surface { id: string; node: string; probe: V3SceneObject; top: number; kind: "outdoor" | "balcony" | "roof-terrace"; living: boolean; hostId?: string; facade?: JunctionFacade; level?: number; area: number }
-interface Mass { o: V3SceneObject; levels: number; levelHeight: number; base: number; storeyBase: number; w: number; d: number; openings: NonNullable<V3Composition["openings"]> }
+interface Mass { o: V3SceneObject; levels: number; storeys: ReturnType<typeof v3MassStoreys>; levelHeight: number; base: number; storeyBase: number; w: number; d: number; openings: NonNullable<V3Composition["openings"]> }
 
 const expanded = (o: V3SceneObject, by: number): V3SceneObject => { const [w, , d] = scaledDimensionsOf(o); return { ...o, architecture: undefined, dimensions: [w + 2 * by, 1, d + 2 * by], transform: { ...o.transform, scale: [1, 1, 1] } }; };
 const planArea = (o: V3SceneObject) => { const [w, , d] = scaledDimensionsOf(o); return w * d; };
@@ -94,12 +94,12 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
 
   // Storeys of every building mass, with the openings the compiler actually resolves for each facade.
   const masses: Mass[] = scene.objects.filter((o) => o.type === "building-mass").map((o) => {
-    const [w, h, d] = scaledDimensionsOf(o), levels = v3MassLevelCount(o), levelHeight = h / levels;
-    return { o, levels, levelHeight, base: getObjectBaseY(o), storeyBase: v3StoreyBase(o, scene), w, d, openings: resolvedFacadeComposition(o, w, d, levelHeight).openings ?? [] };
+    const [w, , d] = scaledDimensionsOf(o), levels = v3MassLevelCount(o), storeys = v3MassStoreys(o,scene), levelHeight = storeys[0].height;
+    return { o, levels, storeys, levelHeight, base: getObjectBaseY(o), storeyBase: v3StoreyBase(o, scene), w, d, openings: resolvedFacadeComposition(o, w, d, levelHeight).openings ?? [] };
   });
   const massById = new Map(masses.map((m) => [m.o.id, m]));
   for (const m of masses) {
-    for (let f = 0; f < m.levels; f++) node(storeyNode(m.o.id, f), "storey", m.o.id, m.base + f * m.levelHeight + V3_FLOOR_SLAB, m.storeyBase + f);
+    for (let f = 0; f < m.levels; f++) node(storeyNode(m.o.id, f), "storey", m.o.id, m.base + m.storeys[f].elevation + V3_FLOOR_SLAB, m.storeyBase + f);
     node(`${m.o.id}#roof`, "roof", m.o.id, getObjectTopY(m.o));
   }
 
@@ -116,7 +116,7 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
   for (const m of masses) for (const assembly of m.o.composition?.assemblies ?? []) for (const part of assembly.parts) {
     // A slab at its level's floor datum is walkable; one raised within the storey is a canopy, portico or lanai roof.
     if (part.type !== "slab" || (part.elevation ?? 0) > STEP_MATCH) continue;
-    const length = facadeLength(m, part.facade), level = part.level ?? 0, y = m.base + level * m.levelHeight + (part.elevation ?? 0);
+    const length = facadeLength(m, part.facade), level = part.level ?? 0, y = m.base + m.storeys[level].elevation + (part.elevation ?? 0);
     const probes = addressedStrips(m, `${m.o.id}/${assembly.id}/${part.id}`, part.facade, part.start, part.end, part.depth, y,part.segmentId,part.level??0);
     const upper = m.storeyBase + level > 0;
     for(const surface of probes)surfaces.push({ id: assembly.id, node: surface.id, probe: surface, top: y + (part.thickness ?? .2), kind: upper ? "balcony" : "outdoor", living: !upper && !ARRIVAL.test(`${assembly.id} ${assembly.intent}`), hostId: m.o.id, facade: part.facade, level, area: (part.end - part.start) * (m.o.composition?.footprint?.segments?.find(s=>s.id===part.segmentId)?segmentLength(m.o.composition.footprint.segments.find(s=>s.id===part.segmentId)!):length) * part.depth / probes.length });
@@ -144,7 +144,7 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
   const compiledOpening = (m: Mass, openingId: string, floor: number) => [...ids].some((id) => id.startsWith(`${m.o.id}:${openingId}:level-${floor}:`));
   const exteriorDoors = new Map<string, string[]>();
   for (const m of masses) for (let f = 0; f < m.levels; f++) {
-    const floorY = m.base + f * m.levelHeight + V3_FLOOR_SLAB, here = storeyNode(m.o.id, f);
+    const floorY = m.base + m.storeys[f].elevation + V3_FLOOR_SLAB, here = storeyNode(m.o.id, f);
     for (const op of stackedStoreyOpenings(m.openings, m.storeyBase, f)) {
       if (!WALKABLE_OPENING_TYPES.has(op.type) || !("start" in op) || !appliesTo(op.floors, m.storeyBase + f) || !compiledOpening(m, op.id, f)) continue;
       const reaches=addressedStrips(m, `${m.o.id}:${op.id}:reach`,op.facade,op.start,op.end,DOOR_REACH,floorY-.5,op.segmentId,f),sills=addressedStrips(m,`${m.o.id}:${op.id}:sill`,op.facade,op.start,op.end,ABUT,floorY-.5,op.segmentId,f);
@@ -191,7 +191,7 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
     const a = massById.get(j.massA), b = massById.get(j.massB);
     if (!a || !b) continue;
     for (let fa = 0; fa < a.levels; fa++) for (let fb = 0; fb < b.levels; fb++) {
-      const ya = a.base + fa * a.levelHeight + V3_FLOOR_SLAB, yb = b.base + fb * b.levelHeight + V3_FLOOR_SLAB;
+      const ya = a.base + a.storeys[fa].elevation + V3_FLOOR_SLAB, yb = b.base + b.storeys[fb].elevation + V3_FLOOR_SLAB;
       if (Math.abs(ya - yb) > LEVEL_MATCH || Math.min(ya, yb) + 2 > j.relativeElevation.shared[1]) continue;
       if (passageClear(j.sharedWalls, massById, Math.max(ya, yb) + 1.1, barrierList)) edge(storeyNode(a.o.id, fa), storeyNode(b.o.id, fb), "junction", j.id);
     }
@@ -253,7 +253,7 @@ export function auditV3Completeness(input: V3Scene): V3CompletenessAudit {
   }
   for (const s of surfaces.filter((x) => x.kind === "roof-terrace")) {
     if (nodes.get(s.node)!.reachable) continue;
-    const adjoining = masses.filter((m) => m.o.id !== s.hostId && footprintOverlap(expanded(s.probe, 1.5), m.o) > .05 && Array.from({ length: m.levels }, (_, f) => m.base + f * m.levelHeight + V3_FLOOR_SLAB).some((y) => Math.abs(y - s.top) <= LEVEL_MATCH + .1));
+    const adjoining = masses.filter((m) => m.o.id !== s.hostId && footprintOverlap(expanded(s.probe, 1.5), m.o) > .05 && Array.from({ length: m.levels }, (_, f) => m.base + m.storeys[f].elevation + V3_FLOOR_SLAB).some((y) => Math.abs(y - s.top) <= LEVEL_MATCH + .1));
     const guarded = adjoining.find((m) => (["north", "south", "east", "west"] as const).some((f) => guardBlocks(scene, s.probe, m, f)));
     const gapped = adjoining.find((m) => footprintOverlap(expanded(m.o, ABUT), s.probe) <= .02);
     finding("INACCESSIBLE_ROOF_TERRACE", "significant", [s.id, ...(s.hostId ? [s.hostId] : []), ...adjoining.map((m) => m.o.id)],

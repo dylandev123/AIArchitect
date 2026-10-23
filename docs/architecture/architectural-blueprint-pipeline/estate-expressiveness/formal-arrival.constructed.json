@@ -1,0 +1,2296 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 180,
+      "depth": 160,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE REFERENCE — Sea Court: the sheltered south arrival follows a curved planted approach into a circular fountain court. A two-storey U frames a north-facing garden, with a sea living wing west and a private primary wing east. A continuous gallery mediates courtyard, entertaining and service rooms; the stair hall and upper landing align. A separate low guest pavilion and shaded pool terrace complete the sequence. This is independently constructed technical evidence, not a Terra result or a proposed change to a saved estate.",
+      "character": "OFFLINE REFERENCE — Sea Court: the sheltered south arrival follows a curved planted approach into a circular fountain court. A two-storey U frames a north-facing garden, with a sea living wing west and a private primary wing east. A continuous gallery mediates courtyard, entertaining and service rooms; the stair hall and upper landing align. A separate low guest pavilion and shaded pool terrace complete the sequence. This is independently constructed technical evidence, not a Terra result or a proposed change to a saved estate.",
+      "siteAccess": [
+        {
+          "id": "south-gate",
+          "boundary": "south",
+          "point": [
+            40,
+            0,
+            80
+          ]
+        }
+      ],
+      "requirements": [],
+      "program": [
+        {
+          "id": "sea-court-house-program",
+          "role": "Sea Court residence",
+          "kind": "building",
+          "objectIds": [
+            "sea-court-house"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "guest-house-program",
+          "role": "Garden guest pavilion",
+          "kind": "building",
+          "objectIds": [
+            "guest-house"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [
+        {
+          "id": "curved-gate-approach",
+          "purpose": "Gated approach with a precise circular bend into the fountain court",
+          "from": "south-gate",
+          "to": "motor-court",
+          "via": [
+            "route-0"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "point": [
+                12,
+                0,
+                49
+              ]
+            },
+            "use": "vehicle",
+            "width": 5.5,
+            "waypoints": [],
+            "path": [
+              {
+                "id": "gate-straight",
+                "type": "line",
+                "start": [
+                  40,
+                  80
+                ],
+                "end": [
+                  40,
+                  70
+                ]
+              },
+              {
+                "id": "arrival-bend",
+                "type": "arc",
+                "center": [
+                  19,
+                  70
+                ],
+                "radius": 21,
+                "startAngle": 0,
+                "sweep": -90
+              },
+              {
+                "id": "court-contact",
+                "type": "line",
+                "start": [
+                  19,
+                  49
+                ],
+                "end": [
+                  12,
+                  49
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "formal-dropoff",
+          "purpose": "Fountain court to the recessed arrival hall",
+          "from": "motor-court",
+          "to": "sea-court-house",
+          "via": [
+            "route-1"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                27
+              ]
+            },
+            "to": {
+              "entranceId": "sea-court-house-formal-entry-entry",
+              "approachDistance": 5
+            },
+            "use": "vehicle",
+            "width": 5.5,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "guest-link",
+          "purpose": "Independent guest access across the service side garden",
+          "from": "sea-court-house",
+          "to": "guest-house",
+          "via": [
+            "route-2"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "sea-court-house-kitchen-access-entry",
+              "approachDistance": 4
+            },
+            "to": {
+              "entranceId": "guest-house-guest-entry-entry",
+              "approachDistance": 4
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                -40,
+                0,
+                13
+              ]
+            ]
+          }
+        },
+        {
+          "id": "sea-connection",
+          "purpose": "Living wing to sea terrace",
+          "from": "sea-court-house",
+          "to": "sea-terrace",
+          "via": [
+            "route-3"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "sea-court-house-west-sea-door-entry",
+              "approachDistance": 1
+            },
+            "to": {
+              "point": [
+                -21,
+                0,
+                -41
+              ]
+            },
+            "use": "pedestrian",
+            "width": 2,
+            "waypoints": []
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-sea-court-house",
+            "objectId": "sea-court-house",
+            "role": "Sea Court residence"
+          },
+          {
+            "id": "bp-guest-house",
+            "objectId": "guest-house",
+            "role": "Garden guest pavilion"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "sea-court-house-formal-entry-entry",
+            "objectId": "sea-court-house",
+            "openingId": "formal-entry",
+            "level": 0
+          },
+          {
+            "id": "sea-court-house-court-glazing-entry",
+            "objectId": "sea-court-house",
+            "openingId": "court-glazing",
+            "level": 0
+          },
+          {
+            "id": "sea-court-house-west-sea-door-entry",
+            "objectId": "sea-court-house",
+            "openingId": "west-sea-door",
+            "level": 0
+          },
+          {
+            "id": "sea-court-house-primary-sea-door-entry",
+            "objectId": "sea-court-house",
+            "openingId": "primary-sea-door",
+            "level": 0
+          },
+          {
+            "id": "sea-court-house-kitchen-access-entry",
+            "objectId": "sea-court-house",
+            "openingId": "kitchen-access",
+            "level": 0
+          },
+          {
+            "id": "guest-house-guest-entry-entry",
+            "objectId": "guest-house",
+            "openingId": "guest-entry",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "sea-court-house-roof",
+          "guest-house-roof"
+        ],
+        "outdoorObjectIds": [
+          "motor-court",
+          "arrival-fountain",
+          "west-arrival-garden",
+          "east-arrival-garden",
+          "court-garden",
+          "sea-terrace",
+          "sea-pool",
+          "west-shade",
+          "east-shade",
+          "guest-court"
+        ],
+        "routeIds": [
+          "curved-gate-approach",
+          "formal-dropoff",
+          "guest-link",
+          "sea-connection"
+        ],
+        "verticalCirculationIds": [
+          "grand-stair",
+          "court-lift"
+        ],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "sea-court-house",
+        "type": "building-mass",
+        "semanticRole": "Sea Court residence",
+        "label": "Sea Court residence",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -18,
+          "baseElevation": 0,
+          "width": 60,
+          "depth": 40,
+          "height": 7.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            3.8,
+            -18
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          60,
+          7.6,
+          40
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "garden-court-cut",
+                "facade": "north",
+                "start": 0.3,
+                "end": 0.7,
+                "depth": 20,
+                "type": "recess"
+              }
+            ]
+          },
+          "openings": [
+            {
+              "id": "formal-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.47,
+              "end": 0.53,
+              "height": 2.4,
+              "serves": "arrival-hall"
+            },
+            {
+              "id": "court-glazing",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.4,
+              "operation": "sliding",
+              "serves": "garden-gallery"
+            },
+            {
+              "id": "west-sea-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.06,
+              "end": 0.24,
+              "height": 2.4,
+              "operation": "sliding",
+              "serves": "west-living"
+            },
+            {
+              "id": "primary-sea-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.75,
+              "end": 0.85,
+              "height": 2.4,
+              "operation": "sliding",
+              "serves": "primary-bedroom"
+            },
+            {
+              "id": "kitchen-access",
+              "facade": "west",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.62,
+              "end": 0.7,
+              "height": 2.4,
+              "serves": "chef-kitchen"
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "sea-court-house-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of sea-court-house",
+        "label": "Sea Court residence roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -18,
+          "baseElevation": 7.6,
+          "width": 60,
+          "depth": 40,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            7.725,
+            -18
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          60,
+          0.25,
+          40
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "sea-court-house",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "guest-house",
+        "type": "building-mass",
+        "semanticRole": "Garden guest pavilion",
+        "label": "Garden guest pavilion",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -61,
+          "z": -5,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 28,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -61,
+            1.8,
+            -5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          3.6,
+          28
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "guest-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "guest-hall"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "guest-house-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of guest-house",
+        "label": "Garden guest pavilion roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -61,
+          "z": -5,
+          "baseElevation": 3.6,
+          "width": 24,
+          "depth": 28,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -61,
+            3.725,
+            -5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.25,
+          28
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "guest-house",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "motor-court",
+        "type": "driveway",
+        "semanticRole": "Circular fountain motor court",
+        "label": "Circular fountain motor court",
+        "geometryKind": "path",
+        "architecture": {
+          "x": 0,
+          "z": 43,
+          "baseElevation": 0,
+          "width": 32,
+          "depth": 32,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.07,
+            43
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          32,
+          0.14,
+          32
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "court-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 16,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "arrival-fountain",
+        "type": "fountain",
+        "semanticRole": "Arrival fountain",
+        "label": "Arrival fountain",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": 43,
+          "baseElevation": 0,
+          "width": 8,
+          "depth": 8,
+          "height": 0.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.3,
+            43
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          0.6,
+          8
+        ],
+        "material": {
+          "id": "water",
+          "color": "#528e9a",
+          "roughness": 0.2,
+          "surface": "water"
+        },
+        "collision": "water",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "fountain-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 4,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "west-arrival-garden",
+        "type": "landscape-zone",
+        "semanticRole": "Sculpted arrival garden",
+        "label": "Sculpted arrival garden",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -29,
+          "z": 43,
+          "baseElevation": 0,
+          "width": 18,
+          "depth": 28,
+          "height": 0.12,
+          "rotationY": 0.15
+        },
+        "transform": {
+          "position": [
+            -29,
+            0.06,
+            43
+          ],
+          "rotation": [
+            0,
+            0.15,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          0.12,
+          28
+        ],
+        "material": {
+          "id": "grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "edge-0",
+                "type": "line",
+                "start": [
+                  -9,
+                  -14
+                ],
+                "end": [
+                  9,
+                  -14
+                ]
+              },
+              {
+                "id": "edge-1",
+                "type": "line",
+                "start": [
+                  9,
+                  -14
+                ],
+                "end": [
+                  9,
+                  -4
+                ]
+              },
+              {
+                "id": "edge-2",
+                "type": "line",
+                "start": [
+                  9,
+                  -4
+                ],
+                "end": [
+                  2,
+                  -4
+                ]
+              },
+              {
+                "id": "edge-3",
+                "type": "line",
+                "start": [
+                  2,
+                  -4
+                ],
+                "end": [
+                  2,
+                  14
+                ]
+              },
+              {
+                "id": "edge-4",
+                "type": "line",
+                "start": [
+                  2,
+                  14
+                ],
+                "end": [
+                  -9,
+                  14
+                ]
+              },
+              {
+                "id": "edge-5",
+                "type": "line",
+                "start": [
+                  -9,
+                  14
+                ],
+                "end": [
+                  -9,
+                  -14
+                ]
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "east-arrival-garden",
+        "type": "landscape-zone",
+        "semanticRole": "East arrival grove",
+        "label": "East arrival grove",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 45,
+          "z": 24,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 28,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            45,
+            0.06,
+            24
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.12,
+          28
+        ],
+        "material": {
+          "id": "grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "garden-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 12,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "court-garden",
+        "type": "landscape-zone",
+        "semanticRole": "Sheltered court garden",
+        "label": "Sheltered court garden",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -28,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 16,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            -28
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          0.12,
+          16
+        ],
+        "material": {
+          "id": "grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "edge-0",
+                "type": "line",
+                "start": [
+                  -10,
+                  -8
+                ],
+                "end": [
+                  10,
+                  -8
+                ]
+              },
+              {
+                "id": "edge-1",
+                "type": "line",
+                "start": [
+                  10,
+                  -8
+                ],
+                "end": [
+                  8,
+                  8
+                ]
+              },
+              {
+                "id": "edge-2",
+                "type": "line",
+                "start": [
+                  8,
+                  8
+                ],
+                "end": [
+                  -8,
+                  8
+                ]
+              },
+              {
+                "id": "edge-3",
+                "type": "line",
+                "start": [
+                  -8,
+                  8
+                ],
+                "end": [
+                  -10,
+                  -8
+                ]
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "sea-terrace",
+        "type": "terrace",
+        "semanticRole": "Sea entertaining terrace",
+        "label": "Sea entertaining terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -50,
+          "baseElevation": 0,
+          "width": 68,
+          "depth": 20,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.07,
+            -50
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          68,
+          0.14,
+          20
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "edge-0",
+                "type": "line",
+                "start": [
+                  -34,
+                  -7
+                ],
+                "end": [
+                  -29,
+                  -10
+                ]
+              },
+              {
+                "id": "edge-1",
+                "type": "line",
+                "start": [
+                  -29,
+                  -10
+                ],
+                "end": [
+                  29,
+                  -10
+                ]
+              },
+              {
+                "id": "edge-2",
+                "type": "line",
+                "start": [
+                  29,
+                  -10
+                ],
+                "end": [
+                  34,
+                  -7
+                ]
+              },
+              {
+                "id": "edge-3",
+                "type": "line",
+                "start": [
+                  34,
+                  -7
+                ],
+                "end": [
+                  34,
+                  10
+                ]
+              },
+              {
+                "id": "edge-4",
+                "type": "line",
+                "start": [
+                  34,
+                  10
+                ],
+                "end": [
+                  -34,
+                  10
+                ]
+              },
+              {
+                "id": "edge-5",
+                "type": "line",
+                "start": [
+                  -34,
+                  10
+                ],
+                "end": [
+                  -34,
+                  -7
+                ]
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "sea-pool",
+        "type": "pool",
+        "semanticRole": "Curved sea pool",
+        "label": "Curved sea pool",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": -50,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 10,
+          "height": 1,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.5,
+            -50
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          1,
+          10
+        ],
+        "material": {
+          "id": "water",
+          "color": "#528e9a",
+          "roughness": 0.2,
+          "surface": "water"
+        },
+        "collision": "water",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "pool-north",
+                "type": "line",
+                "start": [
+                  -10,
+                  -5
+                ],
+                "end": [
+                  10,
+                  -5
+                ]
+              },
+              {
+                "id": "pool-east",
+                "type": "arc",
+                "center": [
+                  10,
+                  0
+                ],
+                "radius": 5,
+                "startAngle": -90,
+                "sweep": 180
+              },
+              {
+                "id": "pool-south",
+                "type": "line",
+                "start": [
+                  10,
+                  5
+                ],
+                "end": [
+                  -10,
+                  5
+                ]
+              },
+              {
+                "id": "pool-west",
+                "type": "arc",
+                "center": [
+                  -10,
+                  0
+                ],
+                "radius": 5,
+                "startAngle": 90,
+                "sweep": 180
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "west-shade",
+        "type": "canopy",
+        "semanticRole": "Covered entertaining loggia",
+        "label": "Covered entertaining loggia",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -25,
+          "z": -50,
+          "baseElevation": 0,
+          "width": 12,
+          "depth": 10,
+          "height": 3.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -25,
+            1.6,
+            -50
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          3.2,
+          10
+        ],
+        "material": {
+          "id": "timber",
+          "color": "#695343",
+          "roughness": 0.8,
+          "surface": "wood"
+        },
+        "collision": "solid",
+        "canopyStyle": "slatted"
+      },
+      {
+        "id": "east-shade",
+        "type": "canopy",
+        "semanticRole": "Pool dining shelter",
+        "label": "Pool dining shelter",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 25,
+          "z": -50,
+          "baseElevation": 0,
+          "width": 12,
+          "depth": 10,
+          "height": 3.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            25,
+            1.6,
+            -50
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          3.2,
+          10
+        ],
+        "material": {
+          "id": "timber",
+          "color": "#695343",
+          "roughness": 0.8,
+          "surface": "wood"
+        },
+        "collision": "solid",
+        "canopyStyle": "slatted"
+      },
+      {
+        "id": "guest-court",
+        "type": "terrace",
+        "semanticRole": "Guest garden court",
+        "label": "Guest garden court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -61,
+          "z": 21,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 16,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -61,
+            0.07,
+            21
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          0.14,
+          16
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "guest-court-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 8,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "route-0",
+        "type": "driveway",
+        "semanticRole": "Gated approach with a precise circular bend into the fountain court",
+        "label": "Gated approach with a precise circular bend into the fountain court",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            27.375,
+            0.05,
+            63.125
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30.75,
+          0.01,
+          33.75
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-1",
+        "type": "driveway",
+        "semanticRole": "Fountain court to the recessed arrival hall",
+        "label": "Fountain court to the recessed arrival hall",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            14.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          5.5,
+          0.01,
+          25
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-2",
+        "type": "path",
+        "semanticRole": "Independent guest access across the service side garden",
+        "label": "Independent guest access across the service side garden",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -45.95,
+            0.05,
+            0.7000000000000002
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          31.9,
+          0.01,
+          26.4
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-3",
+        "type": "path",
+        "semanticRole": "Living wing to sea terrace",
+        "label": "Living wing to sea terrace",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -21,
+            0.05,
+            -39.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          2,
+          0.01,
+          3
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "court-ground",
+          "label": "Arrival and garden floor",
+          "semanticRole": "Arrival and garden floor",
+          "hostMassId": "sea-court-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4
+        },
+        {
+          "id": "court-upper",
+          "label": "Private upper floor",
+          "semanticRole": "Private upper floor",
+          "hostMassId": "sea-court-house",
+          "index": 1,
+          "elevation": 4.26,
+          "height": 3.6
+        },
+        {
+          "id": "guest-floor",
+          "label": "Guest garden floor",
+          "semanticRole": "Guest garden floor",
+          "hostMassId": "guest-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "arrival-hall",
+          "label": "Arrival and stair hall",
+          "semanticRole": "Arrival and stair hall",
+          "program": "foyer stair circulation",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 0,
+            "z": 12,
+            "width": 8,
+            "depth": 16
+          }
+        },
+        {
+          "id": "garden-gallery",
+          "label": "Shaded garden gallery",
+          "semanticRole": "Shaded garden gallery",
+          "program": "circulation gallery",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 60,
+            "depth": 4
+          }
+        },
+        {
+          "id": "chef-kitchen",
+          "label": "Chef kitchen",
+          "semanticRole": "Chef kitchen",
+          "program": "kitchen service",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -26.5,
+            "z": 8,
+            "width": 7,
+            "depth": 8
+          }
+        },
+        {
+          "id": "scullery",
+          "label": "Scullery",
+          "semanticRole": "Scullery",
+          "program": "service kitchen",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -19.5,
+            "z": 6,
+            "width": 7,
+            "depth": 4
+          }
+        },
+        {
+          "id": "food-pantry",
+          "label": "Food pantry",
+          "semanticRole": "Food pantry",
+          "program": "pantry",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -19.5,
+            "z": 10,
+            "width": 7,
+            "depth": 4
+          }
+        },
+        {
+          "id": "staff-dining",
+          "label": "Staff dining",
+          "semanticRole": "Staff dining",
+          "program": "service dining",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -26.5,
+            "z": 16,
+            "width": 7,
+            "depth": 8
+          }
+        },
+        {
+          "id": "service-vestibule",
+          "label": "Service vestibule",
+          "semanticRole": "Service vestibule",
+          "program": "service circulation",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -19.5,
+            "z": 16,
+            "width": 7,
+            "depth": 8
+          }
+        },
+        {
+          "id": "dining",
+          "label": "Entertaining dining",
+          "semanticRole": "Entertaining dining",
+          "program": "dining",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -10,
+            "z": 9,
+            "width": 12,
+            "depth": 10
+          }
+        },
+        {
+          "id": "wine-room",
+          "label": "Wine room",
+          "semanticRole": "Wine room",
+          "program": "wine storage",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -13,
+            "z": 17,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "butler-pantry",
+          "label": "Butler pantry",
+          "semanticRole": "Butler pantry",
+          "program": "pantry",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -7,
+            "z": 17,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "family-salon",
+          "label": "Family salon",
+          "semanticRole": "Family salon",
+          "program": "living",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 10,
+            "z": 9,
+            "width": 12,
+            "depth": 10
+          }
+        },
+        {
+          "id": "cinema",
+          "label": "Private cinema",
+          "semanticRole": "Private cinema",
+          "program": "media",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 10,
+            "z": 17,
+            "width": 12,
+            "depth": 6
+          }
+        },
+        {
+          "id": "east-service-hall",
+          "label": "East service hall",
+          "semanticRole": "East service hall",
+          "program": "service circulation",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 17.5,
+            "z": 12,
+            "width": 3,
+            "depth": 16
+          }
+        },
+        {
+          "id": "laundry",
+          "label": "Laundry",
+          "semanticRole": "Laundry",
+          "program": "service",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 23,
+            "z": 8,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "utility-store",
+          "label": "Utility store",
+          "semanticRole": "Utility store",
+          "program": "storage",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 23,
+            "z": 16,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "service-corridor",
+          "label": "Service side passage",
+          "semanticRole": "Service side passage",
+          "program": "service circulation",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 28.5,
+            "z": 12,
+            "width": 3,
+            "depth": 16
+          }
+        },
+        {
+          "id": "west-living",
+          "label": "Sea living room",
+          "semanticRole": "Sea living room",
+          "program": "living entertaining",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -21,
+            "z": -14,
+            "width": 18,
+            "depth": 12
+          }
+        },
+        {
+          "id": "west-library",
+          "label": "Library retreat",
+          "semanticRole": "Library retreat",
+          "program": "library",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -21,
+            "z": -4,
+            "width": 18,
+            "depth": 8
+          }
+        },
+        {
+          "id": "primary-bedroom",
+          "label": "Primary sleeping room",
+          "semanticRole": "Primary sleeping room",
+          "program": "private bedroom",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 18,
+            "z": -16,
+            "width": 12,
+            "depth": 8
+          }
+        },
+        {
+          "id": "primary-sitting",
+          "label": "Primary sitting room",
+          "semanticRole": "Primary sitting room",
+          "program": "private sitting",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 27,
+            "z": -16,
+            "width": 6,
+            "depth": 8
+          }
+        },
+        {
+          "id": "primary-private-gallery",
+          "label": "Primary suite gallery",
+          "semanticRole": "Primary suite gallery",
+          "program": "private circulation",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 21,
+            "z": -10,
+            "width": 18,
+            "depth": 4
+          }
+        },
+        {
+          "id": "primary-dressing",
+          "label": "Primary dressing",
+          "semanticRole": "Primary dressing",
+          "program": "private dressing",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 16,
+            "z": -4,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "primary-bath",
+          "label": "Primary bath",
+          "semanticRole": "Primary bath",
+          "program": "private bathroom",
+          "storeyId": "court-ground",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 25,
+            "z": -4,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-stair-hall",
+          "label": "Upper stair landing",
+          "semanticRole": "Upper stair landing",
+          "program": "stair landing circulation",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 0,
+            "z": 12,
+            "width": 8,
+            "depth": 16
+          }
+        },
+        {
+          "id": "upper-gallery",
+          "label": "Upper garden gallery",
+          "semanticRole": "Upper garden gallery",
+          "program": "circulation gallery",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 60,
+            "depth": 4
+          }
+        },
+        {
+          "id": "family-study",
+          "label": "Family study",
+          "semanticRole": "Family study",
+          "program": "study",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -23,
+            "z": 8,
+            "width": 14,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-west-gym",
+          "label": "Gym",
+          "semanticRole": "Gym",
+          "program": "fitness",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -23,
+            "z": 16,
+            "width": 14,
+            "depth": 8
+          }
+        },
+        {
+          "id": "family-lounge",
+          "label": "Family lounge",
+          "semanticRole": "Family lounge",
+          "program": "living",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -10,
+            "z": 8,
+            "width": 12,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-playroom",
+          "label": "Children playroom",
+          "semanticRole": "Children playroom",
+          "program": "play",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -10,
+            "z": 16,
+            "width": 12,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-library",
+          "label": "Guest library",
+          "semanticRole": "Guest library",
+          "program": "study",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 10,
+            "z": 8,
+            "width": 12,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-studio",
+          "label": "Creative studio",
+          "semanticRole": "Creative studio",
+          "program": "studio",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 10,
+            "z": 16,
+            "width": 12,
+            "depth": 8
+          }
+        },
+        {
+          "id": "linen-service",
+          "label": "Upper service hall",
+          "semanticRole": "Upper service hall",
+          "program": "service circulation",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 18,
+            "z": 12,
+            "width": 4,
+            "depth": 16
+          }
+        },
+        {
+          "id": "upper-laundry",
+          "label": "Upper laundry",
+          "semanticRole": "Upper laundry",
+          "program": "service",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 25,
+            "z": 8,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "upper-linen",
+          "label": "Linen storage",
+          "semanticRole": "Linen storage",
+          "program": "storage",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 25,
+            "z": 16,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "west-suite",
+          "label": "West guest bedroom",
+          "semanticRole": "West guest bedroom",
+          "program": "bedroom",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -21,
+            "z": -14,
+            "width": 18,
+            "depth": 12
+          }
+        },
+        {
+          "id": "west-bath",
+          "label": "West guest bath",
+          "semanticRole": "West guest bath",
+          "program": "bathroom",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -25,
+            "z": -4,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "west-dressing",
+          "label": "West dressing vestibule",
+          "semanticRole": "West dressing vestibule",
+          "program": "dressing",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": -16,
+            "z": -4,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "east-suite",
+          "label": "East family bedroom",
+          "semanticRole": "East family bedroom",
+          "program": "bedroom",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 21,
+            "z": -14,
+            "width": 18,
+            "depth": 12
+          }
+        },
+        {
+          "id": "east-dressing",
+          "label": "East dressing vestibule",
+          "semanticRole": "East dressing vestibule",
+          "program": "dressing",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 16,
+            "z": -4,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "east-bath",
+          "label": "East family bath",
+          "semanticRole": "East family bath",
+          "program": "bathroom",
+          "storeyId": "court-upper",
+          "hostMassId": "sea-court-house",
+          "footprint": {
+            "x": 25,
+            "z": -4,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-hall",
+          "label": "Guest gallery",
+          "semanticRole": "Guest gallery",
+          "program": "circulation",
+          "storeyId": "guest-floor",
+          "hostMassId": "guest-house",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 4,
+            "depth": 28
+          }
+        },
+        {
+          "id": "guest-west-bedroom",
+          "label": "Guest bedroom west",
+          "semanticRole": "Guest bedroom west",
+          "program": "bedroom",
+          "storeyId": "guest-floor",
+          "hostMassId": "guest-house",
+          "footprint": {
+            "x": -7,
+            "z": -7,
+            "width": 10,
+            "depth": 14
+          }
+        },
+        {
+          "id": "guest-east-bedroom",
+          "label": "Guest bedroom east",
+          "semanticRole": "Guest bedroom east",
+          "program": "bedroom",
+          "storeyId": "guest-floor",
+          "hostMassId": "guest-house",
+          "footprint": {
+            "x": 7,
+            "z": -7,
+            "width": 10,
+            "depth": 14
+          }
+        },
+        {
+          "id": "guest-west-bath",
+          "label": "Guest bath and dressing west",
+          "semanticRole": "Guest bath and dressing west",
+          "program": "bath dressing",
+          "storeyId": "guest-floor",
+          "hostMassId": "guest-house",
+          "footprint": {
+            "x": -7,
+            "z": 7,
+            "width": 10,
+            "depth": 14
+          }
+        },
+        {
+          "id": "guest-living",
+          "label": "Guest sitting and pantry",
+          "semanticRole": "Guest sitting and pantry",
+          "program": "living pantry",
+          "storeyId": "guest-floor",
+          "hostMassId": "guest-house",
+          "footprint": {
+            "x": 7,
+            "z": 7,
+            "width": 10,
+            "depth": 14
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "grand-stair",
+          "type": "stair",
+          "hostMassId": "sea-court-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": -1,
+            "z": 12,
+            "width": 4,
+            "depth": 10
+          },
+          "stairType": "straight",
+          "direction": "north"
+        },
+        {
+          "id": "court-lift",
+          "type": "lift",
+          "hostMassId": "sea-court-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 2.5,
+            "z": 7,
+            "width": 2,
+            "depth": 3
+          }
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "arrival-hall",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "dining",
+        "to": "scullery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "scullery",
+        "to": "chef-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "dining",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "family-salon",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "west-library",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "west-library",
+        "to": "west-living",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-dressing",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-dressing",
+        "to": "primary-private-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-private-gallery",
+        "to": "primary-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "primary-dressing",
+        "to": "primary-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "upper-stair-hall",
+        "to": "upper-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "west-dressing",
+        "to": "upper-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "west-dressing",
+        "to": "west-suite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "east-dressing",
+        "to": "upper-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "east-dressing",
+        "to": "east-suite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-hall",
+        "to": "guest-west-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-hall",
+        "to": "guest-east-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-hall",
+        "to": "guest-living",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "complete",
+        "diagnostics": []
+      }
+    }
+  }
+}

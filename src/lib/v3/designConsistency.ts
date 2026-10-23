@@ -24,7 +24,7 @@ export function auditV3DesignConsistency(scene: V3Scene, issues: readonly V3Issu
   if (issues.some(i => i.severity === 'fatal' && (i.code.startsWith('INVALID_') || i.code.startsWith('DUPLICATE_')))) return { ok: false, findings };
   const completeness = auditV3Completeness(scene), stairFailures=completeness.circulationFailures;
   for(const failure of stairFailures) if(!findings.some(f=>f.code===failure.code&&f.targetIds.includes(failure.targetId))) findings.push({
-    code:failure.code,classification:'repairable',targetIds:[failure.targetId],message:failure.message,
+    code:failure.code,classification:'repairable',targetIds:[failure.targetId,...('obstacleId' in failure&&typeof failure.obstacleId==='string'?[failure.obstacleId]:[])],message:failure.message,
     guidance:'Correct only this authored circulation entry location, footprint, stairType/direction/turn or diagnosed levels. Preserve its id, host, intended endpoints, requirements and every unrelated stair. Never delete access to silence a failure.',
   });
   const evidence = (ids: string[]) => ids.flatMap(id => {

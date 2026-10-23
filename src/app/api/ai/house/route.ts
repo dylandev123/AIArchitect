@@ -1,3 +1,4 @@
+import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from '@/lib/ai/v3GenerationLimits';
 import { v3ConsistencyRepairInstructions } from '@/lib/v3/designConsistency';
 import { assessV3Revision, assessV3ObjectiveRevision } from '@/lib/v3/safeRevision';
 import { retainV3RevisionArtifact } from '@/lib/ai/v3FailureArtifact';
@@ -67,9 +68,13 @@ import { recoverV3FailedPreview } from "@/lib/v3/failedPreview";
 import { ingestV3GenerationOutput } from "@/lib/v3/ingestion";
 import { v3BlueprintFirstEnabled, V3_BLUEPRINT_REPAIR_PROMPT } from '@/lib/v3/blueprintGeneration';
 import type { V3BlueprintApproval } from '@/lib/v3/blueprintApproval';
+import { isV3PlanEvaluation } from '@/lib/v3/architecturalPlanEvaluation';
+import { splitV3ArchitecturalBlueprint } from '@/lib/v3/architecturalPlanFirst';
+import type { V3ArchitecturalBlueprint } from '@/lib/v3/architecturalBlueprint';
 import { generateV3FromArchitecturalBlueprint, v3ArchitecturalBlueprintEnabled, v3ArchitecturalBlueprintPrompt } from '@/lib/v3/architecturalBlueprintGeneration';
 import { fingerprint } from "@/lib/ai/usage/diagnostics";
 import type { UsageAssessment } from "@/lib/ai/usage/track";
+import { randomUUID } from 'node:crypto';
 
 /** Seconds. A mansion brief needs one 30-40 s model call, and a repair pass can need a second. */
 export const maxDuration = 300;
@@ -90,9 +95,9 @@ const MAX_HISTORY_TURNS = { world: 12, zone: 6, component: 4 } as const;
 const MAX_OUTPUT_TOKENS = { world: 8000, zone: 4000, component: 2000 } as const;
 const MAX_ASSETS = 40;
 /** V3 is a bounded scene response, deliberately independent of V2's budgets. */
-export const V3_INITIAL_MAX_OUTPUT_TOKENS = 10_000;
+
 /** Shared usage/log output stays a preview; full failure artifacts are development-local only. */
-export const V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS = 2_048;
+
 const V3_STRUCTURED_OUTPUT_MAX_ISSUES = 4;
 const V3_STRUCTURED_OUTPUT_VALUE_MAX_CHARS = 180;
 
@@ -235,7 +240,7 @@ function pathOf(issue: V3SchemaIssue): string | undefined {
  * Extract only the AI SDK's structured-output evidence. This deliberately never serializes a request,
  * provider headers, or an arbitrary error message, all of which may contain credentials.
  */
-export function describeV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure | undefined {
+function describeV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure | undefined {
   if (!NoObjectGeneratedError.isInstance(error)) return undefined;
   const cause = error.cause;
   const jsonParsingFailed = JSONParseError.isInstance(cause);
@@ -309,7 +314,7 @@ export async function GET() {
   return NextResponse.json({
     architecturalBlueprint: {
       enabledForNewFlatGenerations: v3ArchitecturalBlueprintEnabled(process.env.AI_V3_ARCHITECTURAL_BLUEPRINT, 'flat'),
-      contract: 'v3-architectural-blueprint-1',
+      contract: 'v3-plan-first-1',
       maxAuthoringAttempts: 2,
       maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS,
     },
@@ -355,6 +360,7 @@ export async function POST(req: NextRequest) {
   // V3 is an entirely separate scene authority. It deliberately enters before every V2 document/router branch.
   if (resolvedMode.mode === "v3-scene") {
     console.info("[generation] generationMode: v3-scene");
+    if(isV3ProjectRoot(root)&&isV3PlanEvaluation(root.v3Scene))return withResolvedGenerationMode(NextResponse.json({error:"Use Edit and save 2D plan for local changes, or Build in 3D for a separate exterior call."},{status:409}),resolvedMode.mode);
     if (!isAiConfigured()) return withResolvedGenerationMode(NextResponse.json({ error: AI_NOT_CONFIGURED_MESSAGE }, { status: 503 }), resolvedMode.mode);
     if (body.mode === "generate" && body.v3TerrainMode !== undefined && body.v3TerrainMode !== "flat" && body.v3TerrainMode !== "advanced") return withResolvedGenerationMode(NextResponse.json({ error: "Unknown V3 terrain mode." }, { status: 400 }), resolvedMode.mode);
     const response = body.mode === "generate"
@@ -625,16 +631,18 @@ async function generateV3Scene(prompt: string, root: Record<string, unknown>, ba
 /** Blueprint-only authoring uses the same V3 request and maximum two-call budget. Default off. */
 async function generateArchitecturalBlueprintV3(prompt:string,baseRevision:string,projectId:string|null){
   const system=v3ArchitecturalBlueprintPrompt();
+  const generationId=randomUUID();
   let inputTokens=0,outputTokens=0,totalTokens=0,cost=0;
   let lastBlueprint:unknown;
+  let lastAttempt:0|1=0;
   try{
     const built=await generateV3FromArchitecturalBlueprint(prompt,async({repair})=>{
       const result=await withUsageLogging(
-        {projectId,requestType:'generation',scope:WORLD_SCOPE.level,model:getAiModelId(),generationMode:'v3-scene',stage:repair?'v3-architectural-blueprint-repair':'v3-architectural-blueprint',retryNumber:repair?1:0,retryReason:repair?'objective-blueprint-validation':undefined,maxOutputTokens:V3_INITIAL_MAX_OUTPUT_TOKENS},
+        {projectId,operationId:generationId,requestType:'generation',scope:WORLD_SCOPE.level,model:getAiModelId(),generationMode:'v3-scene',stage:repair?'v3-architectural-blueprint-repair':'v3-architectural-blueprint',retryNumber:repair?1:0,retryReason:repair?'objective-blueprint-validation':undefined,maxOutputTokens:V3_INITIAL_MAX_OUTPUT_TOKENS},
         // Disable SDK transport retries: an ambiguous provider failure must not
         // secretly repeat authoring outside the explicit two-attempt budget.
         ()=>generateText({model:getAiModel(),maxRetries:0,maxOutputTokens:V3_INITIAL_MAX_OUTPUT_TOKENS,system,messages:[{role:'user',content:repair?
-          `Repair this SAME blueprint only. No detailed scene. This consumes the single existing objective repair attempt. Only diagnosed circulation ids may change footprint/stairType/direction/turn; preserve host, levels, type and ids. Only diagnosed connection ids may change waypoints; preserve endpoint references, approach distance, width/use and surface identity. All other design decisions, buildings, storeys, rooms, entrances, materials, features and requirements are immutable. If a different design is necessary, report the unresolved decision. Failures: ${JSON.stringify(repair.findings)}\nOriginal brief: ${prompt}\nBlueprint: ${JSON.stringify(repair.blueprint)}`:prompt}],output:Output.json({name:'v3_architectural_blueprint'}),providerOptions:AI_PROVIDER_OPTIONS}),
+          `Repair this SAME blueprint only. No detailed scene. This consumes the single existing objective repair attempt. Only diagnosed circulation ids may change footprint/stairType/direction/turn; preserve host, levels, type and ids. Only diagnosed connection ids may change waypoints; preserve endpoint references, approach distance, width/use and surface identity. All other design decisions, buildings, storeys, rooms, entrances, materials, features and requirements are immutable. If a different design is necessary, report the unresolved decision. Failures: ${JSON.stringify(repair.findings)}\nOriginal brief: ${prompt}\nBlueprint: ${JSON.stringify(repair.planFirst??splitV3ArchitecturalBlueprint(repair.blueprint as V3ArchitecturalBlueprint))}`:prompt}],output:Output.json({name:'v3_architectural_blueprint'}),providerOptions:AI_PROVIDER_OPTIONS}),
         outcome=>'error' in outcome?v3StructuredOutputUsageAssessment(outcome.error):{},
       );
       inputTokens+=result.totalUsage.inputTokens??0;outputTokens+=result.totalUsage.outputTokens??0;totalTokens+=result.totalUsage.totalTokens??0;
@@ -643,20 +651,30 @@ async function generateArchitecturalBlueprintV3(prompt:string,baseRevision:strin
       // Diagnose the provider termination before attempting to consume JSON.
       if(result.finishReason!==undefined&&result.finishReason!=='stop')return {output:undefined,finishReason:result.finishReason};
       lastBlueprint=result.output;
+      lastAttempt=repair?1:0;
       return {output:lastBlueprint,finishReason:result.finishReason};
-    });
+    },{requirePlanFirst:true,onAttempt:async attempt=>{
+      if(attempt.rawBlueprint===undefined)return;
+      await retainV3FailureArtifact(process.env.NODE_ENV==='development'?JSON.stringify(attempt.rawBlueprint):undefined,attempt.attempt,'ingestion',{
+        generationId,terrainMode:'flat',decision:attempt.decision,
+        errors:attempt.findings.filter(f=>f.severity==='fatal').map(f=>`${f.code} [${f.targetIds.join(', ')}]: ${f.message}`),
+        warnings:attempt.findings.filter(f=>f.severity==='advisory').map(f=>f.message),notes:[],omitted:[],
+        identityChanges:attempt.identityChanges,normalizedBlueprint:attempt.normalizedBlueprint,
+      });
+    }});
     if(!built.ok||!built.scene){
       const fatal=built.findings.filter(f=>f.severity==='fatal');
-      if(lastBlueprint!==undefined)await retainV3FailureArtifact(process.env.NODE_ENV==='development'?JSON.stringify(lastBlueprint):undefined,built.attempts===2?1:0,'ingestion',{
-        terrainMode:'flat',decision:'rejected',errors:fatal.map(f=>`${f.code}: ${f.message}`),warnings:built.findings.filter(f=>f.severity==='advisory').map(f=>f.message),notes:[],omitted:[],
-      });
-      return NextResponse.json({error:`Architectural blueprint ${built.phase} failed: ${fatal[0]?.message??'Complete supported design required.'}`,code:fatal[0]?.code,phase:built.phase,findings:built.findings,attempts:built.attempts},{status:built.phase==='output'?502:422});
+      return NextResponse.json({outcome:'cannot-construct',error:`Cannot Construct — architectural blueprint ${built.phase} failed: ${fatal[0]?.message??'Complete supported design required.'}`,code:fatal[0]?.code,phase:built.phase,findings:built.findings,attempts:built.attempts,...(built.planningScene?{architecturalPlan:{version:3,generationMode:'v3-scene',v3Scene:built.planningScene}}:{})},{status:built.phase==='output'?502:422});
     }
-    built.scene.metadata={...built.scene.metadata,brief:prompt,terrainMode:'flat',blueprintContract:'v3-architectural-blueprint-1',generatedAt:new Date().toISOString(),
+    built.scene.metadata={...built.scene.metadata,brief:prompt,terrainMode:'flat',blueprintContract:'v3-plan-first-1',generatedAt:new Date().toISOString(),
       usage:{inputTokens,outputTokens,totalTokens,attempts:built.attempts,estimatedCost:cost||undefined,contextBytes:Buffer.byteLength(system+prompt),schemaBytes:Buffer.byteLength(system.slice(system.indexOf('{'))),repair:built.attempts===2}};
     const json=JSON.stringify({version:3,generationMode:'v3-scene',v3Scene:built.scene});
-    return NextResponse.json({summary:`V3 property constructed from one architectural blueprint: ${built.scene.objects.length} persistent objects.`,json,baseRevision,revision:revisionOf(json),generationMode:'v3-scene',warnings:built.findings.filter(f=>f.severity==='advisory').map(f=>`${f.code}: ${f.message}`)});
+    return NextResponse.json({summary:`${built.outcome==='draft'?'Draft — Needs Refinement (not fully validated)':'Complete'}: V3 property developed from its authoritative 2D plan; ${built.scene.objects.length} persistent objects.`,outcome:built.outcome,findings:built.findings,json,baseRevision,revision:revisionOf(json),generationMode:'v3-scene',warnings:built.findings.filter(f=>f.severity==='advisory').map(f=>`${f.code}: ${f.message}`)});
   }catch(error){
+    // A planner/compiler exception must not destroy an already paid-for response.
+    if(lastBlueprint!==undefined)await retainV3FailureArtifact(process.env.NODE_ENV==='development'?JSON.stringify(lastBlueprint):undefined,lastAttempt,'ingestion',{
+      generationId,terrainMode:'flat',decision:'rejected',errors:['ARCHITECTURAL_PIPELINE_EXCEPTION: Offline replay required; original candidate retained.'],warnings:[],notes:[],omitted:[],
+    });
     const failure=logV3StructuredOutputFailure(error);
     if(failure)return NextResponse.json({error:'The architectural blueprint response was incomplete or invalid. No scene was constructed.',code:failure.code},{status:502});
     logV3ProviderRequestRejection(error);return providerErrorResponse(error);

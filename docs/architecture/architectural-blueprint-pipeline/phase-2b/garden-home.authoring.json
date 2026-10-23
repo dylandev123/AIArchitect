@@ -1,0 +1,220 @@
+{
+  "format": "v3-architectural-plan-1",
+  "concept": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+  "site": {
+    "width": 60,
+    "depth": 60,
+    "access": []
+  },
+  "buildings": [
+    {
+      "id": "garden-house",
+      "label": "Garden home",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 12,
+        "depth": 10
+      },
+      "storeys": [
+        {
+          "id": "garden-floor",
+          "label": "Garden floor",
+          "spaces": [
+            {
+              "id": "garden-living",
+              "label": "garden living",
+              "program": "open-plan living dining"
+            },
+            {
+              "id": "garden-kitchen",
+              "label": "garden kitchen",
+              "program": "kitchen"
+            },
+            {
+              "id": "garden-gallery",
+              "label": "garden gallery",
+              "program": "circulation gallery"
+            },
+            {
+              "id": "garden-bedroom",
+              "label": "garden bedroom",
+              "program": "bedroom"
+            },
+            {
+              "id": "garden-entry",
+              "label": "garden entry",
+              "program": "entry hall"
+            },
+            {
+              "id": "garden-bath",
+              "label": "garden bath",
+              "program": "bathroom"
+            },
+            {
+              "id": "garden-utility",
+              "label": "garden utility",
+              "program": "utility"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "garden-root"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "garden-living-leaf",
+                "kind": "room",
+                "roomId": "garden-living"
+              },
+              {
+                "id": "garden-kitchen-leaf",
+                "kind": "room",
+                "roomId": "garden-kitchen"
+              },
+              {
+                "id": "garden-gallery-leaf",
+                "kind": "room",
+                "roomId": "garden-gallery"
+              },
+              {
+                "id": "garden-bedroom-leaf",
+                "kind": "room",
+                "roomId": "garden-bedroom"
+              },
+              {
+                "id": "garden-entry-leaf",
+                "kind": "room",
+                "roomId": "garden-entry"
+              },
+              {
+                "id": "garden-bath-leaf",
+                "kind": "room",
+                "roomId": "garden-bath"
+              },
+              {
+                "id": "garden-utility-leaf",
+                "kind": "room",
+                "roomId": "garden-utility"
+              },
+              {
+                "id": "garden-root",
+                "kind": "split",
+                "zone": "Public, circulation, private service",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "garden-public",
+                    "weight": 4
+                  },
+                  {
+                    "node": "garden-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "garden-private",
+                    "weight": 4
+                  }
+                ]
+              },
+              {
+                "id": "garden-public",
+                "kind": "split",
+                "zone": "Garden-facing public rooms",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "garden-living-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "garden-kitchen-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "garden-private",
+                "kind": "split",
+                "zone": "Private, arrival, service",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "garden-bedroom-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-entry-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-service",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "garden-service",
+                "kind": "split",
+                "zone": "Wet and service spaces",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "garden-bath-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-utility-leaf",
+                    "weight": 1
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "garden-door",
+          "type": "door",
+          "facade": "south",
+          "start": 0.44,
+          "end": 0.56,
+          "serves": "garden-entry"
+        }
+      ]
+    }
+  ],
+  "roomAdjacencies": [
+    {
+      "from": "garden-entry",
+      "to": "garden-gallery"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-living"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-kitchen"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-bedroom"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-bath"
+    },
+    {
+      "from": "garden-entry",
+      "to": "garden-utility"
+    }
+  ]
+}

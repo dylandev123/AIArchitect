@@ -99,12 +99,24 @@ describe("V3 Terra freedom product audit", () => {
     expect([...bounds.min, ...bounds.max, ...bounds.center, ...bounds.size].every(Number.isFinite)).toBe(true);
     for (const item of reloaded.v3Scene.objects) expect(renderedFor(reloaded.v3Scene, item.id, model.primitives)).toBe(true);
 
-    const counts = reloaded.v3Scene.objects.reduce<Record<string, number>>((total, item) => {
-      const strategy = resolveV3Renderable(item).strategy;
-      total[strategy] = (total[strategy] ?? 0) + 1;
-      return total;
-    }, {});
-    expect(counts).toEqual({ specialized: 16, generic: 14 });
+    // The former 16/14 total predates the specialized fountain builder in capabilities.ts.
+    // Pin identities: an aggregate alone could hide one regression behind another promotion.
+    const dispatched = (strategy: string) => reloaded.v3Scene.objects.filter(item => resolveV3Renderable(item).strategy === strategy).map(item => item.id).sort();
+    expect(dispatched('specialized')).toEqual([
+      'site-grade', 'living-pavilion', 'bedroom-wing', 'glass-gallery', 'rooftop-lounge',
+      'dining-room', 'infinity-pool', 'gazebo', 'fountain', 'arrival-court', 'retaining-wall',
+      'garden-stairs', 'lawn', 'tree-grove', 'planters', 'rock-garden', 'tropical-zone',
+    ].sort());
+    expect(dispatched('generic')).toEqual([
+      'entrance-volume', 'spa', 'fire-lounge', 'outdoor-kitchen', 'tennis-court', 'helipad',
+      'driveway-gate', 'privacy-hedge', 'meditation-pavilion', 'kinetic-shade',
+      'conversation-garden', 'bridge-lookout', 'water-wall',
+    ].sort());
+    expect(dispatched('proxy')).toEqual([]);
+    expect(model.primitives.filter(p => p.sourceObjectId === 'fountain').map(p => p.componentRole)).toEqual([
+      'shaped basin floor', 'shaped basin shell', 'shaped basin coping', 'water surface', 'fountain jet',
+    ]);
+    expect(model.primitives.filter(p => p.sourceObjectId === 'fountain').every(p => p.kind === 'triMesh')).toBe(true);
     expect(resolveV3Renderable(reloaded.v3Scene.objects.find((item) => item.id === "water-wall")!)).toMatchObject({ strategy: "generic", geometryKind: "box", warning: "FALLBACK_RENDER_USED" });
     expect(reloaded.v3Scene.objects.find((item) => item.id === "water-wall")?.source).toMatchObject({ assetId: "missing-water-wall-asset", replaceable: true });
     expect(reloaded.v3Scene.objects.find((item) => item.id === "kinetic-shade")?.support).toBeDefined();

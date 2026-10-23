@@ -1,0 +1,72 @@
+{
+  "externalTerraOrOpenAICalls": 0,
+  "paidGenerations": 0,
+  "commitsPushesDeployments": 0,
+  "focused": {
+    "files": 3,
+    "passed": 46,
+    "command": "vitest run src/app/api/ai/plan/route.test.ts src/lib/v3/__tests__/architecturalPlanAuthoring.test.ts src/lib/v3/__tests__/architecturalPlanFirst.test.ts"
+  },
+  "fullSuite": {
+    "command": "npm test -- --maxWorkers=2 --reporter=json",
+    "passed": 2418,
+    "failed": 0,
+    "skipped": 3,
+    "files": 200,
+    "suites": 575
+  },
+  "initialConcurrentAttempt": {
+    "passed": 2394,
+    "failed": 22,
+    "context": "Default worker count while optimized build was running; 21 failures exceeded the default 5-second timeout and one duplicate capability registration occurred. All pass with two workers; no production fixes made for these failures."
+  },
+  "typescript": "tsc --noEmit passed",
+  "eslint": "npm run lint passed",
+  "productionBuild": {
+    "status": "passed",
+    "command": "next build --webpack",
+    "isolatedRoot": "/private/tmp/aiarchitect-plan-authoring-verify",
+    "fontSource": "Existing local cached font fixtures",
+    "externalNetworkGuard": "scripts/offline-blueprint-provider.mjs",
+    "productionCodeSameAsFinal": true
+  },
+  "productionUI": {
+    "productionWorkspace": true,
+    "optimizedBuild": "next build --webpack",
+    "isolatedBrowserStorage": true,
+    "realProviderCalls": 0,
+    "mockedProviderCalls": 2,
+    "planCalls": 1,
+    "explicitElaborationCalls": 1,
+    "disabledByDefault": true,
+    "no3DCanvasDuringEvaluation": true,
+    "localDiagnostics": true,
+    "editSaveUndoRedoReload": true,
+    "unchangedGeometryThroughConstruction": true,
+    "unrelatedProjectPreserved": true,
+    "errors": [],
+    "forbidden": [],
+    "captures": [
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/plan-authoring/ui/01-estate-plan.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/plan-authoring/ui/02-ground-zones.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/plan-authoring/ui/03-local-diagnostics.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/plan-authoring/ui/04-explicit-cost-and-decision.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/plan-authoring/ui/05-built-exact-plan.jpg"
+    ]
+  },
+  "preservation": {
+    "hashedPreexistingFiles": 1533,
+    "changedPreexistingFiles": [
+      "src/lib/v3/blueprint.ts",
+      "src/lib/v3/architecturalPlanFirst.ts",
+      "src/lib/v3/architecturalPlanEvaluation.ts",
+      "src/app/api/ai/plan/route.test.ts"
+    ],
+    "unexpectedChangedPreexistingFiles": [],
+    "missingPreexistingFiles": [],
+    "allOriginalFixtureAndEvidenceHashesPreserved": true,
+    "v2OrTerrainFilesChangedByThisTask": [],
+    "realBrowserStorage": "Not used; separate ephemeral browser context"
+  },
+  "fieldMeasurements": "metrics.json"
+}

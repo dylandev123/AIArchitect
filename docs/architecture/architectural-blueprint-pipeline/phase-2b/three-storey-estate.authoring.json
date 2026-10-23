@@ -1,0 +1,985 @@
+{
+  "format": "v3-architectural-plan-1",
+  "concept": "OFFLINE TEST — Three articulated storeys wrap an open north court. West sleeping and east creative wings meet an east-west bridge gallery. A fixed eastern stair/lift core connects every floor, and a small detached ground-only pavilion offers independent working space. Distinct suite proportions on the middle floor are intentional.",
+  "site": {
+    "width": 100,
+    "depth": 100,
+    "access": []
+  },
+  "buildings": [
+    {
+      "id": "court-house",
+      "label": "Court residence",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "rotationY": 0.22
+      },
+      "plan": {
+        "kind": "articulated",
+        "width": 24,
+        "depth": 20,
+        "operations": [
+          {
+            "id": "court-cut",
+            "type": "recess",
+            "facade": "north",
+            "start": 0.3333333333333333,
+            "end": 0.6666666666666666,
+            "depth": 10
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "id": "court-floor-0",
+          "label": "Court level 0",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "court-0-west-suite",
+              "label": "court 0 west suite",
+              "program": "bedroom"
+            },
+            {
+              "id": "court-0-west-bath",
+              "label": "court 0 west bath",
+              "program": "bathroom"
+            },
+            {
+              "id": "court-0-east-studio",
+              "label": "court 0 east studio",
+              "program": "studio"
+            },
+            {
+              "id": "court-0-east-study",
+              "label": "court 0 east study",
+              "program": "study"
+            },
+            {
+              "id": "court-0-gallery",
+              "label": "court 0 gallery",
+              "program": "circulation gallery"
+            },
+            {
+              "id": "court-0-service",
+              "label": "court 0 service",
+              "program": "service kitchen"
+            },
+            {
+              "id": "court-0-entry",
+              "label": "court 0 entry",
+              "program": "entry hall"
+            },
+            {
+              "id": "court-0-stair-hall",
+              "label": "court 0 stair hall",
+              "program": "stair lift landing hall"
+            },
+            {
+              "id": "court-0-west-hall",
+              "label": "court 0 west hall",
+              "program": "private circulation hall"
+            },
+            {
+              "id": "court-0-east-hall",
+              "label": "court 0 east hall",
+              "program": "creative circulation hall"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "court-0-west",
+                "bounds": {
+                  "x": -8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-0-east",
+                "bounds": {
+                  "x": 8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-0-bridge",
+                "bounds": {
+                  "x": 0,
+                  "z": 5,
+                  "width": 24,
+                  "depth": 10
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "court-0-west-suite-leaf",
+                "kind": "room",
+                "roomId": "court-0-west-suite"
+              },
+              {
+                "id": "court-0-west-bath-leaf",
+                "kind": "room",
+                "roomId": "court-0-west-bath"
+              },
+              {
+                "id": "court-0-east-studio-leaf",
+                "kind": "room",
+                "roomId": "court-0-east-studio"
+              },
+              {
+                "id": "court-0-east-study-leaf",
+                "kind": "room",
+                "roomId": "court-0-east-study"
+              },
+              {
+                "id": "court-0-gallery-leaf",
+                "kind": "room",
+                "roomId": "court-0-gallery"
+              },
+              {
+                "id": "court-0-service-leaf",
+                "kind": "room",
+                "roomId": "court-0-service"
+              },
+              {
+                "id": "court-0-entry-leaf",
+                "kind": "room",
+                "roomId": "court-0-entry"
+              },
+              {
+                "id": "court-0-stair-hall-leaf",
+                "kind": "room",
+                "roomId": "court-0-stair-hall"
+              },
+              {
+                "id": "court-0-west-hall-leaf",
+                "kind": "room",
+                "roomId": "court-0-west-hall"
+              },
+              {
+                "id": "court-0-east-hall-leaf",
+                "kind": "room",
+                "roomId": "court-0-east-hall"
+              },
+              {
+                "id": "court-0-west",
+                "kind": "split",
+                "zone": "West guest wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-0-west-rooms",
+                    "weight": 6
+                  },
+                  {
+                    "node": "court-0-west-hall-leaf",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "court-0-west-rooms",
+                "kind": "split",
+                "zone": "Sleeping and bathing off a private hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-0-west-suite-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-0-west-bath-leaf",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "court-0-east",
+                "kind": "split",
+                "zone": "East creative wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-0-east-hall-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-0-east-rooms",
+                    "weight": 6
+                  }
+                ]
+              },
+              {
+                "id": "court-0-east-rooms",
+                "kind": "split",
+                "zone": "Studio and study off a wing hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-0-east-studio-leaf",
+                    "weight": 3
+                  },
+                  {
+                    "node": "court-0-east-study-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "court-0-bridge",
+                "kind": "split",
+                "zone": "Gallery and landward arrival/service",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-0-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-0-south",
+                    "weight": 8
+                  }
+                ]
+              },
+              {
+                "id": "court-0-south",
+                "kind": "split",
+                "zone": "Service, arrival and vertical core",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-0-service-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-0-entry-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-0-stair-hall-leaf",
+                    "weight": 8
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "court-floor-1",
+          "label": "Court level 1",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "court-1-west-suite",
+              "label": "court 1 west suite",
+              "program": "bedroom"
+            },
+            {
+              "id": "court-1-west-bath",
+              "label": "court 1 west bath",
+              "program": "bathroom"
+            },
+            {
+              "id": "court-1-east-studio",
+              "label": "court 1 east studio",
+              "program": "studio"
+            },
+            {
+              "id": "court-1-east-study",
+              "label": "court 1 east study",
+              "program": "study"
+            },
+            {
+              "id": "court-1-gallery",
+              "label": "court 1 gallery",
+              "program": "circulation gallery"
+            },
+            {
+              "id": "court-1-service",
+              "label": "court 1 service",
+              "program": "service kitchen"
+            },
+            {
+              "id": "court-1-entry",
+              "label": "court 1 entry",
+              "program": "entry hall"
+            },
+            {
+              "id": "court-1-stair-hall",
+              "label": "court 1 stair hall",
+              "program": "stair lift landing hall"
+            },
+            {
+              "id": "court-1-west-hall",
+              "label": "court 1 west hall",
+              "program": "private circulation hall"
+            },
+            {
+              "id": "court-1-east-hall",
+              "label": "court 1 east hall",
+              "program": "creative circulation hall"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "court-1-west",
+                "bounds": {
+                  "x": -8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-1-east",
+                "bounds": {
+                  "x": 8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-1-bridge",
+                "bounds": {
+                  "x": 0,
+                  "z": 5,
+                  "width": 24,
+                  "depth": 10
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "court-1-west-suite-leaf",
+                "kind": "room",
+                "roomId": "court-1-west-suite"
+              },
+              {
+                "id": "court-1-west-bath-leaf",
+                "kind": "room",
+                "roomId": "court-1-west-bath"
+              },
+              {
+                "id": "court-1-east-studio-leaf",
+                "kind": "room",
+                "roomId": "court-1-east-studio"
+              },
+              {
+                "id": "court-1-east-study-leaf",
+                "kind": "room",
+                "roomId": "court-1-east-study"
+              },
+              {
+                "id": "court-1-gallery-leaf",
+                "kind": "room",
+                "roomId": "court-1-gallery"
+              },
+              {
+                "id": "court-1-service-leaf",
+                "kind": "room",
+                "roomId": "court-1-service"
+              },
+              {
+                "id": "court-1-entry-leaf",
+                "kind": "room",
+                "roomId": "court-1-entry"
+              },
+              {
+                "id": "court-1-stair-hall-leaf",
+                "kind": "room",
+                "roomId": "court-1-stair-hall"
+              },
+              {
+                "id": "court-1-west-hall-leaf",
+                "kind": "room",
+                "roomId": "court-1-west-hall"
+              },
+              {
+                "id": "court-1-east-hall-leaf",
+                "kind": "room",
+                "roomId": "court-1-east-hall"
+              },
+              {
+                "id": "court-1-west",
+                "kind": "split",
+                "zone": "West private wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-1-west-rooms",
+                    "weight": 6
+                  },
+                  {
+                    "node": "court-1-west-hall-leaf",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "court-1-west-rooms",
+                "kind": "split",
+                "zone": "Sleeping and bathing off a private hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-1-west-suite-leaf",
+                    "weight": 3
+                  },
+                  {
+                    "node": "court-1-west-bath-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "court-1-east",
+                "kind": "split",
+                "zone": "East creative wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-1-east-hall-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-1-east-rooms",
+                    "weight": 6
+                  }
+                ]
+              },
+              {
+                "id": "court-1-east-rooms",
+                "kind": "split",
+                "zone": "Studio and study off a wing hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-1-east-studio-leaf",
+                    "weight": 3
+                  },
+                  {
+                    "node": "court-1-east-study-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "court-1-bridge",
+                "kind": "split",
+                "zone": "Gallery and landward arrival/service",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-1-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-1-south",
+                    "weight": 8
+                  }
+                ]
+              },
+              {
+                "id": "court-1-south",
+                "kind": "split",
+                "zone": "Service, arrival and vertical core",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-1-service-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-1-entry-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-1-stair-hall-leaf",
+                    "weight": 8
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "court-floor-2",
+          "label": "Court level 2",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "court-2-west-suite",
+              "label": "court 2 west suite",
+              "program": "bedroom"
+            },
+            {
+              "id": "court-2-west-bath",
+              "label": "court 2 west bath",
+              "program": "bathroom"
+            },
+            {
+              "id": "court-2-east-studio",
+              "label": "court 2 east studio",
+              "program": "studio"
+            },
+            {
+              "id": "court-2-east-study",
+              "label": "court 2 east study",
+              "program": "study"
+            },
+            {
+              "id": "court-2-gallery",
+              "label": "court 2 gallery",
+              "program": "circulation gallery"
+            },
+            {
+              "id": "court-2-service",
+              "label": "court 2 service",
+              "program": "service kitchen"
+            },
+            {
+              "id": "court-2-entry",
+              "label": "court 2 entry",
+              "program": "entry hall"
+            },
+            {
+              "id": "court-2-stair-hall",
+              "label": "court 2 stair hall",
+              "program": "stair lift landing hall"
+            },
+            {
+              "id": "court-2-west-hall",
+              "label": "court 2 west hall",
+              "program": "private circulation hall"
+            },
+            {
+              "id": "court-2-east-hall",
+              "label": "court 2 east hall",
+              "program": "creative circulation hall"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "court-2-west",
+                "bounds": {
+                  "x": -8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-2-east",
+                "bounds": {
+                  "x": 8,
+                  "z": -5,
+                  "width": 8,
+                  "depth": 10
+                }
+              },
+              {
+                "root": "court-2-bridge",
+                "bounds": {
+                  "x": 0,
+                  "z": 5,
+                  "width": 24,
+                  "depth": 10
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "court-2-west-suite-leaf",
+                "kind": "room",
+                "roomId": "court-2-west-suite"
+              },
+              {
+                "id": "court-2-west-bath-leaf",
+                "kind": "room",
+                "roomId": "court-2-west-bath"
+              },
+              {
+                "id": "court-2-east-studio-leaf",
+                "kind": "room",
+                "roomId": "court-2-east-studio"
+              },
+              {
+                "id": "court-2-east-study-leaf",
+                "kind": "room",
+                "roomId": "court-2-east-study"
+              },
+              {
+                "id": "court-2-gallery-leaf",
+                "kind": "room",
+                "roomId": "court-2-gallery"
+              },
+              {
+                "id": "court-2-service-leaf",
+                "kind": "room",
+                "roomId": "court-2-service"
+              },
+              {
+                "id": "court-2-entry-leaf",
+                "kind": "room",
+                "roomId": "court-2-entry"
+              },
+              {
+                "id": "court-2-stair-hall-leaf",
+                "kind": "room",
+                "roomId": "court-2-stair-hall"
+              },
+              {
+                "id": "court-2-west-hall-leaf",
+                "kind": "room",
+                "roomId": "court-2-west-hall"
+              },
+              {
+                "id": "court-2-east-hall-leaf",
+                "kind": "room",
+                "roomId": "court-2-east-hall"
+              },
+              {
+                "id": "court-2-west",
+                "kind": "split",
+                "zone": "West private wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-2-west-rooms",
+                    "weight": 6
+                  },
+                  {
+                    "node": "court-2-west-hall-leaf",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "court-2-west-rooms",
+                "kind": "split",
+                "zone": "Sleeping and bathing off a private hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-2-west-suite-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-2-west-bath-leaf",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "court-2-east",
+                "kind": "split",
+                "zone": "East creative wing",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-2-east-hall-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-2-east-rooms",
+                    "weight": 6
+                  }
+                ]
+              },
+              {
+                "id": "court-2-east-rooms",
+                "kind": "split",
+                "zone": "Studio and study off a wing hall",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-2-east-studio-leaf",
+                    "weight": 3
+                  },
+                  {
+                    "node": "court-2-east-study-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "court-2-bridge",
+                "kind": "split",
+                "zone": "Gallery and landward arrival/service",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "court-2-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "court-2-south",
+                    "weight": 8
+                  }
+                ]
+              },
+              {
+                "id": "court-2-south",
+                "kind": "split",
+                "zone": "Service, arrival and vertical core",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "court-2-service-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-2-entry-leaf",
+                    "weight": 8
+                  },
+                  {
+                    "node": "court-2-stair-hall-leaf",
+                    "weight": 8
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "court-door",
+          "type": "door",
+          "facade": "south",
+          "start": 0.44,
+          "end": 0.56,
+          "serves": "court-0-entry"
+        }
+      ]
+    },
+    {
+      "id": "work-pavilion",
+      "label": "Work pavilion",
+      "location": {
+        "x": -30,
+        "z": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 8,
+        "depth": 6
+      },
+      "storeys": [
+        {
+          "id": "work-floor",
+          "label": "Work floor",
+          "spaces": [
+            {
+              "id": "work-studio",
+              "label": "work studio",
+              "program": "studio"
+            },
+            {
+              "id": "work-entry",
+              "label": "work entry",
+              "program": "entry hall"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "work-root"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "work-studio-leaf",
+                "kind": "room",
+                "roomId": "work-studio"
+              },
+              {
+                "id": "work-entry-leaf",
+                "kind": "room",
+                "roomId": "work-entry"
+              },
+              {
+                "id": "work-root",
+                "kind": "split",
+                "zone": "Studio and arrival",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "work-studio-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "work-entry-leaf",
+                    "weight": 1
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "work-door",
+          "type": "door",
+          "facade": "south",
+          "start": 0.44,
+          "end": 0.56,
+          "serves": "work-entry"
+        }
+      ]
+    }
+  ],
+  "verticalCirculation": [
+    {
+      "id": "court-stair",
+      "type": "stair",
+      "hostMassId": "court-house",
+      "fromLevel": 0,
+      "toLevel": 2,
+      "footprint": {
+        "x": 6,
+        "z": 6,
+        "width": 3,
+        "depth": 6
+      }
+    },
+    {
+      "id": "court-lift",
+      "type": "lift",
+      "hostMassId": "court-house",
+      "fromLevel": 0,
+      "toLevel": 2,
+      "footprint": {
+        "x": 10,
+        "z": 4,
+        "width": 2,
+        "depth": 2
+      }
+    }
+  ],
+  "roomAdjacencies": [
+    {
+      "from": "court-0-gallery",
+      "to": "court-0-west-hall"
+    },
+    {
+      "from": "court-0-gallery",
+      "to": "court-0-east-hall"
+    },
+    {
+      "from": "court-0-gallery",
+      "to": "court-0-service"
+    },
+    {
+      "from": "court-0-gallery",
+      "to": "court-0-entry"
+    },
+    {
+      "from": "court-0-gallery",
+      "to": "court-0-stair-hall"
+    },
+    {
+      "from": "court-0-west-hall",
+      "to": "court-0-west-suite"
+    },
+    {
+      "from": "court-0-west-hall",
+      "to": "court-0-west-bath"
+    },
+    {
+      "from": "court-0-east-hall",
+      "to": "court-0-east-studio"
+    },
+    {
+      "from": "court-0-east-hall",
+      "to": "court-0-east-study"
+    },
+    {
+      "from": "court-1-gallery",
+      "to": "court-1-west-hall"
+    },
+    {
+      "from": "court-1-gallery",
+      "to": "court-1-east-hall"
+    },
+    {
+      "from": "court-1-gallery",
+      "to": "court-1-service"
+    },
+    {
+      "from": "court-1-gallery",
+      "to": "court-1-entry"
+    },
+    {
+      "from": "court-1-gallery",
+      "to": "court-1-stair-hall"
+    },
+    {
+      "from": "court-1-west-hall",
+      "to": "court-1-west-suite"
+    },
+    {
+      "from": "court-1-west-hall",
+      "to": "court-1-west-bath"
+    },
+    {
+      "from": "court-1-east-hall",
+      "to": "court-1-east-studio"
+    },
+    {
+      "from": "court-1-east-hall",
+      "to": "court-1-east-study"
+    },
+    {
+      "from": "court-2-gallery",
+      "to": "court-2-west-hall"
+    },
+    {
+      "from": "court-2-gallery",
+      "to": "court-2-east-hall"
+    },
+    {
+      "from": "court-2-gallery",
+      "to": "court-2-service"
+    },
+    {
+      "from": "court-2-gallery",
+      "to": "court-2-entry"
+    },
+    {
+      "from": "court-2-gallery",
+      "to": "court-2-stair-hall"
+    },
+    {
+      "from": "court-2-west-hall",
+      "to": "court-2-west-suite"
+    },
+    {
+      "from": "court-2-west-hall",
+      "to": "court-2-west-bath"
+    },
+    {
+      "from": "court-2-east-hall",
+      "to": "court-2-east-studio"
+    },
+    {
+      "from": "court-2-east-hall",
+      "to": "court-2-east-study"
+    },
+    {
+      "from": "work-studio",
+      "to": "work-entry"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "changes": {
+    "version": 1,
+    "id": "metadata-regression-villa",
+    "name": "Metadata Regression Villa",
+    "character": "A generous Caribbean hall opens toward the pool, with a shaded gallery connecting a quiet garden salon, deep verandas catching island breezes, and warm timber details framing the long tropical horizon.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "main",
+        "x": -5,
+        "z": -7,
+        "width": 14,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.1,
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "veranda": 2,
+        "balcony": 1.5
+      },
+      {
+        "id": "salon",
+        "x": 9,
+        "z": -4,
+        "width": 8,
+        "depth": 6,
+        "orientation": 180,
+        "storeys": 1,
+        "storeyHeight": 3.8,
+        "role": "living",
+        "parentId": "main",
+        "detached": false,
+        "veranda": 1.8,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "breeze-link",
+        "from": "main",
+        "to": "salon",
+        "width": 2.4
+      }
+    ],
+    "terraces": [
+      {
+        "id": "garden-room",
+        "kind": "terrace",
+        "x": -3,
+        "z": 3,
+        "width": 20,
+        "depth": 7,
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": -2,
+      "z": 13,
+      "width": 12,
+      "depth": 5.5
+    },
+    "garden": {
+      "x": 0,
+      "z": 3,
+      "width": 42,
+      "depth": 42
+    },
+    "siteMode": "fixed"
+  },
+  "summary": "Deterministic offline regression fixture; this is not the lost Terra response.",
+  "unsupported": []
+}

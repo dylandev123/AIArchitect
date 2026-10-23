@@ -1,5 +1,7 @@
 # Full-property blueprint construction and default-off production route
 
+**Build-first update:** [BUILD_FIRST_REPORT.md](BUILD_FIRST_REPORT.md) supersedes the all-or-nothing behavior described below for the opt-in independent production branch. Strict/offline callers retain their existing default; production can save explicitly labelled, editable drafts with localized defects. Primary architectural checks remain blocking.
+
 The subsequent [production reliability audit](PRODUCTION_RELIABILITY_REPORT.md) records stronger preflight/component checks, safe flag diagnostics and offline tests through real SDK parsing. Counts below describe this earlier milestone.
 
 20 October 2026, America/St_Lucia. The normal V3 generation endpoint now has a blueprint-only branch: one independently authored design is validated and deterministically constructed into the existing editable scene. **The branch remains disabled. No Terra/OpenAI requests, paid generations, V2/terrain changes, environment changes, commits, pushes or deployment were made.** Existing uncommitted work was retained.

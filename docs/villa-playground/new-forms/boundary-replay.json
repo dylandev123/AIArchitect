@@ -1,0 +1,284 @@
+{
+  "changes": {
+    "version": 1,
+    "id": "saint-lucia-caribbean-crown",
+    "name": "Caribbean Crown Estate",
+    "character": "An expansive Saint Lucian sea-view estate arranged as a refined Caribbean pavilion compound: a grand central villa, a south garden salon, an east guest",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "main-villa",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 3,
+        "width": 16,
+        "depth": 10,
+        "orientation": 180,
+        "storeys": 2,
+        "storeyHeight": 3.9,
+        "veranda": 2,
+        "balcony": 2.2
+      },
+      {
+        "id": "garden-salon",
+        "role": "living",
+        "parentId": "main-villa",
+        "detached": false,
+        "x": 0,
+        "z": 18,
+        "width": 14,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.8,
+        "balcony": 2
+      },
+      {
+        "id": "east-guest-pavilion",
+        "role": "guest",
+        "parentId": "main-villa",
+        "detached": false,
+        "x": 18,
+        "z": 2,
+        "width": 10,
+        "depth": 8,
+        "orientation": 90,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.6,
+        "balcony": 1.8
+      },
+      {
+        "id": "west-retreat",
+        "role": "guest",
+        "parentId": "main-villa",
+        "detached": true,
+        "x": -19,
+        "z": -5,
+        "width": 12,
+        "depth": 8,
+        "orientation": 180,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.8,
+        "balcony": 2
+      }
+    ],
+    "connections": [
+      {
+        "id": "main-to-garden-gallery",
+        "from": "main-villa",
+        "to": "garden-salon",
+        "width": 3
+      },
+      {
+        "id": "main-to-east-gallery",
+        "from": "main-villa",
+        "to": "east-guest-pavilion",
+        "width": 2.5
+      }
+    ],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -23,
+        "width": 20,
+        "depth": 4.2,
+        "id": "pool-north-sun-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 0,
+        "z": -13,
+        "width": 20,
+        "depth": 4.2,
+        "id": "pool-south-lounge-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": -9.3,
+        "z": -18,
+        "width": 4.3,
+        "depth": 7.5,
+        "id": "pool-west-cabana-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 10.15,
+        "z": -18,
+        "width": 6,
+        "depth": 7.5,
+        "id": "pool-east-dining-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": -18,
+      "width": 14,
+      "depth": 5.5
+    },
+    "garden": {
+      "x": -30,
+      "z": -30,
+      "width": 60,
+      "depth": 60
+    }
+  },
+  "summary": "Caribbean Crown Estate is a dramatic, approximately $15-million-calibre tropical compound centered on a two-storey ivory main villa. Hip roofs, panoramic glazing, deep verandas, and upper balconies create a resort-like silhouette, while two low covered galleries link the principal social and east guest wings without compromising the pitched-roof composition. A detached west retreat offers privacy, and the north-facing 14-metre pool ensemble provides layered timber sun decks, dining space, and a clear Caribbean-view foreground.",
+  "unsupported": [],
+  "config": {
+    "version": 1,
+    "id": "saint-lucia-caribbean-crown",
+    "name": "Caribbean Crown Estate",
+    "character": "An expansive Saint Lucian sea-view estate arranged as a refined Caribbean pavilion compound: a grand central villa, a south garden salon, an east guest",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "main-villa",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 3,
+        "width": 16,
+        "depth": 10,
+        "orientation": 180,
+        "storeys": 2,
+        "storeyHeight": 3.9,
+        "veranda": 2,
+        "balcony": 2.2
+      },
+      {
+        "id": "garden-salon",
+        "role": "living",
+        "parentId": "main-villa",
+        "detached": false,
+        "x": 0,
+        "z": 18,
+        "width": 14,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.8,
+        "balcony": 2
+      },
+      {
+        "id": "east-guest-pavilion",
+        "role": "guest",
+        "parentId": "main-villa",
+        "detached": false,
+        "x": 18,
+        "z": 2,
+        "width": 10,
+        "depth": 8,
+        "orientation": 90,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.6,
+        "balcony": 1.8
+      },
+      {
+        "id": "west-retreat",
+        "role": "guest",
+        "parentId": "main-villa",
+        "detached": true,
+        "x": -19,
+        "z": -5,
+        "width": 12,
+        "depth": 8,
+        "orientation": 180,
+        "storeys": 2,
+        "storeyHeight": 3.8,
+        "veranda": 1.8,
+        "balcony": 2
+      }
+    ],
+    "connections": [
+      {
+        "id": "main-to-garden-gallery",
+        "from": "main-villa",
+        "to": "garden-salon",
+        "width": 3
+      },
+      {
+        "id": "main-to-east-gallery",
+        "from": "main-villa",
+        "to": "east-guest-pavilion",
+        "width": 2.5
+      }
+    ],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -23,
+        "width": 20,
+        "depth": 4.2,
+        "id": "pool-north-sun-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 0,
+        "z": -13,
+        "width": 20,
+        "depth": 4.2,
+        "id": "pool-south-lounge-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": -9.3,
+        "z": -18,
+        "width": 4.3,
+        "depth": 7.5,
+        "id": "pool-west-cabana-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 10.15,
+        "z": -18,
+        "width": 6,
+        "depth": 7.5,
+        "id": "pool-east-dining-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": -18,
+      "width": 14,
+      "depth": 5.5
+    },
+    "garden": {
+      "x": -1.0749999999999993,
+      "z": -0.45000000000000107,
+      "width": 54.15,
+      "depth": 53.3
+    },
+    "siteMode": "derived"
+  },
+  "providerCalls": 0
+}

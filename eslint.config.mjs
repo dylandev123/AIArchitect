@@ -19,6 +19,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Preserved recovery evidence includes archived Next output, not source.
+    ".v3-debug/**",
   ]),
 ]);
 

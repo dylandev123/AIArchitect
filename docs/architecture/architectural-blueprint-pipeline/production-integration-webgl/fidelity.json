@@ -1,0 +1,85 @@
+{
+  "originalSha256": "9733be300b2fbb316ea248201c4af87df86665fb63fb9c6d63012aa49f1af9ed",
+  "exactProductionApiPrimitivesEqualOfflineOriginal": true,
+  "primitives": 316,
+  "constructionReceiptFindings": [],
+  "objects": 13,
+  "storeys": [
+    {
+      "id": "villa-ground",
+      "elevation": 0.26,
+      "height": 4.2
+    },
+    {
+      "id": "villa-upper",
+      "elevation": 4.46,
+      "height": 3.5
+    },
+    {
+      "id": "guest-ground",
+      "elevation": 0.26,
+      "height": 3.6
+    }
+  ],
+  "counts": {
+    "buildings": 2,
+    "roofs": 2,
+    "rooms": 17,
+    "facadeOpeningRecords": 16,
+    "entrances": 2,
+    "outdoorFeatures": 5,
+    "routes": 4,
+    "stairs": 1,
+    "retainedPartitions": 9,
+    "retainedDoors": 8
+  },
+  "identityChanges": [
+    {
+      "path": "connections.0.surfaceId",
+      "from": "arrival-court",
+      "to": "route-arrival-drive",
+      "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+    },
+    {
+      "path": "connections.1.surfaceId",
+      "from": "arrival-court",
+      "to": "route-guest-walk",
+      "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+    },
+    {
+      "path": "connections.2.surfaceId",
+      "from": "view-terrace",
+      "to": "route-ocean-terrace-walk",
+      "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+    },
+    {
+      "path": "connections.3.surfaceId",
+      "from": "view-terrace",
+      "to": "route-pool-approach",
+      "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+    }
+  ],
+  "currentOutcome": "draft",
+  "currentDiagnosticCount": 78,
+  "currentClassificationCounts": {
+    "advisory": 29,
+    "draft-tolerable": 49
+  },
+  "currentCodeCounts": {
+    "ROOM_OUTSIDE_HOST": 8,
+    "ROOM_OVERLAP": 5,
+    "ROOM_ADJACENCY_NO_SHARED_BOUNDARY": 7,
+    "PARTITION_BOUNDARY_UNRESOLVED": 7,
+    "DOOR_BOUNDARY_UNRESOLVED": 6,
+    "ESTATE_ALLOCATION_CONFLICT": 20,
+    "ESTATE_REQUIREMENT_UNVERIFIED": 4,
+    "ESTATE_ACCESS_MISSING": 1,
+    "ESTATE_ROUTE_BLOCKED": 2,
+    "BLUEPRINT_RELATIONSHIP_UNVERIFIED": 2,
+    "BLUEPRINT_SPACE_OUTSIDE_HOST": 8,
+    "BLUEPRINT_SPACE_OVERLAP": 5,
+    "ARCHITECTURAL_DOOR_CLIPPED": 1,
+    "ARCHITECTURAL_RAISED_POOL": 1,
+    "STAIR_ACCESS_BLOCKED": 1
+  }
+}

@@ -1,5 +1,7 @@
 # Blueprint-to-3D production reliability gate
 
+**Build-first update:** [BUILD_FIRST_REPORT.md](BUILD_FIRST_REPORT.md) supersedes the all-or-nothing behavior described below for the opt-in independent production branch. Strict/offline callers retain their existing default; production can save explicitly labelled, editable drafts with localized defects. Primary architectural checks remain blocking.
+
 20 October 2026, America/St_Lucia. This is the current reliability audit of the default-off independent blueprint branch. It extends [FULL_PROPERTY_REPORT.md](FULL_PROPERTY_REPORT.md) and [CONTRACT.md](CONTRACT.md). The supplied task ended partway through Phase 3; this report covers the production, preflight and construction-fidelity requirements that were supplied.
 
 No live provider requests, paid experiments, flag/environment changes, saved-user-project writes, commits, pushes or deployments were performed. Provider tests use an offline SDK model; persistence tests use in-memory storage. Existing unrelated working-tree changes and captured response/blueprint fixtures were retained.

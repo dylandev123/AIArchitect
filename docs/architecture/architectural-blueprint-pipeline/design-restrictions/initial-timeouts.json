@@ -1,0 +1,290 @@
+{
+  "command": "npm test -- --reporter=json --outputFile=/tmp/design-restrictions-full-tests.json",
+  "concurrentWith": "production build and TypeScript check",
+  "result": {
+    "numPassedTests": 2317,
+    "numFailedTests": 43,
+    "numPendingTests": 3,
+    "success": false
+  },
+  "failed": [
+    {
+      "path": "src/store/__tests__/v3FullPropertyPersistence.test.ts",
+      "tests": [
+        {
+          "name": "saves an authored full property to the existing project store and preserves another saved project",
+          "durationMs": 20029.179125
+        }
+      ]
+    },
+    {
+      "path": "src/lib/ai/__tests__/clientV3Routing.test.ts",
+      "tests": [
+        {
+          "name": "V3 initial client request applies and persists an editable draft with its outcome, then keeps revision protection",
+          "durationMs": 7200.173416999999
+        }
+      ]
+    },
+    {
+      "path": "src/lib/house/__tests__/scale.test.ts",
+      "tests": [
+        {
+          "name": "scale rules produce valid designs everywhere assembles without validation errors",
+          "durationMs": 161511.862292
+        }
+      ]
+    },
+    {
+      "path": "src/lib/house/__tests__/siteCollisions.test.ts",
+      "tests": [
+        {
+          "name": "generated estates and mansions contain no building-on-building or building-in-pool overlaps, and no collision the last gate can find",
+          "durationMs": 5394.791499999999
+        }
+      ]
+    },
+    {
+      "path": "src/lib/house/__tests__/siteRouting.test.ts",
+      "tests": [
+        {
+          "name": "terrain respects the plan keeps the river, rocks, clearing and retaining walls out of the arrival, garage, pool, outdoor-living and guest zones",
+          "durationMs": 15421.768666
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/architecturalBlueprintIdentity.test.ts",
+      "tests": [
+        {
+          "name": "architectural identity recovery without any provider constructs an otherwise valid estate with colliding route owners, with no repair",
+          "durationMs": 6536.5716250000005
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/architecturalBlueprintReliability.test.ts",
+      "tests": [
+        {
+          "name": "construction fidelity against approved components refuses a partial save when full production compilation loses one window",
+          "durationMs": 15042.964708
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/architecturalDraft.test.ts",
+      "tests": [
+        {
+          "name": "build-first acceptance without architectural substitution corrects transient derived mesh loss deterministically before another author call",
+          "durationMs": 5789.525750000001
+        },
+        {
+          "name": "build-first acceptance without architectural substitution returns a one-call editable draft, then repairs its current scene and promotes only after full revalidation",
+          "durationMs": 7447.493166
+        },
+        {
+          "name": "build-first acceptance without architectural substitution retains overlapping-door defects during reload rather than promoting from stale metadata",
+          "durationMs": 5184.276542
+        },
+        {
+          "name": "build-first acceptance without architectural substitution recomputes a stale derived route envelope and keeps the authoritative route unchanged",
+          "durationMs": 9263.658624999996
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/blueprintConstruction.test.ts",
+      "tests": [
+        {
+          "name": "blueprint entrance \u2192 authored approach \u2192 constructed destination rejects wall-following approaches, obstacles and water without changing authored bends",
+          "durationMs": 6024.202499999999
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/blueprintGeneration.test.ts",
+      "tests": [
+        {
+          "name": "blueprint-first generation contract (no provider) records reproducible output overhead and offline acceptance evidence",
+          "durationMs": 6279.334708000002
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/blueprintLiveFailure.test.ts",
+      "tests": [
+        {
+          "name": "recovered blueprint-first cloister mansion (offline) replays both latest and earlier responses through production ingestion without changing authored inputs",
+          "durationMs": 8881.466417
+        },
+        {
+          "name": "recovered blueprint-first cloister mansion (offline) recovers every stable identity and exposes real route blockers without accepting the scene",
+          "durationMs": 5500.371917
+        },
+        {
+          "name": "recovered blueprint-first cloister mansion (offline) recovers every stable identity and exposes real route blockers without accepting the scene",
+          "durationMs": 9275.568249999998
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/designConsistency.test.ts",
+      "tests": [
+        {
+          "name": "new generation consistency contract (offline) retains legacy ingestion and identical compiled geometry; exports repeatable replay evidence",
+          "durationMs": 6415.59
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/facadeOpeningRecovery.test.ts",
+      "tests": [
+        {
+          "name": "localized facade recovery without changing architectural intent promotes a general property to Complete after an explicit facade edit and full revalidation",
+          "durationMs": 10886.089958
+        },
+        {
+          "name": "localized facade recovery without changing architectural intent D: retains strict blocking for a broken primary approach and missing primary geometry, even with draft metadata",
+          "durationMs": 10627.694375
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/fullPropertyBlueprint.test.ts",
+      "tests": [
+        {
+          "name": "expanded independent full-property construction constructs actual curved balcony/guards, portico and pergola, then round trips without sidecar authority",
+          "durationMs": 6050.631249999999
+        },
+        {
+          "name": "expanded independent full-property construction moves curved assemblies with the host and keeps their IDs across ordinary edits and reload",
+          "durationMs": 5927.73575
+        },
+        {
+          "name": "expanded independent full-property construction allows only the diagnosed stair correction, bounded to two calls, preserving all other decisions",
+          "durationMs": 10662.692625000003
+        },
+        {
+          "name": "expanded independent full-property construction does not grant a third call or accept a route repair that changes its entrance, width or material",
+          "durationMs": 5850.619790999997
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/generationReliability.test.ts",
+      "tests": [
+        {
+          "name": "captured cliffside mansion replay is deterministic, idempotent, persistable and locally editable",
+          "durationMs": 5899.5985
+        },
+        {
+          "name": "captured mansion persistence commits atomically and reloads identically",
+          "durationMs": 5794.021624999998
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/mansionReadiness.test.ts",
+      "tests": [
+        {
+          "name": "offline dream mansion suite envelope is local to its authored/dependency region",
+          "durationMs": 9037.777709
+        },
+        {
+          "name": "offline dream mansion new bedroom wing is local to its authored/dependency region",
+          "durationMs": 9473.731666999998
+        },
+        {
+          "name": "offline dream mansion living glazing is local to its authored/dependency region",
+          "durationMs": 8590.798291
+        },
+        {
+          "name": "offline dream mansion deeper pool terrace is local to its authored/dependency region",
+          "durationMs": 5866.429500000006
+        },
+        {
+          "name": "offline dream mansion one roof is local to its authored/dependency region",
+          "durationMs": 7821.489125
+        },
+        {
+          "name": "offline dream mansion pool move is local to its authored/dependency region",
+          "durationMs": 5209.494000000006
+        },
+        {
+          "name": "offline dream mansion entry material is local to its authored/dependency region",
+          "durationMs": 6368.630333000001
+        },
+        {
+          "name": "offline dream mansion can replace one roof family through existing local operations",
+          "durationMs": 8952.39699999999
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/preGenerationReliability.test.ts",
+      "tests": [
+        {
+          "name": "pre-generation reliability audit (offline, no providers) replays all four untouched responses and exports every diagnostic, separating investigation from acceptance",
+          "durationMs": 34685.938125
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/productionRouteDiagnostics.test.ts",
+      "tests": [
+        {
+          "name": "production estate route rendering diagnostics recognizes actual estate ribbons while preserving malformed-route and unknown-object diagnostics",
+          "durationMs": 5124.146083
+        }
+      ]
+    },
+    {
+      "path": "src/lib/v3/__tests__/unifiedSpatial.test.ts",
+      "tests": [
+        {
+          "name": "one spatial route from blueprint through construction and repair (offline) constructs an explicitly corrected geometric plan without changing buildings, roofs or finishes",
+          "durationMs": 16477.944084000002
+        },
+        {
+          "name": "one spatial route from blueprint through construction and repair (offline) rejects 2m \u2192 23m box/route repairs, new collisions and distant detours while permitting a local authored correction",
+          "durationMs": 6962.379542000002
+        }
+      ]
+    },
+    {
+      "path": "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+      "tests": [
+        {
+          "name": "actual production route with real SDK parsing and an offline model adapts the unchanged second live estate into plan-first format as an editable Draft without paid repair",
+          "durationMs": 5473.973292000001
+        },
+        {
+          "name": "actual production route with real SDK parsing and an offline model returns one editable explicitly labelled draft through the actual SDK and route",
+          "durationMs": 8272.888249999996
+        },
+        {
+          "name": "actual production route with real SDK parsing and an offline model repairs only diagnosed stair intent and attributes exactly two SDK calls",
+          "durationMs": 5510.657041000006
+        },
+        {
+          "name": "actual production route with real SDK parsing and an offline model returns no saveable output for construction",
+          "durationMs": 5515.910250000001
+        }
+      ]
+    },
+    {
+      "path": "src/app/api/ai/house/__tests__/route.v3.test.ts",
+      "tests": [
+        {
+          "name": "POST /api/ai/house V3 scene mode constructs the new blueprint-only provider response with one mocked call and editable save/reload semantics",
+          "durationMs": 7207.870792
+        },
+        {
+          "name": "POST /api/ai/house V3 scene mode accepts a locally corrected recovered plan in the single objective follow-up offline",
+          "durationMs": 6993.793292000002
+        }
+      ]
+    }
+  ],
+  "resolution": "Full suite passed with maxWorkers=2; assertions and timeouts were not weakened."
+}

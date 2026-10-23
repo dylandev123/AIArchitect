@@ -1,0 +1,82 @@
+{
+  "materials": [
+    {
+      "id": "stone",
+      "color": "#d6d2c8",
+      "surface": "stone",
+      "roughness": 0.8
+    },
+    {
+      "id": "roof",
+      "color": "#a58a64",
+      "surface": "metal",
+      "roughness": 0.4
+    },
+    {
+      "id": "paving",
+      "color": "#b8ad98",
+      "surface": "paving",
+      "roughness": 0.74
+    },
+    {
+      "id": "grass",
+      "color": "#61754b",
+      "surface": "grass",
+      "roughness": 0.9
+    },
+    {
+      "id": "water",
+      "color": "#528e9a",
+      "surface": "water",
+      "roughness": 0.2
+    },
+    {
+      "id": "timber",
+      "color": "#695343",
+      "surface": "wood",
+      "roughness": 0.8
+    }
+  ],
+  "buildings": [
+    {
+      "id": "writer-home",
+      "materialId": "stone",
+      "facade": {
+        "openings": []
+      },
+      "roof": {
+        "form": "flat",
+        "materialId": "roof",
+        "pitchDegrees": 0,
+        "overhang": 0,
+        "thickness": 0.25
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "writer-terrace",
+      "materialId": "paving",
+      "height": 0.14,
+      "railing": "none"
+    },
+    {
+      "id": "writer-garden",
+      "materialId": "grass",
+      "height": 0.12
+    }
+  ],
+  "connections": [
+    {
+      "id": "writer-arrival",
+      "materialId": "paving"
+    },
+    {
+      "id": "writer-garden-link",
+      "materialId": "paving"
+    }
+  ],
+  "verticalCirculation": [],
+  "partitions": [],
+  "doors": []
+}

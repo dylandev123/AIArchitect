@@ -1,3 +1,5 @@
+import { splitV3ArchitecturalBlueprint } from '@/lib/v3/architecturalPlanFirst';
+import type { V3ArchitecturalBlueprint } from '@/lib/v3/architecturalBlueprint';
 import { explicitlyCorrectedCloister, recoveredCloister } from '@/lib/v3/parity/unifiedSpatial';
 import * as failureArtifacts from "@/lib/ai/v3FailureArtifact";
 import { NextRequest } from "next/server";
@@ -15,11 +17,11 @@ import { executeV3SceneOperations } from '@/lib/v3/operations';
 import * as sceneCompiler from '@/lib/v3/scene';
 import cloisterInitial from '@/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-0.json';
 import cloisterRepair from '@/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-1.json';
-import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from "../route";
+import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from "@/lib/ai/v3GenerationLimits";
 
 const generateText = vi.fn();
 const usageAssessments: Array<{ meta: unknown; assessment: unknown }> = [];
-vi.mock("ai", async (importOriginal) => ({ ...(await importOriginal<typeof import("ai")>()), generateText: (...args: unknown[]) => generateText(...args) }));
+vi.mock("ai", async (importOriginal) => ({ ...(await importOriginal<typeof import("ai")>()), generateText: (...args: unknown[]) => Promise.resolve(generateText(...args)).then(result=>process.env.AI_V3_ARCHITECTURAL_BLUEPRINT==='1'&&result?.output?.format==='v3-architectural-blueprint-1'?{...result,output:splitV3ArchitecturalBlueprint(result.output as V3ArchitecturalBlueprint)}:result) }));
 vi.mock("@/lib/ai/usage/track", () => ({
   withUsageLogging: async (meta: unknown, run: () => Promise<unknown>, assess?: (outcome: { error: unknown }) => unknown) => {
     try { return await run(); } catch (error) { usageAssessments.push({ meta, assessment: await assess?.({ error }) }); throw error; }
@@ -81,10 +83,10 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const res=await generateOffline('A curved residence with balcony, pool and covered outdoor living');
     expect(res.status).toBe(200);expect(generateText).toHaveBeenCalledTimes(1);
     const request=generateText.mock.calls[0][0];expect(request.maxOutputTokens).toBe(V3_INITIAL_MAX_OUTPUT_TOKENS);
-    expect(request.system).toContain('ONE complete independent architectural blueprint');expect(request.system).toContain('"$schema"');
+    expect(request.system).toContain('ONE plan-first design');expect(request.system).toContain('"$schema"');
     expect(request.system).not.toContain('BLUEPRINT-FIRST AUTHORING');expect(request.system).not.toContain('Current plan:');
     const body=await res.json(),root=JSON.parse(body.json);expect(body.baseRevision).toBeTruthy();
-    expect(root.v3Scene.metadata.blueprintContract).toBe('v3-architectural-blueprint-1');expect(root.v3Scene.metadata.usage.attempts).toBe(1);
+    expect(root.v3Scene.metadata.blueprintContract).toBe('v3-plan-first-1');expect(root.v3Scene.metadata.usage.attempts).toBe(1);
     expect(root.v3Scene.objects[0].composition.footprint.segments).toEqual(bp.buildings[0].plan.kind==='outline'?bp.buildings[0].plan.segments:[]);
     expect(JSON.stringify(root.v3Scene)).not.toContain('"buildings":'+JSON.stringify(bp.buildings));
     const edited=executeV3SceneOperations(root.v3Scene,{intent:'Edit constructed property',operations:[{op:'changeMaterial',target:'orchard-atelier',material:{id:'local-ochre',color:'#c9a86b',surface:'stucco'}}]});
@@ -98,7 +100,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     if(kind==='capability')bp.buildings[0].roof.form='dome';
     const output=kind==='double-output'?{...bp,objects:[]}:bp;
     const compile=vi.spyOn(sceneCompiler,'compileV3Scene');generateText.mockResolvedValue({output,totalUsage:sdkUsage});
-    const res=await generateOffline();expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(1);expect(compile).not.toHaveBeenCalled();
+    const res=await generateOffline();expect(res.status).toBe(422);expect(generateText).toHaveBeenCalledTimes(1);if(kind!=='capability')expect(compile).not.toHaveBeenCalled();
     const body=await res.json();expect(body.json).toBeUndefined();expect(body.v3FailedPreview).toBeUndefined();expect(body.phase).toBe('planning');
   });
 
@@ -133,7 +135,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
 
   it('keeps advanced-site generation on the existing scene route when the new flag is set',async()=>{
     vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT','1');generateText.mockResolvedValue({output:toGenerationOutput(generationScene()),totalUsage:sdkUsage});
-    await generateOffline('A hillside home','advanced');expect(generateText.mock.calls[0][0].system).not.toContain('ONE complete independent architectural blueprint');
+    await generateOffline('A hillside home','advanced');expect(generateText.mock.calls[0][0].system).not.toContain('ONE plan-first design');
   });
 
   it('reports an omitted explicitly requested feature instead of asking for a second creative scene',async()=>{

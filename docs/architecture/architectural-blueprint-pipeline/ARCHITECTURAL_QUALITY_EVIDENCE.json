@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-21",
+  "timezone": "America/St_Lucia",
+  "scope": "Architectural quality of exact second-live recovered estate; no redesign",
+  "providerCallsThisInvestigation": 0,
+  "paidGenerationsThisInvestigation": 0,
+  "original": {
+    "path": ".v3-debug/second-live-b78f82e1b55e/original/provider-response.json",
+    "bytes": 20523,
+    "sha256": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb",
+    "captureTime": "2026-10-21T13:16:37.584Z"
+  },
+  "checks": {
+    "fixtureEqual": true,
+    "normalizedBlueprintEqual": true,
+    "freshOfflineSceneExactlyEqual": true,
+    "productionSceneArchitectureEqual": true,
+    "productionDifferences": [
+      "metadata"
+    ],
+    "buildingMapping": [
+      {
+        "id": "main-villa",
+        "plan": {
+          "kind": "rectangle",
+          "width": 24,
+          "depth": 18
+        },
+        "placementPreserved": true,
+        "dimensionsPreserved": true,
+        "facadePreserved": true,
+        "roofIntentPreserved": true,
+        "authoredAssemblies": 0
+      },
+      {
+        "id": "guest-pavilion",
+        "plan": {
+          "kind": "rectangle",
+          "width": 12,
+          "depth": 8
+        },
+        "placementPreserved": true,
+        "dimensionsPreserved": true,
+        "facadePreserved": true,
+        "roofIntentPreserved": true,
+        "authoredAssemblies": 0
+      }
+    ],
+    "featureMapping": [
+      {
+        "id": "sunset-terrace",
+        "type": "terrace",
+        "placementPreserved": true,
+        "dimensionsPreserved": true
+      },
+      {
+        "id": "infinity-pool",
+        "type": "pool",
+        "placementPreserved": true,
+        "dimensionsPreserved": true
+      },
+      {
+        "id": "north-garden-lawn",
+        "type": "landscape-zone",
+        "placementPreserved": true,
+        "dimensionsPreserved": true
+      },
+      {
+        "id": "east-arrival-lawn",
+        "type": "landscape-zone",
+        "placementPreserved": true,
+        "dimensionsPreserved": true
+      }
+    ]
+  },
+  "quantities": {
+    "siteAreaM2": 10800,
+    "combinedBuildingFootprintM2": 528,
+    "siteCoverageFraction": 0.04888888888888889,
+    "grossFloorPlateAreaM2": 960,
+    "terraceAreaM2": 230,
+    "poolAreaM2": 75,
+    "poolToTerraceEnvelopeGapM": 2,
+    "poolRimDatumM": 1.4,
+    "poolWaterDatumM": 1.36,
+    "terraceTopM": 0.18,
+    "poolRimAboveTerraceM": 1.22,
+    "materialsWithoutMaterialIdAssignments": [
+      "charcoal-metal",
+      "clear-glass"
+    ],
+    "mainEntryColorCopiesCharcoalHex": true,
+    "facadeOpeningDeclarations": 9,
+    "expandedFacadeApertures": 14,
+    "withheldConflictingApertures": 3,
+    "constructedFacadeApertures": 11,
+    "authoredFacadeAssemblies": 0,
+    "offlineCompiledPrimitives": 209
+  },
+  "visuallyInspectedProductionScreenshots": [
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/api-generated-mansion.jpg",
+      "sha256": "81f3c453300453a5d0432291dba94c9664b3bf66d8352107b41f7e63fb69cb75",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 208
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/property-plan.jpg",
+      "sha256": "f811e70da2a4575d6e5fa8707537764f7396ca988b43c4e8160ba62863faeec7",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 208
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/ocean-facades-pool-and-guest.jpg",
+      "sha256": "8832e242b599dd7e11ed655296280fe9a8689b57448021fda0a5b113426ff94c",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 208
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/entrances-and-roofs.jpg",
+      "sha256": "ed04ad1e2b278e5e039b0b1bdcdf0fde303f9f82f31d7093b7dbd8e5c13a0560",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 208
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/service-windows-refined.jpg",
+      "sha256": "ebd5813cd22fa890bb839c1164ccf83c26c787cfb937528a7de81437949b9f5a",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 203
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/edited-draft-reloaded.jpg",
+      "sha256": "c9a9cb3907d86da25225f94c2a24d3c299c7d1d0ee7f46e68999a4f2e05eb36b",
+      "matchesExistingManifest": true,
+      "inspectedVisually": true,
+      "mountedMeshCount": 203
+    }
+  ],
+  "sourceHashesAtInvestigation": {
+    "src/lib/v3/architecturalBlueprintGeneration.ts": "2a006b6d446db8246a7fd2ea3d1553bae2a4f8e62b35061394be10d98820ee45",
+    "src/lib/v3/architecturalBlueprint.ts": "f724936e5853a1c907db80f7a5ce83b56cb6fd8e1846eb31fc7797fcf66c8d72",
+    "src/lib/v3/composition.ts": "57ef314c73ca8018143d10c90d5132c6816591486e3277393e742a59632309b0",
+    "src/lib/v3/footprintConstruction.ts": "05e27abd858f4b13b789151844235ab6328b15aafe6515a9ab00d3cc398e3c6d",
+    "src/lib/v3/construction.ts": "263d5cfacc3eceed026a74de16a99b9111a843eaefe66298be9a3ab6d0ffef41",
+    "src/lib/v3/scene.ts": "f8db65246dca6a68c1b0e45dc76c4ead9c72363da226c1e02f3efc82bd873887",
+    "src/lib/v3/designReview.ts": "b44a22c7b179c3e9d6642678e086fb393a4165fbdd723a5f3d084e786cff2ca5",
+    "src/lib/v3/vegetation.ts": "1416d7adddfbc7eac97cfda0602d42f88620acedbb2691f7c97bbb5e4f3ad0cd",
+    "src/components/workspace/viewport/house/HouseRenderer.tsx": "af6283ac32458ba45b8cf5ed7126a90f4fbbf481b54510c73a3c201ae2cb566c",
+    "src/components/workspace/viewport/house/PrimitiveMesh.tsx": "db791c9cd797b7481f5c2fceacb8436cae4618db9bfa0bda7a5604869816b71f",
+    "src/components/workspace/viewport/house/glassLook.ts": "341e76d3f889a40d783ce369d3808f595c1ea9bbede1f9a89657c077aa3b76f7",
+    "src/lib/pbrLibrary.ts": "7c097d67e5092b72268f4e193e8a2d8a5b2d48ecada2c53e5d4423b73f93e368"
+  },
+  "evidenceHashes": {
+    ".v3-debug/second-live-b78f82e1b55e/final/recovered-scene.json": "38af84659ce9a14af0c71be5113d85c08acfe2f206d476f6988f838283dc2536",
+    "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/api-mansion.json": "a52cb85411a34b6e6ae901d612bb457bc5be14228a81dc3869ad8b88b29c6f6e",
+    "docs/architecture/architectural-blueprint-pipeline/second-live-production-webgl-verified/capture.json": "b61b5398b7fb7fe931bc1d9a7fc8e787fa403360a25dbb2a22be3d5f10690c44",
+    ".v3-debug/second-live-b78f82e1b55e/original/capture.json": "005958fb4aed9bc0747a14080719e14b4cdfc2420314293f22bf8fc563fd046c"
+  },
+  "offlineReplay": {
+    "command": "npm run recover:blueprint -- --source .v3-debug/second-live-b78f82e1b55e/original/capture.json --output /private/tmp/aiarchitect-quality-audit-b78f82e1b55e",
+    "fetchForbiddenByScript": true,
+    "outputKeptOutsideOriginalEvidence": true,
+    "scenePath": "/private/tmp/aiarchitect-quality-audit-b78f82e1b55e/recovered-scene.json"
+  },
+  "limits": [
+    "Historical full request and exact system prompt snapshot not captured",
+    "Existing production screenshots inspected; no new browser capture performed",
+    "No future authoring quality or construction valuation proven",
+    "Current source has pre-existing uncommitted work; no production source changed by investigation"
+  ]
+}

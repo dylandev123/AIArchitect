@@ -12,6 +12,8 @@ import { PROMPT_SUGGESTIONS } from "@/lib/promptSuggestions";
 import { AdminButton } from "@/components/admin/AdminButton";
 import { HeroInspiration } from "@/components/landing/HeroInspiration";
 import { AllProjectsDialog } from "@/components/landing/AllProjectsDialog";
+import { Design2DPlan } from "@/components/landing/Design2DPlan";
+import { RecoveredMansion } from "@/components/landing/RecoveredMansion";
 
 /** "A modern two-storey house with a pool…" → "A modern two-storey house with a". */
 function projectNameFromBrief(brief: string): string {
@@ -106,6 +108,8 @@ export default function Home() {
 
       {/* Hero */}
       <main className="relative flex-1 flex flex-col items-center px-4 sm:px-8 pb-24 pt-8 sm:pt-14">
+        {hydrated && <Design2DPlan />}
+        {process.env.NODE_ENV === "development" && hydrated && <RecoveredMansion />}
         <div className="grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-50 leading-[1.08]">

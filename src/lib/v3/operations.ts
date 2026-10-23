@@ -1,3 +1,4 @@
+import { revalidateArchitecturalScene } from './architecturalAcceptance';
 import { estateRouteBounds } from './routeGeometry';
 import { v3EstatePlanSchema, type V3EstatePlan } from './estatePlan';
 import { v3CompositionSchema, type V3Composition } from "./composition";
@@ -201,6 +202,11 @@ export function executeV3SceneOperations(scene: V3Scene, rawPlan: unknown): { ok
   // Edits persist only authored intent; derived support is re-resolved at compile/audit, never written here.
   const touched = new Set(plan.operations.flatMap((operation) => operation.op === "create" ? [operation.object.id] : operation.op === "duplicate" ? [operation.id, operation.target] : "target" in operation ? [operation.target] : []));
   const repaired = repairV3GeneratedScene(next, [], { reportDerivedSupport: false, scopeIds: touched });
+  if (original.metadata.architecturalValidation && !errors.length) {
+    const checked = revalidateArchitecturalScene(next);
+    return checked.ok ? {ok:true,scene:checked.scene,errors:[],warnings:checked.findings.map(f=>`${f.code}: ${f.message}`)}
+      : {ok:false,scene:original,errors:checked.findings.filter(f=>f.severity==='fatal').map(f=>`${f.code}: ${f.message}`)};
+  }
   const valid = validateV3Scene(next, { lenient: true }); errors.push(...valid.errors);
   if (authored.size && !errors.length) for (const issue of auditV3Interior(next)) if (issue.severity !== "advisory" && authored.has(issue.targetId)) errors.push(`${issue.code} [${issue.targetId}]: ${issue.message}`);
   // An explicit circulation edit must be buildable; existing circulation an envelope edit invalidates is only reported.

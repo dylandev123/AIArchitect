@@ -1,0 +1,395 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 60,
+      "depth": 60,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE TEST — A quiet L-shaped listening and reading home framing a pocket garden. An inner-edge gallery leads from the south entrance to the north studio. The court remains outside the actual concave shell.",
+      "character": "OFFLINE TEST — A quiet L-shaped listening and reading home framing a pocket garden. An inner-edge gallery leads from the south entrance to the north studio. The court remains outside the actual concave shell.",
+      "siteAccess": [],
+      "requirements": [],
+      "program": [
+        {
+          "id": "listening-house-program",
+          "role": "Listening home",
+          "kind": "building",
+          "objectIds": [
+            "listening-house"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-listening-house",
+            "objectId": "listening-house",
+            "role": "Listening home"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "listening-house-listening-door-entry",
+            "objectId": "listening-house",
+            "openingId": "listening-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "listening-house-roof"
+        ],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "verticalCirculationIds": [],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "listening-house",
+        "type": "building-mass",
+        "semanticRole": "Listening home",
+        "label": "Listening home",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 12,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          3.6,
+          12
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "listening-edge-0",
+                "type": "line",
+                "start": [
+                  -8,
+                  -6
+                ],
+                "end": [
+                  8,
+                  -6
+                ]
+              },
+              {
+                "id": "listening-edge-1",
+                "type": "line",
+                "start": [
+                  8,
+                  -6
+                ],
+                "end": [
+                  8,
+                  6
+                ]
+              },
+              {
+                "id": "listening-edge-2",
+                "type": "line",
+                "start": [
+                  8,
+                  6
+                ],
+                "end": [
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "listening-edge-3",
+                "type": "line",
+                "start": [
+                  2,
+                  6
+                ],
+                "end": [
+                  2,
+                  0
+                ]
+              },
+              {
+                "id": "listening-edge-4",
+                "type": "line",
+                "start": [
+                  2,
+                  0
+                ],
+                "end": [
+                  -8,
+                  0
+                ]
+              },
+              {
+                "id": "listening-edge-5",
+                "type": "line",
+                "start": [
+                  -8,
+                  0
+                ],
+                "end": [
+                  -8,
+                  -6
+                ]
+              }
+            ],
+            "operations": []
+          },
+          "openings": [
+            {
+              "id": "listening-door",
+              "facade": "south",
+              "segmentId": "listening-edge-2",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.6666666666666666,
+              "end": 1,
+              "height": 2.4,
+              "serves": "listening-entry"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "listening-house-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of listening-house",
+        "label": "Listening home roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 3.6,
+          "width": 16,
+          "depth": 12,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            3.725,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.25,
+          12
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "listening-house",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "listening-floor",
+          "label": "Listening floor",
+          "semanticRole": "Listening floor",
+          "hostMassId": "listening-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "listening-studio",
+          "label": "listening studio",
+          "semanticRole": "listening studio",
+          "program": "living reading studio",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": -3,
+            "z": -3,
+            "width": 10,
+            "depth": 6
+          }
+        },
+        {
+          "id": "listening-gallery",
+          "label": "listening gallery",
+          "semanticRole": "listening gallery",
+          "program": "circulation gallery",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": 3,
+            "z": -3,
+            "width": 2,
+            "depth": 6
+          }
+        },
+        {
+          "id": "listening-kitchen",
+          "label": "listening kitchen",
+          "semanticRole": "listening kitchen",
+          "program": "kitchen",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": 6,
+            "z": -3,
+            "width": 4,
+            "depth": 6
+          }
+        },
+        {
+          "id": "listening-entry",
+          "label": "listening entry",
+          "semanticRole": "listening entry",
+          "program": "entry hall",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": 3,
+            "z": 3,
+            "width": 2,
+            "depth": 6
+          }
+        },
+        {
+          "id": "listening-bedroom",
+          "label": "listening bedroom",
+          "semanticRole": "listening bedroom",
+          "program": "bedroom",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": 6,
+            "z": 2,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "listening-bath",
+          "label": "listening bath",
+          "semanticRole": "listening bath",
+          "program": "bathroom",
+          "storeyId": "listening-floor",
+          "hostMassId": "listening-house",
+          "footprint": {
+            "x": 6,
+            "z": 5,
+            "width": 4,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": []
+    },
+    "relationships": [
+      {
+        "from": "listening-gallery",
+        "to": "listening-entry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "listening-gallery",
+        "to": "listening-studio",
+        "kind": "adjacent"
+      },
+      {
+        "from": "listening-gallery",
+        "to": "listening-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "listening-entry",
+        "to": "listening-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "listening-entry",
+        "to": "listening-bath",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "complete",
+        "diagnostics": []
+      }
+    }
+  }
+}

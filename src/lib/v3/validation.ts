@@ -1,3 +1,4 @@
+import { estateRouteClipsEntrance, estateRouteSupported } from './routeGeometry';
 import { effectiveV3Scene } from './derivedSupport';
 import { BLOCKING_FOOTPRINT_CODES, curvedMassConflicts } from './architectureSafety';
 import { footprintDiagnostics } from './footprintDiagnostics';
@@ -45,7 +46,7 @@ function overlap(a: V3SceneObject, b: V3SceneObject): boolean {
 export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {}): V3Validation {
   const issues: V3Issue[] = [];
   const texts = new Map<V3Issue, string>();
-  const add = (severity: V3IssueSeverity, code: string, targetId: string, message: string, text = message) => { const item = { severity, code, targetId, message }; issues.push(item); texts.set(item, text); };
+  const add = (severity: V3IssueSeverity, code: string, targetId: string, message: string, text = message, targetIds?:string[]) => { const item = { severity, code, targetId, message, ...(targetIds?{targetIds}:{}) }; issues.push(item); texts.set(item, text); };
   const finish = (): V3Validation => {
     const errors: string[] = [], warnings: string[] = [];
     for (const item of issues) {
@@ -111,7 +112,12 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
   const relationshipIds = v3RelationshipTargetIds(s);
   for (const r of s.relationships ?? []) if (!relationshipIds.has(r.from) || !relationshipIds.has(r.to)) add("physical", "MISSING_RELATIONSHIP_OBJECT", `${r.from}->${r.to}`, `Relationship ${r.kind} references a missing object.`);
   for (const item of interiorIssues.filter((candidate) => candidate.severity !== "fatal")) add(item.severity, item.code, item.targetId, item.message);
-  for (const warning of v3RenderWarnings(s.objects)) add("advisory", warning.code, warning.targetId, warning.message);
+  // Supported estate corridors are compiled once from authoritative route
+  // geometry before object dispatch. Their selectable owner box never reaches
+  // generic rendering. Keep fallback warnings for every other object; estate
+  // audits and construction receipts still independently verify these ribbons.
+  const estateSurfaceIds = new Set(issues.some(i => i.code === 'INVALID_ESTATE_PLAN') ? [] : s.estatePlan?.circulation.filter(r => estateRouteSupported(s, r)).flatMap(r => r.via) ?? []);
+  for (const warning of v3RenderWarnings(s.objects.filter(o => !(["path", "driveway"].includes(o.type) && estateSurfaceIds.has(o.id))))) add("advisory", warning.code, warning.targetId, warning.message);
   // Persisted hierarchy is mandatory for new V3 output, but older saved scenes remain readable and can be
   // re-rendered through the deterministic legacy adapter without another model request.
   if (s.siteHierarchy) {
@@ -142,6 +148,6 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
   // Independent construction failures must not hide estate diagnostics. Only malformed
   // prerequisites prevent this audit; an unresolved canopy or roof does not.
   const estateAuditSafe = !issues.some(issue => issue.severity === 'fatal' && !BLOCKING_FOOTPRINT_CODES.has(issue.code));
-  for (const finding of estateAuditSafe ? auditV3EstatePlan(s) : []) add(["ESTATE_FORM_UNBUILT","ESTATE_ROUTE_BLOCKED","ESTATE_POOL_CROSSING","ESTATE_ROUTE_UNSUPPORTED","ESTATE_ACCESS_POINT_MISSING"].includes(finding.code)?"fatal":"advisory", finding.code, finding.targetIds[0] ?? "estatePlan", finding.message);
+  for (const finding of estateAuditSafe ? auditV3EstatePlan(s) : []) add(finding.code==='ESTATE_ROUTE_BLOCKED'&&estateRouteClipsEntrance(s,finding.targetIds)?"physical":["ESTATE_FORM_UNBUILT","ESTATE_ROUTE_BLOCKED","ESTATE_POOL_CROSSING","ESTATE_ROUTE_UNSUPPORTED","ESTATE_ACCESS_POINT_MISSING"].includes(finding.code)?"fatal":"advisory", finding.code, finding.targetIds[0] ?? "estatePlan", finding.message, finding.message, finding.targetIds);
   return finish();
 }

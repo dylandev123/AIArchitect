@@ -1,5 +1,5 @@
 import { resolveFootprint } from './footprint';
-import { endpointFits, estateEndpoint, estateRouteAccess, estateRouteSupported, estateRouteSegments, siteAccessFits, spatialPlanPoints, spatialParts } from './routeGeometry';
+import { endpointFits, estateEndpoint, estateRouteAccess, estateRouteSupported, estateRouteSegments, estateRouteVertices, siteAccessFits, spatialPlanPoints, spatialParts } from './routeGeometry';
 import { estateAccessEvidence, isEstateDestination, type EstateAccessEvidence } from './estateAccess';
 import { authoredOverlap, realizesForm, authoredSeparation } from './authoredPlan';
 import type { V3Scene, V3SceneObject } from './scene';
@@ -71,10 +71,7 @@ export function auditEstateSpatial(input: V3Scene, accessEvidence?: EstateAccess
       if (!water && !solid) continue;
       if (spatialParts(scene,object).some(part=>segments.some(segment => authoredOverlap(segment,part)>.02 && (water || getObjectTopY(part)>segment.transform.position[1] && getObjectBaseY(part)<segment.transform.position[1]+2)))) add(water?'ESTATE_POOL_CROSSING':'ESTATE_ROUTE_BLOCKED',[...route.via,object.id],`${route.id}: route width intersects ${object.id}; an authored detour or explicit supported bridge is required.`);
     }
-    if (segments.some(s => {
-      const [x,,z]=s.transform.position, [w,,d]=s.dimensions, a=s.transform.rotation[1];
-      return Math.abs(x)+(Math.abs(Math.cos(a))*w+Math.abs(Math.sin(a))*d)/2>scene.site.width/2 || Math.abs(z)+(Math.abs(Math.sin(a))*w+Math.abs(Math.cos(a))*d)/2>scene.site.depth/2;
-    })) add('ESTATE_ACCESS_DISCONNECTED',route.via,`${route.id}: route corridor leaves the site.`);
+    if (estateRouteVertices(scene,route).some((v,i)=>i%3===0?Math.abs(v)>scene.site.width/2+1e-7:i%3===2?Math.abs(v)>scene.site.depth/2+1e-7:false)) add('ESTATE_ACCESS_DISCONNECTED',route.via,`${route.id}: route corridor leaves the site.`);
   }
   return out;
 }

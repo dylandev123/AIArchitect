@@ -1,0 +1,755 @@
+{
+  "concept": "OFFLINE REFERENCE — Two garden courts separate parallel two-storey wings, joined by an inhabited stair bridge. Continuous internal galleries connect the rooms without passing through bedrooms. The aligned upper bridge connects the private wings. A one-storey east library volume touches the ground wing and stays absent on the upper floor. This independently authored H arrangement proves articulated massing and stack fidelity, not generated design quality.",
+  "character": "OFFLINE REFERENCE — Two garden courts separate parallel two-storey wings, joined by an inhabited stair bridge. Continuous internal galleries connect the rooms without passing through bedrooms. The aligned upper bridge connects the private wings. A one-storey east library volume touches the ground wing and stays absent on the upper floor. This independently authored H arrangement proves articulated massing and stack fidelity, not generated design quality.",
+  "site": {
+    "width": 140,
+    "depth": 120,
+    "baseElevation": 0,
+    "groundColor": "#61754b",
+    "north": "-z",
+    "access": []
+  },
+  "entrances": [
+    {
+      "id": "garden-wings-bridge-entry-entry",
+      "objectId": "garden-wings",
+      "openingId": "bridge-entry",
+      "level": 0
+    },
+    {
+      "id": "garden-wings-north-gallery-entry-entry",
+      "objectId": "garden-wings",
+      "openingId": "north-gallery-entry",
+      "level": 0
+    },
+    {
+      "id": "low-library-library-door-entry",
+      "objectId": "low-library",
+      "openingId": "library-door",
+      "level": 0
+    }
+  ],
+  "verticalCirculation": [
+    {
+      "id": "bridge-stair",
+      "type": "stair",
+      "hostMassId": "garden-wings",
+      "fromLevel": 0,
+      "toLevel": 1,
+      "footprint": {
+        "x": 0,
+        "z": 0,
+        "width": 10,
+        "depth": 4
+      },
+      "stairType": "straight",
+      "direction": "east"
+    },
+    {
+      "id": "bridge-lift",
+      "type": "lift",
+      "hostMassId": "garden-wings",
+      "fromLevel": 0,
+      "toLevel": 1,
+      "footprint": {
+        "x": -8,
+        "z": 0,
+        "width": 3,
+        "depth": 3
+      }
+    }
+  ],
+  "requirements": [],
+  "program": [
+    {
+      "id": "garden-wings-program",
+      "role": "Garden wings residence",
+      "kind": "building",
+      "objectIds": [
+        "garden-wings"
+      ],
+      "source": "design"
+    },
+    {
+      "id": "low-library-program",
+      "role": "Single-storey library wing",
+      "kind": "building",
+      "objectIds": [
+        "low-library"
+      ],
+      "source": "design"
+    }
+  ],
+  "zones": [],
+  "forms": [],
+  "relationships": [
+    {
+      "id": "joined-library",
+      "intent": "Single-storey library meets the east wing at the shared ground datum",
+      "from": "garden-wings",
+      "to": "low-library",
+      "kind": "connects"
+    }
+  ],
+  "considerations": [],
+  "roomAdjacencies": [
+    {
+      "from": "ground-stair-hall",
+      "to": "ground-west-gallery"
+    },
+    {
+      "from": "ground-west-gallery",
+      "to": "ground-west-0"
+    },
+    {
+      "from": "ground-west-gallery",
+      "to": "ground-west-1"
+    },
+    {
+      "from": "ground-west-gallery",
+      "to": "ground-west-2"
+    },
+    {
+      "from": "ground-west-gallery",
+      "to": "ground-west-3"
+    },
+    {
+      "from": "ground-stair-hall",
+      "to": "ground-east-gallery"
+    },
+    {
+      "from": "ground-east-gallery",
+      "to": "ground-east-0"
+    },
+    {
+      "from": "ground-east-gallery",
+      "to": "ground-east-1"
+    },
+    {
+      "from": "ground-east-gallery",
+      "to": "ground-east-2"
+    },
+    {
+      "from": "ground-east-gallery",
+      "to": "ground-east-3"
+    },
+    {
+      "from": "upper-stair-hall",
+      "to": "upper-west-gallery"
+    },
+    {
+      "from": "upper-west-gallery",
+      "to": "upper-west-0"
+    },
+    {
+      "from": "upper-west-gallery",
+      "to": "upper-west-1"
+    },
+    {
+      "from": "upper-west-gallery",
+      "to": "upper-west-2"
+    },
+    {
+      "from": "upper-west-gallery",
+      "to": "upper-west-3"
+    },
+    {
+      "from": "upper-stair-hall",
+      "to": "upper-east-gallery"
+    },
+    {
+      "from": "upper-east-gallery",
+      "to": "upper-east-0"
+    },
+    {
+      "from": "upper-east-gallery",
+      "to": "upper-east-1"
+    },
+    {
+      "from": "upper-east-gallery",
+      "to": "upper-east-2"
+    },
+    {
+      "from": "upper-east-gallery",
+      "to": "upper-east-3"
+    }
+  ],
+  "format": "v3-architectural-plan-1",
+  "buildings": [
+    {
+      "id": "garden-wings",
+      "label": "Garden wings residence",
+      "role": "Garden wings residence",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "articulated",
+        "width": 48,
+        "depth": 36,
+        "operations": [
+          {
+            "id": "north-court",
+            "facade": "north",
+            "start": 0.25,
+            "end": 0.75,
+            "depth": 14,
+            "type": "recess"
+          },
+          {
+            "id": "south-court",
+            "facade": "south",
+            "start": 0.25,
+            "end": 0.75,
+            "depth": 14,
+            "type": "recess"
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "id": "wings-ground",
+          "label": "Public garden wings",
+          "role": "Public garden wings",
+          "height": 4.2,
+          "spaces": [
+            {
+              "id": "ground-stair-hall",
+              "label": "Entrance and stair bridge",
+              "role": "Entrance and stair bridge",
+              "program": "stair circulation gallery",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 24,
+                "depth": 8
+              }
+            },
+            {
+              "id": "ground-west-gallery",
+              "label": "west wing gallery",
+              "role": "west wing gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": -13.5,
+                "z": 0,
+                "width": 3,
+                "depth": 36
+              }
+            },
+            {
+              "id": "ground-west-0",
+              "label": "west salon",
+              "role": "west salon",
+              "program": "living",
+              "footprint": {
+                "x": -19.5,
+                "z": -13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-west-1",
+              "label": "west dining",
+              "role": "west dining",
+              "program": "dining",
+              "footprint": {
+                "x": -19.5,
+                "z": -4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-west-2",
+              "label": "west kitchen",
+              "role": "west kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": -19.5,
+                "z": 4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-west-3",
+              "label": "west service",
+              "role": "west service",
+              "program": "service",
+              "footprint": {
+                "x": -19.5,
+                "z": 13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-east-gallery",
+              "label": "east wing gallery",
+              "role": "east wing gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": 13.5,
+                "z": 0,
+                "width": 3,
+                "depth": 36
+              }
+            },
+            {
+              "id": "ground-east-0",
+              "label": "east salon",
+              "role": "east salon",
+              "program": "living",
+              "footprint": {
+                "x": 19.5,
+                "z": -13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-east-1",
+              "label": "east dining",
+              "role": "east dining",
+              "program": "dining",
+              "footprint": {
+                "x": 19.5,
+                "z": -4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-east-2",
+              "label": "east kitchen",
+              "role": "east kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": 19.5,
+                "z": 4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "ground-east-3",
+              "label": "east service",
+              "role": "east service",
+              "program": "service",
+              "footprint": {
+                "x": 19.5,
+                "z": 13.5,
+                "width": 9,
+                "depth": 9
+              }
+            }
+          ]
+        },
+        {
+          "id": "wings-upper",
+          "label": "Private upper wings",
+          "role": "Private upper wings",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "upper-stair-hall",
+              "label": "Upper bridge and landing",
+              "role": "Upper bridge and landing",
+              "program": "stair circulation gallery",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 24,
+                "depth": 8
+              }
+            },
+            {
+              "id": "upper-west-gallery",
+              "label": "west wing gallery",
+              "role": "west wing gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": -13.5,
+                "z": 0,
+                "width": 3,
+                "depth": 36
+              }
+            },
+            {
+              "id": "upper-west-0",
+              "label": "west bedroom",
+              "role": "west bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": -19.5,
+                "z": -13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-west-1",
+              "label": "west dressing and bath",
+              "role": "west dressing and bath",
+              "program": "bathroom dressing",
+              "footprint": {
+                "x": -19.5,
+                "z": -4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-west-2",
+              "label": "west study",
+              "role": "west study",
+              "program": "study",
+              "footprint": {
+                "x": -19.5,
+                "z": 4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-west-3",
+              "label": "west bedroom",
+              "role": "west bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": -19.5,
+                "z": 13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-east-gallery",
+              "label": "east wing gallery",
+              "role": "east wing gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": 13.5,
+                "z": 0,
+                "width": 3,
+                "depth": 36
+              }
+            },
+            {
+              "id": "upper-east-0",
+              "label": "east bedroom",
+              "role": "east bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": 19.5,
+                "z": -13.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-east-1",
+              "label": "east dressing and bath",
+              "role": "east dressing and bath",
+              "program": "bathroom dressing",
+              "footprint": {
+                "x": 19.5,
+                "z": -4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-east-2",
+              "label": "east study",
+              "role": "east study",
+              "program": "study",
+              "footprint": {
+                "x": 19.5,
+                "z": 4.5,
+                "width": 9,
+                "depth": 9
+              }
+            },
+            {
+              "id": "upper-east-3",
+              "label": "east bedroom",
+              "role": "east bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": 19.5,
+                "z": 13.5,
+                "width": 9,
+                "depth": 9
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "garden-wings-roof",
+      "accessOpenings": [
+        {
+          "id": "bridge-entry",
+          "facade": "south",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.46,
+          "end": 0.54,
+          "height": 2.4,
+          "serves": "ground-stair-hall"
+        },
+        {
+          "id": "north-gallery-entry",
+          "facade": "north",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.46,
+          "end": 0.54,
+          "height": 2.4,
+          "operation": "sliding",
+          "serves": "ground-stair-hall"
+        }
+      ]
+    },
+    {
+      "id": "low-library",
+      "label": "Single-storey library wing",
+      "role": "Single-storey library wing",
+      "location": {
+        "x": 32,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 16,
+        "depth": 8
+      },
+      "storeys": [
+        {
+          "id": "library-ground",
+          "label": "Library level",
+          "role": "Library level",
+          "height": 4.2,
+          "spaces": [
+            {
+              "id": "library-reading",
+              "label": "Garden reading room",
+              "role": "Garden reading room",
+              "program": "library",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 16,
+                "depth": 8
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "low-library-roof",
+      "accessOpenings": [
+        {
+          "id": "library-door",
+          "facade": "south",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.4,
+          "end": 0.6,
+          "height": 2.4,
+          "serves": "library-reading"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "north-garden",
+      "label": "North planted court",
+      "role": "North planted court",
+      "type": "landscape-zone",
+      "location": {
+        "x": 0,
+        "z": -11,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 16,
+      "depth": 8,
+      "footprint": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "edge-0",
+            "type": "line",
+            "start": [
+              -8,
+              -4
+            ],
+            "end": [
+              8,
+              -4
+            ]
+          },
+          {
+            "id": "edge-1",
+            "type": "line",
+            "start": [
+              8,
+              -4
+            ],
+            "end": [
+              7,
+              4
+            ]
+          },
+          {
+            "id": "edge-2",
+            "type": "line",
+            "start": [
+              7,
+              4
+            ],
+            "end": [
+              -7,
+              4
+            ]
+          },
+          {
+            "id": "edge-3",
+            "type": "line",
+            "start": [
+              -7,
+              4
+            ],
+            "end": [
+              -8,
+              -4
+            ]
+          }
+        ],
+        "operations": []
+      }
+    },
+    {
+      "id": "north-court-rim",
+      "label": "North courtyard perimeter",
+      "role": "North courtyard perimeter",
+      "type": "courtyard",
+      "location": {
+        "x": 0,
+        "z": -11,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 20,
+      "depth": 12,
+      "footprint": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "edge-0",
+            "type": "line",
+            "start": [
+              -10,
+              -6
+            ],
+            "end": [
+              10,
+              -6
+            ]
+          },
+          {
+            "id": "edge-1",
+            "type": "line",
+            "start": [
+              10,
+              -6
+            ],
+            "end": [
+              8,
+              6
+            ]
+          },
+          {
+            "id": "edge-2",
+            "type": "line",
+            "start": [
+              8,
+              6
+            ],
+            "end": [
+              -8,
+              6
+            ]
+          },
+          {
+            "id": "edge-3",
+            "type": "line",
+            "start": [
+              -8,
+              6
+            ],
+            "end": [
+              -10,
+              -6
+            ]
+          }
+        ],
+        "operations": []
+      }
+    },
+    {
+      "id": "south-arrival",
+      "label": "Sheltered entry court",
+      "role": "Sheltered entry court",
+      "type": "terrace",
+      "location": {
+        "x": 0,
+        "z": 12,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 20,
+      "depth": 14,
+      "footprint": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "entry-court",
+            "type": "arc",
+            "center": [
+              0,
+              0
+            ],
+            "radius": 7,
+            "startAngle": 0,
+            "sweep": 360
+          }
+        ],
+        "operations": []
+      }
+    },
+    {
+      "id": "library-terrace",
+      "label": "Library garden terrace",
+      "role": "Library garden terrace",
+      "type": "terrace",
+      "location": {
+        "x": 32,
+        "z": 11,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 20,
+      "depth": 10
+    }
+  ],
+  "connections": []
+}

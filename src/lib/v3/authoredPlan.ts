@@ -4,7 +4,7 @@ import { footprint } from './reviewGeometry';
 import { flatPolygon } from '@/lib/house/geometry/mesh';
 export type PlanPoint=[number,number];
 export function authoredPlan(o:V3SceneObject,floor=0):PlanPoint[]{
- const fp=o.type==='building-mass'?resolveFootprint(o,floor):undefined;
+ const fp=resolveFootprint(o,floor);
  if(!fp)return footprint(o);
  const c=Math.cos(o.transform.rotation[1]),s=Math.sin(o.transform.rotation[1]);
  return fp.polygon.map(([x,z])=>[o.transform.position[0]+(x+fp.frame.x)*c+(z+fp.frame.z)*s,o.transform.position[2]-(x+fp.frame.x)*s+(z+fp.frame.z)*c]);

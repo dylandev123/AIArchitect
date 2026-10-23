@@ -1,0 +1,330 @@
+{
+  "materials": [
+    {
+      "id": "limestone",
+      "color": "#d5c7ad",
+      "roughness": 0.78,
+      "surface": "stone"
+    },
+    {
+      "id": "copper",
+      "color": "#47665c",
+      "roughness": 0.55,
+      "metalness": 0.55,
+      "surface": "metal"
+    },
+    {
+      "id": "terracotta",
+      "color": "#ac6548",
+      "roughness": 0.8,
+      "surface": "stone"
+    },
+    {
+      "id": "water",
+      "color": "#2f8594",
+      "roughness": 0.1,
+      "opacity": 0.8,
+      "surface": "water"
+    },
+    {
+      "id": "paving",
+      "color": "#c7bda5",
+      "roughness": 0.82,
+      "surface": "paving"
+    },
+    {
+      "id": "court-paving",
+      "color": "#b8ad98",
+      "roughness": 0.74,
+      "surface": "paving"
+    },
+    {
+      "id": "meadow",
+      "color": "#61754b",
+      "roughness": 0.9,
+      "surface": "grass"
+    },
+    {
+      "id": "timber",
+      "color": "#84654b",
+      "roughness": 0.72,
+      "surface": "wood"
+    }
+  ],
+  "buildings": [
+    {
+      "id": "crescent-house",
+      "materialId": "limestone",
+      "roof": {
+        "form": "flat",
+        "materialId": "copper",
+        "pitchDegrees": 0,
+        "overhang": 0.4,
+        "thickness": 0.25
+      },
+      "facade": {
+        "massHierarchy": "primary",
+        "openings": [
+          {
+            "id": "salon-glass",
+            "type": "glazing-zone",
+            "facade": "east",
+            "segmentId": "inhabited-arc",
+            "start": 0.06,
+            "end": 0.94,
+            "heightRatio": 0.76,
+            "floors": "ground"
+          },
+          {
+            "id": "suite-balcony-door",
+            "type": "glazed-door",
+            "facade": "east",
+            "segmentId": "inhabited-arc",
+            "start": 0.3,
+            "end": 0.5,
+            "height": 2.8,
+            "floors": "upper",
+            "operation": "sliding",
+            "serves": "arc-balcony"
+          }
+        ],
+        "mainEntry": {
+          "openingId": "house-entry",
+          "canopyDepth": 1.6
+        },
+        "assemblies": [
+          {
+            "id": "arc-balcony",
+            "intent": "Private upper arc balcony",
+            "parts": [
+              {
+                "id": "deck",
+                "type": "slab",
+                "facade": "east",
+                "segmentId": "inhabited-arc",
+                "start": 0.25,
+                "end": 0.65,
+                "depth": 2.4,
+                "level": 1,
+                "elevation": 0.06,
+                "thickness": 0.2
+              },
+              {
+                "id": "guard",
+                "type": "railing",
+                "slabId": "deck",
+                "edges": [
+                  "outer",
+                  "start",
+                  "end"
+                ],
+                "height": 1.1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "orchard-atelier",
+      "materialId": "limestone",
+      "roof": {
+        "form": "hip",
+        "materialId": "terracotta",
+        "pitchDegrees": 25,
+        "overhang": 0.6,
+        "thickness": 0.25
+      },
+      "facade": {
+        "massHierarchy": "secondary",
+        "openings": [],
+        "assemblies": [
+          {
+            "id": "atelier-portico",
+            "intent": "Sheltered atelier entrance",
+            "parts": [
+              {
+                "id": "cover",
+                "type": "slab",
+                "facade": "north",
+                "start": 0.1,
+                "end": 0.9,
+                "depth": 2.4,
+                "elevation": 3,
+                "thickness": 0.2
+              },
+              {
+                "id": "left-post",
+                "type": "post",
+                "facade": "north",
+                "at": 0.15,
+                "depth": 2.1,
+                "height": 3,
+                "size": 0.2
+              },
+              {
+                "id": "right-post",
+                "type": "post",
+                "facade": "north",
+                "at": 0.85,
+                "depth": 2.1,
+                "height": 3,
+                "size": 0.2
+              },
+              {
+                "id": "lintel",
+                "type": "beam",
+                "facade": "north",
+                "start": 0.1,
+                "end": 0.9,
+                "depth": 2.1,
+                "height": 0.22,
+                "elevation": 2.8,
+                "thickness": 0.2
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "arrival-court",
+      "materialId": "court-paving"
+    },
+    {
+      "id": "pool-deck",
+      "materialId": "timber"
+    },
+    {
+      "id": "long-pool",
+      "materialId": "water"
+    },
+    {
+      "id": "orchard",
+      "materialId": "meadow"
+    },
+    {
+      "id": "poolside-shade",
+      "materialId": "timber",
+      "canopyStyle": "slatted"
+    },
+    {
+      "id": "east-garden",
+      "materialId": "meadow"
+    },
+    {
+      "id": "arrival-shade",
+      "materialId": "timber",
+      "canopyStyle": "slatted"
+    },
+    {
+      "id": "arrival-shade-floor",
+      "materialId": "paving"
+    }
+  ],
+  "connections": [
+    {
+      "id": "gate-arrival",
+      "materialId": "paving"
+    },
+    {
+      "id": "principal-approach",
+      "materialId": "paving"
+    },
+    {
+      "id": "atelier-approach",
+      "materialId": "paving"
+    },
+    {
+      "id": "garden-approach",
+      "materialId": "paving"
+    },
+    {
+      "id": "court-garden-link",
+      "materialId": "paving"
+    }
+  ],
+  "partitions": [
+    {
+      "id": "service-partition",
+      "storeyId": "house-ground",
+      "roomAId": "kitchen",
+      "roomBId": "service-room",
+      "boundaryId": "boundary:kitchen|service-room",
+      "partitionType": "wall",
+      "semanticRole": "Service separation"
+    },
+    {
+      "id": "suite-gallery-wall",
+      "storeyId": "house-upper",
+      "roomAId": "arc-suite",
+      "roomBId": "upper-gallery",
+      "boundaryId": "boundary:arc-suite|upper-gallery",
+      "partitionType": "wall",
+      "semanticRole": "Private upper-floor separation"
+    },
+    {
+      "id": "dressing-gallery-wall",
+      "storeyId": "house-upper",
+      "roomAId": "north-dressing",
+      "roomBId": "upper-gallery",
+      "boundaryId": "boundary:north-dressing|upper-gallery",
+      "partitionType": "wall",
+      "semanticRole": "Private upper-floor separation"
+    },
+    {
+      "id": "bath-dressing-wall",
+      "storeyId": "house-upper",
+      "roomAId": "family-bath",
+      "roomBId": "north-dressing",
+      "boundaryId": "boundary:family-bath|north-dressing",
+      "partitionType": "wall",
+      "semanticRole": "Private upper-floor separation"
+    },
+    {
+      "id": "bath-gallery-wall",
+      "storeyId": "house-upper",
+      "roomAId": "family-bath",
+      "roomBId": "upper-gallery",
+      "boundaryId": "boundary:family-bath|upper-gallery",
+      "partitionType": "wall",
+      "semanticRole": "Private upper-floor separation"
+    }
+  ],
+  "doors": [
+    {
+      "id": "service-door",
+      "partitionId": "service-partition",
+      "offset": 3,
+      "width": 0.9,
+      "program": "door",
+      "semanticRole": "Service access"
+    },
+    {
+      "id": "suite-gallery-door",
+      "partitionId": "suite-gallery-wall",
+      "offset": 7,
+      "width": 1.2,
+      "program": "door",
+      "semanticRole": "Private suite access"
+    },
+    {
+      "id": "dressing-gallery-door",
+      "partitionId": "dressing-gallery-wall",
+      "offset": 12,
+      "width": 0.9,
+      "program": "door",
+      "semanticRole": "Dressing access from gallery"
+    },
+    {
+      "id": "bath-dressing-door",
+      "partitionId": "bath-dressing-wall",
+      "offset": 3,
+      "width": 0.9,
+      "program": "door",
+      "semanticRole": "Bath access through dressing"
+    }
+  ]
+}

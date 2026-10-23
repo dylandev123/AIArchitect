@@ -1,0 +1,491 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 64,
+      "depth": 48,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE REFERENCE — A Caribbean vernacular veranda house with a simple pitched metal roof. A shaded south veranda and a continuous entry gallery face the garden, while the living room separates the private bedroom/bath from kitchen and utility. The style is carried by the veranda, low roof and shaded openings, without imitating a mansion.",
+      "character": "OFFLINE REFERENCE — A Caribbean vernacular veranda house with a simple pitched metal roof. A shaded south veranda and a continuous entry gallery face the garden, while the living room separates the private bedroom/bath from kitchen and utility. The style is carried by the veranda, low roof and shaded openings, without imitating a mansion.",
+      "siteAccess": [
+        {
+          "id": "veranda-gate",
+          "boundary": "south",
+          "point": [
+            0,
+            0,
+            24
+          ]
+        }
+      ],
+      "requirements": [],
+      "program": [
+        {
+          "id": "veranda-home-program",
+          "role": "Caribbean veranda home",
+          "kind": "building",
+          "objectIds": [
+            "veranda-home"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [
+        {
+          "id": "veranda-arrival",
+          "purpose": "Garden gate to veranda",
+          "from": "veranda-gate",
+          "to": "veranda-deck",
+          "via": [
+            "route-0"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "point": [
+                0,
+                0,
+                10
+              ]
+            },
+            "use": "pedestrian",
+            "width": 1.4,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "veranda-entry-link",
+          "purpose": "Veranda to entry gallery",
+          "from": "veranda-deck",
+          "to": "veranda-home",
+          "via": [
+            "route-1"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                9
+              ]
+            },
+            "to": {
+              "entranceId": "veranda-home-veranda-entry-entry"
+            },
+            "use": "pedestrian",
+            "width": 1.4,
+            "waypoints": []
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-veranda-home",
+            "objectId": "veranda-home",
+            "role": "Caribbean veranda home"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "veranda-home-veranda-entry-entry",
+            "objectId": "veranda-home",
+            "openingId": "veranda-entry",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "veranda-home-roof"
+        ],
+        "outdoorObjectIds": [
+          "veranda-deck"
+        ],
+        "routeIds": [
+          "veranda-arrival",
+          "veranda-entry-link"
+        ],
+        "verticalCirculationIds": [],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "veranda-home",
+        "type": "building-mass",
+        "semanticRole": "Caribbean veranda home",
+        "label": "Caribbean veranda home",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 12,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          3.6,
+          12
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "veranda-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.45,
+              "end": 0.55,
+              "height": 2.4,
+              "serves": "veranda-gallery"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "veranda-deck",
+        "type": "terrace",
+        "semanticRole": "Shaded veranda floor",
+        "label": "Shaded veranda floor",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 8,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 4,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.01,
+          4
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "route-0",
+        "type": "path",
+        "semanticRole": "Garden gate to veranda",
+        "label": "Garden gate to veranda",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            17
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          1.4,
+          0.01,
+          14
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-1",
+        "type": "path",
+        "semanticRole": "Veranda to entry gallery",
+        "label": "Veranda to entry gallery",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            2.220446049250313e-16,
+            0.05,
+            7.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          1.4000000000000004,
+          0.01,
+          3
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "veranda-floor",
+          "label": "Veranda and garden floor",
+          "semanticRole": "Veranda and garden floor",
+          "hostMassId": "veranda-home",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "veranda-gallery",
+          "label": "veranda gallery",
+          "semanticRole": "veranda gallery",
+          "program": "entry circulation gallery",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": 0,
+            "z": 5,
+            "width": 16,
+            "depth": 2
+          }
+        },
+        {
+          "id": "veranda-salon",
+          "label": "veranda salon",
+          "semanticRole": "veranda salon",
+          "program": "living dining",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": 0,
+            "z": -1,
+            "width": 8,
+            "depth": 10
+          }
+        },
+        {
+          "id": "veranda-bedroom",
+          "label": "veranda bedroom",
+          "semanticRole": "veranda bedroom",
+          "program": "bedroom",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": -6,
+            "z": 1,
+            "width": 4,
+            "depth": 6
+          }
+        },
+        {
+          "id": "veranda-bath",
+          "label": "veranda bath",
+          "semanticRole": "veranda bath",
+          "program": "bathroom dressing",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": -6,
+            "z": -4,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "veranda-kitchen",
+          "label": "veranda kitchen",
+          "semanticRole": "veranda kitchen",
+          "program": "kitchen",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": 6,
+            "z": 1,
+            "width": 4,
+            "depth": 6
+          }
+        },
+        {
+          "id": "veranda-utility",
+          "label": "veranda utility",
+          "semanticRole": "veranda utility",
+          "program": "utility pantry",
+          "storeyId": "veranda-floor",
+          "hostMassId": "veranda-home",
+          "footprint": {
+            "x": 6,
+            "z": -4,
+            "width": 4,
+            "depth": 4
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": []
+    },
+    "relationships": [
+      {
+        "from": "veranda-gallery",
+        "to": "veranda-salon",
+        "kind": "adjacent"
+      },
+      {
+        "from": "veranda-gallery",
+        "to": "veranda-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "veranda-gallery",
+        "to": "veranda-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "veranda-bedroom",
+        "to": "veranda-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "veranda-kitchen",
+        "to": "veranda-utility",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "planDeferredFeatureHeights": [
+        "veranda-deck"
+      ],
+      "planUnresolved": [],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 6,
+          "potentialAccessRoomIds": [
+            "veranda-bath",
+            "veranda-bedroom",
+            "veranda-gallery",
+            "veranda-kitchen",
+            "veranda-salon",
+            "veranda-utility"
+          ],
+          "findings": []
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": []
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "veranda-home-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form veranda-home-roof."
+        }
+      ],
+      "brief": "Design a Caribbean vernacular home with a deep shaded veranda and a pitched metal roof, clear circulation and private sleeping accommodation."
+    }
+  }
+}

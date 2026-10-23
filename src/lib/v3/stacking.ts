@@ -15,6 +15,18 @@ export function v3MassLevelCount(o: V3SceneObject): number {
   return clamp(Math.round(o.levels ?? Math.max(1, Math.round(h / 3.4))), 1, Math.max(1, Math.min(20, Math.floor(h / 2.2))));
 }
 
+/** Compiled slab datums in host-local metres. Semantic storeys own these heights;
+ * exterior-only legacy masses retain their uniform layout. No second persisted geometry. */
+export function v3MassStoreys(o: V3SceneObject, scene?: V3Scene): { elevation: number; height: number }[] {
+  const count = v3MassLevelCount(o), height = scaledDimensionsOf(o)[1];
+  const authored = scene?.interior?.storeys.filter(s => s.hostMassId === o.id).sort((a, b) => a.index - b.index);
+  // Older semantic overlays use structural elevations (starting at zero) and
+  // never controlled the exterior. Only a complete finished-floor stack owns it.
+  if (authored?.length === count && Math.abs(authored.reduce((sum,s)=>sum+s.height,0)-height)<1e-7 && authored.every((s, i) => s.index === i && s.height > 0 && Math.abs(s.elevation-.26-authored.slice(0,i).reduce((sum,p)=>sum+p.height,0))<1e-7))
+    return authored.map(s => ({ elevation: s.elevation - .26, height: s.height }));
+  return Array.from({ length: count }, (_, i) => ({ elevation: i * height / count, height: height / count }));
+}
+
 /** The building mass `o` is explicitly stacked on: authored host relationship plus base at the host's top. */
 function stackedHost(o: V3SceneObject, scene: V3Scene): V3SceneObject | undefined {
   const id = hostIdOf(o);

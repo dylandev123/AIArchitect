@@ -1,0 +1,2537 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 160,
+      "depth": 130,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "A sea-facing estate organized as a ceremonial descent from a shaded circular arrival court to a low, broad villa and its horizon terrace. The principal house is a two-storey Caribbean modern composition: a protected landward arrival face gives way to deep ocean-facing living rooms, a long shaded terrace and a reflecting-edge pool. Two detached garden pavilions frame the villa without competing with it: guests occupy the quieter western garden, while wellness occupies the eastern garden. The deliberately compact upper floor concentrates private suites above the arrival wing while preserving the broad sea-facing ground floor for daily indoor-outdoor living. The $15 million ambition is expressed through spatial sequence, generous covered thresholds, estate-scale landscape and separate hospitality/service infrastructure rather than excessive enclosed area.",
+      "character": "A sea-facing estate organized as a ceremonial descent from a shaded circular arrival court to a low, broad villa and its horizon terrace. The principal house is a two-storey Caribbean modern composition: a protected landward arrival face gives way to deep ocean-facing living rooms, a long shaded terrace and a reflecting-edge pool. Two detached garden pavilions frame the villa without competing with it: guests occupy the quieter western garden, while wellness occupies the eastern garden. The deliberately compact upper floor concentrates private suites above the arrival wing while preserving the broad sea-facing ground floor for daily indoor-outdoor living. The $15 million ambition is expressed through spatial sequence, generous covered thresholds, estate-scale landscape and separate hospitality/service infrastructure rather than excessive enclosed area.",
+      "siteAccess": [
+        {
+          "id": "south-gate",
+          "boundary": "south",
+          "point": [
+            0,
+            0,
+            65
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "id": "budget-brief",
+          "source": "user",
+          "statement": "Create an extraordinary luxury estate guided by a $15 million budget.",
+          "metric": "budget",
+          "objectIds": [
+            "main-villa",
+            "guest-pavilion",
+            "wellness-pavilion",
+            "service-cottage",
+            "ocean-terrace",
+            "infinity-pool"
+          ],
+          "value": "$15 million"
+        },
+        {
+          "id": "saint-lucia-brief",
+          "source": "user",
+          "statement": "Estate overlooks the Caribbean Sea in Saint Lucia.",
+          "metric": "feature",
+          "objectIds": [
+            "main-villa",
+            "ocean-terrace",
+            "infinity-pool",
+            "sea-lawn"
+          ],
+          "value": "Caribbean Sea outlook"
+        },
+        {
+          "id": "luxury-brief",
+          "source": "user",
+          "statement": "Provide a beautiful arrival experience, landscaped outdoor spaces and realistic multi-storey plans.",
+          "metric": "style",
+          "objectIds": [
+            "arrival-drive",
+            "arrival-fountain",
+            "arrival-garden",
+            "main-villa",
+            "west-guest-garden",
+            "east-wellness-garden"
+          ],
+          "value": "Caribbean modern estate"
+        }
+      ],
+      "program": [
+        {
+          "id": "main-villa-program",
+          "role": "primary residence",
+          "kind": "building",
+          "objectIds": [
+            "main-villa"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "guest-pavilion-program",
+          "role": "guest accommodation",
+          "kind": "building",
+          "objectIds": [
+            "guest-pavilion"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "wellness-pavilion-program",
+          "role": "wellness and recreation",
+          "kind": "building",
+          "objectIds": [
+            "wellness-pavilion"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "service-cottage-program",
+          "role": "staff and estate operations",
+          "kind": "building",
+          "objectIds": [
+            "service-cottage"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [
+        {
+          "id": "main-terrace-relationship",
+          "intent": "The principal villa opens directly to the ocean living terrace.",
+          "from": "main-villa",
+          "to": "ocean-terrace",
+          "kind": "connects"
+        },
+        {
+          "id": "pool-terrace-relationship",
+          "intent": "The pool extends the primary terrace toward the sea lawn.",
+          "from": "ocean-terrace",
+          "to": "infinity-pool",
+          "kind": "connects"
+        },
+        {
+          "id": "arrival-fountain-relationship",
+          "intent": "The fountain is the center of the circular arrival court.",
+          "from": "arrival-drive",
+          "to": "arrival-fountain",
+          "kind": "contains"
+        },
+        {
+          "id": "guest-garden-relationship",
+          "intent": "The west pavilion fronts its private garden.",
+          "from": "guest-pavilion",
+          "to": "west-guest-garden",
+          "kind": "connects"
+        },
+        {
+          "id": "wellness-garden-relationship",
+          "intent": "The wellness pavilion opens to its landscaped garden.",
+          "from": "wellness-pavilion",
+          "to": "east-wellness-garden",
+          "kind": "connects"
+        }
+      ],
+      "considerations": [],
+      "circulation": [
+        {
+          "id": "gate-to-arrival",
+          "purpose": "estate vehicle arrival",
+          "from": "south-gate",
+          "to": "arrival-drive",
+          "via": [
+            "route-0"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "point": [
+                0,
+                0,
+                41
+              ]
+            },
+            "use": "vehicle",
+            "width": 5.5,
+            "waypoints": [
+              [
+                0,
+                0,
+                48
+              ]
+            ]
+          }
+        },
+        {
+          "id": "arrival-to-villa",
+          "purpose": "covered pedestrian arrival to principal entry",
+          "from": "arrival-drive",
+          "to": "main-villa",
+          "via": [
+            "route-1"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                0,
+                0,
+                9
+              ]
+            },
+            "to": {
+              "entranceId": "main-villa-main-arrival-door-entry",
+              "approachDistance": 2
+            },
+            "use": "pedestrian",
+            "width": 2.4,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "villa-to-terrace",
+          "purpose": "principal indoor-outdoor living connection",
+          "from": "main-villa",
+          "to": "ocean-terrace",
+          "via": [
+            "route-2"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "main-villa-main-ocean-door-entry",
+              "approachDistance": 2
+            },
+            "to": {
+              "point": [
+                0,
+                0,
+                -19
+              ]
+            },
+            "use": "pedestrian",
+            "width": 3,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "arrival-to-guest",
+          "purpose": "guest garden walk",
+          "from": "arrival-drive",
+          "to": "guest-pavilion",
+          "via": [
+            "route-3"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -14,
+                0,
+                21
+              ]
+            },
+            "to": {
+              "entranceId": "guest-pavilion-guest-arrival-door-entry",
+              "approachDistance": 2
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                -28,
+                0,
+                12
+              ]
+            ]
+          }
+        },
+        {
+          "id": "arrival-to-wellness",
+          "purpose": "wellness garden walk",
+          "from": "arrival-drive",
+          "to": "wellness-pavilion",
+          "via": [
+            "route-4"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                14,
+                0,
+                21
+              ]
+            },
+            "to": {
+              "entranceId": "wellness-pavilion-wellness-arrival-door-entry",
+              "approachDistance": 2
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                25,
+                0,
+                12
+              ]
+            ]
+          }
+        },
+        {
+          "id": "gate-to-service",
+          "purpose": "discreet service access",
+          "from": "south-gate",
+          "to": "service-cottage",
+          "via": [
+            "route-5"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "entranceId": "service-cottage-service-arrival-door-entry",
+              "approachDistance": 2
+            },
+            "use": "service",
+            "width": 3.5,
+            "waypoints": [
+              [
+                -34,
+                0,
+                40
+              ]
+            ]
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-main-villa",
+            "objectId": "main-villa",
+            "role": "primary residence"
+          },
+          {
+            "id": "bp-guest-pavilion",
+            "objectId": "guest-pavilion",
+            "role": "guest accommodation"
+          },
+          {
+            "id": "bp-wellness-pavilion",
+            "objectId": "wellness-pavilion",
+            "role": "wellness and recreation"
+          },
+          {
+            "id": "bp-service-cottage",
+            "objectId": "service-cottage",
+            "role": "staff and estate operations"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-villa-main-arrival-door-entry",
+            "objectId": "main-villa",
+            "openingId": "main-arrival-door",
+            "level": 0
+          },
+          {
+            "id": "main-villa-main-ocean-door-entry",
+            "objectId": "main-villa",
+            "openingId": "main-ocean-door",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-guest-arrival-door-entry",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-arrival-door",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-guest-west-garden-door-entry",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-west-garden-door",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-guest-east-garden-door-entry",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-east-garden-door",
+            "level": 0
+          },
+          {
+            "id": "wellness-pavilion-wellness-arrival-door-entry",
+            "objectId": "wellness-pavilion",
+            "openingId": "wellness-arrival-door",
+            "level": 0
+          },
+          {
+            "id": "wellness-pavilion-wellness-garden-door-entry",
+            "objectId": "wellness-pavilion",
+            "openingId": "wellness-garden-door",
+            "level": 0
+          },
+          {
+            "id": "service-cottage-service-arrival-door-entry",
+            "objectId": "service-cottage",
+            "openingId": "service-arrival-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "main-villa-roof",
+          "guest-pavilion-roof",
+          "wellness-pavilion-roof",
+          "service-cottage-roof"
+        ],
+        "outdoorObjectIds": [
+          "arrival-drive",
+          "arrival-fountain",
+          "entry-canopy",
+          "ocean-terrace",
+          "infinity-pool",
+          "west-guest-garden",
+          "east-wellness-garden",
+          "arrival-garden",
+          "sea-lawn"
+        ],
+        "routeIds": [
+          "gate-to-arrival",
+          "arrival-to-villa",
+          "villa-to-terrace",
+          "arrival-to-guest",
+          "arrival-to-wellness",
+          "gate-to-service"
+        ],
+        "verticalCirculationIds": [
+          "main-stair"
+        ],
+        "allocations": [
+          {
+            "id": "bp-saint-lucia-brief",
+            "requirementId": "saint-lucia-brief",
+            "objectIds": [
+              "main-villa",
+              "ocean-terrace",
+              "infinity-pool",
+              "sea-lawn"
+            ],
+            "roomIds": []
+          }
+        ]
+      }
+    },
+    "objects": [
+      {
+        "id": "main-villa",
+        "type": "building-mass",
+        "semanticRole": "primary residence",
+        "label": "Caribbean Horizon Villa",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": -5,
+          "baseElevation": 0,
+          "width": 42,
+          "depth": 24,
+          "height": 7.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            3.6,
+            -5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          42,
+          7.2,
+          24
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "main-arrival-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.43,
+              "end": 0.57,
+              "height": 2.4,
+              "frame": true,
+              "reveal": 1.2,
+              "serves": "main-foyer"
+            },
+            {
+              "id": "main-ocean-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.42,
+              "end": 0.8,
+              "height": 2.4,
+              "operation": "sliding",
+              "reveal": 1.5,
+              "serves": "main-living"
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "guest-pavilion",
+        "type": "building-mass",
+        "semanticRole": "guest accommodation",
+        "label": "West Guest Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -38,
+          "z": -10,
+          "baseElevation": 0,
+          "width": 18,
+          "depth": 14,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -38,
+            1.8,
+            -10
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          3.6,
+          14
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "guest-arrival-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.42,
+              "end": 0.58,
+              "height": 2.4,
+              "frame": true,
+              "reveal": 0.9,
+              "serves": "guest-entry"
+            },
+            {
+              "id": "guest-west-garden-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.12,
+              "end": 0.38,
+              "height": 2.4,
+              "operation": "sliding",
+              "reveal": 0.8,
+              "serves": "guest-west-bedroom"
+            },
+            {
+              "id": "guest-east-garden-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.62,
+              "end": 0.88,
+              "height": 2.4,
+              "operation": "sliding",
+              "reveal": 0.8,
+              "serves": "guest-east-bedroom"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "wellness-pavilion",
+        "type": "building-mass",
+        "semanticRole": "wellness and recreation",
+        "label": "East Wellness Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 35,
+          "z": -8,
+          "baseElevation": 0,
+          "width": 20,
+          "depth": 14,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            35,
+            1.8,
+            -8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          20,
+          3.6,
+          14
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "wellness-arrival-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.43,
+              "end": 0.57,
+              "height": 2.4,
+              "frame": true,
+              "reveal": 0.8,
+              "serves": "wellness-entry"
+            },
+            {
+              "id": "wellness-garden-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.55,
+              "end": 0.9,
+              "height": 2.4,
+              "operation": "sliding",
+              "reveal": 1,
+              "serves": "wellness-studio"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "service-cottage",
+        "type": "building-mass",
+        "semanticRole": "staff and estate operations",
+        "label": "Estate Service Cottage",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -34,
+          "z": 25,
+          "baseElevation": 0,
+          "width": 18,
+          "depth": 12,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -34,
+            1.8,
+            25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          3.6,
+          12
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "service-arrival-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.42,
+              "end": 0.58,
+              "height": 2.4,
+              "frame": true,
+              "reveal": 0.6,
+              "serves": "service-lobby"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "arrival-drive",
+        "type": "driveway",
+        "semanticRole": "vehicle arrival and turning court",
+        "label": "Circular Arrival Court",
+        "geometryKind": "path",
+        "architecture": {
+          "x": 0,
+          "z": 25,
+          "baseElevation": 0,
+          "width": 32,
+          "depth": 32,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          32,
+          0.01,
+          32
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "walkable",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "arrival-drive-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 16,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "arrival-fountain",
+        "type": "fountain",
+        "semanticRole": "motor court focal point",
+        "label": "Arrival Fountain",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": 25,
+          "baseElevation": 0,
+          "width": 6,
+          "depth": 6,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          6,
+          0.01,
+          6
+        ],
+        "material": {
+          "id": "plan-water",
+          "color": "#528e9a",
+          "surface": "water"
+        },
+        "collision": "water",
+        "composition": {
+          "footprint": {
+            "kind": "outline",
+            "segments": [
+              {
+                "id": "arrival-fountain-circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 3,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ],
+            "operations": []
+          }
+        }
+      },
+      {
+        "id": "entry-canopy",
+        "type": "canopy",
+        "semanticRole": "shaded entry threshold",
+        "label": "Arrival Canopy",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 9,
+          "baseElevation": 0,
+          "width": 8,
+          "depth": 4,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            9
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          0.01,
+          4
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid"
+      },
+      {
+        "id": "ocean-terrace",
+        "type": "terrace",
+        "semanticRole": "outdoor living and dining",
+        "label": "Ocean Living Terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -25,
+          "baseElevation": 0,
+          "width": 46,
+          "depth": 12,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            -25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          46,
+          0.01,
+          12
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "infinity-pool",
+        "type": "pool",
+        "semanticRole": "swimming and sea outlook",
+        "label": "Caribbean Horizon Pool",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": -40,
+          "baseElevation": 0,
+          "width": 22,
+          "depth": 8,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            -40
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          22,
+          0.01,
+          8
+        ],
+        "material": {
+          "id": "plan-water",
+          "color": "#528e9a",
+          "surface": "water"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "west-guest-garden",
+        "type": "landscape-zone",
+        "semanticRole": "private guest landscape",
+        "label": "Guest Garden",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -38,
+          "z": -22,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 12,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -38,
+            0.005,
+            -22
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          0.01,
+          12
+        ],
+        "material": {
+          "id": "plan-grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "east-wellness-garden",
+        "type": "landscape-zone",
+        "semanticRole": "private wellness landscape",
+        "label": "Wellness Garden",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 35,
+          "z": -20,
+          "baseElevation": 0,
+          "width": 26,
+          "depth": 16,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            35,
+            0.005,
+            -20
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          26,
+          0.01,
+          16
+        ],
+        "material": {
+          "id": "plan-grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "arrival-garden",
+        "type": "landscape-zone",
+        "semanticRole": "arrival landscape",
+        "label": "Arrival Palm Garden",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 43,
+          "baseElevation": 0,
+          "width": 52,
+          "depth": 26,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            43
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          52,
+          0.01,
+          26
+        ],
+        "material": {
+          "id": "plan-grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "sea-lawn",
+        "type": "landscape-zone",
+        "semanticRole": "view lawn and event landscape",
+        "label": "Sea Lawn",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -53,
+          "baseElevation": 0,
+          "width": 70,
+          "depth": 18,
+          "height": 0.01,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.005,
+            -53
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          70,
+          0.01,
+          18
+        ],
+        "material": {
+          "id": "plan-grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "route-0",
+        "type": "driveway",
+        "semanticRole": "estate vehicle arrival",
+        "label": "estate vehicle arrival",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            53
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          5.5,
+          0.01,
+          24
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-1",
+        "type": "path",
+        "semanticRole": "covered pedestrian arrival to principal entry",
+        "label": "covered pedestrian arrival to principal entry",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -8.881784197001252e-16,
+            0.05,
+            8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          2.4000000000000017,
+          0.01,
+          2.0000000000000027
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-2",
+        "type": "path",
+        "semanticRole": "principal indoor-outdoor living connection",
+        "label": "principal indoor-outdoor living connection",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            3.0600000000000005,
+            0.05,
+            -18.75
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          6.120000000000001,
+          0.01,
+          3.5
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-3",
+        "type": "path",
+        "semanticRole": "guest garden walk",
+        "label": "guest garden walk",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -26.206659083908924,
+            0.05,
+            9.378530313919448
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          25.38668183218215,
+          0.01,
+          24.757060627838896
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-4",
+        "type": "path",
+        "semanticRole": "wellness garden walk",
+        "label": "wellness garden walk",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            24.66504299438423,
+            0.05,
+            10.348280784641494
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          22.469914011231534,
+          0.01,
+          22.696561569282988
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      },
+      {
+        "id": "route-5",
+        "type": "path",
+        "semanticRole": "discreet service access",
+        "label": "discreet service access",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -17.35665835583217,
+            0.05,
+            48
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          36.78668328833566,
+          0.01,
+          34
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "main-ground",
+          "label": "Ground Floor",
+          "semanticRole": "arrival, entertaining and daily living",
+          "hostMassId": "main-villa",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        },
+        {
+          "id": "main-upper",
+          "label": "Upper Floor",
+          "semanticRole": "private suites",
+          "hostMassId": "main-villa",
+          "index": 1,
+          "elevation": 3.8600000000000003,
+          "height": 3.6
+        },
+        {
+          "id": "guest-ground",
+          "label": "Guest Pavilion Ground Floor",
+          "semanticRole": "guest accommodation",
+          "hostMassId": "guest-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        },
+        {
+          "id": "wellness-ground",
+          "label": "Wellness Pavilion Ground Floor",
+          "semanticRole": "wellness",
+          "hostMassId": "wellness-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        },
+        {
+          "id": "service-ground",
+          "label": "Service Cottage Ground Floor",
+          "semanticRole": "estate operations",
+          "hostMassId": "service-cottage",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "main-foyer",
+          "label": "Arrival Foyer",
+          "semanticRole": "arrival",
+          "program": "double-height arrival hall",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": 8.5,
+            "width": 8,
+            "depth": 7
+          }
+        },
+        {
+          "id": "main-gallery",
+          "label": "Landward Gallery",
+          "semanticRole": "circulation",
+          "program": "main circulation gallery",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": 4,
+            "width": 34,
+            "depth": 2
+          }
+        },
+        {
+          "id": "main-stair-hall",
+          "label": "Stair Hall",
+          "semanticRole": "vertical circulation",
+          "program": "stair and upper-floor approach",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 12,
+            "z": 8.5,
+            "width": 6,
+            "depth": 7
+          }
+        },
+        {
+          "id": "main-powder",
+          "label": "Powder Room",
+          "semanticRole": "guest amenity",
+          "program": "powder room",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -12,
+            "z": 8.5,
+            "width": 6,
+            "depth": 7
+          }
+        },
+        {
+          "id": "main-pantry",
+          "label": "Butler Pantry",
+          "semanticRole": "service",
+          "program": "pantry and back kitchen",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -17,
+            "z": 0,
+            "width": 8,
+            "depth": 6
+          }
+        },
+        {
+          "id": "main-kitchen",
+          "label": "Chef Kitchen",
+          "semanticRole": "service",
+          "program": "open chef kitchen",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -9,
+            "z": 0,
+            "width": 8,
+            "depth": 6
+          }
+        },
+        {
+          "id": "main-dining",
+          "label": "Dining Room",
+          "semanticRole": "entertaining",
+          "program": "formal and family dining",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 10,
+            "depth": 6
+          }
+        },
+        {
+          "id": "main-living",
+          "label": "Great Room",
+          "semanticRole": "entertaining",
+          "program": "ocean-facing living salon",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 8,
+            "z": -7.5,
+            "width": 26,
+            "depth": 9
+          }
+        },
+        {
+          "id": "main-family-lounge",
+          "label": "Library Lounge",
+          "semanticRole": "retreat",
+          "program": "informal lounge and library",
+          "storeyId": "main-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -14,
+            "z": -7.5,
+            "width": 14,
+            "depth": 9
+          }
+        },
+        {
+          "id": "main-upper-gallery",
+          "label": "Upper Gallery",
+          "semanticRole": "circulation",
+          "program": "bedroom landing gallery",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 0,
+            "z": 4,
+            "width": 24,
+            "depth": 2
+          }
+        },
+        {
+          "id": "main-upper-landing",
+          "label": "Stair Landing",
+          "semanticRole": "vertical circulation",
+          "program": "upper stair approach",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 12,
+            "z": 8,
+            "width": 6,
+            "depth": 8
+          }
+        },
+        {
+          "id": "main-master-bedroom",
+          "label": "Primary Bedroom",
+          "semanticRole": "private suite",
+          "program": "ocean-facing primary sleeping chamber",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 9.5,
+            "z": -6.5,
+            "width": 19,
+            "depth": 21
+          }
+        },
+        {
+          "id": "main-master-dressing",
+          "label": "Primary Dressing",
+          "semanticRole": "private suite",
+          "program": "primary dressing room",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -6,
+            "z": -6,
+            "width": 12,
+            "depth": 12
+          }
+        },
+        {
+          "id": "main-master-bath",
+          "label": "Primary Bath",
+          "semanticRole": "private suite",
+          "program": "primary bath",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -16,
+            "z": -6,
+            "width": 8,
+            "depth": 12
+          }
+        },
+        {
+          "id": "main-guest-bedroom",
+          "label": "Upper Guest Bedroom",
+          "semanticRole": "guest suite",
+          "program": "guest bedroom",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -16,
+            "z": 8,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "main-guest-bath",
+          "label": "Upper Guest Bath",
+          "semanticRole": "guest suite",
+          "program": "guest bath",
+          "storeyId": "main-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -8,
+            "z": 8,
+            "width": 6,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-entry",
+          "label": "Guest Arrival Lobby",
+          "semanticRole": "arrival",
+          "program": "guest pavilion entry",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 5,
+            "width": 6,
+            "depth": 4
+          }
+        },
+        {
+          "id": "guest-gallery",
+          "label": "Guest Gallery",
+          "semanticRole": "circulation",
+          "program": "suite circulation",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 16,
+            "depth": 2
+          }
+        },
+        {
+          "id": "guest-west-bedroom",
+          "label": "West Guest Bedroom",
+          "semanticRole": "guest suite",
+          "program": "guest bedroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": -4.5,
+            "z": -3,
+            "width": 9,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-east-bedroom",
+          "label": "East Guest Bedroom",
+          "semanticRole": "guest suite",
+          "program": "guest bedroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 4.5,
+            "z": -3,
+            "width": 9,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-west-bath",
+          "label": "West Guest Bath",
+          "semanticRole": "guest suite",
+          "program": "guest bath",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": -6,
+            "z": 5,
+            "width": 6,
+            "depth": 4
+          }
+        },
+        {
+          "id": "guest-east-bath",
+          "label": "East Guest Bath",
+          "semanticRole": "guest suite",
+          "program": "guest bath",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 6,
+            "z": 5,
+            "width": 6,
+            "depth": 4
+          }
+        },
+        {
+          "id": "wellness-entry",
+          "label": "Wellness Entry",
+          "semanticRole": "arrival",
+          "program": "wellness reception",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 5,
+            "width": 8,
+            "depth": 4
+          }
+        },
+        {
+          "id": "wellness-gallery",
+          "label": "Wellness Gallery",
+          "semanticRole": "circulation",
+          "program": "wellness circulation",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 18,
+            "depth": 2
+          }
+        },
+        {
+          "id": "wellness-studio",
+          "label": "Movement Studio",
+          "semanticRole": "wellness",
+          "program": "yoga and fitness studio",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": 5,
+            "z": -3,
+            "width": 10,
+            "depth": 8
+          }
+        },
+        {
+          "id": "wellness-treatment",
+          "label": "Treatment Room",
+          "semanticRole": "wellness",
+          "program": "massage and treatment room",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": -5,
+            "z": -3,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "wellness-change",
+          "label": "Changing Room",
+          "semanticRole": "wellness support",
+          "program": "changing and shower room",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": -6.5,
+            "z": 5,
+            "width": 5,
+            "depth": 4
+          }
+        },
+        {
+          "id": "wellness-powder",
+          "label": "Wellness Powder Room",
+          "semanticRole": "wellness support",
+          "program": "guest powder room",
+          "storeyId": "wellness-ground",
+          "hostMassId": "wellness-pavilion",
+          "footprint": {
+            "x": 6.5,
+            "z": 5,
+            "width": 5,
+            "depth": 4
+          }
+        },
+        {
+          "id": "service-lobby",
+          "label": "Service Lobby",
+          "semanticRole": "arrival",
+          "program": "staff entry lobby",
+          "storeyId": "service-ground",
+          "hostMassId": "service-cottage",
+          "footprint": {
+            "x": 0,
+            "z": 4.5,
+            "width": 6,
+            "depth": 3
+          }
+        },
+        {
+          "id": "service-office",
+          "label": "Estate Office",
+          "semanticRole": "operations",
+          "program": "estate management office",
+          "storeyId": "service-ground",
+          "hostMassId": "service-cottage",
+          "footprint": {
+            "x": -5,
+            "z": 0,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "service-laundry",
+          "label": "Laundry",
+          "semanticRole": "service",
+          "program": "laundry and linen room",
+          "storeyId": "service-ground",
+          "hostMassId": "service-cottage",
+          "footprint": {
+            "x": 3,
+            "z": 0,
+            "width": 6,
+            "depth": 6
+          }
+        },
+        {
+          "id": "service-store",
+          "label": "Service Store",
+          "semanticRole": "service",
+          "program": "estate storage",
+          "storeyId": "service-ground",
+          "hostMassId": "service-cottage",
+          "footprint": {
+            "x": -5,
+            "z": -4,
+            "width": 6,
+            "depth": 2
+          }
+        },
+        {
+          "id": "service-staff-room",
+          "label": "Staff Room",
+          "semanticRole": "staff",
+          "program": "staff rest room",
+          "storeyId": "service-ground",
+          "hostMassId": "service-cottage",
+          "footprint": {
+            "x": 3,
+            "z": -4,
+            "width": 6,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "main-stair",
+          "type": "stair",
+          "hostMassId": "main-villa",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 12,
+            "z": 8,
+            "width": 4,
+            "depth": 6
+          }
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "main-villa",
+        "to": "ocean-terrace",
+        "kind": "connects"
+      },
+      {
+        "from": "ocean-terrace",
+        "to": "infinity-pool",
+        "kind": "connects"
+      },
+      {
+        "from": "arrival-drive",
+        "to": "arrival-fountain",
+        "kind": "contains"
+      },
+      {
+        "from": "guest-pavilion",
+        "to": "west-guest-garden",
+        "kind": "connects"
+      },
+      {
+        "from": "wellness-pavilion",
+        "to": "east-wellness-garden",
+        "kind": "connects"
+      },
+      {
+        "from": "main-foyer",
+        "to": "main-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-gallery",
+        "to": "main-stair-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-gallery",
+        "to": "main-powder",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-gallery",
+        "to": "main-pantry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-gallery",
+        "to": "main-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-gallery",
+        "to": "main-dining",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-kitchen",
+        "to": "main-pantry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-kitchen",
+        "to": "main-dining",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-dining",
+        "to": "main-living",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-pantry",
+        "to": "main-family-lounge",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-upper-landing",
+        "to": "main-upper-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-upper-gallery",
+        "to": "main-master-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-upper-gallery",
+        "to": "main-guest-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-upper-gallery",
+        "to": "main-guest-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-master-bedroom",
+        "to": "main-master-dressing",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-master-dressing",
+        "to": "main-master-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "main-guest-bedroom",
+        "to": "main-guest-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-entry",
+        "to": "guest-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-gallery",
+        "to": "guest-west-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-gallery",
+        "to": "guest-east-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-entry",
+        "to": "guest-west-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "guest-entry",
+        "to": "guest-east-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "wellness-entry",
+        "to": "wellness-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "wellness-gallery",
+        "to": "wellness-studio",
+        "kind": "adjacent"
+      },
+      {
+        "from": "wellness-gallery",
+        "to": "wellness-treatment",
+        "kind": "adjacent"
+      },
+      {
+        "from": "wellness-entry",
+        "to": "wellness-change",
+        "kind": "adjacent"
+      },
+      {
+        "from": "wellness-entry",
+        "to": "wellness-powder",
+        "kind": "adjacent"
+      },
+      {
+        "from": "service-lobby",
+        "to": "service-office",
+        "kind": "adjacent"
+      },
+      {
+        "from": "service-lobby",
+        "to": "service-laundry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "service-office",
+        "to": "service-store",
+        "kind": "adjacent"
+      },
+      {
+        "from": "service-laundry",
+        "to": "service-staff-room",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "planDeferredFeatureHeights": [
+        "arrival-drive",
+        "arrival-fountain",
+        "entry-canopy",
+        "ocean-terrace",
+        "infinity-pool",
+        "west-guest-garden",
+        "east-wellness-garden",
+        "arrival-garden",
+        "sea-lawn"
+      ],
+      "planUnresolved": [],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 33,
+          "potentialAccessRoomIds": [
+            "guest-east-bath",
+            "guest-east-bedroom",
+            "guest-entry",
+            "guest-gallery",
+            "guest-west-bath",
+            "guest-west-bedroom",
+            "main-dining",
+            "main-family-lounge",
+            "main-foyer",
+            "main-gallery",
+            "main-kitchen",
+            "main-living",
+            "main-master-bath",
+            "main-master-bedroom",
+            "main-master-dressing",
+            "main-pantry",
+            "main-powder",
+            "main-stair-hall",
+            "main-upper-landing",
+            "service-laundry",
+            "service-lobby",
+            "service-office",
+            "service-staff-room",
+            "service-store",
+            "wellness-change",
+            "wellness-entry",
+            "wellness-gallery",
+            "wellness-powder",
+            "wellness-studio",
+            "wellness-treatment"
+          ],
+          "findings": [
+            {
+              "code": "BLUEPRINT_SPACE_OVERLAP",
+              "severity": "fatal",
+              "targetIds": [
+                "main-upper-gallery",
+                "main-upper-landing"
+              ],
+              "message": "Two allocated rooms occupy the same floor area."
+            },
+            {
+              "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+              "severity": "fatal",
+              "targetIds": [
+                "main-master-bedroom"
+              ],
+              "message": "Allocated room must lie inside its actual host storey footprint."
+            },
+            {
+              "code": "BLUEPRINT_SPACE_OVERLAP",
+              "severity": "fatal",
+              "targetIds": [
+                "main-master-bedroom",
+                "main-upper-gallery"
+              ],
+              "message": "Two allocated rooms occupy the same floor area."
+            },
+            {
+              "code": "BLUEPRINT_SPACE_OVERLAP",
+              "severity": "fatal",
+              "targetIds": [
+                "main-guest-bedroom",
+                "main-upper-gallery"
+              ],
+              "message": "Two allocated rooms occupy the same floor area."
+            },
+            {
+              "code": "BLUEPRINT_SPACE_OVERLAP",
+              "severity": "fatal",
+              "targetIds": [
+                "main-guest-bath",
+                "main-upper-gallery"
+              ],
+              "message": "Two allocated rooms occupy the same floor area."
+            },
+            {
+              "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+              "targetIds": [
+                "main-upper-landing->main-upper-gallery"
+              ],
+              "message": "Rooms main-upper-landing and main-upper-gallery are declared adjacent but share no boundary.",
+              "severity": "advisory"
+            },
+            {
+              "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+              "targetIds": [
+                "main-upper-gallery->main-master-bedroom"
+              ],
+              "message": "Rooms main-upper-gallery and main-master-bedroom are declared adjacent but share no boundary.",
+              "severity": "advisory"
+            },
+            {
+              "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+              "targetIds": [
+                "main-upper-gallery->main-guest-bedroom"
+              ],
+              "message": "Rooms main-upper-gallery and main-guest-bedroom are declared adjacent but share no boundary.",
+              "severity": "advisory"
+            },
+            {
+              "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+              "targetIds": [
+                "main-upper-gallery->main-guest-bath"
+              ],
+              "message": "Rooms main-upper-gallery and main-guest-bath are declared adjacent but share no boundary.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_ADJACENCY_PASSAGE",
+              "targetIds": [
+                "main-upper-landing",
+                "main-upper-gallery"
+              ],
+              "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_ADJACENCY_PASSAGE",
+              "targetIds": [
+                "main-upper-gallery",
+                "main-master-bedroom"
+              ],
+              "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_ADJACENCY_PASSAGE",
+              "targetIds": [
+                "main-upper-gallery",
+                "main-guest-bedroom"
+              ],
+              "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_ADJACENCY_PASSAGE",
+              "targetIds": [
+                "main-upper-gallery",
+                "main-guest-bath"
+              ],
+              "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_ROOM_ACCESS_UNVERIFIED",
+              "targetIds": [
+                "main-upper",
+                "main-upper-gallery",
+                "main-guest-bedroom",
+                "main-guest-bath"
+              ],
+              "message": "These zones have no potential shared-edge path from a drawn ground entrance through aligned circulation reservations. Draw connecting circulation or intended outdoor access. Missing zones, gaps or detailed doors may explain it; no path has been invented.",
+              "severity": "advisory"
+            }
+          ]
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": [
+          {
+            "code": "PLAN_ADJACENCY_PASSAGE",
+            "targetIds": [
+              "main-upper-landing",
+              "main-upper-gallery"
+            ],
+            "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_ADJACENCY_PASSAGE",
+            "targetIds": [
+              "main-upper-gallery",
+              "main-master-bedroom"
+            ],
+            "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_ADJACENCY_PASSAGE",
+            "targetIds": [
+              "main-upper-gallery",
+              "main-guest-bedroom"
+            ],
+            "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_ADJACENCY_PASSAGE",
+            "targetIds": [
+              "main-upper-gallery",
+              "main-guest-bath"
+            ],
+            "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_ROOM_ACCESS_UNVERIFIED",
+            "targetIds": [
+              "main-upper",
+              "main-upper-gallery",
+              "main-guest-bedroom",
+              "main-guest-bath"
+            ],
+            "message": "These zones have no potential shared-edge path from a drawn ground entrance through aligned circulation reservations. Draw connecting circulation or intended outdoor access. Missing zones, gaps or detailed doors may explain it; no path has been invented.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "wellness-pavilion",
+            "service-cottage",
+            "ocean-terrace",
+            "infinity-pool"
+          ],
+          "message": "budget-brief: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "arrival-drive",
+            "arrival-fountain",
+            "arrival-garden",
+            "main-villa",
+            "west-guest-garden",
+            "east-wellness-garden"
+          ],
+          "message": "luxury-brief: style is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "main-villa-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form main-villa-roof."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "guest-pavilion-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form guest-pavilion-roof."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "wellness-pavilion-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form wellness-pavilion-roof."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "service-cottage-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form service-cottage-roof."
+        },
+        {
+          "code": "BLUEPRINT_SPACE_OVERLAP",
+          "severity": "fatal",
+          "targetIds": [
+            "main-upper-gallery",
+            "main-upper-landing"
+          ],
+          "message": "Two allocated rooms occupy the same floor area."
+        },
+        {
+          "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+          "severity": "fatal",
+          "targetIds": [
+            "main-master-bedroom"
+          ],
+          "message": "Allocated room must lie inside its actual host storey footprint."
+        },
+        {
+          "code": "BLUEPRINT_SPACE_OVERLAP",
+          "severity": "fatal",
+          "targetIds": [
+            "main-master-bedroom",
+            "main-upper-gallery"
+          ],
+          "message": "Two allocated rooms occupy the same floor area."
+        },
+        {
+          "code": "BLUEPRINT_SPACE_OVERLAP",
+          "severity": "fatal",
+          "targetIds": [
+            "main-guest-bedroom",
+            "main-upper-gallery"
+          ],
+          "message": "Two allocated rooms occupy the same floor area."
+        },
+        {
+          "code": "BLUEPRINT_SPACE_OVERLAP",
+          "severity": "fatal",
+          "targetIds": [
+            "main-guest-bath",
+            "main-upper-gallery"
+          ],
+          "message": "Two allocated rooms occupy the same floor area."
+        },
+        {
+          "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+          "targetIds": [
+            "main-upper-landing->main-upper-gallery"
+          ],
+          "message": "Rooms main-upper-landing and main-upper-gallery are declared adjacent but share no boundary.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+          "targetIds": [
+            "main-upper-gallery->main-master-bedroom"
+          ],
+          "message": "Rooms main-upper-gallery and main-master-bedroom are declared adjacent but share no boundary.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+          "targetIds": [
+            "main-upper-gallery->main-guest-bedroom"
+          ],
+          "message": "Rooms main-upper-gallery and main-guest-bedroom are declared adjacent but share no boundary.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+          "targetIds": [
+            "main-upper-gallery->main-guest-bath"
+          ],
+          "message": "Rooms main-upper-gallery and main-guest-bath are declared adjacent but share no boundary.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_ADJACENCY_PASSAGE",
+          "targetIds": [
+            "main-upper-landing",
+            "main-upper-gallery"
+          ],
+          "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_ADJACENCY_PASSAGE",
+          "targetIds": [
+            "main-upper-gallery",
+            "main-master-bedroom"
+          ],
+          "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_ADJACENCY_PASSAGE",
+          "targetIds": [
+            "main-upper-gallery",
+            "main-guest-bedroom"
+          ],
+          "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_ADJACENCY_PASSAGE",
+          "targetIds": [
+            "main-upper-gallery",
+            "main-guest-bath"
+          ],
+          "message": "Declared adjacency has less than 0.8m of shared edge. Move/resize the zones or revise the access intent; adjacency alone creates no passage.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_ROOM_ACCESS_UNVERIFIED",
+          "targetIds": [
+            "main-upper",
+            "main-upper-gallery",
+            "main-guest-bedroom",
+            "main-guest-bath"
+          ],
+          "message": "These zones have no potential shared-edge path from a drawn ground entrance through aligned circulation reservations. Draw connecting circulation or intended outdoor access. Missing zones, gaps or detailed doors may explain it; no path has been invented.",
+          "severity": "advisory"
+        }
+      ]
+    }
+  }
+}

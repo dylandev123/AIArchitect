@@ -4,6 +4,7 @@ import type { V3Scene, V3SceneObject } from "./scene";
 import { buildV3TerrainSurface } from "./scene";
 import { getObjectTopY, scaledDimensionsOf } from "./elevation";
 import { resolveSiteHierarchy } from "./siteHierarchy";
+import { footprintContains } from './footprint';
 
 /**
  * Presentation-only planting for V3 landscape zones and planters. Derived on every render from authored zone intent
@@ -92,6 +93,10 @@ export function v3VegetationPlacements(scene: V3Scene, heightAt: (x: number, z: 
     const place = (local: [number, number], tree: boolean, index: number) => {
       const c = Math.cos(r.a), s = Math.sin(r.a), x = r.cx + local[0] * c + local[1] * s, z = r.cz - local[0] * s + local[1] * c;
       const kind = pick(rng, tree ? palette.trees : palette.shrubs), variantRoll = rng(), heightRoll = rng(), spin = rng();
+      // An authored garden boundary governs planting too, not its selection box.
+      // Preserve the legacy scatter and random sequence for rectangular zones.
+      const margin=tree?CLEARANCE.tree:CLEARANCE.shrub;
+      if(zone.composition?.footprint&&!footprintContains(zone,[[-margin,-margin],[margin,-margin],[margin,margin],[-margin,margin]].map(([x,z])=>[local[0]+x,local[1]+z])))return;
       // Planters hold their plants on their own top; ground zones follow the final terrain and keep clear of everything built.
       if (!planter && !clear(x, z, tree ? CLEARANCE.tree : CLEARANCE.shrub)) return;
       const height = tree ? palette.treeHeight[0] + heightRoll * (palette.treeHeight[1] - palette.treeHeight[0]) : (planter ? .6 : .8) + heightRoll * (planter ? .5 : .9);

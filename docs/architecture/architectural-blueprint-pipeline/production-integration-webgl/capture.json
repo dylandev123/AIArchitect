@@ -1,0 +1,883 @@
+{
+  "runtime": "next start (optimized production build)",
+  "flow": "Landing Generate -> blank V3 project -> workspace pending brief -> requestHouseEdit -> HTTP POST /api/ai/house -> actual OpenAI SDK with offline transport response -> deterministic construction -> client appendVersion -> localStorage -> production WebGL",
+  "originalSha256": "9733be300b2fbb316ea248201c4af87df86665fb63fb9c6d63012aa49f1af9ed",
+  "providerCalls": 0,
+  "mockedProviderResponses": 2,
+  "mansionAuthoringResponses": 1,
+  "mansionRepairResponses": 0,
+  "flags": {
+    "architecturalBlueprint": {
+      "enabledForNewFlatGenerations": true,
+      "contract": "v3-architectural-blueprint-1",
+      "maxAuthoringAttempts": 2,
+      "maxOutputTokens": 10000
+    }
+  },
+  "responses": [
+    {
+      "status": 200,
+      "pipeline": "v3-architectural-blueprint-1",
+      "outcome": "draft",
+      "requestMode": "generate",
+      "projectId": "45638ba0-2ea5-4532-8601-aeda166f6f6d"
+    },
+    {
+      "status": 200,
+      "pipeline": "v3-architectural-blueprint-1",
+      "outcome": "draft",
+      "requestMode": "generate",
+      "projectId": "7d43274a-a1d4-4e90-b469-2b80f315fded"
+    }
+  ],
+  "atomicWritesVerified": true,
+  "isolatedBrowserStorage": true,
+  "unrelatedProjectUnchanged": true,
+  "mansionReloadIdentical": true,
+  "semanticInspectorEdit": {
+    "color": "#514d47",
+    "geometryUnchanged": true,
+    "reloadPreserved": true
+  },
+  "mansionRevalidation": "draft",
+  "unrelatedAfterDoorRefinement": "complete",
+  "completeReloadIdentical": true,
+  "objects": [
+    "main-villa",
+    "villa-roof",
+    "guest-pavilion",
+    "guest-roof",
+    "arrival-court",
+    "view-terrace",
+    "infinity-pool",
+    "guest-terrace",
+    "tropical-garden",
+    "route-arrival-drive",
+    "route-guest-walk",
+    "route-ocean-terrace-walk",
+    "route-pool-approach"
+  ],
+  "diagnostics": [
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "living-salon"
+      ],
+      "message": "Room living-salon footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "dining-room"
+      ],
+      "message": "Room dining-room footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "service-pantry"
+      ],
+      "message": "Room service-pantry footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "primary-suite"
+      ],
+      "message": "Room primary-suite footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "primary-ensuite"
+      ],
+      "message": "Room primary-ensuite footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "bedroom-two"
+      ],
+      "message": "Room bedroom-two footprint extends beyond host main-villa.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "guest-lounge"
+      ],
+      "message": "Room guest-lounge footprint extends beyond host guest-pavilion.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetIds": [
+        "guest-bedroom"
+      ],
+      "message": "Room guest-bedroom footprint extends beyond host guest-pavilion.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OVERLAP",
+      "targetIds": [
+        "show-kitchen"
+      ],
+      "message": "Rooms dining-room and show-kitchen overlap on storey villa-ground.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OVERLAP",
+      "targetIds": [
+        "main-stair-hall"
+      ],
+      "message": "Rooms show-kitchen and main-stair-hall overlap on storey villa-ground.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OVERLAP",
+      "targetIds": [
+        "laundry"
+      ],
+      "message": "Rooms entry-foyer and laundry overlap on storey villa-ground.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OVERLAP",
+      "targetIds": [
+        "bedroom-two"
+      ],
+      "message": "Rooms primary-ensuite and bedroom-two overlap on storey villa-upper.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_OVERLAP",
+      "targetIds": [
+        "bedroom-two"
+      ],
+      "message": "Rooms primary-dressing and bedroom-two overlap on storey villa-upper.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "living-salon->dining-room"
+      ],
+      "message": "Rooms living-salon and dining-room are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "dining-room->show-kitchen"
+      ],
+      "message": "Rooms dining-room and show-kitchen are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "show-kitchen->entry-foyer"
+      ],
+      "message": "Rooms show-kitchen and entry-foyer are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "primary-suite->primary-ensuite"
+      ],
+      "message": "Rooms primary-suite and primary-ensuite are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "primary-suite->primary-dressing"
+      ],
+      "message": "Rooms primary-suite and primary-dressing are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "bedroom-two->bedroom-two-bath"
+      ],
+      "message": "Rooms bedroom-two and bedroom-two-bath are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetIds": [
+        "guest-bedroom->guest-bath"
+      ],
+      "message": "Rooms guest-bedroom and guest-bath are declared adjacent but share no boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "living-dining-partition"
+      ],
+      "message": "Partition living-dining-partition: rooms living-salon and dining-room no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "dining-kitchen-partition"
+      ],
+      "message": "Partition dining-kitchen-partition: rooms dining-room and show-kitchen no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "kitchen-foyer-partition"
+      ],
+      "message": "Partition kitchen-foyer-partition: rooms show-kitchen and entry-foyer no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "primary-bath-partition"
+      ],
+      "message": "Partition primary-bath-partition: rooms primary-suite and primary-ensuite no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "primary-dressing-partition"
+      ],
+      "message": "Partition primary-dressing-partition: rooms primary-suite and primary-dressing no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "guest-bedroom-bath-partition"
+      ],
+      "message": "Partition guest-bedroom-bath-partition: rooms bedroom-two and bedroom-two-bath no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "PARTITION_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "pavilion-bedroom-bath-partition"
+      ],
+      "message": "Partition pavilion-bedroom-bath-partition: rooms guest-bedroom and guest-bath no longer share a declared adjacent boundary of at least 0.3m.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "living-dining-opening"
+      ],
+      "message": "Door living-dining-opening sits on partition living-dining-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "kitchen-foyer-door"
+      ],
+      "message": "Door kitchen-foyer-door sits on partition kitchen-foyer-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "primary-bath-door"
+      ],
+      "message": "Door primary-bath-door sits on partition primary-bath-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "primary-dressing-door"
+      ],
+      "message": "Door primary-dressing-door sits on partition primary-dressing-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "guest-suite-bath-door"
+      ],
+      "message": "Door guest-suite-bath-door sits on partition guest-bedroom-bath-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "DOOR_BOUNDARY_UNRESOLVED",
+      "targetIds": [
+        "pavilion-bath-door"
+      ],
+      "message": "Door pavilion-bath-door sits on partition pavilion-bedroom-bath-partition, whose boundary no longer resolves.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "arrival-court"
+      ],
+      "message": "arrival-zone: arrival-court exceeds allocation x=[-34,-4], z=[-2,24].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "view-terrace"
+      ],
+      "message": "view-living-zone: allocation exceeds the site boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "view-terrace"
+      ],
+      "message": "view-living-zone: view-terrace exceeds allocation x=[-33,-5], z=[-68,-32].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "infinity-pool"
+      ],
+      "message": "view-living-zone: infinity-pool exceeds allocation x=[-33,-5], z=[-68,-32].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "main-villa"
+      ],
+      "message": "view-living-zone: main-villa exceeds allocation x=[-33,-5], z=[-68,-32].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "guest-pavilion"
+      ],
+      "message": "guest-garden-zone: allocation exceeds the site boundary.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "guest-pavilion"
+      ],
+      "message": "guest-garden-zone: guest-pavilion exceeds allocation x=[1,41], z=[-65,-15].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "guest-terrace"
+      ],
+      "message": "guest-garden-zone: guest-terrace exceeds allocation x=[1,41], z=[-65,-15].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "tropical-garden"
+      ],
+      "message": "guest-garden-zone: tropical-garden exceeds allocation x=[1,41], z=[-65,-15].",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+      "targetIds": [
+        "main-villa"
+      ],
+      "message": "budget-target: budget is retained as intent; no deterministic verification is available.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+      "targetIds": [
+        "main-villa"
+      ],
+      "message": "saint-lucia-character: style is retained as intent; no deterministic verification is available.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_ACCESS_MISSING",
+      "severity": "fatal",
+      "targetIds": [
+        "infinity-pool"
+      ],
+      "message": "outdoor-living-program: planned destination has no authored route or proven architectural passage/dry approach.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ROUTE_BLOCKED",
+      "targetIds": [
+        "route-ocean-terrace-walk"
+      ],
+      "message": "ocean-terrace-walk: route width intersects main-villa; an authored detour or explicit supported bridge is required.",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "view-terrace",
+        "infinity-pool",
+        "main-villa"
+      ],
+      "message": "view-living-zone: allocation exceeds the site boundary.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "severity": "fatal",
+      "targetIds": [
+        "guest-pavilion",
+        "guest-terrace",
+        "tropical-garden"
+      ],
+      "message": "guest-garden-zone: allocation exceeds the site boundary.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+      "severity": "advisory",
+      "targetIds": [
+        "main-villa",
+        "guest-pavilion",
+        "infinity-pool",
+        "view-terrace"
+      ],
+      "message": "budget-target: budget is retained as intent; no deterministic verification is available.",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+      "severity": "advisory",
+      "targetIds": [
+        "main-villa",
+        "guest-pavilion",
+        "view-terrace"
+      ],
+      "message": "saint-lucia-character: style is retained as intent; no deterministic verification is available.",
+      "classification": "advisory"
+    },
+    {
+      "code": "ESTATE_ROUTE_BLOCKED",
+      "severity": "fatal",
+      "targetIds": [
+        "route-ocean-terrace-walk",
+        "main-villa"
+      ],
+      "message": "ocean-terrace-walk: route width intersects main-villa; an authored detour or explicit supported bridge is required.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+      "severity": "advisory",
+      "targetIds": [
+        "terrace-pool-relationship",
+        "view-terrace",
+        "infinity-pool"
+      ],
+      "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract.",
+      "classification": "advisory"
+    },
+    {
+      "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+      "severity": "advisory",
+      "targetIds": [
+        "guest-garden-relationship",
+        "guest-pavilion",
+        "tropical-garden"
+      ],
+      "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract.",
+      "classification": "advisory"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "living-salon"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "dining-room"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OVERLAP",
+      "severity": "fatal",
+      "targetIds": [
+        "dining-room",
+        "show-kitchen"
+      ],
+      "message": "Two allocated rooms occupy the same floor area.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OVERLAP",
+      "severity": "fatal",
+      "targetIds": [
+        "entry-foyer",
+        "laundry"
+      ],
+      "message": "Two allocated rooms occupy the same floor area.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OVERLAP",
+      "severity": "fatal",
+      "targetIds": [
+        "main-stair-hall",
+        "show-kitchen"
+      ],
+      "message": "Two allocated rooms occupy the same floor area.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "service-pantry"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "primary-suite"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "primary-ensuite"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "bedroom-two"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OVERLAP",
+      "severity": "fatal",
+      "targetIds": [
+        "bedroom-two",
+        "primary-ensuite"
+      ],
+      "message": "Two allocated rooms occupy the same floor area.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OVERLAP",
+      "severity": "fatal",
+      "targetIds": [
+        "bedroom-two",
+        "primary-dressing"
+      ],
+      "message": "Two allocated rooms occupy the same floor area.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "guest-lounge"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "BLUEPRINT_SPACE_OUTSIDE_HOST",
+      "severity": "fatal",
+      "targetIds": [
+        "guest-bedroom"
+      ],
+      "message": "Allocated room must lie inside its actual host storey footprint.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ARCHITECTURAL_DOOR_CLIPPED",
+      "targetIds": [
+        "foyer-stair-partition",
+        "foyer-stair-opening"
+      ],
+      "severity": "fatal",
+      "message": "Interior door would be omitted or resized. Door records support rectangular cutouts in constructed partitions; exterior doors belong in facade openings.",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ARCHITECTURAL_RAISED_POOL",
+      "targetIds": [
+        "infinity-pool"
+      ],
+      "message": "The authored pool basin rests on the flat ground datum. Its elevated water surface is retained; dry access is audited separately.",
+      "severity": "advisory",
+      "classification": "advisory"
+    },
+    {
+      "code": "STAIR_ACCESS_BLOCKED",
+      "targetId": "main-stair",
+      "obstacleId": "foyer-stair-partition",
+      "message": "main-stair: walking approach intersects foyer-stair-partition:wall:foyer-stair-opening~end.",
+      "targetIds": [
+        "main-stair",
+        "foyer-stair-partition"
+      ],
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "arrival-court"
+      ],
+      "message": "arrival-zone: arrival-court exceeds allocation x=[-34,-4], z=[-2,24]. arrival-court world plan=[[-19,11],[11,11],[11,25],[-19,25]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "view-terrace",
+        "infinity-pool",
+        "main-villa"
+      ],
+      "message": "view-living-zone: allocation exceeds the site boundary. view-terrace world plan=[[-19,-32],[9,-32],[9,-14],[-19,-14]]; infinity-pool world plan=[[-15,-48],[5,-48],[5,-36],[-15,-36]]; main-villa world plan=[[-17,-14],[7,-14],[7,4],[-17,4],[-17,-14],[7,-14],[7,4],[-17,4]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "view-terrace"
+      ],
+      "message": "view-living-zone: view-terrace exceeds allocation x=[-33,-5], z=[-68,-32]. view-terrace world plan=[[-19,-32],[9,-32],[9,-14],[-19,-14]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "infinity-pool"
+      ],
+      "message": "view-living-zone: infinity-pool exceeds allocation x=[-33,-5], z=[-68,-32]. infinity-pool world plan=[[-15,-48],[5,-48],[5,-36],[-15,-36]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "main-villa"
+      ],
+      "message": "view-living-zone: main-villa exceeds allocation x=[-33,-5], z=[-68,-32]. main-villa world plan=[[-17,-14],[7,-14],[7,4],[-17,4],[-17,-14],[7,-14],[7,4],[-17,4]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "guest-pavilion",
+        "guest-terrace",
+        "tropical-garden"
+      ],
+      "message": "guest-garden-zone: allocation exceeds the site boundary. guest-pavilion world plan=[[21,-2],[39,-2],[39,10],[21,10]]; guest-terrace world plan=[[21,-10],[39,-10],[39,-2],[21,-2]]; tropical-garden world plan=[[20,-40],[42,-40],[42,-14],[20,-14]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "guest-pavilion"
+      ],
+      "message": "guest-garden-zone: guest-pavilion exceeds allocation x=[1,41], z=[-65,-15]. guest-pavilion world plan=[[21,-2],[39,-2],[39,10],[21,10]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "guest-terrace"
+      ],
+      "message": "guest-garden-zone: guest-terrace exceeds allocation x=[1,41], z=[-65,-15]. guest-terrace world plan=[[21,-10],[39,-10],[39,-2],[21,-2]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    },
+    {
+      "code": "ESTATE_ALLOCATION_CONFLICT",
+      "targetIds": [
+        "tropical-garden"
+      ],
+      "message": "guest-garden-zone: tropical-garden exceeds allocation x=[1,41], z=[-65,-15]. tropical-garden world plan=[[20,-40],[42,-40],[42,-14],[20,-14]]",
+      "severity": "fatal",
+      "classification": "draft-tolerable"
+    }
+  ],
+  "captures": [
+    {
+      "name": "api-generated-mansion",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/api-generated-mansion.jpg",
+      "sha256": "1e7004107fab08023c378a234a89ed38de0506f312209e7da97e360a7c7b8439",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "property-plan",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/property-plan.jpg",
+      "sha256": "1b9aa7100e759aaa0a7cea69a1d0e88a3a977bac2468ebbed51f07fb3b8e1486",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "ocean-facades-pool-and-guest",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/ocean-facades-pool-and-guest.jpg",
+      "sha256": "9bed57841c8e38ecd0d71f4434c595dd609f77f98eba3a408e4f68ffe286af5a",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "entrances-and-roofs",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/entrances-and-roofs.jpg",
+      "sha256": "b96a2f5b0be36adc3f2a09fe98d85e2336d3324e3243910f660b9a2c88ff6391",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "object-diagnostics-and-edit",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/object-diagnostics-and-edit.jpg",
+      "sha256": "3949a4dda8815529e381e52811e72bde6a32e016c47008c0463015a177b84207",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "edited-draft-reloaded",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/edited-draft-reloaded.jpg",
+      "sha256": "8d8ef377c0fdf81231fdf4c16448cef3b316ae5cc773d69a7e93b73dfa75e240",
+      "webgl": {
+        "width": 1224,
+        "height": 907,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "unrelated-refined-complete",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/unrelated-refined-complete.jpg",
+      "sha256": "e226e141ac4497c7911bcc1629412b3be3c5f643975021980bf8240ec59e2b04",
+      "webgl": {
+        "width": 1224,
+        "height": 847,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "unrelated-complete-reloaded",
+      "path": "docs/architecture/architectural-blueprint-pipeline/production-integration-webgl/unrelated-complete-reloaded.jpg",
+      "sha256": "a8d341e5c2dc326ce14265ce48567c87e360509ee29c01776deef408432b7e7b",
+      "webgl": {
+        "width": 1224,
+        "height": 907,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    }
+  ],
+  "errors": [],
+  "unexpectedRequests": []
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { v3ArchitecturalMassingScene } from '@/lib/v3/architecturalPlanFirst';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/store/useProjectStore";
@@ -28,10 +29,13 @@ import { V3Vegetation } from "../scenery/V3Vegetation";
 import type { OutdoorAssetPlacement } from "@/lib/outdoor/placements";
 import { compileV3Scene, isV3ProjectRoot } from "@/lib/v3/scene";
 import { validateV3Scene } from "@/lib/v3/validation";
+import { revalidateArchitecturalScene } from "@/lib/v3/architecturalAcceptance";
 import { applyV3RenderDiagnostics } from "@/lib/v3/presentation";
 import { useV3FailedPreviewStore } from "@/store/useV3FailedPreviewStore";
 import { buildV3RenderIdentity } from "@/lib/v3/renderIdentity";
 import { resolveActiveV3RenderSource } from "@/lib/v3/activeRenderSource";
+import * as THREE from "three";
+import { DEFAULT_ARCHITECTURAL_VIEW, planningHostId, planningSectionY } from "@/lib/v3/architecturalPlanning";
 import { useV3RenderIdentityStore } from "@/store/useV3RenderIdentityStore";
 
 /**
@@ -84,6 +88,7 @@ export function HouseRenderer() {
   const houseConfigJson = useProjectStore(
     (s) => s.getProject(params.projectId)?.houseConfigJson
   );
+  const architecturalView = useProjectStore(s => s.getProject(params.projectId)?.architecturalView) ?? DEFAULT_ARCHITECTURAL_VIEW;
   const frozen = useRenderFlightStore((s) => s.frozen);
   const viewed = useRenderFlightStore((s) => s.viewed);
   const recordFlight = useRenderFlightStore((s) => s.record);
@@ -128,9 +133,12 @@ export function HouseRenderer() {
         // compiler-safe fields; persisted/history scenes retain lenient checks.
         if (activeV3Source.source !== "failed-preview") {
           const valid = validateV3Scene(activeV3Source.scene, { lenient: true });
-          if (!valid.ok) return { compilerInputHash: undefined, model: null, site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+          // A supported architectural draft can carry a local fatal finding in
+          // the strict scene audit. Recompute acceptance; metadata alone cannot
+          // authorize rendering broken primary geometry or stale diagnostics.
+          if (!valid.ok && !(activeV3Source.scene.metadata.architecturalValidation && revalidateArchitecturalScene(activeV3Source.scene).ok)) return { compilerInputHash: undefined, model: null, site: null, document: undefined, violations: [] as V2OnlyViolation[] };
         }
-        return { compilerInputHash: auditHash(activeV3Source.scene), model: applyV3RenderDiagnostics(compileV3Scene(activeV3Source.scene, { debug: v3TerrainDebug }), activeV3Source.scene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
+        return { compilerInputHash: auditHash(activeV3Source.scene), model: applyV3RenderDiagnostics(compileV3Scene(architecturalView.mode === "massing" ? v3ArchitecturalMassingScene(activeV3Source.scene) : activeV3Source.scene, { debug: v3TerrainDebug }), activeV3Source.scene, v3Diagnostics), site: null, document: undefined, violations: [] as V2OnlyViolation[] };
       }
       const raw = JSON.parse(renderJson ?? "{}");
       const document = raw.architecturalDesignDocument ?? raw.architectureDocument;
@@ -145,7 +153,7 @@ export function HouseRenderer() {
       }
     } catch { /* legacy generator exposes JSON errors normally */ }
     return { compilerInputHash: undefined, ...generateHouseFromJson(renderJson ?? "{}"), document: undefined, violations: [] as V2OnlyViolation[] };
-  }, [activeV3Source, architectureDebug, renderJson, v2OnlyMode, cutawayLevel, v3TerrainDebug, v3Diagnostics]);
+  }, [activeV3Source, architecturalView.mode, architectureDebug, renderJson, v2OnlyMode, cutawayLevel, v3TerrainDebug, v3Diagnostics]);
   const v3RenderIdentity = useMemo(() => {
     return buildV3RenderIdentity({
       projectId: params.projectId,
@@ -243,21 +251,31 @@ export function HouseRenderer() {
     recordFlight({ projectId: params.projectId, configJson: renderJson ?? "{}", configHash: auditHash(renderJson ?? "{}"), documentHash: audit?.hash, v2: !!document, primitiveCount: isolated.length, primitiveHash: auditHash(isolated.map(primitiveSignature)), massIds: [...new Set(isolated.map(massIdOf).filter((id): id is string => !!id))], bounds: primitiveBounds(isolated) }, frozen ? "frozen" : viewed ? "viewed" : "live-render");
   }, [audit?.hash, document, frozen, isolated, model, params.projectId, recordFlight, renderJson, viewed]);
 
-  if (!model || !pbrReady) return null;
+  const blueprint = !!activeV3Source.scene && (architecturalView.mode === "blueprint" || architecturalView.mode === "massing");
+  const sectionPlanes = useMemo(() => {
+    const scene = activeV3Source.scene;
+    if (!scene || !blueprint || architecturalView.mode === "massing" || !architecturalView.cutaway) return new Map<string, THREE.Plane[]>();
+    return new Map(scene.objects.filter(o => o.type === "building-mass").map(o => {
+      const y = planningSectionY(scene, o.id, architecturalView.floor ?? 0);
+      return [o.id, [new THREE.Plane(new THREE.Vector3(0, -1, 0), y ?? -10000)]];
+    }));
+  }, [activeV3Source.scene, blueprint, architecturalView.cutaway, architecturalView.floor, architecturalView.mode]);
+
+  if (!model || (!blueprint && !pbrReady)) return null;
 
   const isVisible = (p: HousePrimitive) =>
-    (showRoof || p.category !== "roof") && (!geometryXRay || p.category !== "roof") && !cutaway?.has(p.id) && !replacedPrefixes.some((prefix) => p.id.startsWith(prefix));
+    ((blueprint ? architecturalView.mode !== "massing" && !architecturalView.cutaway : showRoof) || p.category !== "roof") && (!geometryXRay || p.category !== "roof") && !cutaway?.has(p.id) && !replacedPrefixes.some((prefix) => p.id.startsWith(prefix));
 
   return (
     <group>
       {isolated.map((primitive, i) =>
-        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} readOnly={!!activeV3Source.scene && activeV3Source.source !== "persisted"} /> : null
+        isVisible(primitive) ? <PrimitiveMesh key={primitive.id} primitive={primitive} surface={surfaces[i]} xRay={geometryXRay} onAuditMesh={onAuditMesh} readOnly={!!activeV3Source.scene && activeV3Source.source !== "persisted"} blueprint={blueprint ? { clippingPlanes: sectionPlanes.get(planningHostId(activeV3Source.scene!, primitive) ?? "") } : undefined} /> : null
       )}
       {swapped.map((p) => (
         <GlbFeature key={p.featureId} placement={p} projectId={params.projectId} footprint={catalog.find((a) => a.id === p.assetId)?.validation?.footprint} />
       ))}
       {proceduralOutdoor.map((placement) => <ProceduralOutdoorPlaceholder key={placement.id} placement={placement} />)}
-      {activeV3Source.scene && !geometryXRay && !isolateMassId && !v3Diagnostics.hideTerrain && <V3Vegetation scene={activeV3Source.scene} />}
+      {activeV3Source.scene && !blueprint && !geometryXRay && !isolateMassId && !v3Diagnostics.hideTerrain && <V3Vegetation scene={activeV3Source.scene} />}
     </group>
   );
 }

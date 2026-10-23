@@ -49,7 +49,11 @@ export function redactV3FailureText(raw: string): string {
 /** What the pipeline concluded about this attempt. Everything here is derived server-side data, never request content. */
 export interface V3FailureDiagnostics {
   terrainMode?: "flat" | "advanced";
-  decision: "repair-requested" | "rejected";
+  decision: "accepted" | "repair-requested" | "rejected";
+  /** Correlates both fixed attempt slots; an older slot is never evidence of a retry. */
+  generationId?: string;
+  identityChanges?: { path: string; from: string; to: string; reason: string }[];
+  normalizedBlueprint?: unknown;
   errors: string[];
   warnings: string[];
   /** Normalization/repair notes, including every omission (`*_OMITTED`) with its reason. */
@@ -72,13 +76,17 @@ export async function retainV3FailureArtifact(raw: string | undefined, attempt: 
       ...(diagnostics ? { diagnostics: JSON.parse(redactV3FailureText(JSON.stringify(diagnostics))) } : {}),
     };
     let serialized = JSON.stringify(artifact, null, 2);
-    if (Buffer.byteLength(serialized) > V3_FAILURE_ARTIFACT_MAX_BYTES && artifact.diagnostics?.normalizedScene !== undefined) {
-      // The normalized scene is reproducible from rawResponse; drop it before ever dropping the replay input.
-      serialized = JSON.stringify({ ...artifact, diagnostics: { ...artifact.diagnostics, normalizedScene: null, normalizedSceneOmittedForSize: true } }, null, 2);
+    if (Buffer.byteLength(serialized) > V3_FAILURE_ARTIFACT_MAX_BYTES && (artifact.diagnostics?.normalizedScene !== undefined || artifact.diagnostics?.normalizedBlueprint !== undefined)) {
+      // Derived inputs are reproducible from rawResponse; drop them before the replay input.
+      artifact.diagnostics = { ...artifact.diagnostics, normalizedScene: null, normalizedBlueprint: null, normalizedSceneOmittedForSize: true };
+      serialized = JSON.stringify(artifact, null, 2);
     }
     if (Buffer.byteLength(serialized) > V3_FAILURE_ARTIFACT_MAX_BYTES) {
       // Never pretend a truncated preview is an exact replay fixture.
       serialized = JSON.stringify({ ...artifact, omittedForSize: true, rawResponse: null }, null, 2);
+    }
+    if (Buffer.byteLength(serialized) > V3_FAILURE_ARTIFACT_MAX_BYTES) {
+      serialized = JSON.stringify({ ...artifact, omittedForSize: true, rawResponse: null, diagnostics: { generationId: artifact.diagnostics?.generationId, decision: artifact.diagnostics?.decision, omittedForSize: true } }, null, 2);
     }
     const directory = path.join(process.cwd(), ".v3-debug");
     await mkdir(directory, { mode: 0o700, recursive: true });

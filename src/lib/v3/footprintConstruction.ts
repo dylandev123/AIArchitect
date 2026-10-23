@@ -9,12 +9,13 @@ import { buildPolygonRoofPlate, buildPolygonShedRoof } from '@/lib/architecture/
 import { box } from '@/lib/house/architecture/parts';
 import { extrudeOutline, triMeshOf } from '@/lib/house/geometry/mesh';
 import type { HousePrimitive } from '@/lib/house/types';
-import type { V3SceneObject, V3Material } from './scene';
+import type { V3Scene, V3SceneObject, V3Material } from './scene';
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from './elevation';
 import { resolveFootprint, edgeFacade, simpleFootprint } from './footprint';
 import { builderOpening, glazeDoorLeaves, semanticCompositionChildId, semanticOpeningIds, stackedStoreyOpenings, resolvedFacadeComposition, type V3Composition } from './composition';
-import { v3MassLevelCount } from './stacking';
+import { v3MassLevelCount, v3MassStoreys } from './stacking';
 import { resolveV3FootprintRoofPlan } from './roofPlanning';
+import { buildArchitecturalFacadeOpenings } from './facadeOpeningRecovery';
 
 export interface FootprintDiagnostic { code:string; targetId:string; message:string }
 const paint=(m:V3Material)=>({color:m.color,roughness:m.roughness??.72,metalness:m.metalness??0});
@@ -27,7 +28,7 @@ function place(o:V3SceneObject,parts:HousePrimitive[],base=getObjectBaseY(o)):Ho
  return parts.map(p=>{
   const id=semanticCompositionChildId(p.id.startsWith(`${o.id}:`)?p.id:`${o.id}-${p.id}`);
   const surface=p.category==='floor'?'concrete':p.category==='wall'||p.category==='roof'?o.material.surface:undefined;
-  const common={...p,...(surface&&!['water','grass','paving'].includes(surface)?{surface:surface as 'concrete'|'stone'|'wood'|'glass'|'metal'|'stucco'}:{}),id,sourceObjectId:o.id,semanticRole:o.semanticRole,componentRole:p.category==='floor'?'floor slab':p.category==='roof'?p.label.toLowerCase():p.category==='window'?(p.transparent?'facade glazing':'glazing frame'):'facade wall'};
+  const common={...p,...(surface&&!['water','grass','paving'].includes(surface)?{surface:surface as 'concrete'|'stone'|'wood'|'glass'|'metal'|'stucco'}:{}),id,sourceObjectId:o.id,semanticRole:o.semanticRole,componentRole:p.label.startsWith('Unresolved facade opening:')?'unresolved facade wall':p.category==='floor'?'floor slab':p.category==='roof'?p.label.toLowerCase():p.category==='window'?(p.transparent?'facade glazing':'glazing frame'):'facade wall'};
   if(p.kind==='box')return {...common,kind:'box' as const,size:p.size,position:point(...p.position),rotation:[p.rotation[0],p.rotation[1]+o.transform.rotation[1],p.rotation[2]] as [number,number,number]};
   if(p.kind==='triMesh'){const vertices:number[]=[];for(let i=0;i<p.vertices.length;i+=3)vertices.push(...point(p.vertices[i],p.vertices[i+1],p.vertices[i+2]));return {...common,kind:'triMesh' as const,vertices};}
   return common;
@@ -62,9 +63,10 @@ export function assemblyWallOffset(fp:NonNullable<ReturnType<typeof resolveFootp
  if(candidates.length!==1)return;
  const {x,z}=facadeEdgeSpan(candidates[0],w,d);return {x,z};
 }
-export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhang:number|undefined,roofMaterial:V3Material,storeyBase=0):{parts:HousePrimitive[];diagnostics:FootprintDiagnostic[]}|undefined {
+export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhang:number|undefined,roofMaterial:V3Material,storeyBase=0,scene?:V3Scene):{parts:HousePrimitive[];diagnostics:FootprintDiagnostic[]}|undefined {
  if(!o.composition?.footprint)return undefined;
- const levels=v3MassLevelCount(o),h=scaledDimensionsOf(o)[1],lh=h/levels;
+ const architectural=!!scene?.estatePlan?.blueprint,buildOpenings=architectural?buildArchitecturalFacadeOpenings:buildMassOpenings;
+ const levels=v3MassLevelCount(o),h=scaledDimensionsOf(o)[1],storeys=v3MassStoreys(o,scene),lh=storeys[0].height;
  const fps=Array.from({length:levels},(_,i)=>resolveFootprint(o,i));
  if(fps.some(fp=>!fp))return o.composition.footprint.kind==='outline'?{parts:[],diagnostics:[{code:'FOOTPRINT_INVALID',targetId:o.id,message:'Invalid curved/irregular outline; no substitute geometry is built.'}]}:undefined;
  const diagnostics:FootprintDiagnostic[]=[],local:HousePrimitive[]=[];
@@ -74,18 +76,18 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
  const outline=o.composition.footprint.kind==='outline',segments=o.composition.footprint.segments??[];
  const composition=outline?o.composition:resolvedFacadeComposition(o,w,d,lh),materials={exterior:paint(o.material),trim,glass};
  for(let floor=0;floor<=levels;floor++){
-  const fp=fps[Math.min(floor,levels-1)]!,y=floor*lh+(floor===levels?-.26:0);
+  const fp=fps[Math.min(floor,levels-1)]!,y=(floor===levels?h:storeys[floor].elevation)+(floor===levels?-.26:0);
   if(outline)local.push(triMeshOf(`slab-${floor+1}-outline`,'floor','Floor slab',extrudeOutline(fp.polygon.map(p=>[p[0],p[1]]),y,y+.26,{bottom:true}),{color:'#b8b0a4',roughness:.72,metalness:0}));
   fp.rects.forEach((r,i)=>local.push(box(`slab-${floor+1}-${i}`,'floor','Floor slab',[(r.x0+r.x1)/2,y+.13,(r.z0+r.z1)/2],[r.x1-r.x0,.26,r.z1-r.z0],{color:'#b8b0a4',roughness:.72,metalness:0})));
   fp.wedges.forEach((p,i)=>local.push(triMeshOf(`slab-${floor+1}-wedge-${i}`,'floor','Floor slab',extrudeOutline(p.map(v=>[v[0],v[1]] as [number,number]),y,y+.26,{bottom:true}),{color:'#b8b0a4',roughness:.72,metalness:0})));
   if(floor===levels)continue;
-  const wallY=floor*lh+.26,wallH=lh-(floor===levels-1?.52:.26);
+  const wallY=storeys[floor].elevation+.26,wallH=storeys[floor].height-(floor===levels-1?.52:.26);
   const openings=stackedStoreyOpenings(composition.openings??[],storeyBase,floor).filter(op=>!op.floors||op.floors==='all'||(op.floors==='ground'?storeyBase+floor===0:storeyBase+floor>0));
   if(outline){
    for(const op of openings)if(!segments.some(s=>s.id===op.segmentId))note('FOOTPRINT_SEGMENT_UNRESOLVED',`Opening ${op.id} requires a valid segmentId; no compass fallback is built.`);
    for(const segment of segments){
     const length=segmentLength(segment),eligible=openings.filter(op=>op.segmentId===segment.id);
-    const result=buildMassOpenings([{a:[-length/2,-.5],b:[length/2,-.5],facade:'north'}],length,1,eligible.map(op=>({...builderOpening(op),facade:'north' as const})),storeyBase+floor,wallY,wallH,`wall-${segment.id}-${floor}`,materials,semanticOpeningIds(o.id,segment.id,floor));
+    const result=buildOpenings([{a:[-length/2,-.5],b:[length/2,-.5],facade:'north'}],length,1,eligible.map(op=>({...builderOpening(op),facade:'north' as const})),storeyBase+floor,wallY,wallH,`wall-${segment.id}-${floor}`,materials,semanticOpeningIds(o.id,segment.id,floor));
     local.push(...bend(glazeDoorLeaves(result.primitives,o,eligible,trim).map(p=>({...p,...(p.label==='Door Frame'?{...ENTRY_DOOR_FINISH,...(composition.mainEntry?.color&&p.id.includes(`:${composition.mainEntry.openingId}:`)?{color:composition.mainEntry.color}:{})}:{})})),segment,segments));
     for(const warning of result.warnings)note('FOOTPRINT_OPENING_CLIPPED',`Segment ${segment.id}, level ${floor}: ${warning}`);
    }
@@ -96,6 +98,7 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
    if(edge.open){local.push(...buildColonnadePosts(edge,wallY,wallH,`wall-${floor}-open-${i}`,materials.exterior));continue;}
    if(!facade){local.push(...(edge.chamfer?.glazed?buildGlazedWallEdge(edge,wallY,wallH,`wall-${floor}-angled-${i}`,materials):[buildPlainWallEdge(edge,wallY,wallH,`wall-${floor}-angled-${i}`,materials.exterior)]));continue;}
    const eligible=openings.filter(op=>{
+    if(architectural&&op.segmentId!==undefined)return false;
     if(op.facade!==facade)return false;
     if(!('start' in op)){
      const original=fp.edges.filter(e=>e.facade===facade&&!e.open);
@@ -117,7 +120,7 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
     return true;
    });
    const virtual:WallEdge={...edge,facade,a:[edge.a[0]-x,edge.a[1]-z],b:[edge.b[0]-x,edge.b[1]-z]};
-   const result=buildMassOpenings([virtual],w,d,eligible.map(builderOpening),storeyBase+floor,wallY,wallH,`wall-${floor}`,materials,semanticOpeningIds(o.id,`${facade}-seg-${i}`,floor));
+   const result=buildOpenings([virtual],w,d,eligible.map(builderOpening),storeyBase+floor,wallY,wallH,`wall-${floor}`,materials,semanticOpeningIds(o.id,`${facade}-seg-${i}`,floor));
    const multiple=fp.edges.filter(e=>edgeFacade(e)===facade).length>1;
    const parts=glazeDoorLeaves(result.primitives,o,eligible,trim).map(p=>({...p,...(p.label==='Door Frame'?{...ENTRY_DOOR_FINISH,...(composition.mainEntry?.color&&p.id.includes(`:${composition.mainEntry.openingId}:`)?{color:composition.mainEntry.color}:{})}:{}),id:multiple?`${semanticCompositionChildId(p.id)}-seg-${i}`:p.id}));
    local.push(...shift(parts,x,z));
@@ -130,8 +133,8 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
   }
  }
  const assemblies:NonNullable<V3Composition['assemblies']>=[...(composition.assemblies??[])];
- const entry=composition.openings?.find(op=>op.id===composition.mainEntry?.openingId&&op.type==='door');
- if(entry&&entry.type==='door'&&composition.mainEntry){
+ const entry=composition.openings?.find(op=>op.id===composition.mainEntry?.openingId&&(op.type==='door'||op.type==='glazed-door'));
+ if(entry&&(entry.type==='door'||entry.type==='glazed-door')&&composition.mainEntry){
   let start=Math.max(0,entry.start-.04),end=Math.min(1,entry.end+.04);
   // Padding is derived, not authored. Keep it on the doorway's unique supporting
   // wall instead of asking the provider to shrink a valid door to accommodate it.
@@ -143,7 +146,9 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
   }
   assemblies.push({id:`entry-${entry.id}`,intent:'Main entry canopy',parts:[{id:'canopy',type:'slab',facade:entry.facade,...(entry.segmentId?{segmentId:entry.segmentId}:{}),start,end,depth:composition.mainEntry.canopyDepth,elevation:Math.min(entry.height??2.4,lh-.4)+.41,thickness:.18,level:0}]});
  }
- for(const assembly of assemblies)for(const part of assembly.parts){
+ for(const authoredAssembly of assemblies){
+ const assembly={...authoredAssembly,parts:authoredAssembly.parts.map(p=>p.type==='railing'?p:{...p,elevation:(storeys[p.level??0]?.elevation??(p.level??0)*lh)+(p.elevation??0)-(p.level??0)*lh})};
+ for(const part of assembly.parts){
   const anchor=part.type==='railing'?assembly.parts.find(p=>p.id===part.slabId&&p.type==='slab'):part;
   if(!anchor||anchor.type==='railing')continue;
   if(outline){
@@ -159,6 +164,7 @@ export function compileFootprintMass(o:V3SceneObject,includeRoof:boolean,overhan
   if(!a){note('FOOTPRINT_ASSEMBLY_UNRESOLVED',`Assembly ${assembly.id}/${part.id} requires a unique wall plane or two outer shoulders bounding an inward recess; retained without arbitrary relocation.`);continue;}
   const parts=buildArchitecturalAssemblies({width:w,depth:d,height:h,floors:levels,assemblies:[{...assembly,parts:part.type==='railing'?[anchor,part]:[part]}]},lh,materials.exterior,trim,glass).filter(p=>part.type!=='railing'||p.label==='Assembly Railing');
   local.push(...shift(parts,a.x,a.z));
+ }
  }
  const parts=place(o,shift(local,frame.x,frame.z));
  if(includeRoof){const result=compileFootprintRoof(o,{...o,material:roofMaterial,overhang},getObjectBaseY(o)+h,.25);parts.push(...result.parts);diagnostics.push(...result.diagnostics);}

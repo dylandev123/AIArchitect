@@ -1,0 +1,191 @@
+{
+  "concept": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+  "character": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+  "site": {
+    "width": 60,
+    "depth": 60,
+    "baseElevation": 0,
+    "groundColor": "#61754b",
+    "north": "-z",
+    "access": []
+  },
+  "entrances": [
+    {
+      "id": "garden-house-garden-door-entry",
+      "objectId": "garden-house",
+      "openingId": "garden-door",
+      "level": 0
+    }
+  ],
+  "verticalCirculation": [],
+  "requirements": [],
+  "program": [
+    {
+      "id": "garden-house-program",
+      "role": "Garden home",
+      "kind": "building",
+      "objectIds": [
+        "garden-house"
+      ],
+      "source": "design"
+    }
+  ],
+  "zones": [],
+  "forms": [],
+  "relationships": [],
+  "considerations": [],
+  "roomAdjacencies": [
+    {
+      "from": "garden-entry",
+      "to": "garden-gallery"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-living"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-kitchen"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-bedroom"
+    },
+    {
+      "from": "garden-gallery",
+      "to": "garden-bath"
+    },
+    {
+      "from": "garden-entry",
+      "to": "garden-utility"
+    }
+  ],
+  "format": "v3-architectural-plan-1",
+  "buildings": [
+    {
+      "id": "garden-house",
+      "label": "Garden home",
+      "role": "Garden home",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 12,
+        "depth": 10
+      },
+      "storeys": [
+        {
+          "id": "garden-floor",
+          "label": "Garden floor",
+          "role": "Garden floor",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "garden-living",
+              "label": "garden living",
+              "role": "garden living",
+              "program": "open-plan living dining",
+              "footprint": {
+                "x": -2,
+                "z": -3,
+                "width": 8,
+                "depth": 4
+              }
+            },
+            {
+              "id": "garden-kitchen",
+              "label": "garden kitchen",
+              "role": "garden kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": 4,
+                "z": -3,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "garden-gallery",
+              "label": "garden gallery",
+              "role": "garden gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 12,
+                "depth": 2
+              }
+            },
+            {
+              "id": "garden-bedroom",
+              "label": "garden bedroom",
+              "role": "garden bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": -4,
+                "z": 3,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "garden-entry",
+              "label": "garden entry",
+              "role": "garden entry",
+              "program": "entry hall",
+              "footprint": {
+                "x": 0,
+                "z": 3,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "garden-bath",
+              "label": "garden bath",
+              "role": "garden bath",
+              "program": "bathroom",
+              "footprint": {
+                "x": 4,
+                "z": 2,
+                "width": 4,
+                "depth": 2
+              }
+            },
+            {
+              "id": "garden-utility",
+              "label": "garden utility",
+              "role": "garden utility",
+              "program": "utility",
+              "footprint": {
+                "x": 4,
+                "z": 4,
+                "width": 4,
+                "depth": 2
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "garden-house-roof",
+      "accessOpenings": [
+        {
+          "id": "garden-door",
+          "facade": "south",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.44,
+          "end": 0.56,
+          "height": 2.4,
+          "serves": "garden-entry"
+        }
+      ]
+    }
+  ],
+  "features": [],
+  "connections": []
+}

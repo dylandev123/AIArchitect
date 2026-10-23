@@ -3,6 +3,14 @@ export type TimeOfDay = "morning" | "midday" | "sunset" | "night";
 /** V3 is opt-in; persisted V2 projects retain their existing default. */
 export type GenerationMode = "v2-architectural" | "v3-scene";
 
+/** Presentation preferences only; architectural geometry remains in houseConfigJson. */
+export interface ArchitecturalWorkspaceView {
+  mode: "floor-plan" | "massing" | "blueprint" | "finished";
+  floor: number | null;
+  buildingId: string | null;
+  cutaway: boolean;
+}
+
 export const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
   house:      "House",
   villa:      "Villa",
@@ -45,4 +53,10 @@ export interface Project {
   currentVersionIndex: number;
   /** Visual time of day for the viewport sky and lighting. Persisted per project. */
   timeOfDay?: TimeOfDay;
+  architecturalView?: ArchitecturalWorkspaceView;
+  /** Immutable source retained separately from the editable recovered scene. */
+  recoverySource?: {
+    sha256: string;
+    originalBlueprint: string;
+  };
 }

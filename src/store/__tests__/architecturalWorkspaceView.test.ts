@@ -1,0 +1,31 @@
+import { afterEach, expect, it, vi } from 'vitest';
+import { fullPropertyBlueprint } from '@/lib/v3/parity/fullPropertyBlueprint';
+import { constructV3ArchitecturalBlueprint, planV3ArchitecturalBlueprint } from '@/lib/v3/architecturalBlueprint';
+import { executeV3SceneOperations } from '@/lib/v3/operations';
+import { compileV3Scene, BLANK_V3_SCENE } from '@/lib/v3/scene';
+import { deriveArchitecturalPlan } from '@/lib/v3/architecturalPlanning';
+
+afterEach(()=>vi.unstubAllGlobals());
+it('switches all views without design/history changes, persists floor, and synchronizes semantic edit/undo/redo/reload',async()=>{
+  const data=new Map<string,string>(),localStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>void data.set(k,v),removeItem:(k:string)=>void data.delete(k)};
+  vi.stubGlobal('localStorage',localStorage);vi.stubGlobal('window',{localStorage,addEventListener:()=>{}});
+  const fetch=vi.fn(()=>{throw Error('No provider calls');});vi.stubGlobal('fetch',fetch);
+  vi.resetModules();
+  const {useProjectStore,PROJECT_STORAGE_KEY}=await import('../useProjectStore');
+  const store=useProjectStore.getState(),p=store.createProject('Planning studio proof','house','v3-scene');
+  const built=constructV3ArchitecturalBlueprint(planV3ArchitecturalBlueprint(fullPropertyBlueprint(),{buildFirst:true}).approval!);
+  expect(built.ok).toBe(true);
+  const json=JSON.stringify({...BLANK_V3_SCENE,v3Scene:built.scene});store.appendVersion(p.id,'Original',json);
+  const before=useProjectStore.getState().getProject(p.id)!;
+  for(const mode of ['floor-plan','blueprint','finished','floor-plan'] as const)store.setArchitecturalView(p.id,{mode,floor:1,buildingId:'crescent-house'});
+  const viewed=useProjectStore.getState().getProject(p.id)!;
+  expect(viewed.houseConfigJson).toBe(before.houseConfigJson);expect(viewed.versions).toEqual(before.versions);expect(viewed.currentVersionIndex).toBe(before.currentVersionIndex);
+  const changed=executeV3SceneOperations(built.scene!,{intent:'Refine service door',operations:[{op:'setDoor',door:{...built.scene!.interior!.doors![0],offset:2.5}}]});expect(changed.ok).toBe(true);
+  store.appendVersion(p.id,'Door refinement',JSON.stringify({...BLANK_V3_SCENE,v3Scene:changed.scene}));
+  const drawing=()=>{const scene=JSON.parse(useProjectStore.getState().getProject(p.id)!.houseConfigJson).v3Scene;return deriveArchitecturalPlan(scene,compileV3Scene(scene),0);};
+  const after=drawing();store.undo(p.id);expect(drawing()).not.toEqual(after);store.redo(p.id);expect(drawing()).toEqual(after);
+  const saved=JSON.parse(data.get(PROJECT_STORAGE_KEY)!).state.projects.find((v:{id:string})=>v.id===p.id);
+  expect(saved.architecturalView).toMatchObject({mode:'floor-plan',floor:1});
+  vi.resetModules();const reopened=(await import('../useProjectStore')).useProjectStore.getState().getProject(p.id)!;
+  expect(reopened.architecturalView).toEqual(saved.architecturalView);expect(reopened.houseConfigJson).toBe(saved.houseConfigJson);expect(fetch).not.toHaveBeenCalled();
+},30000);

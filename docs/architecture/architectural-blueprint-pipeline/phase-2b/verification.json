@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-22",
+  "timezone": "America/St_Lucia",
+  "externalProviderCalls": 0,
+  "paidGenerations": 0,
+  "additionalAgents": 0,
+  "commits": 0,
+  "pushes": 0,
+  "deployments": 0,
+  "savedUserProjectWrites": 0,
+  "focused": {
+    "testFiles": 11,
+    "tests": 157,
+    "passed": 157,
+    "failed": 0,
+    "skipped": 0,
+    "success": true,
+    "failures": []
+  },
+  "finalRoomInvariants": {
+    "testFiles": 1,
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "success": true,
+    "failures": []
+  },
+  "finalExactResponseSdkReplay": {
+    "testFiles": 1,
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "success": true,
+    "failures": []
+  },
+  "fullRepository": {
+    "testFiles": 209,
+    "tests": 2514,
+    "passed": 2508,
+    "failed": 3,
+    "skipped": 3,
+    "success": false,
+    "failures": [
+      {
+        "file": "src/lib/v3/__tests__/productionRouteDiagnostics.test.ts",
+        "test": "production estate route rendering diagnostics recognizes actual estate ribbons while preserving malformed-route and unknown-object diagnostics"
+      },
+      {
+        "file": "src/lib/v3/__tests__/supportCapabilities.test.ts",
+        "test": "support behaviour comes from the capability registry matches the legacy type lists for every registered and unregistered type"
+      },
+      {
+        "file": "src/lib/v3/__tests__/terraFreedomAudit.test.ts",
+        "test": "V3 Terra freedom product audit keeps a mansion full of new nouns through the exact offline production path"
+      }
+    ]
+  },
+  "fullRunScope": "The full run precedes the additional upper-only setback regression. Final focused 157/157 includes that test and refined independent wing circulation; supplemental final tests verify input/output shell/relationship equality and exact paid response text/hash through the SDK.",
+  "baselineFailureEvidence": "The same three failures are documented, with a starting-code comparison, in ../phase-2/verification.json from the preceding phase. No fresh baseline source reconstruction was performed in Phase 2B.",
+  "checks": {
+    "typescript": "PASS: npx tsc --noEmit",
+    "eslint": "PASS: all changed/new TypeScript/TSX and evidence scripts",
+    "whitespace": "PASS: git diff --check",
+    "productionBuild": "PASS: isolated Next.js 16.2.9 build --webpack with no env files/credentials, cached local fonts and blocked external transport",
+    "pipeline": "PASS: scripts/room-planning-evidence.ts",
+    "browser": {
+      "result": "PASS",
+      "providerCalls": 0,
+      "existingProjectsAccessed": false,
+      "errors": [],
+      "forbidden": [],
+      "verified": [
+        {
+          "name": "garden-home",
+          "reloadLossless": true,
+          "versionsUnchanged": true,
+          "webgl": {
+            "width": 1224,
+            "height": 907,
+            "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+          }
+        },
+        {
+          "name": "listening-home",
+          "reloadLossless": true,
+          "versionsUnchanged": true,
+          "webgl": {
+            "width": 1224,
+            "height": 907,
+            "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+          }
+        },
+        {
+          "name": "three-storey-estate",
+          "reloadLossless": true,
+          "versionsUnchanged": true,
+          "webgl": {
+            "width": 1224,
+            "height": 907,
+            "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+          }
+        }
+      ],
+      "roomEditReload": true,
+      "draftIntentEditorRefinement": true,
+      "naturalOriginalUnchanged": true,
+      "captures": [
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/garden-home-floor-0.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/garden-home-constructed.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/listening-home-floor-0.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/listening-home-constructed.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/three-storey-estate-floor-0.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/three-storey-estate-floor-1.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/three-storey-estate-floor-2.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/three-storey-estate-constructed.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/garden-home-edited.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/draft-resolved-in-editor.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/natural-original.saved.png",
+        "docs/architecture/architectural-blueprint-pipeline/phase-2b/ui/natural-proposal.saved.png"
+      ]
+    },
+    "preservation": {
+      "result": "PASS",
+      "inventoriedFiles": 238,
+      "changed": [],
+      "missing": [],
+      "existingBrowserProjectsAccessed": false,
+      "existingBrowserProjectsWritten": false,
+      "note": "SHA-256 comparison of all pre-existing .v3-debug files and regression fixtures; browser tests use only a fresh isolated profile. Source workspace already had unrelated changes before this phase."
+    }
+  },
+  "isolatedBuild": {
+    "directory": "/private/tmp/aiarchitect-phase2b-final",
+    "log": "/private/tmp/aiarchitect-phase2b-final-build.log",
+    "serverStopped": true,
+    "noEnvFilesCopied": true,
+    "noExistingProjectsCopied": true,
+    "externalTransportForbidden": true
+  },
+  "commands": {
+    "focused": "npx vitest run --maxWorkers=2 [11 files recorded in focused-tests.json] --reporter=json",
+    "full": "npx vitest run --maxWorkers=2 --testTimeout=30000 --reporter=json",
+    "evidence": "npx vite-node --config vitest.config.mts scripts/room-planning-evidence.ts",
+    "browser": "PLAYWRIGHT_MODULE=/private/tmp/aiarchitect-studio-browser/node_modules/playwright-core CHROMIUM_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' node scripts/room-planning-capture.mjs"
+  }
+}

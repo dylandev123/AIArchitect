@@ -4,7 +4,10 @@
  * Existing V3 semantics/builders remain the construction and editing authority.
  */
 import { z } from 'zod';
+import { siteFeatureConstructionIssues, isWaterFeature } from './siteFeatureConstruction';
+import { plannedDrySurface } from './plannedSiteGeometry';
 import { resolvedFacadeComposition, v3CompositionSchema } from './composition';
+import { LOCAL_FACADE_CODES } from './facadeOpeningRecovery';
 import { v3FootprintSchema, type V3Footprint } from './footprintSchema';
 import { v3EstatePlanSchema } from './estatePlan';
 import { runtimeGeometryFromArchitecture } from './architecture';
@@ -27,9 +30,12 @@ import { assemblyWallOffset } from './footprintConstruction';
 import { architecturalBlueprintPreflight, architecturalInteriorPreflight } from './architecturalBlueprintPreflight';
 import { auditArchitecturalConstructionFidelity } from './architecturalConstructionFidelity';
 
+import { architecturalDraftFinding, revalidateArchitecturalScene } from './architecturalAcceptance';
+import { normalizeArchitecturalBlueprintIdentities, type ArchitecturalIdentityChange } from './architecturalBlueprintIdentity';
+
 const n = z.number().finite(), id = z.string().regex(/^[a-zA-Z][a-zA-Z0-9-]{1,63}$/);
-const text = z.string().min(1).max(600), label = z.string().min(1).max(100);
-const region = z.object({ x:n, z:n, width:n.positive(), depth:n.positive() }).strict();
+const text = z.string().min(1).max(2000), label = z.string().min(1).max(100);
+const region = z.object({ x:n, z:n, width:n.positive(), depth:n.positive() }).strict().describe('Host-local rectangle: x/z are its CENTRE in metres, width/depth its full spans.');
 const location = z.object({ x:n, z:n, baseElevation:n, rotationY:n }).strict();
 const material = z.object({ id, color:z.string().regex(/^#[0-9a-fA-F]{6}$/), roughness:n.min(0).max(1).optional(), metalness:n.min(0).max(1).optional(), opacity:n.min(0).max(1).optional(), surface:z.enum(['concrete','stone','wood','glass','metal','stucco','paving','water','grass']) }).strict();
 const plan = z.discriminatedUnion('kind', [
@@ -71,10 +77,10 @@ export const v3ArchitecturalBlueprintSchema = z.object({
     roof:z.object({ id, form:label, materialId:id, pitchDegrees:n.min(0).max(89), overhang:n.nonnegative(), thickness:n.min(.18).max(.35) }).strict(),
   }).strict()).min(1),
   entrances:z.array(z.object({ id, objectId:id, openingId:id, level:n.int().min(0).max(19) }).strict()),
-  features:z.array(z.object({ id, label, role:label, type:label, materialId:id, location, width:n.positive(), depth:n.positive(), height:n.positive(),
+  features:z.array(z.object({ id, label, role:label, type:label, materialId:id, location, width:n.positive(), depth:n.positive(), height:n.positive(), footprint:v3FootprintSchema.optional(),
     canopyStyle:z.enum(['solid','slatted']).optional(), railing:z.enum(['auto','none']).optional(), terraceOpenEdges:z.array(z.enum(['north','south','east','west'])).optional(),
   }).strict()),
-  connections:z.array(z.object({ id, surfaceId:id, purpose:text, from:endpoint, to:endpoint, use:z.enum(['pedestrian','vehicle','service']), width:n.positive().max(100), waypoints:z.array(z.tuple([n,n,n])).max(100), materialId:id }).strict()),
+  connections:z.array(z.object({ id, surfaceId:id.describe('Declares the exclusive generated path/driveway object for THIS connection. Choose a new unique ID, never a feature ID or another connection surfaceId. Surface endpoints reference existing features separately.'), purpose:text, from:endpoint, to:endpoint, use:z.enum(['pedestrian','vehicle','service']), width:n.positive().max(100), waypoints:z.array(z.tuple([n,n,n])).max(100), path:v3FootprintSchema.shape.segments.optional().describe('Optional exact line/arc centreline in WORLD x/z metres, from the named source contact to destination. Omit waypoints and entrance approachDistance when using path.'), materialId:id }).strict()),
   verticalCirculation:z.array(vertical),
   requirements:estate.requirements, program:estate.program, zones:estate.zones,
   forms:estate.architecture.unwrap(), relationships:estate.relationships, considerations:estate.considerations,
@@ -85,7 +91,7 @@ export const v3ArchitecturalBlueprintSchema = z.object({
 export type V3ArchitecturalBlueprint = z.infer<typeof v3ArchitecturalBlueprintSchema>;
 type BlueprintEndpoint = z.infer<typeof endpoint>;
 const ROOFS = new Set(['flat','floating-flat','mono-pitch','hip','gable','butterfly','terrace']);
-const FEATURES = new Set(['terrace','courtyard','pool','landscape-zone','canopy']);
+const FEATURES = new Set(['terrace','courtyard','pool','fountain','landscape-zone','canopy','path','driveway']);
 const stable = (value:unknown):string => JSON.stringify(value, (_key,v) => v && typeof v==='object' && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))) : v);
 const same = (a:unknown,b:unknown) => stable(a)===stable(b);
 
@@ -101,7 +107,7 @@ function canonicalSemantics(scene:V3Scene):V3Scene {
 }
 
 /** Reuse the actual compiler's effective policies, and refuse their design overrides. */
-function constructionPolicyConflicts(scene:V3Scene):V3BlueprintFinding[]{
+export function constructionPolicyConflicts(scene:V3Scene):V3BlueprintFinding[]{
   const effective=resolveV3JunctionDatums(resolveV3Fidelity(effectiveV3Scene(scene)).scene).scene;
   const eaves=roofClearanceOverhangs(effective),out:V3BlueprintFinding[]=[];
   const fail=(target:string,message:string)=>out.push({code:'ARCHITECTURAL_COMPILER_OVERRIDE',targetIds:[target],message,severity:'fatal'});
@@ -124,19 +130,19 @@ function constructionPolicyConflicts(scene:V3Scene):V3BlueprintFinding[]{
       for(const opening of original.composition?.openings??[])if(opening.type==='opening-rhythm'){
         const segment=original.composition?.footprint?.segments?.find(s=>s.id===opening.segmentId);
         const span=segment?segmentLength(segment):['north','south'].includes(opening.facade)?frame.width:frame.depth;
-        if(Math.abs(fittedRhythmWidth(span,opening.count,opening.width)-opening.width)>1e-8)fail(original.id,`Opening ${opening.id} would be narrowed by the existing bay-fitting policy; resolve its width in the design.`);
+        if(Math.abs(fittedRhythmWidth(span,opening.count,opening.width)-opening.width)>1e-8)out.push({code:'ARCHITECTURAL_OPENING_CLIPPED',targetIds:[original.id,opening.id],severity:'fatal',message:`Opening ${opening.id} exceeds the supported facade bay width; its wall is retained without narrowing the intent.`});
       }
     }
-    if(original.type==='courtyard'&&(original.dimensions[1]<.14||original.material.color.toLowerCase()!=='#b8ad98'||original.material.surface!=='paving'||original.material.roughness!==.74||original.material.metalness||original.material.opacity!==undefined))
+    if(original.type==='courtyard'&&(original.dimensions[1]<.14||original.material.color.toLowerCase()!=='#b8ad98'||original.material.surface!=='paving'||original.material.roughness!==.74||original.material.metalness||original.material.opacity!==undefined&&original.material.opacity!==1))
       fail(original.id,'V3 courtyard semantics build a perimeter with fixed #b8ad98 paving/roughness .74 and height >=.14m. A custom finish or thinner ring is unsupported by this slice.');
-    if(original.type==='landscape-zone'&&(original.dimensions[1]<.12||original.material.surface!=='grass'||original.material.roughness!==.9||original.material.metalness||original.material.opacity!==undefined))
+    if(original.type==='landscape-zone'&&(original.dimensions[1]<.12||original.material.surface!=='grass'||original.material.roughness!==.9||original.material.metalness||original.material.opacity!==undefined&&original.material.opacity!==1))
       fail(original.id,'V3 landscape-zone semantics build grass groundcover, height >=.12m and roughness .9; trees and custom planting construction are separate capabilities.');
   }
   return out;
 }
 
 /** Exact line/arc extrema; preserve the authored local origin, segments and all opening fractions. */
-function envelope(p:V3ArchitecturalBlueprint['buildings'][number]['plan']):{width:number;depth:number;footprint?:V3Footprint} {
+export function architecturalPlanEnvelope(p:V3ArchitecturalBlueprint['buildings'][number]['plan']):{width:number;depth:number;footprint?:V3Footprint} {
   if(p.kind==='rectangle')return {width:p.width,depth:p.depth};
   if(p.kind==='articulated')return {width:p.width,depth:p.depth,footprint:{kind:'articulated',operations:p.operations}};
   const points = p.segments.flatMap(s=>{
@@ -151,14 +157,14 @@ function envelope(p:V3ArchitecturalBlueprint['buildings'][number]['plan']):{widt
 }
 
 /** Pure semantic lowering. No provider, design inference, scene repair or geometry builder. */
-function lower(bp:V3ArchitecturalBlueprint):V3Scene {
+export function lowerV3ArchitecturalBlueprint(bp:V3ArchitecturalBlueprint):V3Scene {
   const materials=new Map(bp.materials.map(m=>[m.id,m]));
   const object=(entry:{id:string;label:string;role:string;materialId:string},type:string,architecture:NonNullable<V3SceneObject['architecture']>):V3SceneObject=>({
     id:entry.id,label:entry.label,semanticRole:entry.role,type,geometryKind:inferV3GeometryKind({type,dimensions:[architecture.width,architecture.height,architecture.depth]}),architecture,...runtimeGeometryFromArchitecture(architecture),material:structuredClone(materials.get(entry.materialId)!),
   });
   const objects:V3SceneObject[]=[], interior:NonNullable<V3Scene['interior']>={storeys:[],rooms:[],circulation:structuredClone(bp.verticalCirculation),partitions:structuredClone(bp.partitions),doors:structuredClone(bp.doors)};
   for(const b of bp.buildings){
-    const {width,depth,footprint}=envelope(b.plan),height=b.storeys.reduce((sum,s)=>sum+s.height,0);
+    const {width,depth,footprint}=architecturalPlanEnvelope(b.plan),height=b.storeys.reduce((sum,s)=>sum+s.height,0);
     objects.push({...object(b,'building-mass',{...b.location,width,depth,height}),levels:b.storeys.length,collision:'solid',composition:{...structuredClone(b.facade),...(footprint?{footprint:structuredClone(footprint)}:{})}});
     objects.push({...object({id:b.roof.id,label:`${b.label} roof`,role:`Roof of ${b.id}`,materialId:b.roof.materialId},'roof-form',{...b.location,baseElevation:b.location.baseElevation+height,width,depth,height:b.roof.thickness}),hostId:b.id,roofForm:b.roof.form as V3SceneObject['roofForm'],pitch:b.roof.pitchDegrees,pitchUnit:'degrees',overhang:b.roof.overhang});
     let elevation=0;
@@ -169,8 +175,9 @@ function lower(bp:V3ArchitecturalBlueprint):V3Scene {
     });
   }
   for(const f of bp.features)objects.push({...object(f,f.type,{...f.location,width:f.width,depth:f.depth,height:f.height}),
+    ...(f.footprint?{composition:{footprint:structuredClone(f.footprint)}}:{}),
     ...(f.canopyStyle===undefined?{}:{canopyStyle:f.canopyStyle}),...(f.railing===undefined?{}:{railing:f.railing}),...(f.terraceOpenEdges===undefined?{}:{terraceOpenEdges:structuredClone(f.terraceOpenEdges)}),
-    collision:f.type==='pool'?'water':f.type==='landscape-zone'?'none':f.type==='canopy'?'solid':'walkable'});
+    collision:isWaterFeature(f)?'water':f.type==='landscape-zone'?'none':f.type==='canopy'?'solid':'walkable'});
   const resolveEndpoint=(e:BlueprintEndpoint)=>{
     if(e.kind==='entrance'){
       const entry=bp.entrances.find(i=>i.id===e.entranceId)!;
@@ -185,30 +192,32 @@ function lower(bp:V3ArchitecturalBlueprint):V3Scene {
     // Placeholder is immediately replaced by existing canonical ribbon bounds.
     // It is never an AI-authored path box or a geometric constraint.
     objects.push(object({id:c.surfaceId,label:c.purpose.slice(0,100),role:c.purpose.slice(0,100),materialId:c.materialId},c.use==='vehicle'?'driveway':'path',{x:0,z:0,baseElevation:bp.site.baseElevation,width:1,depth:1,height:.01}));
-    return {id:c.id,purpose:c.purpose,from:from.objectId,to:to.objectId,via:[c.surfaceId],spatial:{from:from.access,to:to.access,use:c.use,width:c.width,waypoints:structuredClone(c.waypoints)}};
+    return {id:c.id,purpose:c.purpose,from:from.objectId,to:to.objectId,via:[c.surfaceId],spatial:{from:from.access,to:to.access,use:c.use,width:c.width,waypoints:structuredClone(c.waypoints),...(c.path?{path:structuredClone(c.path)}:{})}};
   });
   return {version:3,site:{width:bp.site.width,depth:bp.site.depth,baseElevation:0,naturalGround:{elevation:0,grade:0},groundMaterial:{id:'ground',color:bp.site.groundColor,surface:'grass'}},objects,interior,
     estatePlan:{version:1,concept:bp.concept,character:bp.character,siteAccess:structuredClone(bp.site.access),requirements:structuredClone(bp.requirements),program:structuredClone(bp.program),zones:structuredClone(bp.zones),architecture:structuredClone(bp.forms),relationships:structuredClone(bp.relationships),considerations:structuredClone(bp.considerations),circulation,
       blueprint:{version:1,buildings:bp.buildings.map(b=>({id:`bp-${b.id}`,objectId:b.id,role:b.role})),entrances:structuredClone(bp.entrances),roofObjectIds:bp.buildings.map(b=>b.roof.id),outdoorObjectIds:bp.features.map(f=>f.id),routeIds:bp.connections.map(c=>c.id),verticalCirculationIds:bp.verticalCirculation.map(c=>c.id),allocations:bp.requirements.filter(r=>r.metric==='feature'||r.metric==='bedrooms').map(r=>({id:`bp-${r.id}`,requirementId:r.id,objectIds:[...r.objectIds],roomIds:[]}))}},
-    relationships:[...bp.relationships.map(({from,to,kind})=>({from,to,kind})),...bp.roomAdjacencies.map(r=>({...r,kind:'adjacent' as const}))],metadata:{}};
+    relationships:[...bp.relationships.map(({from,to,kind})=>({from:bp.connections.find(c=>c.id===from)?.surfaceId??from,to:bp.connections.find(c=>c.id===to)?.surfaceId??to,kind})),...bp.roomAdjacencies.map(r=>({...r,kind:'adjacent' as const}))],metadata:{}};
 }
 
-export interface V3ArchitecturalPlanningResult { ok:boolean; findings:V3BlueprintFinding[]; approval?:V3ArchitecturalApproval; }
+export interface V3ArchitecturalPlanningResult { ok:boolean; findings:V3BlueprintFinding[]; approval?:V3ArchitecturalApproval; blueprint?:V3ArchitecturalBlueprint; identityChanges?:ArchitecturalIdentityChange[]; }
 /** Opaque, in-memory evidence. No serialized approval can authorize construction. */
 export interface V3ArchitecturalApproval { readonly kind:'v3-architectural-approval'; }
-const approvals=new WeakMap<V3ArchitecturalApproval,{scene:V3Scene;existing:V3BlueprintApproval}>();
+const approvals=new WeakMap<V3ArchitecturalApproval,{scene:V3Scene;existing:V3BlueprintApproval;buildFirst?:boolean;findings:V3BlueprintFinding[]}>();
 
 /** Validate independent design BEFORE accepting detailed construction; never repairs or invents design. */
-export function planV3ArchitecturalBlueprint(raw:unknown):V3ArchitecturalPlanningResult {
+export function planV3ArchitecturalBlueprint(raw:unknown,options:{buildFirst?:boolean}={}):V3ArchitecturalPlanningResult {
   const findings:V3BlueprintFinding[]=[],fail=(code:string,targetIds:string[],message:string)=>findings.push({code,targetIds,message,severity:'fatal'});
   const parsed=v3ArchitecturalBlueprintSchema.safeParse(raw);
   if(!parsed.success)return {ok:false,findings:parsed.error.issues.map(i=>({code:'ARCHITECTURAL_BLUEPRINT_INPUT',severity:'fatal',targetIds:[i.path.join('.')],message:i.message}))};
-  const bp=parsed.data;
+  const identities=normalizeArchitecturalBlueprintIdentities(parsed.data);
+  const bp=identities.blueprint;
+  findings.push(...identities.findings);
+  // Identity ambiguity must stop before any map/find-based relationship lookup.
+  if(findings.some(f=>f.severity==='fatal'))return {ok:false,findings,blueprint:bp,identityChanges:[]};
   findings.push(...architecturalBlueprintPreflight(bp));
-  const ids=[...bp.buildings.flatMap(b=>[b.id,b.roof.id,...b.storeys.flatMap(s=>[s.id,...s.spaces.map(r=>r.id)])]),...bp.features.map(f=>f.id),...bp.connections.map(c=>c.surfaceId),...bp.verticalCirculation.map(c=>c.id),...bp.partitions.map(p=>p.id),...bp.doors.map(d=>d.id)];
-  for(const value of new Set(ids))if(ids.filter(i=>i===value).length>1)fail('ARCHITECTURAL_DUPLICATE_ID',[value],'Semantic identities must be unique.');
+  const evidence={blueprint:bp,identityChanges:identities.changes};
   const mats=new Set(bp.materials.map(m=>m.id));
-  if(mats.size!==bp.materials.length)fail('ARCHITECTURAL_DUPLICATE_ID',['materials'],'Material identities must be unique.');
   for(const [owner,ref] of [...bp.buildings.flatMap(b=>[[b.id,b.materialId],[b.roof.id,b.roof.materialId]]),...bp.features.map(f=>[f.id,f.materialId]),...bp.connections.map(c=>[c.id,c.materialId])])if(!mats.has(ref))fail('ARCHITECTURAL_MATERIAL',[owner,ref],'Missing major material.');
   for(const b of bp.buildings){
     const composition=v3CompositionSchema.safeParse(b.facade);
@@ -223,7 +232,6 @@ export function planV3ArchitecturalBlueprint(raw:unknown):V3ArchitecturalPlannin
         if(b.plan.kind!=='outline'&&part.segmentId)fail('ARCHITECTURAL_ASSEMBLY_HOST',[b.id,assembly.id,part.id],'segmentId is only supported on an explicit line/arc outline.');
       }
     }
-    if(b.storeys.some(s=>Math.abs(s.height-b.storeys[0].height)>1e-8))fail('ARCHITECTURAL_STOREYS_UNSUPPORTED',[b.id],'V3 constructs uniform storey heights per mass; use explicit separate masses or retain this unresolved design.');
     if(!ROOFS.has(b.roof.form))fail('ARCHITECTURAL_ROOF_UNSUPPORTED',[b.id,b.roof.id],`V3 cannot construct requested roof ${b.roof.form}.`);
     else if(['flat','floating-flat','terrace'].includes(b.roof.form)?b.roof.pitchDegrees!==0:b.roof.pitchDegrees<1||b.roof.pitchDegrees>60)fail('ARCHITECTURAL_ROOF_PITCH',[b.roof.id],'Pitch must match V3 construction: 0 for flat families, 1–60 degrees for pitched families.');
     if(!bp.entrances.some(e=>e.objectId===b.id&&e.level===0))fail('ARCHITECTURAL_ENTRANCE_UNDECIDED',[b.id],'Choose an actual ground entrance before constructing this building.');
@@ -236,6 +244,7 @@ export function planV3ArchitecturalBlueprint(raw:unknown):V3ArchitecturalPlannin
   }
   for(const c of bp.verticalCirculation)if(c.type==='stair'&&(!c.stairType||!c.direction||(['l-shaped','u-shaped'].includes(c.stairType)&&!c.turn)))fail('ARCHITECTURAL_CIRCULATION_UNDECIDED',[c.id],'Choose stair type, direction, and turn for a turning stair explicitly; construction cannot choose the layout.');
   for(const f of bp.features){
+
     if(!FEATURES.has(f.type))fail('ARCHITECTURAL_FEATURE_UNSUPPORTED',[f.id],`This slice cannot construct ${f.type}; no generic substitute will be built.`);
     if(f.type==='canopy'&&!f.canopyStyle)fail('ARCHITECTURAL_FEATURE_UNDECIDED',[f.id],'Choose solid or slatted canopy construction explicitly.');
     if(f.type!=='canopy'&&f.canopyStyle||f.type!=='terrace'&&(f.railing!==undefined||f.terraceOpenEdges!==undefined))fail('ARCHITECTURAL_FEATURE_INPUT',[f.id],'Canopy style belongs only to canopies; railing and open edges belong only to terraces.');
@@ -246,40 +255,43 @@ export function planV3ArchitecturalBlueprint(raw:unknown):V3ArchitecturalPlannin
     if(e.kind==='site-access'&&bp.site.access.filter(a=>a.id===e.accessId).length!==1)fail('ARCHITECTURAL_REFERENCE',[c.id,e.accessId],'Choose one explicit site access.');
     if(e.kind==='surface'){
       const f=bp.features.find(f=>f.id===e.objectId);
-      if(!f||!['terrace','courtyard','landscape-zone'].includes(f.type))fail('ARCHITECTURAL_REFERENCE',[c.id,e.objectId],'Endpoint needs an existing dry surface.');
+      if(!f||!plannedDrySurface(f.type))fail('ARCHITECTURAL_REFERENCE',[c.id,e.objectId],'Endpoint needs an existing dry surface.');
       else if(Math.abs(e.local[0])>f.width/2+.001||Math.abs(e.local[1])>f.depth/2+.001)fail('ARCHITECTURAL_SURFACE_CONTACT',[c.id,f.id],'Authored surface contact lies outside its footprint.');
     }
   }
-  if(findings.length)return {ok:false,findings};
-  const semantic=lower(bp);
-  for(const o of semantic.objects)if(o.composition?.footprint?.kind==='articulated')for(const assembly of o.composition.assemblies??[])for(const part of assembly.parts)if(part.type!=='railing'){
+  if(findings.some(f=>f.severity==='fatal'&&(!options.buildFirst||f.code!=='ARCHITECTURAL_DOOR_OVERLAP'&&!LOCAL_FACADE_CODES.has(f.code))))return {ok:false,findings,...evidence};
+  const semantic=lowerV3ArchitecturalBlueprint(bp);
+  for(const o of semantic.objects.filter(o=>bp.features.some(f=>f.id===o.id)))for(const message of siteFeatureConstructionIssues(o))fail('ARCHITECTURAL_FEATURE_CONSTRUCTION_DEFERRED',[o.id],message);
+  for(const o of semantic.objects)if(o.type==='building-mass'&&o.composition?.footprint?.kind==='articulated')for(const assembly of o.composition.assemblies??[])for(const part of assembly.parts)if(part.type!=='railing'){
     const fp=resolveFootprint(o,part.level??0);
     if(!fp||!assemblyWallOffset(fp,part))fail('ARCHITECTURAL_ASSEMBLY_HOST',[o.id,assembly.id,part.id],'Assembly needs one actual wall plane or a slab bridging two outer recess shoulders. No attachment will be chosen automatically.');
   }
-  if(findings.length)return {ok:false,findings};
+  if(findings.some(f=>f.severity==='fatal'&&(!options.buildFirst||f.code!=='ARCHITECTURAL_DOOR_OVERLAP'&&!LOCAL_FACADE_CODES.has(f.code))))return {ok:false,findings,...evidence};
   // Existing measurement/contact/roof/space checks operate on lowered semantics.
   // No compileV3Scene, constructed passage or detailed mesh is allowed at this gate.
+  const blocking=()=>findings.some(f=>f.severity==='fatal'&&(!options.buildFirst||!architecturalDraftFinding(semantic,f,findings)));
   const preliminary=auditV3Blueprint(semantic,{constructionEvidence:false});
   findings.push(...preliminary.findings);
   findings.push(...auditV3Interior(semantic).filter(i=>i.severity!=='advisory').map(i=>({code:i.code,targetIds:[i.targetId],message:i.message,severity:'fatal' as const})));
   findings.push(...architecturalInteriorPreflight(semantic));
-  if(findings.some(f=>f.severity==='fatal'))return {ok:false,findings};
+  if(blocking())return {ok:false,findings,...evidence};
   findings.push(...constructionPolicyConflicts(semantic));
-  if(findings.some(f=>f.severity==='fatal'))return {ok:false,findings};
+  if(blocking())return {ok:false,findings,...evidence};
   const scene=normalizeV3GenerationOutput(semantic,'flat').scene;
-  if(!same(canonicalSemantics(semantic),canonicalSemantics(scene)))return {ok:false,findings:[...findings,{code:'ARCHITECTURAL_NORMALIZATION_DRIFT',targetIds:['scene'],message:'Compatibility normalization changed authored semantics; this design needs explicit support.',severity:'fatal'}]};
-  const checked=approveV3Blueprint(scene,{constructionEvidence:false});
-  if(!checked.ok||!checked.approval)return {ok:false,findings:[...findings,...checked.findings]};
+  if(!same(canonicalSemantics(semantic),canonicalSemantics(scene)))return {ok:false,...evidence,findings:[...findings,{code:'ARCHITECTURAL_NORMALIZATION_DRIFT',targetIds:['scene'],message:'Compatibility normalization changed authored semantics; this design needs explicit support.',severity:'fatal'}]};
+  const checked=approveV3Blueprint(scene,{constructionEvidence:false,...(options.buildFirst?{allowFinding:(f:V3BlueprintFinding)=>architecturalDraftFinding(scene,f,findings)}:{})});
+  if(!checked.ok||!checked.approval)return {ok:false,...evidence,findings:[...findings,...checked.findings]};
   const approval:V3ArchitecturalApproval=Object.freeze({kind:'v3-architectural-approval'});
-  approvals.set(approval,{scene:structuredClone(scene),existing:checked.approval});
-  return {ok:true,findings,approval};
+  approvals.set(approval,{scene:structuredClone(scene),existing:checked.approval,buildFirst:options.buildFirst,findings:structuredClone(findings)});
+  return {ok:true,findings,approval,...evidence};
 }
 
-export interface V3ArchitecturalConstruction { ok:boolean; findings:V3BlueprintFinding[]; scene?:V3Scene; model?:ReturnType<typeof compileV3Scene>; }
+export interface V3ArchitecturalConstruction { ok:boolean; findings:V3BlueprintFinding[]; outcome?:'complete'|'draft'|'cannot-construct'; scene?:V3Scene; model?:ReturnType<typeof compileV3Scene>; }
 /** Only this function publishes editable V3 construction. No AI elaboration parameter exists. */
 export function constructV3ArchitecturalBlueprint(approval:V3ArchitecturalApproval):V3ArchitecturalConstruction {
   const entry=approvals.get(approval);
   if(!entry)return {ok:false,findings:[{code:'ARCHITECTURAL_APPROVAL_REQUIRED',severity:'fatal',targetIds:['blueprint'],message:'Run preliminary planning in this process before construction.'}]};
+  if(entry.buildFirst)return revalidateArchitecturalScene(entry.scene,entry.findings);
   const result=ingestV3GenerationOutput(structuredClone(entry.scene),'flat',{requireBlueprint:true,requireDesignConsistency:true,approvedBlueprint:entry.existing});
   const findings=[...constructionPolicyConflicts(entry.scene),...(result.blueprint?.findings??[]),...result.validation.issues.map(i=>({code:i.code,severity:i.severity==='advisory'?'advisory' as const:'fatal' as const,targetIds:i.targetIds??[i.targetId],message:i.message})),
     ...(result.geometryAudit?.errors??[]).map(message=>({code:'ARCHITECTURAL_COMPILED_GEOMETRY',severity:'fatal' as const,targetIds:['construction'],message}))];
@@ -305,30 +317,34 @@ export function constructV3ArchitecturalBlueprint(approval:V3ArchitecturalApprov
  * Missing major spaces, independent roofs or unsupported assemblies are diagnosed;
  * this is deliberately not a migration or an architecture-invention fallback.
  */
-export function checkoutV3ArchitecturalBlueprint(scene:V3Scene):V3ArchitecturalPlanningResult & {blueprint?:V3ArchitecturalBlueprint} {
+export function checkoutV3ArchitecturalBlueprint(scene:V3Scene, options:{planOnly?:boolean}={}):V3ArchitecturalPlanningResult & {blueprint?:V3ArchitecturalBlueprint} {
   const findings:V3BlueprintFinding[]=[],fail=(target:string,message:string)=>findings.push({code:'ARCHITECTURAL_CHECKOUT_UNSUPPORTED',severity:'fatal',targetIds:[target],message});
   const estate=scene.estatePlan,index=estate?.blueprint;
   if(!estate||!index||!scene.interior)return {ok:false,findings:[{code:'ARCHITECTURAL_CHECKOUT_INCOMPLETE',severity:'fatal',targetIds:['scene'],message:'No complete indexed storey/space design is available; author the missing architecture explicitly.'}]};
-  const features=scene.objects.filter(o=>FEATURES.has(o.type));
   const routeOwners=new Set(estate.circulation.flatMap(r=>r.via));
+  const features=scene.objects.filter(o=>(FEATURES.has(o.type)||options.planOnly&&index.outdoorObjectIds.includes(o.id))&&!routeOwners.has(o.id));
   const materials=new Map<string,z.infer<typeof material>>();
   for(const o of scene.objects){
     const parsed=material.safeParse(o.material);
     if(!parsed.success)fail(o.id,'Material needs an explicit supported finish.');
     else if(materials.has(o.material.id)&&!same(materials.get(o.material.id),parsed.data))fail(o.id,'One material id names conflicting finishes.');
     else materials.set(o.material.id,parsed.data!);
-    if(!['building-mass','roof-form'].includes(o.type)&&!FEATURES.has(o.type)&&!routeOwners.has(o.id))fail(o.id,'Object has no independent-blueprint construction mapping in this slice.');
+    if(!['building-mass','roof-form'].includes(o.type)&&!FEATURES.has(o.type)&&!routeOwners.has(o.id)&&!(options.planOnly&&index.outdoorObjectIds.includes(o.id)))fail(o.id,'Object has no independent-blueprint construction mapping in this slice.');
     if(o.composition?.roofDatumGroup)fail(o.id,'Shared roof datums need a future blueprint mapping; they will not be dropped.');
     if(o.composition?.assemblies?.some(a=>!a.parts.length))fail(o.id,'An empty assembly has no construction mapping.');
     if(o.support||o.type==='building-mass'&&o.hostId)fail(o.id,'Explicit supported/stacked objects need a future host contract.');
     if(o.type==='building-mass'&&(!o.architecture||!o.levels))fail(o.id,'Building needs explicit canonical architecture and storey count.');
   }
   const buildings:V3ArchitecturalBlueprint['buildings']=[];
-  for(const b of scene.objects.filter(o=>o.type==='building-mass')){
-    const a=b.architecture,roofs=scene.objects.filter(r=>r.type==='roof-form'&&r.hostId===b.id),roof=roofs[0];
+  for(const [buildingIndex,b] of scene.objects.filter(o=>o.type==='building-mass').entries()){
+    const reserved=index.roofObjectIds[buildingIndex];
+    // Plan checkout uses only the reserved identity. This temporary declaration is
+    // stripped by the plan adapter; it is never approved, compiled or persisted.
+    const roofs=options.planOnly&&reserved?[{id:reserved,architecture:{height:.25},roofForm:'flat' as const,material:b.material,pitch:0,overhang:0}]:scene.objects.filter(r=>r.type==='roof-form'&&r.hostId===b.id);
+    const a=b.architecture,roof=roofs[0];
     if(!a||roofs.length!==1||!roof.architecture||!roof.roofForm){fail(b.id,'Exactly one supported explicit hosted roof is required.');continue;}
     const datums=scene.interior.storeys.filter(s=>s.hostMassId===b.id).sort((a,b)=>a.index-b.index);
-    if(datums.length!==b.levels||datums.some((s,i)=>s.index!==i||!scene.interior!.rooms.some(r=>r.storeyId===s.id))){fail(b.id,'All storeys need stable datums and authored major spaces.');continue;}
+    if(datums.length!==b.levels||datums.some((s,i)=>s.index!==i||!options.planOnly&&!scene.interior!.rooms.some(r=>r.storeyId===s.id))){fail(b.id,'All storeys need stable datums and authored major spaces.');continue;}
     const fp=b.composition?.footprint;
     const p:V3ArchitecturalBlueprint['buildings'][number]['plan']=fp?.kind==='outline'?{kind:'outline',segments:structuredClone(fp.segments!)}:fp?{kind:'articulated',width:a.width,depth:a.depth,operations:structuredClone(fp.operations)}:{kind:'rectangle',width:a.width,depth:a.depth};
     const {footprint:unusedFootprint,roofDatumGroup:unusedGroup,...facade}=b.composition??{};
@@ -353,17 +369,19 @@ export function checkoutV3ArchitecturalBlueprint(scene:V3Scene):V3ArchitecturalP
     if(!r.spatial||r.via.length!==1||!owner){fail(r.id,'Connections need a single canonical spatial owner.');continue;}
     const from=extractEndpoint(r,'from'),to=extractEndpoint(r,'to');
     if(!from||!to){fail(r.id,'Connection needs named entrances/site access or explicit dry-surface contacts.');continue;}
-    connections.push({id:r.id,surfaceId:owner.id,purpose:r.purpose,from,to,use:r.spatial.use,width:r.spatial.width,waypoints:structuredClone(r.spatial.waypoints??[]),materialId:owner.material.id});
+    connections.push({id:r.id,surfaceId:owner.id,purpose:r.purpose,from,to,use:r.spatial.use,width:r.spatial.width,waypoints:structuredClone(r.spatial.waypoints??[]),...(r.spatial.path?{path:structuredClone(r.spatial.path)}:{}),materialId:owner.material.id});
   }
   if(features.some(f=>!f.architecture))fail('features','Site features need named canonical geometry.');
   if(findings.length)return {ok:false,findings};
   const bp:V3ArchitecturalBlueprint={format:'v3-architectural-blueprint-1',concept:estate.concept,character:estate.character,
     site:{width:scene.site.width,depth:scene.site.depth,baseElevation:0,north:'-z',groundColor:scene.site.groundMaterial?.color??'#4a6b42',access:structuredClone(estate.siteAccess??[])},materials:[...materials.values()],buildings,entrances:structuredClone(index.entrances),
     features:features.map(f=>({id:f.id,label:f.label,role:f.semanticRole,type:f.type,materialId:f.material.id,location:{x:f.architecture!.x,z:f.architecture!.z,baseElevation:f.architecture!.baseElevation,rotationY:f.architecture!.rotationY??0},width:f.architecture!.width,depth:f.architecture!.depth,height:f.architecture!.height,
+      ...(f.composition?.footprint?{footprint:structuredClone(f.composition.footprint)}:{}),
       ...(f.canopyStyle===undefined?{}:{canopyStyle:f.canopyStyle}),...(f.railing===undefined?{}:{railing:f.railing}),...(f.terraceOpenEdges===undefined?{}:{terraceOpenEdges:structuredClone(f.terraceOpenEdges)}),
     })),connections,verticalCirculation:structuredClone(scene.interior.circulation??[]),
     requirements:structuredClone(estate.requirements),program:structuredClone(estate.program),zones:structuredClone(estate.zones),forms:structuredClone(estate.architecture??[]),relationships:structuredClone(estate.relationships),considerations:structuredClone(estate.considerations),roomAdjacencies:scene.relationships.filter(r=>r.kind==='adjacent').map(({from,to})=>({from,to})),partitions:structuredClone(scene.interior.partitions??[]) as V3ArchitecturalBlueprint['partitions'],doors:structuredClone(scene.interior.doors??[]) as V3ArchitecturalBlueprint['doors']};
-  const planned=planV3ArchitecturalBlueprint(bp);
+  if(options.planOnly)return {ok:true,findings,blueprint:bp};
+  const planned=planV3ArchitecturalBlueprint(bp,{buildFirst:!!scene.metadata.architecturalValidation});
   if(!planned.approval)return planned;
   // Refuse an export that would silently erase semantics (including legacy extra
   // envelopes, facade presets, roof positions, unsupported intent or site terrain).
@@ -379,7 +397,7 @@ export function checkoutV3ArchitecturalBlueprint(scene:V3Scene):V3ArchitecturalP
  * fail atomically. No blueprint/revision tracking is persisted in the V3 project.
  */
 export function reviseV3ArchitecturalBlueprint(current:V3Scene,base:V3ArchitecturalApproval,raw:unknown):V3ArchitecturalConstruction {
-  const prior=approvals.get(base),planned=planV3ArchitecturalBlueprint(raw);
+  const prior=approvals.get(base),buildFirst=prior?.buildFirst||!!current.metadata.architecturalValidation,planned=planV3ArchitecturalBlueprint(raw,{buildFirst});
   if(!prior||!planned.approval)return {ok:false,findings:prior?planned.findings:[{code:'ARCHITECTURAL_APPROVAL_REQUIRED',severity:'fatal',targetIds:['blueprint'],message:'The in-memory base approval is required for this replan.'}]};
   const next=approvals.get(planned.approval)!.scene,merged=structuredClone(current),findings:V3BlueprintFinding[]=[];
   const conflict=(path:string)=>findings.push({code:'ARCHITECTURAL_EDIT_CONFLICT',severity:'fatal',targetIds:[path],message:'A local scene edit conflicts with this blueprint revision; reconcile explicitly.'});
@@ -403,14 +421,16 @@ export function reviseV3ArchitecturalBlueprint(current:V3Scene,base:V3Architectu
   Object.assign(merged,merge(canonicalSemantics(prior.scene),canonicalSemantics(next),canonicalSemantics(current),'scene'));
   if(findings.length)return {ok:false,findings};
   const normalized=normalizeV3GenerationOutput(merged,'flat').scene;
-  const checked=approveV3Blueprint(normalized);
+  // This is a trusted local replan, not raw provider ingestion. Preserve project provenance/usage.
+  normalized.metadata=structuredClone(merged.metadata);
+  const checked=approveV3Blueprint(normalized,buildFirst?{constructionEvidence:false,allowFinding:f=>architecturalDraftFinding(normalized,f)}:{});
   if(!checked.approval)return {ok:false,findings:checked.findings};
   const approval:V3ArchitecturalApproval=Object.freeze({kind:'v3-architectural-approval'});
-  approvals.set(approval,{scene:normalized,existing:checked.approval});
+  approvals.set(approval,{scene:normalized,existing:checked.approval,buildFirst,findings:[]});
   const built=constructV3ArchitecturalBlueprint(approval);
   // Ensure construction still satisfies the newly approved geometry, while permitting
   // unchanged fields explicitly edited through the regular V3 editor.
-  if(built.scene){
+  if(built.scene&&!buildFirst){
     const audit=auditV3BlueprintElaboration(checked.approval,built.scene);
     if(!audit.ok)return {ok:false,findings:audit.findings};
   }

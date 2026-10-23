@@ -5,7 +5,9 @@ import { buildMassOpenings, OPENING_FRAME, type OpeningIdScheme } from "@/lib/ar
 import { buildArchitecturalAssemblies } from "@/lib/architecture/geometry/assemblies";
 import type { WallEdge } from "@/lib/architecture/geometry/footprint";
 import type { HousePrimitive } from "@/lib/house/types";
-import type { V3SceneObject } from "./scene";
+import { v3MassStoreys } from './stacking';
+import { buildArchitecturalFacadeOpenings } from './facadeOpeningRecovery';
+import type { V3Scene, V3SceneObject } from "./scene";
 
 const n = z.number().finite(), positive = n.positive(), unit = n.min(0).max(1);
 const id = z.string().min(1).max(64), facade = z.enum(["north", "east", "south", "west"]);
@@ -46,7 +48,7 @@ export const v3CompositionSchema = z.object({
   openings: z.array(opening).max(128).optional(),
   assemblies: z.array(z.object({ id, intent: z.string().min(1).max(160), parts: z.array(part).max(128) }).strict()).max(32).optional(),
 }).strict().superRefine((value, ctx) => {
-  if (value.mainEntry && !value.openings?.some(o => o.id === value.mainEntry!.openingId && o.type === 'door' && o.floors === 'ground' && o.end > o.start)) ctx.addIssue({ code: 'custom', message: 'mainEntry must reference an explicit ground-floor door.' });
+  if (value.mainEntry && !value.openings?.some(o => o.id === value.mainEntry!.openingId && (o.type === 'door' || o.type === 'glazed-door') && o.floors === 'ground' && o.end > o.start)) ctx.addIssue({ code: 'custom', message: 'mainEntry must reference an explicit ground-floor door.' });
   if (value.mainEntry && value.assemblies?.some(a => a.id === `entry-${value.mainEntry!.openingId}`)) ctx.addIssue({ code: 'custom', message: 'Entry canopy assembly id is reserved.' });
   const unique = (ids: string[]) => new Set(ids).size === ids.length;
   if (!unique((value.openings ?? []).map(o => o.id)) || !unique((value.assemblies ?? []).map(a => a.id))) ctx.addIssue({ code: "custom", message: "Composition ids must be unique." });
@@ -133,11 +135,12 @@ export function glazeDoorLeaves(parts: HousePrimitive[], o: V3SceneObject, openi
   return parts.flatMap((p) => {
     const key = p.id.startsWith(`${o.id}:`) ? p.id.slice(o.id.length + 1).split(":")[0] : undefined, op = key ? glazed.get(key) : undefined;
     if (!op || op.type !== "glazed-door" || p.kind !== "box" || p.label !== "Door Frame" || !p.id.endsWith("-frame")) return [p];
+    const finish=op.id===o.composition?.mainEntry?.openingId&&o.composition.mainEntry.color?{...trim,color:o.composition.mainEntry.color}:trim;
     const base = p.id.slice(0, -"-frame".length), alongX = p.size[0] >= p.size[2], length = alongX ? p.size[0] : p.size[2], height = p.size[1], depth = alongX ? p.size[2] : p.size[0];
     const member = Math.min(OPENING_FRAME.member, length / 4, height / 4), [cx, cy, cz] = p.position;
     const at = (along: number, y: number): [number, number, number] => alongX ? [cx + along, y, cz] : [cx, y, cz + along];
     const size = (along: number, h: number): [number, number, number] => alongX ? [along, h, depth] : [depth, h, along];
-    const frame = (suffix: string, label: string, along: number, y: number, a: number, h: number): HousePrimitive => ({ ...p, id: `${base}${suffix}`, label, position: at(along, y), size: size(a, h), ...trim });
+    const frame = (suffix: string, label: string, along: number, y: number, a: number, h: number): HousePrimitive => ({ ...p, id: `${base}${suffix}`, label, position: at(along, y), size: size(a, h), ...finish });
     const out: HousePrimitive[] = [
       frame("-frame-jamb-0", "Glazed Door Frame (jamb)", -length / 2 + member / 2, cy, member, height),
       frame("-frame-jamb-1", "Glazed Door Frame (jamb)", length / 2 - member / 2, cy, member, height),
@@ -161,12 +164,14 @@ export function stackedStoreyOpenings(openings: readonly V3Opening[], storeyBase
 }
 
 /** Reuse pure V2 construction functions; no V2 document, pipeline, persistence or bake. */
-export function compileV3Composition(o: V3SceneObject, width: number, depth: number, height: number, levels: number, storeyBase = 0): HousePrimitive[] {
+export function compileV3Composition(o: V3SceneObject, width: number, depth: number, height: number, levels: number, storeyBase = 0, scene?: V3Scene): HousePrimitive[] {
   const parsed = v3CompositionSchema.safeParse(o.composition);
   if (!parsed.success) return [];
+  const architectural = !!scene?.estatePlan?.blueprint;
+  const buildOpenings = architectural ? buildArchitecturalFacadeOpenings : buildMassOpenings;
   const composition = {...parsed.data, openings: parsed.data.openings?.map(op => op.type === 'opening-rhythm'
-    ? {...op, width: fittedRhythmWidth(op.facade === 'north' || op.facade === 'south' ? width : depth, op.count, op.width)}
-    : {...op, reveal: op.reveal ?? .04})}, levelHeight = height / levels;
+    ? architectural ? op : {...op, width: fittedRhythmWidth(op.facade === 'north' || op.facade === 'south' ? width : depth, op.count, op.width)}
+    : {...op, reveal: op.reveal ?? .04})}, storeys = v3MassStoreys(o, scene), levelHeight = storeys[0].height;
   const exterior = { color: o.material.color, roughness: o.material.roughness ?? .72, metalness: o.material.metalness ?? 0 };
   const trim = { color: "#263036", roughness: .38, metalness: .7 };
   const glass = { color: "#8fbdc9", roughness: .1, metalness: .08, transparent: true, opacity: .42 };
@@ -178,15 +183,15 @@ export function compileV3Composition(o: V3SceneObject, width: number, depth: num
   ];
   const local: HousePrimitive[] = [];
   if (composition.openings !== undefined) for (let floor = 0; floor < levels; floor++) for (const edge of edges) {
-    local.push(...glazeDoorLeaves(buildMassOpenings([edge], width, depth, stackedStoreyOpenings(composition.openings, storeyBase, floor).map(builderOpening), storeyBase + floor, floor * levelHeight, levelHeight, `wall-${floor}`, { exterior, trim, glass }, semanticOpeningIds(o.id, edge.facade!, floor)).primitives, o, composition.openings, trim));
+    local.push(...glazeDoorLeaves(buildOpenings([edge], width, depth, stackedStoreyOpenings(composition.openings.filter(op=>!architectural||op.segmentId===undefined), storeyBase, floor).map(builderOpening), storeyBase + floor, storeys[floor].elevation, storeys[floor].height, `wall-${floor}`, { exterior, trim, glass }, semanticOpeningIds(o.id, edge.facade!, floor)).primitives, o, composition.openings, trim));
   }
-  const entry = composition.mainEntry && composition.openings?.find(op => op.id === composition.mainEntry!.openingId && op.type === 'door');
-  const entryAssembly: NonNullable<V3Composition['assemblies']> = entry && entry.type === 'door' ? [{
+  const entry = composition.mainEntry && composition.openings?.find(op => op.id === composition.mainEntry!.openingId && (op.type === 'door' || op.type === 'glazed-door'));
+  const entryAssembly: NonNullable<V3Composition['assemblies']> = entry && (entry.type === 'door' || entry.type === 'glazed-door') ? [{
     id: `entry-${entry.id}`, intent: 'Main entry canopy', parts: [{ id: 'canopy', type: 'slab', facade: entry.facade,
       start: Math.max(0, entry.start - .04), end: Math.min(1, entry.end + .04), depth: composition.mainEntry!.canopyDepth,
       elevation: Math.min(entry.height ?? 2.4, levelHeight - .4) + .15, thickness: .18, level: 0 }],
   }] : [];
-  local.push(...buildArchitecturalAssemblies({ width, depth, height, floors: levels, assemblies: [...(composition.assemblies ?? []), ...entryAssembly] }, levelHeight, exterior, trim, glass));
+  local.push(...buildArchitecturalAssemblies({ width, depth, height, floors: levels, assemblies: [...(composition.assemblies ?? []), ...entryAssembly].map(a => ({...a, parts:a.parts.map(p => p.type === "railing" ? p : {...p, level:0, elevation:(storeys[p.level ?? 0]?.elevation ?? (p.level ?? 0)*levelHeight) + (p.elevation ?? 0)})})) }, levelHeight, exterior, trim, glass));
   const yaw = o.transform.rotation[1], c = Math.cos(yaw), s = Math.sin(yaw), base = o.transform.position[1] - height / 2;
   return local.flatMap(p => {
     if (p.kind !== "box" || !p.size.every(v => Number.isFinite(v) && v > 0)) return [];
@@ -196,7 +201,7 @@ export function compileV3Composition(o: V3SceneObject, width: number, depth: num
     const isMainEntry = entry && p.id.includes(`:${entry.id}:`);
     const door = p.label === 'Door Frame' ? { ...ENTRY_DOOR_FINISH, ...(isMainEntry && composition.mainEntry?.color ? { color: composition.mainEntry.color } : {}) } : undefined;
     return [{ ...p, ...(surface && !['water','grass','paving'].includes(surface) ? {surface: surface as 'stone'|'wood'|'metal'|'concrete'|'stucco'|'glass'} : {}), ...door, id: p.id.includes(':') ? semanticCompositionChildId(p.id) : `${o.id}-composition-${p.id}`, sourceObjectId: o.id, semanticRole: o.semanticRole,
-      componentRole: p.category === "window" ? (p.transparent ? "facade glazing" : "glazing frame") : p.label.startsWith("Assembly") ? p.label.toLowerCase() : "facade wall",
+      componentRole: p.label.startsWith('Unresolved facade opening:') ? 'unresolved facade wall' : p.category === "window" ? (p.transparent ? "facade glazing" : "glazing frame") : p.label.startsWith("Assembly") ? p.label.toLowerCase() : "facade wall",
       position: [o.transform.position[0] + x*c + z*s, base+y, o.transform.position[2] - x*s + z*c] as [number,number,number],
       rotation: [p.rotation[0], p.rotation[1]+yaw, p.rotation[2]] as [number,number,number] }];
   });

@@ -1,0 +1,38 @@
+import {afterEach,expect,it,vi} from 'vitest';
+import live from '@/lib/v3/__tests__/fixtures/architectural-blueprint-live-2026-10-20.json';
+import {constructV3ArchitecturalBlueprint,planV3ArchitecturalBlueprint,checkoutV3ArchitecturalBlueprint,reviseV3ArchitecturalBlueprint} from '@/lib/v3/architecturalBlueprint';
+import {BLANK_V3_SCENE,compileV3Scene} from '@/lib/v3/scene';
+
+afterEach(()=>vi.unstubAllGlobals());
+it('persists the real mansion draft and a blueprint height edit atomically, retaining unrelated saved projects',async()=>{
+  const data=new Map<string,string>(),localStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>void data.set(k,v),removeItem:(k:string)=>void data.delete(k)};
+  vi.stubGlobal('localStorage',localStorage);vi.stubGlobal('window',{localStorage,addEventListener:()=>{}});
+  vi.resetModules();
+  const {useProjectStore,PROJECT_STORAGE_KEY}=await import('../useProjectStore');
+  const store=useProjectStore.getState(),existing=store.createProject('Existing work','house','v3-scene');
+  const existingBefore=JSON.stringify(useProjectStore.getState().getProject(existing.id));
+  const built=constructV3ArchitecturalBlueprint(planV3ArchitecturalBlueprint(live,{buildFirst:true}).approval!);
+  expect(built.outcome).toBe('draft');
+  const p=store.createProject('Isolated mansion proof','house','v3-scene');
+  store.appendVersion(p.id,'Recovered mansion draft',JSON.stringify({...BLANK_V3_SCENE,v3Scene:built.scene}),'ai-initial-generation');
+  const saved=useProjectStore.getState().getProject(p.id)!,savedScene=JSON.parse(saved.houseConfigJson).v3Scene;
+  expect(compileV3Scene(savedScene)).toEqual(built.model);
+  const checkout=checkoutV3ArchitecturalBlueprint(savedScene),bp=structuredClone(checkout.blueprint!);
+  expect(checkout.ok).toBe(true);bp.buildings[0].storeys[1].height=3.8;
+  const revised=reviseV3ArchitecturalBlueprint(savedScene,checkout.approval!,bp);
+  expect(revised.ok).toBe(true);
+  store.appendVersion(p.id,'Upper storey 3.8m',JSON.stringify({...BLANK_V3_SCENE,v3Scene:revised.scene}));
+  vi.resetModules();
+  const reopened=(await import('../useProjectStore')).useProjectStore;
+  await reopened.persist.rehydrate();
+  const current=reopened.getState().getProject(p.id)!,root=JSON.parse(current.houseConfigJson);
+  expect(root.v3Scene.metadata.architecturalValidation.status).toBe('draft');
+  expect(root.v3Scene.objects.find((o:{id:string})=>o.id==='villa-roof').architecture.baseElevation).toBe(8);
+  expect(compileV3Scene(root.v3Scene)).toEqual(revised.model);
+  expect(current.versions.at(-1)!.houseConfigJson).toBe(current.houseConfigJson);
+  expect(checkoutV3ArchitecturalBlueprint(root.v3Scene).ok).toBe(true);
+  expect(JSON.stringify(reopened.getState().getProject(existing.id))).toBe(existingBefore);
+  const persisted=data.get(PROJECT_STORAGE_KEY),broken=structuredClone(root);broken.v3Scene.objects.shift();
+  expect(()=>reopened.getState().updateHouseConfig(p.id,JSON.stringify(broken))).toThrow();
+  expect(data.get(PROJECT_STORAGE_KEY)).toBe(persisted);
+},20000);

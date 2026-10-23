@@ -1,0 +1,139 @@
+{
+  "renderer": "Production PrimitiveMesh/PBR, edge detail, lighting and PostFx",
+  "captures": [
+    {
+      "name": "draft-estate",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/draft-estate.jpg",
+      "status": "Draft — Needs Refinement (not fully validated): 13 objects; 153 primitives. Blueprint document is not persisted in the scene.",
+      "webgl": {
+        "width": 1270,
+        "height": 950,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "draft-reloaded",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/draft-reloaded.jpg",
+      "status": "Draft — Needs Refinement (not fully validated): scene and diagnostics survived reload.",
+      "webgl": {
+        "width": 1270,
+        "height": 950,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "draft-interior",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/draft-interior.jpg",
+      "status": "Draft — Needs Refinement (not fully validated): scene and diagnostics survived reload.",
+      "webgl": {
+        "width": 1270,
+        "height": 950,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "promoted-complete",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/promoted-complete.jpg",
+      "status": "Complete: service door repaired and current scene fully revalidated.",
+      "webgl": {
+        "width": 1270,
+        "height": 950,
+        "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "renderer": "WebKit WebGL"
+      }
+    },
+    {
+      "name": "workspace-draft",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/workspace-draft.jpg",
+      "status": "draft",
+      "diagnostics": [
+        {
+          "code": "DOOR_OUTSIDE_BOUNDARY",
+          "targetIds": [
+            "service-door"
+          ]
+        },
+        {
+          "code": "ARCHITECTURAL_DOOR_CLIPPED",
+          "targetIds": [
+            "service-partition",
+            "service-door"
+          ]
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ]
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ]
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "workspace-repaired",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/workspace-repaired.jpg",
+      "status": "complete",
+      "diagnostics": [
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ]
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ]
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "workspace-reloaded-complete",
+      "path": "docs/architecture/architectural-blueprint-pipeline/draft-webgl/workspace-reloaded-complete.jpg",
+      "status": "complete",
+      "diagnostics": [
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "house-upper"
+          ]
+        },
+        {
+          "code": "STOREY_OUTSIDE_HOST",
+          "targetIds": [
+            "atelier-ground"
+          ]
+        },
+        {
+          "code": "FALLBACK_RENDER_USED",
+          "targetIds": [
+            "arrival-drive"
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "blockedRequests": []
+}

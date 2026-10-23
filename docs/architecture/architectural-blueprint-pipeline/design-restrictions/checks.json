@@ -1,0 +1,165 @@
+{
+  "recordedAtUtc": "2026-10-21T18:32:20.038270+00:00",
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "commits": 0,
+  "pushes": 0,
+  "deployments": 0,
+  "focused": {
+    "command": "npm test -- src/lib/v3/__tests__/architecturalDesignRestrictions.test.ts src/lib/v3/__tests__/architecturalPlanFirst.test.ts src/lib/v3/__tests__/architecturalPlanning.test.ts src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+    "exitCode": 0,
+    "passed": 64,
+    "files": 4,
+    "log": "focused-tests.log"
+  },
+  "full": {
+    "command": "npm test -- --maxWorkers=2 --reporter=json --outputFile=/tmp/design-restrictions-full-tests-final.json",
+    "exitCode": 0,
+    "passed": 2360,
+    "skipped": 3,
+    "failed": 0,
+    "files": 195,
+    "record": "full-tests.json",
+    "initialUnboundedConcurrency": "initial-timeouts.json"
+  },
+  "typescript": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
+  "eslint": {
+    "command": "npm run lint; npx eslint scripts/architectural-design-capture.mjs scripts/architectural-design-alternatives.ts",
+    "exitCode": 0
+  },
+  "productionBuild": {
+    "command": "NEXT_TELEMETRY_DISABLED=1 npm run build (network-enabled for existing Google Fonts)",
+    "exitCode": 0,
+    "buildId": "IeZqTpzhW5gbwJ_0r4LTM",
+    "log": "build.log",
+    "initialSandboxFailure": "Existing Google Fonts CSS could not be fetched; no source/fonts were changed."
+  },
+  "whitespace": {
+    "command": "git diff --check plus trailing-whitespace scan of all task source/scripts/docs including untracked files",
+    "exitCode": 0,
+    "findings": []
+  },
+  "originals": [
+    {
+      "date": "2026-10-20",
+      "sha256": "f489d79d6830a9787ae173fdd012a459b36edbc93b638219f94bc454dbb1e394",
+      "unchanged": true,
+      "compatibleOutcome": "draft"
+    },
+    {
+      "date": "2026-10-21",
+      "sha256": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb",
+      "unchanged": true,
+      "compatibleOutcome": "draft"
+    }
+  ],
+  "alternativeConstruction": [
+    {
+      "date": "2026-10-20",
+      "outcome": "complete",
+      "productionSequence": [
+        "plan",
+        "massing",
+        "exterior"
+      ],
+      "planPreserved": true,
+      "providerCalls": 0
+    },
+    {
+      "date": "2026-10-21",
+      "outcome": "complete",
+      "productionSequence": [
+        "plan",
+        "massing",
+        "exterior"
+      ],
+      "planPreserved": true,
+      "providerCalls": 0
+    }
+  ],
+  "productionPath": {
+    "verifiedBy": "actual API route and real SDK parser with offline MockLanguageModelV3, including raw JSON omitting optional fields",
+    "flag": "AI_V3_ARCHITECTURAL_BLUEPRINT=1",
+    "terrain": "flat",
+    "requirePlanFirst": true,
+    "inputSchemaOptionalDefaults": true,
+    "singleInitialResponse": true,
+    "maximumAuthoringAttempts": 2,
+    "sdkTransportRetries": 0,
+    "outputTokenCap": 10000,
+    "unchangedDraftPolicy": true,
+    "noIndependentSceneAuthoring": true
+  },
+  "productionCapture": {
+    "command": "node scripts/architectural-design-capture.mjs (optional AUDIT_DETAIL=1 adds northwest views)",
+    "record": "capture.json",
+    "captures": 38,
+    "errors": [],
+    "forbiddenRequests": [],
+    "failedAssets": [],
+    "matchedBlueprintFinishedMeshes": [
+      315,
+      257,
+      208,
+      243
+    ],
+    "visualReview": {
+      "inspected": "Representative original/alternative estate plans, ground plans, finished overviews, first outdoor eye-level view and second northwest massing/exterior views",
+      "finding": "U/L footprints, changed spatial hierarchy and integrated pool decks are visible; production materials/vegetation remain schematic and private interiors remain conceptual."
+    }
+  },
+  "changedSourceFingerprints": [
+    {
+      "path": "src/lib/v3/architecturalBlueprintGeneration.ts",
+      "sha256": "952f5dc68fb7eab5daf1fcc8a0f62f148cdd23439435147ad37bf5c21e2cd450"
+    },
+    {
+      "path": "src/lib/v3/architecturalPlanFirst.ts",
+      "sha256": "7c8831ae9af54b680fbf8abe7fccb6880256adba06417045e28e13b75e1f9dab"
+    },
+    {
+      "path": "src/lib/v3/architecturalBlueprint.ts",
+      "sha256": "b6bf5d97b9fc993dded766228c09a42161cee2cd5a56dfafa9cb3afde67be7aa"
+    },
+    {
+      "path": "src/lib/v3/routeGeometry.ts",
+      "sha256": "405cf2be436709cbcecae4d8270131446d2578a1b6e6853f124a33d1d95ebd08"
+    },
+    {
+      "path": "src/lib/v3/__tests__/architecturalDesignRestrictions.test.ts",
+      "sha256": "0361b2a4796cc3d43c49d86cc7e3c20d2370091e019a066aa96e302aab99c933"
+    },
+    {
+      "path": "src/lib/v3/__tests__/architecturalPlanning.test.ts",
+      "sha256": "2c0741a3dff873de3441fe5021ef3cb6fe0ee8bfe38ac28db8835206f669270c"
+    },
+    {
+      "path": "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+      "sha256": "5620077c9a098581c627714cd139781876b7f415708dc9cf64b595058dd40aaf"
+    },
+    {
+      "path": "scripts/architectural-design-alternatives.ts",
+      "sha256": "c47458f19353e6b9a3c1520ecccf4f04b37625050b1de7184f152d26e2fbcc8d"
+    },
+    {
+      "path": "scripts/architectural-design-capture.mjs",
+      "sha256": "cd476399e584042d10f736599a6641bac262d1fb4d312a41ecb2483e2929cb68"
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/DESIGN_RESTRICTIONS_AUDIT.md",
+      "sha256": "b5a64b867afde0c94625878e159c73d7c4db24c7b72501e40fa9fbf3093c88ff"
+    },
+    {
+      "path": "docs/architecture/architectural-blueprint-pipeline/CONTRACT.md",
+      "sha256": "3c09ffa0076dd6af7fcf8290fe82a0b705968be9cfb985031945dae3c9c6b69d"
+    }
+  ],
+  "artifactLinks": {
+    "missing": []
+  },
+  "captureHashesVerified": true,
+  "roomIdentitiesRetained": true
+}

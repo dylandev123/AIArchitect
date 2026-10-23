@@ -1,0 +1,273 @@
+{
+  "format": "v3-architectural-plan-1",
+  "concept": "OFFLINE TEST — A quiet L-shaped listening and reading home framing a pocket garden. An inner-edge gallery leads from the south entrance to the north studio. The court remains outside the actual concave shell.",
+  "site": {
+    "width": 60,
+    "depth": 60,
+    "access": []
+  },
+  "buildings": [
+    {
+      "id": "listening-house",
+      "label": "Listening home",
+      "location": {
+        "x": 0,
+        "z": 0
+      },
+      "plan": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "listening-edge-0",
+            "type": "line",
+            "start": [
+              -8,
+              -6
+            ],
+            "end": [
+              8,
+              -6
+            ]
+          },
+          {
+            "id": "listening-edge-1",
+            "type": "line",
+            "start": [
+              8,
+              -6
+            ],
+            "end": [
+              8,
+              6
+            ]
+          },
+          {
+            "id": "listening-edge-2",
+            "type": "line",
+            "start": [
+              8,
+              6
+            ],
+            "end": [
+              2,
+              6
+            ]
+          },
+          {
+            "id": "listening-edge-3",
+            "type": "line",
+            "start": [
+              2,
+              6
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "id": "listening-edge-4",
+            "type": "line",
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              -8,
+              0
+            ]
+          },
+          {
+            "id": "listening-edge-5",
+            "type": "line",
+            "start": [
+              -8,
+              0
+            ],
+            "end": [
+              -8,
+              -6
+            ]
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "id": "listening-floor",
+          "label": "Listening floor",
+          "spaces": [
+            {
+              "id": "listening-studio",
+              "label": "listening studio",
+              "program": "living reading studio"
+            },
+            {
+              "id": "listening-gallery",
+              "label": "listening gallery",
+              "program": "circulation gallery"
+            },
+            {
+              "id": "listening-kitchen",
+              "label": "listening kitchen",
+              "program": "kitchen"
+            },
+            {
+              "id": "listening-entry",
+              "label": "listening entry",
+              "program": "entry hall"
+            },
+            {
+              "id": "listening-bedroom",
+              "label": "listening bedroom",
+              "program": "bedroom"
+            },
+            {
+              "id": "listening-bath",
+              "label": "listening bath",
+              "program": "bathroom"
+            }
+          ],
+          "layout": {
+            "regions": [
+              {
+                "root": "listening-north",
+                "bounds": {
+                  "x": 0,
+                  "z": -3,
+                  "width": 16,
+                  "depth": 6
+                }
+              },
+              {
+                "root": "listening-south",
+                "bounds": {
+                  "x": 5,
+                  "z": 3,
+                  "width": 6,
+                  "depth": 6
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "listening-studio-leaf",
+                "kind": "room",
+                "roomId": "listening-studio"
+              },
+              {
+                "id": "listening-gallery-leaf",
+                "kind": "room",
+                "roomId": "listening-gallery"
+              },
+              {
+                "id": "listening-kitchen-leaf",
+                "kind": "room",
+                "roomId": "listening-kitchen"
+              },
+              {
+                "id": "listening-entry-leaf",
+                "kind": "room",
+                "roomId": "listening-entry"
+              },
+              {
+                "id": "listening-bedroom-leaf",
+                "kind": "room",
+                "roomId": "listening-bedroom"
+              },
+              {
+                "id": "listening-bath-leaf",
+                "kind": "room",
+                "roomId": "listening-bath"
+              },
+              {
+                "id": "listening-north",
+                "kind": "split",
+                "zone": "Reading, circulation and cooking",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "listening-studio-leaf",
+                    "weight": 10
+                  },
+                  {
+                    "node": "listening-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "listening-kitchen-leaf",
+                    "weight": 4
+                  }
+                ]
+              },
+              {
+                "id": "listening-south",
+                "kind": "split",
+                "zone": "Arrival gallery and private suite",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "listening-entry-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "listening-suite",
+                    "weight": 4
+                  }
+                ]
+              },
+              {
+                "id": "listening-suite",
+                "kind": "split",
+                "zone": "Bedroom and bathing",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "listening-bedroom-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "listening-bath-leaf",
+                    "weight": 1
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "listening-door",
+          "type": "door",
+          "facade": "south",
+          "start": 0.6666666666666666,
+          "end": 1,
+          "serves": "listening-entry",
+          "segmentId": "listening-edge-2"
+        }
+      ]
+    }
+  ],
+  "roomAdjacencies": [
+    {
+      "from": "listening-gallery",
+      "to": "listening-entry"
+    },
+    {
+      "from": "listening-gallery",
+      "to": "listening-studio"
+    },
+    {
+      "from": "listening-gallery",
+      "to": "listening-kitchen"
+    },
+    {
+      "from": "listening-entry",
+      "to": "listening-bedroom"
+    },
+    {
+      "from": "listening-entry",
+      "to": "listening-bath"
+    }
+  ]
+}

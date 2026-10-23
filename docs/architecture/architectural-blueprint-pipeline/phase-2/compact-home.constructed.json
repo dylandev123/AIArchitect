@@ -1,0 +1,488 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 36,
+      "depth": 36,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE REFERENCE — A compact garden home: a modest rectangular shell keeps construction simple. The south entry hall gives separate access to sleeping, bathing and cooking; a full-width north living room opens to the garden terrace. No luxury amenities are imposed.",
+      "character": "OFFLINE REFERENCE — A compact garden home: a modest rectangular shell keeps construction simple. The south entry hall gives separate access to sleeping, bathing and cooking; a full-width north living room opens to the garden terrace. No luxury amenities are imposed.",
+      "siteAccess": [
+        {
+          "id": "compact-gate",
+          "boundary": "south",
+          "point": [
+            0,
+            0,
+            18
+          ]
+        }
+      ],
+      "requirements": [],
+      "program": [
+        {
+          "id": "compact-home-program",
+          "role": "Compact garden home",
+          "kind": "building",
+          "objectIds": [
+            "compact-home"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [
+        {
+          "id": "compact-arrival",
+          "purpose": "Gate to entry hall",
+          "from": "compact-gate",
+          "to": "compact-home",
+          "via": [
+            "route-0"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "entranceId": "compact-home-compact-entry-entry"
+            },
+            "use": "pedestrian",
+            "width": 1.2,
+            "waypoints": []
+          }
+        },
+        {
+          "id": "compact-garden-link",
+          "purpose": "Living to terrace",
+          "from": "compact-home",
+          "to": "compact-terrace",
+          "via": [
+            "route-1"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "compact-home-compact-garden-door-entry"
+            },
+            "to": {
+              "point": [
+                0,
+                0,
+                -5
+              ]
+            },
+            "use": "pedestrian",
+            "width": 1.2,
+            "waypoints": []
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-compact-home",
+            "objectId": "compact-home",
+            "role": "Compact garden home"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "compact-home-compact-entry-entry",
+            "objectId": "compact-home",
+            "openingId": "compact-entry",
+            "level": 0
+          },
+          {
+            "id": "compact-home-compact-garden-door-entry",
+            "objectId": "compact-home",
+            "openingId": "compact-garden-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "compact-home-roof"
+        ],
+        "outdoorObjectIds": [
+          "compact-terrace"
+        ],
+        "routeIds": [
+          "compact-arrival",
+          "compact-garden-link"
+        ],
+        "verticalCirculationIds": [],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "compact-home",
+        "type": "building-mass",
+        "semanticRole": "Compact garden home",
+        "label": "Compact garden home",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 10,
+          "depth": 8,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          10,
+          3.6,
+          8
+        ],
+        "material": {
+          "id": "stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "compact-entry",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "compact-hall"
+            },
+            {
+              "id": "compact-garden-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.4,
+              "operation": "sliding",
+              "serves": "compact-living"
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "compact-home-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of compact-home",
+        "label": "Compact garden home roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 3.6,
+          "width": 10,
+          "depth": 8,
+          "height": 0.25,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            3.725,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          10,
+          0.25,
+          8
+        ],
+        "material": {
+          "id": "roof",
+          "color": "#a58a64",
+          "roughness": 0.4,
+          "surface": "metal"
+        },
+        "hostId": "compact-home",
+        "roofForm": "flat",
+        "overhang": 0,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "compact-terrace",
+        "type": "terrace",
+        "semanticRole": "Living garden terrace",
+        "label": "Living garden terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -8,
+          "baseElevation": 0,
+          "width": 10,
+          "depth": 6,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.07,
+            -8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          10,
+          0.14,
+          6
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none"
+      },
+      {
+        "id": "route-0",
+        "type": "path",
+        "semanticRole": "Gate to entry hall",
+        "label": "Gate to entry hall",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            2.220446049250313e-16,
+            0.05,
+            11
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          1.2000000000000004,
+          0.01,
+          14
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "route-1",
+        "type": "path",
+        "semanticRole": "Living to terrace",
+        "label": "Living to terrace",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            0,
+            0.05,
+            -4.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          1.2,
+          0.01,
+          1
+        ],
+        "material": {
+          "id": "paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "surface": "paving"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "compact-floor",
+          "label": "Garden floor",
+          "semanticRole": "Garden floor",
+          "hostMassId": "compact-home",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "compact-living",
+          "label": "compact living",
+          "semanticRole": "compact living",
+          "program": "living dining",
+          "storeyId": "compact-floor",
+          "hostMassId": "compact-home",
+          "footprint": {
+            "x": 0,
+            "z": -2,
+            "width": 10,
+            "depth": 4
+          }
+        },
+        {
+          "id": "compact-hall",
+          "label": "compact hall",
+          "semanticRole": "compact hall",
+          "program": "entry circulation",
+          "storeyId": "compact-floor",
+          "hostMassId": "compact-home",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 2,
+            "depth": 4
+          }
+        },
+        {
+          "id": "compact-bedroom",
+          "label": "compact bedroom",
+          "semanticRole": "compact bedroom",
+          "program": "bedroom",
+          "storeyId": "compact-floor",
+          "hostMassId": "compact-home",
+          "footprint": {
+            "x": -3,
+            "z": 2,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "compact-kitchen",
+          "label": "compact kitchen",
+          "semanticRole": "compact kitchen",
+          "program": "kitchen",
+          "storeyId": "compact-floor",
+          "hostMassId": "compact-home",
+          "footprint": {
+            "x": 3,
+            "z": 1,
+            "width": 4,
+            "depth": 2
+          }
+        },
+        {
+          "id": "compact-bath",
+          "label": "compact bath",
+          "semanticRole": "compact bath",
+          "program": "bathroom",
+          "storeyId": "compact-floor",
+          "hostMassId": "compact-home",
+          "footprint": {
+            "x": 3,
+            "z": 3,
+            "width": 4,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": []
+    },
+    "relationships": [
+      {
+        "from": "compact-hall",
+        "to": "compact-living",
+        "kind": "adjacent"
+      },
+      {
+        "from": "compact-hall",
+        "to": "compact-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "compact-hall",
+        "to": "compact-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "compact-hall",
+        "to": "compact-bath",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "complete",
+        "diagnostics": []
+      }
+    }
+  }
+}

@@ -1,0 +1,716 @@
+{
+  "scene": {
+    "version": 3,
+    "site": {
+      "width": 100,
+      "depth": 90,
+      "baseElevation": 0,
+      "groundMaterial": {
+        "id": "concept-ground",
+        "color": "#b6b9ad",
+        "roughness": 1
+      }
+    },
+    "objects": [
+      {
+        "id": "main-residence",
+        "label": "Sea Court Residence",
+        "semanticRole": "Primary private estate residence framing the protected sea court",
+        "type": "building-mass",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "width": 46,
+          "depth": 32,
+          "height": 8.2,
+          "baseElevation": 0.3,
+          "rotationY": 0
+        },
+        "dimensions": [
+          46,
+          8.2,
+          32
+        ],
+        "transform": {
+          "position": [
+            0,
+            4.3999999999999995,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-plaster",
+          "color": "#dedbd3",
+          "roughness": 0.85
+        },
+        "levels": 2,
+        "roofForm": "flat",
+        "pitch": 12,
+        "pitchUnit": "degrees",
+        "overhang": 0.7,
+        "composition": {
+          "openings": [],
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "sea-court-recess",
+                "floors": "all",
+                "type": "recess",
+                "facade": "north",
+                "start": 0.17,
+                "end": 0.83,
+                "depth": 14
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "horizon-pavilion",
+        "label": "Horizon Pavilion",
+        "semanticRole": "Detached seaward pavilion and independent outlook volume",
+        "type": "building-mass",
+        "architecture": {
+          "x": 34,
+          "z": -16,
+          "width": 18,
+          "depth": 12,
+          "height": 4.8,
+          "baseElevation": 0.3,
+          "rotationY": 0
+        },
+        "dimensions": [
+          18,
+          4.8,
+          12
+        ],
+        "transform": {
+          "position": [
+            34,
+            2.6999999999999997,
+            -16
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-plaster",
+          "color": "#dedbd3",
+          "roughness": 0.85
+        },
+        "levels": 1,
+        "roofForm": "butterfly",
+        "pitch": 10,
+        "pitchUnit": "degrees",
+        "overhang": 0.9,
+        "composition": {
+          "openings": []
+        }
+      },
+      {
+        "id": "arrival-pavilion",
+        "label": "Arrival Pavilion",
+        "semanticRole": "Low landward arrival marker and threshold to the estate",
+        "type": "building-mass",
+        "architecture": {
+          "x": 0,
+          "z": 30,
+          "width": 16,
+          "depth": 8,
+          "height": 3.6,
+          "baseElevation": 0.15,
+          "rotationY": 0
+        },
+        "dimensions": [
+          16,
+          3.6,
+          8
+        ],
+        "transform": {
+          "position": [
+            0,
+            1.95,
+            30
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-plaster",
+          "color": "#dedbd3",
+          "roughness": 0.85
+        },
+        "levels": 1,
+        "roofForm": "mono-pitch",
+        "pitch": 8,
+        "pitchUnit": "degrees",
+        "overhang": 1,
+        "composition": {
+          "openings": []
+        }
+      },
+      {
+        "id": "sea-court",
+        "label": "Sheltered Sea Court",
+        "semanticRole": "courtyard",
+        "type": "courtyard",
+        "architecture": {
+          "x": 0,
+          "z": -9,
+          "width": 30,
+          "depth": 14,
+          "height": 0.08,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "dimensions": [
+          30,
+          0.08,
+          14
+        ],
+        "transform": {
+          "position": [
+            0,
+            0.04,
+            -9
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-outdoor",
+          "color": "#b9b3a5",
+          "roughness": 1
+        },
+        "metadata": {
+          "purpose": "Wind-tempered outdoor living court framed by the main residence and open north to the Caribbean horizon"
+        }
+      },
+      {
+        "id": "panorama-terrace",
+        "label": "Panorama Terrace",
+        "semanticRole": "terrace",
+        "type": "terrace",
+        "architecture": {
+          "x": 0,
+          "z": -25,
+          "width": 40,
+          "depth": 7,
+          "height": 0.08,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "dimensions": [
+          40,
+          0.08,
+          7
+        ],
+        "transform": {
+          "position": [
+            0,
+            0.04,
+            -25
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-outdoor",
+          "color": "#b9b3a5",
+          "roughness": 1
+        },
+        "metadata": {
+          "purpose": "Broad open-air sea outlook held beyond the more intimate protected court"
+        }
+      },
+      {
+        "id": "arrival-court",
+        "label": "Landward Arrival Court",
+        "semanticRole": "arrival",
+        "type": "courtyard",
+        "architecture": {
+          "x": 0,
+          "z": 20,
+          "width": 22,
+          "depth": 8,
+          "height": 0.08,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "dimensions": [
+          22,
+          0.08,
+          8
+        ],
+        "transform": {
+          "position": [
+            0,
+            0.04,
+            20
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-outdoor",
+          "color": "#b9b3a5",
+          "roughness": 1
+        },
+        "metadata": {
+          "purpose": "Formal exterior threshold separating arrival from the principal residence"
+        }
+      },
+      {
+        "id": "east-pavilion-garden",
+        "label": "East Pavilion Garden",
+        "semanticRole": "garden",
+        "type": "landscape-zone",
+        "architecture": {
+          "x": 35,
+          "z": 0,
+          "width": 20,
+          "depth": 12,
+          "height": 0.08,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "dimensions": [
+          20,
+          0.08,
+          12
+        ],
+        "transform": {
+          "position": [
+            35,
+            0.04,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "material": {
+          "id": "concept-outdoor",
+          "color": "#929c86",
+          "roughness": 1
+        },
+        "metadata": {
+          "purpose": "Private planted exterior ground surrounding the detached horizon pavilion"
+        }
+      }
+    ],
+    "relationships": [],
+    "interior": {
+      "rooms": [],
+      "storeys": [
+        {
+          "id": "main-residence-storey-0",
+          "hostMassId": "main-residence",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2,
+          "label": "Sea Court Residence · level 1",
+          "semanticRole": "concept-storey"
+        },
+        {
+          "id": "main-residence-storey-1",
+          "hostMassId": "main-residence",
+          "index": 1,
+          "elevation": 4.46,
+          "height": 4,
+          "label": "Sea Court Residence · level 2",
+          "semanticRole": "concept-storey"
+        },
+        {
+          "id": "horizon-pavilion-storey-0",
+          "hostMassId": "horizon-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.8,
+          "label": "Horizon Pavilion · level 1",
+          "semanticRole": "concept-storey"
+        },
+        {
+          "id": "arrival-pavilion-storey-0",
+          "hostMassId": "arrival-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6,
+          "label": "Arrival Pavilion · level 1",
+          "semanticRole": "concept-storey"
+        }
+      ]
+    },
+    "metadata": {
+      "conceptEvaluation": true,
+      "conceptFormat": "v3-architectural-concept-1",
+      "title": "Caribbean Horizon Estate, Saint Lucia",
+      "concept": "A composed hilltop estate arranged as a deep, two-storey sea-facing U: a substantial protected residence forms a calm court open to the Caribbean horizon, while a detached horizon pavilion sits to the east as a lower, independent destination. The architecture is deliberately horizontal and grounded, using a broad plinth-like main mass to make the sea, sky and sheltered outdoor rooms feel dominant rather than competing with a vertical object.",
+      "character": "Sculptural Caribbean modernism: weighty, shade-casting horizontal volumes, a protected wind-tempered court, and a restrained procession from the landward south to the open northern sea edge.",
+      "decisions": [
+        "The principal residence is a 46 by 32 metre articulated U-shaped envelope, with a 14 metre-deep northern recess. Its substantial southern bar anchors the estate against the landward approach while two 7.8 metre-deep side wings frame the sea.",
+        "The U opens north toward the assumed Caribbean view, creating a 30 by 14 metre sheltered sea court. This court is a true exterior void in the building mass rather than an enclosed internal courtyard.",
+        "The residence rises two generous storeys, giving it enough presence for the estate while retaining a low, horizon-oriented profile.",
+        "A flat roof consolidates the non-rectangular main volume as one calm horizontal datum and emphasizes the cut-out geometry of the sea court.",
+        "A detached eastern horizon pavilion is set beyond a narrow landscape gap from the main wing. Its distinct rectangular volume avoids making the estate read as a single oversized block and gives the seaward edge a secondary architectural focal point.",
+        "The horizon pavilion receives a butterfly roof, making its silhouette visibly independent from the flat-roofed residence without exceeding the main house in scale.",
+        "The southern arrival is held apart from the residence by a formal outdoor arrival court, slowing the transition from landward entry to the protected central composition.",
+        "A broad northern panorama terrace is separated from the house by planted ground, preserving the court as an intimate sheltered exterior while establishing a larger, open-air sea outlook."
+      ],
+      "assumptions": [
+        "The site is an approximately 100 by 90 metre private Saint Lucia parcel with the Caribbean Sea and principal long view to the north.",
+        "The selected building zone is treated as flat ground; the requested overlooking condition is understood as a naturally elevated coastal setting beyond the modelled plinth elevations.",
+        "Landscape, retaining terrain, access drives, planting and water elements are outside this massing concept and are not represented as constructed geometry.",
+        "The estate is intended as a private luxury residence with a separate seaward pavilion, rather than a multi-building resort compound."
+      ],
+      "terrainMode": "flat",
+      "designPipeline": {
+        "stage": "concept",
+        "authority": "v3-semantic-scene",
+        "roomDevelopment": "deferred",
+        "preserve": "envelopes-roofs-storeys"
+      },
+      "brief": "Design an extraordinary $15 million luxury estate overlooking the Caribbean Sea in Saint Lucia. You have complete creative freedom.",
+      "generatedAt": "2026-10-22T15:58:33.302Z",
+      "model": "gpt-5.6-terra",
+      "usage": {
+        "inputTokens": 2045,
+        "outputTokens": 2676,
+        "totalTokens": 4721,
+        "attempts": 1,
+        "repair": false,
+        "estimatedCost": 0.032573200000000004
+      }
+    }
+  },
+  "findings": [],
+  "footprintTrace": [
+    {
+      "targetId": "main-residence",
+      "kind": "articulated",
+      "authoredGeometry": {
+        "kind": "articulated",
+        "operations": [
+          {
+            "id": "sea-court-recess",
+            "floors": "all",
+            "type": "recess",
+            "facade": "north",
+            "start": 0.17,
+            "end": 0.83,
+            "depth": 14
+          }
+        ]
+      },
+      "coordinates": "metres; centred host-local X east, Z south; world x=x0+lx*cos(yaw)+lz*sin(yaw), z=z0-lx*sin(yaw)+lz*cos(yaw); facade intervals west-to-east / north-to-south",
+      "architecture": {
+        "x": 0,
+        "z": 0,
+        "width": 46,
+        "depth": 32,
+        "height": 8.2,
+        "baseElevation": 0.3,
+        "rotationY": 0
+      },
+      "dimensions": [
+        46,
+        8.2,
+        32
+      ],
+      "transform": {
+        "position": [
+          0,
+          4.3999999999999995,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "frame": {
+        "width": 46,
+        "depth": 32,
+        "x": 0,
+        "z": 0
+      },
+      "declaredEnvelope": {
+        "min": [
+          -23,
+          -16
+        ],
+        "max": [
+          23,
+          16
+        ]
+      },
+      "floors": [
+        {
+          "floor": 0,
+          "polygon": [
+            [
+              -23,
+              -16
+            ],
+            [
+              -15.18,
+              -16
+            ],
+            [
+              -15.18,
+              -2
+            ],
+            [
+              15.18,
+              -2
+            ],
+            [
+              15.18,
+              -16
+            ],
+            [
+              23,
+              -16
+            ],
+            [
+              23,
+              16
+            ],
+            [
+              -23,
+              16
+            ]
+          ],
+          "bounds": {
+            "min": [
+              -23,
+              -16
+            ],
+            "max": [
+              23,
+              16
+            ]
+          },
+          "resolved": true
+        },
+        {
+          "floor": 1,
+          "polygon": [
+            [
+              -23,
+              -16
+            ],
+            [
+              -15.18,
+              -16
+            ],
+            [
+              -15.18,
+              -2
+            ],
+            [
+              15.18,
+              -2
+            ],
+            [
+              15.18,
+              -16
+            ],
+            [
+              23,
+              -16
+            ],
+            [
+              23,
+              16
+            ],
+            [
+              -23,
+              16
+            ]
+          ],
+          "bounds": {
+            "min": [
+              -23,
+              -16
+            ],
+            "max": [
+              23,
+              16
+            ]
+          },
+          "resolved": true
+        }
+      ]
+    },
+    {
+      "targetId": "horizon-pavilion",
+      "kind": "rectangle",
+      "coordinates": "metres; centred host-local X east, Z south; world x=x0+lx*cos(yaw)+lz*sin(yaw), z=z0-lx*sin(yaw)+lz*cos(yaw); facade intervals west-to-east / north-to-south",
+      "architecture": {
+        "x": 34,
+        "z": -16,
+        "width": 18,
+        "depth": 12,
+        "height": 4.8,
+        "baseElevation": 0.3,
+        "rotationY": 0
+      },
+      "dimensions": [
+        18,
+        4.8,
+        12
+      ],
+      "transform": {
+        "position": [
+          34,
+          2.6999999999999997,
+          -16
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "declaredEnvelope": {
+        "min": [
+          -9,
+          -6
+        ],
+        "max": [
+          9,
+          6
+        ]
+      },
+      "floors": [
+        {
+          "floor": 0,
+          "resolved": true
+        }
+      ]
+    },
+    {
+      "targetId": "arrival-pavilion",
+      "kind": "rectangle",
+      "coordinates": "metres; centred host-local X east, Z south; world x=x0+lx*cos(yaw)+lz*sin(yaw), z=z0-lx*sin(yaw)+lz*cos(yaw); facade intervals west-to-east / north-to-south",
+      "architecture": {
+        "x": 0,
+        "z": 30,
+        "width": 16,
+        "depth": 8,
+        "height": 3.6,
+        "baseElevation": 0.15,
+        "rotationY": 0
+      },
+      "dimensions": [
+        16,
+        3.6,
+        8
+      ],
+      "transform": {
+        "position": [
+          0,
+          1.95,
+          30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "declaredEnvelope": {
+        "min": [
+          -8,
+          -4
+        ],
+        "max": [
+          8,
+          4
+        ]
+      },
+      "floors": [
+        {
+          "floor": 0,
+          "resolved": true
+        }
+      ]
+    }
+  ],
+  "providerCalls": 0
+}

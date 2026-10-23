@@ -1,0 +1,42 @@
+
+> ai-architect@0.1.0 test
+> vitest run src/lib/v3/__tests__/architecturalDesignRestrictions.test.ts src/lib/v3/__tests__/architecturalPlanFirst.test.ts src/lib/v3/__tests__/architecturalPlanning.test.ts src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts
+
+
+ RUN  v3.2.7 /Users/dylandevaux/Websites/AIArchitect
+
+ ✓ src/lib/v3/__tests__/architecturalDesignRestrictions.test.ts (5 tests) 290ms
+ ✓ src/lib/v3/__tests__/architecturalPlanning.test.ts (6 tests) 2503ms
+   ✓ one V3 architectural authority > replans host placement with the same room IDs, roof and entrance-derived route  648ms
+   ✓ one V3 architectural authority > changes one authored height and derives upper floors, partitions, mass and roof together  662ms
+   ✓ one V3 architectural authority > projects existing semantic room edits and retains door cutouts after serialization  440ms
+ ✓ src/lib/v3/__tests__/architecturalPlanFirst.test.ts (12 tests) 3784ms
+   ✓ authoritative 2D plan before construction > constructs plan → massing → exterior with one offline author response and exact shared geometry  989ms
+   ✓ authoritative 2D plan before construction > preserves independently authored 'crescent-estate' topology  523ms
+   ✓ authoritative 2D plan before construction > preserves independently authored 'rotunda' topology  452ms
+   ✓ rebuilds a changed 2D footprint into matching walls and roof without losing other plan identities  1296ms
+ ✓ src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts (41 tests) 12762ms
+   ✓ actual production route with real SDK parsing and an offline model > adapts the unchanged second live estate into plan-first format as an editable Draft without paid repair  1714ms
+   ✓ actual production route with real SDK parsing and an offline model > recovers route-owner aliases locally through the SDK and retains the original and rename evidence  711ms
+   ✓ actual production route with real SDK parsing and an offline model > adapts the unchanged failed live JSON without identity rejection or another authoring call  370ms
+   ✓ actual production route with real SDK parsing and an offline model > combines unequal heights, glazed entries, owner collisions and a local defect on an unrelated estate  633ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: complete  657ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: door  577ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: walkway  619ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: secondary-stair  717ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: combined  700ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: decorative-finish  629ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: sole-stair  798ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: geometry-substitution  492ms
+   ✓ actual production route with real SDK parsing and an offline model > production luxury-estate preflight: transient-mesh-loss  584ms
+   ✓ actual production route with real SDK parsing and an offline model > constructs 'crescent-estate' from JSON text with only the blueprint schema on the provider wire  508ms
+   ✓ actual production route with real SDK parsing and an offline model > constructs 'rotunda' from JSON text with only the blueprint schema on the provider wire  455ms
+   ✓ actual production route with real SDK parsing and an offline model > returns one editable explicitly labelled draft through the actual SDK and route  780ms
+   ✓ actual production route with real SDK parsing and an offline model > repairs only diagnosed stair intent and attributes exactly two SDK calls  604ms
+   ✓ actual production route with real SDK parsing and an offline model > returns no saveable output for construction  488ms
+
+ Test Files  4 passed (4)
+      Tests  64 passed (64)
+   Start at  14:14:00
+   Duration  13.55s (transform 1.56s, setup 0ms, collect 2.07s, tests 19.34s, environment 0ms, prepare 196ms)
+

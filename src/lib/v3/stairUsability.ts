@@ -7,13 +7,13 @@ import { footprintContains } from './footprint';
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from './elevation';
 import { primitiveTriangles } from './junctionGeometry';
 
-export interface V3StairFailure { code: string; targetId: string; message: string; }
+export interface V3StairFailure { code: string; targetId: string; message: string; obstacleId?:string; }
 /** Known physical failures only; no architectural invention or building-code certification.
  * Optional constructed primitives verify openings, walls and headroom against the production compiler. */
 export function auditV3StairUsability(input: V3Scene, primitives?: HousePrimitive[]): V3StairFailure[] {
   const scene = materializeV3ArchitecturalScene(input);
   const failures = auditV3CirculationIntent(scene).filter(i=>i.code!=='CIRCULATION_OVERLAP');
-  const add = (code:string,targetId:string,message:string) => failures.push({code,targetId,message:`${targetId}: ${message}`});
+  const add = (code:string,targetId:string,message:string,obstacleId?:string) => failures.push({code,targetId,...(obstacleId?{obstacleId}:{}),message:`${targetId}: ${message}`});
   for (const r of resolveV3Circulation(scene).filter(r=>r.entry.type==='stair'&&r.usable)) {
     const {entry,exit,walk}=v3StairAccessGeometry(r), id=r.entry.id;
     const local=(host:typeof r.host,p:Vec3):[number,number]=>{
@@ -64,7 +64,7 @@ export function auditV3StairUsability(input: V3Scene, primitives?: HousePrimitiv
       // Body width probes are conservative; no normative landing-size or egress certification is claimed.
       for(const [dx,dz] of [[0,0],[.18,0],[-.18,0],[0,.18],[0,-.18]]){
         const obstacle=hit([p[0]+dx,p[1],p[2]+dz]);
-        if(obstacle){add(['floor','roof'].includes(obstacle.category)?'STAIR_OPENING_BLOCKED':'STAIR_ACCESS_BLOCKED',id,`constructed approach or walking clearance intersects ${obstacle.id}.`);blocked=true;break;}
+        if(obstacle){add(['floor','roof'].includes(obstacle.category)?'STAIR_OPENING_BLOCKED':'STAIR_ACCESS_BLOCKED',id,`constructed approach or walking clearance intersects ${obstacle.id}.`,obstacle.sourceObjectId??obstacle.id);blocked=true;break;}
       }
       if(blocked)break;
     }
@@ -86,7 +86,7 @@ export function auditV3StairUsability(input: V3Scene, primitives?: HousePrimitiv
       for(const {p,vertices,min,max} of meshes){
         if([0,1,2].some(k=>max[k]<Math.min(a.getComponent(k),b.getComponent(k))||min[k]>Math.max(a.getComponent(k),b.getComponent(k))))continue;
         for(let i=0;i<vertices.length;i+=9)if(ray.intersectTriangle(new Vector3(...vertices.slice(i,i+3) as Vec3),new Vector3(...vertices.slice(i+3,i+6) as Vec3),new Vector3(...vertices.slice(i+6,i+9) as Vec3),false,target)&&target.distanceTo(a)<distance-.01){
-          add('STAIR_ACCESS_BLOCKED',id,`walking approach intersects ${p.id}.`);blocked=true;break;
+          add('STAIR_ACCESS_BLOCKED',id,`walking approach intersects ${p.id}.`,p.sourceObjectId??p.id);blocked=true;break;
         }
         if(blocked)break;
       }

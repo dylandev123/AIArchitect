@@ -1,0 +1,287 @@
+{
+  "sourceHash": "65036c5f32b6c9b8be56fc6c57886715bb9bd469b2480fe938199f4427eb88ad",
+  "sourcePreserved": true,
+  "proposalAppliedToExistingProject": false,
+  "requiresReview": true,
+  "before": [
+    {
+      "severity": "advisory",
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetId": "main-living",
+      "message": "Room main-living footprint extends beyond the actual host main-villa storey footprint."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetId": "main-family-lounge",
+      "message": "Room main-family-lounge footprint extends beyond the actual host main-villa storey footprint."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetId": "main-master-bedroom",
+      "message": "Room main-master-bedroom footprint extends beyond the actual host main-villa storey footprint."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-stair-hall",
+      "message": "Rooms main-gallery and main-stair-hall overlap on storey main-ground."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-powder",
+      "message": "Rooms main-gallery and main-powder overlap on storey main-ground."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-upper-landing",
+      "message": "Rooms main-upper-gallery and main-upper-landing overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-master-bedroom",
+      "message": "Rooms main-upper-gallery and main-master-bedroom overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-guest-bedroom",
+      "message": "Rooms main-upper-gallery and main-guest-bedroom overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-guest-bath",
+      "message": "Rooms main-upper-gallery and main-guest-bath overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-gallery->main-stair-hall",
+      "message": "Rooms main-gallery and main-stair-hall are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-gallery->main-powder",
+      "message": "Rooms main-gallery and main-powder are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-landing->main-upper-gallery",
+      "message": "Rooms main-upper-landing and main-upper-gallery are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-master-bedroom",
+      "message": "Rooms main-upper-gallery and main-master-bedroom are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-guest-bedroom",
+      "message": "Rooms main-upper-gallery and main-guest-bedroom are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-guest-bath",
+      "message": "Rooms main-upper-gallery and main-guest-bath are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "wellness-entry->wellness-change",
+      "message": "Rooms wellness-entry and wellness-change are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "wellness-entry->wellness-powder",
+      "message": "Rooms wellness-entry and wellness-powder are declared adjacent but share no boundary."
+    }
+  ],
+  "after": [
+    {
+      "severity": "advisory",
+      "code": "ROOM_OUTSIDE_HOST",
+      "targetId": "main-master-bedroom",
+      "message": "Room main-master-bedroom footprint extends beyond the actual host main-villa storey footprint."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-upper-landing",
+      "message": "Rooms main-upper-gallery and main-upper-landing overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-master-bedroom",
+      "message": "Rooms main-upper-gallery and main-master-bedroom overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-guest-bedroom",
+      "message": "Rooms main-upper-gallery and main-guest-bedroom overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_OVERLAP",
+      "targetId": "main-guest-bath",
+      "message": "Rooms main-upper-gallery and main-guest-bath overlap on storey main-upper."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-landing->main-upper-gallery",
+      "message": "Rooms main-upper-landing and main-upper-gallery are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-master-bedroom",
+      "message": "Rooms main-upper-gallery and main-master-bedroom are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-guest-bedroom",
+      "message": "Rooms main-upper-gallery and main-guest-bedroom are declared adjacent but share no boundary."
+    },
+    {
+      "severity": "advisory",
+      "code": "ROOM_ADJACENCY_NO_SHARED_BOUNDARY",
+      "targetId": "main-upper-gallery->main-guest-bath",
+      "message": "Rooms main-upper-gallery and main-guest-bath are declared adjacent but share no boundary."
+    }
+  ],
+  "changes": [
+    {
+      "roomId": "main-stair-hall",
+      "before": {
+        "x": 12,
+        "z": 8,
+        "width": 6,
+        "depth": 8
+      },
+      "after": {
+        "x": 12,
+        "z": 8.5,
+        "width": 6,
+        "depth": 7
+      }
+    },
+    {
+      "roomId": "main-powder",
+      "before": {
+        "x": -12,
+        "z": 8,
+        "width": 6,
+        "depth": 8
+      },
+      "after": {
+        "x": -12,
+        "z": 8.5,
+        "width": 6,
+        "depth": 7
+      }
+    },
+    {
+      "roomId": "main-living",
+      "before": {
+        "x": 8,
+        "z": -10,
+        "width": 26,
+        "depth": 14
+      },
+      "after": {
+        "x": 8,
+        "z": -7.5,
+        "width": 26,
+        "depth": 9
+      }
+    },
+    {
+      "roomId": "main-family-lounge",
+      "before": {
+        "x": -14,
+        "z": -10,
+        "width": 14,
+        "depth": 14
+      },
+      "after": {
+        "x": -14,
+        "z": -7.5,
+        "width": 14,
+        "depth": 9
+      }
+    },
+    {
+      "roomId": "wellness-entry",
+      "before": {
+        "x": 0,
+        "z": 5,
+        "width": 6,
+        "depth": 4
+      },
+      "after": {
+        "x": 0,
+        "z": 5,
+        "width": 8,
+        "depth": 4
+      }
+    },
+    {
+      "roomId": "wellness-change",
+      "before": {
+        "x": -7,
+        "z": 5,
+        "width": 4,
+        "depth": 4
+      },
+      "after": {
+        "x": -6.5,
+        "z": 5,
+        "width": 5,
+        "depth": 4
+      }
+    },
+    {
+      "roomId": "wellness-powder",
+      "before": {
+        "x": 7,
+        "z": 5,
+        "width": 4,
+        "depth": 4
+      },
+      "after": {
+        "x": 6.5,
+        "z": 5,
+        "width": 5,
+        "depth": 4
+      }
+    }
+  ],
+  "unresolved": [
+    {
+      "storeyId": "main-upper",
+      "message": "Facing boundary is ambiguous for main-upper-gallery and main-guest-bedroom."
+    },
+    {
+      "storeyId": "main-upper",
+      "message": "No valid bounded rectangle for main-upper-gallery."
+    }
+  ],
+  "unchangedBuildingGeometry": true,
+  "unchangedAdjacencyIntent": true,
+  "unchangedStairReservation": true,
+  "limitation": "The upper floor is retained unchanged because its diagonal gallery/bedroom contact is ambiguous. This is a separate review candidate, never a load-time repair or a revised paid response."
+}

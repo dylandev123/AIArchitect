@@ -4,7 +4,7 @@ import type { V3Scene, V3SceneObject, Vec3 } from "./scene";
 import type { V3Circulation, V3PlanDirection, V3StairType } from "./interior";
 import { materializeV3ArchitecturalScene } from "./architecture";
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from "./elevation";
-import { v3MassLevelCount } from "./stacking";
+import { v3MassStoreys, v3MassLevelCount } from "./stacking";
 import { roofHostId } from "./compositionPolicies";
 import { rooftopTerraces } from "./rooftopFeatures";
 import { localPlane } from "./junctions";
@@ -82,6 +82,14 @@ function lShape(run: number, across: number) {
   return { flight, run1: run - flight, run2: across - flight };
 }
 
+/** A U stair may have an open well. Maximise equal flight width inside the
+ * authored reservation while fitting the existing tread/riser policy. */
+function uShape(run: number, across: number, risers: number) {
+  const goings = Math.max(1, Math.ceil(risers / 2) - 1);
+  const flight = Math.min(across / 2, run - goings * MIN_GOING);
+  return {flight, flightRun: run - flight};
+}
+
 /** Resolves every authored circulation entry; malformed or unusable intent is reported, never repositioned. */
 export function resolveV3Circulation(input: V3Scene): V3ResolvedCirculation[] {
   return resolveAll(input).resolved;
@@ -102,7 +110,7 @@ function resolveAll(input: V3Scene): { resolved: V3ResolvedCirculation[]; issues
     const f = entry.footprint;
     if (!f || ![f.x, f.z, f.width, f.depth].every(finite) || f.width <= 0 || f.depth <= 0) { issue("CIRCULATION_LOCATION_MISSING", `${entry.id} has no usable plan footprint in ${host.id}; a stair or lift is never placed automatically.`); continue; }
     const levels = v3MassLevelCount(host), [w, h, d] = scaledDimensionsOf(host), levelHeight = h / levels, base = getObjectBaseY(host);
-    const datums = Array.from({ length: levels + 1 }, (_, k) => base + k * levelHeight);
+    const datums = [...v3MassStoreys(host, scene).map(s => base + s.elevation), base + h];
     if (!Number.isInteger(entry.fromLevel) || !Number.isInteger(entry.toLevel) || entry.fromLevel < 0 || entry.toLevel <= entry.fromLevel || entry.toLevel > levels) {
       issue("CIRCULATION_LEVELS_INVALID", `${entry.id} must climb from a lower to a higher storey of ${host.id} (levels 0–${levels}, where ${levels} is its roof); got ${String(entry.fromLevel)}→${String(entry.toLevel)}.`);
       continue;
@@ -141,7 +149,7 @@ function resolveAll(input: V3Scene): { resolved: V3ResolvedCirculation[]; issues
       const radius = Math.min(f.width, f.depth) / 2 - .05;
       if (radius * 2 / 3 * SPIRAL_STEP < MIN_GOING - 1e-6 || radius < .65) unusable(`spiral footprint ${Math.min(f.width, f.depth).toFixed(2)} m is too small for usable treads (minimum ~1.4 m).`);
     } else if (stairType === "u-shaped") {
-      const flight = across / 2, flightRun = run - flight, n1 = Math.ceil(risers / 2), n2 = risers - n1;
+      const {flight, flightRun} = uShape(run, across, risers), n1 = Math.ceil(risers / 2), n2 = risers - n1;
       if (flight < MIN_STAIR_WIDTH) unusable(`each U-stair flight is ${flight.toFixed(2)} m wide (minimum ${MIN_STAIR_WIDTH} m).`);
       else if (flightRun / Math.max(1, Math.max(n1, n2) - 1) < MIN_GOING - 1e-6) unusable(`U-stair flights of ${flightRun.toFixed(2)} m cannot fit ${risers} risers of ${riser.toFixed(2)} m with ${MIN_GOING} m treads.`);
     } else if (stairType === "l-shaped") {
@@ -222,11 +230,23 @@ function buildCirculation(r: V3ResolvedCirculation): HousePrimitive[] {
     const side: V3PlanDirection = Math.abs(ex) >= Math.abs(ez) ? (ex > 0 ? "east" : "west") : (ez > 0 ? "south" : "north");
     exits = [edgeSegment(r, side)];
   } else if (r.stairType === "u-shaped") {
-    const flightRun = frame.run - half, n1 = Math.ceil(risers / 2), n2 = risers - n1, first = r.turn === "right" ? [-half, 0] : [0, half], second = r.turn === "right" ? [0, half] : [-half, 0];
+    const {flight, flightRun} = uShape(frame.run, frame.across, risers), n1 = Math.ceil(risers / 2), n2 = risers - n1, first = r.turn === "right" ? [-half, -half+flight] : [half-flight, half], second = r.turn === "right" ? [half-flight, half] : [-half, -half+flight];
     const g1 = flightRun / Math.max(1, n1 - 1), g2 = flightRun / Math.max(1, n2 - 1);
     for (let i = 1; i < n1; i++) step(`tread-${i}`, (i - 1) * g1, i * g1, first[0], first[1], r.fromY + i * riser);
     step("landing-1", flightRun, frame.run, -half, half, r.fromY + n1 * riser, "stair landing");
     for (let j = 1; j < n2; j++) step(`tread-${n1 + j}`, flightRun - j * g2, flightRun - (j - 1) * g2, second[0], second[1], r.fromY + (n1 + j) * riser);
+    if(frame.across-2*flight>1e-6){
+      // Inner guards follow the derived well without consuming either flight.
+      const guard=(key:string,a0:number,a1:number,side:number,top:number)=>{
+        const p=frame.point((a0+a1)/2,side),alongX=Math.abs(frame.ax)>.5;
+        add(`well-${key}`,'stair flight guard','balcony',p[0],top+.5,p[1],alongX?[a1-a0,1,.02]:[.02,1,a1-a0],GUARD_GLASS);
+      };
+      const inner=(strip:number[])=>strip[0]<0?strip[1]+.01:strip[0]-.01;
+      for(let i=1;i<n1;i++)guard(`first-${i}`,(i-1)*g1,i*g1,inner(first),r.fromY+i*riser);
+      for(let j=1;j<n2;j++)guard(`second-${j}`,flightRun-j*g2,flightRun-(j-1)*g2,inner(second),r.fromY+(n1+j)*riser);
+      const p=frame.point(flightRun-.01,0),alongX=Math.abs(frame.rx)>.5,gap=frame.across-2*flight;
+      add('well-landing','stair flight guard','balcony',p[0],r.fromY+n1*riser+.5,p[1],alongX?[gap,1,.02]:[.02,1,gap],GUARD_GLASS);
+    }
     exits = [[0, 0, second[0], second[1]]];
   } else if (r.stairType === "l-shaped") {
     const { flight, run1, run2 } = lShape(frame.run, frame.across);
@@ -381,7 +401,7 @@ export function applyV3Circulation(scene: V3Scene, primitives: HousePrimitive[])
 export function v3StairAccessGeometry(r: V3ResolvedCirculation): { entry: Vec3; exit: Vec3; walk: Vec3[] } {
   const frame = stairFrame(r), half = frame.across / 2, sign = r.turn === 'right' ? 1 : -1;
   let entry: [number, number] = [0, 0], exit: [number, number] = [frame.run, 0];
-  if (r.stairType === 'u-shaped') { entry = [0, -sign * half / 2]; exit = [0, sign * half / 2]; }
+  if (r.stairType === 'u-shaped') { const risers=Math.max(2,Math.ceil((r.toY-r.fromY)/TARGET_RISER-1e-6)),{flight}=uShape(frame.run,frame.across,risers); entry = [0, -sign * (half-flight/2)]; exit = [0, sign * (half-flight/2)]; }
   if (r.stairType === 'l-shaped') {
     const { flight, run1 } = lShape(frame.run, frame.across);
     entry = [0, -sign * (half - flight / 2)]; exit = [(run1 + frame.run) / 2, sign * half];

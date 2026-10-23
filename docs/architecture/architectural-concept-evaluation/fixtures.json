@@ -1,0 +1,1039 @@
+[
+  {
+    "name": "courtyard",
+    "provenance": "hand-authored offline fixture",
+    "input": {
+      "format": "v3-architectural-concept-1",
+      "title": "OFFLINE courtyard",
+      "concept": "A quiet garden shapes the composition.",
+      "character": "Neutral architectural massing",
+      "decisions": [
+        "Arrival faces a sheltered outdoor space."
+      ],
+      "assumptions": [
+        "Flat site."
+      ],
+      "site": {
+        "width": 70,
+        "depth": 60
+      },
+      "buildings": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "role": "residence",
+          "x": 0,
+          "z": 0,
+          "width": 24,
+          "depth": 18,
+          "storeyHeights": [
+            3.8,
+            3.1
+          ],
+          "roof": {
+            "form": "floating-flat",
+            "overhang": 0.3
+          },
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "type": "recess",
+                "facade": "south",
+                "start": 0.3,
+                "end": 0.7,
+                "depth": 10
+              }
+            ]
+          }
+        }
+      ],
+      "outdoorSpaces": [
+        {
+          "id": "court",
+          "label": "Quiet court",
+          "purpose": "Sheltered garden gathering",
+          "kind": "courtyard",
+          "x": 0,
+          "z": 4,
+          "width": 8,
+          "depth": 8
+        }
+      ],
+      "connections": []
+    },
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 70,
+        "depth": 60,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "semanticRole": "residence",
+          "type": "building-mass",
+          "architecture": {
+            "x": 0,
+            "z": 0,
+            "width": 24,
+            "depth": 18,
+            "height": 6.9,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            24,
+            6.9,
+            18
+          ],
+          "transform": {
+            "position": [
+              0,
+              3.45,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 2,
+          "roofForm": "floating-flat",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.3,
+          "composition": {
+            "openings": [],
+            "footprint": {
+              "kind": "articulated",
+              "operations": [
+                {
+                  "type": "recess",
+                  "facade": "south",
+                  "start": 0.3,
+                  "end": 0.7,
+                  "depth": 10
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "court",
+          "label": "Quiet court",
+          "semanticRole": "courtyard",
+          "type": "courtyard",
+          "architecture": {
+            "x": 0,
+            "z": 4,
+            "width": 8,
+            "depth": 8,
+            "height": 0.08,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            8,
+            0.08,
+            8
+          ],
+          "transform": {
+            "position": [
+              0,
+              0.04,
+              4
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-outdoor",
+            "color": "#b9b3a5",
+            "roughness": 1
+          },
+          "metadata": {
+            "purpose": "Sheltered garden gathering"
+          }
+        }
+      ],
+      "relationships": [],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "home-storey-0",
+            "hostMassId": "home",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.8,
+            "label": "Garden home · level 1",
+            "semanticRole": "concept-storey"
+          },
+          {
+            "id": "home-storey-1",
+            "hostMassId": "home",
+            "index": 1,
+            "elevation": 4.06,
+            "height": 3.1,
+            "label": "Garden home · level 2",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "OFFLINE courtyard",
+        "concept": "A quiet garden shapes the composition.",
+        "character": "Neutral architectural massing",
+        "decisions": [
+          "Arrival faces a sheltered outdoor space."
+        ],
+        "assumptions": [
+          "Flat site."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        }
+      }
+    },
+    "primitiveCount": 60,
+    "roofPrimitiveCount": 30,
+    "envelopeSignature": "{\"site\":{\"width\":70,\"depth\":60,\"baseElevation\":0,\"groundMaterial\":{\"id\":\"concept-ground\",\"color\":\"#b6b9ad\",\"roughness\":1}},\"buildings\":[{\"id\":\"home\",\"type\":\"building-mass\",\"architecture\":{\"x\":0,\"z\":0,\"width\":24,\"depth\":18,\"height\":6.9,\"baseElevation\":0,\"rotationY\":0},\"footprint\":{\"kind\":\"articulated\",\"operations\":[{\"type\":\"recess\",\"facade\":\"south\",\"start\":0.3,\"end\":0.7,\"depth\":10}]},\"roofForm\":\"floating-flat\",\"pitch\":12,\"pitchUnit\":\"degrees\",\"overhang\":0.3,\"levels\":2}],\"storeys\":[{\"id\":\"home-storey-0\",\"hostMassId\":\"home\",\"index\":0,\"elevation\":0.26,\"height\":3.8,\"label\":\"Garden home · level 1\",\"semanticRole\":\"concept-storey\"},{\"id\":\"home-storey-1\",\"hostMassId\":\"home\",\"index\":1,\"elevation\":4.06,\"height\":3.1,\"label\":\"Garden home · level 2\",\"semanticRole\":\"concept-storey\"}],\"relationships\":[]}"
+  },
+  {
+    "name": "l-shaped",
+    "provenance": "hand-authored offline fixture",
+    "input": {
+      "format": "v3-architectural-concept-1",
+      "title": "OFFLINE l-shaped",
+      "concept": "A quiet garden shapes the composition.",
+      "character": "Neutral architectural massing",
+      "decisions": [
+        "Arrival faces a sheltered outdoor space."
+      ],
+      "assumptions": [
+        "Flat site."
+      ],
+      "site": {
+        "width": 70,
+        "depth": 60
+      },
+      "buildings": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "role": "residence",
+          "x": 0,
+          "z": 0,
+          "width": 24,
+          "depth": 18,
+          "storeyHeights": [
+            3.4
+          ],
+          "roof": {
+            "form": "mono-pitch",
+            "pitchDegrees": 8,
+            "overhang": 0.2
+          },
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "type": "notch",
+                "corner": "se",
+                "width": 10,
+                "depth": 9
+              }
+            ]
+          }
+        }
+      ],
+      "outdoorSpaces": [],
+      "connections": []
+    },
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 70,
+        "depth": 60,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "semanticRole": "residence",
+          "type": "building-mass",
+          "architecture": {
+            "x": 0,
+            "z": 0,
+            "width": 24,
+            "depth": 18,
+            "height": 3.4,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            24,
+            3.4,
+            18
+          ],
+          "transform": {
+            "position": [
+              0,
+              1.7,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "mono-pitch",
+          "pitch": 8,
+          "pitchUnit": "degrees",
+          "overhang": 0.2,
+          "composition": {
+            "openings": [],
+            "footprint": {
+              "kind": "articulated",
+              "operations": [
+                {
+                  "type": "notch",
+                  "corner": "se",
+                  "width": 10,
+                  "depth": 9
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "relationships": [],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "home-storey-0",
+            "hostMassId": "home",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.4,
+            "label": "Garden home · level 1",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "OFFLINE l-shaped",
+        "concept": "A quiet garden shapes the composition.",
+        "character": "Neutral architectural massing",
+        "decisions": [
+          "Arrival faces a sheltered outdoor space."
+        ],
+        "assumptions": [
+          "Flat site."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        }
+      }
+    },
+    "primitiveCount": 13,
+    "roofPrimitiveCount": 2,
+    "envelopeSignature": "{\"site\":{\"width\":70,\"depth\":60,\"baseElevation\":0,\"groundMaterial\":{\"id\":\"concept-ground\",\"color\":\"#b6b9ad\",\"roughness\":1}},\"buildings\":[{\"id\":\"home\",\"type\":\"building-mass\",\"architecture\":{\"x\":0,\"z\":0,\"width\":24,\"depth\":18,\"height\":3.4,\"baseElevation\":0,\"rotationY\":0},\"footprint\":{\"kind\":\"articulated\",\"operations\":[{\"type\":\"notch\",\"corner\":\"se\",\"width\":10,\"depth\":9}]},\"roofForm\":\"mono-pitch\",\"pitch\":8,\"pitchUnit\":\"degrees\",\"overhang\":0.2,\"levels\":1}],\"storeys\":[{\"id\":\"home-storey-0\",\"hostMassId\":\"home\",\"index\":0,\"elevation\":0.26,\"height\":3.4,\"label\":\"Garden home · level 1\",\"semanticRole\":\"concept-storey\"}],\"relationships\":[]}"
+  },
+  {
+    "name": "pavilions",
+    "provenance": "hand-authored offline fixture",
+    "input": {
+      "format": "v3-architectural-concept-1",
+      "title": "OFFLINE pavilions",
+      "concept": "A quiet garden shapes the composition.",
+      "character": "Neutral architectural massing",
+      "decisions": [
+        "Arrival faces a sheltered outdoor space."
+      ],
+      "assumptions": [
+        "Flat site."
+      ],
+      "site": {
+        "width": 70,
+        "depth": 60
+      },
+      "buildings": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "role": "residence",
+          "x": -12,
+          "z": 0,
+          "width": 12,
+          "depth": 10,
+          "storeyHeights": [
+            3.4
+          ],
+          "roof": {
+            "form": "hip",
+            "overhang": 0.3
+          },
+          "rotationDegrees": 25
+        },
+        {
+          "id": "studio",
+          "label": "Round studio",
+          "role": "studio",
+          "x": 12,
+          "z": 0,
+          "width": 10,
+          "depth": 10,
+          "storeyHeights": [
+            3.4
+          ],
+          "roof": {
+            "form": "floating-flat",
+            "overhang": 0.2
+          },
+          "rotationDegrees": 0,
+          "footprint": {
+            "kind": "outline",
+            "operations": [],
+            "segments": [
+              {
+                "id": "circle",
+                "type": "arc",
+                "center": [
+                  0,
+                  0
+                ],
+                "radius": 5,
+                "startAngle": 0,
+                "sweep": 360
+              }
+            ]
+          }
+        }
+      ],
+      "outdoorSpaces": [],
+      "connections": []
+    },
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 70,
+        "depth": 60,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "semanticRole": "residence",
+          "type": "building-mass",
+          "architecture": {
+            "x": -12,
+            "z": 0,
+            "width": 12,
+            "depth": 10,
+            "height": 3.4,
+            "baseElevation": 0,
+            "rotationY": 0.4363323129985824
+          },
+          "dimensions": [
+            12,
+            3.4,
+            10
+          ],
+          "transform": {
+            "position": [
+              -12,
+              1.7,
+              0
+            ],
+            "rotation": [
+              0,
+              0.4363323129985824,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "hip",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.3,
+          "composition": {
+            "openings": []
+          }
+        },
+        {
+          "id": "studio",
+          "label": "Round studio",
+          "semanticRole": "studio",
+          "type": "building-mass",
+          "architecture": {
+            "x": 12,
+            "z": 0,
+            "width": 10,
+            "depth": 10,
+            "height": 3.4,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            10,
+            3.4,
+            10
+          ],
+          "transform": {
+            "position": [
+              12,
+              1.7,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "floating-flat",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.2,
+          "composition": {
+            "openings": [],
+            "footprint": {
+              "kind": "outline",
+              "segments": [
+                {
+                  "id": "circle",
+                  "type": "arc",
+                  "center": [
+                    0,
+                    0
+                  ],
+                  "radius": 5,
+                  "startAngle": 0,
+                  "sweep": 360
+                }
+              ],
+              "operations": []
+            }
+          }
+        }
+      ],
+      "relationships": [],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "home-storey-0",
+            "hostMassId": "home",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.4,
+            "label": "Garden home · level 1",
+            "semanticRole": "concept-storey"
+          },
+          {
+            "id": "studio-storey-0",
+            "hostMassId": "studio",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.4,
+            "label": "Round studio · level 1",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "OFFLINE pavilions",
+        "concept": "A quiet garden shapes the composition.",
+        "character": "Neutral architectural massing",
+        "decisions": [
+          "Arrival faces a sheltered outdoor space."
+        ],
+        "assumptions": [
+          "Flat site."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        }
+      }
+    },
+    "primitiveCount": 22,
+    "roofPrimitiveCount": 12,
+    "envelopeSignature": "{\"site\":{\"width\":70,\"depth\":60,\"baseElevation\":0,\"groundMaterial\":{\"id\":\"concept-ground\",\"color\":\"#b6b9ad\",\"roughness\":1}},\"buildings\":[{\"id\":\"home\",\"type\":\"building-mass\",\"architecture\":{\"x\":-12,\"z\":0,\"width\":12,\"depth\":10,\"height\":3.4,\"baseElevation\":0,\"rotationY\":0.4363323129985824},\"roofForm\":\"hip\",\"pitch\":12,\"pitchUnit\":\"degrees\",\"overhang\":0.3,\"levels\":1},{\"id\":\"studio\",\"type\":\"building-mass\",\"architecture\":{\"x\":12,\"z\":0,\"width\":10,\"depth\":10,\"height\":3.4,\"baseElevation\":0,\"rotationY\":0},\"footprint\":{\"kind\":\"outline\",\"segments\":[{\"id\":\"circle\",\"type\":\"arc\",\"center\":[0,0],\"radius\":5,\"startAngle\":0,\"sweep\":360}],\"operations\":[]},\"roofForm\":\"floating-flat\",\"pitch\":12,\"pitchUnit\":\"degrees\",\"overhang\":0.2,\"levels\":1}],\"storeys\":[{\"id\":\"home-storey-0\",\"hostMassId\":\"home\",\"index\":0,\"elevation\":0.26,\"height\":3.4,\"label\":\"Garden home · level 1\",\"semanticRole\":\"concept-storey\"},{\"id\":\"studio-storey-0\",\"hostMassId\":\"studio\",\"index\":0,\"elevation\":0.26,\"height\":3.4,\"label\":\"Round studio · level 1\",\"semanticRole\":\"concept-storey\"}],\"relationships\":[]}"
+  },
+  {
+    "name": "connected-wings",
+    "provenance": "hand-authored offline fixture",
+    "input": {
+      "format": "v3-architectural-concept-1",
+      "title": "OFFLINE connected-wings",
+      "concept": "A quiet garden shapes the composition.",
+      "character": "Neutral architectural massing",
+      "decisions": [
+        "Arrival faces a sheltered outdoor space."
+      ],
+      "assumptions": [
+        "Flat site."
+      ],
+      "site": {
+        "width": 70,
+        "depth": 60
+      },
+      "buildings": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "role": "residence",
+          "x": 0,
+          "z": 0,
+          "width": 16,
+          "depth": 10,
+          "storeyHeights": [
+            3.8,
+            3.1
+          ],
+          "roof": {
+            "form": "gable",
+            "overhang": 0.3
+          }
+        },
+        {
+          "id": "wing",
+          "label": "Low wing",
+          "role": "wing",
+          "x": 12,
+          "z": 2,
+          "width": 8,
+          "depth": 6,
+          "storeyHeights": [
+            3.4
+          ],
+          "roof": {
+            "form": "mono-pitch",
+            "pitchDegrees": 12,
+            "overhang": 0.3
+          }
+        }
+      ],
+      "outdoorSpaces": [],
+      "connections": [
+        {
+          "from": "home",
+          "to": "wing"
+        }
+      ]
+    },
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 70,
+        "depth": 60,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "semanticRole": "residence",
+          "type": "building-mass",
+          "architecture": {
+            "x": 0,
+            "z": 0,
+            "width": 16,
+            "depth": 10,
+            "height": 6.9,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            16,
+            6.9,
+            10
+          ],
+          "transform": {
+            "position": [
+              0,
+              3.45,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 2,
+          "roofForm": "gable",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.3,
+          "composition": {
+            "openings": []
+          }
+        },
+        {
+          "id": "wing",
+          "label": "Low wing",
+          "semanticRole": "wing",
+          "type": "building-mass",
+          "architecture": {
+            "x": 12,
+            "z": 2,
+            "width": 8,
+            "depth": 6,
+            "height": 3.4,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            8,
+            3.4,
+            6
+          ],
+          "transform": {
+            "position": [
+              12,
+              1.7,
+              2
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "mono-pitch",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.3,
+          "composition": {
+            "openings": []
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "from": "home",
+          "to": "wing",
+          "kind": "connects"
+        }
+      ],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "home-storey-0",
+            "hostMassId": "home",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.8,
+            "label": "Garden home · level 1",
+            "semanticRole": "concept-storey"
+          },
+          {
+            "id": "home-storey-1",
+            "hostMassId": "home",
+            "index": 1,
+            "elevation": 4.06,
+            "height": 3.1,
+            "label": "Garden home · level 2",
+            "semanticRole": "concept-storey"
+          },
+          {
+            "id": "wing-storey-0",
+            "hostMassId": "wing",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.4,
+            "label": "Low wing · level 1",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "OFFLINE connected-wings",
+        "concept": "A quiet garden shapes the composition.",
+        "character": "Neutral architectural massing",
+        "decisions": [
+          "Arrival faces a sheltered outdoor space."
+        ],
+        "assumptions": [
+          "Flat site."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        }
+      }
+    },
+    "primitiveCount": 30,
+    "roofPrimitiveCount": 9,
+    "envelopeSignature": "{\"site\":{\"width\":70,\"depth\":60,\"baseElevation\":0,\"groundMaterial\":{\"id\":\"concept-ground\",\"color\":\"#b6b9ad\",\"roughness\":1}},\"buildings\":[{\"id\":\"home\",\"type\":\"building-mass\",\"architecture\":{\"x\":0,\"z\":0,\"width\":16,\"depth\":10,\"height\":6.9,\"baseElevation\":0,\"rotationY\":0},\"roofForm\":\"gable\",\"pitch\":12,\"pitchUnit\":\"degrees\",\"overhang\":0.3,\"levels\":2},{\"id\":\"wing\",\"type\":\"building-mass\",\"architecture\":{\"x\":12,\"z\":2,\"width\":8,\"depth\":6,\"height\":3.4,\"baseElevation\":0,\"rotationY\":0},\"roofForm\":\"mono-pitch\",\"pitch\":12,\"pitchUnit\":\"degrees\",\"overhang\":0.3,\"levels\":1}],\"storeys\":[{\"id\":\"home-storey-0\",\"hostMassId\":\"home\",\"index\":0,\"elevation\":0.26,\"height\":3.8,\"label\":\"Garden home · level 1\",\"semanticRole\":\"concept-storey\"},{\"id\":\"home-storey-1\",\"hostMassId\":\"home\",\"index\":1,\"elevation\":4.06,\"height\":3.1,\"label\":\"Garden home · level 2\",\"semanticRole\":\"concept-storey\"},{\"id\":\"wing-storey-0\",\"hostMassId\":\"wing\",\"index\":0,\"elevation\":0.26,\"height\":3.4,\"label\":\"Low wing · level 1\",\"semanticRole\":\"concept-storey\"}],\"relationships\":[{\"from\":\"home\",\"to\":\"wing\",\"kind\":\"connects\"}]}"
+  },
+  {
+    "name": "modest",
+    "provenance": "hand-authored offline fixture",
+    "input": {
+      "format": "v3-architectural-concept-1",
+      "title": "OFFLINE modest",
+      "concept": "A quiet garden shapes the composition.",
+      "character": "Neutral architectural massing",
+      "decisions": [
+        "Arrival faces a sheltered outdoor space."
+      ],
+      "assumptions": [
+        "Flat site."
+      ],
+      "site": {
+        "width": 24,
+        "depth": 24
+      },
+      "buildings": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "role": "residence",
+          "x": 0,
+          "z": 0,
+          "width": 8,
+          "depth": 6,
+          "storeyHeights": [
+            3.4
+          ],
+          "roof": {
+            "form": "gable",
+            "pitchDegrees": 25,
+            "overhang": 0.5
+          }
+        }
+      ],
+      "outdoorSpaces": [],
+      "connections": []
+    },
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 24,
+        "depth": 24,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "home",
+          "label": "Garden home",
+          "semanticRole": "residence",
+          "type": "building-mass",
+          "architecture": {
+            "x": 0,
+            "z": 0,
+            "width": 8,
+            "depth": 6,
+            "height": 3.4,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            8,
+            3.4,
+            6
+          ],
+          "transform": {
+            "position": [
+              0,
+              1.7,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "gable",
+          "pitch": 25,
+          "pitchUnit": "degrees",
+          "overhang": 0.5,
+          "composition": {
+            "openings": []
+          }
+        }
+      ],
+      "relationships": [],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "home-storey-0",
+            "hostMassId": "home",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.4,
+            "label": "Garden home · level 1",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "OFFLINE modest",
+        "concept": "A quiet garden shapes the composition.",
+        "character": "Neutral architectural massing",
+        "decisions": [
+          "Arrival faces a sheltered outdoor space."
+        ],
+        "assumptions": [
+          "Flat site."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        }
+      }
+    },
+    "primitiveCount": 11,
+    "roofPrimitiveCount": 4,
+    "envelopeSignature": "{\"site\":{\"width\":24,\"depth\":24,\"baseElevation\":0,\"groundMaterial\":{\"id\":\"concept-ground\",\"color\":\"#b6b9ad\",\"roughness\":1}},\"buildings\":[{\"id\":\"home\",\"type\":\"building-mass\",\"architecture\":{\"x\":0,\"z\":0,\"width\":8,\"depth\":6,\"height\":3.4,\"baseElevation\":0,\"rotationY\":0},\"roofForm\":\"gable\",\"pitch\":25,\"pitchUnit\":\"degrees\",\"overhang\":0.5,\"levels\":1}],\"storeys\":[{\"id\":\"home-storey-0\",\"hostMassId\":\"home\",\"index\":0,\"elevation\":0.26,\"height\":3.4,\"label\":\"Garden home · level 1\",\"semanticRole\":\"concept-storey\"}],\"relationships\":[]}"
+  }
+]

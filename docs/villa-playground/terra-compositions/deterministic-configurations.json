@@ -1,0 +1,265 @@
+{
+  "provenance": "Deterministic component configurations. No model calls or prompt interpretation.",
+  "configurations": [
+    {
+      "version": 1,
+      "id": "horizon-house",
+      "name": "Horizon House",
+      "character": "One quiet volume facing a long pool.",
+      "appearance": {
+        "style": "modern",
+        "roof": "flat",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -5,
+          "width": 18,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 1.6
+        }
+      ],
+      "connections": [],
+      "terraces": [
+        {
+          "x": 0,
+          "z": 3,
+          "width": 20,
+          "depth": 8,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 9,
+          "z": 12,
+          "width": 4,
+          "depth": 8,
+          "id": "sun-deck",
+          "kind": "terrace",
+          "timber": true
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 12,
+        "width": 12,
+        "depth": 5
+      },
+      "garden": {
+        "x": 0,
+        "z": 4,
+        "width": 40,
+        "depth": 40
+      }
+    },
+    {
+      "version": 1,
+      "id": "breeze-pair",
+      "name": "Breeze Pair",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 0,
+        "z": 3,
+        "width": 42,
+        "depth": 42
+      }
+    },
+    {
+      "version": 1,
+      "id": "olive-court",
+      "name": "Olive Court",
+      "character": "An asymmetric court with a private garden retreat.",
+      "appearance": {
+        "style": "tuscan",
+        "roof": "gable",
+        "exterior": "warm-stone",
+        "glazing": "divided",
+        "landscape": "mediterranean"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -10,
+          "width": 24,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.2,
+          "veranda": 1.6,
+          "balcony": 1.5
+        },
+        {
+          "id": "west",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": -10,
+          "z": 2,
+          "width": 10,
+          "depth": 6,
+          "orientation": 90,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.6,
+          "balcony": 0
+        },
+        {
+          "id": "east",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 11,
+          "z": 1.2,
+          "width": 8,
+          "depth": 6,
+          "orientation": 270,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.6,
+          "balcony": 0
+        },
+        {
+          "id": "retreat",
+          "role": "guest",
+          "parentId": "main",
+          "detached": true,
+          "x": -19,
+          "z": 12,
+          "width": 6,
+          "depth": 5,
+          "orientation": 90,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.4,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "west-link",
+          "from": "main",
+          "to": "west",
+          "width": 2.4
+        },
+        {
+          "id": "east-link",
+          "from": "main",
+          "to": "east",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": 0,
+          "z": 1,
+          "width": 10,
+          "depth": 11,
+          "id": "olive-courtyard",
+          "kind": "courtyard",
+          "timber": false
+        },
+        {
+          "x": 0,
+          "z": 8.5,
+          "width": 16,
+          "depth": 3,
+          "id": "pool-approach",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": 0,
+        "z": 15,
+        "width": 12,
+        "depth": 5
+      },
+      "garden": {
+        "x": 0,
+        "z": 3,
+        "width": 52,
+        "depth": 46
+      }
+    }
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 60,
+      "depth": 60,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+      "character": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+      "siteAccess": [],
+      "requirements": [],
+      "program": [
+        {
+          "id": "garden-house-program",
+          "role": "Garden home",
+          "kind": "building",
+          "objectIds": [
+            "garden-house"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-garden-house",
+            "objectId": "garden-house",
+            "role": "Garden home"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "garden-house-garden-door-entry",
+            "objectId": "garden-house",
+            "openingId": "garden-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "garden-house-roof"
+        ],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "verticalCirculationIds": [],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "garden-house",
+        "type": "building-mass",
+        "semanticRole": "Garden home",
+        "label": "Garden home",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 12,
+          "depth": 10,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          3.6,
+          10
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "garden-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "garden-entry"
+            }
+          ]
+        },
+        "levels": 1
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "garden-floor",
+          "label": "Garden floor",
+          "semanticRole": "Garden floor",
+          "hostMassId": "garden-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "garden-living",
+          "label": "garden living",
+          "semanticRole": "garden living",
+          "program": "open-plan living dining",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": -2,
+            "z": -3,
+            "width": 8,
+            "depth": 4
+          }
+        },
+        {
+          "id": "garden-kitchen",
+          "label": "garden kitchen",
+          "semanticRole": "garden kitchen",
+          "program": "kitchen",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": 4,
+            "z": -3,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "garden-gallery",
+          "label": "garden gallery",
+          "semanticRole": "garden gallery",
+          "program": "circulation gallery",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": 0,
+            "z": 0,
+            "width": 12,
+            "depth": 2
+          }
+        },
+        {
+          "id": "garden-bedroom",
+          "label": "garden bedroom",
+          "semanticRole": "garden bedroom",
+          "program": "bedroom",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": -4,
+            "z": 3,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "garden-entry",
+          "label": "garden entry",
+          "semanticRole": "garden entry",
+          "program": "entry hall",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": 0,
+            "z": 3,
+            "width": 4,
+            "depth": 4
+          }
+        },
+        {
+          "id": "garden-bath",
+          "label": "garden bath",
+          "semanticRole": "garden bath",
+          "program": "bathroom",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": 4,
+            "z": 2,
+            "width": 4,
+            "depth": 2
+          }
+        },
+        {
+          "id": "garden-utility",
+          "label": "garden utility",
+          "semanticRole": "garden utility",
+          "program": "utility",
+          "storeyId": "garden-floor",
+          "hostMassId": "garden-house",
+          "footprint": {
+            "x": 4,
+            "z": 4,
+            "width": 4,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": []
+    },
+    "relationships": [
+      {
+        "from": "garden-entry",
+        "to": "garden-gallery",
+        "kind": "adjacent"
+      },
+      {
+        "from": "garden-gallery",
+        "to": "garden-living",
+        "kind": "adjacent"
+      },
+      {
+        "from": "garden-gallery",
+        "to": "garden-kitchen",
+        "kind": "adjacent"
+      },
+      {
+        "from": "garden-gallery",
+        "to": "garden-bedroom",
+        "kind": "adjacent"
+      },
+      {
+        "from": "garden-gallery",
+        "to": "garden-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "garden-entry",
+        "to": "garden-utility",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "planDeferredFeatureHeights": [],
+      "planUnresolved": [],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 7,
+          "potentialAccessRoomIds": [
+            "garden-bath",
+            "garden-bedroom",
+            "garden-entry",
+            "garden-gallery",
+            "garden-kitchen",
+            "garden-living",
+            "garden-utility"
+          ],
+          "findings": []
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": []
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "garden-house-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form garden-house-roof."
+        }
+      ],
+      "roomLayoutDrafts": [],
+      "roomLayoutDevelopment": {
+        "version": 1,
+        "storeyIds": [
+          "garden-floor"
+        ]
+      }
+    }
+  }
+}

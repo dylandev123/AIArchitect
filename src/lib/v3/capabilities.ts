@@ -102,7 +102,7 @@ const ids = (scene: V3Scene, keep: (object: V3SceneObject) => boolean, self: V3S
 /** Roof clearance (eave trimming) and the composition roof material couple every mass and roof form. */
 const roofComposition = (object: V3SceneObject, scene: V3Scene) => ids(scene, (candidate) => candidate.type === "building-mass" || candidate.type === "roof-form", object);
 /** A walking surface is cut by any pool it overlaps. */
-const poolCutouts = (object: V3SceneObject, scene: V3Scene) => ids(scene, (candidate) => candidate.type === "pool", object);
+const poolCutouts = (object: V3SceneObject, scene: V3Scene) => ids(scene, (candidate) => (candidate.type === "pool" || candidate.type === "fountain"), object);
 const deckOrGeneric = (object: V3SceneObject, context: V3CompileContext) => v3CompileKit.compilePoolDeck(object, context.scene);
 const terrainLineValidation: V3CapabilityValidation = { compiledBoundsExempt: true, compiledShape: "terrain-following" };
 
@@ -112,7 +112,7 @@ const BUILTIN: Record<string, V3Capability> = {
     renderability: "specialized",
     // The implicit roof yields to an explicit roof-form, or to an authored walkable terrace resting on the roof.
     // A stacked mass resolves its storeys against the building, so its "upper" openings land on its own floors.
-    compile: (o, { scene, roofOverhangs, roofMaterial, rooftopTerraceHosts }) => v3CompileKit.compileBuildingMass(o, !scene.objects.some((candidate) => candidate.type === "roof-form" && (candidate.hostId === o.id || candidate.support?.hostId === o.id || candidate.support?.objectId === o.id)) && !rooftopTerraceHosts?.has(o.id), roofOverhangs.get(o.id), roofMaterial, v3StoreyBase(o, scene)),
+    compile: (o, { scene, roofOverhangs, roofMaterial, rooftopTerraceHosts }) => v3CompileKit.compileBuildingMass(o, !scene.objects.some((candidate) => candidate.type === "roof-form" && (candidate.hostId === o.id || candidate.support?.hostId === o.id || candidate.support?.objectId === o.id)) && !rooftopTerraceHosts?.has(o.id), roofOverhangs.get(o.id), roofMaterial, v3StoreyBase(o, scene), scene),
     validation: { levelsBoundedByHeight: true },
     metrics: { mass: true, roof: (o) => !!o.roofForm },
     dependsOn: roofComposition,
@@ -126,6 +126,7 @@ const BUILTIN: Record<string, V3Capability> = {
     support: { surfaceKind: "roof", structural: true, padHost: true, hostedBy: ["mass"], deterministic: true, requiresHost: true, specializedHost: "resting" },
   },
   "pool": { category: "pool", renderability: "specialized", geometryHint: "water", compile: (o) => v3CompileKit.compilePool(o), validation: { compiledBoundsExempt: true }, metrics: { siteAmenity: true }, support: { occupiable: true, groundPad: true, hostClass: "pool", deterministic: true } },
+  "fountain": { category: "pool", renderability: "specialized", geometryHint: "water", compile: (o, { scene }) => v3CompileKit.compileShapedSiteFeature(o, scene), validation: { compiledBoundsExempt: true }, metrics: { siteAmenity: true }, support: { hostedBy: [], deterministic: true } },
   "balcony": { renderability: "specialized", geometryHint: "slab", compile: (o) => v3CompileKit.compileBalcony(o), metrics: { coveredOutdoor: true, siteAmenity: true }, support: { hostedBy: ["mass", "wall"], deterministic: true, requiresHost: true, specializedHost: "attached" } },
   "terrace": { category: "floor", renderability: "specialized", geometryHint: "slab", compile: (o, context) => deckOrGeneric(o, context) ?? v3CompileKit.compileTerraceSurface(o), metrics: { coveredOutdoor: true, siteAmenity: true }, dependsOn: poolCutouts, support: { surfaceKind: "terrace", structural: true, groundPad: true, padHost: true, hostClass: "ground" } },
   "courtyard": { category: "floor", renderability: "specialized", compile: (o) => v3CompileKit.compileCourtyard(o), metrics: { siteAmenity: true }, support: { surfaceKind: "terrace", structural: true, groundPad: true, hostClass: "ground" } },
@@ -136,6 +137,7 @@ const BUILTIN: Record<string, V3Capability> = {
   "column-line": { renderability: "specialized", compile: (o) => v3CompileKit.compileColumnLine(o) },
   "railing-run": { renderability: "specialized", compile: (o) => v3CompileKit.compileRailingRun(o) },
   "canopy": { category: "roof", renderability: "specialized", compile: (o) => v3CompileKit.compileCanopy(o), metrics: { coveredOutdoor: true, siteAmenity: true }, support: { structural: true, auditExempt: true, hostedBy: ["mass", "ground", "wall"], deterministic: true, specializedHost: "resting" } },
+  "driveway": { renderability: "specialized", specializedWhen: o => !!o.composition?.footprint, geometryHint: "path", compile: (o, { scene }) => v3CompileKit.compileShapedSiteFeature(o, scene), dependsOn: poolCutouts },
   "path": {
     category: "path", renderability: "specialized", geometryHint: "path",
     compile: (o, { terrain, connectionSurfaceIds }) => connectionSurfaceIds.has(o.id) ? [] : [v3CompileKit.part(o, "path surface", v3CompileKit.pathRibbon(o, terrain))],

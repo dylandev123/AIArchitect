@@ -1,0 +1,206 @@
+{
+  "concept": "OFFLINE REFERENCE — A compact garden home: a modest rectangular shell keeps construction simple. The south entry hall gives separate access to sleeping, bathing and cooking; a full-width north living room opens to the garden terrace. No luxury amenities are imposed.",
+  "site": {
+    "width": 36,
+    "depth": 36,
+    "baseElevation": 0,
+    "groundColor": "#61754b",
+    "north": "-z",
+    "access": [
+      {
+        "id": "compact-gate",
+        "boundary": "south",
+        "point": [
+          0,
+          0,
+          18
+        ]
+      }
+    ]
+  },
+  "verticalCirculation": [],
+  "requirements": [],
+  "relationships": [],
+  "roomAdjacencies": [
+    {
+      "from": "compact-hall",
+      "to": "compact-living"
+    },
+    {
+      "from": "compact-hall",
+      "to": "compact-bedroom"
+    },
+    {
+      "from": "compact-hall",
+      "to": "compact-kitchen"
+    },
+    {
+      "from": "compact-hall",
+      "to": "compact-bath"
+    }
+  ],
+  "format": "v3-architectural-plan-1",
+  "buildings": [
+    {
+      "id": "compact-home",
+      "label": "Compact garden home",
+      "role": "Compact garden home",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 10,
+        "depth": 8
+      },
+      "storeys": [
+        {
+          "id": "compact-floor",
+          "label": "Garden floor",
+          "role": "Garden floor",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "compact-living",
+              "label": "compact living",
+              "role": "compact living",
+              "program": "living dining",
+              "footprint": {
+                "x": 0,
+                "z": -2,
+                "width": 10,
+                "depth": 4
+              }
+            },
+            {
+              "id": "compact-hall",
+              "label": "compact hall",
+              "role": "compact hall",
+              "program": "entry circulation",
+              "footprint": {
+                "x": 0,
+                "z": 2,
+                "width": 2,
+                "depth": 4
+              }
+            },
+            {
+              "id": "compact-bedroom",
+              "label": "compact bedroom",
+              "role": "compact bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": -3,
+                "z": 2,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "compact-kitchen",
+              "label": "compact kitchen",
+              "role": "compact kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": 3,
+                "z": 1,
+                "width": 4,
+                "depth": 2
+              }
+            },
+            {
+              "id": "compact-bath",
+              "label": "compact bath",
+              "role": "compact bath",
+              "program": "bathroom",
+              "footprint": {
+                "x": 3,
+                "z": 3,
+                "width": 4,
+                "depth": 2
+              }
+            }
+          ]
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "compact-entry",
+          "facade": "south",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.44,
+          "end": 0.56,
+          "height": 2.4,
+          "serves": "compact-hall"
+        },
+        {
+          "id": "compact-garden-door",
+          "facade": "north",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.4,
+          "end": 0.6,
+          "height": 2.4,
+          "operation": "sliding",
+          "serves": "compact-living"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "compact-terrace",
+      "label": "Living garden terrace",
+      "role": "Living garden terrace",
+      "type": "terrace",
+      "location": {
+        "x": 0,
+        "z": -8,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 10,
+      "depth": 6
+    }
+  ],
+  "connections": [
+    {
+      "id": "compact-arrival",
+      "purpose": "Gate to entry hall",
+      "from": {
+        "kind": "site-access",
+        "accessId": "compact-gate"
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "compact-entry"
+      },
+      "use": "pedestrian",
+      "width": 1.2,
+      "waypoints": []
+    },
+    {
+      "id": "compact-garden-link",
+      "purpose": "Living to terrace",
+      "from": {
+        "kind": "entrance",
+        "entranceId": "compact-garden-door"
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "compact-terrace",
+        "local": [
+          0,
+          3
+        ]
+      },
+      "use": "pedestrian",
+      "width": 1.2,
+      "waypoints": []
+    }
+  ]
+}

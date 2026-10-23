@@ -25,20 +25,24 @@ export function simpleFootprint(p: readonly Point[]): boolean {
   }
   return true;
 }
-export function resolveFootprint(o: V3SceneObject, floor: number) {
+export function resolveFootprint(o: V3SceneObject, floor: number, onInvalid?: (reason: string, polygon?: readonly Point[]) => void) {
+  const invalid = (reason: string, polygon?: readonly Point[]) => { onInvalid?.(reason, polygon); return undefined; };
   if(!o.composition?.footprint)return undefined;
   const parsed=v3FootprintSchema.safeParse(o.composition.footprint);
-  if(!parsed.success)return undefined;
+  if(!parsed.success)return invalid(`schema: ${parsed.error.issues.map(i=>`${i.path.join('.')}: ${i.message}`).join('; ')}`);
   const ids=parsed.data.operations.flatMap(op=>op.id?[op.id]:[]);
-  if(new Set(ids).size!==ids.length)return undefined;
+  if(new Set(ids).size!==ids.length)return invalid('Duplicate operation IDs.');
   const frame=footprintFrame(o);
-  if(frame.width<=.1||frame.depth<=.1)return undefined;
-  if(parsed.data.operations.some(op=>'start' in op && op.end<=op.start))return undefined;
+  if(frame.width<=.1||frame.depth<=.1)return invalid('Projection reserves leave a base frame <= 0.1m.');
+  if(parsed.data.operations.some(op=>'start' in op && op.end<=op.start))return invalid('Facade interval end must exceed start.');
   const fp=parsed.data.kind==='outline'?resolvePath(parsed.data.segments!):buildFloorFootprint(frame.width,frame.depth,parsed.data.operations,floor),[w,,d]=scaledDimensionsOf(o);
-  if(!fp || fp.warnings.length || !simpleFootprint(fp.polygon) || fp.polygon.some(([x,z])=>Math.abs(x+frame.x)>w/2+1e-6||Math.abs(z+frame.z)>d/2+1e-6))return undefined;
+  if(!fp)return invalid('Outline path is not clockwise, closed and contiguous, or violates segment length/ID/sample limits.');
+  if(fp.warnings.length)return invalid(fp.warnings.join('; '), fp.polygon);
+  if(!simpleFootprint(fp.polygon))return invalid('Footprint boundary self-intersects, touches a nonadjacent edge, or has a degenerate edge.', fp.polygon);
+  if(fp.polygon.some(([x,z])=>Math.abs(x+frame.x)>w/2+1e-6||Math.abs(z+frame.z)>d/2+1e-6))return invalid(`Local footprint exceeds centred ${w} x ${d}m placement envelope.`, fp.polygon);
   if(parsed.data.kind==='outline'){
    const inner=offsetPath(fp.polygon,-.2);
-   if(!simpleFootprint(inner)||inner.some(p=>!pointInPolygon(p,fp.polygon)))return undefined;
+   if(!simpleFootprint(inner)||inner.some(p=>!pointInPolygon(p,fp.polygon)))return invalid('Outline cannot contain a simple 0.2m inward wall offset.', fp.polygon);
   }
   return {...fp,frame};
 }

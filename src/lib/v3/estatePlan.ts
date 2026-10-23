@@ -4,13 +4,15 @@ import { v3Capability } from './capabilities';
 import { authoredOverlap, authoredPlan, planArea, authoredSeparation } from './authoredPlan';
 import { zoneMemberPlanPoints } from './zoneGeometry';
 import { auditEstateSpatial } from './estateSpatial';
+import { v3FootprintSchema } from './footprintSchema';
 import { z } from 'zod';
 import { v3BlueprintSchema } from './blueprintSchema';
 import type { V3Scene, V3SceneObject } from './scene';
 import type { V3DesignDiagnostic } from './designReview';
 import { scaledDimensionsOf, getObjectBaseY, getObjectTopY } from './elevation';
+import { v3RelationshipTargetIds } from './interior';
 
-const text = z.string().min(1).max(600), id = z.string().min(1).max(100);
+const text = z.string().min(1).max(2000), id = z.string().min(1).max(100);
 const region = z.object({ x: z.number().finite(), z: z.number().finite(), width: z.number().positive(), depth: z.number().positive() }).strict();
 const point = z.tuple([z.number().finite(), z.number().finite(), z.number().finite()]);
 const access = z.object({ point: point.optional(), openingId: id.optional(), entranceId: id.optional(), approachDistance: z.number().finite().min(.02).max(100).optional() }).strict().superRefine((value, ctx) => {
@@ -37,7 +39,7 @@ export const v3EstatePlanSchema = z.object({
     if (zone.allocationMode === 'derived' && zone.allocation !== undefined) ctx.addIssue({code:'custom', message:'Derived zones must omit allocation; their envelope is measured from objects.'});
     if (zone.allocationMode !== 'derived' && zone.allocation === undefined) ctx.addIssue({code:'custom', message:'Reserved and legacy zones require an explicit allocation.'});
   })),
-  circulation: z.array(z.object({ id, purpose: text, from: id, to: id, via: z.array(id).min(1), spatial: z.object({ from: access, to: access, use: z.enum(['pedestrian', 'vehicle', 'service']), width: z.number().positive().max(100), waypoints: z.array(point).max(100).optional() }).strict().optional() }).strict()),
+  circulation: z.array(z.object({ id, purpose: text, from: id, to: id, via: z.array(id).min(1), spatial: z.object({ from: access, to: access, use: z.enum(['pedestrian', 'vehicle', 'service']), width: z.number().positive().max(100), waypoints: z.array(point).max(100).optional(), path: v3FootprintSchema.shape.segments.optional() }).strict().optional() }).strict()),
   architecture: z.array(z.object({ id, objectIds: z.array(id).min(1), form: z.enum(['rectangular', 'joined', 'rotated', 'L-shaped', 'U-shaped', 'polygonal', 'circular', 'curved', 'irregular', 'complex-roof']), intent: text, minWidth: z.number().positive().optional(), minDepth: z.number().positive().optional(), minHeight: z.number().positive().optional() }).strict()).optional(),
   relationships: z.array(z.object({ id, intent: text, from: id, to: id, kind: z.enum(['connects', 'contains', 'aligns', 'hosts', 'supports']) }).strict()),
   considerations: z.array(z.object({ id, intent: text, objectIds: z.array(id), kind: z.enum(['view', 'privacy', 'open-space', 'landscape']) }).strict()),
@@ -65,7 +67,11 @@ export function auditV3EstatePlan(scene: V3Scene, options:{constructionEvidence?
   }
   for(const entry of plan.program.filter(p=>p.kind==='amenity'))for(const ref of entry.objectIds){const o=objects.get(ref);if(o&&(v3Capability(o.type)?.renderability!=='specialized'||/fountain|tennis|basketball/i.test(`${entry.role} ${o.label}`)))add('ESTATE_AMENITY_UNVERIFIED',[ref],`${entry.id}: ${o.label} has no certified specialized construction for that amenity; a generic slab, box or water basin is not proof of the named equipment.`,true);}
   const refs = [...plan.program, ...plan.zones, ...plan.requirements, ...plan.considerations];
-  for (const entry of refs) for (const ref of entry.objectIds) if (!objects.has(ref)) add('ESTATE_MISSING_OBJECT', [ref], `${entry.id} references missing authored object ${ref}.`);
+  // Blueprint commitments can name declared semantic rooms, storeys and routes.
+  // Resolve their identities, never pretend they are missing building objects.
+  const semanticIds = v3RelationshipTargetIds(scene);
+  const canonicalRef=(ref:string)=>plan.blueprint?plan.circulation.find(r=>r.id===ref&&r.via.length===1)?.via[0]??ref:ref;
+  for (const entry of refs) for (const ref of entry.objectIds) if (!objects.has(canonicalRef(ref)) && !(plan.blueprint && plan.considerations.includes(entry as typeof plan.considerations[number]) && semanticIds.has(ref)) && !(plan.zones.includes(entry as typeof plan.zones[number]) && ((plan.siteAccess??[]).some(a=>a.id===ref) || plan.blueprint?.entrances.some(e=>e.id===ref)))) add('ESTATE_MISSING_OBJECT', [ref], `${entry.id} references missing authored object ${ref}.`);
   for (const zone of plan.zones) {
     const r = zone.allocation;
     if (r && (Math.abs(r.x)+r.width/2>scene.site.width/2+.25 || Math.abs(r.z)+r.depth/2>scene.site.depth/2+.25)) add('ESTATE_ALLOCATION_CONFLICT', zone.objectIds, `${zone.id}: allocation exceeds the site boundary.`);
@@ -83,11 +89,11 @@ export function auditV3EstatePlan(scene: V3Scene, options:{constructionEvidence?
   const accessEvidence=estateAccessEvidence(scene,options);
   const linked = (from: string, to: string, kind: string) => scene.relationships.some(r => r.kind===kind && (r.from===from && r.to===to || kind==='connects' && r.from===to && r.to===from));
   for (const r of plan.relationships) {
-    const a=objects.get(r.from), b=objects.get(r.to);
+    const from=canonicalRef(r.from),to=canonicalRef(r.to),a=objects.get(from), b=objects.get(to);
     const roof=a?.type==='roof-form'?a:b?.type==='roof-form'?b:undefined;
     const host=roof===a?b:a;
     const realized = r.kind==='connects' && accessEvidence.connected(r.from,r.to) || r.kind==='hosts' && roof && host && (roof.hostId??roof.support?.hostId??roof.support?.objectId)===host.id;
-    if (!a || !b || !linked(r.from,r.to,r.kind) && !realized) add('ESTATE_RELATIONSHIP_MISSING', [r.from,r.to], `${r.id}: missing authored ${r.kind} relationship.`,r.kind==='aligns'&&!!a&&!!b);
+    if (!semanticIds.has(from) || !semanticIds.has(to) || !linked(from,to,r.kind) && !realized) add('ESTATE_RELATIONSHIP_MISSING', [r.from,r.to], `${r.id}: missing authored ${r.kind} relationship.`,r.kind==='aligns'&&!!a&&!!b);
   }
   for (const route of plan.circulation) {
     if (route.spatial) continue; // Physical authored routes are audited below, independently of graph declarations.
@@ -107,7 +113,12 @@ export function auditV3EstatePlan(scene: V3Scene, options:{constructionEvidence?
     if (req.metric==='siteWidth') actual=scene.site.width;
     if (req.metric==='siteDepth') actual=scene.site.depth;
     if (req.metric==='floorArea' && selected.length===req.objectIds.length && selected.length) actual=selected.filter(o=>o.type==='building-mass').reduce((sum,o)=>{const [w,,d]=scaledDimensionsOf(o);return sum+(o.composition?.footprint?Array.from({length:v3MassLevelCount(o)},(_,floor)=>planArea(authoredPlan(o,floor))).reduce((a,b)=>a+b,0):w*d*v3MassLevelCount(o));},0);
-    if (req.metric==='bedrooms' && scene.interior?.rooms.length) actual=scene.interior.rooms.filter(r => r.program === 'bedroom' && (!req.objectIds.length || req.objectIds.includes(r.hostMassId))).length;
+    if (req.metric==='bedrooms' && scene.interior?.rooms.length) {
+      const incomplete=scene.interior.storeys.some(s=>(!req.objectIds.length||req.objectIds.includes(s.hostMassId))&&!scene.interior!.rooms.some(r=>r.storeyId===s.id));
+      // An unresolved floor has no invented room geometry. A partial count
+      // cannot establish a conflict with a retained whole-building obligation.
+      if(!incomplete)actual=scene.interior.rooms.filter(r => r.program === 'bedroom' && (!req.objectIds.length || req.objectIds.includes(r.hostMassId))).length;
+    }
     if (actual!==undefined && req.range && (actual<req.range.min-.01 || actual>req.range.max+.01)) add('ESTATE_REQUIREMENT_CONFLICT', req.objectIds, `${req.id}: ${req.metric} is ${actual}, expected ${req.range.min}–${req.range.max}.`);
     else if (req.metric!=='feature' && (actual===undefined || !req.range)) add('ESTATE_REQUIREMENT_UNVERIFIED', req.objectIds, `${req.id}: ${req.metric} is retained as intent; no deterministic verification is available.`, true);
     if (req.metric==='feature' && !req.objectIds.length) add('ESTATE_REQUIREMENT_UNVERIFIED', [], `${req.id}: feature has no authored reference.`, true);

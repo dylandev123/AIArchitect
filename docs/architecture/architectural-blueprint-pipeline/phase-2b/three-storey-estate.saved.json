@@ -1,0 +1,986 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 100,
+      "depth": 100,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE TEST — Three articulated storeys wrap an open north court. West sleeping and east creative wings meet an east-west bridge gallery. A fixed eastern stair/lift core connects every floor, and a small detached ground-only pavilion offers independent working space. Distinct suite proportions on the middle floor are intentional.",
+      "character": "OFFLINE TEST — Three articulated storeys wrap an open north court. West sleeping and east creative wings meet an east-west bridge gallery. A fixed eastern stair/lift core connects every floor, and a small detached ground-only pavilion offers independent working space. Distinct suite proportions on the middle floor are intentional.",
+      "siteAccess": [],
+      "requirements": [],
+      "program": [
+        {
+          "id": "court-house-program",
+          "role": "Court residence",
+          "kind": "building",
+          "objectIds": [
+            "court-house"
+          ],
+          "source": "design"
+        },
+        {
+          "id": "work-pavilion-program",
+          "role": "Work pavilion",
+          "kind": "building",
+          "objectIds": [
+            "work-pavilion"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-court-house",
+            "objectId": "court-house",
+            "role": "Court residence"
+          },
+          {
+            "id": "bp-work-pavilion",
+            "objectId": "work-pavilion",
+            "role": "Work pavilion"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "court-house-court-door-entry",
+            "objectId": "court-house",
+            "openingId": "court-door",
+            "level": 0
+          },
+          {
+            "id": "work-pavilion-work-door-entry",
+            "objectId": "work-pavilion",
+            "openingId": "work-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "court-house-roof",
+          "work-pavilion-roof"
+        ],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "verticalCirculationIds": [
+          "court-stair",
+          "court-lift"
+        ],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "court-house",
+        "type": "building-mass",
+        "semanticRole": "Court residence",
+        "label": "Court residence",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 24,
+          "depth": 20,
+          "height": 10.8,
+          "rotationY": 0.22
+        },
+        "transform": {
+          "position": [
+            0,
+            5.4,
+            0
+          ],
+          "rotation": [
+            0,
+            0.22,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          24,
+          10.8,
+          20
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "court-cut",
+                "facade": "north",
+                "start": 0.3333333333333333,
+                "end": 0.6666666666666666,
+                "depth": 10,
+                "type": "recess"
+              }
+            ]
+          },
+          "openings": [
+            {
+              "id": "court-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "court-0-entry"
+            }
+          ]
+        },
+        "levels": 3
+      },
+      {
+        "id": "work-pavilion",
+        "type": "building-mass",
+        "semanticRole": "Work pavilion",
+        "label": "Work pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -30,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 8,
+          "depth": 6,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -30,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          3.6,
+          6
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "work-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "work-entry"
+            }
+          ]
+        },
+        "levels": 1
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "court-floor-0",
+          "label": "Court level 0",
+          "semanticRole": "Court level 0",
+          "hostMassId": "court-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        },
+        {
+          "id": "court-floor-1",
+          "label": "Court level 1",
+          "semanticRole": "Court level 1",
+          "hostMassId": "court-house",
+          "index": 1,
+          "elevation": 3.8600000000000003,
+          "height": 3.6
+        },
+        {
+          "id": "court-floor-2",
+          "label": "Court level 2",
+          "semanticRole": "Court level 2",
+          "hostMassId": "court-house",
+          "index": 2,
+          "elevation": 7.46,
+          "height": 3.6
+        },
+        {
+          "id": "work-floor",
+          "label": "Work floor",
+          "semanticRole": "Work floor",
+          "hostMassId": "work-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [
+        {
+          "id": "court-0-west-suite",
+          "label": "court 0 west suite",
+          "semanticRole": "court 0 west suite",
+          "program": "bedroom",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -7.5,
+            "width": 6,
+            "depth": 5
+          }
+        },
+        {
+          "id": "court-0-west-bath",
+          "label": "court 0 west bath",
+          "semanticRole": "court 0 west bath",
+          "program": "bathroom",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -2.5,
+            "width": 6,
+            "depth": 5
+          }
+        },
+        {
+          "id": "court-0-east-studio",
+          "label": "court 0 east studio",
+          "semanticRole": "court 0 east studio",
+          "program": "studio",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -6.25,
+            "width": 6,
+            "depth": 7.5
+          }
+        },
+        {
+          "id": "court-0-east-study",
+          "label": "court 0 east study",
+          "semanticRole": "court 0 east study",
+          "program": "study",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -1.25,
+            "width": 6,
+            "depth": 2.5
+          }
+        },
+        {
+          "id": "court-0-gallery",
+          "label": "court 0 gallery",
+          "semanticRole": "court 0 gallery",
+          "program": "circulation gallery",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 1,
+            "width": 24,
+            "depth": 2
+          }
+        },
+        {
+          "id": "court-0-service",
+          "label": "court 0 service",
+          "semanticRole": "court 0 service",
+          "program": "service kitchen",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-0-entry",
+          "label": "court 0 entry",
+          "semanticRole": "court 0 entry",
+          "program": "entry hall",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-0-stair-hall",
+          "label": "court 0 stair hall",
+          "semanticRole": "court 0 stair hall",
+          "program": "stair lift landing hall",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-0-west-hall",
+          "label": "court 0 west hall",
+          "semanticRole": "court 0 west hall",
+          "program": "private circulation hall",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "court-0-east-hall",
+          "label": "court 0 east hall",
+          "semanticRole": "court 0 east hall",
+          "program": "creative circulation hall",
+          "storeyId": "court-floor-0",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "court-1-west-suite",
+          "label": "court 1 west suite",
+          "semanticRole": "court 1 west suite",
+          "program": "bedroom",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -6.25,
+            "width": 6,
+            "depth": 7.5
+          }
+        },
+        {
+          "id": "court-1-west-bath",
+          "label": "court 1 west bath",
+          "semanticRole": "court 1 west bath",
+          "program": "bathroom",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -1.25,
+            "width": 6,
+            "depth": 2.5
+          }
+        },
+        {
+          "id": "court-1-east-studio",
+          "label": "court 1 east studio",
+          "semanticRole": "court 1 east studio",
+          "program": "studio",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -6.25,
+            "width": 6,
+            "depth": 7.5
+          }
+        },
+        {
+          "id": "court-1-east-study",
+          "label": "court 1 east study",
+          "semanticRole": "court 1 east study",
+          "program": "study",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -1.25,
+            "width": 6,
+            "depth": 2.5
+          }
+        },
+        {
+          "id": "court-1-gallery",
+          "label": "court 1 gallery",
+          "semanticRole": "court 1 gallery",
+          "program": "circulation gallery",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 1,
+            "width": 24,
+            "depth": 2
+          }
+        },
+        {
+          "id": "court-1-service",
+          "label": "court 1 service",
+          "semanticRole": "court 1 service",
+          "program": "service kitchen",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-1-entry",
+          "label": "court 1 entry",
+          "semanticRole": "court 1 entry",
+          "program": "entry hall",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-1-stair-hall",
+          "label": "court 1 stair hall",
+          "semanticRole": "court 1 stair hall",
+          "program": "stair lift landing hall",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-1-west-hall",
+          "label": "court 1 west hall",
+          "semanticRole": "court 1 west hall",
+          "program": "private circulation hall",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "court-1-east-hall",
+          "label": "court 1 east hall",
+          "semanticRole": "court 1 east hall",
+          "program": "creative circulation hall",
+          "storeyId": "court-floor-1",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "court-2-west-suite",
+          "label": "court 2 west suite",
+          "semanticRole": "court 2 west suite",
+          "program": "bedroom",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -7.5,
+            "width": 6,
+            "depth": 5
+          }
+        },
+        {
+          "id": "court-2-west-bath",
+          "label": "court 2 west bath",
+          "semanticRole": "court 2 west bath",
+          "program": "bathroom",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -9,
+            "z": -2.5,
+            "width": 6,
+            "depth": 5
+          }
+        },
+        {
+          "id": "court-2-east-studio",
+          "label": "court 2 east studio",
+          "semanticRole": "court 2 east studio",
+          "program": "studio",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -6.25,
+            "width": 6,
+            "depth": 7.5
+          }
+        },
+        {
+          "id": "court-2-east-study",
+          "label": "court 2 east study",
+          "semanticRole": "court 2 east study",
+          "program": "study",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 9,
+            "z": -1.25,
+            "width": 6,
+            "depth": 2.5
+          }
+        },
+        {
+          "id": "court-2-gallery",
+          "label": "court 2 gallery",
+          "semanticRole": "court 2 gallery",
+          "program": "circulation gallery",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 1,
+            "width": 24,
+            "depth": 2
+          }
+        },
+        {
+          "id": "court-2-service",
+          "label": "court 2 service",
+          "semanticRole": "court 2 service",
+          "program": "service kitchen",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-2-entry",
+          "label": "court 2 entry",
+          "semanticRole": "court 2 entry",
+          "program": "entry hall",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 0,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-2-stair-hall",
+          "label": "court 2 stair hall",
+          "semanticRole": "court 2 stair hall",
+          "program": "stair lift landing hall",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 8,
+            "z": 6,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "court-2-west-hall",
+          "label": "court 2 west hall",
+          "semanticRole": "court 2 west hall",
+          "program": "private circulation hall",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": -5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "court-2-east-hall",
+          "label": "court 2 east hall",
+          "semanticRole": "court 2 east hall",
+          "program": "creative circulation hall",
+          "storeyId": "court-floor-2",
+          "hostMassId": "court-house",
+          "footprint": {
+            "x": 5,
+            "z": -5,
+            "width": 2,
+            "depth": 10
+          }
+        },
+        {
+          "id": "work-studio",
+          "label": "work studio",
+          "semanticRole": "work studio",
+          "program": "studio",
+          "storeyId": "work-floor",
+          "hostMassId": "work-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": -1,
+            "width": 8,
+            "depth": 4
+          }
+        },
+        {
+          "id": "work-entry",
+          "label": "work entry",
+          "semanticRole": "work entry",
+          "program": "entry hall",
+          "storeyId": "work-floor",
+          "hostMassId": "work-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 2,
+            "width": 8,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "court-stair",
+          "type": "stair",
+          "hostMassId": "court-house",
+          "fromLevel": 0,
+          "toLevel": 2,
+          "footprint": {
+            "x": 6,
+            "z": 6,
+            "width": 3,
+            "depth": 6
+          }
+        },
+        {
+          "id": "court-lift",
+          "type": "lift",
+          "hostMassId": "court-house",
+          "fromLevel": 0,
+          "toLevel": 2,
+          "footprint": {
+            "x": 10,
+            "z": 4,
+            "width": 2,
+            "depth": 2
+          }
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "court-0-gallery",
+        "to": "court-0-west-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-gallery",
+        "to": "court-0-east-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-gallery",
+        "to": "court-0-service",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-gallery",
+        "to": "court-0-entry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-gallery",
+        "to": "court-0-stair-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-west-hall",
+        "to": "court-0-west-suite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-west-hall",
+        "to": "court-0-west-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-east-hall",
+        "to": "court-0-east-studio",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-0-east-hall",
+        "to": "court-0-east-study",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-gallery",
+        "to": "court-1-west-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-gallery",
+        "to": "court-1-east-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-gallery",
+        "to": "court-1-service",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-gallery",
+        "to": "court-1-entry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-gallery",
+        "to": "court-1-stair-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-west-hall",
+        "to": "court-1-west-suite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-west-hall",
+        "to": "court-1-west-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-east-hall",
+        "to": "court-1-east-studio",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-1-east-hall",
+        "to": "court-1-east-study",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-gallery",
+        "to": "court-2-west-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-gallery",
+        "to": "court-2-east-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-gallery",
+        "to": "court-2-service",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-gallery",
+        "to": "court-2-entry",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-gallery",
+        "to": "court-2-stair-hall",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-west-hall",
+        "to": "court-2-west-suite",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-west-hall",
+        "to": "court-2-west-bath",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-east-hall",
+        "to": "court-2-east-studio",
+        "kind": "adjacent"
+      },
+      {
+        "from": "court-2-east-hall",
+        "to": "court-2-east-study",
+        "kind": "adjacent"
+      },
+      {
+        "from": "work-studio",
+        "to": "work-entry",
+        "kind": "adjacent"
+      }
+    ],
+    "metadata": {
+      "planDeferredFeatureHeights": [],
+      "planUnresolved": [],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 32,
+          "potentialAccessRoomIds": [
+            "court-0-east-hall",
+            "court-0-east-studio",
+            "court-0-east-study",
+            "court-0-entry",
+            "court-0-gallery",
+            "court-0-service",
+            "court-0-stair-hall",
+            "court-0-west-bath",
+            "court-0-west-hall",
+            "court-0-west-suite",
+            "court-1-east-hall",
+            "court-1-east-studio",
+            "court-1-east-study",
+            "court-1-entry",
+            "court-1-gallery",
+            "court-1-service",
+            "court-1-stair-hall",
+            "court-1-west-bath",
+            "court-1-west-hall",
+            "court-1-west-suite",
+            "court-2-east-hall",
+            "court-2-east-studio",
+            "court-2-east-study",
+            "court-2-entry",
+            "court-2-gallery",
+            "court-2-service",
+            "court-2-stair-hall",
+            "court-2-west-bath",
+            "court-2-west-hall",
+            "court-2-west-suite",
+            "work-entry",
+            "work-studio"
+          ],
+          "findings": []
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": []
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "court-house-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form court-house-roof."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "work-pavilion-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form work-pavilion-roof."
+        }
+      ],
+      "roomLayoutDrafts": [],
+      "roomLayoutDevelopment": {
+        "version": 1,
+        "storeyIds": [
+          "court-floor-0",
+          "court-floor-1",
+          "court-floor-2",
+          "work-floor"
+        ]
+      }
+    }
+  }
+}

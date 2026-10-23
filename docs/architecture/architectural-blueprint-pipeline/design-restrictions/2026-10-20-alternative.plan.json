@@ -1,0 +1,710 @@
+{
+  "format": "v3-architectural-plan-1",
+  "concept": "Two inhabited wings frame a north-facing ocean court; south arrival is compressed before the water garden.",
+  "character": "Tropical mineral walls, recessed glazing and real shaded outdoor rooms. Conceptual interiors; no infinity edge, planted species or flush-threshold certification is claimed.",
+  "site": {
+    "width": 90,
+    "depth": 100,
+    "baseElevation": 0,
+    "groundColor": "#9b987f",
+    "north": "-z",
+    "access": [
+      {
+        "id": "south-gate",
+        "boundary": "south",
+        "point": [
+          0,
+          0,
+          50
+        ]
+      }
+    ]
+  },
+  "entrances": [
+    {
+      "id": "main-residence-entry",
+      "objectId": "main-villa",
+      "openingId": "villa-south-entry",
+      "level": 0
+    },
+    {
+      "id": "guest-pavilion-entry",
+      "objectId": "guest-pavilion",
+      "openingId": "guest-south-entry",
+      "level": 0
+    },
+    {
+      "id": "garden-living-exit",
+      "objectId": "main-villa",
+      "openingId": "garden-living-door",
+      "level": 0
+    }
+  ],
+  "verticalCirculation": [
+    {
+      "id": "main-stair",
+      "type": "stair",
+      "hostMassId": "main-villa",
+      "fromLevel": 0,
+      "toLevel": 1,
+      "footprint": {
+        "x": -9.35,
+        "z": 5.1,
+        "width": 2,
+        "depth": 8
+      },
+      "stairType": "straight",
+      "direction": "south",
+      "label": "Sculptural U Stair",
+      "semanticRole": "Primary private vertical circulation"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "budget-target",
+      "source": "user",
+      "statement": "Design an extraordinary luxury estate in Saint Lucia with a construction and estate-design target of $15 million.",
+      "metric": "budget",
+      "objectIds": [
+        "main-villa",
+        "guest-pavilion",
+        "infinity-pool",
+        "view-terrace"
+      ],
+      "range": {
+        "min": 15000000,
+        "max": 15000000
+      },
+      "value": "$15 million target"
+    },
+    {
+      "id": "saint-lucia-character",
+      "source": "user",
+      "statement": "The estate shall respond to Saint Lucia through a climate-responsive, view-oriented Caribbean luxury architectural character.",
+      "metric": "style",
+      "objectIds": [
+        "main-villa",
+        "guest-pavilion",
+        "view-terrace"
+      ],
+      "value": "Contemporary Caribbean tropical modern"
+    }
+  ],
+  "program": [
+    {
+      "id": "estate-residence-program",
+      "role": "Primary owner residence with formal entertaining, chef service spaces and two private bedroom suites.",
+      "kind": "residence",
+      "objectIds": [
+        "main-villa"
+      ],
+      "source": "design",
+      "access": "required"
+    },
+    {
+      "id": "guest-accommodation-program",
+      "role": "Independent one-bedroom guest accommodation with lounge, dressing and private terrace.",
+      "kind": "building",
+      "objectIds": [
+        "guest-pavilion"
+      ],
+      "source": "design",
+      "access": "required"
+    },
+    {
+      "id": "outdoor-program",
+      "role": "Dry garden rooms and ordinary swimming basin",
+      "kind": "amenity",
+      "objectIds": [
+        "view-terrace",
+        "infinity-pool"
+      ],
+      "source": "design",
+      "access": "required"
+    }
+  ],
+  "zones": [],
+  "forms": [],
+  "relationships": [],
+  "considerations": [],
+  "roomAdjacencies": [],
+  "buildings": [
+    {
+      "id": "main-villa",
+      "label": "Belvedere House",
+      "role": "Primary luxury residence",
+      "location": {
+        "x": -5,
+        "z": -3,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "articulated",
+        "width": 27.2,
+        "depth": 20.4,
+        "operations": [
+          {
+            "id": "ocean-court",
+            "facade": "north",
+            "start": 0.3125,
+            "end": 0.6875,
+            "depth": 6.8,
+            "type": "recess"
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "id": "villa-ground",
+          "label": "Garden Level",
+          "role": "Arrival, entertaining and service",
+          "height": 4.2,
+          "spaces": [
+            {
+              "id": "living-salon",
+              "label": "Great Salon",
+              "role": "Public entertaining",
+              "program": "Formal and informal living",
+              "footprint": {
+                "x": -9.35,
+                "z": -5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "dining-room",
+              "label": "Dining Pavilion",
+              "role": "Public entertaining",
+              "program": "Twelve-seat dining",
+              "footprint": {
+                "x": 9.35,
+                "z": -5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "show-kitchen",
+              "label": "Open Kitchen",
+              "role": "Entertaining support",
+              "program": "Chef kitchen and breakfast preparation",
+              "footprint": {
+                "x": 9.35,
+                "z": 5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "entry-foyer",
+              "label": "Arrival Gallery",
+              "role": "Arrival",
+              "program": "Main entry and art foyer",
+              "footprint": {
+                "x": 0,
+                "z": 5.95,
+                "width": 10.2,
+                "depth": 8.5
+              }
+            },
+            {
+              "id": "main-stair-hall",
+              "label": "Stair Hall",
+              "role": "Vertical circulation",
+              "program": "Private upper-level circulation",
+              "footprint": {
+                "x": -9.35,
+                "z": 5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "service-pantry",
+              "label": "Service Pantry",
+              "role": "Service",
+              "program": "Back kitchen and catering storage",
+              "footprint": {
+                "x": -2.55,
+                "z": -0.85,
+                "width": 5.1,
+                "depth": 5.1
+              }
+            },
+            {
+              "id": "laundry",
+              "label": "Laundry",
+              "role": "Service",
+              "program": "Linen and laundry",
+              "footprint": {
+                "x": 2.55,
+                "z": -0.85,
+                "width": 5.1,
+                "depth": 5.1
+              }
+            }
+          ]
+        },
+        {
+          "id": "villa-upper",
+          "label": "Private Level",
+          "role": "Bedrooms and private retreat",
+          "height": 3.5,
+          "spaces": [
+            {
+              "id": "primary-suite",
+              "label": "Primary Suite",
+              "role": "Private",
+              "program": "Owner bedroom and sea-view sitting area",
+              "footprint": {
+                "x": -9.35,
+                "z": -5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "primary-ensuite",
+              "label": "Primary Bath",
+              "role": "Private",
+              "program": "Owner bathing suite",
+              "footprint": {
+                "x": -2.55,
+                "z": 6.8,
+                "width": 5.1,
+                "depth": 6.8
+              }
+            },
+            {
+              "id": "primary-dressing",
+              "label": "Primary Dressing",
+              "role": "Private",
+              "program": "Owner wardrobe",
+              "footprint": {
+                "x": 2.55,
+                "z": 6.8,
+                "width": 5.1,
+                "depth": 6.8
+              }
+            },
+            {
+              "id": "bedroom-two",
+              "label": "Guest Suite Two",
+              "role": "Private",
+              "program": "En-suite guest bedroom",
+              "footprint": {
+                "x": 9.35,
+                "z": -5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "bedroom-two-bath",
+              "label": "Guest Suite Two Bath",
+              "role": "Private",
+              "program": "Guest bathroom",
+              "footprint": {
+                "x": 9.35,
+                "z": 5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "upper-landing",
+              "label": "Upper Landing",
+              "role": "Vertical circulation",
+              "program": "Private bedroom landing",
+              "footprint": {
+                "x": -9.35,
+                "z": 5.1,
+                "width": 8.5,
+                "depth": 10.2
+              }
+            },
+            {
+              "id": "upper-court-gallery",
+              "label": "Court gallery",
+              "role": "Private circulation",
+              "program": "Hall linking the two wings",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 10.2,
+                "depth": 6.8
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "villa-roof",
+      "accessOpenings": [
+        {
+          "id": "villa-south-entry",
+          "facade": "south",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.43,
+          "end": 0.57,
+          "height": 3,
+          "operation": "hinged",
+          "reveal": 0.18
+        },
+        {
+          "id": "garden-living-door",
+          "facade": "north",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.05,
+          "end": 0.27,
+          "height": 3,
+          "operation": "sliding",
+          "reveal": 0.2
+        }
+      ]
+    },
+    {
+      "id": "guest-pavilion",
+      "label": "Garden Guest Pavilion",
+      "role": "Independent guest accommodation",
+      "location": {
+        "x": 27,
+        "z": -9,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 16,
+        "depth": 12
+      },
+      "storeys": [
+        {
+          "id": "guest-ground",
+          "label": "Guest Level",
+          "role": "Guest accommodation",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "guest-lounge",
+              "label": "Guest Lounge",
+              "role": "Guest",
+              "program": "Private guest living room",
+              "footprint": {
+                "x": -4,
+                "z": 0,
+                "width": 8,
+                "depth": 12
+              }
+            },
+            {
+              "id": "guest-bedroom",
+              "label": "Garden Suite",
+              "role": "Guest",
+              "program": "Guest bedroom",
+              "footprint": {
+                "x": 4,
+                "z": -2,
+                "width": 8,
+                "depth": 8
+              }
+            },
+            {
+              "id": "guest-bath",
+              "label": "Garden Suite Bath",
+              "role": "Guest",
+              "program": "Guest bathroom",
+              "footprint": {
+                "x": 2,
+                "z": 4,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "guest-dressing",
+              "label": "Garden Suite Dressing",
+              "role": "Guest",
+              "program": "Guest wardrobe",
+              "footprint": {
+                "x": 6,
+                "z": 4,
+                "width": 4,
+                "depth": 4
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "guest-roof",
+      "accessOpenings": [
+        {
+          "id": "guest-south-entry",
+          "facade": "south",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.4,
+          "end": 0.6,
+          "height": 2.7,
+          "operation": "hinged"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "arrival-court",
+      "label": "Sheltered south arrival court",
+      "role": "Sheltered south arrival court",
+      "type": "terrace",
+      "location": {
+        "x": -5,
+        "z": 22,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 24,
+      "depth": 14,
+      "height": 0.18
+    },
+    {
+      "id": "view-terrace",
+      "label": "North water garden deck",
+      "role": "North water garden deck",
+      "type": "terrace",
+      "location": {
+        "x": -5,
+        "z": -29,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 36,
+      "depth": 20,
+      "height": 0.18
+    },
+    {
+      "id": "infinity-pool",
+      "label": "Ordinary swimming basin, no infinity system",
+      "role": "Ordinary swimming basin, no infinity system",
+      "type": "pool",
+      "location": {
+        "x": -5,
+        "z": -32,
+        "baseElevation": -1.22,
+        "rotationY": 0
+      },
+      "width": 22,
+      "depth": 6,
+      "height": 1.4
+    },
+    {
+      "id": "guest-terrace",
+      "label": "Quiet guest garden room",
+      "role": "Quiet guest garden room",
+      "type": "terrace",
+      "location": {
+        "x": 27,
+        "z": -21,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 16,
+      "depth": 12,
+      "height": 0.18
+    },
+    {
+      "id": "ocean-court-floor",
+      "label": "Dry court between inhabited wings",
+      "role": "Dry court between inhabited wings",
+      "type": "terrace",
+      "location": {
+        "x": -5,
+        "z": -12.7,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 10.2,
+      "depth": 12.6,
+      "height": 0.18
+    },
+    {
+      "id": "west-wing-porch",
+      "label": "West wing dry porch",
+      "role": "West wing dry porch",
+      "type": "terrace",
+      "location": {
+        "x": -14.35,
+        "z": -16.1,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 8.5,
+      "depth": 5.8,
+      "height": 0.18
+    },
+    {
+      "id": "east-wing-porch",
+      "label": "East wing dry porch",
+      "role": "East wing dry porch",
+      "type": "terrace",
+      "location": {
+        "x": 4.35,
+        "z": -16.1,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 8.5,
+      "depth": 5.8,
+      "height": 0.18
+    },
+    {
+      "id": "tropical-garden",
+      "label": "Guest privacy lawn",
+      "role": "Guest privacy lawn",
+      "type": "landscape-zone",
+      "location": {
+        "x": 29,
+        "z": -38,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 20,
+      "depth": 16,
+      "height": 0.12
+    },
+    {
+      "id": "garden-shade",
+      "label": "Shaded dining pavilion",
+      "role": "Shaded dining pavilion",
+      "type": "canopy",
+      "location": {
+        "x": 9,
+        "z": -24,
+        "baseElevation": 0.18,
+        "rotationY": 0
+      },
+      "width": 8,
+      "depth": 8,
+      "height": 3.2
+    }
+  ],
+  "connections": [
+    {
+      "id": "arrival-drive",
+      "surfaceId": "arrival-drive-owner",
+      "purpose": "arrival-drive",
+      "from": {
+        "kind": "site-access",
+        "accessId": "south-gate"
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "main-residence-entry",
+        "approachDistance": 3
+      },
+      "use": "vehicle",
+      "width": 4.8,
+      "waypoints": [
+        [
+          -5,
+          0,
+          34
+        ]
+      ]
+    },
+    {
+      "id": "guest-walk",
+      "surfaceId": "guest-walk-owner",
+      "purpose": "guest-walk",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          10,
+          0
+        ]
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "guest-pavilion-entry",
+        "approachDistance": 2
+      },
+      "use": "pedestrian",
+      "width": 1.8,
+      "waypoints": [
+        [
+          27,
+          0,
+          22
+        ],
+        [
+          27,
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "west-garden-walk",
+      "surfaceId": "west-garden-walk-owner",
+      "purpose": "west-garden-walk",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          -10,
+          0
+        ]
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "view-terrace",
+        "local": [
+          -16,
+          8
+        ]
+      },
+      "use": "pedestrian",
+      "width": 1.8,
+      "waypoints": [
+        [
+          -25,
+          0,
+          22
+        ],
+        [
+          -25,
+          0,
+          -21
+        ]
+      ]
+    },
+    {
+      "id": "court-to-water",
+      "surfaceId": "court-to-water-owner",
+      "purpose": "court-to-water",
+      "from": {
+        "kind": "surface",
+        "objectId": "ocean-court-floor",
+        "local": [
+          0,
+          0
+        ]
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "view-terrace",
+        "local": [
+          0,
+          10
+        ]
+      },
+      "use": "pedestrian",
+      "width": 2,
+      "waypoints": []
+    }
+  ]
+}

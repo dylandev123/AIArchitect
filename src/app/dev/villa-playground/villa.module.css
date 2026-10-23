@@ -1,0 +1,102 @@
+.playground { position: relative; width: 100%; height: 100svh; min-height: 620px; overflow: hidden; background: #dce8e5; color: #23392f; font-family: Arial, Helvetica, sans-serif; }
+.viewport { position: absolute; inset: 0; touch-action: none; }
+.header { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 28px 40px; pointer-events: none; }
+.brand { display: flex; gap: 10px; align-items: center; font-size: 17px; letter-spacing: -.6px; font-weight: 600; text-decoration: none; color: inherit; pointer-events: auto; }
+.brand span { font-size: 9px; font-weight: 500; letter-spacing: 1.8px; border-left: 1px solid #23392f30; padding-left: 13px; margin-left: 7px; }
+.dev { display: flex; align-items: center; gap: 7px; font-size: 10px; letter-spacing: .4px; background: #ffffff90; border: 1px solid #fff8; padding: 9px 12px; border-radius: 30px; backdrop-filter: blur(12px); }
+.dev i { width: 5px; height: 5px; border-radius: 100%; background: #668b58; }
+.intro { position: absolute; top: 115px; left: 40px; pointer-events: none; }
+.eyebrow { font-size: 9px; letter-spacing: 2.1px; color: #547064; margin-bottom: 19px; }
+.intro h1 { font-size: clamp(34px, 3.3vw, 50px); line-height: 1.12; font-weight: 400; letter-spacing: -2px; margin: 0; }
+.intro h1 span { display: block; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: .78em; letter-spacing: -1.2px; margin-top: 8px; }
+.description { font-size: 11px; line-height: 1.8; color: #4d685b; margin-top: 20px; }
+.moods { position: absolute; top: 112px; right: 40px; display: flex; gap: 3px; padding: 5px; border: 1px solid #fff9; border-radius: 40px; background: #ffffffb0; backdrop-filter: blur(18px); }
+.playground button { cursor: pointer; color: #455b50; background: transparent; border: 0; font-family: inherit; transition: background .2s, color .2s; }
+.playground button:focus-visible, .playground a:focus-visible { outline: 2px solid #2c5d49; outline-offset: 4px; }
+.moods button { display: flex; align-items: center; gap: 7px; padding: 10px 15px; font-size: 11px; border-radius: 30px; }
+.playground button[aria-pressed=true] { color: #fff; background: #2f4d3e; }
+.playground button:hover { background: #31543e18; }
+.playground button[aria-pressed=true]:hover { background: #3c604d; }
+.footer { position: absolute; bottom: 42px; left: 40px; right: 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.caption { display: flex; gap: 14px; align-items: center; pointer-events: none; }
+.number { font: italic 27px Georgia, serif; color: #446453; }
+.caption strong { display: block; font-weight: 500; font-size: 12px; letter-spacing: -.2px; }
+.caption div > span { display: block; font-size: 9px; color: #607063; margin-top: 6px; }
+.cameraBar { display: flex; gap: 3px; align-items: center; background: #ffffffd9; border: 1px solid #fffb; border-radius: 40px; padding: 6px; box-shadow: 0 8px 30px #243c2110; backdrop-filter: blur(20px); }
+.cameraBar button { display: flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; border-radius: 30px; padding: 0 14px; font-size: 11px; }
+.divider { height: 17px; width: 1px; background: #25392a20; margin: 0 5px; }
+.hints { display: flex; flex-direction: column; gap: 7px; font-size: 9px; color: #46634e; }
+.hints span { display: flex; align-items: center; gap: 7px; }
+.credit { position: absolute; bottom: 13px; right: 40px; display: flex; align-items: center; gap: 3px; font-size: 8px; color: #3b5946; text-decoration: none; }
+.status { position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); padding: 20px 28px; border-radius: 16px; background: #ffffffe8; font-size: 14px; color: #2f4d3e; }
+@media (max-width: 1050px) { .caption { display: none; } .footer { justify-content: center; } .hints { position: absolute; right: 0; bottom: 70px; } }
+@media (max-width: 650px) { .header { padding: 21px; } .brand { font-size: 14px; } .brand span { font-size: 7px; padding-left: 8px; margin-left: 1px; } .dev { font-size: 0; padding: 8px; } .intro { left: 22px; top: 90px; } .eyebrow { font-size: 7px; } .intro h1 { font-size: 32px; } .description { display: none; } .moods { right: 20px; top: auto; bottom: 107px; } .moods button { padding: 8px 12px; font-size: 10px; } .footer { left: 12px; right: 12px; bottom: 44px; } .cameraBar { gap: 0; padding: 4px; } .cameraBar button { padding: 0 10px; font-size: 10px; } .hints { display: none; } .credit { right: 20px; bottom: 16px; } }
+
+/* Keep the interface readable as the camera moves across light and shaded ground. */
+.playground::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, #edf0e4d9 0%, #edf0e400 17%, #edf0e400 82%, #f6f8ef66 100%); }
+.header, .intro, .moods, .footer, .credit, .status { z-index: 1; }
+.caption { padding: 12px 16px; border-radius: 14px; background: #f7f8ee9c; backdrop-filter: blur(12px); }
+.hints { padding: 12px 15px; border-radius: 12px; background: #f7f8ee80; backdrop-filter: blur(12px); }
+
+.styleBar { position: absolute; z-index: 2; top: 86px; left: 40px; display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; border-radius: 24px; border: 1px solid #fff9; background: #ffffffcf; backdrop-filter: blur(15px); }
+.styleBar button { font-size: 10px; padding: 10px 14px; border-radius: 20px; }
+.collectionIntro { top: 158px; }
+.collectionIntro h1 { font-size: clamp(30px, 3vw, 44px); }
+.collectionIntro h1 span { font-size: .65em; }
+.moods { top: 86px; }
+.customizeToggle { position: absolute; z-index: 3; right: 40px; top: 150px; background: #f6f7eccf !important; border: 1px solid #fff9 !important; padding: 12px 20px; border-radius: 25px; font-size: 11px; backdrop-filter: blur(12px); }
+.customizer { position: absolute; z-index: 3; right: 40px; top: 200px; bottom: 145px; width: 250px; overflow-y: auto; padding: 22px; background: #f7f7eeed; border: 1px solid #fff; border-radius: 18px; backdrop-filter: blur(18px); box-shadow: 0 10px 40px #18372616; }
+.customizer h2 { font: 25px Georgia, serif; margin: 0 0 6px; }
+.customizer > p { font-size: 10px; color: #607063; margin-bottom: 20px; }
+.customizer label { display: block; font-size: 11px; margin: 15px 0; }
+.customizer select { display: block; width: 100%; margin-top: 6px; padding: 8px; border: 1px solid #b4bfad; border-radius: 7px; background: #ffffffb0; color: #2f4d3e; font-size: 11px; }
+.customizer input[type=range] { display: block; width: 100%; margin-top: 9px; accent-color: #42614c; }
+.customizer output { float: right; font-size: 10px; color: #607063; }
+.customizer .checkLabel { display: flex; gap: 9px; align-items: center; }
+@media (max-width: 1050px) { .moods { top: 145px; } .customizeToggle { top: 205px; } .customizer { top: 255px; } }
+@media (max-width: 650px) { .styleBar { top: 73px; left: 18px; right: 18px; border-radius: 15px; gap: 0; } .styleBar button { font-size: 9px; padding: 7px 8px; } .collectionIntro { top: 166px; left: 22px; } .collectionIntro h1 { font-size: 30px; } .moods { top: auto; bottom: 120px; right: 16px; } .customizeToggle { top: 240px; right: 18px; font-size: 10px; padding: 9px 14px; } .customizer { top: 285px; bottom: 170px; right: 18px; width: 220px; } }
+.customizer fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.playground button:disabled { opacity: .5; cursor: default; }
+.terraDock { position: absolute; z-index: 2; bottom: 116px; left: 50%; transform: translateX(-50%); width: min(620px, calc(100% - 40px)); }
+.terraForm { padding: 11px 15px; border-radius: 18px; border: 1px solid #ffffffeb; background: #f8f9f0ec; backdrop-filter: blur(18px); box-shadow: 0 8px 35px #233c2220; }
+.terraMode { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.terraMode > span { font-size: 9px; letter-spacing: 1.7px; font-weight: 600; margin-right: auto; color: #3c624e; }
+.terraMode button { font-size: 9px; padding: 5px 10px; border-radius: 20px; }
+.terraInput { display: flex; align-items: center; gap: 12px; }
+.terraInput textarea { flex: 1; min-width: 0; resize: none; border: 0; padding: 4px 0; outline-color: #42614c; color: #2f4d3e; font: 11px/1.65 Arial, sans-serif; background: transparent; }
+.terraInput textarea::placeholder { color: #7d8a78; }
+.terraInput button { flex-shrink: 0; padding: 12px 15px; color: #fff; background: #2f4d3e; border-radius: 24px; font-size: 10px; }
+.terraInput button:hover { background: #426650; }
+.terraProgress { display: block; padding-top: 4px; font-size: 9px; color: #607063; }
+.terraResult { position: relative; margin: 0 0 8px; padding: 13px 30px 13px 16px; border: 1px solid #fff; border-radius: 14px; background: #f8f9f0f2; backdrop-filter: blur(18px); font-size: 11px; line-height: 1.6; }
+.terraResult p { margin: 0; }
+.terraResult button { position: absolute; top: 6px; right: 9px; font-size: 18px; }
+.terraResult .unsupported { color: #8b633a; margin-top: 6px; }
+@media (max-width: 650px) { .terraDock { bottom: 165px; } .terraForm { padding: 9px 12px; } .terraInput button { padding: 10px; font-size: 9px; } .terraInput textarea { font-size: 10px; } .customizer { bottom: 295px; } .terraResult { font-size: 10px; max-height: 130px; overflow-y: auto; } }
+
+.compositionBar { position: absolute; z-index: 2; top: 142px; left: 40px; display: flex; gap: 4px; align-items: center; padding: 4px; border-radius: 24px; border: 1px solid #fff9; background: #ffffffcf; backdrop-filter: blur(15px); }
+.compositionBar > span { font-size: 8px; letter-spacing: 1.4px; margin: 0 9px; }
+.compositionBar button { font-size: 10px; padding: 9px 13px; border-radius: 20px; }
+.collectionIntro { top: 202px; }
+.localNotice { position: absolute; z-index: 2; bottom: 116px; left: 50%; transform: translateX(-50%); padding: 12px 20px; border-radius: 30px; background: #f8f9f0df; font-size: 10px; white-space: nowrap; }
+@media (max-width: 650px) { .compositionBar { left: 18px; top: 151px; right: 18px; gap: 0; } .compositionBar > span { font-size: 7px; margin: 0 5px; } .compositionBar button { font-size: 9px; padding: 8px; } .collectionIntro { top: 205px; } .localNotice { white-space: normal; width: 70%; text-align: center; bottom: 170px; line-height: 1.6; } }
+
+.customizer input[type=number] { display: block; width: 100%; margin-top: 6px; padding: 8px; border: 1px solid #b4bfad; border-radius: 7px; background: #ffffffb0; color: #2f4d3e; font-size: 11px; }
+.customizer details { margin: 14px 0; padding-top: 12px; border-top: 1px solid #b4bfad70; font-size: 11px; }
+.customizer summary { cursor: pointer; line-height: 1.5; }
+.customizer button[type=submit] { margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #34523f; color: white; font-size: 11px; }
+.terraResult p, .customizer p[role=alert] { white-space: pre-line; overflow-wrap: anywhere; }
+.terraResult { max-height: 180px; overflow-y: auto; }
+
+.siteControls { font-size: 10px; margin-top: 7px; color: #486052; }
+.siteControls summary { cursor: pointer; }
+.siteControls > label { display: flex; gap: 6px; align-items: center; margin: 7px 0; }
+.siteControls fieldset { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; border: 0; padding: 0; }
+.siteControls fieldset label { display: grid; gap: 3px; }
+.siteControls input[type=number] { width: 100%; min-width: 0; padding: 5px; border: 1px solid #aeb9ad; border-radius: 5px; background: #fff9; }
+@media (max-width: 650px) { .compositionBar { overflow-x: auto; white-space: nowrap; } .compositionBar button { flex-shrink: 0; } }
+
+/* Keep all preserved studies and the three offline examples accessible. */
+.compositionBar { max-width: calc(100% - 80px); overflow-x: auto; white-space: nowrap; }
+.compositionBar button, .compositionBar > span { flex-shrink: 0; }
+@media (max-width: 650px) { .compositionBar { max-width: calc(100% - 36px); } }

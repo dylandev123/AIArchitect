@@ -1,0 +1,159 @@
+--- starting/src/components/workspace/viewport/ArchitecturalFloorPlan.tsx
++++ phase2/src/components/workspace/viewport/ArchitecturalFloorPlan.tsx
+@@ -51,7 +51,7 @@
+         {floor===null&&<text x={b.polygon.reduce((s,p)=>s+p[0],0)/b.polygon.length} y={b.polygon.reduce((s,p)=>s+p[1],0)/b.polygon.length} textAnchor="middle" fontSize={font} fill="#294a45">{b.label}</text>}
+       </g>)}
+       {drawing.rooms.map(r=><g key={r.id} {...interactive(r.id)} aria-label={r.label}>
+-        <polygon points={points(r.polygon)} fill={selected===r.id?'#f1dfbe':/hall|entry|circulation/.test(r.program)?'#e9ede5':'#f3efe5'} fillOpacity=".75" stroke="#bdc4b8" strokeDasharray=".18 .12" strokeWidth={stroke*.45}/>
++        <polygon points={points(r.polygon)} fill={selected===r.id?'#f1dfbe':/hall|entry|circulation/.test(r.program)?'#e9ede5':'#f3efe5'} fillOpacity=".75" stroke={evaluation?'#899789':'#bdc4b8'} strokeDasharray={evaluation?undefined:'.18 .12'} strokeWidth={stroke*(evaluation?.8:.45)}/>
+         <text x={r.centre[0]} y={r.centre[1]-.08} textAnchor="middle" fill="#314d47" fontSize={Math.min(font*.65,r.width/Math.max(6,r.label.length)*1.6)}>{r.label}</text>
+         <text x={r.centre[0]} y={r.centre[1]+font*.65} textAnchor="middle" fill="#78827a" fontSize={font*.45}>{r.width.toFixed(1)} × {r.depth.toFixed(1)} m</text>
+       </g>)}
+--- starting/src/components/workspace/viewport/PlanEvaluationControls.tsx
++++ phase2/src/components/workspace/viewport/PlanEvaluationControls.tsx
+@@ -4,6 +4,7 @@
+ import type { V3BlueprintFinding } from '@/lib/v3/blueprint';
+ import { checkoutPlanEvaluation, preparePlanEvaluation, planExteriorPrompt, DEFAULT_PLAN_EXTERIOR_REQUEST, unresolvedPlanItems } from '@/lib/v3/architecturalPlanEvaluation';
+ import { planConstructionBlockers } from '@/lib/v3/architecturalPlanFirst';
++import { ARCHITECTURAL_REVIEW_QUESTIONS } from '@/lib/v3/architecturalPlanReview';
+ import { useProjectStore } from '@/store/useProjectStore';
+ import { useSceneStore } from '@/store/useSceneStore';
+ import { requestPlanEvaluation, type PlanEvaluationConfig, type PlanResponseRecovery } from '@/lib/ai/planClient';
+@@ -21,11 +22,12 @@
+   },()=>null);
+   const recovery=useMemo<PlanResponseRecovery|null>(()=>{try{return JSON.parse(recoveryText??'null');}catch{return null;}},[recoveryText]);
+   useEffect(()=>{fetch('/api/ai/plan',{cache:'no-store'}).then(r=>r.json()).then(setConfig).catch(()=>{});},[]);
+-  const findings=localFindings??scene.metadata.planDiagnostics as V3BlueprintFinding[]??[];
++  const current=useMemo(()=>checkoutPlanEvaluation(scene),[scene]);
++  const findings=editing&&localFindings?localFindings:current.findings;
+   const openEditor=()=>{
+     const current=checkoutPlanEvaluation(scene);
+     if(!current.plan){setError(current.findings.map(f=>`${f.code}: ${f.message}`).join('\n'));return;}
+-    setText(JSON.stringify(current.plan,null,2));setEditorBase(JSON.stringify(scene));setEditing(true);setBuilding(false);setError('');
++    setText(JSON.stringify(current.plan,null,2));setEditorBase(JSON.stringify(scene));setLocalFindings(null);setEditing(true);setBuilding(false);setError('');
+   };
+   const save=()=>{
+     try{
+@@ -38,7 +40,6 @@
+       setEditing(false);setError('');
+     }catch(e){setError(String(e));}
+   };
+-  const current=checkoutPlanEvaluation(scene);
+   const unresolved=unresolvedPlanItems(scene),blockers=planConstructionBlockers(current);
+   const inputEstimate=Math.ceil((planExteriorPrompt().length+JSON.stringify(current.plan??{}).length+(decisions.trim()||DEFAULT_PLAN_EXTERIOR_REQUEST).length+(typeof scene.metadata.brief==='string'?scene.metadata.brief.length:0)+200)/4);
+   const estimate=config?.pricing?((inputEstimate*config.pricing.input+config.maxOutputTokens*config.pricing.output)/1000000):null;
+@@ -56,6 +57,7 @@
+     <div className="mt-2 flex gap-2"><button disabled={busy} onClick={openEditor} className="rounded border border-white/30 px-2 py-1">Edit and save 2D plan</button><button disabled={busy||!config?.enabled} onClick={()=>{setBuilding(true);setEditing(false);setError('');}} className="rounded bg-emerald-200 px-2 py-1 text-neutral-950">Build in 3D</button></div>
+     {unresolved.length>0&&<div role="status" className="mt-2 rounded border border-amber-300/40 p-2 text-amber-100"><p className="font-semibold">{unresolved.length} unresolved plan {unresolved.length===1?'object':'objects'} · not drawn</p><p className="mt-1">Everything else is drawn and editable. Each is kept exactly as Terra authored it; nothing was retargeted or invented.</p>{unresolved.map(i=><p key={`${i.kind}:${i.id}`} className="mt-1 text-amber-200/90"><b>{i.kind} {i.id}</b> — {i.findings[0]?.message}</p>)}<button disabled={busy} onClick={openEditor} className="mt-2 underline">Correct them in the plan editor</button></div>}
+     <details className="mt-2 max-h-36 overflow-auto"><summary>2D diagnostics ({findings.length})</summary>{findings.map((f,i)=><p key={i} className="mt-2">{f.severity} · {f.code}: {f.message} {f.targetIds.map(id=><button key={id} onClick={()=>useSceneStore.getState().selectKey(id)} className="mr-1 underline">{id}</button>)}</p>)}</details>
++    <details className="mt-2 max-h-48 overflow-auto"><summary>Review the architecture</summary><p className="mt-2">Diagnostics check conceptual geometry and possible access. They do not certify a walkable finished house or exceptional design. Review the drawing against your brief before approving it.</p>{ARCHITECTURAL_REVIEW_QUESTIONS.map(question=><p key={question} className="mt-2">{question}</p>)}</details>
+     {editing&&<div className="mt-2"><p>Edit footprints, locations, room zones, entrances, routes or outdoor features in the existing V3 plan contract. Save creates an undoable project version.</p><textarea aria-label="2D evaluation plan JSON" value={text} onChange={e=>setText(e.target.value)} className="mt-2 h-64 w-full rounded bg-neutral-800 p-2 font-mono text-[10px]"/><button onClick={save} className="mt-2 rounded bg-emerald-200 px-3 py-1 text-neutral-950">Save 2D plan</button><button onClick={()=>setEditing(false)} className="ml-3 underline">Cancel</button></div>}
+     {building&&<div className="mt-2 space-y-2">{blockers.length>0&&<div role="status"><p className="font-semibold text-amber-200">These saved plan objects need correction before construction. No AI call will run.</p>{blockers.map((f,i)=><p key={i} className="mt-1 text-amber-200">{f.targetIds.join(', ')}: {f.message}</p>)}</div>}<p>Terra uses this exact saved plan and its concept and requirements to choose roofs, materials, glazing, shade and missing outdoor heights. Your approved layout stays fixed. Detailed interior design is deferred.</p><details><summary>Exterior preferences (optional)</summary><textarea aria-label="Exterior preferences (optional)" value={decisions} disabled={busy} onChange={e=>setDecisions(e.target.value)} placeholder="Leave blank for Terra to develop the exterior." className="mt-2 h-20 w-full rounded bg-neutral-800 p-2"/></details><p>Requires one additional AI call, no automatic retry. {estimate===null?'Cost unknown: no configured model price.':`Configured ${config?.model} estimate: about $${estimate.toFixed(3)} USD with the full ${config?.maxOutputTokens.toLocaleString()} output-token budget and ~${inputEstimate.toLocaleString()} estimated input tokens. Actual tokens and billing vary; this is not a guaranteed cap.`} No call runs until you press the button below.</p><button disabled={busy||!config?.enabled||!current.ok||blockers.length>0} onClick={()=>void build()} className="rounded bg-amber-200 px-3 py-2 text-neutral-950 disabled:opacity-50">{busy?'Terra is developing and building your property…':'Confirm Build in 3D · 1 AI call'}</button><button disabled={busy} onClick={()=>setBuilding(false)} className="ml-3 underline">Cancel</button></div>}
+     {error&&<p role="alert" className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap text-red-300">{error}</p>}
+--- starting/src/lib/v3/architecturalBlueprintGeneration.ts
++++ phase2/src/lib/v3/architecturalBlueprintGeneration.ts
+@@ -20,8 +20,8 @@
+ GEOMETRY: metres; north=-Z, east=+X, yaw radians, flat site datum 0. Building/feature locations are WORLD centres; room and stair x/z are HOST-LOCAL CENTRES, not minimum corners. Room rectangles must fit the real outline without overlap. Storey heights alone determine mass height and floor datums. V3 derives walls, slabs, outline envelopes, host roof placement and route contacts/ribbons/bounds; never duplicate those coordinates. Each building needs ground access and a program entry. Use connected clockwise line/arc outlines or articulated operations for supported nonrectangular forms. Operations can target ground/upper/all floors; arbitrary independent storey polygons, outline holes, splines, overlapping curved masses and stacked hosts are unsupported.
+ OPENINGS: accessOpenings belong to plan; exterior facade.openings lists only additional openings (explicit [] for none). Door/glazed-door permits passage; glazing-zone/rhythm is a window. MainEntry references a ground door. Fractions address actual facades; every outline opening/assembly part needs its segmentId. Fit spans, sills and heights without overlap/clipping. Assemblies contain real host-relative slab/post/beam/rail parts; rail slabId is local to its assembly. Balcony access needs a door on that level serving the assembly. Primary finish covers walls/slabs; posts/beams use existing dark trim, rails existing glass. Bespoke part finishes are unsupported.
+ ROOFS: one reserved host-derived roof per mass; flat/floating-flat/terrace pitch 0; mono-pitch/hip/gable/butterfly pitch 1..60 degrees. Nonrectangular hosts support flat/floating-flat/terrace/mono-pitch only. Preserve an unsupported requested roof family in roof.form for an honest diagnostic; never substitute it.
+-OUTDOORS: terrace, courtyard (perimeter ring), pool, landscape-zone (grass only), canopy (canopyStyle solid/slatted). Courtyard paving is #b8ad98, roughness .74, thickness >=.14m; grass roughness .9, thickness >=.12m. Canopy spans >=1m, height >=2.2m. Pool baseElevation + height is the RIM datum, not excavation depth; coordinate it with dry poolside paving. Water material does not design an infinity edge. Shell/coping policies are fixed. No authored trees, furniture, pool equipment or automatic steps/ramps; horizontal route contact does not certify a flush threshold.
+-ROUTES: reference entrance, site-access or a contact in a named dry surface's local frame. surfaceId declares a NEW exclusive path/driveway owner, never an existing feature; endpoint.objectId references that feature. Terrace/courtyard/landscape support surface endpoints; canopies need a separate dry floor. Choose width/use and obstacle-avoiding bends; V3 derives endpoint world coordinates and owner bounds. Do not author path boxes or repeat gate/entrance coordinates.
++OUTDOORS: terrace (including fully paved motor courts), courtyard (perimeter ring), pool, fountain (basin and central jet), landscape-zone (grass only), path, driveway, canopy (canopyStyle solid/slatted). Terrace/courtyard/pool/fountain/garden/path/driveway boundaries can be shaped with supported line/arc footprints; a circle is a full 360-degree arc. Keep basin/perimeter offsets wide enough for a .22m inset without folded necks; the fountain origin must lie inside its basin. Canopies remain rectangular. Water basins cut islands out of intersecting paving; routes must avoid water. Courtyard paving is #b8ad98, roughness .74, thickness >=.14m; grass roughness .9, thickness >=.12m. Canopy spans >=1m, height >=2.2m. Pool baseElevation + height is the RIM datum, not excavation depth; coordinate it with dry poolside paving. Water material does not design an infinity edge. Shell/coping policies are fixed. No authored trees, furniture, pool equipment or automatic steps/ramps; horizontal route contact does not certify a flush threshold.
++ROUTES: reference entrance, site-access or a contact in a named dry surface's local frame. surfaceId declares a NEW exclusive path/driveway owner, never an existing feature; endpoint.objectId references that feature. Terrace/courtyard/landscape support surface endpoints; canopies need a separate dry floor. Choose width/use and obstacle-avoiding bends; V3 derives endpoint world coordinates and owner bounds. Exact curved routes use path:[line/arc segments] in WORLD x/z metres continuously between the named contacts, with waypoints:[] and no approachDistance; arc radius must exceed half the route width by .1m. Ordinary waypoints produce straight segments only. Do not author path boxes or repeat gate/entrance coordinates.
+ INTERIORS: reserve usable stair flights/landings with explicit host, levels, type/direction/turn. Room names do not build walls. Defer partitions and interior doors unless requested. When requested, use real shared room boundaries and door offsets in METRES from boundary start; only rectangular gaps in solid/glazed/screen partitions are supported, without leaves/hardware. Exterior doors are facade openings.
+ Stable IDs/references must resolve. Preserve user obligations separately from design choices, report capability gaps and never silently simplify. Return only the design matching this JSON schema: no objects, runtime transforms, meshes, independent roof coordinates, duplicate route geometry, V3 scene or V2 document.
+ `;
+--- starting/src/lib/v3/architecturalDesignGuidance.ts
++++ phase2/src/lib/v3/architecturalDesignGuidance.ts
+@@ -1,10 +1,10 @@
+ /** A design process within one Terra response, not additional calls or stored stages. */
+ export const ARCHITECTURAL_DESIGN_PROCESS = `
+-For initial design, resolve the architecture in this order within this one response:
+-1. IMAGINE THE PROPERTY. Interpret the brief's location, climate, budget, scale, style and desired daily experience. Explicit constraints govern; where the user leaves freedom, make coherent choices and state consequential assumptions briefly in concept. A budget guides ambition, not a verified construction estimate. Choose a distinctive spatial idea, not just a style label. For an ambitious luxury brief, decide what the exceptional experience is and spend area and architectural emphasis on it: arrival sequence, hierarchy of volumes, a sequence of courts, a framed view, generous shaded living, or another site-specific idea. These are alternatives, never a checklist or a style/shape quota. A sophisticated restrained design is valid; a list of luxury adjectives attached to unrelated rectangles is not a spatial concept.
+-2. COMPOSE THE SITE AND DRAW THE PLAN. Give that idea physical form: proportion buildings and the spaces between them, establish arrival and the main entrance, then arrange conceptual public/private/service room zones and circulation inside the same footprints. Decide which spaces deserve views, privacy and direct outdoor access. For tropical/ocean settings, consider shade, breeze paths, sheltered outdoor living and exposure without inventing a measured wind direction or shoreline. Let terraces, gardens and any amenities reinforce the composition. Wings, courtyards, pavilions, curves or a restrained rectangle are choices for spatial reasons; no fixed template, required amenity list or complexity quota.
+-3. ORGANIZE THE FLOORS. Work from the entrance and circulation skeleton before packing rooms. Draw foyers, galleries/corridors and stair landings as actual nonoverlapping spaces with useful widths and shared boundaries. Keep everyday paths from crossing private bedrooms, bathrooms, kitchens' working zones or furniture-sized dead ends. Locate kitchen/pantry/service access together, connect dining to kitchen and entertaining/outdoor areas, and give bedroom suites privacy from arrival. Use roomAdjacencies for the important functional connections on each storey: the rectangles must actually share a usable edge; a label alone cannot create a passage. These indicate conceptual access, not invented constructed doors. Use appropriate, varied proportions for the program; avoid vast undifferentiated bedroom/bath/kitchen rectangles. Express a suite with distinct bedroom/dressing/bath zones when it improves the plan. Keep every room inside the actual articulated/curved shell, not merely its bounding box, and leave recesses/courts outside rooms. Place circulation reservations within a stair hall with clear approaches and an aligned landing on EVERY connected floor; reserve enough run/width for a buildable stair. A lift is not a substitute for a coherent stair plan. Stack circulation and wet/service zones deliberately, choose which wings have upper floors, and keep ground-only pavilions ground-only. Unbuilt voids/double-height zones are not another room on the next floor; do not claim an unsupported floor-slab void.
+-4. REVIEW THE COMPOSITION. Before returning, mentally walk from the gate to the entrance, through the principal rooms and out to the garden. Check proportions at estate and room scale, useful outdoor spaces, guest/service circulation, privacy, view orientation and indoor-outdoor relationships. Imagine the same plan as a silhouette and from arrival eye level: can it support the intended exterior character? Correct weak relationships in the actual geometry before finalizing; adjectives and adjacency claims do not create them. Keep only a concise spatial rationale in concept, not a separate review document.
+-5. PRESERVE IT FOR 3D. Finalize one authoritative 2D layout. Exterior decisions develop those exact footprints, room zones, entrances and routes. V3 derives technical construction; do not repeat derived coordinates or design a second layout.
++Use four logical stages inside this ONE initial-design response. Resolve and revise the drawing before emitting the authoritative document; do not return separate stage documents:
++A — ARCHITECTURAL CONCEPT AND ESTATE COMPOSITION: IMAGINE THE PROPERTY. Interpret the brief's location, climate, budget, scale, style and desired daily experience. Explicit constraints govern; where the user leaves freedom, make coherent choices and state consequential assumptions briefly in concept. A budget guides ambition, not a verified construction estimate. Choose a distinctive spatial idea, not just a style label. For an ambitious luxury brief, decide what the exceptional experience is and spend area and architectural emphasis on it: arrival sequence, hierarchy of volumes, a sequence of courts, a framed view, generous shaded living, or another site-specific idea. These are alternatives, never a checklist or a style/shape quota. A sophisticated restrained design is valid; a list of luxury adjectives attached to unrelated rectangles is not a spatial concept.
++Continue A — COMPOSE THE SITE AND DRAW THE PLAN. Give that idea physical form: proportion buildings and the spaces between them, establish arrival and the main entrance, then arrange conceptual public/private/service room zones and circulation inside the same footprints. Decide which spaces deserve views, privacy and direct outdoor access. For tropical/ocean settings, consider shade, breeze paths, sheltered outdoor living and exposure without inventing a measured wind direction or shoreline. Let terraces, gardens and any amenities reinforce the composition. Wings, courtyards, pavilions, curves or a restrained rectangle are choices for spatial reasons; no fixed template, required amenity list or complexity quota.
++B — FLOOR PLANNING. Work from the entrance and circulation skeleton before packing rooms. Draw foyers, galleries/corridors and stair landings as actual nonoverlapping spaces with useful widths and shared boundaries. Aim for at least 0.8m of useful shared edge for conceptual access and at least 0.9m across circulation zones; these are schematic review guides, not building-code certification. Bring entrance halls to the actual door contact on the shell, and, when an opening’s serves reference names an interior room, keep it consistent with that room. A gap or an overlapping room is not a corridor. Keep everyday paths from crossing private bedrooms, bathrooms, kitchens' working zones or furniture-sized dead ends. Locate kitchen/pantry/service access together, connect dining to kitchen and entertaining/outdoor areas, and give bedroom suites privacy from arrival. Use roomAdjacencies for the important functional connections on each storey: the rectangles must actually share a usable edge; a label alone cannot create a passage. These indicate conceptual access, not invented constructed doors. Use appropriate, varied proportions for the program; avoid vast undifferentiated bedroom/bath/kitchen rectangles. Express a suite with distinct bedroom/dressing/bath zones when it improves the plan. Keep every room inside the actual articulated/curved shell, not merely its bounding box, and leave recesses/courts outside rooms. Place circulation reservations within a stair hall with clear approaches and an aligned landing on EVERY connected floor; reserve enough run/width for a buildable stair. A lift is not a substitute for a coherent stair plan. Stack circulation and wet/service zones deliberately, choose which wings have upper floors, and keep ground-only pavilions ground-only. Unbuilt voids/double-height zones are not another room on the next floor; do not claim an unsupported floor-slab void.
++C — ARCHITECTURAL REVIEW: REVIEW THE COMPOSITION. Before returning, mentally walk from the gate to the entrance, through the principal rooms and out to the garden. Check proportions at estate and room scale, useful outdoor spaces, guest/service circulation, privacy, view orientation and indoor-outdoor relationships. Imagine the same plan as a silhouette and from arrival eye level: can it support the intended exterior character? Check that each room has a potential shared-edge path from an entrance or an aligned landing, not merely a declared adjacency. Do not use room overlap to make a connection. A valid rectangular layout does not by itself demonstrate exceptional architecture; judge the ambition through proportion, sequence and relationships. Correct weak relationships in the actual geometry before finalizing; adjectives and adjacency claims do not create them. Keep only a concise spatial rationale in concept, not a separate review document.
++D — AUTHORITATIVE BLUEPRINT: PRESERVE IT FOR 3D. Finalize one authoritative 2D layout. Exterior decisions develop those exact footprints, room zones, entrances and routes. V3 derives technical construction; do not repeat derived coordinates or design a second layout.
+ These are design instructions, not claims that separate planning/review calls have occurred. When developing an approved plan or making a bounded repair, its preservation rules govern: do not restart composition or change protected geometry. Report conflicts instead of silently substituting a design.
+ `;
+--- starting/src/lib/v3/architecturalPlanAuthoring.ts
++++ phase2/src/lib/v3/architecturalPlanAuthoring.ts
+@@ -38,7 +38,7 @@
+   verticalCirculation: z.array(shape.verticalCirculation.element.omit({stairType:true, direction:true, turn:true, label:true, semanticRole:true})).default([]),
+   requirements: shape.requirements.default([]),
+   relationships: shape.relationships,
+-  roomAdjacencies: shape.roomAdjacencies.default([]),
++  roomAdjacencies: shape.roomAdjacencies.default([]).describe('Important same-storey conceptual access relationships. Zones must share a useful edge (aim for at least 0.8m); a corner, overlap or adjacency label does not make a passage. Detailed doors are deferred.'),
+ }).strict();
+ 
+ // Also accept partial legacy documents without advertising their bookkeeping in
+--- starting/src/lib/v3/architecturalPlanFirst.ts
++++ phase2/src/lib/v3/architecturalPlanFirst.ts
+@@ -13,6 +13,7 @@
+ import { SHAPED_SITE_TYPES, siteFeatureConstructionIssues } from './siteFeatureConstruction';
+ import { plannedSiteType } from './plannedSiteGeometry';
+ import { resolveFootprint } from './footprint';
++import { reviewArchitecturalPlan } from './architecturalPlanReview';
+ import { planDraftFinding, triageSurfaceEndpoint, ROUTE_FAILURE_CODES, type UnresolvedPlanItem, type UnresolvedPlanKind } from './planRecovery';
+ 
+ const building = blueprintSchema.shape.buildings.element;
+@@ -211,6 +212,11 @@
+   canonical.metadata.designPipeline={format:'v3-plan-first-1',stage:'plan',authority:'v3-semantic-plan'};
+   // The editable plan keeps every authored object, withheld ones exactly as written.
+   const full:V3ArchitecturalPlan={...plan,connections:plan.connections.map(c=>unresolved.has(key('connection',c.id))?c:reseated.get(c.id)??c)};
++  // Read-only review follows acceptance: observations improve the editable plan,
++  // never add another rejection gate or silently repair approved geometry.
++  const review=reviewArchitecturalPlan(canonical,findings);
++  canonical.metadata.planQualityReview=review;
++  findings.push(...review.findings);
+   return {ok:!blocked,plan:full,scene:canonical,findings,identityChanges:normalized.changes,unresolved:items};
+ }
+ 
+--- starting/src/app/api/ai/plan/route.architecturalIntelligence.test.ts
++++ phase2/src/app/api/ai/plan/route.architecturalIntelligence.test.ts
+@@ -10,7 +10,7 @@
+ import { v3ArchitecturalBlueprintPrompt } from '@/lib/v3/architecturalBlueprintGeneration';
+ import { splitV3ArchitecturalBlueprint, sameArchitecturalPlan } from '@/lib/v3/architecturalPlanFirst';
+ import { distinctArchitecturalBlueprints } from '@/lib/v3/parity/architecturalBlueprint';
+-import { formalArrivalEstate, articulatedWingsResidence, referenceExterior } from '@/lib/v3/parity/expressiveEstate';
++import { architecturalIntelligenceExamples, compactAuthoringInput, intelligenceExampleExterior } from '@/lib/v3/parity/architecturalIntelligence';
+ import { v3PlanAuthoringSchema } from '@/lib/v3/architecturalPlanAuthoring';
+ import { POST } from './route';
+ 
+@@ -136,22 +136,20 @@
+ });
+ 
+ 
+-it.each([{name:'formal arrival estate',make:formalArrivalEstate},{name:'connected wings',make:articulatedWingsResidence}])('round-trips the expressive $name through real production SDK parsing with offline transport',async({make})=>{
+-  const plan=make();
+-  const {character,entrances,program,zones,forms,considerations,...compact}=plan;
+-  void character;void entrances;void program;void zones;void forms;void considerations;
+-  const endpoint=(e:typeof plan.connections[number]['from'])=>e.kind==='entrance'?{...e,entranceId:plan.entrances.find(a=>a.id===e.entranceId)!.openingId}:e;
+-  const verticalCirculation=plan.verticalCirculation.map(c=>{const {stairType,direction,turn,label,semanticRole,...reservation}=c;void stairType;void direction;void turn;void label;void semanticRole;return reservation;});
+-  const author={...compact,verticalCirculation,buildings:plan.buildings.map(b=>{const {roofId,spaceHeight,...building}=b;void roofId;void spaceHeight;return building;}),connections:plan.connections.map(c=>{const {surfaceId,...connection}=c;void surfaceId;return {...connection,from:endpoint(c.from),to:endpoint(c.to)};})};
++it.each(architecturalIntelligenceExamples())('round-trips $name through the production SDK, saved blueprint and V3 with offline transport',async({name,brief,make})=>{
++  const plan=make(),author=compactAuthoringInput(plan);
+   expect(v3PlanAuthoringSchema.safeParse(author).success).toBe(true);
+   output=author;
+-  const designed=await post('design',JSON.stringify(BLANK_V3_SCENE),'An extraordinary Saint Lucia estate. Choose a coherent architecture freely.');
++  const designed=await post('design',JSON.stringify(BLANK_V3_SCENE),brief);
+   const saved=await designed.json();expect(designed.status,JSON.stringify(saved)).toBe(200);checkWire(planEvaluationPrompt());
+-  const source=JSON.parse(saved.json).v3Scene,checked=checkoutPlanEvaluation(source);
++  const source=JSON.parse(saved.json).v3Scene,checked=checkoutPlanEvaluation(JSON.parse(JSON.stringify(source)));
++  expect(source.metadata.planQualityReview.architecturalJudgment.status).toBe('requires-design-review');
++  expect(source.metadata.brief).toBe(brief);
++  expect(saved.recovery.rawResponse).toBe(JSON.stringify(author));
+   expect(checked.ok).toBe(true);expect(checked.plan!.features.map(f=>f.footprint)).toEqual(plan.features.map(f=>f.footprint));
+   expect(checked.plan!.connections.map(c=>c.path)).toEqual(plan.connections.map(c=>c.path));
+   expect(checked.plan!.roomAdjacencies).toEqual(plan.roomAdjacencies);
+-  wires=[];output=referenceExterior(checked.plan!);
++  wires=[];output=intelligenceExampleExterior(checked.plan!,name);
+   const developed=await post('elaborate',saved.json,'');
+   const built=await developed.json();expect(developed.status,JSON.stringify(built)).toBe(200);checkWire(planExteriorPrompt());
+   expect(sameArchitecturalPlan(source,JSON.parse(built.json).v3Scene)).toBe(true);

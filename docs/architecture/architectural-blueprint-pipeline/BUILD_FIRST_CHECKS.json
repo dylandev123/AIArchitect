@@ -1,0 +1,1179 @@
+{
+  "date": "2026-10-20",
+  "timezone": "America/St_Lucia",
+  "scope": "Offline build-first / explicit draft acceptance; no provider calls, deployment or flag changes",
+  "checks": {
+    "tests": {
+      "command": "NATIVE_LIVE_QA=0 TEST_DATABASE_URL= ARCHITECTURAL_DRAFT_PROOF=docs/architecture/architectural-blueprint-pipeline/DRAFT_REGRESSION_PROOF.json npx vitest run --maxWorkers=2",
+      "success": true,
+      "passed": 2285,
+      "failed": 0,
+      "skipped": 3,
+      "passedFiles": 183,
+      "skippedFiles": 2,
+      "files": [
+        {
+          "file": "src/tmp/probe.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/bridge.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/compiler.test.ts",
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/assetApproval.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/deleteProject.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/useLibraryStore.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v2SitePlanPersistence.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3ArchitecturalBlueprintPersistence.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3ArchitecturalDraftPersistence.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3BlueprintPersistence.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3FullPropertyPersistence.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3InteriorPersistence.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/store/__tests__/v3ScenePersistence.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/clientV2AdditiveProxy.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/clientV2Edit.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/clientV3Routing.test.ts",
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/generationRepair.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/siteSchema.v2.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/stagedClient.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/usage-db.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 1
+        },
+        {
+          "file": "src/lib/ai/__tests__/usage.test.ts",
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/ai/__tests__/v3FailureArtifact.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/architectEditContext.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/critic.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/criticV2.test.ts",
+          "passed": 21,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/designEngine.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/editGoals.test.ts",
+          "passed": 18,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/liveArchitectAcceptance.test.ts",
+          "passed": 21,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/liveSharedFacade.test.ts",
+          "passed": 28,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/roofLanguage.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/sceneOperations.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/sitePathRouting.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/sitePlanRenderAudit.test.ts",
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/stressRenderAudit.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2AdditiveObjects.test.ts",
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2AdditivePlacement.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2Authority.test.ts",
+          "passed": 49,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2CapabilityFixes.test.ts",
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2Fixtures.test.ts",
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2FollowUpRouting.test.ts",
+          "passed": 21,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2OnlyMode.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/v2SiteFeatures.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/__tests__/volumePlan.test.ts",
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/assetPersistence.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/glbModels.test.ts",
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/glbValidator.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/modelCache.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/placement.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/__tests__/serverStore.pg.test.ts",
+          "passed": 0,
+          "failed": 0,
+          "skipped": 1
+        },
+        {
+          "file": "src/lib/assets/__tests__/versions.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/components/admin/__tests__/AssetUpgradeDialog.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/architecture.test.ts",
+          "passed": 18,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/cameraFit.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/normalizeRooms.test.ts",
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/poolPlacement.test.ts",
+          "passed": 46,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/richness.test.ts",
+          "passed": 52,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/roomScope.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/roomView.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/scale.test.ts",
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/siteCollisions.test.ts",
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/sitePlan.test.ts",
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/__tests__/siteRouting.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/house/roof/expression.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/landscaping/__tests__/cars.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/landscaping/__tests__/footprints.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/capabilities/__tests__/engine.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/storage/__tests__/browserAssets.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/storage/__tests__/persistence.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/attach.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/capabilities.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/generationLoop.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/library.test.ts",
+          "passed": 21,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/liveNeed.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/nativeRetry.test.ts",
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/plans.test.ts",
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/proposal.test.ts",
+          "passed": 18,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/service.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/__tests__/spaceRecipes.test.ts",
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/components/workspace/__tests__/chatMessageState.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/outdoor/__tests__/ownership.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/outdoor/__tests__/placements.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/outdoor/__tests__/render.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/outdoor/__tests__/spaces.test.ts",
+          "passed": 15,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalBlueprint.test.ts",
+          "passed": 37,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalBlueprintReliability.test.ts",
+          "passed": 39,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalCompleteness.test.ts",
+          "passed": 26,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalDraft.test.ts",
+          "passed": 23,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalFeatures.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architecturalQuality.test.ts",
+          "passed": 13,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/architectureExpressiveness.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/auditInvariants.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/blueprint.test.ts",
+          "passed": 36,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/blueprintConstruction.test.ts",
+          "passed": 24,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/blueprintGeneration.test.ts",
+          "passed": 27,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/blueprintLiveFailure.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/compilerArchitectureAudit.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/composition.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/compositionMaterialParity.test.ts",
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/coordinateConvention.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/creativeFreedom.test.ts",
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/curved.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/designConsistency.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/designReview.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/elevation.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/estatePlan.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/estateSpatial.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/explicitSupport.test.ts",
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/expressiveGenerationEndToEnd.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/failedPreview.test.ts",
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/failedPreviewRenderIntegration.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/featureBaseline.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/fidelity.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/footprintBaseline.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/fullPropertyBlueprint.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/futureProofArchitecture.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/generationReliability.test.ts",
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/geometryAuthority.test.ts",
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/interior.test.ts",
+          "passed": 11,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/interiorPartitions.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/interiorWalls.test.ts",
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/junctions.test.ts",
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/mansionCompatibility.test.ts",
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/mansionFailure.test.ts",
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/mansionReadiness.test.ts",
+          "passed": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/nonrectangular.test.ts",
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/parityFixture.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/preGenerationReliability.test.ts",
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/presentation.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/presentationRepair.test.ts",
+          "passed": 32,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/projectMode.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/rawGenerationIngestion.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/readiness.test.ts",
+          "passed": 18,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/regressionLadder.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/remainingAudit.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/renderFirst.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/renderIdentity.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/scene.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/semanticIdentity.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/siteHierarchy.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/siteHierarchyMigration.test.ts",
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/siteObjectIngestion.test.ts",
+          "passed": 15,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/supportCapabilities.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/terraFreedomAudit.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/terrainMode.test.ts",
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/terrainSiteAudit.test.ts",
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/unifiedSpatial.test.ts",
+          "passed": 24,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/universalAuthoring.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/v3/__tests__/webglParityRegression.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/geometry/__tests__/footprint.test.ts",
+          "passed": 13,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/geometry/__tests__/openings.test.ts",
+          "passed": 18,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/roofSystems/__tests__/render.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/roofSystems/__tests__/roofSystems.test.ts",
+          "passed": 45,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/native/__tests__/hardening.test.ts",
+          "passed": 101,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/native/__tests__/light.test.ts",
+          "passed": 31,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/native/__tests__/live.test.ts",
+          "passed": 0,
+          "failed": 0,
+          "skipped": 1
+        },
+        {
+          "file": "src/lib/assets/native/__tests__/native.test.ts",
+          "passed": 32,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/assets/native/__tests__/shapes.test.ts",
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/architectEditDiff.test.ts",
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/authority.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/foundationStage.test.ts",
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/generationMode.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/geometryStage.test.ts",
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/massExpansionStage.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/numericNormalization.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/pipeline.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/pipelineInvariants.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/roofCompositionStage.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/roofStage.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/schemas.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/sitePlanStage.test.ts",
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/spatialReflow.test.ts",
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/architecture/stages/__tests__/tokenExhaustion.test.ts",
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/lib/library/knowledge/__tests__/knowledge.test.ts",
+          "passed": 23,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/components/workspace/inspector/__tests__/v3SemanticUi.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/components/workspace/panels/__tests__/ArchitectureDebugPanel.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.additiveProxy.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+          "passed": 24,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.architecturalEdit.test.ts",
+          "passed": 38,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.goalCoverage.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.streaming.test.ts",
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.test.ts",
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.tokenExhaustion.test.ts",
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.v2authority.test.ts",
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/app/api/ai/house/__tests__/route.v3.test.ts",
+          "passed": 62,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "file": "src/components/workspace/viewport/house/__tests__/v3Selection.test.ts",
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "typescript": {
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "eslint": {
+      "command": "npm run lint -- --max-warnings=0",
+      "exitCode": 0
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "webgl": {
+      "command": "PLAYWRIGHT_DIR=<existing-installation> node scripts/architectural-draft-capture.mjs",
+      "captures": 7,
+      "browserErrors": [],
+      "blockedRequests": [],
+      "evidence": "draft-webgl/capture.json",
+      "actualWorkspaceInspectorRepairAndReload": true
+    }
+  },
+  "sourceSha256": {
+    "scripts/architectural-draft-capture.mjs": "b580db1547171289d8554de0802b0e1416d6fa0e887e85216fc526ef40ae36c2",
+    "scripts/architectural-rejection-inventory.mjs": "aea2efc23c3a7ac0c52813fd1c832c522fc1f320e301f8cb32166ffde9b986ff",
+    "src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts": "6abd05ce467c78c0166de7d59ceef2e8e754ecaefd88f1293d39a4a25b240077",
+    "src/app/api/ai/house/route.ts": "62d68d84b99052fd7fc63b445f6ed022ac8f748b1da65ca83cdd91195ec0ddf4",
+    "src/app/dev/architectural-blueprint/viewer.tsx": "651d9da1be830d0e8b8e026e89dbd0036e47e97bcdc3a4ff80bba3bfede8d5dc",
+    "src/components/workspace/inspector/V3ObjectInspector.tsx": "6829e0f1ada88a93fc9f0cf7691ebfc4cf319de13c02ea1995611d1fc624eb61",
+    "src/components/workspace/viewport/V3ArchitecturalValidationBanner.tsx": "76da417fd278c73028fc32489a131f1d5c53f6e6a47a8059e06c0ca81f98850b",
+    "src/components/workspace/viewport/Viewport.tsx": "46a157aef671c8801229ae3491c20e09acb9df40bd53eb2b442ed658332a223b",
+    "src/lib/ai/__tests__/clientV3Routing.test.ts": "b1b7cfd33431726418ef78b3c7fd11acfca2e1a3327312e57bba1ec377a9c8ea",
+    "src/lib/ai/client.ts": "12a2dde9be424be7ab0ea28f928b08c35f443ace55d93275120e3ea903f42033",
+    "src/lib/v3/__tests__/architecturalDraft.test.ts": "3b2ddfa50ab84d892322b9913b9bd3e9cee0c24e05a5b3e6b90a13a7bae93c71",
+    "src/lib/v3/architecturalAcceptance.ts": "4e7b9d40c735c1ae78a8dedd4bfc9e42368f8c82e489fb6caebf9f5d5f2e1491",
+    "src/lib/v3/architecturalBlueprint.ts": "2458ac8ddf0b3b25cb83611f7e9b729e9f2e3ab8b3637b6c2957e24454b1c486",
+    "src/lib/v3/architecturalBlueprintGeneration.ts": "9efefdcece402574d56be4933d451081791fe54f24129b477f841fceb8204e22",
+    "src/lib/v3/architecturalBlueprintPreflight.ts": "c44ddf1a73c4c74159dced882b1145b8f616753e0c240b9bb4544246a408e17c",
+    "src/lib/v3/architecturalConstructionFidelity.ts": "45c561b925be845542cd6f26cd4dc07ea9eda19ee8f5090fd4bee9c8ce95a255",
+    "src/lib/v3/blueprintApproval.ts": "64e557ddf15676a2f536cd22c1fdad8f826fc0c9dd710af88ad658b3bb7609f9",
+    "src/lib/v3/operations.ts": "e4ceb353d1389119f32e6e12df01016b14a3c53c52924cebce910157d07d7780",
+    "src/lib/v3/scene.ts": "54f2e8e2f50f8ffcc0608f71b8d19190da3967667c96d572ad344f8fbcac2ed6",
+    "src/store/__tests__/v3ArchitecturalDraftPersistence.test.ts": "49fa62bf5ef88b145d46960aa915a26166b0b6ac8aa724785ce7829538742212",
+    "src/store/useProjectStore.ts": "ad0919da3ac5b5aeaf5d8645257a3fd82e7a04d30de770a24e6cbfc5e3e54d90"
+  },
+  "recoveredFixtureFileSha256": {
+    "src/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-0.json": "7ec373d567965cd6cd151a06f7771975e99a9d294c8f0021900bcab66b272fae",
+    "src/lib/v3/__tests__/fixtures/blueprint-cloister-attempt-1.json": "c7816d4dc0de93e049040d961388f801008510896889a7fb78c468806abcf2ea",
+    "src/lib/v3/__tests__/fixtures/canopy-meridian-attempt-0.json": "caba9c8798ab20e468ae09eccfddebcc54bcf82c05ecbe73ce853a1d7b9464af",
+    "src/lib/v3/__tests__/fixtures/canopy-meridian-attempt-1.json": "b9ba00d656200c7d1c9d0d61055f12a0f6a600cd427f3b7511cdc62c29dc6d40",
+    "src/lib/v3/__tests__/fixtures/cliffside-mansion-attempt-0.json": "ff1d380fb04404560296543109e3bf0ef73263126fa0396196cec30f6dddaf01",
+    "src/lib/v3/__tests__/fixtures/cliffside-mansion-attempt-1.json": "c05e4ff353a4d9733f143a0bbf4c7717da7135b89a97c29ee376dbc0e7ed4b07"
+  }
+}

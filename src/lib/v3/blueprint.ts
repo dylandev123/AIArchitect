@@ -9,7 +9,7 @@ import { authoredPlan, authoredOverlap, authoredSeparation, planArea } from './a
 import { footprintContains, resolveFootprint } from './footprint';
 import { openingEdges, facadeEdgeSpan } from './footprintConstruction';
 import { getObjectBaseY, getObjectTopY, scaledDimensionsOf } from './elevation';
-import { v3MassLevelCount, v3StoreyBase } from './stacking';
+import { v3MassStoreys, v3MassLevelCount, v3StoreyBase } from './stacking';
 import { resolveV3FootprintRoofPlan } from './roofPlanning';
 import { addressedStrips } from './accessPlanning';
 import { footprintOverlap } from './reviewGeometry';
@@ -45,7 +45,7 @@ const inputSchema = z.object({
 
 const hostId = (object: V3SceneObject) => object.support?.hostId ?? object.support?.objectId ?? object.hostId;
 type Rect = { x: number; z: number; width: number; depth: number };
-function localRectangleFits(host: V3SceneObject, r: Rect, floor: number) {
+export function localRectangleFits(host: V3SceneObject, r: Rect, floor: number) {
   const points: [number,number][] = [[r.x-r.width/2,r.z-r.depth/2],[r.x+r.width/2,r.z-r.depth/2],[r.x+r.width/2,r.z+r.depth/2],[r.x-r.width/2,r.z+r.depth/2]];
   const [w,,d] = scaledDimensionsOf(host);
   return points.every(([x,z]) => Math.abs(x)<=w/2+.001 && Math.abs(z)<=d/2+.001) && footprintContains(host,points,floor);
@@ -53,7 +53,7 @@ function localRectangleFits(host: V3SceneObject, r: Rect, floor: number) {
 
 /** Read-only planning gate. Shared estate access evidence may inspect compiled junction passages;
  * this never invokes ingestion, changes construction decisions or calls a provider. */
-export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:boolean}={}): V3BlueprintAudit {
+export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:boolean;circulationReservations?:boolean}={}): V3BlueprintAudit {
   const findings: V3BlueprintFinding[] = [];
   const add = (code: string, targetIds: string[], message: string, severity: 'fatal' | 'advisory' = 'fatal') => findings.push({ code, severity, targetIds, message });
   const finish = () => ({ ok: !findings.some(f => f.severity === 'fatal'), findings });
@@ -146,7 +146,7 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
     if (!route.spatial) for (const side of ['from','to'] as const) {
       const host = objects.get(route[side]), surface = objects.get(side==='from'?route.via[0]:route.via.at(-1)!);
       if (host?.type!=='building-mass' || !surface) continue;
-      const [w,h,d] = scaledDimensionsOf(host);
+      const [w,,d] = scaledDimensionsOf(host);
       const entries = bp.entrances.filter(e=>e.objectId===host.id);
       const contacts = entries.filter(entry=>{
         const op = host.composition?.openings?.find(op=>op.id===entry.openingId);
@@ -154,7 +154,7 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
         return addressedStrips({o:host,w,d},`${entry.id}:threshold`,op.facade,op.start,op.end,.05,getObjectBaseY(host),op.segmentId,entry.level).some(strip=>footprintOverlap(strip,surface)>.001);
       });
       if (!contacts.length) add('BLUEPRINT_ROUTE_THRESHOLD',[route.id,host.id,surface.id],'The route surface does not meet a designated entrance on its actual wall.');
-      else if (!contacts.some(e=>Math.abs(getObjectBaseY(host)+e.level*h/v3MassLevelCount(host)+.26-getObjectTopY(surface))<=.1))
+      else if (!contacts.some(e=>Math.abs(getObjectBaseY(host)+v3MassStoreys(host,scene)[e.level].elevation+.26-getObjectTopY(surface))<=.1))
         add('BLUEPRINT_THRESHOLD_TRANSITION',[route.id,host.id,surface.id],'Door and route surface have different finished elevations; author any intended step or ramp.','advisory');
     }
   }
@@ -175,8 +175,11 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
     }
   }
   const connectors = scene.interior?.circulation ?? [];
-  for (const failure of auditV3StairUsability(scene)) add(failure.code,[failure.targetId],failure.message);
-  const usable = new Set(resolveV3Circulation(scene).filter(c=>c.usable).map(c=>c.entry.id));
+  const reservationsOnly = options.constructionEvidence === false && options.circulationReservations === true;
+  // A 2D reservation chooses placement and connectivity, not a buildable flight.
+  // Construction keeps the full physical checks, including sole vertical access.
+  if (!reservationsOnly) for (const failure of auditV3StairUsability(scene)) add(failure.code,[failure.targetId],failure.message);
+  const usable = new Set(reservationsOnly ? connectors.map(c=>c.id) : resolveV3Circulation(scene).filter(c=>c.usable).map(c=>c.entry.id));
   for (const value of bp.verticalCirculationIds) if (!connectors.some(c=>c.id===value)) add('BLUEPRINT_REFERENCE',[value],'Missing authored vertical circulation.');
   // Preliminary graph uses resolved usable endpoints; detailed physical checks run before approval.
   // Touching, explicitly connected wings share equal datums.
@@ -196,7 +199,7 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
   }
   for (const a of buildings) for (const b of buildings) if (a.id<b.id && scene.relationships.some(r=>r.kind==='connects' && (r.from===a.id&&r.to===b.id || r.from===b.id&&r.to===a.id))) {
     for (let la=0;la<v3MassLevelCount(a);la++) for (let lb=0;lb<v3MassLevelCount(b);lb++) {
-      const ya=getObjectBaseY(a)+la*scaledDimensionsOf(a)[1]/v3MassLevelCount(a), yb=getObjectBaseY(b)+lb*scaledDimensionsOf(b)[1]/v3MassLevelCount(b);
+      const ya=getObjectBaseY(a)+v3MassStoreys(a,scene)[la].elevation, yb=getObjectBaseY(b)+v3MassStoreys(b,scene)[lb].elevation;
       if (Math.abs(ya-yb)<.05 && authoredSeparation(a,b,la,lb)<=.05) link(node(a,la),node(b,lb));
     }
   }
@@ -221,7 +224,7 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
     const host = objects.get(s.hostMassId);
     // V3Storey.elevation is the finished floor, as used by rooms, partitions and
     // stairs. The structural slab datum is lower by the shared slab thickness.
-    if (host?.type!=='building-mass' || s.index>=v3MassLevelCount(host) || Math.abs(s.elevation-(s.index*scaledDimensionsOf(host)[1]/v3MassLevelCount(host)+V3_FLOOR_SLAB))>.05 || Math.abs(s.height-scaledDimensionsOf(host)[1]/v3MassLevelCount(host))>.05) add('BLUEPRINT_STOREYS',[s.id,s.hostMassId],'Finished-floor datum/height contradicts its constructed building level.');
+    if (host?.type!=='building-mass' || s.index>=v3MassLevelCount(host) || Math.abs(s.elevation-(storeys.filter(p=>p.hostMassId===host.id&&p.index<s.index).reduce((sum,p)=>sum+p.height,0)+V3_FLOOR_SLAB))>.05 || Math.abs(storeys.filter(p=>p.hostMassId===host.id).reduce((sum,p)=>sum+p.height,0)-scaledDimensionsOf(host)[1])>.05) add('BLUEPRINT_STOREYS',[s.id,s.hostMassId],'Finished-floor datum/height contradicts its constructed building level.');
   }
   for (const room of rooms) {
     const host = objects.get(room.hostMassId), storey = storeys.find(s=>s.id===room.storeyId && s.hostMassId===room.hostMassId);
@@ -233,9 +236,9 @@ export function auditV3Blueprint(input: unknown, options:{constructionEvidence?:
   }
   for (const a of buildings) for (const b of buildings) if (a.id<b.id) {
     let overlaps = false;
-    const ah=scaledDimensionsOf(a)[1]/v3MassLevelCount(a),bh=scaledDimensionsOf(b)[1]/v3MassLevelCount(b);
     for (let la=0;la<v3MassLevelCount(a);la++) for (let lb=0;lb<v3MassLevelCount(b);lb++) {
-      const ay=getObjectBaseY(a)+la*ah,by=getObjectBaseY(b)+lb*bh;
+      const sa=v3MassStoreys(a,scene)[la],sb=v3MassStoreys(b,scene)[lb],ah=sa.height,bh=sb.height;
+      const ay=getObjectBaseY(a)+sa.elevation,by=getObjectBaseY(b)+sb.elevation;
       if (ay+ah>by+.01 && by+bh>ay+.01 && authoredOverlap(a,b,la,lb)>.02) overlaps = true;
     }
     if (!overlaps) continue;

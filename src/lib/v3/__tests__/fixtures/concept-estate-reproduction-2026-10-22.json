@@ -1,0 +1,146 @@
+{
+  "format": "v3-architectural-concept-1",
+  "title": "Caribbean Horizon Estate, Saint Lucia",
+  "concept": "A composed hilltop estate arranged as a deep, two-storey sea-facing U: a substantial protected residence forms a calm court open to the Caribbean horizon, while a detached horizon pavilion sits to the east as a lower, independent destination. The architecture is deliberately horizontal and grounded, using a broad plinth-like main mass to make the sea, sky and sheltered outdoor rooms feel dominant rather than competing with a vertical object.",
+  "character": "Sculptural Caribbean modernism: weighty, shade-casting horizontal volumes, a protected wind-tempered court, and a restrained procession from the landward south to the open northern sea edge.",
+  "decisions": [
+    "The principal residence is a 46 by 32 metre articulated U-shaped envelope, with a 14 metre-deep northern recess. Its substantial southern bar anchors the estate against the landward approach while two 7.8 metre-deep side wings frame the sea.",
+    "The U opens north toward the assumed Caribbean view, creating a 30 by 14 metre sheltered sea court. This court is a true exterior void in the building mass rather than an enclosed internal courtyard.",
+    "The residence rises two generous storeys, giving it enough presence for the estate while retaining a low, horizon-oriented profile.",
+    "A flat roof consolidates the non-rectangular main volume as one calm horizontal datum and emphasizes the cut-out geometry of the sea court.",
+    "A detached eastern horizon pavilion is set beyond a narrow landscape gap from the main wing. Its distinct rectangular volume avoids making the estate read as a single oversized block and gives the seaward edge a secondary architectural focal point.",
+    "The horizon pavilion receives a butterfly roof, making its silhouette visibly independent from the flat-roofed residence without exceeding the main house in scale.",
+    "The southern arrival is held apart from the residence by a formal outdoor arrival court, slowing the transition from landward entry to the protected central composition.",
+    "A broad northern panorama terrace is separated from the house by planted ground, preserving the court as an intimate sheltered exterior while establishing a larger, open-air sea outlook."
+  ],
+  "assumptions": [
+    "The site is an approximately 100 by 90 metre private Saint Lucia parcel with the Caribbean Sea and principal long view to the north.",
+    "The selected building zone is treated as flat ground; the requested overlooking condition is understood as a naturally elevated coastal setting beyond the modelled plinth elevations.",
+    "Landscape, retaining terrain, access drives, planting and water elements are outside this massing concept and are not represented as constructed geometry.",
+    "The estate is intended as a private luxury residence with a separate seaward pavilion, rather than a multi-building resort compound."
+  ],
+  "site": {
+    "width": 100,
+    "depth": 90
+  },
+  "buildings": [
+    {
+      "id": "main-residence",
+      "label": "Sea Court Residence",
+      "role": "Primary private estate residence framing the protected sea court",
+      "x": 0,
+      "z": 0,
+      "width": 46,
+      "depth": 32,
+      "rotationDegrees": 0,
+      "baseElevation": 0.3,
+      "storeyHeights": [
+        4.2,
+        4.0
+      ],
+      "footprint": {
+        "kind": "articulated",
+        "operations": [
+          {
+            "id": "sea-court-recess",
+            "floors": "all",
+            "type": "recess",
+            "facade": "north",
+            "start": 0.17,
+            "end": 0.83,
+            "depth": 14
+          }
+        ]
+      },
+      "roof": {
+        "form": "flat",
+        "overhang": 0.7
+      }
+    },
+    {
+      "id": "horizon-pavilion",
+      "label": "Horizon Pavilion",
+      "role": "Detached seaward pavilion and independent outlook volume",
+      "x": 34,
+      "z": -16,
+      "width": 18,
+      "depth": 12,
+      "rotationDegrees": 0,
+      "baseElevation": 0.3,
+      "storeyHeights": [
+        4.8
+      ],
+      "roof": {
+        "form": "butterfly",
+        "pitchDegrees": 10,
+        "overhang": 0.9
+      }
+    },
+    {
+      "id": "arrival-pavilion",
+      "label": "Arrival Pavilion",
+      "role": "Low landward arrival marker and threshold to the estate",
+      "x": 0,
+      "z": 30,
+      "width": 16,
+      "depth": 8,
+      "rotationDegrees": 0,
+      "baseElevation": 0.15,
+      "storeyHeights": [
+        3.6
+      ],
+      "roof": {
+        "form": "mono-pitch",
+        "pitchDegrees": 8,
+        "overhang": 1
+      }
+    }
+  ],
+  "connections": [],
+  "outdoorSpaces": [
+    {
+      "id": "sea-court",
+      "label": "Sheltered Sea Court",
+      "purpose": "Wind-tempered outdoor living court framed by the main residence and open north to the Caribbean horizon",
+      "kind": "courtyard",
+      "x": 0,
+      "z": -9,
+      "width": 30,
+      "depth": 14,
+      "rotationDegrees": 0
+    },
+    {
+      "id": "panorama-terrace",
+      "label": "Panorama Terrace",
+      "purpose": "Broad open-air sea outlook held beyond the more intimate protected court",
+      "kind": "terrace",
+      "x": 0,
+      "z": -25,
+      "width": 40,
+      "depth": 7,
+      "rotationDegrees": 0
+    },
+    {
+      "id": "arrival-court",
+      "label": "Landward Arrival Court",
+      "purpose": "Formal exterior threshold separating arrival from the principal residence",
+      "kind": "arrival",
+      "x": 0,
+      "z": 20,
+      "width": 22,
+      "depth": 8,
+      "rotationDegrees": 0
+    },
+    {
+      "id": "east-pavilion-garden",
+      "label": "East Pavilion Garden",
+      "purpose": "Private planted exterior ground surrounding the detached horizon pavilion",
+      "kind": "garden",
+      "x": 35,
+      "z": 0,
+      "width": 20,
+      "depth": 12,
+      "rotationDegrees": 0
+    }
+  ]
+}

@@ -18,11 +18,12 @@ import type { V3SceneSite } from "@/lib/v3/scene";
 interface SceneProps {
   timeOfDay: TimeOfDay;
   v3Presentation?: boolean;
+  blueprint?: boolean;
   /** Active V3 site: its terrain is the ground authority inside the site rectangle. */
   v3Site?: V3SceneSite;
 }
 
-export function Scene({ timeOfDay, v3Presentation = false, v3Site }: SceneProps) {
+export function Scene({ timeOfDay, v3Presentation = false, v3Site, blueprint = false }: SceneProps) {
   const cfg = TIME_OF_DAY[timeOfDay];
   const { sky, sun } = cfg;
   // V3's terrain has local relief and needs a little more distance contrast.
@@ -36,6 +37,14 @@ export function Scene({ timeOfDay, v3Presentation = false, v3Site }: SceneProps)
   // A never-designed project shows only the site, terrain and horizon — no placeholder house.
   const blank = useNeedsGeneration();
   const geometryXRay = useSceneStore((s) => s.geometryXRay);
+
+  if (blueprint) return <>
+    <color attach="background" args={["#e7e9e2"]} />
+    <ambientLight intensity={.65} />
+    <hemisphereLight args={["#ffffff", "#9ba793", .8]} />
+    <directionalLight position={[30, 60, -25]} intensity={2} />
+    {!blank && <HouseRenderer key="authoritative-house" />}
+  </>;
 
   return (
     <>
@@ -75,7 +84,7 @@ export function Scene({ timeOfDay, v3Presentation = false, v3Site }: SceneProps)
       {!geometryXRay && <GroundPlane v3Site={v3Presentation ? v3Site : undefined} />}
       <SceneGrid />
       {!geometryXRay && <Terrain />}
-      {!blank && <HouseRenderer />}
+      {!blank && <HouseRenderer key="authoritative-house" />}
       {!blank && !geometryXRay && <Scenery />}
       <PostFx exposure={exposure} />
     </>

@@ -1,6 +1,7 @@
 /** V3-only semantic paths. Metres in host-local x/z; positive sweeps run clockwise in plan. */
 import type { Point, FloorFootprint } from '@/lib/architecture/geometry/footprint';
 import type { V3Footprint } from './footprintSchema';
+import { v3FootprintSchema } from './footprintSchema';
 import type { HousePrimitive } from '@/lib/house/types';
 export type PathSegment = NonNullable<V3Footprint['segments']>[number];
 export const CURVE_STEP = Math.PI / 90;
@@ -18,6 +19,20 @@ export function segmentNormal(s:PathSegment,u:number):Point {
  return [sign*Math.cos(a),sign*Math.sin(a)];
 }
 export function segmentSteps(s:PathSegment){return s.type==='line'?1:Math.max(4,Math.ceil(Math.abs(s.sweep!)*Math.PI/180/CURVE_STEP),Math.ceil(segmentLength(s)/.35));}
+/** Open world-space route centreline; exact authored segments survive checkout.
+ * Sampling is shared by drawing, collision probes and production construction. */
+export function sampleRoutePath(segments:PathSegment[]):Point[]|undefined {
+ if(!v3FootprintSchema.safeParse({kind:'outline',operations:[],segments}).success||new Set(segments.map(s=>s.id)).size!==segments.length)return;
+ if(segments.some(s=>Math.abs(s.startAngle??0)>720||!Number.isFinite(segmentLength(s))||segmentLength(s)<.1)||segments.reduce((n,s)=>n+segmentSteps(s),0)>4096)return;
+ const points:Point[]=[];
+ for(const [i,s] of segments.entries()){
+  if(i){const p=segmentPoint(segments[i-1],1),q=segmentPoint(s,0);if(Math.hypot(p[0]-q[0],p[1]-q[1])>1e-6)return;}
+  const steps=segmentSteps(s);
+  for(let j=0;j<steps;j++)points.push(segmentPoint(s,j/steps));
+ }
+ points.push(segmentPoint(segments.at(-1)!,1));
+ return points;
+}
 export function resolvePath(segments:PathSegment[]):FloorFootprint|undefined {
  if(!segments.length||new Set(segments.map(s=>s.id)).size!==segments.length)return;
  if(segments.some(s=>!Number.isFinite(segmentLength(s)))||segments.reduce((n,s)=>n+segmentSteps(s),0)>4096)return;

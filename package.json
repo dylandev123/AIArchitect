@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "test:ai": "node --test scripts/test-ai-house.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "recover:blueprint": "vite-node --config vitest.config.mts scripts/recover-architectural-blueprint.ts",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.118",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "ai": "^6.0.216",
+    "fflate": "^0.8.3",
     "lucide-react": "^1.22.0",
     "n8ao": "^2.0.1",
     "next": "16.2.9",

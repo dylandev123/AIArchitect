@@ -1,0 +1,53 @@
+# Final build-first production preflight
+
+20 October 2026, America/St_Lucia.
+
+**GO for one separately authorized, controlled live evaluation of the supported flat-site V3 contract.** No live generation was performed or authorized by this audit. **NO-GO for broad production rollout or a guarantee of arbitrary luxury-estate generation.** The offline production endpoint constructs a visible, editable estate despite the tested localized defects. No application-code blocker was confirmed, so application code was left unchanged.
+
+## Requirement results
+
+PASS below describes the exercised supported contract. It does not measure Terra's probability of authoring a valid blueprint from an arbitrary brief.
+
+| # | Result | Evidence and boundary |
+| --- | --- | --- |
+| 1. Exact flag selects blueprint-only generation | **PASS** | `generateV3Scene` returns from the independent branch before consulting the older flag. Actual-route tests enable both flags and inspect the SDK request and pipeline response header. New flat V3 generation is required; edits and advanced terrain retain their existing paths. |
+| 2. One coherent request, output budget, malformed/truncated output | **PASS, offline scope** | One system prompt contains the independent schema and construction policies; one user message supplies the brief. The wire cap is **10,000 output tokens per attempt**. The combined estate fixture is 11,636 bytes compact / 21,591 formatted, below the cap under the repository's conservative three-bytes-per-token estimate. This is a serialization estimate, not actual Terra tokenization or reasoning usage. Length, filtering, error, tool-call and other abnormal finishes reject before construction; malformed/non-object output rejects without fallback or retry. Live budget adequacy for substantially larger or more verbose designs remains unmeasured. |
+| 3. Validate, deterministically construct, display complete supported architecture | **PASS** | Actual `POST /api/ai/house`, real AI SDK JSON parsing, local schema/planning, opaque approval and production compilation/receipts run with an offline SDK model. The combined fixture retains **13 editable objects, 14 functional room regions and 182 primitives**: both buildings/roofs, curved outline, balcony/guards, atelier portico, pool basin/water/shell/coping, dry deck, pergola, arrival court, landscape zone and routes. |
+| 4. Local defects produce an editable draft | **PASS within explicit classifications** | Endpoint regressions cover internal door clipping, a 0.10m route-ribbon boundary overrun, a physically blocked secondary stair with a working independent alternative, decorative trim finish drift, and simultaneous door/stair/route defects. Each viable draft uses **one authoring call**. Status is `Draft — Needs Refinement`; original fatal diagnostics remain present and are classified `draft-tolerable`. |
+| 5. Core failures block | **PASS** | Missing essential main-building references, invalid footprint, unsupported primary roof/form, unusable sole stair, missing required components/guards and major component geometry substitution reject. Failure returns no saveable JSON/model/scene and cannot enter normal client apply. A failed permitted sole-stair repair stops after call two. |
+| 6. Safe deterministic corrections | **PASS** | Existing tests prove canonical route-owner envelope rebuilding without changing authored endpoints/waypoints. Actual endpoint fault injection proves transient pool-water mesh loss is repaired by recompilation in one authoring call. Persistent geometry substitutions still reject. No room, entrance, roof, route bend or design decision is invented. |
+| 7. Full property/usable preview instead of empty site | **PASS** | The actual combined-defect endpoint JSON is loaded into an isolated normal workspace. Inspected WebGL captures show the whole property and draft banner before and after page reload. This is the ordinary editable scene, rather than a failed ephemeral preview. |
+| 8. Atomic draft save, reload, edit and promotion | **PASS for existing local project persistence** | Real project-store tests use isolated in-memory localStorage. Scene, diagnostics and version share one serialized update; invalid commits leave state/storage unchanged. Rehydrate, semantic door edit and current-scene revalidation promote a repaired door draft to Complete. Browser inspector repair, saved promotion and full page reload also pass. This does not claim filesystem crash transactions or remote multi-device persistence. |
+| 9. Bounded provider budget | **PASS** | One initial request and at most one narrowly scoped objective stair/waypoint repair. Viable drafts return immediately. `maxRetries:0` disables SDK transport retries; usage logging invokes its supplied operation once. A retryable 429 causes only one model call. Protected-design comparison refuses redesign; no third call or detailed-scene fallback exists. |
+| 10. Production route with substantial estate fixtures | **PASS** | Eleven added actual-route cases cover Complete, four draft defect categories, combined defects, missing main building, unsupported roof, sole-stair failure, persistent geometry substitution and transient mesh loss. The real SDK parses provider-shaped JSON text. Fetch is forbidden in this suite. Existing distinct-design, client routing, preservation and persistence coverage also runs. |
+
+## Exact activation configuration
+
+```text
+AI_V3_ARCHITECTURAL_BLUEPRINT=1
+request.mode=generate
+request.generationMode=v3-scene
+request.v3TerrainMode=flat   # also the default when omitted
+```
+
+Only the exact flag string `1` enables this branch. `AI_V3_BLUEPRINT_FIRST` is unnecessary and may be unset; even `1` cannot override the selected independent branch. Confirm selection with `x-ai-architect-pipeline: v3-architectural-blueprint-1` and `x-ai-architect-resolved-mode: v3-scene`. Read-only `GET /api/ai/house` reports flag state, two maximum authoring attempts and the 10,000-token cap without accessing a provider.
+
+**Observed local configuration:** `.env.local` already contains `AI_V3_ARCHITECTURAL_BLUEPRINT=1`; `AI_V3_BLUEPRINT_FIRST` is unset there. Neither shell variable was set when inspected. Earlier reports describe the code's default-off behavior; they do not reflect this currently enabled local override. No environment file was changed. Deployed environment state was not inspected. The rendering server explicitly cleared `OPENAI_API_KEY` and disabled both flags in its process.
+
+## Rendering, editing and limits
+
+[Optimized production captures](final-preflight-production-webgl/capture.json) verify the actual endpoint's [combined draft](final-preflight-production-webgl/production-route-combined-draft.jpg) and [page reload](final-preflight-production-webgl/production-route-combined-reloaded.jpg) in `next start` after a successful production build. Both inspected images show the full property and draft diagnostics, with a real WebGL 2 context and no empty-site failure. [Nine additional local development captures](final-preflight-webgl/capture.json) include an [interior section](final-preflight-webgl/draft-interior.jpg), [workspace door repair](final-preflight-webgl/workspace-repaired.jpg) and [Complete after reload](final-preflight-webgl/workspace-reloaded-complete.jpg). All **eleven captures** use isolated browser storage, production mesh/PBR/edge/lighting/PostFx and normal workspace components, with zero page errors and zero attempted provider/project API requests. No deployment was involved.
+
+The supported defect policy is intentionally narrower than “any broken detail.” Exterior/essential entrance failures, all unusable vertical access, substantial route disconnection, missing balcony guards, missing architecture and geometry substitutions still block. Stair tolerance requires independently usable access to every storey after excluding all defective connectors together. Walkway tolerance is at most 0.15m of boundary overrun with valid endpoints and independent collision checks. Decorative tolerance covers trim finish drift with preserved geometry/ownership, rather than a missing structural assembly.
+
+The scene retains advisory storey-envelope and route-render diagnostics; Complete means no remaining non-advisory objective construction failures under this contract. Room regions do not invent private-room partitions, furnishings or hardware. Landscape zones construct grass cover; authored tree layouts remain unsupported. This audit does not certify engineering, egress, privacy, aesthetics, brief completeness, or first-call model success.
+
+## Validation and preservation
+
+[FINAL_PREFLIGHT_CHECKS.json](FINAL_PREFLIGHT_CHECKS.json) records final commands/results, fixture measurements, captures and source hashes. [FINAL_PREFLIGHT_FIXTURE_PROOF.json](FINAL_PREFLIGHT_FIXTURE_PROOF.json) retains the explicitly authored input and combined-defect outcome; its provider usage is mocked. [FINAL_PREFLIGHT_PROPERTY.json](FINAL_PREFLIGHT_PROPERTY.json) is the actual endpoint's ordinary editable V3 response used for the workspace capture.
+
+Final validation: **2,296 tests passed, 3 skipped; 183 test files passed, 2 skipped.** TypeScript, repository-wide ESLint with zero warnings, tracked/new-text whitespace checks and the optimized Next.js production build passed. The final full-suite command used one worker and a 30-second per-test timeout. Earlier five-second runs hit wall-clock timeouts; no assertion correction or application-code change was needed. The initial sandboxed build could not download Google Fonts, and the first network-enabled retry exhausted disk space. Clearing only the ignored generated `.next/dev/cache` recovered 7.4GB; the subsequent build passed. These host issues are resolved and are not outstanding pipeline blockers. Both local servers and isolated browsers were stopped.
+
+Only endpoint regression coverage, an offline capture script and new audit artifacts were added during this preflight. A preflight hash inventory confirms every pre-existing changed/untracked file was preserved byte-for-byte except the intentionally extended endpoint test. Original saved scenes and recovered provider fixtures were not altered. No Terra/OpenAI calls, paid generations, real saved-project writes, V2/terrain changes, commits, pushes or deployments were performed.
+
+For a controlled live evaluation, use one supported flat-site estate brief, preserve the untouched response and finish/token accounting, inspect the constructed property and its diagnostics, and stop after the existing maximum two requests. Natural-model omissions and output-budget exhaustion are evaluation risks; offline fixture acceptance does not establish their rate.

@@ -2,7 +2,7 @@ import { compileV3Scene, type V3Scene } from './scene';
 import { validateV3Scene } from './validation';
 import { auditV3StairUsability } from './stairUsability';
 import { materializeV3ArchitecturalScene } from './architecture';
-import { auditV3Blueprint, type V3BlueprintAudit } from './blueprint';
+import { auditV3Blueprint, type V3BlueprintAudit, type V3BlueprintFinding } from './blueprint';
 
 /** Ephemeral comparison evidence, never a persisted scene or an authorization/security token. */
 export interface V3BlueprintApproval { readonly version: 1; readonly decisions: Readonly<Record<string,string>>; }
@@ -38,8 +38,9 @@ function decisions(input: V3Scene): Record<string,string> {
 }
 
 /** Approve only an explicitly authored, spatially valid planning scene. Does not fill gaps. */
-export function approveV3Blueprint(scene: V3Scene, options:{constructionEvidence?:boolean}={}): V3BlueprintAudit & { approval?: V3BlueprintApproval } {
+export function approveV3Blueprint(scene: V3Scene, options:{constructionEvidence?:boolean; allowFinding?:(finding:V3BlueprintFinding)=>boolean}={}): V3BlueprintAudit & { approval?: V3BlueprintApproval } {
   const audit = auditV3Blueprint(scene,options);
+  if(options.allowFinding) audit.ok=!audit.findings.some(f=>f.severity==='fatal'&&!options.allowFinding!(f));
   // Preliminary index checks need no finished details. Before freezing a structurally
   // inspectable full scene, however, actual stair openings and approaches must work.
   if(options.constructionEvidence!==false && audit.ok && scene.interior?.circulation?.length && validateV3Scene(scene,{lenient:true}).ok){

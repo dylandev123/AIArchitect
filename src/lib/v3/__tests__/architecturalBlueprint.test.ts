@@ -100,7 +100,6 @@ describe('independent complete architectural blueprint → existing V3 construct
   it.each([
     ['unsupported dome',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.buildings[0].roof.form='dome';},'ARCHITECTURAL_ROOF_UNSUPPORTED'],
     ['hip over curve',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.buildings[0].roof.form='hip';b.buildings[0].roof.pitchDegrees=25;},'ROOF_FOOTPRINT_UNSUPPORTED'],
-    ['unequal levels',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.buildings[0].storeys[1].height=5;},'ARCHITECTURAL_STOREYS_UNSUPPORTED'],
     ['tiny stair',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.verticalCirculation[0].footprint.width=.4;b.verticalCirculation[0].footprint.depth=.5;},'CIRCULATION_NOT_USABLE'],
     ['missing material',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.buildings[0].materialId='missing';},'ARCHITECTURAL_MATERIAL'],
     ['unsupported feature',(b:ReturnType<typeof crescentEstateBlueprint>)=>{b.features[0].type='tennis-court';},'ARCHITECTURAL_FEATURE_UNSUPPORTED'],

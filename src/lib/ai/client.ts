@@ -35,7 +35,7 @@ export interface HouseEditRequest {
 }
 
 export type HouseEditResult =
-  | { ok: true; summary: string; generated: boolean; unchanged?: "already-satisfied" | "capability-needed" }
+  | { ok: true; summary: string; generated: boolean; outcome?: "complete" | "draft"; unchanged?: "already-satisfied" | "capability-needed" }
   | { ok: false; error: string; status: number; stale?: boolean };
 
 export interface GenerationModeDiagnostic {
@@ -157,7 +157,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
     return { ok: false, error: `Generation mode disagreement: client requested ${generationMode}, but server resolved ${serverResolvedMode}. Generation was blocked.`, status: 409 };
   }
   // A gateway timeout or crash answers with a non-JSON page: report what happened instead of a parse error.
-  const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string; intelligence?: GenerationReport; outcome?: "already-satisfied" | "capability-needed"; v3FailedPreview?: V3FailedPreview };
+  const data = (await res.json().catch(() => ({}))) as { summary?: string; json?: string; timeOfDay?: TimeOfDay; error?: string; intelligence?: GenerationReport; outcome?: "already-satisfied" | "capability-needed" | "complete" | "draft"; v3FailedPreview?: V3FailedPreview };
 
   if (!res.ok || typeof data.json !== "string") {
     // Failed previews are held only in an ephemeral read-only store. There is no
@@ -176,7 +176,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
 
   const baseDocument = v2DocumentOf(baseJson);
   // A validated V2 no-op is a successful answer, but deliberately creates no project version.
-  if (!generate && data.outcome) {
+  if (!generate && (data.outcome === "already-satisfied" || data.outcome === "capability-needed")) {
     logEdit("COMMIT", { projectId: req.projectId, accepted: true, reason: data.outcome }, data.json);
     return { ok: true, summary: data.summary ?? "No project changes were needed.", generated: false, unchanged: data.outcome };
   }
@@ -197,6 +197,9 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
   }
   logEdit("COMMIT", { projectId: req.projectId, accepted: true, writer: generate ? "ai-initial-generation" : "ai-followup-edit" }, data.json);
   req.apply(summary, data.json, generate ? "ai-initial-generation" : "ai-followup-edit");
+  if(generate && generationMode==='v3-scene'){
+    try{if(JSON.parse(data.json).v3Scene?.metadata?.designPipeline?.format==='v3-plan-first-1')useProjectStore.getState().setArchitecturalView(req.projectId,{mode:'floor-plan',floor:null,buildingId:null});}catch{ /* Scene parsing is checked by normal project ingestion. */ }
+  }
   if (generate && data.timeOfDay) useProjectStore.getState().setTimeOfDay(req.projectId, data.timeOfDay);
-  return { ok: true, summary, generated: generate };
+  return { ok: true, summary, generated: generate, ...(data.outcome === "complete" || data.outcome === "draft" ? {outcome:data.outcome} : {}) };
 }

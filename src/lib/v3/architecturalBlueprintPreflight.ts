@@ -1,4 +1,4 @@
-import { openingBands } from '@/lib/architecture/geometry/openings';
+import { resolveFacadeOpeningBands } from './facadeOpeningRecovery';
 import type { V3ArchitecturalBlueprint } from './architecturalBlueprint';
 import type { V3BlueprintFinding } from './blueprint';
 import { builderOpening } from './composition';
@@ -24,13 +24,29 @@ export function architecturalBlueprintPreflight(bp: V3ArchitecturalBlueprint): V
     fail('ARCHITECTURAL_REFERENCE', [ref], 'Room adjacency must reference an existing functional space.');
   for (const adjacency of bp.roomAdjacencies) if (adjacency.from === adjacency.to)
     fail('ARCHITECTURAL_REFERENCE', [adjacency.from], 'A room adjacency must name two different spaces.');
-  for (const [index, door] of bp.doors.entries()) {
+  findings.push(...architecturalDoorPreflight(bp.doors));
+
+  findings.push(...architecturalOpeningPreflight(bp.buildings));
+  return findings;
+}
+
+/** Unsupported door forms and overlaps remain visible after reload and edits. */
+export function architecturalDoorPreflight(doors: {id:string;program:string;partitionId:string;offset:number;width:number}[]): V3BlueprintFinding[] {
+  const findings:V3BlueprintFinding[]=[];
+  const fail=(code:string,targetIds:string[],message:string)=>findings.push({code,targetIds,message,severity:'fatal'});
+  for (const [index, door] of doors.entries()) {
     if (door.program === 'archway') fail('ARCHITECTURAL_INTERIOR_UNSUPPORTED', [door.id], 'The partition builder constructs rectangular cutouts, not arched openings. Preserve the requested form; no rectangular substitute is authorised.');
-    for (const other of bp.doors.slice(index + 1)) if (door.partitionId === other.partitionId && Math.abs(door.offset - other.offset) < (door.width + other.width) / 2 - 1e-8)
+    for (const other of doors.slice(index + 1)) if (door.partitionId === other.partitionId && Math.abs(door.offset - other.offset) < (door.width + other.width) / 2 - 1e-8)
       fail('ARCHITECTURAL_DOOR_OVERLAP', [door.id, other.id], 'Interior openings overlap; merging their gaps would lose independently authored door intent.');
   }
+  return findings;
+}
 
-  for (const b of bp.buildings) {
+/** Shared by initial planning and revalidation after ordinary scene edits. */
+export function architecturalOpeningPreflight(buildings: Pick<V3ArchitecturalBlueprint['buildings'][number], 'id'|'facade'|'plan'|'storeys'>[]): V3BlueprintFinding[] {
+  const findings: V3BlueprintFinding[]=[];
+  const fail=(code:string,targetIds:string[],message:string)=>findings.push({code,targetIds,message,severity:'fatal'});
+  for (const b of buildings) {
     const openings = b.facade.openings ?? [];
     for (const op of openings) {
       if ('start' in op && op.end <= op.start)
@@ -44,25 +60,22 @@ export function architecturalBlueprintPreflight(bp: V3ArchitecturalBlueprint): V
     // before construction. This does not invoke a mesh builder.
     for (let level = 0; level < b.storeys.length; level++) {
       const height = b.storeys[level].height - (b.plan.kind === 'rectangle' ? 0 : level === b.storeys.length - 1 ? .52 : .26);
-      const groups = new Map<string, { start: number; end: number; id: string }[]>();
+      const groups = new Set<string>();
       for (const op of openings) {
         if (op.floors === 'ground' && level !== 0 || op.floors === 'upper' && level === 0) continue;
         const segment = b.plan.kind === 'outline' ? b.plan.segments.find(s => s.id === op.segmentId) : undefined;
         if (b.plan.kind === 'outline' && (!segment || (segment.type === 'line' ? !segment.start || !segment.end : !segment.center || !segment.radius || segment.startAngle === undefined || !segment.sweep))) continue;
         const span = segment ? segmentLength(segment) : b.plan.kind === 'outline' ? 0 : ['north', 'south'].includes(op.facade) ? b.plan.width : b.plan.depth;
         if (!Number.isFinite(span) || span <= 0) continue; // Footprint validation owns malformed geometry.
-        const bands = openingBands('north', span, 1, [{ ...builderOpening(op), facade: 'north' }], level, height);
-        const requestedHeight = op.type === 'glazing-zone' ? op.heightRatio * height : op.height;
-        if (!bands.length || bands.some(band => requestedHeight !== undefined && Math.abs((band.height ?? 0) - requestedHeight) > 1e-8
-          || (band.sill ?? 0) > height - .2 || (band.height ?? 0) < .3 || (band.sill ?? 0) + (band.height ?? 0) > height + 1e-8))
-          fail('ARCHITECTURAL_OPENING_CLIPPED', [b.id, op.id], `Opening on level ${level} would be dropped or resized by construction; resolve its height, sill and span explicitly.`);
-        const key = segment?.id ?? op.facade, existing = groups.get(key) ?? [];
-        for (const band of bands) {
-          const conflict = existing.find(other => Math.min(other.end, band.end) - Math.max(other.start, band.start) > 1e-8);
-          if (conflict) fail('ARCHITECTURAL_OPENING_OVERLAP', [b.id, conflict.id, op.id], `Opening spans overlap on ${key}, level ${level}; construction cannot choose which intent to clip.`);
-          existing.push({ start: band.start, end: band.end, id: op.id });
-        }
-        groups.set(key, existing);
+        const key = segment?.id ?? op.facade;
+        if (groups.has(key)) continue;
+        groups.add(key);
+        const addressed = openings.filter(other => segment ? other.segmentId === segment.id : other.facade === op.facade && other.segmentId === undefined);
+        const resolved = resolveFacadeOpeningBands(addressed.map(other=>({...builderOpening(other),facade:'north' as const})), 'north', span, 1, level, height);
+        for (const id of resolved.invalidIds)
+          fail('ARCHITECTURAL_OPENING_CLIPPED', [b.id, id], `Opening on ${key}, level ${level} cannot be cut at its authored size. Intent is retained; supported wall remains pending refinement.`);
+        for (const [a,c] of resolved.conflicts)
+          fail('ARCHITECTURAL_OPENING_OVERLAP', [b.id, a.ownerId, c.ownerId], `Opening cuts overlap on ${key}, level ${level}: ${a.key} span [${a.start}, ${a.end}], sill ${a.sill}, height ${a.height}; ${c.key} span [${c.start}, ${c.end}], sill ${c.sill}, height ${c.height}. Both conflicting cuts are withheld; amber wall sections remain unresolved and editable.`);
       }
     }
   }

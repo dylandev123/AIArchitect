@@ -10,6 +10,7 @@ import { planV3ArchitecturalBlueprint,constructV3ArchitecturalBlueprint,reviseV3
 import { compileV3Scene,type V3Scene } from '@/lib/v3/scene';
 import { executeV3SceneOperations } from '@/lib/v3/operations';
 import { ingestV3GenerationOutput } from '@/lib/v3/ingestion';
+import { revalidateArchitecturalScene } from '@/lib/v3/architecturalAcceptance';
 import { PrimitiveMesh } from '@/components/workspace/viewport/house/PrimitiveMesh';
 import { applyEdgeDetail,RENDER_BASE_BEVEL } from '@/lib/house/architecture/edgeDetail';
 import { SunLight } from '@/components/workspace/viewport/SunLight';
@@ -17,7 +18,8 @@ import { SceneEnvironment } from '@/components/workspace/viewport/scenery/SceneE
 import { PostFx } from '@/components/workspace/viewport/PostFx';
 import { TIME_OF_DAY } from '@/lib/timeOfDay';
 
-const DESIGNS=[...distinctArchitecturalBlueprints(),{name:'full-property',blueprint:fullPropertyBlueprint()}];
+const draftBlueprint=fullPropertyBlueprint();draftBlueprint.doors[0].offset=.1;
+const DESIGNS=[...distinctArchitecturalBlueprints(),{name:'full-property',blueprint:fullPropertyBlueprint()},{name:'draft-door',blueprint:draftBlueprint}];
 export function ArchitecturalBlueprintViewer(){
   const [name,setName]=useState('crescent-estate'),[raw,setRaw]=useState(()=>JSON.stringify(crescentEstateBlueprint(),null,2));
   const [planning,setPlanning]=useState<V3ArchitecturalPlanningResult>(),[scene,setScene]=useState<V3Scene>(),[status,setStatus]=useState('Independent design loaded. Validate before construction.'),[section,setSection]=useState(false);
@@ -31,18 +33,27 @@ export function ArchitecturalBlueprintViewer(){
     setName(key);setRaw(JSON.stringify(bp,null,2));setPlanning(undefined);setScene(undefined);setSection(false);setDetail('estate');setStatus('Independent design loaded. Validate before construction.');
   };
   const validate=()=>{
-    try{const p=planV3ArchitecturalBlueprint(JSON.parse(raw));setPlanning(p);setScene(undefined);setStatus(p.ok?'Blueprint approved. Detailed V3 construction has not run.':`Planning rejected: ${p.findings.filter(f=>f.severity==='fatal').map(f=>`${f.code}: ${f.message}`).join(' | ')}`);}
+    try{const p=planV3ArchitecturalBlueprint(JSON.parse(raw),{buildFirst:name==='draft-door'});setPlanning(p);setScene(undefined);setStatus(p.ok?'Blueprint approved. Detailed V3 construction has not run.':`Planning rejected: ${p.findings.filter(f=>f.severity==='fatal').map(f=>`${f.code}: ${f.message}`).join(' | ')}`);}
     catch(e){setPlanning(undefined);setScene(undefined);setStatus(`Planning rejected: ${String(e)}`);}
   };
   const construct=()=>{
     const result=constructV3ArchitecturalBlueprint(planning!.approval!);
-    setScene(result.scene);setStatus(result.ok?`Constructed editable V3: ${result.scene!.objects.length} objects; ${result.model!.primitives.length} primitives. Blueprint document is not persisted in the scene.`:`Construction rejected: ${result.findings.map(f=>f.message).join(' | ')}`);
+    setScene(result.scene);setStatus(result.ok?`${result.outcome==='draft'?'Draft — Needs Refinement (not fully validated)':'Constructed editable V3'}: ${result.scene!.objects.length} objects; ${result.model!.primitives.length} primitives. Blueprint document is not persisted in the scene.`:`Construction rejected: ${result.findings.map(f=>f.message).join(' | ')}`);
   };
   const move=()=>{
     const bp=JSON.parse(raw) as V3ArchitecturalBlueprint;bp.buildings[0].location.x+=3;
     const result=reviseV3ArchitecturalBlueprint(scene!,planning!.approval!,bp);
     if(result.ok){setScene(result.scene);setRaw(JSON.stringify(bp,null,2));setPlanning(planV3ArchitecturalBlueprint(bp));setName('moved-estate');setStatus('Replanned +3m: residence, host roof, entrance contacts and routes updated; stable IDs retained.');}
     else setStatus(`Replan rejected: ${result.findings.map(f=>f.message).join(' | ')}`);
+  };
+  const reloadDraft=()=>{
+    const saved=JSON.stringify(scene);localStorage.setItem('ai-architect-offline-draft-proof',saved);
+    const result=revalidateArchitecturalScene(JSON.parse(localStorage.getItem('ai-architect-offline-draft-proof')!));
+    if(result.ok){setScene(result.scene);setStatus(`${result.outcome==='draft'?'Draft — Needs Refinement (not fully validated)':'Complete'}: scene and diagnostics survived reload.`);}
+  };
+  const repairDraft=()=>{
+    const result=executeV3SceneOperations(scene!,{intent:'Refine service door',operations:[{op:'setDoor',door:{...scene!.interior!.doors![0],offset:3}}]});
+    if(result.ok){setScene(result.scene);setStatus('Complete: service door repaired and current scene fully revalidated.');}else setStatus(result.errors.join(' | '));
   };
   const editReload=()=>{
     const edited=executeV3SceneOperations(scene!,{intent:'Change atelier finish through the existing V3 editor',operations:[{op:'changeMaterial',target:'orchard-atelier',material:{id:'ochre-stucco',color:'#c49a68',surface:'stucco'}}]});
@@ -58,7 +69,8 @@ export function ArchitecturalBlueprintViewer(){
       <aside style={{width:330,padding:'0 16px 16px',display:'flex',flexDirection:'column',gap:10}}>
         <p>Independent architectural blueprint<br/><small>Metres · north −Z · no detailed scene objects</small></p>
         <textarea aria-label="Architectural blueprint JSON" value={raw} onChange={e=>{setRaw(e.target.value);setPlanning(undefined);setScene(undefined);setStatus('Design changed. Validate before construction.');}} style={{flex:1,minHeight:0,fontSize:11,fontFamily:'monospace',padding:10,border:'1px solid #aaa',borderRadius:4}}/>
-        <button onClick={validate}>Validate blueprint</button><button disabled={!planning?.approval} onClick={construct}>Construct V3</button>
+        <button onClick={validate}>Validate blueprint</button>
+        {name==='draft-door'&&<><button disabled={!scene} onClick={reloadDraft}>Reload editable draft</button><button disabled={!scene} onClick={repairDraft}>Repair draft door</button></>}<button disabled={!planning?.approval} onClick={construct}>Construct V3</button>
         <button disabled={!scene||!planning?.approval} onClick={move}>Move residence +3m</button>
         <button disabled={!scene?.objects.some(o=>o.id==='orchard-atelier')} onClick={editReload}>Edit and reload V3</button>
         <button disabled={!scene} onClick={()=>{setSection(s=>!s);setName('interior-section');}}>Toggle interior section</button>

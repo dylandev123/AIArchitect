@@ -45,6 +45,16 @@ it("does not throw if local storage fails", async () => {
   vi.mocked(process.cwd).mockReturnValue("/invalid\0");
   await expect(retainV3FailureArtifact("{}", 0, "ingestion")).resolves.toBeUndefined();
 });
+it('keeps the replay source when derived blueprint evidence exceeds the size bound', async () => {
+  const raw = '{"format":"v3-architectural-blueprint-1"}';
+  await retainV3FailureArtifact(raw, 0, 'ingestion', { generationId: 'generation-one', decision: 'rejected', errors: [], warnings: [], notes: [], omitted: [], normalizedBlueprint: 'x'.repeat(V3_FAILURE_ARTIFACT_MAX_BYTES) });
+  expect(await read()).toMatchObject({ rawResponse: raw, omittedForSize: false, diagnostics: { generationId: 'generation-one', normalizedBlueprint: null } });
+});
+it('never reintroduces oversized derived evidence when the original also exceeds retention', async () => {
+  await retainV3FailureArtifact('x'.repeat(V3_FAILURE_ARTIFACT_MAX_BYTES), 0, 'ingestion', { generationId: 'generation-one', decision: 'rejected', errors: [], warnings: [], notes: [], omitted: [], normalizedBlueprint: 'x'.repeat(V3_FAILURE_ARTIFACT_MAX_BYTES) });
+  expect((await stat(path.join(directory, '.v3-debug/failed-attempt-0.json'))).size).toBeLessThanOrEqual(V3_FAILURE_ARTIFACT_MAX_BYTES);
+  expect(await read()).toMatchObject({ rawResponse: null, omittedForSize: true, diagnostics: { generationId: 'generation-one', normalizedBlueprint: null } });
+});
 
 it("retains redacted bounded revision snapshots and decisions in one independent slot", async () => {
   const file = path.join(directory, '.v3-debug/revision-latest.json');

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-22",
+  "route": "/dev/villa-playground",
+  "design": "Villa Solana — fixed contemporary tropical villa",
+  "httpStatus": 200,
+  "typescript": "Final npm run typecheck passed: next typegen && tsc --noEmit",
+  "unitTests": {
+    "passed": 32,
+    "files": 5,
+    "note": "Four V3 persistence tests initially hit the default 5s timeout under worker contention. All 12 persistence tests passed with one worker and a 30s CLI timeout; the other 20 tests passed in the initial run."
+  },
+  "browser": {
+    "actualWebGLSceneObserved": "Chrome Guest, native browser control",
+    "screenshots": [
+      "solana-poolside-daylight.jpg",
+      "solana-poolside-golden-hour.jpg",
+      "solana-arrival.jpg",
+      "solana-garden.jpg",
+      "solana-above.jpg"
+    ],
+    "cameraPresetsVisuallyVerified": ["Poolside", "Arrival", "Garden", "Above"],
+    "lightingVisuallyVerified": ["Daylight", "Golden hour"],
+    "runtime": "Transient development hot-reload errors recovered with a clean browser reload. No new runtime error in the development log during final mood and camera preset checks.",
+    "directOrbitPanZoom": "Not exhaustively re-tested; existing OrbitControls reused",
+    "mobile": "Not visually verified",
+    "production404": "Not exercised; existing development gate retained",
+    "warnings": ["Shared THREE.Clock deprecation", "Shared PCFSoftShadowMap deprecation"]
+  },
+  "sharedRendererChange": "WaterSurface optional art-direction props; existing defaults preserved; owned normal-map clones disposed on cleanup",
+  "v3WorkflowCodeChanged": false,
+  "newDependencies": 0,
+  "openAICalls": 0,
+  "terraCalls": 0,
+  "migrations": 0,
+  "commits": 0,
+  "deployed": false
+}

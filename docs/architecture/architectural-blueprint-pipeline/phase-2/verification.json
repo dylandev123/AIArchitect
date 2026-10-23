@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-21",
+  "timezone": "America/St_Lucia",
+  "externalProviderCalls": 0,
+  "newAgents": 0,
+  "existingProjectsAccessed": false,
+  "focused": {
+    "command": "npx vitest run --maxWorkers=2 [the 13 testFiles listed in focused-tests.json] --reporter=json",
+    "testFiles": 13,
+    "totalTests": 121,
+    "passed": 121,
+    "failed": 0,
+    "skipped": 0,
+    "success": true,
+    "failures": []
+  },
+  "fullRepository": {
+    "command": "npx vitest run --maxWorkers=2 --testTimeout=30000 --reporter=json",
+    "testFiles": 206,
+    "totalTests": 2484,
+    "passed": 2478,
+    "failed": 3,
+    "skipped": 3,
+    "success": false,
+    "failures": [
+      {
+        "file": "lib/v3/__tests__/productionRouteDiagnostics.test.ts",
+        "test": "production estate route rendering diagnostics recognizes actual estate ribbons while preserving malformed-route and unknown-object diagnostics",
+        "message": "AssertionError: expected false to be true // Object.is equality"
+      },
+      {
+        "file": "lib/v3/__tests__/supportCapabilities.test.ts",
+        "test": "support behaviour comes from the capability registry matches the legacy type lists for every registered and unregistered type",
+        "message": "AssertionError: fountain: expected true to be false // Object.is equality"
+      },
+      {
+        "file": "lib/v3/__tests__/terraFreedomAudit.test.ts",
+        "test": "V3 Terra freedom product audit keeps a mansion full of new nouns through the exact offline production path",
+        "message": "AssertionError: expected { specialized: 17, generic: 13 } to deeply equal { specialized: 16, generic: 14 }"
+      }
+    ],
+    "note": "Full run followed initial implementation. Final seam-tolerance and legacy serves-reference refinements were then verified by the final 121-test focused run and rebuilt production app. No test-count changes."
+  },
+  "startingCodeComparison": {
+    "method": "Isolated source copy restored from task-start snapshots of every modified working file; same three failed test files rerun with two workers",
+    "testFiles": 3,
+    "totalTests": 5,
+    "passed": 2,
+    "failed": 3,
+    "skipped": 0,
+    "success": false,
+    "failures": [
+      {
+        "file": "lib/v3/__tests__/productionRouteDiagnostics.test.ts",
+        "test": "production estate route rendering diagnostics recognizes actual estate ribbons while preserving malformed-route and unknown-object diagnostics",
+        "message": "AssertionError: expected false to be true // Object.is equality"
+      },
+      {
+        "file": "lib/v3/__tests__/supportCapabilities.test.ts",
+        "test": "support behaviour comes from the capability registry matches the legacy type lists for every registered and unregistered type",
+        "message": "AssertionError: fountain: expected true to be false // Object.is equality"
+      },
+      {
+        "file": "lib/v3/__tests__/terraFreedomAudit.test.ts",
+        "test": "V3 Terra freedom product audit keeps a mansion full of new nouns through the exact offline production path",
+        "message": "AssertionError: expected { specialized: 17, generic: 13 } to deeply equal { specialized: 16, generic: 14 }"
+      }
+    ],
+    "sameFailureSet": true
+  },
+  "checks": {
+    "typescript": "PASS: npx tsc --noEmit",
+    "eslint": "PASS: all 12 changed/new source files",
+    "whitespace": "PASS: git diff --check",
+    "productionBuild": "PASS: isolated Next.js 16.2.9 build --webpack; latest source, no copied env files, cached font mock, external sockets/fetch forbidden",
+    "pipeline": "PASS: npx vite-node --config vitest.config.mts scripts/architectural-intelligence-phase2-evidence.ts",
+    "productionBrowser": "PASS: all 5 examples; 17 screenshots; no page errors, external requests, provider calls or API writes",
+    "protectedFiles": "PASS: 239 pre-existing files unchanged",
+    "diagnosticRefresh": "PASS: current saved-plan checkout is shown outside JSON draft editing; reopening the editor clears stale draft findings. Final TypeScript/ESLint and production rebuild passed."
+  },
+  "browserCommand": "PLAYWRIGHT_MODULE=/private/tmp/aiarchitect-studio-browser/node_modules/playwright-core CHROMIUM_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' node scripts/architectural-intelligence-phase2-capture.mjs",
+  "isolatedBuild": {
+    "directory": "/private/tmp/aiarchitect-phase2-verify",
+    "preparation": "Copy src, public and build config only; symlink installed node_modules. No .env, database state or saved projects copied.",
+    "command": "env -i PATH=\"$PATH\" HOME=\"$HOME\" NEXT_TELEMETRY_DISABLED=1 NEXT_FONT_GOOGLE_MOCKED_RESPONSES=/private/tmp/aiarchitect-phase2-verify/font-mock.cjs NODE_OPTIONS=--import=/private/tmp/aiarchitect-phase2-verify/offline-guard.mjs node node_modules/next/dist/bin/next build --webpack",
+    "fontMock": "Local cached woff2 through Next font mocked-response support; no downloaded fonts.",
+    "networkGuard": "Reject every fetch and non-loopback socket. Server listener bound to 127.0.0.1:3176 for browser verification; stopped afterward."
+  },
+  "liveEvaluation": {
+    "prepared": "CONTROLLED_2D_EVALUATION.md",
+    "executed": false,
+    "decision": "NO-GO until prior 429 provider-availability cause is resolved; natural architectural quality unproven"
+  }
+}

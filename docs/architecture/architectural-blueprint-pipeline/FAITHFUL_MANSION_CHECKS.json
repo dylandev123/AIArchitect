@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-20",
+  "timezone": "America/St_Lucia",
+  "offline": true,
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "originalSha256": "9733be300b2fbb316ea248201c4af87df86665fb63fb9c6d63012aa49f1af9ed",
+  "originalUnchanged": true,
+  "repeatReplayIdentical": true,
+  "replay": {
+    "directory": ".v3-debug/faithful-mansion-verified",
+    "outcome": "draft",
+    "blockingCodes": [],
+    "objects": 13,
+    "primitives": 316,
+    "counts": {
+      "buildings": 2,
+      "roofs": 2,
+      "storeys": 3,
+      "rooms": 17,
+      "outdoorFeatures": 5,
+      "connections": 4,
+      "entrances": 2,
+      "facadeOpenings": 16,
+      "verticalCirculation": 1,
+      "partitions": 9,
+      "doors": 8
+    },
+    "identityChanges": [
+      {
+        "path": "connections.0.surfaceId",
+        "from": "arrival-court",
+        "to": "route-arrival-drive",
+        "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+      },
+      {
+        "path": "connections.1.surfaceId",
+        "from": "arrival-court",
+        "to": "route-guest-walk",
+        "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+      },
+      {
+        "path": "connections.2.surfaceId",
+        "from": "view-terrace",
+        "to": "route-ocean-terrace-walk",
+        "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+      },
+      {
+        "path": "connections.3.surfaceId",
+        "from": "view-terrace",
+        "to": "route-pool-approach",
+        "reason": "Separated an exclusive route owner from a reused surface alias; architectural feature references and all route geometry are preserved."
+      }
+    ]
+  },
+  "checks": {
+    "fullSuite": {
+      "command": "npx vitest run --maxWorkers=3 --testTimeout=30000 --reporter=json",
+      "passed": 2320,
+      "failed": 0,
+      "skipped": 3,
+      "testFiles": 188,
+      "report": "/tmp/mansion-verified-tests.json"
+    },
+    "afterFinalGlazedFrameCorrection": {
+      "focusedConstructionTestsPassed": 9,
+      "exactFixtureProductionRouteTestsPassed": 1,
+      "logs": [
+        "/tmp/mansion-glazed-frame-tests.log",
+        "/tmp/mansion-final-route-test.log"
+      ]
+    },
+    "typescript": {
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "eslint": {
+      "command": "npx eslint . --max-warnings=0",
+      "exitCode": 0,
+      "finalTouchedFilesRechecked": true
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "productionBuild": {
+      "command": "OPENAI_API_KEY='' AI_V3_ARCHITECTURAL_BLUEPRINT=0 AI_V3_BLUEPRINT_FIRST=0 npm run build",
+      "exitCode": 0,
+      "log": "/tmp/mansion-production-build.log",
+      "deployed": false
+    }
+  },
+  "webgl": {
+    "manifest": "faithful-mansion-production-webgl/capture.json",
+    "captures": 7,
+    "errors": [],
+    "blockedRequests": [],
+    "reloadIdentical": true,
+    "workspaceEdit": {
+      "finish": "#514d47",
+      "revalidationVersionConsistent": true,
+      "reloadPreserved": true,
+      "architecturalGeometryUnchanged": true
+    }
+  },
+  "sourceSha256": {
+    "src/lib/v3/stacking.ts": "79fba79e510e6236fb569067e78b093c7254ff5a666e61a4ee384c601e794a75",
+    "src/lib/v3/composition.ts": "6e1d6c53dbd218af6c2279e138a9f01df40eaecbf8d5bfad2e5da05a69bd5fc0",
+    "src/lib/v3/scene.ts": "1ebe5777dda2edb04e47f86404e0a8248d0f57a1cb361609a1925b6d26694842",
+    "src/lib/v3/circulation.ts": "7eaa214a5e32abfb39485cd2ebd8b802293d0603e4b04bdcf6ecc27f31890557",
+    "src/lib/v3/footprintConstruction.ts": "453584ce74bd956cbe087a0d0a224fe19352556f05f5a08a55aa70a53445ba1d",
+    "src/lib/v3/interior.ts": "b4b4fb8b62a9292b4c5ddc3707b69f6e9d679f87df78e03b655a166585387e09",
+    "src/lib/v3/architecturalBlueprint.ts": "7802a7f3c44cb5d55cf09481bfcd74baa6b06146d0f30f26b63267d38a1b2efd",
+    "src/lib/v3/architecturalAcceptance.ts": "3a7311b62425d2dbf169ececb5c8775b8bf215894cf6442225027e7475e330b7",
+    "src/lib/v3/architecturalConstructionFidelity.ts": "7d1b730652e24e623bf7377bafb1c3607b21ebf54392602c97084094df0f05fc",
+    "src/lib/v3/blueprint.ts": "509c47f99f686e8d77e5f7c9492de6418fa9676858707eb2c7d6e65be10559a4",
+    "src/lib/v3/completeness.ts": "2c5bc86388510c169c16f83f0c15e8b705d6e81275f9e185e991ece23ee19e91",
+    "src/lib/v3/junctions.ts": "b290a70c594ff07ce7a479abded4437cf83f9c15ec3ed7f8d8ec7aacd6dd9cf3",
+    "src/lib/v3/routeGeometry.ts": "d5bb0afd85b8f426398e96a5b213a25a75164aceb8e438aa21843b850bcf97e3",
+    "src/lib/v3/estatePlan.ts": "9acc5dadd31a37cfb6b1d73f2b9ca92090f5ec9a5b7883ff3f4abb971f594178",
+    "src/lib/v3/estateSpatial.ts": "74e6b1bf6821a054b425fca070ad8e55075aa46f7e1419934ffea9e537c25df4",
+    "src/lib/v3/validation.ts": "0ae858e22c4363e0b390392a238a7a43ba85e9598e7b39d619f05defbcd9caad",
+    "src/lib/v3/designConsistency.ts": "00fdcff3ce331ef18a42538d5eb602318090a5706f2eb2f96b9934e7bc8024a3",
+    "src/lib/v3/stairUsability.ts": "a8d9aec141bd26ece513544ade52912583fab3f134de78485655e6c27d3d5d65",
+    "src/lib/v3/intentCanonicalization.ts": "b6a6d643f6560e55232463b15b1bc126a48e33d32724e26b5ab24bbee0e8a5e6",
+    "src/lib/v3/__tests__/architecturalFaithfulMansion.test.ts": "480be93de734769cd435933710a804bfa22dbe3c0a02cd409ee22a31b2f26df4",
+    "src/store/__tests__/v3FaithfulMansionPersistence.test.ts": "9ae1b853190369b02897394e70722ca5cccc8455442db75daaa15249c0deab36",
+    "scripts/faithful-mansion-capture.mjs": "0105ace33a45fc9e3d5fc8be40c2407830e92bc2b4b57dd8f6f2af7c88bb3c06",
+    "scripts/recover-architectural-blueprint.ts": "4be428ff54baa4cc5bdabcb1b2542e7ad8e5fd9af11341618dd6b1011f392677"
+  },
+  "imageSha256": {
+    "whole-property": "0db050da04425b7511aab0c7d355bff4f88ef529bea477ccaff685f61c991abb",
+    "ocean-facades-pool-and-guest": "626fb5257cb9c86c0b808c502ab456f456b5c7bdc1f8eaba231c8e7a47c01428",
+    "entrances-and-roofs": "ab9121258506ea416d93a5779152a6884a24e7637d03d7b950d0a5203afd8852",
+    "property-plan": "26299f8930fe869eaf2caebe223ad6a448033ff254876c1e22ae36b558a616d0",
+    "reloaded-mansion-draft": "20bb799e9b7feb0df2dc31551448582f1aa851ace97b8e6452e79c8a26c82ce6",
+    "workspace-finish-edited": "f90486e5f3c2f6271166c68cfd013c91768b5019ac5953c73d5a3996f1366430",
+    "workspace-edited-reloaded": "8d4c05a8a0b652099b41a9decbe6aaa39a041829a02f5c87c5e062296ca4b138"
+  },
+  "preserved": [
+    "verified original blueprint",
+    "saved user projects",
+    "pre-existing workspace work",
+    "V2 code",
+    "terrain code and geometry",
+    "environment files"
+  ],
+  "notPerformed": [
+    "provider calls",
+    "paid generations",
+    "commits",
+    "pushes",
+    "deployment",
+    "Terra prompt changes for this task"
+  ]
+}

@@ -8,7 +8,7 @@ import type { JunctionPlane } from './junctionGeometry';
 import { dot3 } from './junctionGeometry';
 import { builderOpening, stackedStoreyOpenings, WALKABLE_OPENING_TYPES } from './composition';
 import { openingBands } from '@/lib/architecture/geometry/openings';
-import { v3MassLevelCount, v3StoreyBase } from './stacking';
+import { v3MassStoreys, v3MassLevelCount, v3StoreyBase } from './stacking';
 
 export type JunctionFacade = 'north'|'south'|'east'|'west';
 export interface V3SharedWallRegion {
@@ -59,10 +59,10 @@ export function roofForMass(s:V3Scene,m:V3SceneObject):V3SceneObject {
 function removedOpenings(s:V3Scene,host:V3SceneObject,other:V3SceneObject,facade:JunctionFacade,span:[number,number],elevation:[number,number],junction:string):V3JunctionDiagnostic[] {
   const openings=host.composition?.openings;
   if(!openings?.length)return [];
-  const [w,h,d]=scaledDimensionsOf(host),levels=v3MassLevelCount(host),levelHeight=h/levels,storeyBase=v3StoreyBase(host,s),base=getObjectBaseY(host);
+  const [w,,d]=scaledDimensionsOf(host),levels=v3MassLevelCount(host),storeys=v3MassStoreys(host,s),storeyBase=v3StoreyBase(host,s),base=getObjectBaseY(host);
   const length=facade==='north'||facade==='south'?w:d,found=new Map<string,{covered:number;total:number}>();
   for(let floor=0;floor<levels;floor++) {
-    const y0=base+floor*levelHeight,y1=y0+levelHeight;
+    const levelHeight=storeys[floor].height,y0=base+storeys[floor].elevation,y1=y0+levelHeight;
     if(Math.min(y1,elevation[1])-Math.max(y0,elevation[0])<.5)continue;
     const scoped=stackedStoreyOpenings(openings,storeyBase,floor).map(builderOpening);
     for(const band of openingBands(facade,w,d,scoped,storeyBase+floor,levelHeight)) {

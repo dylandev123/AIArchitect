@@ -1,0 +1,2919 @@
+{
+  "providerCalls": 0,
+  "evidence": [
+    {
+      "date": "2026-10-20",
+      "originalSha256": "f489d79d6830a9787ae173fdd012a459b36edbc93b638219f94bc454dbb1e394",
+      "originalOutcome": "draft",
+      "alternativeOutcome": "complete",
+      "providerCalls": 0,
+      "mockedAuthorResponses": 1,
+      "stages": [
+        "plan",
+        "massing",
+        "exterior"
+      ],
+      "planPreserved": true,
+      "originalUnchanged": true,
+      "originalRooms": [
+        "living-salon",
+        "dining-room",
+        "show-kitchen",
+        "entry-foyer",
+        "main-stair-hall",
+        "service-pantry",
+        "laundry",
+        "primary-suite",
+        "primary-ensuite",
+        "primary-dressing",
+        "bedroom-two",
+        "bedroom-two-bath",
+        "upper-landing",
+        "guest-lounge",
+        "guest-bedroom",
+        "guest-bath",
+        "guest-dressing"
+      ],
+      "alternativeRooms": [
+        "living-salon",
+        "dining-room",
+        "show-kitchen",
+        "entry-foyer",
+        "main-stair-hall",
+        "service-pantry",
+        "laundry",
+        "primary-suite",
+        "primary-ensuite",
+        "primary-dressing",
+        "bedroom-two",
+        "bedroom-two-bath",
+        "upper-landing",
+        "upper-court-gallery",
+        "guest-lounge",
+        "guest-bedroom",
+        "guest-bath",
+        "guest-dressing"
+      ],
+      "alternativeJSONCharacters": 13572,
+      "findings": [
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "infinity-pool",
+            "view-terrace"
+          ],
+          "message": "budget-target: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "view-terrace"
+          ],
+          "message": "saint-lucia-character: style is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "infinity-pool",
+            "view-terrace"
+          ],
+          "message": "budget-target: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "view-terrace"
+          ],
+          "message": "saint-lucia-character: style is retained as intent; no deterministic verification is available."
+        }
+      ],
+      "trace": {
+        "site": {
+          "width": 90,
+          "depth": 100,
+          "groundMaterial": {
+            "id": "ground",
+            "color": "#9b987f",
+            "surface": "grass"
+          },
+          "baseElevation": 0,
+          "naturalGround": {
+            "elevation": 0,
+            "grade": 0
+          }
+        },
+        "buildings": [
+          {
+            "id": "main-villa",
+            "architecture": {
+              "x": -5,
+              "z": -3,
+              "baseElevation": 0,
+              "width": 27.2,
+              "depth": 20.4,
+              "height": 7.7,
+              "rotationY": 0
+            },
+            "levels": 2,
+            "footprint": {
+              "kind": "articulated",
+              "operations": [
+                {
+                  "id": "ocean-court",
+                  "facade": "north",
+                  "start": 0.3125,
+                  "end": 0.6875,
+                  "depth": 6.8,
+                  "type": "recess"
+                }
+              ]
+            },
+            "polygons": [
+              [
+                [
+                  -18.6,
+                  -13.2
+                ],
+                [
+                  -10.1,
+                  -13.2
+                ],
+                [
+                  -10.1,
+                  -6.3999999999999995
+                ],
+                [
+                  0.09999999999999964,
+                  -6.3999999999999995
+                ],
+                [
+                  0.09999999999999964,
+                  -13.2
+                ],
+                [
+                  8.6,
+                  -13.2
+                ],
+                [
+                  8.6,
+                  7.199999999999999
+                ],
+                [
+                  -18.6,
+                  7.199999999999999
+                ]
+              ],
+              [
+                [
+                  -18.6,
+                  -13.2
+                ],
+                [
+                  -10.1,
+                  -13.2
+                ],
+                [
+                  -10.1,
+                  -6.3999999999999995
+                ],
+                [
+                  0.09999999999999964,
+                  -6.3999999999999995
+                ],
+                [
+                  0.09999999999999964,
+                  -13.2
+                ],
+                [
+                  8.6,
+                  -13.2
+                ],
+                [
+                  8.6,
+                  7.199999999999999
+                ],
+                [
+                  -18.6,
+                  7.199999999999999
+                ]
+              ]
+            ],
+            "accessOpenings": [
+              {
+                "id": "villa-south-entry",
+                "facade": "south",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.43,
+                "end": 0.57,
+                "height": 3,
+                "operation": "hinged",
+                "reveal": 0.18
+              },
+              {
+                "id": "garden-living-door",
+                "facade": "north",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.05,
+                "end": 0.27,
+                "height": 3,
+                "operation": "sliding",
+                "reveal": 0.2
+              }
+            ]
+          },
+          {
+            "id": "guest-pavilion",
+            "architecture": {
+              "x": 27,
+              "z": -9,
+              "baseElevation": 0,
+              "width": 16,
+              "depth": 12,
+              "height": 3.6,
+              "rotationY": 0
+            },
+            "levels": 1,
+            "polygons": [
+              [
+                [
+                  19,
+                  -15
+                ],
+                [
+                  35,
+                  -15
+                ],
+                [
+                  35,
+                  -3
+                ],
+                [
+                  19,
+                  -3
+                ]
+              ]
+            ],
+            "accessOpenings": [
+              {
+                "id": "guest-south-entry",
+                "facade": "south",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.4,
+                "end": 0.6,
+                "height": 2.7,
+                "operation": "hinged"
+              }
+            ]
+          }
+        ],
+        "storeys": [
+          {
+            "id": "villa-ground",
+            "label": "Garden Level",
+            "semanticRole": "Arrival, entertaining and service",
+            "hostMassId": "main-villa",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 4.2
+          },
+          {
+            "id": "villa-upper",
+            "label": "Private Level",
+            "semanticRole": "Bedrooms and private retreat",
+            "hostMassId": "main-villa",
+            "index": 1,
+            "elevation": 4.46,
+            "height": 3.5
+          },
+          {
+            "id": "guest-ground",
+            "label": "Guest Level",
+            "semanticRole": "Guest accommodation",
+            "hostMassId": "guest-pavilion",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.6
+          }
+        ],
+        "rooms": [
+          {
+            "id": "living-salon",
+            "label": "Great Salon",
+            "semanticRole": "Public entertaining",
+            "program": "Formal and informal living",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -9.35,
+              "z": -5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "dining-room",
+            "label": "Dining Pavilion",
+            "semanticRole": "Public entertaining",
+            "program": "Twelve-seat dining",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 9.35,
+              "z": -5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "show-kitchen",
+            "label": "Open Kitchen",
+            "semanticRole": "Entertaining support",
+            "program": "Chef kitchen and breakfast preparation",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 9.35,
+              "z": 5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "entry-foyer",
+            "label": "Arrival Gallery",
+            "semanticRole": "Arrival",
+            "program": "Main entry and art foyer",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 0,
+              "z": 5.95,
+              "width": 10.2,
+              "depth": 8.5
+            }
+          },
+          {
+            "id": "main-stair-hall",
+            "label": "Stair Hall",
+            "semanticRole": "Vertical circulation",
+            "program": "Private upper-level circulation",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -9.35,
+              "z": 5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "service-pantry",
+            "label": "Service Pantry",
+            "semanticRole": "Service",
+            "program": "Back kitchen and catering storage",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -2.55,
+              "z": -0.85,
+              "width": 5.1,
+              "depth": 5.1
+            }
+          },
+          {
+            "id": "laundry",
+            "label": "Laundry",
+            "semanticRole": "Service",
+            "program": "Linen and laundry",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 2.55,
+              "z": -0.85,
+              "width": 5.1,
+              "depth": 5.1
+            }
+          },
+          {
+            "id": "primary-suite",
+            "label": "Primary Suite",
+            "semanticRole": "Private",
+            "program": "Owner bedroom and sea-view sitting area",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -9.35,
+              "z": -5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "primary-ensuite",
+            "label": "Primary Bath",
+            "semanticRole": "Private",
+            "program": "Owner bathing suite",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -2.55,
+              "z": 6.8,
+              "width": 5.1,
+              "depth": 6.8
+            }
+          },
+          {
+            "id": "primary-dressing",
+            "label": "Primary Dressing",
+            "semanticRole": "Private",
+            "program": "Owner wardrobe",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 2.55,
+              "z": 6.8,
+              "width": 5.1,
+              "depth": 6.8
+            }
+          },
+          {
+            "id": "bedroom-two",
+            "label": "Guest Suite Two",
+            "semanticRole": "Private",
+            "program": "En-suite guest bedroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 9.35,
+              "z": -5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "bedroom-two-bath",
+            "label": "Guest Suite Two Bath",
+            "semanticRole": "Private",
+            "program": "Guest bathroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 9.35,
+              "z": 5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "upper-landing",
+            "label": "Upper Landing",
+            "semanticRole": "Vertical circulation",
+            "program": "Private bedroom landing",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -9.35,
+              "z": 5.1,
+              "width": 8.5,
+              "depth": 10.2
+            }
+          },
+          {
+            "id": "upper-court-gallery",
+            "label": "Court gallery",
+            "semanticRole": "Private circulation",
+            "program": "Hall linking the two wings",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 0,
+              "z": 0,
+              "width": 10.2,
+              "depth": 6.8
+            }
+          },
+          {
+            "id": "guest-lounge",
+            "label": "Guest Lounge",
+            "semanticRole": "Guest",
+            "program": "Private guest living room",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": -4,
+              "z": 0,
+              "width": 8,
+              "depth": 12
+            }
+          },
+          {
+            "id": "guest-bedroom",
+            "label": "Garden Suite",
+            "semanticRole": "Guest",
+            "program": "Guest bedroom",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 4,
+              "z": -2,
+              "width": 8,
+              "depth": 8
+            }
+          },
+          {
+            "id": "guest-bath",
+            "label": "Garden Suite Bath",
+            "semanticRole": "Guest",
+            "program": "Guest bathroom",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 2,
+              "z": 4,
+              "width": 4,
+              "depth": 4
+            }
+          },
+          {
+            "id": "guest-dressing",
+            "label": "Garden Suite Dressing",
+            "semanticRole": "Guest",
+            "program": "Guest wardrobe",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 6,
+              "z": 4,
+              "width": 4,
+              "depth": 4
+            }
+          }
+        ],
+        "circulation": [
+          {
+            "id": "main-stair",
+            "type": "stair",
+            "hostMassId": "main-villa",
+            "fromLevel": 0,
+            "toLevel": 1,
+            "footprint": {
+              "x": -9.35,
+              "z": 5.1,
+              "width": 2,
+              "depth": 8
+            },
+            "stairType": "straight",
+            "direction": "south",
+            "label": "Sculptural U Stair",
+            "semanticRole": "Primary private vertical circulation"
+          }
+        ],
+        "features": [
+          {
+            "id": "arrival-court",
+            "type": "terrace",
+            "architecture": {
+              "x": -5,
+              "z": 22,
+              "baseElevation": 0,
+              "width": 24,
+              "depth": 14,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "view-terrace",
+            "type": "terrace",
+            "architecture": {
+              "x": -5,
+              "z": -29,
+              "baseElevation": 0,
+              "width": 36,
+              "depth": 20,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "infinity-pool",
+            "type": "pool",
+            "architecture": {
+              "x": -5,
+              "z": -32,
+              "baseElevation": -1.22,
+              "width": 22,
+              "depth": 6,
+              "height": 1.4,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "guest-terrace",
+            "type": "terrace",
+            "architecture": {
+              "x": 27,
+              "z": -21,
+              "baseElevation": 0,
+              "width": 16,
+              "depth": 12,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "ocean-court-floor",
+            "type": "terrace",
+            "architecture": {
+              "x": -5,
+              "z": -12.7,
+              "baseElevation": 0,
+              "width": 10.2,
+              "depth": 12.6,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "west-wing-porch",
+            "type": "terrace",
+            "architecture": {
+              "x": -14.35,
+              "z": -16.1,
+              "baseElevation": 0,
+              "width": 8.5,
+              "depth": 5.8,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "east-wing-porch",
+            "type": "terrace",
+            "architecture": {
+              "x": 4.35,
+              "z": -16.1,
+              "baseElevation": 0,
+              "width": 8.5,
+              "depth": 5.8,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "tropical-garden",
+            "type": "landscape-zone",
+            "architecture": {
+              "x": 29,
+              "z": -38,
+              "baseElevation": 0,
+              "width": 20,
+              "depth": 16,
+              "height": 0.12,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "garden-shade",
+            "type": "canopy",
+            "architecture": {
+              "x": 9,
+              "z": -24,
+              "baseElevation": 0.18,
+              "width": 8,
+              "depth": 8,
+              "height": 3.2,
+              "rotationY": 0
+            }
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-residence-entry",
+            "objectId": "main-villa",
+            "openingId": "villa-south-entry",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-entry",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-south-entry",
+            "level": 0
+          },
+          {
+            "id": "garden-living-exit",
+            "objectId": "main-villa",
+            "openingId": "garden-living-door",
+            "level": 0
+          }
+        ],
+        "connections": [
+          {
+            "id": "arrival-drive",
+            "purpose": "arrival-drive",
+            "from": "south-gate",
+            "to": "main-villa",
+            "via": [
+              "arrival-drive-owner"
+            ],
+            "spatial": {
+              "from": {},
+              "to": {
+                "entranceId": "main-residence-entry",
+                "approachDistance": 3
+              },
+              "use": "vehicle",
+              "width": 4.8,
+              "waypoints": [
+                [
+                  -5,
+                  0,
+                  34
+                ]
+              ]
+            }
+          },
+          {
+            "id": "guest-walk",
+            "purpose": "guest-walk",
+            "from": "arrival-court",
+            "to": "guest-pavilion",
+            "via": [
+              "guest-walk-owner"
+            ],
+            "spatial": {
+              "from": {
+                "point": [
+                  5,
+                  0,
+                  22
+                ]
+              },
+              "to": {
+                "entranceId": "guest-pavilion-entry",
+                "approachDistance": 2
+              },
+              "use": "pedestrian",
+              "width": 1.8,
+              "waypoints": [
+                [
+                  27,
+                  0,
+                  22
+                ],
+                [
+                  27,
+                  0,
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "id": "west-garden-walk",
+            "purpose": "west-garden-walk",
+            "from": "arrival-court",
+            "to": "view-terrace",
+            "via": [
+              "west-garden-walk-owner"
+            ],
+            "spatial": {
+              "from": {
+                "point": [
+                  -15,
+                  0,
+                  22
+                ]
+              },
+              "to": {
+                "point": [
+                  -21,
+                  0,
+                  -21
+                ]
+              },
+              "use": "pedestrian",
+              "width": 1.8,
+              "waypoints": [
+                [
+                  -25,
+                  0,
+                  22
+                ],
+                [
+                  -25,
+                  0,
+                  -21
+                ]
+              ]
+            }
+          },
+          {
+            "id": "court-to-water",
+            "purpose": "court-to-water",
+            "from": "ocean-court-floor",
+            "to": "view-terrace",
+            "via": [
+              "court-to-water-owner"
+            ],
+            "spatial": {
+              "from": {
+                "point": [
+                  -5,
+                  0,
+                  -12.7
+                ]
+              },
+              "to": {
+                "point": [
+                  -5,
+                  0,
+                  -19
+                ]
+              },
+              "use": "pedestrian",
+              "width": 2,
+              "waypoints": []
+            }
+          }
+        ],
+        "estate": {
+          "concept": "Two inhabited wings frame a north-facing ocean court; south arrival is compressed before the water garden.",
+          "character": "Tropical mineral walls, recessed glazing and real shaded outdoor rooms. Conceptual interiors; no infinity edge, planted species or flush-threshold certification is claimed.",
+          "access": [
+            {
+              "id": "south-gate",
+              "boundary": "south",
+              "point": [
+                0,
+                0,
+                50
+              ]
+            }
+          ],
+          "requirements": [
+            {
+              "id": "budget-target",
+              "source": "user",
+              "statement": "Design an extraordinary luxury estate in Saint Lucia with a construction and estate-design target of $15 million.",
+              "metric": "budget",
+              "objectIds": [
+                "main-villa",
+                "guest-pavilion",
+                "infinity-pool",
+                "view-terrace"
+              ],
+              "range": {
+                "min": 15000000,
+                "max": 15000000
+              },
+              "value": "$15 million target"
+            },
+            {
+              "id": "saint-lucia-character",
+              "source": "user",
+              "statement": "The estate shall respond to Saint Lucia through a climate-responsive, view-oriented Caribbean luxury architectural character.",
+              "metric": "style",
+              "objectIds": [
+                "main-villa",
+                "guest-pavilion",
+                "view-terrace"
+              ],
+              "value": "Contemporary Caribbean tropical modern"
+            }
+          ],
+          "program": [
+            {
+              "id": "estate-residence-program",
+              "role": "Primary owner residence with formal entertaining, chef service spaces and two private bedroom suites.",
+              "kind": "residence",
+              "objectIds": [
+                "main-villa"
+              ],
+              "source": "design",
+              "access": "required"
+            },
+            {
+              "id": "guest-accommodation-program",
+              "role": "Independent one-bedroom guest accommodation with lounge, dressing and private terrace.",
+              "kind": "building",
+              "objectIds": [
+                "guest-pavilion"
+              ],
+              "source": "design",
+              "access": "required"
+            },
+            {
+              "id": "outdoor-program",
+              "role": "Dry garden rooms and ordinary swimming basin",
+              "kind": "amenity",
+              "objectIds": [
+                "view-terrace",
+                "infinity-pool"
+              ],
+              "source": "design",
+              "access": "required"
+            }
+          ],
+          "zones": [],
+          "architecture": [],
+          "relationships": [],
+          "considerations": []
+        },
+        "adjacencies": []
+      },
+      "massingParts": [
+        {
+          "id": "v3-terrain-surface"
+        },
+        {
+          "id": "v3-connection-estate:arrival-drive",
+          "sourceObjectId": "arrival-drive-owner"
+        },
+        {
+          "id": "v3-connection-estate:guest-walk",
+          "sourceObjectId": "guest-walk-owner"
+        },
+        {
+          "id": "v3-connection-estate:west-garden-walk",
+          "sourceObjectId": "west-garden-walk-owner"
+        },
+        {
+          "id": "v3-connection-estate:court-to-water",
+          "sourceObjectId": "court-to-water-owner"
+        },
+        {
+          "id": "main-villa-slab-1-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-1-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-1-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-0:level-0:wall-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:head-wall-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-left-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-right-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-head-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-sill-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:mullion-0-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:mullion-1-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:door-panel-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-0:level-0:wall-after-garden-living-door-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-1:level-0:wall-seg-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-2:level-0:wall-seg-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-3:level-0:wall-seg-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-4:level-0:wall-seg-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-5:level-0:wall-seg-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-6:level-0:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:head-wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:frame-left",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:frame-right",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:frame-head",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:frame-sill",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:mullion-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:mullion-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:mullion-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:villa-south-entry:level-0:door-panel",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-6:level-0:wall-after-villa-south-entry",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-7:level-0:wall-seg-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-2-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-2-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-2-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-0:level-1:wall-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-1:level-1:wall-seg-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-2:level-1:wall-seg-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-3:level-1:wall-seg-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-4:level-1:wall-seg-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-5:level-1:wall-seg-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-6:level-1:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-7:level-1:wall-seg-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-3-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-3-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-3-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "guest-pavilion-slab-1",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion-slab-2",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:north:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:south:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:head-wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:frame-left",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:frame-right",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:frame-head",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:frame-sill",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:mullion-0",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:mullion-1",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-south-entry:level-0:door-panel",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:south:level-0:wall-after-guest-south-entry",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:east:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:west:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "arrival-court-surface",
+          "sourceObjectId": "arrival-court"
+        },
+        {
+          "id": "view-terrace-surface",
+          "sourceObjectId": "view-terrace"
+        },
+        {
+          "id": "infinity-pool-basin",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-water",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ns-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ns-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ew-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ew-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ns-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ns-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ew-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ew-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "guest-terrace-surface",
+          "sourceObjectId": "guest-terrace"
+        },
+        {
+          "id": "ocean-court-floor-surface",
+          "sourceObjectId": "ocean-court-floor"
+        },
+        {
+          "id": "west-wing-porch-surface",
+          "sourceObjectId": "west-wing-porch"
+        },
+        {
+          "id": "east-wing-porch-surface",
+          "sourceObjectId": "east-wing-porch"
+        },
+        {
+          "id": "tropical-garden-groundcover",
+          "sourceObjectId": "tropical-garden"
+        },
+        {
+          "id": "garden-shade-post-left",
+          "sourceObjectId": "garden-shade"
+        },
+        {
+          "id": "garden-shade-post-right",
+          "sourceObjectId": "garden-shade"
+        },
+        {
+          "id": "main-stair:tread-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-6",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-8",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-9",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-10",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-11",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-12",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-13",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-14",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-15",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-16",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-17",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-18",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-19",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-20",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-21",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-22",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:tread-23",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-start-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-rail-start-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-left-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-rail-left-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-right-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-stair:guard-rail-right-0",
+          "sourceObjectId": "main-villa"
+        }
+      ],
+      "originalPlan": [
+        {
+          "id": "main-villa",
+          "location": {
+            "x": -5,
+            "z": -5,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 24,
+            "depth": 18
+          }
+        },
+        {
+          "id": "guest-pavilion",
+          "location": {
+            "x": 30,
+            "z": 4,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 18,
+            "depth": 12
+          }
+        }
+      ],
+      "alternativePlan": [
+        {
+          "id": "main-villa",
+          "location": {
+            "x": -5,
+            "z": -3,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "articulated",
+            "width": 27.2,
+            "depth": 20.4,
+            "operations": [
+              {
+                "id": "ocean-court",
+                "facade": "north",
+                "start": 0.3125,
+                "end": 0.6875,
+                "depth": 6.8,
+                "type": "recess"
+              }
+            ]
+          }
+        },
+        {
+          "id": "guest-pavilion",
+          "location": {
+            "x": 27,
+            "z": -9,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 16,
+            "depth": 12
+          }
+        }
+      ],
+      "floorAreas": {
+        "original": 1080,
+        "alternative": 1163.04
+      },
+      "poolRim": 0.18,
+      "deckTop": 0.18,
+      "provenance": "Separately authored offline design copy retaining the original site, user requirements, building/storey/room identities and accommodation program. Additional court/shade decisions are examples, never a production template or evidence of natural Terra quality."
+    },
+    {
+      "date": "2026-10-21",
+      "originalSha256": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb",
+      "originalOutcome": "draft",
+      "alternativeOutcome": "complete",
+      "providerCalls": 0,
+      "mockedAuthorResponses": 1,
+      "stages": [
+        "plan",
+        "massing",
+        "exterior"
+      ],
+      "planPreserved": true,
+      "originalUnchanged": true,
+      "originalRooms": [
+        "great-room",
+        "dining-room",
+        "sun-lounge",
+        "show-kitchen",
+        "pantry",
+        "laundry",
+        "entry-gallery",
+        "staff-office",
+        "primary-bedroom",
+        "guest-bedroom",
+        "guest-bath",
+        "study-library",
+        "primary-bath",
+        "dressing-room",
+        "upper-hall",
+        "guest-pavilion-sitting",
+        "guest-pavilion-bedroom",
+        "guest-pavilion-bath",
+        "guest-pavilion-closet",
+        "guest-pavilion-entry"
+      ],
+      "alternativeRooms": [
+        "great-room",
+        "dining-room",
+        "sun-lounge",
+        "show-kitchen",
+        "pantry",
+        "laundry",
+        "entry-gallery",
+        "staff-office",
+        "primary-bedroom",
+        "guest-bedroom",
+        "guest-bath",
+        "study-library",
+        "primary-bath",
+        "dressing-room",
+        "upper-hall",
+        "guest-pavilion-sitting",
+        "guest-pavilion-bedroom",
+        "guest-pavilion-bath",
+        "guest-pavilion-closet",
+        "guest-pavilion-entry"
+      ],
+      "alternativeJSONCharacters": 12418,
+      "findings": [
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "sunset-terrace",
+            "infinity-pool"
+          ],
+          "message": "user-budget: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-villa",
+            "guest-pavilion",
+            "sunset-terrace",
+            "infinity-pool"
+          ],
+          "message": "user-budget: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ORIENTATION_CONFLICT",
+          "targetIds": [
+            "scene"
+          ],
+          "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained.",
+          "severity": "advisory"
+        }
+      ],
+      "trace": {
+        "site": {
+          "width": 120,
+          "depth": 90,
+          "groundMaterial": {
+            "id": "ground",
+            "color": "#758b62",
+            "surface": "grass"
+          },
+          "baseElevation": 0,
+          "naturalGround": {
+            "elevation": 0,
+            "grade": 0
+          }
+        },
+        "buildings": [
+          {
+            "id": "main-villa",
+            "architecture": {
+              "x": -10,
+              "z": 0,
+              "baseElevation": 0,
+              "width": 25.6,
+              "depth": 19.200000000000003,
+              "height": 7.800000000000001,
+              "rotationY": 0
+            },
+            "levels": 2,
+            "footprint": {
+              "kind": "articulated",
+              "operations": [
+                {
+                  "id": "garden-court",
+                  "type": "notch",
+                  "corner": "nw",
+                  "width": 8,
+                  "depth": 6.4
+                }
+              ]
+            },
+            "polygons": [
+              [
+                [
+                  -14.8,
+                  -9.600000000000001
+                ],
+                [
+                  2.8000000000000007,
+                  -9.600000000000001
+                ],
+                [
+                  2.8000000000000007,
+                  9.600000000000001
+                ],
+                [
+                  -22.8,
+                  9.600000000000001
+                ],
+                [
+                  -22.8,
+                  -3.200000000000001
+                ],
+                [
+                  -14.8,
+                  -3.200000000000001
+                ]
+              ],
+              [
+                [
+                  -14.8,
+                  -9.600000000000001
+                ],
+                [
+                  2.8000000000000007,
+                  -9.600000000000001
+                ],
+                [
+                  2.8000000000000007,
+                  9.600000000000001
+                ],
+                [
+                  -22.8,
+                  9.600000000000001
+                ],
+                [
+                  -22.8,
+                  -3.200000000000001
+                ],
+                [
+                  -14.8,
+                  -3.200000000000001
+                ]
+              ]
+            ],
+            "accessOpenings": [
+              {
+                "id": "main-entry-door",
+                "facade": "east",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.43,
+                "end": 0.57,
+                "height": 3,
+                "operation": "hinged",
+                "reveal": 0.18
+              },
+              {
+                "id": "garden-living-door",
+                "facade": "south",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.05,
+                "end": 0.27,
+                "height": 3,
+                "operation": "sliding",
+                "reveal": 0.2
+              }
+            ]
+          },
+          {
+            "id": "guest-pavilion",
+            "architecture": {
+              "x": -38,
+              "z": -16,
+              "baseElevation": 0,
+              "width": 16,
+              "depth": 12,
+              "height": 3.5,
+              "rotationY": 0
+            },
+            "levels": 1,
+            "polygons": [
+              [
+                [
+                  -46,
+                  -22
+                ],
+                [
+                  -30,
+                  -22
+                ],
+                [
+                  -30,
+                  -10
+                ],
+                [
+                  -46,
+                  -10
+                ]
+              ]
+            ],
+            "accessOpenings": [
+              {
+                "id": "guest-entry-door",
+                "facade": "south",
+                "floors": "ground",
+                "type": "glazed-door",
+                "start": 0.4,
+                "end": 0.6,
+                "height": 2.7,
+                "operation": "hinged"
+              }
+            ]
+          }
+        ],
+        "storeys": [
+          {
+            "id": "villa-ground",
+            "label": "Entertaining and service level",
+            "semanticRole": "public living and operations",
+            "hostMassId": "main-villa",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 4.2
+          },
+          {
+            "id": "villa-upper",
+            "label": "Private suite level",
+            "semanticRole": "private accommodation",
+            "hostMassId": "main-villa",
+            "index": 1,
+            "elevation": 4.46,
+            "height": 3.6
+          },
+          {
+            "id": "guest-ground",
+            "label": "Guest accommodation level",
+            "semanticRole": "private guest suite",
+            "hostMassId": "guest-pavilion",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.5
+          }
+        ],
+        "rooms": [
+          {
+            "id": "great-room",
+            "label": "Great Room",
+            "semanticRole": "social living",
+            "program": "formal and informal lounge",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -8.8,
+              "z": 3.2,
+              "width": 8,
+              "depth": 12.8
+            }
+          },
+          {
+            "id": "dining-room",
+            "label": "Dining Salon",
+            "semanticRole": "entertaining",
+            "program": "formal dining",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -0.8,
+              "z": 5.6000000000000005,
+              "width": 4.800000000000001,
+              "depth": 6.4
+            }
+          },
+          {
+            "id": "sun-lounge",
+            "label": "Sun Lounge",
+            "semanticRole": "indoor-outdoor entertaining",
+            "program": "casual lounge",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 7.2,
+              "z": 5.6000000000000005,
+              "width": 9.600000000000001,
+              "depth": 6.4
+            }
+          },
+          {
+            "id": "show-kitchen",
+            "label": "Show Kitchen",
+            "semanticRole": "entertaining service",
+            "program": "open chef kitchen",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 6.4,
+              "z": -6.4,
+              "width": 6.4,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "pantry",
+            "label": "Butler Pantry",
+            "semanticRole": "service",
+            "program": "food preparation and storage",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 11.200000000000001,
+              "z": -7.2,
+              "width": 2.4000000000000004,
+              "depth": 3.2
+            }
+          },
+          {
+            "id": "laundry",
+            "label": "Laundry and Service",
+            "semanticRole": "service",
+            "program": "laundry and household operations",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 11.200000000000001,
+              "z": -4.4,
+              "width": 2.4000000000000004,
+              "depth": 1.6
+            }
+          },
+          {
+            "id": "entry-gallery",
+            "label": "Arrival Gallery",
+            "semanticRole": "circulation",
+            "program": "entry gallery and stair hall",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 3.6,
+              "z": -0.8,
+              "width": 16.8,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "staff-office",
+            "label": "Estate Office",
+            "semanticRole": "service",
+            "program": "house management office",
+            "storeyId": "villa-ground",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -0.8,
+              "z": -6.4,
+              "width": 6.4,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "primary-bedroom",
+            "label": "Primary Suite",
+            "semanticRole": "private sleeping",
+            "program": "owner bedroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -8.8,
+              "z": 3.2,
+              "width": 8,
+              "depth": 12.8
+            }
+          },
+          {
+            "id": "guest-bedroom",
+            "label": "Guest Suite",
+            "semanticRole": "private sleeping",
+            "program": "guest bedroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 7.2,
+              "z": 5.6000000000000005,
+              "width": 9.600000000000001,
+              "depth": 6.4
+            }
+          },
+          {
+            "id": "guest-bath",
+            "label": "Guest Bathroom",
+            "semanticRole": "private bathing",
+            "program": "guest bathroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 11.200000000000001,
+              "z": -6.4,
+              "width": 2.4000000000000004,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "study-library",
+            "label": "Study Library",
+            "semanticRole": "private retreat",
+            "program": "library and study",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -0.8,
+              "z": 5.6000000000000005,
+              "width": 4.800000000000001,
+              "depth": 6.4
+            }
+          },
+          {
+            "id": "primary-bath",
+            "label": "Primary Bathroom",
+            "semanticRole": "private bathing",
+            "program": "owner bathroom",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": -0.8,
+              "z": -6.4,
+              "width": 6.4,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "dressing-room",
+            "label": "Primary Dressing",
+            "semanticRole": "private dressing",
+            "program": "owner wardrobe",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 6.4,
+              "z": -6.4,
+              "width": 6.4,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "upper-hall",
+            "label": "Upper Hall",
+            "semanticRole": "circulation",
+            "program": "stair landing and private hall",
+            "storeyId": "villa-upper",
+            "hostMassId": "main-villa",
+            "footprint": {
+              "x": 3.6,
+              "z": -0.8,
+              "width": 16.8,
+              "depth": 4.800000000000001
+            }
+          },
+          {
+            "id": "guest-pavilion-sitting",
+            "label": "Guest Sitting Room",
+            "semanticRole": "guest living",
+            "program": "private sitting room",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": -4,
+              "z": -1,
+              "width": 6,
+              "depth": 8
+            }
+          },
+          {
+            "id": "guest-pavilion-bedroom",
+            "label": "Garden Bedroom",
+            "semanticRole": "guest sleeping",
+            "program": "guest bedroom",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 3,
+              "z": -1,
+              "width": 8,
+              "depth": 8
+            }
+          },
+          {
+            "id": "guest-pavilion-bath",
+            "label": "Garden Bathroom",
+            "semanticRole": "guest bathing",
+            "program": "guest bathroom",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": -4,
+              "z": 4,
+              "width": 6,
+              "depth": 2
+            }
+          },
+          {
+            "id": "guest-pavilion-closet",
+            "label": "Guest Dressing",
+            "semanticRole": "guest dressing",
+            "program": "wardrobe",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 0,
+              "z": 4,
+              "width": 2,
+              "depth": 2
+            }
+          },
+          {
+            "id": "guest-pavilion-entry",
+            "label": "Guest Entry",
+            "semanticRole": "circulation",
+            "program": "entry vestibule",
+            "storeyId": "guest-ground",
+            "hostMassId": "guest-pavilion",
+            "footprint": {
+              "x": 4,
+              "z": 4,
+              "width": 6,
+              "depth": 2
+            }
+          }
+        ],
+        "circulation": [
+          {
+            "id": "villa-private-stair",
+            "type": "stair",
+            "hostMassId": "main-villa",
+            "fromLevel": 0,
+            "toLevel": 1,
+            "footprint": {
+              "x": 4.800000000000001,
+              "z": -0.8,
+              "width": 5,
+              "depth": 4
+            },
+            "stairType": "u-shaped",
+            "direction": "north",
+            "turn": "left",
+            "label": "Gallery Stair",
+            "semanticRole": "private internal stair"
+          }
+        ],
+        "features": [
+          {
+            "id": "sunset-terrace",
+            "type": "terrace",
+            "architecture": {
+              "x": -10,
+              "z": 19.8,
+              "baseElevation": 0,
+              "width": 38,
+              "depth": 20.4,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "infinity-pool",
+            "type": "pool",
+            "architecture": {
+              "x": -17,
+              "z": 23,
+              "baseElevation": -1.22,
+              "width": 16,
+              "depth": 6,
+              "height": 1.4,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "guest-garden-floor",
+            "type": "terrace",
+            "architecture": {
+              "x": -38,
+              "z": -3,
+              "baseElevation": 0,
+              "width": 16,
+              "depth": 14,
+              "height": 0.18,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "north-garden-lawn",
+            "type": "landscape-zone",
+            "architecture": {
+              "x": -21,
+              "z": -8,
+              "baseElevation": 0,
+              "width": 10,
+              "depth": 8,
+              "height": 0.14,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "east-arrival-lawn",
+            "type": "landscape-zone",
+            "architecture": {
+              "x": 29,
+              "z": -17,
+              "baseElevation": 0,
+              "width": 28,
+              "depth": 38,
+              "height": 0.14,
+              "rotationY": 0
+            }
+          },
+          {
+            "id": "garden-shade",
+            "type": "canopy",
+            "architecture": {
+              "x": 3,
+              "z": 21,
+              "baseElevation": 0.18,
+              "width": 8,
+              "depth": 8,
+              "height": 3.2,
+              "rotationY": 0
+            }
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-villa-entrance",
+            "objectId": "main-villa",
+            "openingId": "main-entry-door",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-entrance",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-entry-door",
+            "level": 0
+          },
+          {
+            "id": "garden-living-exit",
+            "objectId": "main-villa",
+            "openingId": "garden-living-door",
+            "level": 0
+          }
+        ],
+        "connections": [
+          {
+            "id": "arrival-drive",
+            "purpose": "arrival-drive",
+            "from": "east-arrival-gate",
+            "to": "main-villa",
+            "via": [
+              "arrival-drive-owner"
+            ],
+            "spatial": {
+              "from": {},
+              "to": {
+                "entranceId": "main-villa-entrance",
+                "approachDistance": 3
+              },
+              "use": "vehicle",
+              "width": 5.8,
+              "waypoints": [
+                [
+                  35,
+                  0,
+                  5
+                ],
+                [
+                  15,
+                  0,
+                  5
+                ]
+              ]
+            }
+          },
+          {
+            "id": "terrace-walk",
+            "purpose": "terrace-walk",
+            "from": "main-villa",
+            "to": "sunset-terrace",
+            "via": [
+              "terrace-walk-owner"
+            ],
+            "spatial": {
+              "from": {
+                "entranceId": "main-villa-entrance",
+                "approachDistance": 2
+              },
+              "to": {
+                "point": [
+                  7,
+                  0,
+                  12.8
+                ]
+              },
+              "use": "pedestrian",
+              "width": 1.8,
+              "waypoints": [
+                [
+                  11,
+                  0,
+                  3
+                ],
+                [
+                  11,
+                  0,
+                  14
+                ]
+              ]
+            }
+          },
+          {
+            "id": "guest-garden-walk",
+            "purpose": "guest-garden-walk",
+            "from": "sunset-terrace",
+            "to": "guest-pavilion",
+            "via": [
+              "guest-garden-walk-owner"
+            ],
+            "spatial": {
+              "from": {
+                "point": [
+                  -27,
+                  0,
+                  13.8
+                ]
+              },
+              "to": {
+                "entranceId": "guest-pavilion-entrance",
+                "approachDistance": 2
+              },
+              "use": "pedestrian",
+              "width": 1.5,
+              "waypoints": [
+                [
+                  -29,
+                  0,
+                  15
+                ],
+                [
+                  -29,
+                  0,
+                  -5
+                ]
+              ]
+            }
+          }
+        ],
+        "estate": {
+          "concept": "An L-shaped residence shelters a west garden court; eastern arrival and a low guest garden have separate approaches.",
+          "character": "Tropical mineral walls, recessed glazing and real shaded outdoor rooms. Conceptual interiors; no infinity edge, planted species or flush-threshold certification is claimed.",
+          "access": [
+            {
+              "id": "east-arrival-gate",
+              "boundary": "east",
+              "point": [
+                60,
+                0,
+                5
+              ]
+            }
+          ],
+          "requirements": [
+            {
+              "id": "user-budget",
+              "source": "user",
+              "statement": "Design an extraordinary luxury estate aligned with a $15 million Saint Lucia commission.",
+              "metric": "budget",
+              "objectIds": [
+                "main-villa",
+                "guest-pavilion",
+                "sunset-terrace",
+                "infinity-pool"
+              ],
+              "range": {
+                "min": 15000000,
+                "max": 15000000
+              },
+              "value": "USD 15 million target"
+            }
+          ],
+          "program": [
+            {
+              "id": "primary-residence-program",
+              "role": "Principal luxury residence with entertaining, owner accommodation and household operations.",
+              "kind": "residence",
+              "objectIds": [
+                "main-villa"
+              ],
+              "source": "design",
+              "access": "required"
+            },
+            {
+              "id": "guest-accommodation-program",
+              "role": "Independent one-bedroom guest accommodation with its own entrance and garden approach.",
+              "kind": "building",
+              "objectIds": [
+                "guest-pavilion"
+              ],
+              "source": "design",
+              "access": "required"
+            },
+            {
+              "id": "outdoor-program",
+              "role": "Dry garden rooms and ordinary swimming basin",
+              "kind": "amenity",
+              "objectIds": [
+                "sunset-terrace",
+                "infinity-pool"
+              ],
+              "source": "design",
+              "access": "required"
+            }
+          ],
+          "zones": [],
+          "architecture": [],
+          "relationships": [],
+          "considerations": []
+        },
+        "adjacencies": []
+      },
+      "massingParts": [
+        {
+          "id": "v3-terrain-surface"
+        },
+        {
+          "id": "v3-connection-estate:arrival-drive",
+          "sourceObjectId": "arrival-drive-owner"
+        },
+        {
+          "id": "v3-connection-estate:terrace-walk",
+          "sourceObjectId": "terrace-walk-owner"
+        },
+        {
+          "id": "v3-connection-estate:guest-garden-walk",
+          "sourceObjectId": "guest-garden-walk-owner"
+        },
+        {
+          "id": "main-villa-slab-1-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-1-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-0:level-0:wall-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-1:level-0:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:head-wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:frame-left",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:frame-right",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:frame-head",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:frame-sill",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:mullion-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:mullion-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:main-entry-door:level-0:door-panel",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-1:level-0:wall-after-main-entry-door",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-2:level-0:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:head-wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-left",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-right",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-head",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:frame-sill",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:mullion-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:mullion-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:garden-living-door:level-0:door-panel",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-2:level-0:wall-after-garden-living-door",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-3:level-0:wall-seg-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-4:level-0:wall-seg-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-5:level-0:wall-seg-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-2-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-2-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-0:level-1:wall-seg-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:east-seg-1:level-1:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:south-seg-2:level-1:wall",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-3:level-1:wall-seg-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:north-seg-4:level-1:wall-seg-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa:west-seg-5:level-1:wall-seg-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-3-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "main-villa-slab-3-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "guest-pavilion-slab-1",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion-slab-2",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:north:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:south:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:head-wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:frame-left",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:frame-right",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:frame-head",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:frame-sill",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:mullion-0",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:mullion-1",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:guest-entry-door:level-0:door-panel",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:south:level-0:wall-after-guest-entry-door",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:east:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "guest-pavilion:west:level-0:wall",
+          "sourceObjectId": "guest-pavilion"
+        },
+        {
+          "id": "sunset-terrace-surface",
+          "sourceObjectId": "sunset-terrace"
+        },
+        {
+          "id": "infinity-pool-basin",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-water",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ns-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ns-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ew-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-shell-ew-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ns-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ns-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ew-0",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "infinity-pool-coping-ew-1",
+          "sourceObjectId": "infinity-pool"
+        },
+        {
+          "id": "guest-garden-floor-surface",
+          "sourceObjectId": "guest-garden-floor"
+        },
+        {
+          "id": "north-garden-lawn-groundcover",
+          "sourceObjectId": "north-garden-lawn"
+        },
+        {
+          "id": "east-arrival-lawn-groundcover",
+          "sourceObjectId": "east-arrival-lawn"
+        },
+        {
+          "id": "garden-shade-post-left",
+          "sourceObjectId": "garden-shade"
+        },
+        {
+          "id": "garden-shade-post-right",
+          "sourceObjectId": "garden-shade"
+        },
+        {
+          "id": "villa-private-stair:tread-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-6",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-8",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-9",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-10",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-11",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:landing-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-13",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-14",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-15",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-16",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-17",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-18",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-19",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-20",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-21",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-22",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:tread-23",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-6",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-8",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-9",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-10",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-first-11",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-1",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-2",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-3",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-4",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-5",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-6",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-7",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-8",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-9",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-10",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-second-11",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:well-landing",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-start-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-rail-start-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-end-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-rail-end-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-left-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-rail-left-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-right-0",
+          "sourceObjectId": "main-villa"
+        },
+        {
+          "id": "villa-private-stair:guard-rail-right-0",
+          "sourceObjectId": "main-villa"
+        }
+      ],
+      "originalPlan": [
+        {
+          "id": "main-villa",
+          "location": {
+            "x": -8,
+            "z": 0,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 24,
+            "depth": 18
+          }
+        },
+        {
+          "id": "guest-pavilion",
+          "location": {
+            "x": -28,
+            "z": -13,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 12,
+            "depth": 8
+          }
+        }
+      ],
+      "alternativePlan": [
+        {
+          "id": "main-villa",
+          "location": {
+            "x": -10,
+            "z": 0,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "articulated",
+            "width": 25.6,
+            "depth": 19.200000000000003,
+            "operations": [
+              {
+                "id": "garden-court",
+                "type": "notch",
+                "corner": "nw",
+                "width": 8,
+                "depth": 6.4
+              }
+            ]
+          }
+        },
+        {
+          "id": "guest-pavilion",
+          "location": {
+            "x": -38,
+            "z": -16,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "plan": {
+            "kind": "rectangle",
+            "width": 16,
+            "depth": 12
+          }
+        }
+      ],
+      "floorAreas": {
+        "original": 960,
+        "alternative": 1072.6399999999999
+      },
+      "poolRim": 0.18,
+      "deckTop": 0.18,
+      "provenance": "Separately authored offline design copy retaining the original site, user requirements, building/storey/room identities and accommodation program. Additional court/shade decisions are examples, never a production template or evidence of natural Terra quality."
+    }
+  ],
+  "prompt": {
+    "beforeCharacters": 36381,
+    "afterCharacters": 33755,
+    "beforeInstructionCharacters": 9130,
+    "afterInstructionCharacters": 6309,
+    "beforeSha256": "9da95f31ceace97502255ed240f09be067b4172e1725031a9f55a36259dea85f",
+    "afterSha256": "c941ca7ffd5c1e034083582b3339bf6f5a8a7d67fb7d26b7855e11f57f02c844",
+    "tokenCounts": "Character counts only; no tokenizer estimate or historical usage is asserted."
+  }
+}

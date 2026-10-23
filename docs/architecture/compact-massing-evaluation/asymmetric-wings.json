@@ -1,0 +1,53 @@
+{
+  "format": "terra-massing-1",
+  "title": "OFFLINE fixture: asymmetric-wings",
+  "concept": "Hand-authored composition for deterministic comparison.",
+  "site": {
+    "width": 70,
+    "depth": 60
+  },
+  "volumes": [
+    {
+      "name": "home",
+      "at": [
+        0,
+        0
+      ],
+      "plan": {
+        "kind": "rectangle",
+        "width": 16,
+        "depth": 10
+      },
+      "heights": [
+        3.8,
+        3.1
+      ],
+      "roof": {
+        "form": "gable",
+        "pitchDegrees": 22,
+        "overhang": 0.2
+      }
+    },
+    {
+      "name": "wing",
+      "attach": {
+        "to": "home",
+        "side": "east",
+        "offset": 2
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 8,
+        "depth": 6
+      },
+      "heights": [
+        3.4
+      ],
+      "roof": {
+        "form": "mono-pitch",
+        "pitchDegrees": 12,
+        "overhang": 0.2
+      }
+    }
+  ]
+}

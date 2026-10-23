@@ -1,0 +1,1371 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 120,
+      "depth": 90,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#758b62",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "An L-shaped residence shelters a west garden court; eastern arrival and a low guest garden have separate approaches.",
+      "character": "Tropical mineral walls, recessed glazing and real shaded outdoor rooms. Conceptual interiors; no infinity edge, planted species or flush-threshold certification is claimed.",
+      "siteAccess": [
+        {
+          "id": "east-arrival-gate",
+          "boundary": "east",
+          "point": [
+            60,
+            0,
+            5
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "id": "user-budget",
+          "source": "user",
+          "statement": "Design an extraordinary luxury estate aligned with a $15 million Saint Lucia commission.",
+          "metric": "budget",
+          "objectIds": [
+            "main-villa",
+            "guest-pavilion",
+            "sunset-terrace",
+            "infinity-pool"
+          ],
+          "range": {
+            "min": 15000000,
+            "max": 15000000
+          },
+          "value": "USD 15 million target"
+        }
+      ],
+      "program": [
+        {
+          "id": "primary-residence-program",
+          "role": "Principal luxury residence with entertaining, owner accommodation and household operations.",
+          "kind": "residence",
+          "objectIds": [
+            "main-villa"
+          ],
+          "source": "design",
+          "access": "required"
+        },
+        {
+          "id": "guest-accommodation-program",
+          "role": "Independent one-bedroom guest accommodation with its own entrance and garden approach.",
+          "kind": "building",
+          "objectIds": [
+            "guest-pavilion"
+          ],
+          "source": "design",
+          "access": "required"
+        },
+        {
+          "id": "outdoor-program",
+          "role": "Dry garden rooms and ordinary swimming basin",
+          "kind": "amenity",
+          "objectIds": [
+            "sunset-terrace",
+            "infinity-pool"
+          ],
+          "source": "design",
+          "access": "required"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [
+        {
+          "id": "arrival-drive",
+          "purpose": "arrival-drive",
+          "from": "east-arrival-gate",
+          "to": "main-villa",
+          "via": [
+            "arrival-drive-owner"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "entranceId": "main-villa-entrance",
+              "approachDistance": 3
+            },
+            "use": "vehicle",
+            "width": 5.8,
+            "waypoints": [
+              [
+                35,
+                0,
+                5
+              ],
+              [
+                15,
+                0,
+                5
+              ]
+            ]
+          }
+        },
+        {
+          "id": "terrace-walk",
+          "purpose": "terrace-walk",
+          "from": "main-villa",
+          "to": "sunset-terrace",
+          "via": [
+            "terrace-walk-owner"
+          ],
+          "spatial": {
+            "from": {
+              "entranceId": "main-villa-entrance",
+              "approachDistance": 2
+            },
+            "to": {
+              "point": [
+                7,
+                0,
+                12.8
+              ]
+            },
+            "use": "pedestrian",
+            "width": 1.8,
+            "waypoints": [
+              [
+                11,
+                0,
+                3
+              ],
+              [
+                11,
+                0,
+                14
+              ]
+            ]
+          }
+        },
+        {
+          "id": "guest-garden-walk",
+          "purpose": "guest-garden-walk",
+          "from": "sunset-terrace",
+          "to": "guest-pavilion",
+          "via": [
+            "guest-garden-walk-owner"
+          ],
+          "spatial": {
+            "from": {
+              "point": [
+                -27,
+                0,
+                13.8
+              ]
+            },
+            "to": {
+              "entranceId": "guest-pavilion-entrance",
+              "approachDistance": 2
+            },
+            "use": "pedestrian",
+            "width": 1.5,
+            "waypoints": [
+              [
+                -29,
+                0,
+                15
+              ],
+              [
+                -29,
+                0,
+                -5
+              ]
+            ]
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-main-villa",
+            "objectId": "main-villa",
+            "role": "primary luxury residence"
+          },
+          {
+            "id": "bp-guest-pavilion",
+            "objectId": "guest-pavilion",
+            "role": "independent guest accommodation"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-villa-entrance",
+            "objectId": "main-villa",
+            "openingId": "main-entry-door",
+            "level": 0
+          },
+          {
+            "id": "guest-pavilion-entrance",
+            "objectId": "guest-pavilion",
+            "openingId": "guest-entry-door",
+            "level": 0
+          },
+          {
+            "id": "garden-living-exit",
+            "objectId": "main-villa",
+            "openingId": "garden-living-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "main-villa-roof",
+          "guest-pavilion-roof"
+        ],
+        "outdoorObjectIds": [
+          "sunset-terrace",
+          "infinity-pool",
+          "guest-garden-floor",
+          "north-garden-lawn",
+          "east-arrival-lawn",
+          "garden-shade"
+        ],
+        "routeIds": [
+          "arrival-drive",
+          "terrace-walk",
+          "guest-garden-walk"
+        ],
+        "verticalCirculationIds": [
+          "villa-private-stair"
+        ],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "main-villa",
+        "type": "building-mass",
+        "semanticRole": "primary luxury residence",
+        "label": "Piton View Main Villa",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -10,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 25.6,
+          "depth": 19.200000000000003,
+          "height": 7.800000000000001,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -10,
+            3.9000000000000004,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          25.6,
+          7.800000000000001,
+          19.200000000000003
+        ],
+        "material": {
+          "id": "ivory-stucco",
+          "color": "#e4ded2",
+          "roughness": 0.82,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "stucco"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "garden-court",
+                "type": "notch",
+                "corner": "nw",
+                "width": 8,
+                "depth": 6.4
+              }
+            ]
+          },
+          "massHierarchy": "primary",
+          "mainEntry": {
+            "openingId": "main-entry-door",
+            "canopyDepth": 2,
+            "color": "#292b29"
+          },
+          "openings": [
+            {
+              "id": "main-entry-door",
+              "facade": "east",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.43,
+              "end": 0.57,
+              "height": 3,
+              "operation": "hinged",
+              "reveal": 0.18
+            },
+            {
+              "id": "garden-living-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.05,
+              "end": 0.27,
+              "height": 3,
+              "operation": "sliding",
+              "reveal": 0.2
+            },
+            {
+              "id": "garden-wing-glass",
+              "facade": "west",
+              "type": "glazing-zone",
+              "start": 0.04,
+              "end": 0.96,
+              "heightRatio": 0.72,
+              "reveal": 0.2
+            },
+            {
+              "id": "upper-view-glass",
+              "facade": "south",
+              "floors": "upper",
+              "type": "glazing-zone",
+              "start": 0.15,
+              "end": 0.85,
+              "heightRatio": 0.64,
+              "reveal": 0.2
+            },
+            {
+              "id": "south-dining-glass",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazing-zone",
+              "start": 0.36,
+              "end": 0.94,
+              "heightRatio": 0.74,
+              "reveal": 0.18
+            },
+            {
+              "id": "entry-upper-glass",
+              "facade": "east",
+              "floors": "upper",
+              "type": "glazing-zone",
+              "start": 0.36,
+              "end": 0.64,
+              "heightRatio": 0.65,
+              "reveal": 0.18
+            }
+          ],
+          "assemblies": [
+            {
+              "id": "arrival-gallery-shade",
+              "intent": "A real shaded arrival gallery gives the main entrance depth",
+              "parts": [
+                {
+                  "id": "gallery-cover",
+                  "facade": "east",
+                  "elevation": 3.8,
+                  "type": "slab",
+                  "start": 0.28,
+                  "end": 0.72,
+                  "depth": 2.4,
+                  "thickness": 0.2
+                },
+                {
+                  "id": "gallery-post-0",
+                  "facade": "east",
+                  "type": "post",
+                  "at": 0.28,
+                  "depth": 2.2,
+                  "height": 3.8,
+                  "size": 0.24
+                },
+                {
+                  "id": "gallery-post-1",
+                  "facade": "east",
+                  "type": "post",
+                  "at": 0.72,
+                  "depth": 2.2,
+                  "height": 3.8,
+                  "size": 0.24
+                }
+              ]
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "main-villa-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of main-villa",
+        "label": "Piton View Main Villa roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -10,
+          "z": 0,
+          "baseElevation": 7.800000000000001,
+          "width": 25.6,
+          "depth": 19.200000000000003,
+          "height": 0.28,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -10,
+            7.94,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          25.6,
+          0.28,
+          19.200000000000003
+        ],
+        "material": {
+          "id": "roof-metal",
+          "color": "#3b4242",
+          "roughness": 0.42,
+          "metalness": 0.7,
+          "opacity": 1,
+          "surface": "metal"
+        },
+        "hostId": "main-villa",
+        "roofForm": "floating-flat",
+        "overhang": 0.6,
+        "pitch": 0,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "guest-pavilion",
+        "type": "building-mass",
+        "semanticRole": "independent guest accommodation",
+        "label": "Garden Guest Pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": -38,
+          "z": -16,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 12,
+          "height": 3.5,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -38,
+            1.75,
+            -16
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          3.5,
+          12
+        ],
+        "material": {
+          "id": "volcanic-stone",
+          "color": "#625d52",
+          "roughness": 0.9,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "massHierarchy": "secondary",
+          "mainEntry": {
+            "openingId": "guest-entry-door",
+            "canopyDepth": 1.6
+          },
+          "openings": [
+            {
+              "id": "guest-entry-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.4,
+              "end": 0.6,
+              "height": 2.7,
+              "operation": "hinged"
+            },
+            {
+              "id": "guest-garden-glass",
+              "facade": "west",
+              "type": "glazing-zone",
+              "start": 0.08,
+              "end": 0.92,
+              "heightRatio": 0.7,
+              "reveal": 0.18
+            }
+          ]
+        },
+        "levels": 1
+      },
+      {
+        "id": "guest-pavilion-roof",
+        "type": "roof-form",
+        "semanticRole": "Roof of guest-pavilion",
+        "label": "Garden Guest Pavilion roof",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -38,
+          "z": -16,
+          "baseElevation": 3.5,
+          "width": 16,
+          "depth": 12,
+          "height": 0.24,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -38,
+            3.62,
+            -16
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.24,
+          12
+        ],
+        "material": {
+          "id": "roof-metal",
+          "color": "#3b4242",
+          "roughness": 0.42,
+          "metalness": 0.7,
+          "opacity": 1,
+          "surface": "metal"
+        },
+        "hostId": "guest-pavilion",
+        "roofForm": "mono-pitch",
+        "overhang": 0.6,
+        "pitch": 10,
+        "pitchUnit": "degrees"
+      },
+      {
+        "id": "sunset-terrace",
+        "type": "terrace",
+        "semanticRole": "South living and pool deck",
+        "label": "South living and pool deck",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -10,
+          "z": 19.8,
+          "baseElevation": 0,
+          "width": 38,
+          "depth": 20.4,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -10,
+            0.09,
+            19.8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          38,
+          0.18,
+          20.4
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none"
+      },
+      {
+        "id": "infinity-pool",
+        "type": "pool",
+        "semanticRole": "Ordinary swimming basin, no infinity system",
+        "label": "Ordinary swimming basin, no infinity system",
+        "geometryKind": "water",
+        "architecture": {
+          "x": -17,
+          "z": 23,
+          "baseElevation": -1.22,
+          "width": 16,
+          "depth": 6,
+          "height": 1.4,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -17,
+            -0.52,
+            23
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          1.4,
+          6
+        ],
+        "material": {
+          "id": "pool-water",
+          "color": "#4d9fb4",
+          "roughness": 0.08,
+          "metalness": 0,
+          "opacity": 0.82,
+          "surface": "water"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "guest-garden-floor",
+        "type": "terrace",
+        "semanticRole": "Private guest garden terrace",
+        "label": "Private guest garden terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -38,
+          "z": -3,
+          "baseElevation": 0,
+          "width": 16,
+          "depth": 14,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -38,
+            0.09,
+            -3
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          16,
+          0.18,
+          14
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "walkable",
+        "railing": "none"
+      },
+      {
+        "id": "north-garden-lawn",
+        "type": "landscape-zone",
+        "semanticRole": "Sheltered northwest lawn court",
+        "label": "Sheltered northwest lawn court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": -21,
+          "z": -8,
+          "baseElevation": 0,
+          "width": 10,
+          "depth": 8,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            -21,
+            0.07,
+            -8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          10,
+          0.14,
+          8
+        ],
+        "material": {
+          "id": "lawn-grass",
+          "color": "#668253",
+          "roughness": 0.9,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "east-arrival-lawn",
+        "type": "landscape-zone",
+        "semanticRole": "Quiet east landscape reserve",
+        "label": "Quiet east landscape reserve",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 29,
+          "z": -17,
+          "baseElevation": 0,
+          "width": 28,
+          "depth": 38,
+          "height": 0.14,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            29,
+            0.07,
+            -17
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          28,
+          0.14,
+          38
+        ],
+        "material": {
+          "id": "lawn-grass",
+          "color": "#668253",
+          "roughness": 0.9,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "garden-shade",
+        "type": "canopy",
+        "semanticRole": "Shaded dining pavilion",
+        "label": "Shaded dining pavilion",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 3,
+          "z": 21,
+          "baseElevation": 0.18,
+          "width": 8,
+          "depth": 8,
+          "height": 3.2,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            3,
+            1.78,
+            21
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          8,
+          3.2,
+          8
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        },
+        "collision": "solid",
+        "canopyStyle": "slatted"
+      },
+      {
+        "id": "arrival-drive-owner",
+        "type": "driveway",
+        "semanticRole": "arrival-drive",
+        "label": "arrival-drive",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            31.4,
+            0.05,
+            2.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          57.2,
+          0.01,
+          10.8
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "terrace-walk-owner",
+        "type": "path",
+        "semanticRole": "terrace-walk",
+        "label": "terrace-walk",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            7.3500000000000005,
+            0.05,
+            6.981021828349518
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          9.1,
+          0.01,
+          15.762043656699037
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      },
+      {
+        "id": "guest-garden-walk-owner",
+        "type": "path",
+        "semanticRole": "guest-garden-walk",
+        "label": "guest-garden-walk",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -32.68206409171468,
+            0.05,
+            2.821559847142204
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12.135871816570646,
+          0.01,
+          25.643119694284408
+        ],
+        "material": {
+          "id": "terrace-paving",
+          "color": "#b8ad98",
+          "roughness": 0.74,
+          "metalness": 0,
+          "opacity": 1,
+          "surface": "paving"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "villa-ground",
+          "label": "Entertaining and service level",
+          "semanticRole": "public living and operations",
+          "hostMassId": "main-villa",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2
+        },
+        {
+          "id": "villa-upper",
+          "label": "Private suite level",
+          "semanticRole": "private accommodation",
+          "hostMassId": "main-villa",
+          "index": 1,
+          "elevation": 4.46,
+          "height": 3.6
+        },
+        {
+          "id": "guest-ground",
+          "label": "Guest accommodation level",
+          "semanticRole": "private guest suite",
+          "hostMassId": "guest-pavilion",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.5
+        }
+      ],
+      "rooms": [
+        {
+          "id": "great-room",
+          "label": "Great Room",
+          "semanticRole": "social living",
+          "program": "formal and informal lounge",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -8.8,
+            "z": 3.2,
+            "width": 8,
+            "depth": 12.8
+          }
+        },
+        {
+          "id": "dining-room",
+          "label": "Dining Salon",
+          "semanticRole": "entertaining",
+          "program": "formal dining",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -0.8,
+            "z": 5.6000000000000005,
+            "width": 4.800000000000001,
+            "depth": 6.4
+          }
+        },
+        {
+          "id": "sun-lounge",
+          "label": "Sun Lounge",
+          "semanticRole": "indoor-outdoor entertaining",
+          "program": "casual lounge",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 7.2,
+            "z": 5.6000000000000005,
+            "width": 9.600000000000001,
+            "depth": 6.4
+          }
+        },
+        {
+          "id": "show-kitchen",
+          "label": "Show Kitchen",
+          "semanticRole": "entertaining service",
+          "program": "open chef kitchen",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 6.4,
+            "z": -6.4,
+            "width": 6.4,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "pantry",
+          "label": "Butler Pantry",
+          "semanticRole": "service",
+          "program": "food preparation and storage",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 11.200000000000001,
+            "z": -7.2,
+            "width": 2.4000000000000004,
+            "depth": 3.2
+          }
+        },
+        {
+          "id": "laundry",
+          "label": "Laundry and Service",
+          "semanticRole": "service",
+          "program": "laundry and household operations",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 11.200000000000001,
+            "z": -4.4,
+            "width": 2.4000000000000004,
+            "depth": 1.6
+          }
+        },
+        {
+          "id": "entry-gallery",
+          "label": "Arrival Gallery",
+          "semanticRole": "circulation",
+          "program": "entry gallery and stair hall",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 3.6,
+            "z": -0.8,
+            "width": 16.8,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "staff-office",
+          "label": "Estate Office",
+          "semanticRole": "service",
+          "program": "house management office",
+          "storeyId": "villa-ground",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -0.8,
+            "z": -6.4,
+            "width": 6.4,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "primary-bedroom",
+          "label": "Primary Suite",
+          "semanticRole": "private sleeping",
+          "program": "owner bedroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -8.8,
+            "z": 3.2,
+            "width": 8,
+            "depth": 12.8
+          }
+        },
+        {
+          "id": "guest-bedroom",
+          "label": "Guest Suite",
+          "semanticRole": "private sleeping",
+          "program": "guest bedroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 7.2,
+            "z": 5.6000000000000005,
+            "width": 9.600000000000001,
+            "depth": 6.4
+          }
+        },
+        {
+          "id": "guest-bath",
+          "label": "Guest Bathroom",
+          "semanticRole": "private bathing",
+          "program": "guest bathroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 11.200000000000001,
+            "z": -6.4,
+            "width": 2.4000000000000004,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "study-library",
+          "label": "Study Library",
+          "semanticRole": "private retreat",
+          "program": "library and study",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -0.8,
+            "z": 5.6000000000000005,
+            "width": 4.800000000000001,
+            "depth": 6.4
+          }
+        },
+        {
+          "id": "primary-bath",
+          "label": "Primary Bathroom",
+          "semanticRole": "private bathing",
+          "program": "owner bathroom",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": -0.8,
+            "z": -6.4,
+            "width": 6.4,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "dressing-room",
+          "label": "Primary Dressing",
+          "semanticRole": "private dressing",
+          "program": "owner wardrobe",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 6.4,
+            "z": -6.4,
+            "width": 6.4,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "upper-hall",
+          "label": "Upper Hall",
+          "semanticRole": "circulation",
+          "program": "stair landing and private hall",
+          "storeyId": "villa-upper",
+          "hostMassId": "main-villa",
+          "footprint": {
+            "x": 3.6,
+            "z": -0.8,
+            "width": 16.8,
+            "depth": 4.800000000000001
+          }
+        },
+        {
+          "id": "guest-pavilion-sitting",
+          "label": "Guest Sitting Room",
+          "semanticRole": "guest living",
+          "program": "private sitting room",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": -4,
+            "z": -1,
+            "width": 6,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-pavilion-bedroom",
+          "label": "Garden Bedroom",
+          "semanticRole": "guest sleeping",
+          "program": "guest bedroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 3,
+            "z": -1,
+            "width": 8,
+            "depth": 8
+          }
+        },
+        {
+          "id": "guest-pavilion-bath",
+          "label": "Garden Bathroom",
+          "semanticRole": "guest bathing",
+          "program": "guest bathroom",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": -4,
+            "z": 4,
+            "width": 6,
+            "depth": 2
+          }
+        },
+        {
+          "id": "guest-pavilion-closet",
+          "label": "Guest Dressing",
+          "semanticRole": "guest dressing",
+          "program": "wardrobe",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 0,
+            "z": 4,
+            "width": 2,
+            "depth": 2
+          }
+        },
+        {
+          "id": "guest-pavilion-entry",
+          "label": "Guest Entry",
+          "semanticRole": "circulation",
+          "program": "entry vestibule",
+          "storeyId": "guest-ground",
+          "hostMassId": "guest-pavilion",
+          "footprint": {
+            "x": 4,
+            "z": 4,
+            "width": 6,
+            "depth": 2
+          }
+        }
+      ],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "villa-private-stair",
+          "type": "stair",
+          "hostMassId": "main-villa",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 4.800000000000001,
+            "z": -0.8,
+            "width": 5,
+            "depth": 4
+          },
+          "stairType": "u-shaped",
+          "direction": "north",
+          "turn": "left",
+          "label": "Gallery Stair",
+          "semanticRole": "private internal stair"
+        }
+      ]
+    },
+    "relationships": [],
+    "metadata": {
+      "architecturalValidation": {
+        "version": 1,
+        "status": "complete",
+        "diagnostics": [
+          {
+            "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+            "severity": "advisory",
+            "targetIds": [
+              "main-villa",
+              "guest-pavilion",
+              "sunset-terrace",
+              "infinity-pool"
+            ],
+            "message": "user-budget: budget is retained as intent; no deterministic verification is available.",
+            "classification": "advisory"
+          },
+          {
+            "code": "ORIENTATION_CONFLICT",
+            "targetIds": [
+              "scene"
+            ],
+            "message": "Site evidence and facade roles do not establish one consistent reversal; geometry and facade intent retained.",
+            "severity": "advisory",
+            "classification": "advisory"
+          }
+        ]
+      },
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "exterior",
+        "authority": "v3-semantic-plan",
+        "sequence": [
+          "plan",
+          "massing",
+          "exterior"
+        ]
+      }
+    }
+  }
+}

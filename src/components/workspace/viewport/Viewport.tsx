@@ -11,12 +11,18 @@ import {
 } from "@react-three/drei";
 import type { KeyboardControlsEntry } from "@react-three/drei";
 import * as THREE from "three";
+import { ArchitecturalFloorPlan } from "./ArchitecturalFloorPlan";
+import { ArchitecturalViewControls } from "./ArchitecturalViewControls";
+import { DEFAULT_ARCHITECTURAL_VIEW } from "@/lib/v3/architecturalPlanning";
+import { isV3PlanEvaluation } from "@/lib/v3/architecturalPlanEvaluation";
+import { compileV3Scene } from "@/lib/v3/scene";
 import { Scene } from "./Scene";
 import { ViewportToolbar } from "./ViewportToolbar";
 import { CameraRig } from "./CameraRig";
 import { RoomNavigator } from "./RoomNavigator";
 import { QuickActions } from "./QuickActions";
 import { GenerationOverlay } from "./GenerationOverlay";
+import { V3ArchitecturalValidationBanner } from "./V3ArchitecturalValidationBanner";
 import { V3FailedPreviewBanner } from "./V3FailedPreviewBanner";
 import { useNeedsGeneration } from "./useNeedsGeneration";
 import { useRoomFocusSync } from "../useRoomFocus";
@@ -99,11 +105,17 @@ export function Viewport() {
   );
   const activeV3 = useActiveV3RenderSource(params.projectId, houseConfigJson);
   const v3Presentation = !!activeV3.scene;
+  const architecturalView = useProjectStore(s => s.getProject(params.projectId)?.architecturalView) ?? DEFAULT_ARCHITECTURAL_VIEW;
+  const evaluation=!!activeV3.scene&&isV3PlanEvaluation(activeV3.scene);
+  const isPlan = v3Presentation && (evaluation||architecturalView.mode === "floor-plan");
+  const isBlueprint = v3Presentation && (architecturalView.mode === "blueprint" || architecturalView.mode === "massing");
+  // Geometry is memoized by source, never by floor, view, zoom or selection.
+  const planModel = useMemo(() => activeV3.scene&&!evaluation ? compileV3Scene(activeV3.scene) : null, [activeV3.scene,evaluation]);
 
   const initialFit = useMemo(() => {
     try {
       if (activeV3.scene) {
-        return computeV3CameraFit(getV3PresentationBounds(activeV3.scene));
+        return computeV3CameraFit(getV3PresentationBounds(activeV3.scene,evaluation?{id:"plan-camera-bounds",primitives:[]}:undefined));
       }
     } catch { /* fall through to legacy parse */ }
     const { config, site } = generateHouseFromJson(houseConfigJson ?? "{}");
@@ -114,17 +126,19 @@ export function Viewport() {
 
   return (
     <div className="relative h-full w-full">
-      <KeyboardControls map={WALK_MAP}>
+      <div className={`absolute inset-0 ${isPlan ? "invisible pointer-events-none" : ""}`} aria-hidden={isPlan}>
+      {!evaluation&&<KeyboardControls map={WALK_MAP}>
         <Canvas
           shadows="soft"
           dpr={[1, 1.75]}
-          gl={{ toneMapping: THREE.NeutralToneMapping }}
+          frameloop={isPlan ? "never" : "always"}
+          gl={{ toneMapping: THREE.NeutralToneMapping, localClippingEnabled: true }}
           camera={{ position: toTuple(initialFit.position), fov: CAMERA_FOV, near: 0.1, far: 5000 }}
           className="!h-full !w-full"
           onPointerMissed={() => selectKey(null)}
         >
           <Suspense fallback={null}>
-            <Scene timeOfDay={timeOfDay} v3Presentation={v3Presentation} v3Site={activeV3.scene?.site} />
+            <Scene timeOfDay={timeOfDay} v3Presentation={v3Presentation} v3Site={activeV3.scene?.site} blueprint={isBlueprint} />
           </Suspense>
           <CameraRig />
 
@@ -147,7 +161,10 @@ export function Viewport() {
             />
           )}
         </Canvas>
-      </KeyboardControls>
+      </KeyboardControls>}
+      </div>
+      {isPlan && activeV3.scene && (planModel||evaluation) && <ArchitecturalFloorPlan key={`${architecturalView.buildingId}-${architecturalView.floor}`} scene={activeV3.scene} model={planModel} floor={architecturalView.floor} buildingId={architecturalView.buildingId} readOnly={activeV3.source !== "persisted"} />}
+      {activeV3.scene && <ArchitecturalViewControls projectId={params.projectId} scene={activeV3.scene} />}
 
       {/* Walk mode hint — shown until user clicks to capture mouse */}
       {walkMode && (
@@ -158,11 +175,12 @@ export function Viewport() {
         </div>
       )}
 
-      <ViewportToolbar onEnterWalk={() => setWalkMode(true)} />
+      {!isPlan && <ViewportToolbar onEnterWalk={() => setWalkMode(true)} />}
       <V3FailedPreviewBanner />
-      <RoomNavigator projectId={params.projectId} />
+      <V3ArchitecturalValidationBanner projectId={params.projectId} />
+      {!isPlan && !isBlueprint && <RoomNavigator projectId={params.projectId} />}
       <GenerationOverlay />
-      {!blank && <QuickActions />}
+      {!blank && !isPlan && <QuickActions />}
     </div>
   );
 }

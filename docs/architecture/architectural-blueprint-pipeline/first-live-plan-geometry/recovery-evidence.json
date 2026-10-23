@@ -1,0 +1,83 @@
+{
+  "originalPaidResponseRecovered": false,
+  "originalPaidResponseSha256": null,
+  "usage": [
+    {
+      "id": "ea6dc83e-6f57-4ea5-aacb-7317849eaa0d",
+      "created_at": "2026-10-21T19:11:05.668Z",
+      "project_id": "1fe77323-316a-4100-a53e-93fad6960361",
+      "stage": "v3-plan-evaluation",
+      "model": "gpt-5.6-terra",
+      "input_tokens": 4936,
+      "output_tokens": 6026,
+      "estimated_cost_usd": 0.082184,
+      "finish_reason": "stop",
+      "diagnostic": null,
+      "output_fingerprint": null,
+      "candidatePresent": false
+    }
+  ],
+  "paidBrief": "Design an extraordinary $15 million luxury estate in Saint Lucia.",
+  "source": "Existing Safari AX state at localhost:3000 and read-only SELECT on existing ai_usage table",
+  "knownReportedFailures": [
+    {
+      "code": "PLAN_FEATURE",
+      "feature": "arrival-court: paved arrival court"
+    },
+    {
+      "code": "PLAN_FEATURE",
+      "feature": "garden-terrace: paved terrace"
+    },
+    {
+      "code": "PLAN_FEATURE",
+      "feature": "resort-pool: swimming pool"
+    },
+    {
+      "code": "PLAN_FEATURE",
+      "feature": "south-lawn: lawn"
+    },
+    {
+      "code": "PLAN_REFERENCE",
+      "route": "arrival-drive -> arrival-court",
+      "message": "Route endpoint requires a planned dry surface."
+    },
+    {
+      "code": "PLAN_REFERENCE",
+      "route": "arrival-walk -> arrival-court",
+      "message": "Route endpoint requires a planned dry surface."
+    },
+    {
+      "code": "PLAN_REFERENCE",
+      "route": "garden-walk -> garden-terrace",
+      "message": "Route endpoint requires a planned dry surface."
+    },
+    {
+      "code": "PLAN_REFERENCE",
+      "route": "guest-path -> garden-terrace",
+      "message": "Route endpoint requires a planned dry surface."
+    },
+    {
+      "code": "PLAN_REFERENCE",
+      "route": "wellness-path -> garden-terrace",
+      "message": "Route endpoint requires a planned dry surface."
+    }
+  ],
+  "exhaustiveValidationInventoryAvailable": false,
+  "buildingsAndRoomsAvailable": false,
+  "originalResponseCaptureGap": "The plan route logged usage before deterministic validation, with no assess callback; no candidate, fingerprint, failure artifact or raw response was retained or returned to the client.",
+  "searched": [
+    ".v3-debug",
+    ".data",
+    "docs",
+    "src fixtures",
+    "/private/tmp JSON/JSONL/logs",
+    "existing correlated ai_usage row",
+    "current Safari failure UI"
+  ],
+  "fixture": {
+    "path": "src/lib/v3/__tests__/fixtures/planned-site-regression.plan.json",
+    "provenance": "Independent pre-existing plan-first-estate fixture; only feature vocabulary changed to reported paid-failure terms. This is NOT the paid plan.",
+    "sha256": "2a7c854fe71cc5dfa1da968875ea59cb959d22dd2e4de654432c7fdd28f8fe6b"
+  },
+  "additionalPaidCalls": 0
+}

@@ -1,0 +1,663 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 60,
+      "depth": 60,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#61754b",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+      "character": "OFFLINE TEST — A modest home with north garden-facing living and cooking, a deliberate cross-gallery and a sheltered central south entry. Relative subdivision is the architectural decision; no independently guessed room rectangles.",
+      "siteAccess": [],
+      "requirements": [],
+      "program": [
+        {
+          "id": "garden-house-program",
+          "role": "Garden home",
+          "kind": "building",
+          "objectIds": [
+            "garden-house"
+          ],
+          "source": "design"
+        }
+      ],
+      "zones": [],
+      "architecture": [],
+      "relationships": [],
+      "considerations": [],
+      "circulation": [],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-garden-house",
+            "objectId": "garden-house",
+            "role": "Garden home"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "garden-house-garden-door-entry",
+            "objectId": "garden-house",
+            "openingId": "garden-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "garden-house-roof"
+        ],
+        "outdoorObjectIds": [],
+        "routeIds": [],
+        "verticalCirculationIds": [],
+        "allocations": []
+      }
+    },
+    "objects": [
+      {
+        "id": "garden-house",
+        "type": "building-mass",
+        "semanticRole": "Garden home",
+        "label": "Garden home",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 0,
+          "baseElevation": 0,
+          "width": 12,
+          "depth": 10,
+          "height": 3.6,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            1.8,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          12,
+          3.6,
+          10
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "openings": [
+            {
+              "id": "garden-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "door",
+              "start": 0.44,
+              "end": 0.56,
+              "height": 2.4,
+              "serves": "garden-entry"
+            }
+          ]
+        },
+        "levels": 1
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "garden-floor",
+          "label": "Garden floor",
+          "semanticRole": "Garden floor",
+          "hostMassId": "garden-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 3.6
+        }
+      ],
+      "rooms": [],
+      "partitions": [],
+      "doors": [],
+      "circulation": []
+    },
+    "relationships": [],
+    "metadata": {
+      "planDeferredFeatureHeights": [],
+      "planUnresolved": [
+        {
+          "kind": "adjacency",
+          "id": "garden-entry|garden-gallery",
+          "raw": {
+            "from": "garden-entry",
+            "to": "garden-gallery"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-entry|garden-gallery",
+                "garden-entry",
+                "garden-gallery"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "garden-gallery|garden-living",
+          "raw": {
+            "from": "garden-gallery",
+            "to": "garden-living"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-living",
+                "garden-gallery",
+                "garden-living"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "garden-gallery|garden-kitchen",
+          "raw": {
+            "from": "garden-gallery",
+            "to": "garden-kitchen"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-kitchen",
+                "garden-gallery",
+                "garden-kitchen"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "garden-gallery|garden-bedroom",
+          "raw": {
+            "from": "garden-gallery",
+            "to": "garden-bedroom"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-bedroom",
+                "garden-gallery",
+                "garden-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "garden-gallery|garden-bath",
+          "raw": {
+            "from": "garden-gallery",
+            "to": "garden-bath"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-bath",
+                "garden-gallery",
+                "garden-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "garden-entry|garden-utility",
+          "raw": {
+            "from": "garden-entry",
+            "to": "garden-utility"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-entry|garden-utility",
+                "garden-entry",
+                "garden-utility"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        }
+      ],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 0,
+          "potentialAccessRoomIds": [],
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-entry|garden-gallery",
+                "garden-entry",
+                "garden-gallery"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-living",
+                "garden-gallery",
+                "garden-living"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-kitchen",
+                "garden-gallery",
+                "garden-kitchen"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-bedroom",
+                "garden-gallery",
+                "garden-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-gallery|garden-bath",
+                "garden-gallery",
+                "garden-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "garden-entry|garden-utility",
+                "garden-entry",
+                "garden-utility"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ENTRY_ROOM_GAP",
+              "targetIds": [
+                "garden-house-garden-door-entry",
+                "garden-house"
+              ],
+              "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+              "severity": "advisory"
+            }
+          ]
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": [
+          {
+            "code": "PLAN_ENTRY_ROOM_GAP",
+            "targetIds": [
+              "garden-house-garden-door-entry",
+              "garden-house"
+            ],
+            "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "garden-floor"
+          ],
+          "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "garden-house-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form garden-house-roof."
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-entry|garden-gallery",
+            "garden-entry",
+            "garden-gallery"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-gallery|garden-living",
+            "garden-gallery",
+            "garden-living"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-gallery|garden-kitchen",
+            "garden-gallery",
+            "garden-kitchen"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-gallery|garden-bedroom",
+            "garden-gallery",
+            "garden-bedroom"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-gallery|garden-bath",
+            "garden-gallery",
+            "garden-bath"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "garden-entry|garden-utility",
+            "garden-entry",
+            "garden-utility"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ENTRY_ROOM_GAP",
+          "targetIds": [
+            "garden-house-garden-door-entry",
+            "garden-house"
+          ],
+          "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "garden-floor",
+            "garden-living"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        }
+      ],
+      "roomLayoutDrafts": [
+        {
+          "storeyId": "garden-floor",
+          "layout": {
+            "regions": [
+              {
+                "root": "garden-root"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "garden-living-leaf",
+                "kind": "room",
+                "roomId": "garden-living"
+              },
+              {
+                "id": "garden-kitchen-leaf",
+                "kind": "room",
+                "roomId": "garden-kitchen"
+              },
+              {
+                "id": "garden-gallery-leaf",
+                "kind": "room",
+                "roomId": "garden-gallery"
+              },
+              {
+                "id": "garden-bedroom-leaf",
+                "kind": "room",
+                "roomId": "garden-bedroom"
+              },
+              {
+                "id": "garden-entry-leaf",
+                "kind": "room",
+                "roomId": "garden-entry"
+              },
+              {
+                "id": "garden-bath-leaf",
+                "kind": "room",
+                "roomId": "garden-bath"
+              },
+              {
+                "id": "garden-utility-leaf",
+                "kind": "room",
+                "roomId": "garden-utility"
+              },
+              {
+                "id": "garden-root",
+                "kind": "split",
+                "zone": "Public, circulation, private service",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "garden-public",
+                    "weight": 4
+                  },
+                  {
+                    "node": "garden-gallery-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "garden-private",
+                    "weight": 4
+                  }
+                ]
+              },
+              {
+                "id": "garden-public",
+                "kind": "split",
+                "zone": "Garden-facing public rooms",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "garden-living-leaf",
+                    "weight": 2
+                  },
+                  {
+                    "node": "garden-kitchen-leaf",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "garden-private",
+                "kind": "split",
+                "zone": "Private, arrival, service",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "garden-bedroom-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-entry-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-service",
+                    "weight": 1
+                  }
+                ]
+              },
+              {
+                "id": "garden-service",
+                "kind": "split",
+                "zone": "Wet and service spaces",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "garden-bath-leaf",
+                    "weight": 1
+                  },
+                  {
+                    "node": "garden-utility-leaf",
+                    "weight": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "spaces": [
+            {
+              "id": "garden-living",
+              "label": "garden living",
+              "program": "open-plan living dining",
+              "size": {
+                "minWidth": 99
+              },
+              "role": "garden living"
+            },
+            {
+              "id": "garden-kitchen",
+              "label": "garden kitchen",
+              "program": "kitchen",
+              "role": "garden kitchen"
+            },
+            {
+              "id": "garden-gallery",
+              "label": "garden gallery",
+              "program": "circulation gallery",
+              "role": "garden gallery"
+            },
+            {
+              "id": "garden-bedroom",
+              "label": "garden bedroom",
+              "program": "bedroom",
+              "role": "garden bedroom"
+            },
+            {
+              "id": "garden-entry",
+              "label": "garden entry",
+              "program": "entry hall",
+              "role": "garden entry"
+            },
+            {
+              "id": "garden-bath",
+              "label": "garden bath",
+              "program": "bathroom",
+              "role": "garden bath"
+            },
+            {
+              "id": "garden-utility",
+              "label": "garden utility",
+              "program": "utility",
+              "role": "garden utility"
+            }
+          ],
+          "findings": [
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "garden-floor",
+                "garden-living"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            }
+          ]
+        }
+      ],
+      "roomLayoutDevelopment": {
+        "version": 1,
+        "storeyIds": []
+      }
+    }
+  }
+}

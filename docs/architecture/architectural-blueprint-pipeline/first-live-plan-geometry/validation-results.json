@@ -1,0 +1,46 @@
+{
+  "fullSuite": {
+    "passed": 2389,
+    "failed": 0,
+    "skipped": 3,
+    "filesPassed": 571
+  },
+  "focused": {
+    "files": 3,
+    "passed": 42,
+    "failed": 0
+  },
+  "typescript": "passed: npx tsc --noEmit",
+  "eslint": "passed: npm run lint",
+  "productionBuild": "passed: next build --webpack in isolated source copy; cached fonts and offline network guard",
+  "productionUI": {
+    "productionWorkspace": true,
+    "optimizedBuild": "next build --webpack (isolated source copy, offline font cache)",
+    "isolatedBrowserStorage": true,
+    "exactOfflineResponsePreserved": true,
+    "fixtureSha256": "2a7c854fe71cc5dfa1da968875ea59cb959d22dd2e4de654432c7fdd28f8fe6b",
+    "realProviderCalls": 0,
+    "mockedProviderCalls": 1,
+    "planCalls": 1,
+    "explicitElaborationCalls": 0,
+    "disabledByDefault": true,
+    "no3DCanvasDuringEvaluation": true,
+    "localDiagnostics": true,
+    "editSaveUndoRedoReload": true,
+    "originalPaidResponseRecovered": false,
+    "fixtureProvenance": "Independent plan-first estate with reported vocabulary; not the paid response",
+    "unrelatedProjectPreserved": true,
+    "errors": [],
+    "forbidden": [],
+    "captures": [
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/first-live-plan-geometry/01-offline-estate-plan.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/first-live-plan-geometry/02-offline-crescent-house-floor-0.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/first-live-plan-geometry/02-offline-crescent-house-floor-1.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/first-live-plan-geometry/02-offline-orchard-atelier-floor-0.jpg",
+      "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/first-live-plan-geometry/03-local-diagnostics.jpg"
+    ]
+  },
+  "whitespace": "git diff --check passed; explicit new-file whitespace scan passed",
+  "externalTerraOpenAICalls": 0,
+  "originalPaidPlanRecovered": false
+}

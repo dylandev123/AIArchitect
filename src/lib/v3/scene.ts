@@ -1,9 +1,10 @@
+import { compileShapedSiteFeature, siteSurfaceRegions } from './siteFeatureConstruction';
 import { supportFloatingRoof } from './roofSupport';
 import { BLOCKING_FOOTPRINT_CODES } from './architectureSafety';
 import { resolveFootprint } from './footprint';
 import { footprintDiagnostics } from './footprintDiagnostics';
 import { compileFootprintMass, compileFootprintRoof } from './footprintConstruction';
-import { estateRouteVertices, estateRouteSupported } from './routeGeometry';
+import { estateRouteVertices, estateRouteSupported, estateRouteObstacles } from './routeGeometry';
 import type { V3EstatePlan } from './estatePlan';
 import { isSlattedCanopy } from './featureIntent';
 import { rooftopTerraces, finishRooftopTerraces } from './rooftopFeatures';
@@ -27,7 +28,7 @@ import type { V3Interior } from "./interior";
 import { compileV3InteriorWalls } from "./interiorWalls";
 import { applyV3Circulation } from "./circulation";
 import { withInferredV3Surfaces } from "./materialInference";
-import { v3MassLevelCount, v3RooftopTerrace, v3StoreyTargetingDiagnostics } from "./stacking";
+import { v3MassLevelCount, v3MassStoreys, v3RooftopTerrace, v3StoreyTargetingDiagnostics } from "./stacking";
 import { v3DerivedWallVertices, v3SeaPlaneOutline, type V3NaturalGround, type V3SeaPlane, type V3SiteGrading } from "./grading";
 
 export const V3_SCENE_VERSION = 3 as const;
@@ -80,7 +81,7 @@ export interface V3Usage { inputTokens?: number; outputTokens?: number; totalTok
 export interface V3Scene { version: typeof V3_SCENE_VERSION; site: V3SceneSite; siteHierarchy?: V3SiteHierarchy; estatePlan?: V3EstatePlan; objects: V3SceneObject[];
   /** Authored semantic storeys/rooms/partitions/doors/circulation. Optional: exterior-only scenes omit it and are never given one. Partitions and circulation compile, into derived (never persisted) walls, stairs and lifts. */
   interior?: V3Interior;
-  relationships: V3Relationship[]; metadata: { brief?: string; generatedAt?: string; usage?: V3Usage; [key: string]: unknown }; }
+  relationships: V3Relationship[]; metadata: { brief?: string; generatedAt?: string; usage?: V3Usage; architecturalValidation?: import('./architecturalAcceptance').ArchitecturalValidationState; [key: string]: unknown }; }
 export interface V3ProjectRoot { version: 3; generationMode: "v3-scene"; v3Scene: V3Scene; }
 export const BLANK_V3_SCENE: V3ProjectRoot = { version: 3, generationMode: "v3-scene", v3Scene: { version: 3, site: { width: 180, depth: 180, baseElevation: 0 }, objects: [], relationships: [], metadata: {} } };
 export function isV3ProjectRoot(raw: unknown): raw is V3ProjectRoot { return !!raw && typeof raw === "object" && (raw as { generationMode?: unknown }).generationMode === "v3-scene" && (raw as { v3Scene?: { version?: unknown } }).v3Scene?.version === 3; }
@@ -200,23 +201,23 @@ const IMPLICIT_ROOF_THICKNESS = .25;
 /** Exposed intermediate slab edge: metres proud of the facade, band height, finish. */
 const SLAB_EDGE = { proud: .04, height: .24, color: "#bdb5a8" };
 /** Small pure V3 construction kit. It borrows V2's proven wall/slab/roof vocabulary, not its document authority. */
-function compileBuildingMass(o: V3SceneObject, includeRoof = true, roofOverhang = o.overhang, roofMaterial = o.material, storeyBase = 0): HousePrimitive[] {
-  const articulated = compileFootprintMass({...o,material:wallMaterial(o)}, includeRoof, roofOverhang, roofMaterial, storeyBase);
+function compileBuildingMass(o: V3SceneObject, includeRoof = true, roofOverhang = o.overhang, roofMaterial = o.material, storeyBase = 0, scene?: V3Scene): HousePrimitive[] {
+  const articulated = compileFootprintMass({...o,material:wallMaterial(o)}, includeRoof, roofOverhang, roofMaterial, storeyBase, scene);
   if (articulated) return articulated.parts;
   if (o.composition?.footprint) o = {...o, composition:{...o.composition, footprint:undefined}};
-  const [w, h, d] = dimensionsOf(o), base = o.transform.position[1] - h / 2, levelCount = v3MassLevelCount(o), levelH = h / levelCount, wall = wallMaterial(o), out: HousePrimitive[] = [];
+  const [w, h, d] = dimensionsOf(o), base = o.transform.position[1] - h / 2, levelCount = v3MassLevelCount(o), storeys = v3MassStoreys(o, scene), levelH = storeys[0].height, wall = wallMaterial(o), out: HousePrimitive[] = [];
   const push = (suffix: string, role: string, lx: number, y: number, lz: number, size: Vec3, material = wall, category: PrimitiveCategory = "wall") => { if (size.every((value) => value > 0)) out.push(boxPart(o, suffix, role, rotated(o, lx, y, lz), size, material, category)); };
-  for (let floor = 0; floor <= levelCount; floor++) push(`slab-${floor + 1}`, "floor slab", 0, base + floor * levelH + (floor === levelCount ? -.13 : .13), 0, [w, .26, d], { id: "concrete", color: "#b8b0a4", roughness: .72, surface: "concrete" }, "floor");
+  for (let floor = 0; floor <= levelCount; floor++) push(`slab-${floor + 1}`, "floor slab", 0, base + (floor === levelCount ? h : storeys[floor].elevation) + (floor === levelCount ? -.13 : .13), 0, [w, .26, d], { id: "concrete", color: "#b8b0a4", roughness: .72, surface: "concrete" }, "floor");
   // V2's expressed floor datum: each intermediate slab edge reads as a band just proud of the facade, so a
   // multi-storey mass reads as stacked floors rather than one tall extruded box.
   for (let floor = 1; floor < levelCount; floor++) {
     // Each band spans 1 cm inside the wall face to `proud` outside; north/south bands wrap the corners.
-    const y = base + floor * levelH, t = SLAB_EDGE.proud + .01, c = (SLAB_EDGE.proud - .01) / 2, long = w + 2 * SLAB_EDGE.proud;
+    const y = base + (floor === levelCount ? h : storeys[floor].elevation), t = SLAB_EDGE.proud + .01, c = (SLAB_EDGE.proud - .01) / 2, long = w + 2 * SLAB_EDGE.proud;
     const slabEdge: V3Material = { id: "slab-edge", color: SLAB_EDGE.color, roughness: .78, surface: "concrete" };
     for (const [side, lx, lz, size] of [["north", 0, -d / 2 - c, [long, SLAB_EDGE.height, t]], ["south", 0, d / 2 + c, [long, SLAB_EDGE.height, t]], ["east", w / 2 + c, 0, [t, SLAB_EDGE.height, d]], ["west", -w / 2 - c, 0, [t, SLAB_EDGE.height, d]]] as const)
       push(`slab-edge-${floor + 1}-${side}`, "floor slab edge", lx, y, lz, [...size] as Vec3, slabEdge, "floor");
   }
-  out.push(...compileV3Composition({ ...o, material: wall, composition: resolvedFacadeComposition(o,w,d,levelH) }, w,d,h,levelCount,storeyBase));
+  out.push(...compileV3Composition({ ...o, material: wall, composition: resolvedFacadeComposition(o,w,d,levelH) }, w,d,h,levelCount,storeyBase,scene));
   if (includeRoof) out.push(...compileRoofForm({ ...o, architecture: undefined, type: "roof-form", dimensions: [w, IMPLICIT_ROOF_THICKNESS, d], transform: { ...o.transform, position: [o.transform.position[0], base + h + IMPLICIT_ROOF_THICKNESS / 2, o.transform.position[2]], scale: [1,1,1] }, roofForm: o.roofForm ?? "flat", overhang: roofOverhang, material: roofMaterial }, wall));
   return out;
 }
@@ -250,15 +251,19 @@ function compilePool(o: V3SceneObject): HousePrimitive[] {
 /** Cut overlapping water basins out of authored walking surfaces, including rotated pools. */
 function compilePoolDeck(o: V3SceneObject, scene: V3Scene): HousePrimitive[] | undefined {
   const [w,h,d] = dimensionsOf(o), top = getObjectTopY(o), base = top - h;
-  const outline: P2[] = [[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(([x,z]) => {
-    const world = rotated(o,x,0,z); return [world[0],world[2]];
-  });
-  let pieces: P2[][] = [outline];
-  for (const pool of scene.objects.filter(candidate => candidate.type === "pool")) {
-    const [pw,ph,pd] = dimensionsOf(pool), rim = pool.architecture ? getObjectTopY(pool) : pool.transform.position[1];
-    if (base > rim + .15 || top < rim - ph) continue;
-    const hole: P2[] = [[-pw/2,-pd/2],[pw/2,-pd/2],[pw/2,pd/2],[-pw/2,pd/2]].map(([x,z]) => { const world = rotated(pool,x,0,z); return [world[0],world[2]]; });
-    pieces = pieces.flatMap(piece => subtractConvex(piece,hole));
+  // Keep legacy rectangular construction byte-identical. Exact boundary cuts
+  // are required only when a new shaped basin/fountain participates.
+  let pieces:P2[][];
+  if(scene.objects.some(p=>p.type==='fountain'||p.type==='pool'&&p.composition?.footprint))pieces=siteSurfaceRegions(o,scene);
+  else {
+    const outline:P2[]=[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(([x,z])=>{const p=rotated(o,x,0,z);return [p[0],p[2]];});
+    pieces=[outline];
+    for(const pool of scene.objects.filter(candidate=>candidate.type==='pool')){
+      const [pw,ph,pd]=dimensionsOf(pool),rim=pool.architecture?getObjectTopY(pool):pool.transform.position[1];
+      if(base>rim+.15||top<rim-ph)continue;
+      const hole:P2[]=[[-pw/2,-pd/2],[pw/2,-pd/2],[pw/2,pd/2],[-pw/2,pd/2]].map(([x,z])=>{const p=rotated(pool,x,0,z);return [p[0],p[2]];});
+      pieces=pieces.flatMap(piece=>subtractConvex(piece,hole));
+    }
   }
   const area = pieces.reduce((sum,piece) => sum + polygonArea(piece),0);
   if (!pieces.length || Math.abs(area-w*d) < 1e-6) return undefined;
@@ -332,6 +337,7 @@ function compileCanopy(o: V3SceneObject): HousePrimitive[] {
 }
 /** Construction functions the capability registry dispatches to. Internal to the V3 compiler. */
 export const v3CompileKit = {
+  compileShapedSiteFeature,
   part, pathRibbon, terrainLine, compilePool, compilePoolDeck, compileBalcony, compileCourtyard, compileLandscapeZone, compileColumnLine, compileRailingRun, compileConnector, compileCanopy, compileBuildingMass,
   compileTerraceSurface: (o: V3SceneObject): HousePrimitive[] => [boxPart(o, "surface", "terrace surface", o.transform.position, dimensionsOf(o), o.material, "patio")],
   compileRoofForm: (o: V3SceneObject, scene: V3Scene, clearedOverhang: number | undefined): HousePrimitive[] => {
@@ -384,8 +390,9 @@ export function compileV3Scene(scene: V3Scene, options: V3CompileOptions = {}): 
     if (route.spatial) route.via.forEach(id=>connectionSurfaceIds.add(id));
     if (!estateRouteSupported(scene, route)) continue;
     const owner = scene.objects.find(o => o.id === route.via[0])!;
+    const unresolved=!!scene.estatePlan?.blueprint && estateRouteObstacles(scene,route).length>0;
     const ribbon: TriMeshPrimitive = {kind:'triMesh',id:`v3-connection-estate:${route.id}`,category:'path',label:`${route.spatial!.use==='pedestrian'?'path':'driveway'} estate:${route.id}`,vertices:estateRouteVertices(scene,route),color:owner.material.color,roughness:owner.material.roughness??.84,metalness:owner.material.metalness??0,surface:'tile'};
-    primitives.push(part(owner, 'estate route surface', ribbon)); connectionSurfaceIds.add(owner.id);
+    primitives.push(part(owner, unresolved?'unresolved route guide':'estate route surface', unresolved?{...ribbon,label:`Unresolved route guide: ${route.id}`,color:'#e6a23c',transparent:true,opacity:.45}:ribbon)); connectionSurfaceIds.add(owner.id);
   }
   const context: V3CompileContext = { scene, terrain, roofOverhangs, roofMaterial, connectionSurfaceIds, rooftopTerraceHosts };
   for (const o of scene.objects) {
@@ -393,7 +400,7 @@ export function compileV3Scene(scene: V3Scene, options: V3CompileOptions = {}): 
     // Registered capabilities compile first; `undefined` (or an unregistered semantic type) uses generic/proxy geometry.
     const scope = options.junctions === false ? undefined : roofScopes.get(o.id);
     const scopedContext = !scope ? context : o.type === 'building-mass' ? { ...context, roofMaterial: compositionRoofMaterial(scope) } : o.type === 'roof-form' ? { ...context, scene: scope } : context;
-    const compiled = v3Capability(o.type)?.compile?.(o, scopedContext);
+    const compiled = compileShapedSiteFeature(o,scene) ?? v3Capability(o.type)?.compile?.(o, scopedContext);
     primitives.push(...(compiled ?? compileGenericGeometry(o, resolveV3Renderable(o).geometryKind)));
   }
   primitives.push(...datum.closures);

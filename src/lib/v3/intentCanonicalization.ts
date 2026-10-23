@@ -105,7 +105,7 @@ function salvageComposition(raw: Rec, id: string, notes: V3GenerationNote[]): Re
     if (v3CompositionSchema.safeParse({ assemblies: [candidate] }).success) keptAssemblies.push(candidate);
     else {keptAssemblies.push(candidate);notes.push({code:"INVALID_COMPOSITION_ENTRY",targetId:id,message:`${id} assembly ${String(assembly.id??"(unnamed)")} is invalid and retained for correction.`});}
   }
-  if (keptAssemblies.length) out.assemblies = keptAssemblies;
+  if (keptAssemblies.length || Array.isArray(raw.assemblies)) out.assemblies = keptAssemblies;
   if (mainEntry && entryId) {
     const canopyDepth = Math.min(6, Math.max(.1, num(mainEntry.canopyDepth) ?? 2.4));
     const color = typeof mainEntry.color === "string" && /^#[0-9a-fA-F]{6}$/.test(mainEntry.color) ? mainEntry.color : undefined;

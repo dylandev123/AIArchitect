@@ -1,0 +1,107 @@
+
+ RUN  v3.2.7 /Users/dylandevaux/Websites/AIArchitect
+
+ ✓ src/lib/v3/__tests__/architecturalPlanAuthoring.test.ts (10 tests) 688ms
+   ✓ compact authoring into existing V3 plan semantics > draws an articulated line/arc estate with room zones and derives its bookkeeping without construction  356ms
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'crescent-estate' without exterior authorship or 3D construction
+[V3 CONFIG] {
+  revision: 1,
+  source: 'ai-plan-evaluation',
+  projectId: '44f45970-5709-4215-82c8-b672f0737687',
+  objectCount: 10
+}
+
+stderr | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'crescent-estate' without exterior authorship or 3D construction
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'rotunda' without exterior authorship or 3D construction
+[V3 CONFIG] {
+  revision: 2,
+  source: 'ai-plan-evaluation',
+  projectId: 'd2e8a97e-f205-4aec-b45e-6a29adaba8d5',
+  objectCount: 3
+}
+
+stderr | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'rotunda' without exterior authorship or 3D construction
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'courtyard-house' without exterior authorship or 3D construction
+[V3 CONFIG] {
+  revision: 3,
+  source: 'ai-plan-evaluation',
+  projectId: '305442a0-a078-4ba2-bda1-e68ce027f0b2',
+  objectCount: 3
+}
+
+stderr | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'courtyard-house' without exterior authorship or 3D construction
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'classical-villa' without exterior authorship or 3D construction
+[V3 CONFIG] {
+  revision: 4,
+  source: 'ai-plan-evaluation',
+  projectId: '9cb4051e-a75a-40ab-827e-0b6176868e71',
+  objectCount: 3
+}
+
+stderr | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > saves 'classical-villa' without exterior authorship or 3D construction
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > edits, saves, reloads, undoes and elaborates the current saved geometry with one separate call
+[V3 CONFIG] {
+  revision: 5,
+  source: 'appendVersion',
+  projectId: '47dd07fc-6c83-439f-a36c-a6c12354ed1d',
+  objectCount: 15
+}
+[V3 CONFIG] {
+  revision: 6,
+  source: 'appendVersion',
+  projectId: '47dd07fc-6c83-439f-a36c-a6c12354ed1d',
+  objectCount: 15
+}
+[V3 CONFIG] {
+  revision: 7,
+  source: 'undo',
+  projectId: '47dd07fc-6c83-439f-a36c-a6c12354ed1d',
+  objectCount: 15
+}
+[V3 CONFIG] {
+  revision: 8,
+  source: 'redo',
+  projectId: '47dd07fc-6c83-439f-a36c-a6c12354ed1d',
+  objectCount: 15
+}
+
+stderr | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > edits, saves, reloads, undoes and elaborates the current saved geometry with one separate call
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+[zustand persist middleware] Unable to update item 'ai-architect-projects', the given storage is currently unavailable.
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > blocks ordinary chat generation and edits against a saved evaluation before any provider call
+[generation] generationMode: v3-scene
+
+stdout | src/app/api/ai/plan/route.test.ts > 2D evaluation with real SDK parsing and offline provider responses > blocks ordinary chat generation and edits against a saved evaluation before any provider call
+[generation] generationMode: v3-scene
+
+ ✓ src/app/api/ai/plan/route.test.ts (24 tests) 4879ms
+   ✓ 2D evaluation with real SDK parsing and offline provider responses > uses the compact production prompt, parses its provider response and preserves its geometry through exterior construction  947ms
+   ✓ 2D evaluation with real SDK parsing and offline provider responses > edits, saves, reloads, undoes and elaborates the current saved geometry with one separate call  866ms
+   ✓ 2D evaluation with real SDK parsing and offline provider responses > blocks ordinary chat generation and edits against a saved evaluation before any provider call  2213ms
+ ✓ src/lib/v3/__tests__/architecturalPlanFirst.test.ts (12 tests) 5788ms
+   ✓ authoritative 2D plan before construction > constructs plan → massing → exterior with one offline author response and exact shared geometry  1472ms
+   ✓ authoritative 2D plan before construction > preserves independently authored 'crescent-estate' topology  862ms
+   ✓ authoritative 2D plan before construction > preserves independently authored 'rotunda' topology  979ms
+   ✓ rebuilds a changed 2D footprint into matching walls and roof without losing other plan identities  1778ms
+
+ Test Files  3 passed (3)
+      Tests  46 passed (46)
+   Start at  16:41:51
+   Duration  6.78s (transform 2.29s, setup 0ms, collect 2.20s, tests 11.35s, environment 0ms, prepare 287ms)
+

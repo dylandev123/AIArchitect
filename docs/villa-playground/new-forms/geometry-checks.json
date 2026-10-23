@@ -1,0 +1,222 @@
+{
+  "providerCalls": 0,
+  "before": [
+    {
+      "path": "wings.main-villa",
+      "message": "Roof/veranda extends outside the garden. Respect the fixed site; revise the composition or explicitly change the site."
+    }
+  ],
+  "after": {
+    "garden": {
+      "x": -1.0749999999999993,
+      "z": -0.45000000000000107,
+      "width": 54.15,
+      "depth": 53.3
+    },
+    "siteMode": "derived",
+    "preserved": {
+      "wings": true,
+      "connections": true,
+      "terraces": true,
+      "pool": true,
+      "appearance": true
+    },
+    "renderedWings": 6
+  },
+  "experimentalStudies": [
+    {
+      "authored": true,
+      "id": "curve-horizon",
+      "name": "Horizon · Curved garden lounge",
+      "character": "An elliptical stone pavilion beside an open modern hall.",
+      "config": {
+        "style": "modern",
+        "composition": "stepped",
+        "scale": 1,
+        "wingRatio": 1,
+        "levels": 2,
+        "exterior": "ivory",
+        "roof": "flat",
+        "glazing": "panoramic",
+        "verandaDepth": 2.2,
+        "terraceDepth": 2.3,
+        "pool": {
+          "enabled": true,
+          "width": 17,
+          "depth": 6.2
+        },
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": -5,
+          "width": 18,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 3.8,
+          "veranda": 2,
+          "balcony": 1.6
+        }
+      ],
+      "terraces": [
+        {
+          "x": 0,
+          "z": 3,
+          "width": 20,
+          "depth": 8,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 9,
+          "z": 12,
+          "width": 4,
+          "depth": 8,
+          "id": "sun-deck",
+          "kind": "terrace",
+          "timber": true
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 12,
+        "width": 12,
+        "depth": 5
+      },
+      "garden": {
+        "x": 4.643884387630029,
+        "z": 3.5,
+        "width": 33.687768775260054,
+        "depth": 30.4
+      },
+      "experimentalForms": [
+        {
+          "id": "round-lounge",
+          "builder": "curved-pavilion@1",
+          "x": 15,
+          "z": 4,
+          "orientation": 25,
+          "width": 8,
+          "depth": 6,
+          "height": 3.5,
+          "material": "limestone"
+        }
+      ]
+    },
+    {
+      "authored": true,
+      "id": "curve-breeze",
+      "name": "Breeze · Rounded retreat",
+      "character": "A smaller ivory pavilion completes the island garden.",
+      "config": {
+        "style": "caribbean",
+        "composition": "pavilions",
+        "scale": 1,
+        "wingRatio": 1,
+        "levels": 2,
+        "exterior": "ivory",
+        "roof": "hip",
+        "glazing": "panoramic",
+        "verandaDepth": 2.8,
+        "terraceDepth": 2.3,
+        "pool": {
+          "enabled": true,
+          "width": 17,
+          "depth": 6.2
+        },
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        },
+        {
+          "id": "breeze-link",
+          "connectionWidth": 2.4,
+          "orientation": 0,
+          "storeys": 1,
+          "storeyHeight": 3.3,
+          "role": "gallery",
+          "connects": [
+            "main",
+            "salon"
+          ],
+          "x": 3.5,
+          "z": -5,
+          "width": 3,
+          "depth": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.5278642595947494,
+        "z": 2.8999999999999995,
+        "width": 37.3557285191895,
+        "depth": 34.1
+      },
+      "experimentalForms": [
+        {
+          "id": "round-lounge",
+          "builder": "curved-pavilion@1",
+          "x": 17,
+          "z": 9,
+          "orientation": 105,
+          "width": 6.5,
+          "depth": 5,
+          "height": 3.2,
+          "material": "ivory"
+        }
+      ]
+    }
+  ]
+}

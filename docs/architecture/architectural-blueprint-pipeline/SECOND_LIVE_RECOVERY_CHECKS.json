@@ -1,0 +1,119 @@
+{
+  "originalRecovered": true,
+  "sourceSha256": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb",
+  "generationId": "520936d4-62b4-4ed2-9f96-f83552b59763",
+  "providerCalls": 0,
+  "paidGenerations": 0,
+  "repairResponsesForRecoveredEstate": 0,
+  "counts": {
+    "buildings": 2,
+    "roofs": 2,
+    "storeys": 3,
+    "rooms": 20,
+    "outdoorFeatures": 4,
+    "connections": 3,
+    "entrances": 2,
+    "facadeOpenings": 9,
+    "verticalCirculation": 1,
+    "partitions": 14,
+    "doors": 10
+  },
+  "outcome": "draft",
+  "compiledPrimitives": 209,
+  "intendedFacadeApertureInstances": 14,
+  "withheldConflictingApertureInstances": 3,
+  "constructedNonconflictingApertureInstances": 11,
+  "checks": [
+    {
+      "command": "npm test -- --run src/lib/v3/__tests__/facadeOpeningRecovery.test.ts src/app/api/ai/house/__tests__/route.architecturalBlueprint.test.ts",
+      "exitCode": 0,
+      "testsPassed": 51
+    },
+    {
+      "command": "npm test -- --maxWorkers=4 --reporter=default --reporter=json --outputFile=/tmp/second-live-suite-verified.json",
+      "exitCode": 0,
+      "testsPassed": 2334,
+      "testsSkipped": 3,
+      "testsFailed": 0,
+      "filesPassed": 188,
+      "filesSkipped": 2
+    },
+    {
+      "command": "npx tsc --noEmit",
+      "exitCode": 0,
+      "log": "/tmp/second-live-types-verified.log"
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "log": "/tmp/second-live-lint-final.log"
+    },
+    {
+      "command": "NEXT_TELEMETRY_DISABLED=1 OPENAI_API_KEY='' npm run build",
+      "exitCode": 0,
+      "log": "/tmp/second-live-build-final.log",
+      "cleanBuild": true,
+      "fontNetworkAccess": true,
+      "providerCalls": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/second-live-blueprint-integration.mjs ORIGINAL OUTPUT INDEPENDENT_OPENING_DRAFT",
+      "exitCode": 0,
+      "manifest": "second-live-production-webgl-verified/capture.json",
+      "actualMountedGeometryVerified": true,
+      "screenshots": 9
+    }
+  ],
+  "productionVerification": {
+    "atomicWritesVerified": true,
+    "isolatedBrowserStorage": true,
+    "unrelatedProjectUnchanged": true,
+    "mansionReloadIdentical": true,
+    "semanticInspectorEdit": {
+      "openingId": "service-window-rhythm",
+      "floors": "upper",
+      "allOtherSemanticsUnchanged": true,
+      "reloadPreserved": true
+    },
+    "mansionRevalidation": "draft",
+    "unrelatedAfterFacadeRefinement": "complete",
+    "completeReloadIdentical": true,
+    "errors": [],
+    "unexpectedRequests": []
+  },
+  "syntaxInvestigation": {
+    "good": "current source parses successfully",
+    "malformedMissingAssemblyLoopBrace": "Error:   x 'import', and 'export' cannot be used outside of module code\n     ,-[footprintConstruction.ts:172:1]\n 169 |  if(includeRoof){const result=compileFootprintRoof(o,{...o,material:roofMaterial,overhang},getObjectBaseY(o)+h,.25);parts.push(...result.parts);diagnostics.push(...result.diagnostics);}\n 170 |  return {parts,diagnostics};\n 171 | }\n 172 | export function compileFootprintRoof(host:V3SceneObject,roof:V3SceneObject,base=getObjectBaseY(roof),thickness=scaledDimensionsOf(roof)[1]):{parts:HousePrimitive[];diagnostics:FootprintDiagnostic[]}{\n     : ^^^^^^\n 173 |  const {fp,rectangular,diagnostics}=resolveV3FootprintRoofPlan(host,roof);\n 174 |  const fail=(code:string,message:string)=>{diagnostics.push({code,targetId:roof.id,message});return {parts:[],diagnostics};};\n 175 |  if(!fp||diagnostics.length)return {parts:[],diagnostics};\n     `----\n\n\nCaused by:\n    Syntax Error",
+    "exactHistoricalSourceUnavailable": true
+  },
+  "remainingDraftCategories": [
+    "facade opening conflict until explicit correction",
+    "room allocations and overlaps",
+    "interior partition boundaries and doors",
+    "reserved zone allocations",
+    "secondary pedestrian route collision",
+    "pool access"
+  ],
+  "paidCallDecision": "NO-GO; no new generation required for recovery or local refinement",
+  "sourceFileHashes": {
+    "src/lib/v3/facadeOpeningRecovery.ts": "b6121e70353200b32103dd765d53ace11ab4741928ead1895d75172cf036e1e8",
+    "src/lib/v3/architecturalBlueprintPreflight.ts": "e40264e5c5414710643ecf4eaba40b15eaaa26d5f3ffdcb601cd46027b4b8fc8",
+    "src/lib/v3/architecturalAcceptance.ts": "1010a98999f2c4a0e09b7ef5a77a8d977beaf9e2495716475d1202e3db6ed254",
+    "src/lib/v3/architecturalBlueprint.ts": "f724936e5853a1c907db80f7a5ce83b56cb6fd8e1846eb31fc7797fcf66c8d72",
+    "src/lib/v3/composition.ts": "57ef314c73ca8018143d10c90d5132c6816591486e3277393e742a59632309b0",
+    "src/lib/v3/footprintConstruction.ts": "05e27abd858f4b13b789151844235ab6328b15aafe6515a9ab00d3cc398e3c6d",
+    "src/lib/v3/estatePlan.ts": "7875223441b3a93085ebd3f1881fc83f21bed57e451975c4ae77dcff0a289be6",
+    "src/lib/v3/routeGeometry.ts": "bd1c2f6ad3d68464bc685462460562c64f8d1abdabb20ce9628f43cc151d93db",
+    "src/lib/v3/scene.ts": "f8db65246dca6a68c1b0e45dc76c4ead9c72363da226c1e02f3efc82bd873887",
+    "src/lib/v3/validation.ts": "b2ff34b444de6d8d1405e25cc2498f6a5040a4719981301f68e3a5c6222d44b5",
+    "src/store/useProjectStore.ts": "f6d8b8398a9a32aa58772002c7311a4a92b2a70064fa61544bee76741ce31474",
+    "src/components/workspace/inspector/V3ObjectInspector.tsx": "9ec568cf5f2ffb5224ac1f06825670d89928e066bdaa6b5f20694b0767c2822b",
+    "src/components/workspace/viewport/house/HouseRenderer.tsx": "af6283ac32458ba45b8cf5ed7126a90f4fbbf481b54510c73a3c201ae2cb566c",
+    "scripts/second-live-blueprint-integration.mjs": "840af2f8564d58f5f438cb93af6882be2491106ba22fe1d52311559f3af54ab1",
+    "src/lib/v3/__tests__/fixtures/architectural-blueprint-live-2026-10-21.json": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb"
+  }
+}

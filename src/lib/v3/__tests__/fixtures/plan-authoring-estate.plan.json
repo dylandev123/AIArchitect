@@ -1,0 +1,498 @@
+{
+  "format": "v3-architectural-plan-1",
+  "concept": "Lantern Garden: a sheltered arrival court, inhabited stone arc and a sequence of quiet garden rooms.",
+  "site": {
+    "width": 130,
+    "depth": 120,
+    "access": [
+      {
+        "id": "north-gate",
+        "boundary": "north",
+        "point": [
+          -3,
+          0,
+          -60
+        ]
+      }
+    ]
+  },
+  "buildings": [
+    {
+      "id": "crescent-house",
+      "label": "Crescent Lantern residence",
+      "location": {
+        "x": 0,
+        "z": 0
+      },
+      "plan": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "arrival-wall",
+            "type": "line",
+            "start": [
+              -18,
+              -10
+            ],
+            "end": [
+              12,
+              -10
+            ]
+          },
+          {
+            "id": "inhabited-arc",
+            "type": "arc",
+            "center": [
+              12,
+              0
+            ],
+            "radius": 10,
+            "startAngle": -90,
+            "sweep": 180
+          },
+          {
+            "id": "garden-wall",
+            "type": "line",
+            "start": [
+              12,
+              10
+            ],
+            "end": [
+              -8,
+              10
+            ]
+          },
+          {
+            "id": "court-return",
+            "type": "line",
+            "start": [
+              -8,
+              10
+            ],
+            "end": [
+              -8,
+              4
+            ]
+          },
+          {
+            "id": "west-wing",
+            "type": "line",
+            "start": [
+              -8,
+              4
+            ],
+            "end": [
+              -18,
+              4
+            ]
+          },
+          {
+            "id": "west-wall",
+            "type": "line",
+            "start": [
+              -18,
+              4
+            ],
+            "end": [
+              -18,
+              -10
+            ]
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "label": "Garden storey",
+          "height": 4,
+          "spaces": [
+            {
+              "label": "Library and stair gallery",
+              "program": "study",
+              "footprint": {
+                "x": -14,
+                "z": -3,
+                "width": 6,
+                "depth": 10
+              }
+            },
+            {
+              "label": "Arrival gallery",
+              "program": "hall",
+              "footprint": {
+                "x": -4,
+                "z": -6,
+                "width": 12,
+                "depth": 6
+              }
+            },
+            {
+              "label": "Garden kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": 5,
+                "z": -6,
+                "width": 6,
+                "depth": 6
+              }
+            },
+            {
+              "label": "Service and powder room",
+              "program": "bathroom",
+              "footprint": {
+                "x": 10,
+                "z": -6,
+                "width": 4,
+                "depth": 6
+              }
+            },
+            {
+              "label": "Garden salon and dining",
+              "program": "living",
+              "footprint": {
+                "x": 4,
+                "z": 3,
+                "width": 20,
+                "depth": 10
+              }
+            }
+          ]
+        },
+        {
+          "label": "Private storey",
+          "height": 4,
+          "spaces": [
+            {
+              "label": "West retreat and stair hall",
+              "program": "study",
+              "footprint": {
+                "x": -14,
+                "z": -3,
+                "width": 6,
+                "depth": 10
+              }
+            },
+            {
+              "label": "Upper gallery",
+              "program": "hall",
+              "footprint": {
+                "x": -1,
+                "z": -2,
+                "width": 20,
+                "depth": 2
+              }
+            },
+            {
+              "label": "Arc suite",
+              "program": "bedroom",
+              "footprint": {
+                "x": 4,
+                "z": 4,
+                "width": 16,
+                "depth": 10
+              }
+            },
+            {
+              "label": "Family bath and dressing",
+              "program": "bathroom",
+              "footprint": {
+                "x": 10,
+                "z": -6,
+                "width": 6,
+                "depth": 6
+              }
+            },
+            {
+              "label": "North dressing room",
+              "program": "dressing",
+              "footprint": {
+                "x": -2,
+                "z": -6,
+                "width": 18,
+                "depth": 6
+              }
+            }
+          ]
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "house-entry",
+          "type": "door",
+          "facade": "north",
+          "segmentId": "arrival-wall",
+          "start": 0.45,
+          "end": 0.55,
+          "height": 3
+        },
+        {
+          "id": "garden-door",
+          "type": "glazed-door",
+          "facade": "south",
+          "segmentId": "garden-wall",
+          "start": 0.25,
+          "end": 0.45,
+          "height": 3,
+          "operation": "sliding"
+        }
+      ]
+    },
+    {
+      "id": "orchard-atelier",
+      "label": "Orchard atelier",
+      "location": {
+        "x": -36,
+        "z": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 12,
+        "depth": 10
+      },
+      "storeys": [
+        {
+          "label": "Atelier floor",
+          "height": 3.6,
+          "spaces": [
+            {
+              "label": "Orchard studio",
+              "program": "studio",
+              "footprint": {
+                "x": 0,
+                "z": 0,
+                "width": 10,
+                "depth": 8
+              }
+            }
+          ]
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "atelier-entry",
+          "type": "door",
+          "facade": "north",
+          "start": 0.4,
+          "end": 0.6,
+          "height": 2.7
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "arrival-court",
+      "label": "Lawn court with limestone perimeter",
+      "type": "courtyard",
+      "location": {
+        "x": -3,
+        "z": -27
+      },
+      "width": 24,
+      "depth": 12,
+      "height": 0.14
+    },
+    {
+      "id": "pool-deck",
+      "label": "Deep timber pool belvedere",
+      "type": "terrace",
+      "location": {
+        "x": 5,
+        "z": 34
+      },
+      "width": 26,
+      "depth": 26,
+      "height": 0.12
+    },
+    {
+      "id": "long-pool",
+      "label": "Long water garden",
+      "type": "pool",
+      "location": {
+        "x": 5,
+        "z": 39,
+        "baseElevation": -1.4
+      },
+      "width": 18,
+      "depth": 12,
+      "height": 1.4
+    },
+    {
+      "id": "orchard",
+      "label": "Quiet orchard clearing",
+      "type": "landscape-zone",
+      "location": {
+        "x": -35,
+        "z": 29
+      },
+      "width": 24,
+      "depth": 25,
+      "height": 0.12
+    },
+    {
+      "id": "poolside-shade",
+      "label": "Slatted poolside room",
+      "type": "canopy",
+      "location": {
+        "x": 5,
+        "z": 27,
+        "baseElevation": 0.12
+      },
+      "width": 10,
+      "depth": 6,
+      "height": 3.2
+    },
+    {
+      "id": "east-garden",
+      "label": "East garden clearing",
+      "type": "landscape-zone",
+      "location": {
+        "x": 38,
+        "z": 4
+      },
+      "width": 18,
+      "depth": 34,
+      "height": 0.12
+    },
+    {
+      "id": "arrival-shade",
+      "label": "Arrival garden shelter",
+      "type": "canopy",
+      "location": {
+        "x": 19,
+        "z": -27,
+        "baseElevation": 0.14
+      },
+      "width": 8,
+      "depth": 10,
+      "height": 3.3
+    },
+    {
+      "id": "arrival-shade-floor",
+      "label": "Arrival shelter paving",
+      "type": "terrace",
+      "location": {
+        "x": 19,
+        "z": -27
+      },
+      "width": 9,
+      "depth": 11,
+      "height": 0.14
+    }
+  ],
+  "connections": [
+    {
+      "purpose": "North gate to arrival court",
+      "from": {
+        "kind": "site-access",
+        "accessId": "north-gate"
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          0,
+          -6
+        ]
+      },
+      "use": "vehicle",
+      "width": 5
+    },
+    {
+      "purpose": "Court to principal gallery",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          0,
+          6
+        ]
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "house-entry",
+        "approachDistance": 3
+      },
+      "use": "pedestrian",
+      "width": 2.8
+    },
+    {
+      "purpose": "Sheltered arrival to orchard atelier",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          -10,
+          0
+        ]
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "atelier-entry",
+        "approachDistance": 3
+      },
+      "use": "pedestrian",
+      "width": 1.8,
+      "waypoints": [
+        [
+          -36,
+          0,
+          -27
+        ]
+      ]
+    },
+    {
+      "purpose": "Salon to dry pool belvedere",
+      "from": {
+        "kind": "entrance",
+        "entranceId": "garden-door",
+        "approachDistance": 3
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "pool-deck",
+        "local": [
+          0,
+          -13
+        ]
+      },
+      "use": "pedestrian",
+      "width": 2
+    },
+    {
+      "purpose": "Arrival court to sheltered garden room",
+      "from": {
+        "kind": "surface",
+        "objectId": "arrival-court",
+        "local": [
+          12,
+          0
+        ]
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "arrival-shade-floor",
+        "local": [
+          -4.5,
+          0
+        ]
+      },
+      "use": "pedestrian",
+      "width": 2
+    }
+  ],
+  "verticalCirculation": [
+    {
+      "id": "library-stair",
+      "type": "stair",
+      "hostMassId": "crescent-house",
+      "fromLevel": 0,
+      "toLevel": 1,
+      "footprint": {
+        "x": -14,
+        "z": -3,
+        "width": 1.6,
+        "depth": 8
+      }
+    }
+  ]
+}

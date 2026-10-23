@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-22",
+  "route": "/dev/villa-playground",
+  "benchmark": "Original TropicalVilla and default grounds retained",
+  "validation": {
+    "typecheck": "passed: next typegen && tsc --noEmit",
+    "lint": "passed: focused source, tests and scripts",
+    "tests": {
+      "passed": 83,
+      "files": 7,
+      "fullRepositorySuiteRun": false
+    }
+  },
+  "browser": {
+    "styles": [
+      {
+        "style": "modern",
+        "meshes": 588,
+        "views": [
+          "Poolside",
+          "Arrival",
+          "Garden",
+          "Above"
+        ],
+        "moods": [
+          "Daylight",
+          "Golden hour"
+        ]
+      },
+      {
+        "style": "caribbean",
+        "meshes": 863,
+        "views": [
+          "Poolside",
+          "Arrival",
+          "Garden",
+          "Above"
+        ],
+        "moods": [
+          "Daylight",
+          "Golden hour"
+        ]
+      },
+      {
+        "style": "spanish",
+        "meshes": 980,
+        "views": [
+          "Poolside",
+          "Arrival",
+          "Garden",
+          "Above"
+        ],
+        "moods": [
+          "Daylight",
+          "Golden hour"
+        ]
+      },
+      {
+        "style": "tuscan",
+        "meshes": 897,
+        "views": [
+          "Poolside",
+          "Arrival",
+          "Garden",
+          "Above"
+        ],
+        "moods": [
+          "Daylight",
+          "Golden hour"
+        ]
+      }
+    ],
+    "errors": [],
+    "controls": "controls-checks.json",
+    "additionalOneLevelVariants": 5
+  },
+  "terra": {
+    "live": true,
+    "model": "gpt-5.6-terra",
+    "browserRequests": 2,
+    "providerCallsPerRequest": [
+      1,
+      1
+    ],
+    "manualMaterialPreservedByAi": true,
+    "unrelatedComponentsPreserved": true,
+    "projectStorageUnchanged": true,
+    "errors": []
+  },
+  "constraints": {
+    "v3WorkflowsChanged": false,
+    "newAgents": false,
+    "newDependencies": false,
+    "databaseMigrations": false,
+    "commits": false,
+    "deployment": false
+  }
+}

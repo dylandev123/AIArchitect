@@ -1,0 +1,165 @@
+{
+  "providerCalls": 0,
+  "baseline": "Working tree at start of this task, not git HEAD",
+  "before": {
+    "schemaBytes": 20883,
+    "schema": {
+      "properties": 279,
+      "required": 200,
+      "objects": 48,
+      "alternatives": 21
+    },
+    "requiredRoot": [
+      "concept",
+      "character",
+      "site",
+      "entrances",
+      "verticalCirculation",
+      "requirements",
+      "program",
+      "format",
+      "buildings",
+      "features",
+      "connections"
+    ],
+    "promptCharacters": 22454,
+    "fixture": {
+      "minifiedBytes": 9495,
+      "fields": 481,
+      "estimatedTokensAtFourChars": 2374
+    }
+  },
+  "after": {
+    "schemaBytes": 13139,
+    "schemaInlineBytes": 16574,
+    "schema": {
+      "properties": 225,
+      "required": 143,
+      "objects": 40,
+      "alternatives": 21
+    },
+    "requiredRoot": [
+      "format",
+      "concept",
+      "site",
+      "buildings"
+    ],
+    "promptCharacters": 15570,
+    "fixture": {
+      "minifiedBytes": 5023,
+      "fields": 307,
+      "estimatedTokensAtFourChars": 1256
+    }
+  },
+  "geometry": [
+    {
+      "floor": null,
+      "equal": true
+    },
+    {
+      "floor": 0,
+      "equal": true
+    },
+    {
+      "floor": 1,
+      "equal": true
+    }
+  ],
+  "checkoutAfterReload": true,
+  "histories": [
+    {
+      "file": "src/lib/v3/__tests__/fixtures/architectural-blueprint-live-2026-10-20.json",
+      "sha256": "f489d79d6830a9787ae173fdd012a459b36edbc93b638219f94bc454dbb1e394",
+      "buildings": [
+        {
+          "id": "main-villa",
+          "kind": "rectangle",
+          "storeys": 2,
+          "rooms": 13
+        },
+        {
+          "id": "guest-pavilion",
+          "kind": "rectangle",
+          "storeys": 1,
+          "rooms": 4
+        }
+      ],
+      "fullAccepted": true,
+      "fullCodes": {
+        "ARCHITECTURAL_DOOR_CLIPPED": 1,
+        "ARCHITECTURAL_IDENTITY_NORMALIZED": 4,
+        "BLUEPRINT_RELATIONSHIP_UNVERIFIED": 2,
+        "BLUEPRINT_SPACE_OUTSIDE_HOST": 8,
+        "BLUEPRINT_SPACE_OVERLAP": 5,
+        "DOOR_BOUNDARY_UNRESOLVED": 6,
+        "ESTATE_ACCESS_MISSING": 2,
+        "ESTATE_ALLOCATION_CONFLICT": 9,
+        "ESTATE_REQUIREMENT_UNVERIFIED": 2,
+        "ESTATE_ROUTE_BLOCKED": 1,
+        "PARTITION_BOUNDARY_UNRESOLVED": 7
+      },
+      "planAccepted": true,
+      "planCodes": {
+        "BLUEPRINT_REFERENCE": 2,
+        "BLUEPRINT_RELATIONSHIP_UNVERIFIED": 2,
+        "BLUEPRINT_SPACE_OUTSIDE_HOST": 8,
+        "BLUEPRINT_SPACE_OVERLAP": 5,
+        "ESTATE_ACCESS_MISSING": 2,
+        "ESTATE_ALLOCATION_CONFLICT": 9,
+        "ESTATE_REQUIREMENT_UNVERIFIED": 2,
+        "ESTATE_ROUTE_BLOCKED": 1,
+        "ROOM_ADJACENCY_NO_SHARED_BOUNDARY": 7
+      },
+      "legacyExpansionIdentical": true
+    },
+    {
+      "file": "src/lib/v3/__tests__/fixtures/architectural-blueprint-live-2026-10-21.json",
+      "sha256": "b78f82e1b55e0ce9e78b01e40f2a4b0ed8d4841ac3e86f1b6b96923887fb94bb",
+      "buildings": [
+        {
+          "id": "main-villa",
+          "kind": "rectangle",
+          "storeys": 2,
+          "rooms": 15
+        },
+        {
+          "id": "guest-pavilion",
+          "kind": "rectangle",
+          "storeys": 1,
+          "rooms": 5
+        }
+      ],
+      "fullAccepted": true,
+      "fullCodes": {
+        "ARCHITECTURAL_DOOR_CLIPPED": 1,
+        "ARCHITECTURAL_OPENING_OVERLAP": 2,
+        "BLUEPRINT_RELATIONSHIP_UNVERIFIED": 1,
+        "BLUEPRINT_SPACE_OUTSIDE_HOST": 9,
+        "BLUEPRINT_SPACE_OVERLAP": 7,
+        "DOOR_BOUNDARY_UNRESOLVED": 7,
+        "DOOR_OUTSIDE_BOUNDARY": 1,
+        "ESTATE_ACCESS_MISSING": 1,
+        "ESTATE_ALLOCATION_CONFLICT": 7,
+        "ESTATE_REQUIREMENT_UNVERIFIED": 2,
+        "ESTATE_ROUTE_BLOCKED": 1,
+        "PARTITION_BOUNDARY_UNRESOLVED": 9
+      },
+      "planAccepted": true,
+      "planCodes": {
+        "BLUEPRINT_REFERENCE": 2,
+        "BLUEPRINT_RELATIONSHIP_UNVERIFIED": 1,
+        "BLUEPRINT_SPACE_OUTSIDE_HOST": 9,
+        "BLUEPRINT_SPACE_OVERLAP": 7,
+        "ESTATE_ACCESS_MISSING": 1,
+        "ESTATE_ALLOCATION_CONFLICT": 7,
+        "ESTATE_MISSING_OBJECT": 2,
+        "ESTATE_REQUIREMENT_UNVERIFIED": 2,
+        "ESTATE_ROUTE_BLOCKED": 1,
+        "ROOM_ADJACENCY_NO_SHARED_BOUNDARY": 10
+      },
+      "legacyExpansionIdentical": true
+    }
+  ],
+  "estimateCaveat": "Character/4 estimates, not model tokenization or a prediction of natural response length. Fixture adaptation also removes optional intent ledgers; not all savings are construction bookkeeping.",
+  "fixtureProvenance": "Separately adapted offline Lantern Garden example, not a natural Terra response or runtime template."
+}

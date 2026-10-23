@@ -1,7 +1,9 @@
 import type { V3Scene, V3SceneObject } from "./scene";
 import { materializeV3ArchitecturalObject } from "./architecture";
 import { getObjectBaseY, scaledDimensionsOf } from "./elevation";
+import { v3MassStoreys } from './stacking';
 import { v3HostClassOf } from "./capabilities";
+import { footprintContains } from './footprint';
 
 /**
  * Semantic interior: authored storeys and rooms. Both are datums, never scene objects, so the exterior compiler
@@ -148,8 +150,14 @@ export function resolveV3Storey(scene: V3Scene, storeyId: string): V3ResolvedSto
   const storey = scene.interior?.storeys.find((candidate) => candidate.id === storeyId);
   const host = storey && hostOf(scene, storey.hostMassId);
   if (!storey || !host) return undefined;
-  const floorY = getObjectBaseY(materializeV3ArchitecturalObject(host)) + storey.elevation;
-  return { storey, host, floorY, ceilingY: floorY + storey.height };
+  const canonical=materializeV3ArchitecturalObject(host),base=getObjectBaseY(canonical),layout=v3MassStoreys(canonical,scene),datum=layout[storey.index];
+  const floorY = base + storey.elevation;
+  // Complete architectural stacks specify floor-to-floor height. Partitions
+  // meet the underside of the next slab, or the roof slab on the top storey.
+  // Legacy room overlays keep their historical ceiling behavior.
+  const controlsExterior=datum&&Math.abs(datum.elevation+.26-storey.elevation)<1e-7&&Math.abs(datum.height-storey.height)<1e-7;
+  const ceilingY=controlsExterior?base+Math.min(datum.elevation+datum.height,scaledDimensionsOf(canonical)[1]-.26):floorY+storey.height;
+  return { storey, host, floorY, ceilingY };
 }
 
 /** The only way a room acquires world elevation: through its storey, which is anchored to its host mass. */
@@ -242,7 +250,12 @@ function expectedPartitionBoundaryIds(partition: V3Partition): string[] {
 /** Resolves a partition's boundary segment, or undefined when its rooms no longer form that boundary. */
 export function resolveV3PartitionBoundary(scene: V3Scene, partitionId: string, boundaries = deriveV3RoomBoundaries(scene)): V3RoomBoundary | undefined {
   const partition = scene.interior?.partitions?.find((candidate) => candidate.id === partitionId);
-  return partition && boundaries.find((boundary) => boundary.id === partition.boundaryId && expectedPartitionBoundaryIds(partition).includes(boundary.id));
+  if (!partition) return;
+  const exact = boundaries.find(boundary => boundary.id === partition.boundaryId && expectedPartitionBoundaryIds(partition).includes(boundary.id));
+  if (exact || partition.roomBId === null || partition.boundaryId.startsWith('boundary:')) return exact;
+  // A designer's boundary label is an alias. Two named rectangular rooms can
+  // have only one shared segment; derive it from the existing boundary resolver.
+  return boundaries.find(boundary => boundary.id === v3SharedBoundaryId(partition.roomAId, partition.roomBId!));
 }
 const footprintOverlapArea = (a: V3RoomFootprint, b: V3RoomFootprint) => Math.max(0, intervalOverlap(a.x - a.width / 2, a.x + a.width / 2, b.x - b.width / 2, b.x + b.width / 2)) * Math.max(0, intervalOverlap(a.z - a.depth / 2, a.z + a.depth / 2, b.z - b.depth / 2, b.z + b.depth / 2));
 
@@ -267,7 +280,7 @@ export function auditV3Interior(scene: V3Scene): V3InteriorIssue[] {
     if (!host) { issue("fatal", "MISSING_STOREY_HOST", storey.id, `Storey ${storey.id} references missing host mass ${storey.hostMassId}.`); continue; }
     if (v3HostClassOf(host.type) !== "mass") issue("fatal", "STOREY_HOST_NOT_MASS", storey.id, `Storey ${storey.id} host ${host.id} is not a building mass.`);
     const hostHeight = scaledDimensionsOf(materializeV3ArchitecturalObject(host))[1];
-    if (storey.elevation < -EPSILON || storey.elevation + storey.height > hostHeight + EPSILON) issue("advisory", "STOREY_OUTSIDE_HOST", storey.id, `Storey ${storey.id} (${storey.elevation}–${storey.elevation + storey.height}m) exceeds host ${host.id} height ${hostHeight}m.`);
+    if (storey.elevation < -EPSILON || (resolveV3Storey(scene,storey.id)!.ceilingY-getObjectBaseY(materializeV3ArchitecturalObject(host))) > hostHeight + EPSILON) issue("advisory", "STOREY_OUTSIDE_HOST", storey.id, `Storey ${storey.id} (${storey.elevation}–${storey.elevation + storey.height}m) exceeds host ${host.id} height ${hostHeight}m.`);
   }
   const byHost = new Map<string, V3Storey[]>();
   for (const storey of storeys.values()) byHost.set(storey.hostMassId, [...(byHost.get(storey.hostMassId) ?? []), storey]);
@@ -290,7 +303,8 @@ export function auditV3Interior(scene: V3Scene): V3InteriorIssue[] {
     const host = hostOf(scene, room.hostMassId);
     if (!host) continue;
     const [width, , depth] = scaledDimensionsOf(materializeV3ArchitecturalObject(host));
-    if (Math.abs(f.x) + f.width / 2 > width / 2 + EPSILON || Math.abs(f.z) + f.depth / 2 > depth / 2 + EPSILON) issue("advisory", "ROOM_OUTSIDE_HOST", room.id, `Room ${room.id} footprint extends beyond host ${host.id}.`);
+    const corners:[number,number][]=[[f.x-f.width/2,f.z-f.depth/2],[f.x+f.width/2,f.z-f.depth/2],[f.x+f.width/2,f.z+f.depth/2],[f.x-f.width/2,f.z+f.depth/2]];
+    if (Math.abs(f.x) + f.width / 2 > width / 2 + EPSILON || Math.abs(f.z) + f.depth / 2 > depth / 2 + EPSILON || !footprintContains(materializeV3ArchitecturalObject(host),corners,storey.index)) issue("advisory", "ROOM_OUTSIDE_HOST", room.id, `Room ${room.id} footprint extends beyond the actual host ${host.id} storey footprint.`);
   }
   const perStorey = new Map<string, V3Room[]>();
   for (const room of rooms.values()) perStorey.set(room.storeyId, [...(perStorey.get(room.storeyId) ?? []), room]);
@@ -335,11 +349,11 @@ function auditPartitionsAndDoors(scene: V3Scene, storeys: Map<string, V3Storey>,
     if (partition.roomAId === partition.roomBId) { fail("INVALID_PARTITION", `Partition ${partition.id} must join two different rooms.`); continue; }
     const offStorey = roomIds.find((id) => rooms.get(id)!.storeyId !== partition.storeyId);
     if (offStorey) { fail("PARTITION_STOREY_MISMATCH", `Partition ${partition.id} room ${offStorey} is not on storey ${partition.storeyId}.`); continue; }
-    if (!expectedPartitionBoundaryIds(partition).includes(partition.boundaryId)) { fail("PARTITION_BOUNDARY_MISMATCH", `Partition ${partition.id} boundary ${partition.boundaryId} is not a boundary of its rooms.`); continue; }
-    const owner = boundaryOwners.get(partition.boundaryId);
+    if (!expectedPartitionBoundaryIds(partition).includes(partition.boundaryId) && (partition.roomBId === null || partition.boundaryId.startsWith("boundary:"))) { fail("PARTITION_BOUNDARY_MISMATCH", `Partition ${partition.id} boundary ${partition.boundaryId} is not a boundary of its rooms.`); continue; }
+    const boundary = resolveV3PartitionBoundary(scene, partition.id, [...boundaries.values()]);
+    const owner = boundaryOwners.get(boundary?.id ?? partition.boundaryId);
     if (owner) { fail("DUPLICATE_PARTITION_BOUNDARY", `Partitions ${owner} and ${partition.id} both claim boundary ${partition.boundaryId}.`); continue; }
-    boundaryOwners.set(partition.boundaryId, partition.id);
-    const boundary = boundaries.get(partition.boundaryId);
+    boundaryOwners.set(boundary?.id ?? partition.boundaryId, partition.id);
     partitions.set(partition.id, boundary);
     if (!boundary) issue("physical", "PARTITION_BOUNDARY_UNRESOLVED", partition.id, partition.roomBId === null
       ? `Partition ${partition.id}: room ${partition.roomAId} no longer has exterior boundary ${partition.boundaryId}.`

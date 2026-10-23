@@ -36,6 +36,27 @@ describe("V3 initial client request", () => {
     expect(useV3FailedPreviewStore.getState().candidate).toBeNull();
   });
 
+  it('applies and persists an editable draft with its outcome, then keeps revision protection',async()=>{
+    const {useProjectStore,requestHouseEdit}=await load();
+    const {fullPropertyBlueprint}=await import('@/lib/v3/parity/fullPropertyBlueprint');
+    const {planV3ArchitecturalBlueprint,constructV3ArchitecturalBlueprint}=await import('@/lib/v3/architecturalBlueprint');
+    const bp=fullPropertyBlueprint();bp.doors[0].offset=.1;
+    const built=constructV3ArchitecturalBlueprint(planV3ArchitecturalBlueprint(bp,{buildFirst:true}).approval!);
+    const project=useProjectStore.getState().createProject('Draft client','house','v3-scene');
+    const response={summary:'Draft — Needs Refinement',outcome:'draft',json:JSON.stringify({...BLANK_V3_SCENE,v3Scene:built.scene})};
+    vi.stubGlobal('fetch',vi.fn().mockImplementation(async()=>new Response(JSON.stringify(response),{status:200,headers:{'Content-Type':'application/json','x-ai-architect-resolved-mode':'v3-scene'}})));
+    const result=await requestHouseEdit({projectId:project.id,prompt:'A complete estate',apply:(summary,json,writer)=>useProjectStore.getState().appendVersion(project.id,summary,json,writer)});
+    expect(result).toMatchObject({ok:true,generated:true,outcome:'draft'});
+    expect(JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson).v3Scene.metadata.architecturalValidation.status).toBe('draft');
+    const second=useProjectStore.getState().createProject('Concurrent draft client','house','v3-scene'),apply=vi.fn();
+    vi.stubGlobal('fetch',vi.fn().mockImplementation(async()=>{
+      useProjectStore.getState().appendVersion(second.id,'Concurrent edit',JSON.stringify({...BLANK_V3_SCENE,v3Scene:{...BLANK_V3_SCENE.v3Scene,metadata:{brief:'A concurrent edit'}}}));
+      return new Response(JSON.stringify(response),{status:200,headers:{'Content-Type':'application/json'}});
+    }));
+    expect(await requestHouseEdit({projectId:second.id,prompt:'An estate',apply})).toMatchObject({ok:false,stale:true});
+    expect(apply).not.toHaveBeenCalled();
+  });
+
   it("sends the persisted V3 mode and V3 root, then preserves V3 on commit", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
     const project = useProjectStore.getState().createProject("V3 mansion", "house", "v3-scene");

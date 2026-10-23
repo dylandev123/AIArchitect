@@ -1,0 +1,215 @@
+{
+  "concept": "OFFLINE REFERENCE — A Caribbean vernacular veranda house with a simple pitched metal roof. A shaded south veranda and a continuous entry gallery face the garden, while the living room separates the private bedroom/bath from kitchen and utility. The style is carried by the veranda, low roof and shaded openings, without imitating a mansion.",
+  "site": {
+    "width": 64,
+    "depth": 48,
+    "baseElevation": 0,
+    "groundColor": "#61754b",
+    "north": "-z",
+    "access": [
+      {
+        "id": "veranda-gate",
+        "boundary": "south",
+        "point": [
+          0,
+          0,
+          24
+        ]
+      }
+    ]
+  },
+  "verticalCirculation": [],
+  "requirements": [],
+  "relationships": [],
+  "roomAdjacencies": [
+    {
+      "from": "veranda-gallery",
+      "to": "veranda-salon"
+    },
+    {
+      "from": "veranda-gallery",
+      "to": "veranda-bedroom"
+    },
+    {
+      "from": "veranda-gallery",
+      "to": "veranda-kitchen"
+    },
+    {
+      "from": "veranda-bedroom",
+      "to": "veranda-bath"
+    },
+    {
+      "from": "veranda-kitchen",
+      "to": "veranda-utility"
+    }
+  ],
+  "format": "v3-architectural-plan-1",
+  "buildings": [
+    {
+      "id": "veranda-home",
+      "label": "Caribbean veranda home",
+      "role": "Caribbean veranda home",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "rectangle",
+        "width": 16,
+        "depth": 12
+      },
+      "storeys": [
+        {
+          "id": "veranda-floor",
+          "label": "Veranda and garden floor",
+          "role": "Veranda and garden floor",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "veranda-gallery",
+              "label": "veranda gallery",
+              "role": "veranda gallery",
+              "program": "entry circulation gallery",
+              "footprint": {
+                "x": 0,
+                "z": 5,
+                "width": 16,
+                "depth": 2
+              }
+            },
+            {
+              "id": "veranda-salon",
+              "label": "veranda salon",
+              "role": "veranda salon",
+              "program": "living dining",
+              "footprint": {
+                "x": 0,
+                "z": -1,
+                "width": 8,
+                "depth": 10
+              }
+            },
+            {
+              "id": "veranda-bedroom",
+              "label": "veranda bedroom",
+              "role": "veranda bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": -6,
+                "z": 1,
+                "width": 4,
+                "depth": 6
+              }
+            },
+            {
+              "id": "veranda-bath",
+              "label": "veranda bath",
+              "role": "veranda bath",
+              "program": "bathroom dressing",
+              "footprint": {
+                "x": -6,
+                "z": -4,
+                "width": 4,
+                "depth": 4
+              }
+            },
+            {
+              "id": "veranda-kitchen",
+              "label": "veranda kitchen",
+              "role": "veranda kitchen",
+              "program": "kitchen",
+              "footprint": {
+                "x": 6,
+                "z": 1,
+                "width": 4,
+                "depth": 6
+              }
+            },
+            {
+              "id": "veranda-utility",
+              "label": "veranda utility",
+              "role": "veranda utility",
+              "program": "utility pantry",
+              "footprint": {
+                "x": 6,
+                "z": -4,
+                "width": 4,
+                "depth": 4
+              }
+            }
+          ]
+        }
+      ],
+      "accessOpenings": [
+        {
+          "id": "veranda-entry",
+          "facade": "south",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.45,
+          "end": 0.55,
+          "height": 2.4,
+          "serves": "veranda-gallery"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "veranda-deck",
+      "label": "Shaded veranda floor",
+      "role": "Shaded veranda floor",
+      "type": "terrace",
+      "location": {
+        "x": 0,
+        "z": 8,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 16,
+      "depth": 4
+    }
+  ],
+  "connections": [
+    {
+      "id": "veranda-arrival",
+      "purpose": "Garden gate to veranda",
+      "from": {
+        "kind": "site-access",
+        "accessId": "veranda-gate"
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "veranda-deck",
+        "local": [
+          0,
+          2
+        ]
+      },
+      "use": "pedestrian",
+      "width": 1.4,
+      "waypoints": []
+    },
+    {
+      "id": "veranda-entry-link",
+      "purpose": "Veranda to entry gallery",
+      "from": {
+        "kind": "surface",
+        "objectId": "veranda-deck",
+        "local": [
+          0,
+          1
+        ]
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "veranda-entry"
+      },
+      "use": "pedestrian",
+      "width": 1.4,
+      "waypoints": []
+    }
+  ]
+}

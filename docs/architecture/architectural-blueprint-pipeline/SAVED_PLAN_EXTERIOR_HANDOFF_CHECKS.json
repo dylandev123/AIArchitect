@@ -1,0 +1,129 @@
+{
+  "verification": "offline-only",
+  "projectId": "66268256-7784-4d7d-8d44-002b6f5303d1",
+  "retainedExportSha256": "7c8c03b5b66d94274c405dc233051bc9f8e211600fb2e7080e95658ac4282a52",
+  "sourceResponseSha256": "9591e1203eb1b81f33d35fb709c31b14e982bfa002fb75ceb432e3869e2877fd",
+  "savedPlan": {
+    "buildings": [
+      {
+        "id": "main-house",
+        "location": {
+          "x": 7,
+          "z": -10,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "plan": {
+          "kind": "articulated",
+          "width": 58,
+          "depth": 34,
+          "operations": [
+            {
+              "id": "arrival-recess",
+              "type": "entry-recess",
+              "facade": "south",
+              "width": 8,
+              "depth": 3
+            },
+            {
+              "id": "east-loggia",
+              "facade": "north",
+              "start": 0.78,
+              "end": 0.94,
+              "depth": 3,
+              "open": true,
+              "postSpacing": 3,
+              "type": "recess"
+            }
+          ]
+        }
+      },
+      {
+        "id": "guest-pavilion",
+        "location": {
+          "x": -39,
+          "z": -10,
+          "baseElevation": 0,
+          "rotationY": 0
+        },
+        "plan": {
+          "kind": "rectangle",
+          "width": 24,
+          "depth": 20
+        }
+      }
+    ],
+    "rooms": 19,
+    "features": 7,
+    "routes": [
+      "arrival-route",
+      "guest-walk",
+      "pool-walk"
+    ],
+    "unresolved": [],
+    "missingFeatureHeightsDelegatedToTerra": 7,
+    "blockers": [
+      {
+        "code": "BLUEPRINT_SITE_BOUNDS",
+        "severity": "fatal",
+        "targetIds": [
+          "pool-garden"
+        ],
+        "message": "pool-garden, level 0 exceeds the fixed 140 × 120m site."
+      },
+      {
+        "code": "BLUEPRINT_ENTRANCE_WALL",
+        "severity": "fatal",
+        "targetIds": [
+          "main-house",
+          "primary-loggia-door"
+        ],
+        "message": "main-house-primary-loggia-door-entry must fit one actual wall segment; its span crosses or ambiguously addresses wall planes."
+      }
+    ],
+    "planUnchanged": true
+  },
+  "mockBuild": {
+    "outcome": "complete",
+    "planPreserved": true,
+    "authoredFeatureHeights": [
+      {
+        "id": "arrival-court",
+        "height": 0.14
+      },
+      {
+        "id": "pool-deck",
+        "height": 0.12
+      },
+      {
+        "id": "long-pool",
+        "height": 1.4
+      },
+      {
+        "id": "orchard",
+        "height": 0.12
+      },
+      {
+        "id": "poolside-shade",
+        "height": 3.2
+      },
+      {
+        "id": "east-garden",
+        "height": 0.12
+      },
+      {
+        "id": "arrival-shade",
+        "height": 3.3
+      },
+      {
+        "id": "arrival-shade-floor",
+        "height": 0.14
+      }
+    ],
+    "primitives": 193
+  },
+  "liveProviderCalls": 0,
+  "credentialsChanged": false,
+  "browserProjectWrites": false,
+  "limitation": "The saved paid estate is still blocked by its site-boundary overrun and entrance wall address. Mock exterior success establishes construction and plan fidelity, not live design quality or completion of that estate."
+}

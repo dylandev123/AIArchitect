@@ -1,0 +1,280 @@
+{
+  "provenance": "one live Terra request via the actual evaluation UI",
+  "prompt": "Design a modest single-storey home for a writer on a flat 30 by 30 metre site. A sheltered outdoor reading court should shape the architecture. Keep the composition compact and thoughtful, with no pool or guest house. Choose the geometry and roof that best express the idea.",
+  "status": 200,
+  "body": {
+    "scene": {
+      "version": 3,
+      "site": {
+        "width": 30,
+        "depth": 30,
+        "baseElevation": 0,
+        "groundMaterial": {
+          "id": "concept-ground",
+          "color": "#b6b9ad",
+          "roughness": 1
+        }
+      },
+      "objects": [
+        {
+          "id": "writer-house",
+          "label": "Writer's House",
+          "semanticRole": "Compact single-storey home enclosing a sheltered outdoor reading court",
+          "type": "building-mass",
+          "architecture": {
+            "x": 0,
+            "z": -1,
+            "width": 14,
+            "depth": 13,
+            "height": 3.3,
+            "baseElevation": 0.15,
+            "rotationY": 0
+          },
+          "dimensions": [
+            14,
+            3.3,
+            13
+          ],
+          "transform": {
+            "position": [
+              0,
+              1.7999999999999998,
+              -1
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-plaster",
+            "color": "#dedbd3",
+            "roughness": 0.85
+          },
+          "levels": 1,
+          "roofForm": "flat",
+          "pitch": 12,
+          "pitchUnit": "degrees",
+          "overhang": 0.35,
+          "composition": {
+            "openings": [],
+            "footprint": {
+              "kind": "articulated",
+              "operations": [
+                {
+                  "id": "reading-court-recess",
+                  "floors": "all",
+                  "type": "recess",
+                  "facade": "south",
+                  "start": 0.21,
+                  "end": 0.79,
+                  "depth": 5.8
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "reading-court",
+          "label": "Sheltered Reading Court",
+          "semanticRole": "courtyard",
+          "type": "courtyard",
+          "architecture": {
+            "x": 0,
+            "z": 4.1,
+            "width": 8,
+            "depth": 5.4,
+            "height": 0.08,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            8,
+            0.08,
+            5.4
+          ],
+          "transform": {
+            "position": [
+              0,
+              0.04,
+              4.1
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-outdoor",
+            "color": "#b9b3a5",
+            "roughness": 1
+          },
+          "metadata": {
+            "purpose": "An intimate outdoor court shaped by the enclosing house mass for quiet reading, writing breaks and protected open-air occupation."
+          }
+        },
+        {
+          "id": "south-garden",
+          "label": "South Garden",
+          "semanticRole": "garden",
+          "type": "landscape-zone",
+          "architecture": {
+            "x": 0,
+            "z": 11.5,
+            "width": 18,
+            "depth": 5,
+            "height": 0.08,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            18,
+            0.08,
+            5
+          ],
+          "transform": {
+            "position": [
+              0,
+              0.04,
+              11.5
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-outdoor",
+            "color": "#929c86",
+            "roughness": 1
+          },
+          "metadata": {
+            "purpose": "A larger open garden extending from the reading court and preserving sunlight and outlook beyond the sheltered exterior room."
+          }
+        },
+        {
+          "id": "arrival-forecourt",
+          "label": "North Arrival Forecourt",
+          "semanticRole": "arrival",
+          "type": "courtyard",
+          "architecture": {
+            "x": 0,
+            "z": -11.5,
+            "width": 12,
+            "depth": 4,
+            "height": 0.08,
+            "baseElevation": 0,
+            "rotationY": 0
+          },
+          "dimensions": [
+            12,
+            0.08,
+            4
+          ],
+          "transform": {
+            "position": [
+              0,
+              0.04,
+              -11.5
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ]
+          },
+          "material": {
+            "id": "concept-outdoor",
+            "color": "#b9b3a5",
+            "roughness": 1
+          },
+          "metadata": {
+            "purpose": "A simple open approach space that separates arrival from the private south-facing reading court."
+          }
+        }
+      ],
+      "relationships": [],
+      "interior": {
+        "rooms": [],
+        "storeys": [
+          {
+            "id": "writer-house-storey-0",
+            "hostMassId": "writer-house",
+            "index": 0,
+            "elevation": 0.26,
+            "height": 3.3,
+            "label": "Writer's House · level 1",
+            "semanticRole": "concept-storey"
+          }
+        ]
+      },
+      "metadata": {
+        "conceptEvaluation": true,
+        "conceptFormat": "v3-architectural-concept-1",
+        "title": "Court House for a Writer",
+        "concept": "A compact, single-storey U-shaped house is carved from a simple enclosing rectangle. Its deep south-facing recess creates a protected reading court: an outdoor void held by two short side wings and a calm northern spine, while remaining open to the wider garden and daylight from the south.",
+        "character": "Quiet, grounded and deliberate. The composition reads as one low, continuous shelter wrapped around an intimate exterior room rather than as a collection of separate objects.",
+        "decisions": [
+          "A single articulated envelope keeps the home modest and spatially coherent.",
+          "The south recess is the primary architectural move, making the reading court rather than an interior programme the organiser of the mass.",
+          "Generous side arms give the court a sense of enclosure and protection without closing it off from the site.",
+          "The court opens south toward the larger garden, balancing shelter with long daylight and an outward view.",
+          "A low flat roof follows the U-shaped footprint, visually unifying the enclosing wings and reinforcing the house's calm horizontal profile.",
+          "The building is placed slightly north of site centre so the open court can extend into a useful south garden while retaining broad planted margins around the compact mass."
+        ],
+        "assumptions": [
+          "The 30 by 30 metre site is level, clear of required setbacks, and may be approached from the south.",
+          "A compact footprint of approximately 135 square metres is appropriate for a modest single-storey home.",
+          "The reading court is an uncovered, ground-level outdoor space and is sheltered by the building mass rather than by a separate structure.",
+          "No pool, guest house, detached studio or additional pavilion is required."
+        ],
+        "terrainMode": "flat",
+        "designPipeline": {
+          "stage": "concept",
+          "authority": "v3-semantic-scene",
+          "roomDevelopment": "deferred",
+          "preserve": "envelopes-roofs-storeys"
+        },
+        "brief": "Design a modest single-storey home for a writer on a flat 30 by 30 metre site. A sheltered outdoor reading court should shape the architecture. Keep the composition compact and thoughtful, with no pool or guest house. Choose the geometry and roof that best express the idea.",
+        "generatedAt": "2026-10-22T15:40:00.245Z",
+        "model": "gpt-5.6-terra",
+        "usage": {
+          "inputTokens": 2079,
+          "outputTokens": 1438,
+          "totalTokens": 3517,
+          "attempts": 1,
+          "repair": false,
+          "estimatedCost": 0.021414
+        }
+      }
+    },
+    "findings": [],
+    "providerCalls": 1,
+    "model": "gpt-5.6-terra",
+    "finishReason": "stop"
+  },
+  "errors": []
+}

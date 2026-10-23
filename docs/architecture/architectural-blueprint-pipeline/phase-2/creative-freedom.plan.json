@@ -1,0 +1,343 @@
+{
+  "concept": "OFFLINE REFERENCE — The Listening Garden: a writer enters a quiet south gallery, turns toward a north reading studio, and discovers a planted pocket framed by an L-shaped home. The bedroom wing shelters the garden from arrival. Creative freedom produces a spatial sequence rather than an amenity list; this is an independent technical example, not Terra authorship.",
+  "character": "OFFLINE REFERENCE — The Listening Garden: a writer enters a quiet south gallery, turns toward a north reading studio, and discovers a planted pocket framed by an L-shaped home. The bedroom wing shelters the garden from arrival. Creative freedom produces a spatial sequence rather than an amenity list; this is an independent technical example, not Terra authorship.",
+  "site": {
+    "width": 64,
+    "depth": 64,
+    "baseElevation": 0,
+    "groundColor": "#61754b",
+    "north": "-z",
+    "access": [
+      {
+        "id": "writer-gate",
+        "boundary": "south",
+        "point": [
+          18,
+          0,
+          32
+        ]
+      }
+    ]
+  },
+  "entrances": [
+    {
+      "id": "writer-home-writer-entry-entry",
+      "objectId": "writer-home",
+      "openingId": "writer-entry",
+      "level": 0
+    },
+    {
+      "id": "writer-home-writer-garden-door-entry",
+      "objectId": "writer-home",
+      "openingId": "writer-garden-door",
+      "level": 0
+    }
+  ],
+  "verticalCirculation": [],
+  "requirements": [],
+  "program": [
+    {
+      "id": "writer-home-program",
+      "role": "Listening garden home",
+      "kind": "building",
+      "objectIds": [
+        "writer-home"
+      ],
+      "source": "design"
+    }
+  ],
+  "zones": [],
+  "forms": [],
+  "relationships": [],
+  "considerations": [],
+  "roomAdjacencies": [
+    {
+      "from": "writer-entry-gallery",
+      "to": "writer-north-gallery"
+    },
+    {
+      "from": "writer-entry-gallery",
+      "to": "writer-bedroom"
+    },
+    {
+      "from": "writer-entry-gallery",
+      "to": "writer-bath"
+    },
+    {
+      "from": "writer-north-gallery",
+      "to": "writer-studio"
+    },
+    {
+      "from": "writer-north-gallery",
+      "to": "writer-kitchen"
+    }
+  ],
+  "format": "v3-architectural-plan-1",
+  "buildings": [
+    {
+      "id": "writer-home",
+      "label": "Listening garden home",
+      "role": "Listening garden home",
+      "location": {
+        "x": 0,
+        "z": 0,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "plan": {
+        "kind": "outline",
+        "segments": [
+          {
+            "id": "writer-edge-0",
+            "type": "line",
+            "start": [
+              -7,
+              -6
+            ],
+            "end": [
+              7,
+              -6
+            ]
+          },
+          {
+            "id": "writer-edge-1",
+            "type": "line",
+            "start": [
+              7,
+              -6
+            ],
+            "end": [
+              7,
+              6
+            ]
+          },
+          {
+            "id": "writer-edge-2",
+            "type": "line",
+            "start": [
+              7,
+              6
+            ],
+            "end": [
+              1,
+              6
+            ]
+          },
+          {
+            "id": "writer-edge-3",
+            "type": "line",
+            "start": [
+              1,
+              6
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
+          {
+            "id": "writer-edge-4",
+            "type": "line",
+            "start": [
+              1,
+              0
+            ],
+            "end": [
+              -7,
+              0
+            ]
+          },
+          {
+            "id": "writer-edge-5",
+            "type": "line",
+            "start": [
+              -7,
+              0
+            ],
+            "end": [
+              -7,
+              -6
+            ]
+          }
+        ]
+      },
+      "storeys": [
+        {
+          "id": "writer-floor",
+          "label": "Garden and writing floor",
+          "role": "Garden and writing floor",
+          "height": 3.6,
+          "spaces": [
+            {
+              "id": "writer-studio",
+              "label": "writer studio",
+              "role": "writer studio",
+              "program": "living study",
+              "footprint": {
+                "x": -3,
+                "z": -3,
+                "width": 8,
+                "depth": 6
+              }
+            },
+            {
+              "id": "writer-north-gallery",
+              "label": "writer north gallery",
+              "role": "writer north gallery",
+              "program": "circulation gallery",
+              "footprint": {
+                "x": 2,
+                "z": -3,
+                "width": 2,
+                "depth": 6
+              }
+            },
+            {
+              "id": "writer-kitchen",
+              "label": "writer kitchen",
+              "role": "writer kitchen",
+              "program": "kitchen dining",
+              "footprint": {
+                "x": 5,
+                "z": -3,
+                "width": 4,
+                "depth": 6
+              }
+            },
+            {
+              "id": "writer-entry-gallery",
+              "label": "writer entry gallery",
+              "role": "writer entry gallery",
+              "program": "entry circulation",
+              "footprint": {
+                "x": 2,
+                "z": 3,
+                "width": 2,
+                "depth": 6
+              }
+            },
+            {
+              "id": "writer-bedroom",
+              "label": "writer bedroom",
+              "role": "writer bedroom",
+              "program": "bedroom",
+              "footprint": {
+                "x": 5,
+                "z": 1.5,
+                "width": 4,
+                "depth": 3
+              }
+            },
+            {
+              "id": "writer-bath",
+              "label": "writer bath",
+              "role": "writer bath",
+              "program": "bathroom dressing",
+              "footprint": {
+                "x": 5,
+                "z": 4.5,
+                "width": 4,
+                "depth": 3
+              }
+            }
+          ]
+        }
+      ],
+      "roofId": "writer-home-roof",
+      "accessOpenings": [
+        {
+          "id": "writer-entry",
+          "facade": "south",
+          "segmentId": "writer-edge-2",
+          "floors": "ground",
+          "type": "door",
+          "start": 0.7,
+          "end": 0.9666666667,
+          "height": 2.4,
+          "serves": "writer-entry-gallery"
+        },
+        {
+          "id": "writer-garden-door",
+          "facade": "south",
+          "segmentId": "writer-edge-4",
+          "floors": "ground",
+          "type": "glazed-door",
+          "start": 0.3,
+          "end": 0.7,
+          "height": 2.4,
+          "operation": "sliding",
+          "serves": "writer-studio"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "writer-terrace",
+      "label": "Garden reading terrace",
+      "role": "Garden reading terrace",
+      "type": "terrace",
+      "location": {
+        "x": -3,
+        "z": 3,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 6,
+      "depth": 4
+    },
+    {
+      "id": "writer-garden",
+      "label": "Listening garden",
+      "role": "Listening garden",
+      "type": "landscape-zone",
+      "location": {
+        "x": -3,
+        "z": 7,
+        "baseElevation": 0,
+        "rotationY": 0
+      },
+      "width": 6,
+      "depth": 4
+    }
+  ],
+  "connections": [
+    {
+      "id": "writer-arrival",
+      "surfaceId": "route-0",
+      "purpose": "Arrival to sheltered entry gallery",
+      "from": {
+        "kind": "site-access",
+        "accessId": "writer-gate"
+      },
+      "to": {
+        "kind": "entrance",
+        "entranceId": "writer-home-writer-entry-entry",
+        "approachDistance": 2
+      },
+      "use": "pedestrian",
+      "width": 1.2,
+      "waypoints": []
+    },
+    {
+      "id": "writer-garden-link",
+      "surfaceId": "route-1",
+      "purpose": "Reading studio to pocket garden",
+      "from": {
+        "kind": "entrance",
+        "entranceId": "writer-home-writer-garden-door-entry"
+      },
+      "to": {
+        "kind": "surface",
+        "objectId": "writer-terrace",
+        "local": [
+          0,
+          -2
+        ]
+      },
+      "use": "pedestrian",
+      "width": 1.2,
+      "waypoints": []
+    }
+  ]
+}

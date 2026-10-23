@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { Edges } from "@react-three/drei";
 import type { ThreeEvent } from "@react-three/fiber";
 import type { HousePrimitive } from "@/lib/house/types";
 import { useSceneStore } from "@/store/useSceneStore";
@@ -189,7 +190,7 @@ export interface RenderedMeshAudit {
   id: string; signature: string; kind: HousePrimitive["kind"]; position: number[]; scale: number[]; rotation: number[]; visible: boolean; parent: string; opacity: number; depthWrite: boolean;
 }
 
-export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, readOnly = false }: { primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
+export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, readOnly = false, blueprint }: { blueprint?: { clippingPlanes?: THREE.Plane[] }; primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const featureRef = useMemo(() => primitive.sourceObjectId ? undefined : parseFeatureMeshId(primitive.id), [primitive.id, primitive.sourceObjectId]);
   const selectionKey = primitive.sourceObjectId ?? (featureRef ? featureKey(featureRef) : primitive.id);
@@ -198,16 +199,16 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
   const selectKey = useSceneStore((s) => s.selectKey);
 
   // An imported asset only counts when its maps resolve to a usable URL; otherwise the surface falls back to the bundled set.
-  const assetId = useAssetStore((st) => hasUsableTextures(st.catalog.find((a) => a.id === primitive.assetId))) ? primitive.assetId : undefined;
+  const assetId = useAssetStore((st) => !blueprint && hasUsableTextures(st.catalog.find((a) => a.id === primitive.assetId))) ? primitive.assetId : undefined;
   const uvScale = primitive.uvScale ?? 1;
   const textures = usePBRTextures(assetId, uvScale);
 
   // Surface detail, only when no imported PBR asset supplies the surface: the bundled PBR set first, procedural canvas
   // patterns as the fallback (surfaces without a set, or a set that fails to load).
-  const libraryDef = !assetId && surface ? SURFACE_PBR[surface] : undefined;
+  const libraryDef = !blueprint && !assetId && surface ? SURFACE_PBR[surface] : undefined;
   const library = usePbrSet(libraryDef);
   const libraryPending = !!libraryDef && !library.textures && !library.failed;
-  const pattern = !assetId && surface && !libraryPending && !library.textures ? SURFACE_PATTERN[surface] : undefined;
+  const pattern = !blueprint && !assetId && surface && !libraryPending && !library.textures ? SURFACE_PATTERN[surface] : undefined;
   const detail = useMemo(() => (pattern ? getSurfaceTextures(pattern) : null), [pattern]);
   // UVs are in metres / tile so a pattern keeps its real-world scale on any face size.
   const tile = library.textures && libraryDef ? libraryDef.tile : pattern ? PATTERN_TILE_METERS[pattern] : 1;
@@ -319,12 +320,17 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
     onAuditMesh({ id: primitive.id, signature, kind: primitive.kind, position: mesh.position.toArray(), scale: mesh.scale.toArray(), rotation: [mesh.rotation.x, mesh.rotation.y, mesh.rotation.z], visible: mesh.visible, parent: mesh.parent?.type ?? "none", opacity: material.opacity ?? 1, depthWrite: material.depthWrite ?? true });
   }, [onAuditMesh, primitive]);
 
-  if (primitive.kind === "box" && primitive.id.endsWith("-water")) {
+  const blueprintMaterial = blueprint ? <meshStandardMaterial
+    color={isSelected ? "#cba16d" : primitive.category === "window" ? "#a8c8ce" : primitive.category === "pool" ? "#a8c1c7" : primitive.category === "landscape" ? "#c9d0bc" : primitive.category === "wall" ? "#b6c0b7" : primitive.category === "floor" ? "#edece6" : "#9aa9a1"}
+    roughness={.95} metalness={0} side={THREE.DoubleSide} clippingPlanes={blueprint.clippingPlanes}
+  /> : null;
+
+  if (!blueprint && primitive.kind === "box" && primitive.id.endsWith("-water")) {
     const water = <WaterSurface position={primitive.position} width={primitive.size[0]} depth={primitive.size[2]} />;
     return primitive.sourceObjectId ? <group onClick={handleClick} userData={{ sourceObjectId: primitive.sourceObjectId }}>{water}</group> : water;
   }
   // Water over an arbitrary outline (curved pools, rivers) gets the animated ripple shader.
-  if (primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
+  if (!blueprint && primitive.kind === "triMesh" && primitive.id.endsWith("-water")) {
     const water = <ShapedWaterSurface vertices={primitive.vertices} color={primitive.color} opacity={primitive.opacity} />;
     return primitive.sourceObjectId ? <group onClick={handleClick} userData={{ sourceObjectId: primitive.sourceObjectId }}>{water}</group> : water;
   }
@@ -341,7 +347,8 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
         userData={{ id: primitive.id, xRay }}
       >
         {boxGeometry ? <primitive object={boxGeometry} attach="geometry" /> : <boxGeometry args={primitive.size} />}
-        {xRay ? <meshStandardMaterial color={primitive.id.includes("floor-") ? "#1d4ed8" : primitive.id.includes("wall-") ? "#f59e0b" : "#a855f7"} wireframe transparent opacity={0.82} depthWrite /> : glass ?? <meshStandardMaterial key={materialKey} {...texturedProps} {...(textures ? {} : detailProps)} {...variation} />}
+        {blueprint && primitive.category !== "landscape" && <Edges threshold={30} color="#526861" clippingPlanes={blueprint.clippingPlanes}/>}
+        {blueprintMaterial ?? (xRay ? <meshStandardMaterial color={primitive.id.includes("floor-") ? "#1d4ed8" : primitive.id.includes("wall-") ? "#f59e0b" : "#a855f7"} wireframe transparent opacity={0.82} depthWrite /> : glass ?? <meshStandardMaterial key={materialKey} {...texturedProps} {...(textures ? {} : detailProps)} {...variation} />)}
       </mesh>
     );
   }
@@ -355,7 +362,8 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
       onClick={handleClick}
       userData={{ id: primitive.id, xRay }}
     >
-      {xRay ? <meshStandardMaterial color="#a855f7" wireframe transparent opacity={0.82} depthWrite side={THREE.DoubleSide} /> : glass ?? <meshStandardMaterial key={materialKey} {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} {...variation} side={THREE.DoubleSide} />}
+      {blueprint && primitive.category !== "landscape" && <Edges threshold={30} color="#526861" clippingPlanes={blueprint.clippingPlanes}/>}
+      {blueprintMaterial ?? (xRay ? <meshStandardMaterial color="#a855f7" wireframe transparent opacity={0.82} depthWrite side={THREE.DoubleSide} /> : glass ?? <meshStandardMaterial key={materialKey} {...(textures ? texturedProps : baseMaterialProps)} {...(textures ? {} : detailProps)} {...variation} side={THREE.DoubleSide} />)}
     </mesh>
   );
 }

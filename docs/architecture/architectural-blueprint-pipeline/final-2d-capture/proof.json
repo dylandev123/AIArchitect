@@ -1,0 +1,71 @@
+{
+  "result": "PASS",
+  "runtime": "next build --webpack + next start, isolated source copy",
+  "productionRoute": "/api/ai/plan",
+  "flag": "AI_V3_PLAN_EVALUATION=1",
+  "realProviderCalls": 0,
+  "mockedProviderCalls": 4,
+  "perEvaluationProviderCalls": 1,
+  "automaticRetries": 0,
+  "automaticRepairs": 0,
+  "elaborationCalls": 0,
+  "disabledByDefault": true,
+  "captureBeforeSdkParsing": true,
+  "captureBeforeNormalization": true,
+  "successfulCaptureDownloadAfterEditAndReload": true,
+  "floorPlanEditUndoRedoReload": true,
+  "existingProjectsUnchanged": true,
+  "isolatedBrowserStorage": true,
+  "productionUsageDatabase": "Intentionally disconnected for this offline check",
+  "results": [
+    {
+      "scenario": "rejected",
+      "status": 422,
+      "sha256": "8665188e87ddad3ba14bef86247121b10d9bebeea137ecd542287cb41510bb4b",
+      "originalSha256": "8665188e87ddad3ba14bef86247121b10d9bebeea137ecd542287cb41510bb4b",
+      "redacted": false,
+      "exactCapture": true,
+      "downloadVerified": true,
+      "providerCalls": 1
+    },
+    {
+      "scenario": "malformed",
+      "status": 502,
+      "sha256": "388ea8080b7a68216fa8e7f861fb8d2c6e8faff649a8c5c0218b4ca531622ba3",
+      "originalSha256": "388ea8080b7a68216fa8e7f861fb8d2c6e8faff649a8c5c0218b4ca531622ba3",
+      "redacted": false,
+      "exactCapture": true,
+      "downloadVerified": true,
+      "providerCalls": 1
+    },
+    {
+      "scenario": "redacted",
+      "status": 422,
+      "sha256": "7629c2e4c18fa78bd8a0e1015cae0126e20a17d18f5fa04cc6a66bef3f1ab7d1",
+      "originalSha256": "c133694ada171e620871e99e70a3d29c6cf242f68737106749b99e8339277222",
+      "redacted": true,
+      "exactCapture": false,
+      "downloadVerified": true,
+      "providerCalls": 1
+    },
+    {
+      "scenario": "success",
+      "status": 200,
+      "sha256": "54cb678218ce1528ca5c12056e52ad3e6bc9afd4c4ab397c14db0df0973ccf25",
+      "originalSha256": "54cb678218ce1528ca5c12056e52ad3e6bc9afd4c4ab397c14db0df0973ccf25",
+      "redacted": false,
+      "exactCapture": true,
+      "downloadVerified": true,
+      "providerCalls": 1
+    }
+  ],
+  "errors": [],
+  "forbidden": [],
+  "captures": [
+    "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/final-2d-capture/1-rejected.jpg",
+    "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/final-2d-capture/2-malformed.jpg",
+    "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/final-2d-capture/3-redacted.jpg",
+    "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/final-2d-capture/4-success.jpg",
+    "/Users/dylandevaux/Websites/AIArchitect/docs/architecture/architectural-blueprint-pipeline/final-2d-capture/5-edited-reloaded.jpg"
+  ]
+}

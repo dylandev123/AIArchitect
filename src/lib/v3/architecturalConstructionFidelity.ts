@@ -1,8 +1,10 @@
+import { compileShapedSiteFeature } from './siteFeatureConstruction';
 import type { HouseModel, HousePrimitive } from '@/lib/house/types';
 import type { V3BlueprintFinding } from './blueprint';
 import { applyV3Circulation } from './circulation';
 import { effectiveV3Scene } from './derivedSupport';
 import { resolveV3Fidelity } from './fidelity';
+import { v3StoreyBase } from './stacking';
 import { resolveFootprint } from './footprint';
 import { compileV3InteriorWalls } from './interiorWalls';
 import { compileV3MassJunctions } from './junctionCompiler';
@@ -56,8 +58,10 @@ export function auditArchitecturalConstructionFidelity(input: V3Scene, model: Ho
     // Replanning may retain unrelated objects created through the ordinary V3
     // editor. Their existing validation remains responsible for their geometry.
     if (!managedIds.has(o.id)) continue;
+    const shaped=compileShapedSiteFeature(o,scene);
+    if(shaped){expected.push(...shaped);continue;}
     switch (o.type) {
-      case 'building-mass': expected.push(...v3CompileKit.compileBuildingMass(o, false)); break;
+      case 'building-mass': expected.push(...v3CompileKit.compileBuildingMass(o, false, o.overhang, o.material, v3StoreyBase(o, scene), scene)); break;
       case 'roof-form': expected.push(...v3CompileKit.compileRoofForm(o, scopes.get(o.id) ?? scene, overhangs.get(o.id))); break;
       case 'pool': expected.push(...v3CompileKit.compilePool(o)); break;
       case 'terrace': expected.push(...(v3CompileKit.compilePoolDeck(o, scene) ?? v3CompileKit.compileTerraceSurface(o))); break;
@@ -74,7 +78,10 @@ export function auditArchitecturalConstructionFidelity(input: V3Scene, model: Ho
   for (const p of finished) {
     const built = actual.get(p.id);
     if (!built) fail('ARCHITECTURAL_PART_UNBUILT', [p.sourceObjectId ?? p.id, p.id], 'A required construction part is missing; other parts from the same object are insufficient.');
-    else if (signature(built) !== signature(p)) fail('ARCHITECTURAL_PART_DRIFT', [p.sourceObjectId ?? p.id, p.id], 'Compiled geometry, ownership or finish differs from the approved component construction.');
+    else if (signature(built) !== signature(p)) {
+      const geometry = (part: HousePrimitive) => JSON.stringify([part.kind, part.kind === 'box' ? [part.position,part.rotation,part.size] : part.vertices,part.sourceObjectId,part.sourceObjectIds,part.componentRole]);
+      fail(geometry(built) === geometry(p) ? 'ARCHITECTURAL_PART_FINISH' : 'ARCHITECTURAL_PART_DRIFT', [p.sourceObjectId ?? p.id, p.id], 'Compiled geometry, ownership or finish differs from the approved component construction.');
+    }
   }
   const expectedIds = new Set(finished.map(p => p.id));
   const routeOwners = new Set(input.estatePlan?.circulation.flatMap(r => r.via));
