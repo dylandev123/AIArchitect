@@ -1,0 +1,2130 @@
+{
+  "prompt": "Architectural revision experiment. Independently resolve the existing roof/occupied-space conflict, excessive stair rises and blocked circulation using supported operations, preserving the intended architectural character and accommodation. You may revise roof footprints, elevations, allocations, circulation or relevant geometry. Choose the geometric solution yourself. Return a separate unapproved candidate and explain your selected solution and reasons explicitly in architecturalPlan and summary. Correct programme references against final construction. Disclose unresolved and new limitations. Original brief (retained knowledge.query): Design an extraordinary $25m contemporary tropical waterfront mansion in Saint Lucia, on a flat site. Create a sophisticated luxury residence with a distinctive entrance, beautiful living spaces, private bedroom wings, purposeful upper-level architecture where appropriate, and integrated outdoor living. Choose a coherent architectural concept using relevant knowledge and construction capabilities. The result should feel like a remarkable luxury estate, not a basic bungalow. Construct fully editable direct-scene architecture.",
+  "mode": "edit",
+  "editIntent": "complete",
+  "current": {
+    "version": "architectural-scene-1",
+    "name": "Water Court Promenade Estate",
+    "elements": [
+      {
+        "id": "salon",
+        "label": "salon floor",
+        "kind": "plate",
+        "assemblyKind": "residential-wing",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "salon-rear",
+        "label": "salon rear",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          0,
+          2,
+          -4.85
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "salon-west",
+        "label": "salon west",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          -8.85,
+          2,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          9.4,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "salon-east",
+        "label": "salon east",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          8.85,
+          2,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          9.4,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "salon-bay-0",
+        "label": "salon bay-0",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          -6.75,
+          2,
+          4.85
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 4.05,
+          "height": 3.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "salon-glass-0",
+        "label": "salon glass-0",
+        "kind": "glazing",
+        "parent": "salon-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          4.05,
+          3.4,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "salon-reveal-0",
+        "label": "salon reveal-0",
+        "kind": "volume",
+        "parent": "salon",
+        "at": [
+          -6.75,
+          3.82,
+          5.06
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "salon-bay-1",
+        "label": "salon bay-1",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          -2.25,
+          2,
+          4.85
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 4.05,
+          "height": 3.55,
+          "glazed": false
+        }
+      },
+      {
+        "id": "salon-glass-1",
+        "label": "salon glass-1",
+        "kind": "entrance",
+        "parent": "salon-bay-1",
+        "at": [
+          0,
+          -0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          4.05,
+          3.55,
+          0.1
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "salon-reveal-1",
+        "label": "salon reveal-1",
+        "kind": "volume",
+        "parent": "salon",
+        "at": [
+          -2.25,
+          3.82,
+          5.06
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "salon-bay-2",
+        "label": "salon bay-2",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          2.25,
+          2,
+          4.85
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 4.05,
+          "height": 3.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "salon-glass-2",
+        "label": "salon glass-2",
+        "kind": "glazing",
+        "parent": "salon-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          4.05,
+          3.4,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "salon-reveal-2",
+        "label": "salon reveal-2",
+        "kind": "volume",
+        "parent": "salon",
+        "at": [
+          2.25,
+          3.82,
+          5.06
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "salon-bay-3",
+        "label": "salon bay-3",
+        "kind": "wall",
+        "parent": "salon",
+        "at": [
+          6.75,
+          2,
+          4.85
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.8,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 4.05,
+          "height": 3.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "salon-glass-3",
+        "label": "salon glass-3",
+        "kind": "glazing",
+        "parent": "salon-bay-3",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          4.05,
+          3.4,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "salon-reveal-3",
+        "label": "salon reveal-3",
+        "kind": "volume",
+        "parent": "salon",
+        "at": [
+          6.75,
+          3.82,
+          5.06
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "salon-roof",
+        "label": "salon roof",
+        "kind": "roof",
+        "parent": "salon",
+        "at": [
+          0,
+          4.025,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          20,
+          0.25,
+          12
+        ],
+        "material": "ivory",
+        "roofForm": "flat",
+        "overhang": 1,
+        "panels": 4
+      },
+      {
+        "id": "family-wing",
+        "label": "family-wing floor",
+        "kind": "plate",
+        "assemblyKind": "residential-wing",
+        "at": [
+          -13,
+          0.1,
+          0.5
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.2,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-rear",
+        "label": "family-wing rear",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          0,
+          1.75,
+          -4.35
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-west",
+        "label": "family-wing west",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          -3.35,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          8.4,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-east",
+        "label": "family-wing east",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          3.35,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          8.4,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-bay-0",
+        "label": "family-wing bay-0",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          -2.333333333333333,
+          1.75,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 1.8833333333333335,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "family-wing-glass-0",
+        "label": "family-wing glass-0",
+        "kind": "glazing",
+        "parent": "family-wing-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.8833333333333335,
+          2.9,
+          0.04
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "family-wing-reveal-0",
+        "label": "family-wing reveal-0",
+        "kind": "volume",
+        "parent": "family-wing",
+        "at": [
+          -2.333333333333333,
+          3.32,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-bay-1",
+        "label": "family-wing bay-1",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          0,
+          1.75,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.8833333333333335,
+          "height": 3.05,
+          "glazed": false
+        }
+      },
+      {
+        "id": "family-wing-glass-1",
+        "label": "family-wing glass-1",
+        "kind": "entrance",
+        "parent": "family-wing-bay-1",
+        "at": [
+          0,
+          -0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.8833333333333335,
+          3.05,
+          0.1
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "family-wing-reveal-1",
+        "label": "family-wing reveal-1",
+        "kind": "volume",
+        "parent": "family-wing",
+        "at": [
+          0,
+          3.32,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-bay-2",
+        "label": "family-wing bay-2",
+        "kind": "wall",
+        "parent": "family-wing",
+        "at": [
+          2.333333333333334,
+          1.75,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 1.8833333333333335,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "family-wing-glass-2",
+        "label": "family-wing glass-2",
+        "kind": "glazing",
+        "parent": "family-wing-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.8833333333333335,
+          2.9,
+          0.04
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "family-wing-reveal-2",
+        "label": "family-wing reveal-2",
+        "kind": "volume",
+        "parent": "family-wing",
+        "at": [
+          2.333333333333334,
+          3.32,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.3333333333333335,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "family-wing-roof",
+        "label": "family-wing roof",
+        "kind": "roof",
+        "parent": "family-wing",
+        "at": [
+          0,
+          3.525,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8.4,
+          0.25,
+          10.4
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0.7,
+        "panels": 4
+      },
+      {
+        "id": "guest-wing",
+        "label": "guest-wing floor",
+        "kind": "plate",
+        "assemblyKind": "residential-wing",
+        "at": [
+          13,
+          0.1,
+          1
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.2,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-rear",
+        "label": "guest-wing rear",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          0,
+          1.75,
+          -3.85
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-west",
+        "label": "guest-wing west",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          -2.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7.4,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-east",
+        "label": "guest-wing east",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          2.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7.4,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-bay-0",
+        "label": "guest-wing bay-0",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          -2,
+          1.75,
+          3.85
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 1.55,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "guest-wing-glass-0",
+        "label": "guest-wing glass-0",
+        "kind": "glazing",
+        "parent": "guest-wing-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.55,
+          2.9,
+          0.04
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "guest-wing-reveal-0",
+        "label": "guest-wing reveal-0",
+        "kind": "volume",
+        "parent": "guest-wing",
+        "at": [
+          -2,
+          3.32,
+          4.06
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-bay-1",
+        "label": "guest-wing bay-1",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          0,
+          1.75,
+          3.85
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.55,
+          "height": 3.05,
+          "glazed": false
+        }
+      },
+      {
+        "id": "guest-wing-glass-1",
+        "label": "guest-wing glass-1",
+        "kind": "entrance",
+        "parent": "guest-wing-bay-1",
+        "at": [
+          0,
+          -0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.55,
+          3.05,
+          0.1
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "guest-wing-reveal-1",
+        "label": "guest-wing reveal-1",
+        "kind": "volume",
+        "parent": "guest-wing",
+        "at": [
+          0,
+          3.32,
+          4.06
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-bay-2",
+        "label": "guest-wing bay-2",
+        "kind": "wall",
+        "parent": "guest-wing",
+        "at": [
+          2,
+          1.75,
+          3.85
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          3.3,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 1.55,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "guest-wing-glass-2",
+        "label": "guest-wing glass-2",
+        "kind": "glazing",
+        "parent": "guest-wing-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.55,
+          2.9,
+          0.04
+        ],
+        "material": "limestone",
+        "panels": 2
+      },
+      {
+        "id": "guest-wing-reveal-2",
+        "label": "guest-wing reveal-2",
+        "kind": "volume",
+        "parent": "guest-wing",
+        "at": [
+          2,
+          3.32,
+          4.06
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "guest-wing-roof",
+        "label": "guest-wing roof",
+        "kind": "roof",
+        "parent": "guest-wing",
+        "at": [
+          0,
+          3.525,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          7.4,
+          0.25,
+          9.4
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0.7,
+        "panels": 4
+      },
+      {
+        "id": "pool-court",
+        "label": "pool-court deck",
+        "kind": "plate",
+        "assemblyKind": "rectangular-pool",
+        "at": [
+          0,
+          0.15,
+          11
+        ],
+        "rotation": 0,
+        "size": [
+          17.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-floor",
+        "label": "pool-court floor",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -1.55,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          14.4,
+          0.2,
+          9.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-water",
+        "label": "pool-court water",
+        "kind": "water",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.05,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          0.02,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-z-minus",
+        "label": "pool-court wall-z-minus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -0.65,
+          1.3500000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          14.4,
+          1.6,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-x-minus",
+        "label": "pool-court wall-x-minus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          -7.1,
+          -0.65,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.6,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-z-minus",
+        "label": "pool-court coping-z-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.1,
+          1.1000000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          15.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-x-minus",
+        "label": "pool-court coping-x-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          -7.35,
+          0.1,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          0.7,
+          0.1,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-x-minus",
+        "label": "pool-court deck-x-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          -8.1,
+          0,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          10.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-z-plus",
+        "label": "pool-court wall-z-plus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -0.65,
+          10.55
+        ],
+        "rotation": 0,
+        "size": [
+          14.4,
+          1.6,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-x-plus",
+        "label": "pool-court wall-x-plus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          7.1,
+          -0.65,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.6,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-z-plus",
+        "label": "pool-court coping-z-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.1,
+          10.8
+        ],
+        "rotation": 0,
+        "size": [
+          15.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-x-plus",
+        "label": "pool-court coping-x-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          7.35,
+          0.1,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          0.7,
+          0.1,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-x-plus",
+        "label": "pool-court deck-x-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          8.1,
+          0,
+          5.95
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          10.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-far",
+        "label": "pool-court deck-far",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0,
+          11.9
+        ],
+        "rotation": 0,
+        "size": [
+          17.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "water-terrace",
+        "label": "Water court terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          0.2,
+          5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-walk",
+        "label": "Arrival promenade",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          10.25
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "entry-post-west",
+        "label": "West entrance portal post",
+        "kind": "volume",
+        "at": [
+          -2.3,
+          2,
+          5.65
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          4,
+          0.55
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "entry-post-east",
+        "label": "East entrance portal post",
+        "kind": "volume",
+        "at": [
+          2.3,
+          2,
+          5.65
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          4,
+          0.55
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "entry-canopy",
+        "label": "Bronze-lined arrival canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          4.1,
+          5.65
+        ],
+        "rotation": 0,
+        "size": [
+          5.2,
+          0.25,
+          1.5
+        ],
+        "material": "bronze",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "family-screen",
+        "label": "Family pavilion timber screen",
+        "kind": "screen",
+        "at": [
+          -13,
+          1.85,
+          5.12
+        ],
+        "rotation": 0,
+        "size": [
+          5.6,
+          3,
+          0.16
+        ],
+        "material": "timber",
+        "panels": 12
+      },
+      {
+        "id": "guest-screen",
+        "label": "Guest pavilion timber screen",
+        "kind": "screen",
+        "at": [
+          13,
+          1.85,
+          5.12
+        ],
+        "rotation": 0,
+        "size": [
+          4.8,
+          3,
+          0.16
+        ],
+        "material": "timber",
+        "panels": 10
+      },
+      {
+        "id": "upper-floor",
+        "label": "Upper owner suite floor",
+        "kind": "plate",
+        "at": [
+          0,
+          3.6,
+          -1.8
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          0.2,
+          7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "upper-front-left",
+        "label": "Upper suite front left wall",
+        "kind": "wall",
+        "at": [
+          -3.75,
+          5.3,
+          1.7
+        ],
+        "rotation": 0,
+        "size": [
+          3.5,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-front-doorwall",
+        "label": "Upper suite entry wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.3,
+          1.7
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.8,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "upper-door",
+        "label": "Upper suite bronze entry",
+        "kind": "entrance",
+        "parent": "upper-front-doorwall",
+        "at": [
+          0,
+          -0.35,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.8,
+          2.5,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "upper-front-right",
+        "label": "Upper suite front right wall",
+        "kind": "wall",
+        "at": [
+          3.75,
+          5.3,
+          1.7
+        ],
+        "rotation": 0,
+        "size": [
+          3.5,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-west",
+        "label": "Upper suite west wall",
+        "kind": "wall",
+        "at": [
+          -5.5,
+          5.3,
+          -1.8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          7,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-east",
+        "label": "Upper suite east wall",
+        "kind": "wall",
+        "at": [
+          5.5,
+          5.3,
+          -1.8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          7,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-rear",
+        "label": "Upper suite view wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.3,
+          -5.3
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          3.2,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.65,
+          "width": 6.4,
+          "height": 2,
+          "glazed": true
+        }
+      },
+      {
+        "id": "upper-roof",
+        "label": "Upper owner suite roof",
+        "kind": "roof",
+        "at": [
+          0,
+          7.02,
+          -1.8
+        ],
+        "rotation": 0,
+        "size": [
+          12.2,
+          0.24,
+          8.2
+        ],
+        "material": "bronze",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "upper-landing-support",
+        "label": "Upper landing support",
+        "kind": "volume",
+        "at": [
+          0,
+          1.8,
+          2.3
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          3.6,
+          1.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "upper-landing",
+        "label": "Upper stair landing",
+        "kind": "plate",
+        "at": [
+          0,
+          3.6,
+          2.3
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          0.2,
+          1.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-01",
+        "label": "Exterior stair tread 01",
+        "kind": "volume",
+        "at": [
+          0,
+          0.185,
+          6.75
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          0.37,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-02",
+        "label": "Exterior stair tread 02",
+        "kind": "volume",
+        "at": [
+          0,
+          0.37,
+          6.25
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          0.74,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-03",
+        "label": "Exterior stair tread 03",
+        "kind": "volume",
+        "at": [
+          0,
+          0.555,
+          5.75
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          1.11,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-04",
+        "label": "Exterior stair tread 04",
+        "kind": "volume",
+        "at": [
+          0,
+          0.74,
+          5.25
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          1.48,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-05",
+        "label": "Exterior stair tread 05",
+        "kind": "volume",
+        "at": [
+          0,
+          0.925,
+          4.75
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          1.85,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-06",
+        "label": "Exterior stair tread 06",
+        "kind": "volume",
+        "at": [
+          0,
+          1.11,
+          4.25
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          2.22,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-07",
+        "label": "Exterior stair tread 07",
+        "kind": "volume",
+        "at": [
+          0,
+          1.295,
+          3.75
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          2.59,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-08",
+        "label": "Exterior stair tread 08",
+        "kind": "volume",
+        "at": [
+          0,
+          1.48,
+          3.25
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          2.96,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-09",
+        "label": "Exterior stair tread 09",
+        "kind": "volume",
+        "at": [
+          0,
+          1.665,
+          2.75
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          3.33,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "stair-10",
+        "label": "Exterior stair tread 10",
+        "kind": "volume",
+        "at": [
+          0,
+          1.85,
+          2.25
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          3.7,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-lounge",
+        "label": "Open elliptical pool lounge",
+        "kind": "pavilion",
+        "at": [
+          11,
+          0.2,
+          15
+        ],
+        "rotation": -0.35,
+        "size": [
+          8,
+          3.8,
+          6
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    ],
+    "architecturalPlan": {
+      "scaleRationale": "The US$25m figure is treated as a qualitative ambition reference in assumed USD, not as a formula for area, construction cost, or valuation; the resulting estate is deliberately substantial but organized as a precise waterfront compound rather than indiscriminate bulk. On the required flat Y=0 site, the architecture uses a large shared salon, two independent private pavilions, an upper owner retreat, pool court, and open lounge to create estate-level richness. ",
+      "arrivalAndCirculation": "Arrival is staged across the limestone pool-side approach to the framed salon entry, with public living and outdoor entertaining on the ground datum, separate guest and family pavilions reached from the exterior court, and a constructed exterior stair ascending to the owner retreat. Service provision is spatially reserved within the dining/service pavilion but equipment and back-of-house fit-out are not represented. ",
+      "volumeHierarchy": "The selected concept is the 'Water Court Promenade': a long primary salon facing a pool court, flanked by lower private pavilions and crowned by a recessed upper owner suite, chosen over a dispersed bungalow composition because it establishes a memorable sectional procession without inventing terrain. The salon is the dominant datum; the guest/family pavilions, pavilion lounge, entry canopy, and stair landing are subordinate elements. ",
+      "relationshipsAndViews": "The salon’s glazed waterfront face opens directly to the terrace and pool route, while the upper retreat looks across the same court; the family pavilion remains set back west of the principal room and the dining/service pavilion is held apart to the east. The open elliptical lounge sits beside, rather than over, the pool deck for shaded outdoor gathering. ",
+      "roofFacadeAndMaterials": "Ivory enclosure, limestone walking surfaces, bronze-framed openings, timber screens, broad flat roof planes, and an intentionally low secondary roofline form a deep, shade-oriented tropical identity. Flat roofs have explicit overhang geometry and the upper suite is set back beneath a separate roof; the materials express an architectural palette only and do not certify coastal performance. ",
+      "intendedSpaces": [
+        "Great salon, dining and kitchen",
+        "Family bedroom pavilion",
+        "Guest bedroom pavilion",
+        "Upper owner suite",
+        "Pool terrace and water court",
+        "Open pool lounge",
+        "Arrival threshold",
+        "Exterior stair and upper landing"
+      ],
+      "programme": [
+        {
+          "name": "Great salon, dining and kitchen",
+          "zone": "public",
+          "strategy": "Primary ground-level salon opens through its central glazed entry bay to the waterfront terrace; dining/kitchen use is an open-plan allocation within the same constructed shell.",
+          "floorIds": [
+            "salon"
+          ],
+          "enclosureIds": [
+            "salon-rear",
+            "salon-west",
+            "salon-east",
+            "salon-bay-0",
+            "salon-bay-1",
+            "salon-bay-2",
+            "salon-bay-3"
+          ],
+          "roofIds": [
+            "salon-roof"
+          ],
+          "accessIds": [
+            "salon-glass-1"
+          ],
+          "limitation": "No internal kitchen fixtures, partitions, or separately enclosed dining room are represented."
+        },
+        {
+          "name": "Family bedroom pavilion",
+          "zone": "private",
+          "strategy": "Independent west pavilion uses a screened pool-facing entry bay and remains outside the principal arrival line.",
+          "floorIds": [
+            "family-wing"
+          ],
+          "enclosureIds": [
+            "family-wing-rear",
+            "family-wing-west",
+            "family-wing-east",
+            "family-wing-bay-0",
+            "family-wing-bay-1",
+            "family-wing-bay-2"
+          ],
+          "roofIds": [
+            "family-wing-roof"
+          ],
+          "accessIds": [
+            "family-wing-glass-1"
+          ],
+          "limitation": "Bedrooms and bathrooms are programme allocations within the one-storey shell; internal partitions are not built."
+        },
+        {
+          "name": "Guest bedroom pavilion",
+          "zone": "private",
+          "strategy": "East pavilion is separate from the owner suite and has its own pool-court entrance for guest privacy.",
+          "floorIds": [
+            "guest-wing"
+          ],
+          "enclosureIds": [
+            "guest-wing-rear",
+            "guest-wing-west",
+            "guest-wing-east",
+            "guest-wing-bay-0",
+            "guest-wing-bay-1",
+            "guest-wing-bay-2"
+          ],
+          "roofIds": [
+            "guest-wing-roof"
+          ],
+          "accessIds": [
+            "guest-wing-glass-1"
+          ],
+          "limitation": "Guest sleeping and bath subdivisions are not modeled."
+        },
+        {
+          "name": "Upper owner suite",
+          "zone": "private",
+          "strategy": "A recessed upper shell rises over the salon and is reached from the constructed exterior stair and landing; its broad rear glazing faces the water court.",
+          "floorIds": [
+            "upper-floor",
+            "upper-landing"
+          ],
+          "enclosureIds": [
+            "upper-front-left",
+            "upper-front-doorwall",
+            "upper-front-right",
+            "upper-east",
+            "upper-west",
+            "upper-rear"
+          ],
+          "roofIds": [
+            "upper-roof"
+          ],
+          "accessIds": [
+            "upper-door"
+          ],
+          "limitation": "The suite is a single open enclosure; dressing and bath rooms are not partitioned."
+        },
+        {
+          "name": "Pool terrace and water court",
+          "zone": "outdoor",
+          "strategy": "A continuous limestone terrace advances from the salon to the explicitly constructed rectangular pool assembly and its dry circuit.",
+          "floorIds": [
+            "water-terrace",
+            "pool-court"
+          ],
+          "enclosureIds": [
+            "pool-court-floor",
+            "pool-court-west",
+            "pool-court-east",
+            "pool-court-north",
+            "pool-court-south"
+          ],
+          "roofIds": [],
+          "accessIds": [
+            "salon-glass-1",
+            "guest-wing-glass-1",
+            "family-wing-glass-1"
+          ],
+          "limitation": "The pool assembly represents basin, coping, dry circuit, and water surface only; no hydraulic edge, filtration, excavation, or drainage is claimed."
+        },
+        {
+          "name": "Open pool lounge",
+          "zone": "outdoor",
+          "strategy": "A curved open lounge is placed beside the pool court as a sheltered social destination, not as enclosed accommodation.",
+          "floorIds": [
+            "pool-lounge"
+          ],
+          "enclosureIds": [
+            "pool-lounge"
+          ],
+          "roofIds": [
+            "pool-lounge"
+          ],
+          "accessIds": [],
+          "limitation": "The approved pavilion component contains its own fixed open lounge geometry and is not subdividable."
+        },
+        {
+          "name": "Arrival threshold",
+          "zone": "circulation",
+          "strategy": "A broad limestone approach terminates at the salon’s central operable glazed entry beneath a framed canopy.",
+          "floorIds": [
+            "arrival-walk"
+          ],
+          "enclosureIds": [
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "roofIds": [
+            "entry-canopy"
+          ],
+          "accessIds": [
+            "salon-glass-1"
+          ],
+          "limitation": "Vehicle driveway, gate, and site boundary are not modeled."
+        },
+        {
+          "name": "Exterior stair and upper landing",
+          "zone": "circulation",
+          "strategy": "Ten progressively rising solid stair treads make a direct exterior route from the pool terrace to the supported upper landing and suite door.",
+          "floorIds": [
+            "stair-01",
+            "stair-02",
+            "stair-03",
+            "stair-04",
+            "stair-05",
+            "stair-06",
+            "stair-07",
+            "stair-08`,`stair-09`,`stair-10`,`upper-landing"
+          ],
+          "enclosureIds": [],
+          "roofIds": [
+            "upper-roof"
+          ],
+          "accessIds": [
+            "upper-door"
+          ],
+          "limitation": "The stair is manually composed from solid steps; guard compliance, handrails, and accessibility compliance are not verified."
+        }
+      ],
+      "spatialRelationships": [
+        {
+          "subject": "salon-glass-1",
+          "target": "water-terrace",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The principal salon entry opens to the limestone outdoor living terrace."
+        },
+        {
+          "subject": "water-terrace",
+          "target": "pool-court",
+          "relation": "adjacent-to",
+          "clearance": 0.5,
+          "reason": "The pool route continues from the salon terrace into the assembly’s dry deck circuit."
+        },
+        {
+          "subject": "upper-floor",
+          "target": "salon",
+          "relation": "above",
+          "clearance": 0,
+          "reason": "The owner suite is purposefully elevated over the primary salon datum."
+        },
+        {
+          "subject": "upper-landing",
+          "target": "stair-10",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The final stair tread meets the supported upper landing."
+        },
+        {
+          "subject": "upper-door",
+          "target": "upper-landing",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The landing provides a real exterior approach to the upper suite door."
+        },
+        {
+          "subject": "pool-lounge",
+          "target": "pool-court-water",
+          "relation": "facing",
+          "clearance": 2,
+          "reason": "The open lounge is placed beside and oriented toward the pool water without occupying the dry circuit."
+        },
+        {
+          "subject": "family-wing",
+          "target": "salon",
+          "relation": "set-back-from",
+          "clearance": 0.5,
+          "reason": "The west private pavilion is separated from the public salon to retain a legible secondary hierarchy."
+        },
+        {
+          "subject": "guest-wing",
+          "target": "salon",
+          "relation": "set-back-from",
+          "clearance": 1,
+          "reason": "The east guest pavilion is held apart from the main salon roof envelope."
+        }
+      ],
+      "designDecisions": [
+        {
+          "disposition": "constructed",
+          "knowledgeId": "property-value-25m-50m",
+          "decision": "Used the value label only to support an ambitious integrated estate programme with a resolved arrival, upper retreat, private pavilions, pool court, and outdoor lounge.",
+          "elementIds": [
+            "salon",
+            "family-wing",
+            "guest-wing",
+            "upper-floor",
+            "pool-court",
+            "pool-lounge"
+          ],
+          "limitation": "No valuation, cost estimate, market claim, or luxury certification is made."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "estate-composition",
+          "decision": "Established a dominant shared residence volume with subordinate private pavilions and an explicit arrival-to-water sequence.",
+          "elementIds": [
+            "salon",
+            "family-wing",
+            "guest-wing",
+            "arrival-walk",
+            "water-terrace"
+          ],
+          "limitation": "The pavilions are reached across exterior circulation; no enclosed inter-wing corridor is modeled."
+        },
+        {
+          "disposition": "guidance",
+          "knowledgeId": "waterfront-estate",
+          "decision": "Directed shared living, terrace, upper retreat, and pool court toward an assumed waterfront outlook while retaining separate private pavilion entries.",
+          "elementIds": [
+            "salon",
+            "water-terrace",
+            "upper-floor",
+            "pool-court"
+          ],
+          "limitation": "No surveyed shore, legal setback, flood datum, marine work, or actual waterfront is modeled."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "tropical-envelope",
+          "decision": "Combined deep flat roof planes, shaded glazing, timber screens, and a covered entrance as a tropical envelope intent.",
+          "elementIds": [
+            "salon-roof",
+            "family-screen",
+            "guest-screen",
+            "entry-canopy"
+          ],
+          "limitation": "Wind, rainfall, thermal, corrosion, and hurricane performance are not simulated or certified."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "living-view",
+          "decision": "Used the salon’s segmented glazed face and direct terrace connection to privilege the shared water-court outlook without glazing all elevations.",
+          "elementIds": [
+            "salon-bay-0",
+            "salon-bay-1",
+            "salon-bay-2",
+            "salon-bay-3",
+            "water-terrace"
+          ],
+          "limitation": "Glare and actual view analysis are not available."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "covered-threshold",
+          "decision": "Built a physical limestone approach, paired portal posts, canopy, and actual central salon entry opening.",
+          "elementIds": [
+            "arrival-walk",
+            "entry-post-west",
+            "entry-post-east",
+            "entry-canopy",
+            "salon-glass-1"
+          ],
+          "limitation": "The canopy is an architectural shelter concept, not a structural or weatherproofing certification."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "roof-flat-parapet",
+          "decision": "Used separately editable, generously proportioned flat roofs over the salon, private pavilions, and upper suite.",
+          "elementIds": [
+            "salon-roof",
+            "family-wing-roof",
+            "guest-wing-roof",
+            "upper-roof"
+          ],
+          "limitation": "Drainage, waterproofing, roof loading, and guard compliance are not modeled."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "build-upper-floor-support",
+          "decision": "Placed the upper floor over the main salon enclosure and created a ground-contact exterior stair/landing sequence for actual level access.",
+          "elementIds": [
+            "upper-floor",
+            "upper-east",
+            "upper-west",
+            "stair-01",
+            "stair-10",
+            "upper-landing"
+          ],
+          "limitation": "Geometric support contact is not structural-engineering verification."
+        },
+        {
+          "disposition": "guidance",
+          "knowledgeId": "coastal-durability",
+          "decision": "Used sheltered openings and stone-toned/bronze/timber material assignments as maintainable coastal-design intent.",
+          "elementIds": [
+            "salon-roof",
+            "entry-canopy",
+            "family-screen",
+            "guest-screen"
+          ],
+          "limitation": "Material enums do not establish corrosion resistance, fixing design, or hurricane detailing."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "site-entrance-address",
+          "decision": "Made a readable approach and threshold rather than assuming a street orientation.",
+          "elementIds": [
+            "arrival-walk",
+            "entry-post-west",
+            "entry-post-east",
+            "salon-glass-1"
+          ],
+          "limitation": "Road alignment, cadastral access, grading, and setbacks are unknown."
+        }
+      ]
+    }
+  }
+}

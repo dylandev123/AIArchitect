@@ -1,0 +1,225 @@
+{
+  "status": "constructed-unapproved-incomplete",
+  "providerCalls": 1,
+  "retries": 0,
+  "requestFingerprint": "b81041eee5ddafeeeb227eae94813e83317c5ad9122468bb6f4f74a404053b6f",
+  "operations": {
+    "add": 43,
+    "replace": 3
+  },
+  "operationsTotal": 46,
+  "resolvedFindings": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "pool-evidence-missing",
+      "elementIds": [
+        "pool-water"
+      ],
+      "message": "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "upper-floor-gap",
+      "elementIds": [
+        "owner-floor",
+        "guest-floor"
+      ],
+      "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "shared-boundary-blocked",
+      "elementIds": [
+        "kitchen-floor",
+        "salon-floor",
+        "kitchen-west-wall-new"
+      ],
+      "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "shared-boundary-blocked",
+      "elementIds": [
+        "kitchen-floor",
+        "dining-floor",
+        "dining-north-wall-new"
+      ],
+      "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+    }
+  ],
+  "remainingFindings": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, services or amenity performance is represented."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision facade-materials: Materials are editable scene materials only; specialist finishes, weathering, craftsmanship and weather performance are not represented."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-tread-17",
+        "upper-bridge-landing"
+      ],
+      "message": "Floor surfaces upper-bridge-landing and stair-tread-17 overlap at the same datum; summed usable area is withheld."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Double-height ocean salon with direct loggia access. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Northeast kitchen/service room with dining and salon access. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Separated upper owner suite enclosure with stair access. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Separated upper guest suite enclosure with stair access. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Retained rectangular pool precinct with complete modeled perimeter. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+    },
+    {
+      "category": "confirmed-technical-defect",
+      "code": "architectural-review",
+      "elementIds": [
+        "salon-south-wall-new",
+        "ocean-loggia-door"
+      ],
+      "message": "ocean-loggia-door: attached panel centre does not align with salon-south-wall-new's opening (expected local Y -0.200, actual -1.7). Review centre versus sill coordinates; geometry was preserved."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "vertical-route-missing",
+      "elementIds": [
+        "owner-floor",
+        "guest-floor"
+      ],
+      "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+    }
+  ],
+  "usage": {
+    "inputTokens": 13114,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 13111
+    },
+    "outputTokens": 7180,
+    "outputTokenDetails": {
+      "textTokens": 5128,
+      "reasoningTokens": 2052
+    },
+    "totalTokens": 20294,
+    "reasoningTokens": 2052,
+    "cachedInputTokens": 0
+  },
+  "preservation": [
+    {
+      "path": "docs/villa-playground/25m-mansion-recovery/original.scene.json",
+      "sha256": "429b5da93a705c881b6943fc8877a56499845dd14405faea42ef2157710b9219",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-strict-live/after.UNAPPROVED.json",
+      "sha256": "6207f1ca11e28d6dcc8723cb4c101b35e09f7bc98431a3c9c48acb31e2f49cbd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-technical-review/repaired.UNAPPROVED.json",
+      "sha256": "4928660aa9e8a2bd1b1fdc2859dc401032f8340ae03c1da7cb5aa5a78c7f2cef",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-technical-review/preserved-versions.UNAPPROVED.json",
+      "sha256": "468dddf52ff96e75c6ceb54d0295efbc7b53a75a64c90a5960e7c5e51e3bd6ab",
+      "unchanged": true
+    }
+  ],
+  "threeRepairedDoorsPreserved": true,
+  "terrainPreserved": true,
+  "existingPoolPreserved": true,
+  "roundtrip": true,
+  "sceneElements": {
+    "before": 57,
+    "after": 100
+  },
+  "schema": "unchanged strict schema; settings fingerprint verified by original runner",
+  "instructionsKnowledgeAndEngine": "unchanged",
+  "approved": false,
+  "screenshots": {
+    "matchedCameras": true,
+    "count": 8,
+    "errors": [],
+    "blockedRequests": [],
+    "views": [
+      "arrival",
+      "aerial",
+      "entrance",
+      "poolside"
+    ],
+    "sceneIdsVerified": true
+  }
+}

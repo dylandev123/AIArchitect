@@ -1,0 +1,1151 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Solana techniques · developer study",
+  "elements": [
+    {
+      "id": "salon",
+      "label": "salon floor",
+      "kind": "plate",
+      "at": [
+        -7,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        10
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-rear",
+      "label": "salon rear",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        0,
+        2.2,
+        -4.85
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-west",
+      "label": "salon west",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        -6.85,
+        2.2,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        9.4,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-east",
+      "label": "salon east",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        6.85,
+        2.2,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        9.4,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-bay-0",
+      "label": "salon bay-0",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        -5.25,
+        2.2,
+        4.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.05,
+        "height": 3.8000000000000003,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-glass-0",
+      "label": "salon glass-0",
+      "kind": "glazing",
+      "parent": "salon-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.05,
+        3.8000000000000003,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "salon-reveal-0",
+      "label": "salon reveal-0",
+      "kind": "volume",
+      "parent": "salon",
+      "at": [
+        -5.25,
+        4.22,
+        5.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "salon-bay-1",
+      "label": "salon bay-1",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        -1.75,
+        2.2,
+        4.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.05,
+        "height": 3.8000000000000003,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-glass-1",
+      "label": "salon glass-1",
+      "kind": "glazing",
+      "parent": "salon-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.05,
+        3.8000000000000003,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "salon-reveal-1",
+      "label": "salon reveal-1",
+      "kind": "volume",
+      "parent": "salon",
+      "at": [
+        -1.75,
+        4.22,
+        5.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "salon-bay-2",
+      "label": "salon bay-2",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        1.75,
+        2.2,
+        4.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.05,
+        "height": 3.8000000000000003,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-glass-2",
+      "label": "salon glass-2",
+      "kind": "glazing",
+      "parent": "salon-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.05,
+        3.8000000000000003,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "salon-reveal-2",
+      "label": "salon reveal-2",
+      "kind": "volume",
+      "parent": "salon",
+      "at": [
+        1.75,
+        4.22,
+        5.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "salon-bay-3",
+      "label": "salon bay-3",
+      "kind": "wall",
+      "parent": "salon",
+      "at": [
+        5.25,
+        2.2,
+        4.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        4.2,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.05,
+        "height": 3.8000000000000003,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-glass-3",
+      "label": "salon glass-3",
+      "kind": "glazing",
+      "parent": "salon-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.05,
+        3.8000000000000003,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "salon-reveal-3",
+      "label": "salon reveal-3",
+      "kind": "volume",
+      "parent": "salon",
+      "at": [
+        5.25,
+        4.22,
+        5.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "salon-roof",
+      "label": "salon roof",
+      "kind": "roof",
+      "parent": "salon",
+      "at": [
+        0,
+        4.425,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        15.6,
+        0.25,
+        11.6
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "suite",
+      "label": "suite floor",
+      "kind": "plate",
+      "at": [
+        -8,
+        4.6,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        0.2,
+        8
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "suite-rear",
+      "label": "suite rear",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        0,
+        1.8,
+        -3.85
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "suite-west",
+      "label": "suite west",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        -5.85,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.4,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "suite-east",
+      "label": "suite east",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        5.85,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.4,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "suite-bay-0",
+      "label": "suite bay-0",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        -4,
+        1.8,
+        3.85
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "suite-glass-0",
+      "label": "suite glass-0",
+      "kind": "glazing",
+      "parent": "suite-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        3,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "suite-reveal-0",
+      "label": "suite reveal-0",
+      "kind": "volume",
+      "parent": "suite",
+      "at": [
+        -4,
+        3.42,
+        4.06
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-bay-1",
+      "label": "suite bay-1",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        0,
+        1.8,
+        3.85
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "suite-glass-1",
+      "label": "suite glass-1",
+      "kind": "glazing",
+      "parent": "suite-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        3,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "suite-reveal-1",
+      "label": "suite reveal-1",
+      "kind": "volume",
+      "parent": "suite",
+      "at": [
+        0,
+        3.42,
+        4.06
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-bay-2",
+      "label": "suite bay-2",
+      "kind": "wall",
+      "parent": "suite",
+      "at": [
+        4,
+        1.8,
+        3.85
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "suite-glass-2",
+      "label": "suite glass-2",
+      "kind": "glazing",
+      "parent": "suite-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        3,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "suite-reveal-2",
+      "label": "suite reveal-2",
+      "kind": "volume",
+      "parent": "suite",
+      "at": [
+        4,
+        3.42,
+        4.06
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-roof",
+      "label": "suite roof",
+      "kind": "roof",
+      "parent": "suite",
+      "at": [
+        0,
+        3.625,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        13.6,
+        0.25,
+        9.6
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "arrival",
+      "label": "arrival floor",
+      "kind": "plate",
+      "at": [
+        2,
+        0.1,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.2,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-rear",
+      "label": "arrival rear",
+      "kind": "wall",
+      "parent": "arrival",
+      "at": [
+        0,
+        4.3,
+        -3.85
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        8.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-west",
+      "label": "arrival west",
+      "kind": "wall",
+      "parent": "arrival",
+      "at": [
+        -1.85,
+        4.3,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.4,
+        8.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-east",
+      "label": "arrival east",
+      "kind": "wall",
+      "parent": "arrival",
+      "at": [
+        1.85,
+        4.3,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.4,
+        8.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-bay-0",
+      "label": "arrival bay-0",
+      "kind": "wall",
+      "parent": "arrival",
+      "at": [
+        0,
+        4.3,
+        3.85
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        8.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 3.55,
+        "height": 8.15,
+        "glazed": false
+      }
+    },
+    {
+      "id": "arrival-reveal-0",
+      "label": "arrival reveal-0",
+      "kind": "volume",
+      "parent": "arrival",
+      "at": [
+        0,
+        8.42,
+        4.06
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-roof",
+      "label": "arrival roof",
+      "kind": "roof",
+      "parent": "arrival",
+      "at": [
+        0,
+        8.625,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.6,
+        0.25,
+        9.6
+      ],
+      "material": "limestone",
+      "roofForm": "flat",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "dining",
+      "label": "dining floor",
+      "kind": "plate",
+      "at": [
+        14,
+        0.1,
+        -1
+      ],
+      "rotation": 0.18,
+      "size": [
+        10,
+        0.2,
+        12
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "dining-rear",
+      "label": "dining rear",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        0,
+        2.1,
+        -5.85
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "dining-west",
+      "label": "dining west",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        -4.85,
+        2.1,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        11.4,
+        4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "dining-east",
+      "label": "dining east",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        4.85,
+        2.1,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        11.4,
+        4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "dining-bay-0",
+      "label": "dining bay-0",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        -3.333333333333333,
+        2.1,
+        5.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.8833333333333333,
+        "height": 3.6,
+        "glazed": false
+      }
+    },
+    {
+      "id": "dining-glass-0",
+      "label": "dining glass-0",
+      "kind": "glazing",
+      "parent": "dining-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.8833333333333333,
+        3.6,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "dining-reveal-0",
+      "label": "dining reveal-0",
+      "kind": "volume",
+      "parent": "dining",
+      "at": [
+        -3.333333333333333,
+        4.02,
+        6.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-bay-1",
+      "label": "dining bay-1",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        0,
+        2.1,
+        5.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.8833333333333333,
+        "height": 3.6,
+        "glazed": false
+      }
+    },
+    {
+      "id": "dining-glass-1",
+      "label": "dining glass-1",
+      "kind": "glazing",
+      "parent": "dining-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.8833333333333333,
+        3.6,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "dining-reveal-1",
+      "label": "dining reveal-1",
+      "kind": "volume",
+      "parent": "dining",
+      "at": [
+        0,
+        4.02,
+        6.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-bay-2",
+      "label": "dining bay-2",
+      "kind": "wall",
+      "parent": "dining",
+      "at": [
+        3.333333333333334,
+        2.1,
+        5.85
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.8833333333333333,
+        "height": 3.6,
+        "glazed": false
+      }
+    },
+    {
+      "id": "dining-glass-2",
+      "label": "dining glass-2",
+      "kind": "glazing",
+      "parent": "dining-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.8833333333333333,
+        3.6,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "dining-reveal-2",
+      "label": "dining reveal-2",
+      "kind": "volume",
+      "parent": "dining",
+      "at": [
+        3.333333333333334,
+        4.02,
+        6.06
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-roof",
+      "label": "dining roof",
+      "kind": "roof",
+      "parent": "dining",
+      "at": [
+        0,
+        4.225,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        11.6,
+        0.25,
+        13.6
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "arrival-door",
+      "label": "arrival-door",
+      "kind": "entrance",
+      "parent": "arrival-bay-0",
+      "at": [
+        0,
+        -2.4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2,
+        3.6,
+        0.15
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "arrival-sidelight-west",
+      "label": "arrival-sidelight-west",
+      "kind": "glazing",
+      "parent": "arrival-bay-0",
+      "at": [
+        -1.3875,
+        -2.4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        0.775,
+        3.6,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "arrival-sidelight-east",
+      "label": "arrival-sidelight-east",
+      "kind": "glazing",
+      "parent": "arrival-bay-0",
+      "at": [
+        1.3875,
+        -2.4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        0.775,
+        3.6,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "arrival-transom",
+      "label": "arrival-transom",
+      "kind": "glazing",
+      "parent": "arrival-bay-0",
+      "at": [
+        0,
+        1.675,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        4.55,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 4
+    }
+  ]
+}

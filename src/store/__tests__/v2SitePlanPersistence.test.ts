@@ -47,7 +47,7 @@ describe("new V2 Site Plan project persistence", () => {
 
   it("round-trips the accepted canonical Site Plan, including its authored pool deck, before a generic poolside chair placement", async () => {
     const store = await loadStore();
-    const project = store.getState().createProject("New V2 pool house");
+    const project = store.getState().createProject("New V2 pool house", "house", "v2-architectural");
     // This is the completed new-V2-generation payload. There is deliberately no legacy `decks`
     // field: a reloaded follow-up must use the accepted, persisted Site Plan itself.
     const completedGeneration = JSON.stringify({

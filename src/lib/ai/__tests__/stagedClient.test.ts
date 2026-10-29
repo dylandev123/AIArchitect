@@ -52,6 +52,13 @@ afterEach(() => {
 });
 
 describe("requestStagedGeneration", () => {
+  it("blocks the default direct-scene project before staged provider dispatch", async () => {
+    const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
+    const project = useProjectStore.getState().createProject("New default");
+    const fetch = vi.fn(); vi.stubGlobal("fetch", fetch);
+    expect(await requestStagedGeneration({projectId:project.id,prompt:"House",apply:()=>{throw Error("must not apply");}})).toMatchObject({ok:false,status:409});
+    expect(fetch).not.toHaveBeenCalled();
+  });
   it("refuses to transport a persisted V3 project through V2 SSE", async () => {
     const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
     const project = useProjectStore.getState().createProject("V3 mansion", "house", "v3-scene");
@@ -67,7 +74,7 @@ describe("requestStagedGeneration", () => {
 
   it("applies the result when the server finishes ok, even though the stream's own stage frames moved the project's live revision", async () => {
     const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
-    const project = useProjectStore.getState().createProject("Test House");
+    const project = useProjectStore.getState().createProject("Test House", "house", "v2-architectural");
 
     const { stream, push, close } = controlledSseStream();
     push(sseFrame("stage", { type: "stage", stage: "intent", index: 1, of: 5, document: { fake: "in-progress-document" } }));
@@ -88,7 +95,7 @@ describe("requestStagedGeneration", () => {
 
   it("applies the result after streaming mass-added, architectural-geometry and roof-added frames too — every SSE 'stage' frame (not just the intent one) must count as the stream's own write, or the newer Architectural Geometry Pass would look like a concurrent edit", async () => {
     const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
-    const project = useProjectStore.getState().createProject("Test House");
+    const project = useProjectStore.getState().createProject("Test House", "house", "v2-architectural");
 
     const { stream, push, close } = controlledSseStream();
     push(sseFrame("stage", { type: "stage", stage: "mass-expansion", index: 4, of: 6, document: { fake: "masses-in-progress" } }));
@@ -112,7 +119,7 @@ describe("requestStagedGeneration", () => {
 
   it("still reports staleness when something else edits the project mid-stream, independent of the stream's own writes", async () => {
     const { useProjectStore, requestStagedGeneration } = await loadWithFreshStores();
-    const project = useProjectStore.getState().createProject("Test House");
+    const project = useProjectStore.getState().createProject("Test House", "house", "v2-architectural");
 
     const { stream, push, close } = controlledSseStream();
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(fakeSseResponse(stream)));

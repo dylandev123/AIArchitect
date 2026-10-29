@@ -781,3 +781,12 @@ describe('V3 offline architecture acceptance safety',()=>{
   const response=await invoke(),body=await response.json();expect(response.status).toBe(502);expect(body.code).toBe('V3_OUTPUT_TRUNCATED');expect(body.json).toBeUndefined();expect(generateText).toHaveBeenCalledTimes(1);
  });
 });
+
+ it('rejects a stale direct-scene request before any legacy generation or provider call',async()=>{
+  generateText.mockClear();
+  const {POST}=await import('../route');
+  const response=await POST(new NextRequest('http://localhost/api/ai/house',{method:'POST',body:JSON.stringify({mode:'generate',prompt:'House',currentHouseJson:JSON.stringify({version:'architectural-scene-1',name:'New',elements:[]})})}));
+  expect(response.status).toBe(409);
+  expect(await response.json()).toMatchObject({code:'DIRECT_SCENE_ENDPOINT_REQUIRED',providerCalls:0});
+  expect(generateText).not.toHaveBeenCalled();
+ });

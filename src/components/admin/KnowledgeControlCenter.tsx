@@ -1,5 +1,6 @@
 "use client";
 
+import { ArchitecturalResearch } from "./ArchitecturalResearch";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, EyeOff, LoaderCircle, RotateCcw, Search, Sparkles, Plus } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
@@ -192,17 +193,18 @@ export function KnowledgeControlCenter({ onNavigate }: { onNavigate?: CardProps[
   if (error) return <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">{error}</p>;
   if (loaded && knowledge.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-white/8 px-4 py-5 text-center">
+      <div className="flex flex-col gap-4"><ArchitecturalResearch/><div className="rounded-xl border border-dashed border-white/8 px-4 py-5 text-center">
         <p className="text-sm text-neutral-400">No knowledge gaps recorded yet</p>
         <p className="mx-auto mt-1 max-w-md text-[11px] text-neutral-600">
           Each generation scores its roofs, outdoor living, landscape, pool, arrival and other areas. Weak ones show up here as the design knowledge to build next.
         </p>
-      </div>
+      </div></div>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
+      <ArchitecturalResearch/>
       <Board title="Highest Impact Missing Knowledge" hint="Demand × how badly designs fall short × what is still missing" items={boards.highestImpact} onNavigate={onNavigate} />
       <Board title="Most Requested Knowledge" hint="Total generations that exposed the gap" items={boards.mostRequested} onNavigate={onNavigate} />
       <Board title="Recently Growing Needs" hint="Requests in the last 14 days" items={boards.recentlyGrowing} onNavigate={onNavigate} />

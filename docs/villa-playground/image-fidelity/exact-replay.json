@@ -1,0 +1,405 @@
+{
+  "spec": {
+    "version": 1,
+    "source": "/inspiration/villa.jpg",
+    "provenance": "terra-vision",
+    "massing": "A compact, single-storey, elongated rectangular residence with a broad low hip roof and deep perimeter eaves. The visible house is modeled as one supported main wing; its apparent long axis is east–west.",
+    "floorLevels": 1,
+    "entrances": "A likely sheltered entrance occurs along the left/west portion of the long facade, but its door is obscured by roof shadow and vegetation; no entrance is asserted as visibly confirmed.",
+    "roofs": "A single low-pitched terracotta-red hipped roof dominates the silhouette, with notably broad eaves and no visible upper roof volume.",
+    "glazing": "One large, simple vertical blue-glazed window is visible on the near short facade. Other facade openings are partially obscured or too indistinct to count reliably.",
+    "materials": "Warm pale stucco or limestone-toned walls, dark timber-like corner/edge trim, red terracotta tile roof, grey stone paving, and blue pool water are visible.",
+    "relationships": [
+      "The principal house sits centrally within an open planted garden.",
+      "A paved outdoor sitting terrace adjoins the west/left side of the residence.",
+      "A rectangular swimming pool lies in the foreground, south-east of the house, separated by lawn.",
+      "A small paved arrival/parking pad is set north-east of the house.",
+      "Mature trees visually frame the building, pool, and patio."
+    ],
+    "uncertainty": [
+      "All dimensions are single-image estimates without a known scale reference.",
+      "The far facade, full opening pattern, entrance position, interior organization, and exact garden boundary are not visible.",
+      "Orientation is assigned to organize an editable exterior and does not claim surveyed cardinal alignment."
+    ],
+    "features": [
+      {
+        "id": "main-massing",
+        "observation": "A single low, elongated rectangular residence is clearly visible beneath one dominant roof mass.",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "wings.0",
+        "limitation": "Width and depth are estimated from perspective rather than measured."
+      },
+      {
+        "id": "single-storey",
+        "observation": "Only one facade level is visible; there is no evident upper floor or roof dormer.",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "wings.0.storeys",
+        "limitation": "Occluded rear elevations remain unseen."
+      },
+      {
+        "id": "hip-roof",
+        "observation": "The red roof slopes down on multiple visible sides and reads as a hipped tiled roof.",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "appearance.roof",
+        "limitation": "Exact pitch, tile profile, ridge geometry, and roof structure are not recoverable."
+      },
+      {
+        "id": "deep-eaves",
+        "observation": "The roof projects substantially beyond the walls, creating a shaded edge around the house.",
+        "confidence": "high",
+        "disposition": "approximate",
+        "target": "wings.0.eave",
+        "limitation": "Eave projection is estimated from foreshortened imagery."
+      },
+      {
+        "id": "warm-wall-finish",
+        "observation": "The exposed walls read as pale warm stone or stucco with darker timber-like trim at corners.",
+        "confidence": "medium",
+        "disposition": "built",
+        "target": "appearance.exterior",
+        "limitation": "The supported exterior palette cannot separately configure trim."
+      },
+      {
+        "id": "near-window",
+        "observation": "A large blue-glazed vertical opening is visible on the near short facade.",
+        "confidence": "high",
+        "disposition": "approximate",
+        "target": "appearance.glazing",
+        "limitation": "Supported wing glazing is property-wide; exact individual window placement is not editable."
+      },
+      {
+        "id": "obscured-entrance",
+        "observation": "A likely doorway is suggested beneath the shaded left-side eave, but it is concealed by shadow and trees.",
+        "confidence": "low",
+        "disposition": "hidden",
+        "target": null,
+        "limitation": "No confirmed entrance location or door geometry can be constructed from the image."
+      },
+      {
+        "id": "west-patio",
+        "observation": "A small grey paved outdoor sitting area with table and chairs appears beside the left/west end of the house.",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "terraces.0",
+        "limitation": "Furniture is not represented by the supported terrace configuration."
+      },
+      {
+        "id": "rectangular-pool",
+        "observation": "A narrow rectangular blue swimming pool is visible in the foreground, offset from the house.",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "pool",
+        "limitation": "Pool size and separation are perspective-based estimates."
+      },
+      {
+        "id": "parking-pad",
+        "observation": "A small dark paved pad with a vehicle-like object appears north-east of the residence.",
+        "confidence": "medium",
+        "disposition": "approximate",
+        "target": "terraces.1",
+        "limitation": "Vehicle and dedicated parking construction are unavailable; only the paved rectangle is represented."
+      },
+      {
+        "id": "garden-trees",
+        "observation": "The residence is surrounded by lawn, broad-canopy trees, shrubs, and several tall columnar evergreens.",
+        "confidence": "high",
+        "disposition": "unsupported",
+        "target": null,
+        "limitation": "This contract has no editable tree, shrub, terrain, or planting-placement field; a landscape builder would need vegetation controls."
+      },
+      {
+        "id": "terrain-and-grid",
+        "observation": "The image shows a broad gently varied green site and faint blue ground-grid lines.",
+        "confidence": "medium",
+        "disposition": "unsupported",
+        "target": null,
+        "limitation": "Terrain shaping and reference-grid overlays have no supported construction fields."
+      },
+      {
+        "id": "interior-layout",
+        "observation": "No room layout, stairs, or internal circulation is visible.",
+        "confidence": "high",
+        "disposition": "hidden",
+        "target": null,
+        "limitation": "Interior plans and structural systems are outside the supported exterior model."
+      }
+    ],
+    "architecture": {
+      "appearance": {
+        "style": "tuscan",
+        "roof": "hip",
+        "exterior": "warm-stone",
+        "glazing": "divided",
+        "landscape": "mediterranean"
+      },
+      "wings": [
+        {
+          "eave": 1.4,
+          "id": "main-house",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": 0,
+          "width": 23,
+          "depth": 10,
+          "orientation": 0,
+          "storeys": 1,
+          "storeyHeight": 3.4,
+          "veranda": 0,
+          "balcony": 0
+        }
+      ],
+      "terraces": [
+        {
+          "x": -14,
+          "z": 1.5,
+          "width": 7,
+          "depth": 6,
+          "id": "west-sitting-patio",
+          "kind": "terrace",
+          "timber": false
+        },
+        {
+          "x": 15,
+          "z": -8,
+          "width": 8,
+          "depth": 4,
+          "id": "north-east-paved-pad",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": 10,
+        "z": 13,
+        "width": 12,
+        "depth": 5
+      }
+    },
+    "evidence": [
+      {
+        "featureId": "main-massing",
+        "basis": "visible",
+        "explanation": "The single long enclosed house volume is clearly legible in the image."
+      },
+      {
+        "featureId": "single-storey",
+        "basis": "visible",
+        "explanation": "Visible walls extend from grade directly to one roof eave line."
+      },
+      {
+        "featureId": "hip-roof",
+        "basis": "visible",
+        "explanation": "Multiple descending roof planes and a broad red tiled roof are directly visible."
+      },
+      {
+        "featureId": "deep-eaves",
+        "basis": "visible",
+        "explanation": "Roof edges project well beyond the wall faces and cast shade."
+      },
+      {
+        "featureId": "warm-wall-finish",
+        "basis": "visible",
+        "explanation": "Near walls read as pale warm stucco or stone with dark perimeter trim."
+      },
+      {
+        "featureId": "near-window",
+        "basis": "visible",
+        "explanation": "A large blue-glazed rectangular opening is visible on the near end wall."
+      },
+      {
+        "featureId": "obscured-entrance",
+        "basis": "inferred",
+        "explanation": "Shadowed facade recesses suggest an entry, but no door is reliably visible."
+      },
+      {
+        "featureId": "west-patio",
+        "basis": "visible",
+        "explanation": "Grey paving, a round table, and chairs are visible beside the left end of the house."
+      },
+      {
+        "featureId": "rectangular-pool",
+        "basis": "visible",
+        "explanation": "A blue rectangular water body with pale coping is visible in the foreground."
+      },
+      {
+        "featureId": "parking-pad",
+        "basis": "visible",
+        "explanation": "A compact paved rectangle and a dark vehicle-like object are visible beyond the house."
+      },
+      {
+        "featureId": "garden-trees",
+        "basis": "visible",
+        "explanation": "Lawn, varied trees, shrubs, and tall narrow evergreens are visible across the site."
+      },
+      {
+        "featureId": "terrain-and-grid",
+        "basis": "unsupported",
+        "explanation": "Ground variation and blue grid markings are visible but unsupported by editable terrain fields."
+      },
+      {
+        "featureId": "interior-layout",
+        "basis": "inferred",
+        "explanation": "The exterior-only view provides no dependable evidence of internal rooms or access."
+      }
+    ],
+    "camera": {
+      "position": [
+        31,
+        27,
+        35
+      ],
+      "target": [
+        0,
+        1.8,
+        2
+      ],
+      "fov": 48,
+      "uncertainty": "Estimated elevated oblique camera matching the visible roof-dominant framing; lens, height, and scene scale are approximate."
+    }
+  },
+  "changes": {
+    "version": 1,
+    "id": "image-first-proof",
+    "name": "Saved Image Residence",
+    "character": "Image interpretation · estimated exterior geometry",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "hip",
+      "exterior": "warm-stone",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "eave": 1.4,
+        "id": "main-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 0,
+        "width": 23,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.4,
+        "veranda": 0,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": -14,
+        "z": 1.5,
+        "width": 7,
+        "depth": 6,
+        "id": "west-sitting-patio",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 15,
+        "z": -8,
+        "width": 8,
+        "depth": 4,
+        "id": "north-east-paved-pad",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 10,
+      "z": 13,
+      "width": 12,
+      "depth": 5
+    },
+    "garden": {
+      "x": 0,
+      "z": 0,
+      "width": 50,
+      "depth": 50
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 5
+  },
+  "summary": "Saved concept reconstructed through existing editable wing builders. Approximate exterior only.",
+  "unsupported": [
+    "deep-eaves: Eave projection is estimated from foreshortened imagery.",
+    "near-window: Supported wing glazing is property-wide; exact individual window placement is not editable.",
+    "parking-pad: Vehicle and dedicated parking construction are unavailable; only the paved rectangle is represented.",
+    "garden-trees: This contract has no editable tree, shrub, terrain, or planting-placement field; a landscape builder would need vegetation controls.",
+    "terrain-and-grid: Terrain shaping and reference-grid overlays have no supported construction fields."
+  ],
+  "config": {
+    "version": 1,
+    "id": "image-first-proof",
+    "name": "Saved Image Residence",
+    "character": "Image interpretation · estimated exterior geometry",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "hip",
+      "exterior": "warm-stone",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "eave": 1.4,
+        "id": "main-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 0,
+        "width": 23,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.4,
+        "veranda": 0,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": -14,
+        "z": 1.5,
+        "width": 7,
+        "depth": 6,
+        "id": "west-sitting-patio",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 15,
+        "z": -8,
+        "width": 8,
+        "depth": 4,
+        "id": "north-east-paved-pad",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 10,
+      "z": 13,
+      "width": 12,
+      "depth": 5
+    },
+    "garden": {
+      "x": 1.1500000000000004,
+      "z": 3.8499999999999996,
+      "width": 47.3,
+      "depth": 37.7
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 5
+  }
+}

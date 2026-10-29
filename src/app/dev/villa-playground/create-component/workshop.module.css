@@ -1,0 +1,20 @@
+.workshop { min-height: 100vh; background: #edf0e9; color: #23382f; padding: 28px; font-family: Arial, sans-serif; }
+.workshop header { display:flex; justify-content:space-between; align-items:center; gap:24px; margin-bottom:28px; }
+.workshop h1 { font-family:Georgia,serif; font-size:36px; margin:8px 0; }
+.workshop h2 { font-size:20px; margin:12px 0; }
+.workshop p { line-height:1.5; margin:12px 0; }
+.workshop a { text-decoration:underline; }
+.grid { display:grid; grid-template-columns:360px minmax(0,1fr); gap:24px; align-items:start; }
+.panel { background:#fafbf7; border:1px solid #ccd6c9; border-radius:16px; padding:20px; }
+.workshop label { display:block; margin:12px 0; font-size:14px; }
+.workshop textarea { display:block; width:100%; min-height:90px; border:1px solid #aebdae; border-radius:6px; padding:10px; margin-top:6px; }
+.workshop button,.workshop select,.workshop input[type=number] { border:1px solid #9eaf9e; border-radius:6px; padding:9px; margin:4px; background:#fff; color:#23382f; }
+.workshop button { cursor:pointer; }
+.workshop button:disabled { opacity:.4; cursor:default; }
+.primary { background:#254d3b !important; color:#fff !important; }
+.controls { display:flex; flex-wrap:wrap; gap:8px; }
+.controls input { width:86px; }
+.workshop pre { white-space:pre-wrap; max-height:260px; overflow:auto; font-size:12px; }
+.workshop img { width:160px; margin:8px; border-radius:6px; }
+.message { border-left:3px solid #6f8e72; padding:10px; white-space:pre-wrap; }
+@media(max-width:950px) { .grid { grid-template-columns:1fr; } .workshop { padding:14px; } }

@@ -1,0 +1,13 @@
+import {mkdir,readFile,writeFile,copyFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const run='00000000-0000-4000-8000-000000000001',root=`.data/image-vision/${run}`;
+const {spec}=JSON.parse(await readFile('docs/villa-playground/image-first/proof.json','utf8'));
+const image=await readFile('public/inspiration/villa.jpg');
+spec.provenance='terra-vision';
+spec.evidence=spec.features.map(f=>({featureId:f.id,basis:f.disposition==='hidden'?'inferred':f.disposition==='unsupported'?'unsupported':'visible',explanation:f.observation}));
+spec.camera={position:[-30,18,40],target:[0,3,0],fov:39,uncertainty:'MOCK ONLY: camera chosen for harness validation, not inferred from live vision.'};
+await mkdir(root,{recursive:true});
+await copyFile('public/inspiration/villa.jpg',`${root}/concept.jpg`);
+await writeFile(`${root}/request.json`,JSON.stringify({mock:true,providerCalls:0,sourceSha256:createHash('sha256').update(image).digest('hex')}));
+await writeFile(`${root}/response.json`,JSON.stringify({text:JSON.stringify(spec),response:{mock:true},usage:{}}));
+console.log(run);

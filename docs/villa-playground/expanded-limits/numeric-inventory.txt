@@ -1,0 +1,255 @@
+src/lib/villa/composition.ts
+11: const position = z.number().min(-L.position).max(L.position);
+12: const rectangle = z.object({ x: position, z: position, width: z.number().min(.6).max(L.rectangle), depth: z.number().min(.6).max(L.rectangle) }).strict();
+20:   x: position, z: position, width: z.number().min(4).max(L.wing), depth: z.number().min(4).max(L.wing),
+21:   orientation: z.number().min(0).max(345).multipleOf(15),
+22:   storeys: z.union([z.literal(1), z.literal(2)]), storeyHeight: z.number().min(3).max(L.storeyHeight),
+23:   veranda: z.number().min(0).max(L.veranda), balcony: z.number().min(0).max(2.4),
+25: const connectionSchema = z.object({ id, from: id, to: id, width: z.number().min(1.2).max(L.galleryWidth) }).strict();
+27: const poolSchema = rectangle.extend({ width: z.number().min(8).max(L.poolWidth), depth: z.number().min(4).max(L.poolDepth) }).strict();
+28: export const gardenSchema = z.object({ x: z.number().min(-L.position).max(L.position), z: z.number().min(-L.position).max(L.position), width: z.number().min(12).max(L.garden), depth: z.number().min(12).max(L.garden) }).strict();
+31:   version: z.literal(1), id, name: z.string().min(1).max(VILLA_TEXT_LIMITS.name).describe('Villa display title, 1–80 characters.'), character: z.string().min(1).max(VILLA_TEXT_LIMITS.character).describe('Villa display tagline, 1–160 characters.'),
+32:   appearance: appearanceSchema, wings: z.array(buildingWingSchema).min(1).max(L.wings),
+33:   connections: z.array(connectionSchema).max(L.galleries), terraces: z.array(terraceSchema).max(L.terraces),
+37:   landscapeMargin: z.number().min(2).max(L.margin).optional(),
+38:   components: z.array(pavilionPlacementSchema).max(L.pavilions).optional(),
+39:   experimentalForms: z.array(pavilionPlacementSchema).max(L.pavilions).optional(),
+49:   ])).max(L.routes*2).optional(),
+53:   ])).max(L.beds*2).optional(),
+63:   ])).max(L.wings*2).optional(),
+67:   ])).max(L.galleries*2).optional(),
+71:   ])).max(L.terraces*2).optional(),
+76:   ])).max(L.pavilions*2).optional(),
+77:   landscapeMargin: z.number().min(2).max(L.margin).optional(),
+91:   Math.min(a.right,b.right)-Math.max(a.left,b.left)>-gap+.01 && Math.min(a.front,b.front)-Math.max(a.rear,b.rear)>-gap+.01;
+101:   if(w.orientation===0) b.front=Math.max(b.front,wingBounds(w).front+front);
+102:   if(w.orientation===90) b.right=Math.max(b.right,wingBounds(w).right+front);
+103:   if(w.orientation===180) b.rear=Math.max(b.rear,wingBounds(w).rear-front);
+104:   if(w.orientation===270) b.left=Math.min(b.left,wingBounds(w).left-front);
+105:   if(w.orientation % 90) {
+138:   return gardenSchema.parse({x:(left+right)/2,z:(rear+front)/2,width:Math.max(12,right-left),depth:Math.max(12,front-rear)});
+147:   if(roots.length!==1 || roots[0].parentId!==null || roots[0].detached) fail('wings','Exactly one main wing must have parentId=null and detached=false.');
+149:     if(w.orientation % 90 && (!w.detached || w.role==='main')) fail(`wings.${w.id}.orientation`,'Non-cardinal wings must be detached secondary wings; shared walls and diagonal galleries are unsupported.');
+150:     if(w.storeys===2 && w.width<8) fail(`wings.${w.id}.width`,'Two storeys require width >= 8 m for the existing stair.');
+151:     if(w.balcony>Math.min(2.4,w.depth/3) || (w.storeys===1 && w.balcony>0)) fail(`wings.${w.id}.balcony`,'Balconies require two storeys and depth <= min(2.4 m, wing depth / 3).');
+159:     if(child.id!==roots[0].id) fail(`wings.${w.id}.parentId`,'Every secondary wing needs a hierarchy path to the main wing.');
+164:   if(wings.reduce((sum,w)=>sum+2*(w.width+w.depth)*w.storeys,0)>L.facadeWork)
+165:     fail('wings',`Combined facade workload exceeds the browser budget (${L.facadeWork} perimeter-metres × storeys). Reduce wing count, perimeter or storeys; site area is unrestricted within its schema.`);
+172:     if(parent && !w.detached && !touching(w,parent) && !links.some(l=>l.from===parent.id || l.to===parent.id)) fail(`wings.${w.id}.parentId`,'Connected wing must share >= 1.2 m of wall with its parent or use an aligned straight gallery.');
+176:   for(let i=0;i<c.wings.length;i++) for(const b of c.wings.slice(i+1)) {
+178:     if(!touching(a,b) && overlaps(wingEnvelope(a,c),wingEnvelope(b,c),.2)) fail(`wings.${a.id},${b.id}`,'Roof/veranda envelopes need at least 0.2 m separation. Move the wings or reduce verandas.');
+183:       if(gallery.storeyHeight+.3>host.storeys*host.storeyHeight) fail(`connections.${gallery.id}`,`Host ${hostId} must rise at least 0.3 m above the gallery (gallery height ${gallery.storeyHeight} m). Raise the host or remove the link.`);
+187:     if(!gallery.connects!.includes(other.id) && overlaps(wingEnvelope(gallery,c),wingEnvelope(other,c),.2)) fail(`connections.${gallery.id}`,`Gallery roof/veranda clearance intersects unrelated wing ${other.id}.`);
+211:     for(const w of wings) if(overlaps(b,wingEnvelope(w,c),.2)) fail(`${field}.${form.id}`,`Pavilion needs 0.2 m clearance from ${w.id}.`);
+212:     for(const other of forms) if(other!==form && overlaps(b,pavilionBounds(other),.2)) fail(`${field}.${form.id}`,'Pavilions need 0.2 m roof separation.');
+218:         if(overlaps(approach,obstacle)) fail(`${field}.${form.id}`, 'Pavilion needs a clear 2.4 m pedestrian approach; rotate or reposition it.');
+227:     if(c.pool && overlaps(bounds(t),bounds(c.pool),.15)) fail(`terraces.${t.id}`,'Paving must leave the pool opening plus 0.15 m clearance. Split surrounding decks into rectangles.');
+232:     if(!contained(outdoor)) fail('pool','Pool, coping, spill channel and furniture need room inside the garden (west 2.2, east 3.8, rear 1.2, front 2.2 m).');
+251:       if(op.type==='put') { if(index<0) l.routes.push(op.route); else l.routes[index]=op.route; }
+252:       else { if(index<0) fail('estateLandscapeChanges.routes','Unknown route: '+key); l.routes.splice(index,1); }
+256:       if(op.type==='put') { if(index<0) l.beds.push(op.bed); else l.beds[index]=op.bed; }
+257:       else { if(index<0) fail('estateLandscapeChanges.beds','Unknown bed: '+key); l.beds.splice(index,1); }
+265:     if(op.type==='add') { if(index>=0) fail(`wings.${op.wing.id}`,'Wing already exists.'); c.wings.push(op.wing); }
+267:       if(index<0) fail(`wings.${op.id}`,'Unknown wing.');
+274:     if(op.type==='put') { if(index<0) c.connections.push(op.connection); else c.connections[index]=op.connection; }
+275:     else { if(index<0) fail(`connections.${key}`,'Unknown gallery.'); c.connections.splice(index,1); }
+279:     if(op.type==='put') { if(index<0) c.terraces.push(op.terrace); else c.terraces[index]=op.terrace; }
+280:     else { if(index<0) fail(`terraces.${key}`,'Unknown terrace.'); c.terraces.splice(index,1); }
+285:     if(op.type==='put') { if(index<0) c.components.push(op.component); else c.components[index]=op.component; }
+287:       if(index<0) fail(`components.${key}`, 'Unknown component.');
+306:   if(error instanceof z.ZodError) return error.issues.map(i=>({path:i.path.join('.'),message:i.path.at(-1)==='builder' ? 'Missing capability: this versioned builder is unavailable. Only the approved curved-pavilion@1 open lounge can be constructed; develop and validate a reusable component for other forms.' : i.message}));
+
+src/lib/villa/estate-landscape.ts
+7: const point=z.object({x:z.number().min(-L.position).max(L.position),z:z.number().min(-L.position).max(L.position)}).strict();
+9:   id,kind:z.enum(['drive','walk']),width:z.number().min(.9).max(L.driveWidth),
+10:   points:z.array(point).min(2).max(L.controls),planting:z.enum(['avenue','border','none']),
+12:   if(r.kind==='drive' && r.width<3.5) ctx.addIssue({code:'custom',message:'Driveways need at least 3.5 m clear width.'});
+13:   if(r.kind==='walk' && r.width>L.walkWidth) ctx.addIssue({code:'custom',message:`Pedestrian paths are bounded to ${L.walkWidth} m.`});
+14:   if(r.points.length>=2) {
+16:     if(curve.getLength()>L.routeSamples*L.routeSpacing) ctx.addIssue({code:'custom',message:`Route exceeds the ${L.routeSamples*L.routeSpacing} m safe sampling budget. Use shorter routes; do not coarsen collision sampling.`});
+18:   for(let i=1;i<r.points.length;i++) if(Math.hypot(r.points[i].x-r.points[i-1].x,r.points[i].z-r.points[i-1].z)<2)
+22:   builder:z.literal('estate-landscape@1'),routes:z.array(estateRouteSchema).min(1).max(L.routes),
+23:   court:z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(12).max(L.court),depth:z.number().min(12).max(L.court),
+24:     island:z.enum(['none','planted','fountain']),islandWidth:z.number().min(2).max(L.island),islandDepth:z.number().min(2).max(L.island),
+25:   }).strict().refine(c=>c.island==='none' || Math.min((c.width-c.islandWidth)/2,(c.depth-c.islandDepth)/2)>=3.5,
+27:   beds:z.array(z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(1.5).max(L.bed),depth:z.number().min(1.5).max(L.bed)}).strict()).max(L.beds),
+34: export function routeSamples(route:EstateRoute, spacing:number=L.routeSpacing):Point[] {
+36:   const count=Math.min(L.routeSamples,Math.max(12,Math.ceil(curve.getLength()/spacing)));
+40:   const dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.z-a.z)*dz)/(dx*dx+dz*dz || 1)));
+44:   return Math.min(...samples.slice(1).map((b,i)=>pointSegmentDistance(p,samples[i],b)));
+60:   return Math.hypot(Math.max(b.left-p.x,0,p.x-b.right),Math.max(b.rear-p.z,0,p.z-b.front));
+69:     for(let i=1;i<samples.length-1;i++) for(const side of [-1,1]) {
+74:       if(routes.some(({r,samples})=>routeDistance(p,samples)<r.width/2+radius) ||
+77:       if(plants.length<L.circulationPlants) plants.push(p);
+92:     const run=[0];for(let i=1;i<samples.length;i++)run.push(run[i-1]+Math.hypot(samples[i].x-samples[i-1].x,samples[i].z-samples[i-1].z));
+93:     if(samples.some((p,i)=>samples.some((q,j)=>run[j]-run[i]>r.width*2+.5 && Math.hypot(p.x-q.x,p.z-q.z)<r.width+.2)))
+97:       if(samples.some(p=>((p.x-c.x)/(c.islandWidth/2+radius))**2+((p.z-c.z)/(c.islandDepth/2+radius))**2<1))
+100:     if(r.kind==='drive' && l.court && ![samples[0],samples.at(-1)!].some(p=>insideCourt(p,l.court!,r.width/2)))
+107:   for(const b of l.beds) if(l.routes.some(r=>routeSamples(r).some(p=>distanceToBounds(p,{left:b.x-b.width/2,right:b.x+b.width/2,rear:b.z-b.depth/2,front:b.z+b.depth/2})<r.width/2+.3)))
+
+src/lib/villa/terra.ts
+9:   prompt: z.string().trim().min(1).max(4000), mode: z.enum(['generate', 'edit']), current: z.union([compositionSchema, villaSchema]).optional(),
+17:   changes: z.union([compositionSchema, compositionPatchSchema, villaPatchSchema]), summary: z.string().min(1).max(VILLA_TEXT_LIMITS.summary).describe('Brief display summary, 1–600 characters.'), unsupported: z.array(z.string().min(1).max(VILLA_TEXT_LIMITS.unsupported).describe('Unsupported-feature explanation, 1–200 characters.')),
+41:   const schema = villaOutputSchema(input).extend({ unsupported: villaResultSchema.shape.unsupported.max(8).describe('At most 8 explanations, each 1–200 characters.') });
+66: pool: {enabled:boolean, width:10..18 (length in metres), depth:4..6.4 (width in metres)}
+70: Luxury/budget is mood and approximate ambition, not a price estimate. For $8m/spectacular choose near the upper scale/wing/pool/veranda ranges, but never exceed them. Prefer coherent proportions to maximizing every number.
+88: Combined building facade budget: sum of 2*(width+depth)*storeys across building wings AND locally derived galleries <=${L.facadeWork}; larger individual wings are supported, but do not maximize all wings together. This bounds facade mesh work without limiting estate area. Each wing local width/depth 4..${L.wing}m. TWO storeys require local width >=8m for the stair. storeys:1|2; storeyHeight:3..${L.storeyHeight}m per wing. veranda:0..${L.veranda}m along local FRONT; balcony:0..min(2.4,depth/3)m only with two storeys, otherwise 0. Roof and facade styles are shared across wings; galleries use lower flat roofs.
+93: Pool is optional, rectangular only; width is east-west LENGTH 8..${L.poolWidth}m; depth north-south WIDTH 4..${L.poolDepth}m. Reserve room from pool water edges to ALL roof/veranda envelopes and garden edge: west 2.2m,east 3.8m,north 1.2m,south 2.2m for coping, spill channel, planters and furniture. For fictional properties without an explicit site, set siteMode:derived: the local builder derives the garden from ALL roofs/verandas, galleries, terraces and pool furniture and component pedestrian approaches plus landscapeMargin (default 2m; choose 2..${L.margin}m to suit planting, circulation and estate ambition); your garden is only a presentation hint. When the brief explicitly specifies a lot/site/garden boundary, set siteMode:fixed and encode its EXACT centre and dimensions in garden; never enlarge a fixed site to fit. Garden x/z are CENTRE coordinates, never the lower-left corner. Fixed site dimensions are 12..${L.garden}m, centre x/z -${L.position}..${L.position}m. Keep the composition near origin; presentation cameras adapt to site size. Do not use remote token terraces to inflate a site; use a generous landscapeMargin when landscaped grounds are part of the brief.
+96: Use 1..${L.routes} routes with 2..${L.controls} centreline controls each, successive controls >=2m apart; each interpolated route length <=${L.routeSamples*L.routeSpacing}m to preserve collision sampling within the browser budget. Local builders interpolate smooth curves, paving, curbs and planting; never calculate mesh geometry. Drive width 3.5..${L.driveWidth}m, walk width .9..${L.walkWidth}m. Court width/depth 12..${L.court}m; island width/depth 2..${L.island}m, leave >=3.5m lane on ALL sides. Equal court axes give a circular arrival; unequal axes an oval. A fountain is the court's central island: move the court centre to move the fountain and coordinate connecting routes, never invent an independent fountain offset. Beds: at most ${L.beds}, width/depth 1.5..${L.bed}m. All centres/route controls -${L.position}..${L.position}m. Routes cannot cross buildings, pool clearance, beds or central islands; drive endpoints must meet the court when present. Walks should connect arrival, entrance thresholds, detached wings, garden rooms and amenities from outside footprints. Do not force a driveway, court, island, beds or pool into every design. Courtyard gardens combine beds and clear walking routes with coordinated surrounding wings and terraces. For ambitious unconstrained estates allocate generous land for this complete arrival and landscape system; derived sites include route planting, courts and beds automatically.
+
+src/lib/villa/design.ts
+14:   scale: z.number().min(.85).max(1.05), wingRatio: z.number().min(.85).max(1.1),
+17:   verandaDepth: z.number().min(1.6).max(2.8), terraceDepth: z.number().min(1.6).max(2.8),
+18:   pool: z.object({ enabled: z.boolean(), width: z.number().min(10).max(18), depth: z.number().min(4).max(6.4) }).strict(),
+28:   scale: z.number().min(.85).max(1.05).optional(), wingRatio: z.number().min(.85).max(1.1).optional(),
+31:   verandaDepth: z.number().min(1.6).max(2.8).optional(), terraceDepth: z.number().min(1.6).max(2.8).optional(),
+32:   pool: z.object({ enabled: z.boolean().optional(), width: z.number().min(10).max(18).optional(), depth: z.number().min(4).max(6.4).optional() }).strict().optional(),
+49:     if (!patch.composition && !(rule.compositions as readonly string[]).includes(next.composition)) next.composition = rule.compositions[0];
+
+src/lib/villa/responseArtifact.ts
+30:   if (process.env.NODE_ENV !== 'development' || !/^[a-f0-9]{64}$/.test(responseId)) return undefined;
+
+src/lib/villa/responseMetadata.ts
+12:   if (boundary > 0) return prefix.slice(0, boundary);
+
+src/lib/villa/experimental/pavilion-geometry.ts
+11:   const shape=new THREE.Shape(), n=Math.ceil((end-start)/2);
+14:     if(i===0) shape.moveTo(x,y); else shape.lineTo(x,y);
+
+src/lib/villa/experimental/curved-pavilion.ts
+9:   x: z.number().min(-L.position).max(L.position), z: z.number().min(-L.position).max(L.position),
+10:   orientation: z.number().min(0).max(359),
+11:   width: z.number().min(6).max(L.pavilionWidth), depth: z.number().min(5).max(L.pavilionDepth),
+12:   height: z.number().min(3).max(L.pavilionHeight),
+
+src/app/dev/villa-playground/design-grounds.tsx
+14:   const front = Math.max(...composeVilla(c).map(b => b.z + b.depth / 2));
+23:       <FinishBox name="pool-approach" at={[0, .12, (front + c.terraceDepth + 12.4 - depth / 2) / 2]} size={[32, .25, Math.max(.2, 12.4 - depth / 2 - front - c.terraceDepth)]} color="#d3c9b2" surface="paving" />
+33:     <Slats at={[-15, .304, front + .9]} count={13} spacing={2.5} size={[.014, .008, 1.5]} color="#b4ae9d" />
+34:     {Array.from({ length: 9 }, (_, i) => <FinishBox key={i} name="arrival-garden-path" at={[-18.2, -.35, 13 - i * 1.5]} size={[2.5, .14, 1.05]} color="#cfc7af" surface="paving" />)}
+38:     {Array.from({ length: 28 }, (_, i) => <group key={i} position={[-23 + i * 1.7, -.5, -13 - Math.sin(i * 2) * 1.2]}>
+41:     {[-1, 1].flatMap(s => Array.from({ length: 11 }, (_, i) => <group key={`${s}-${i}`} position={[s * (17.3 + Math.sin(i) * .6), -.5, -6 + i * 2.1]}>
+44:     {tropical && Array.from({ length: 12 }, (_, i) => <group key={i} position={[-40 + i * 7, -.5, -26 - Math.sin(i * 2) * 6]}><TropicalPalm variant={i % 2} height={7 + i % 3} /></group>)}
+
+src/app/dev/villa-playground/grounds.tsx
+17:     {Array.from({ length: Math.ceil(width / .65) }, (_, i) => <group key={i} position={[-width / 2 + .4 + i * .65, .55, 0]}>
+26:     <Slats at={[-.4, .32, .2]} count={9} spacing={.1} size={[.065, .06, 1.7]} color="#9b7e5a" />
+75:     <Slats at={[-15, .304, 6.65]} count={13} spacing={2.5} size={[.014, .008, 4.55]} color="#b4ae9d" />
+76:     <Slats at={[0, .304, 5.4]} count={2} spacing={2.5} size={[30.5, .008, .014]} axis="z" color="#b4ae9d" />
+77:     <Slats at={[8.8, .25, 12.5]} count={3} spacing={2.5} size={[.014, .008, 6.5]} color="#b4ae9d" />
+90:     {Array.from({ length: 9 }, (_, i) => <FinishBox key={i} name={`garden-path-${i}`} at={[-18.2, -.35, 13 - i * 1.5]} size={[2.5, .14, 1.05]} color="#cfc7af" surface="paving" />)}
+94:     {Array.from({ length: 28 }, (_, i) => <group key={i} position={[-23 + i * 1.7, -.5, -10.8 - Math.sin(i * 2) * 1.2]}>
+98:       {Array.from({ length: 12 }, (_, i) => <group key={i} position={[s * (17.2 + Math.sin(i) * .6), -.5, -6 + i * 2.1]}>
+107:     {Array.from({ length: 15 }, (_, i) => <group key={i} position={[-45 + i * 6.5, -.5, -24 - Math.sin(i * 2) * 6]}>
+
+src/app/dev/villa-playground/villa-kit.tsx
+46:   const overhang = config.style === 'caribbean' ? 1.05 : .55;
+47:   const W = w + overhang * 2, D = d + overhang * 2;
+48:   const rise = D * (low ? .13 : config.style === 'caribbean' ? .26 : .22);
+52:     const l = [-ridge, rise, 0], r = [ridge, rise, 0];
+62:     <Box at={[0, rise + .04, 0]} size={[ridge * 2 + .16, .14, .22]} color={tropical ? '#71887c' : '#b27650'} />
+69:   const count = Math.max(1, Math.round(width / (modern ? 4.5 : 3.5))), bay = width / count;
+75:     {Array.from({ length: count + 1 }, (_, i) => <Wall key={i} name="facade-pier" at={[-width / 2 + i * bay, height / 2, 0]} size={[modern ? .24 : tropical ? .6 : 1.25, height, .3]} config={config} />)}
+77:       const x = -width / 2 + (i + .5) * bay, w = bay - (modern ? .3 : tropical ? .65 : 1.3), door = entrance && i === Math.floor(count / 2);
+88:           <Slats at={[0, -opening / 2 + .1, .07]} count={Math.floor(opening / .14)} spacing={.14} axis="y" size={[.23, .045, .08]} color={tropical ? '#8b9e8b' : '#8a8667'} />
+99:   const count = Math.max(2, Math.round(width / 3.3)), bay = width / count;
+103:       {arches ? Array.from({ length: count }, (_, i) => <group key={i} position={[-width / 2 + (i + .5) * bay, 0, 0]}><Arch width={bay} height={height} config={config} /></group>) :
+104:         Array.from({ length: count + 1 }, (_, i) => <group key={i} position={[-width / 2 + i * bay, 0, 0]}>
+115:     <Sofa at={[-width * .25, .05, depth * .43]} width={Math.min(2.7, width * .35)} />
+124:   const rearCount = Math.max(1, Math.round(w / (modern ? 4.5 : 3.5)));
+125:   const rearDoorX = -(-w / 2 + (Math.floor(rearCount / 2) + .5) * w / rearCount);
+140:           <Slats at={[-.6, 0, 0]} count={10} spacing={.14} size={[.065, WALL, .32]} color="#8a6749" />
+142:         <Sofa at={[-w * .19, y + .02, front - 2]} width={Math.min(3.5, w * .55)} />
+153:           <Slats at={[-w / 2 + .22, .53, setback + .24]} count={Math.floor((w - .4) / .18)} spacing={.18} size={[.025, .96, .025]} color="#5a5942" />
+163:       {Array.from({ length: 23 }, (_, i) => <FinishBox key={i} name="upper-access-step" at={[0, (i + .5) * FLOOR / 23, i * .25]} size={[1.3, FLOOR / 23, .27]} />)}
+
+src/app/dev/villa-playground/curved-pavilion.tsx
+48:     <Sofa at={[0,.02,-rz*.12]} width={Math.min(3.1,p.width*.43)} />
+
+src/app/dev/villa-playground/tropical-palm.tsx
+16:     const length = 3.6 + Math.sin(f * 4.7 + variant) * .6;
+18:     const point = (t: number) => forward.clone().multiplyScalar(length * t).add(new THREE.Vector3(-.27, 9.5 + Math.sin(t * Math.PI) * 1.25 - 1.9 * t * t + upright * t, .15));
+59:   for (let i = 0; i < positions.count; i++) {
+
+src/app/dev/villa-playground/composed-villa.tsx
+21:   if(!opening) return <FinishBox name="wing-slab" at={[0,y,0]} size={[w.width,thickness,w.depth]} color="#d6ccb7" />;
+40:     const start = Math.max(-width/2,c.start), end = Math.min(width/2,c.end);
+41:     if (start > cursor + .08) panels.push(<group key={`wall-${i}`} position={[(cursor+start)/2,0,0]}><WallPanel width={start-cursor} height={height} composition={composition} back={face !== 'front'} /></group>);
+42:     const opening = Math.min(height, c.height-level*wing.storeyHeight-.12);
+43:     if (opening < height) panels.push(<Wall key={`lintel-${i}`} name="gallery-junction-lintel" at={[(start+end)/2,opening+(height-opening)/2,0]} size={[end-start,height-opening,.28]} config={composition.config} />);
+46:   if (cursor < width/2-.08) panels.push(<group key="last" position={[(cursor+width/2)/2,0,0]}><WallPanel width={width/2-cursor} height={height} composition={composition} back={face !== 'front'} entrance={wing.role === 'main' && level === 0 && face === 'rear'} /></group>);
+56:   for (const contact of contacts) { if (contact.start-cursor > 2.5) spans.push([cursor,contact.start]); cursor=Math.max(cursor,contact.end); }
+57:   if(w.width/2-cursor > 2.5) spans.push([cursor,w.width/2]);
+71:           <Sofa at={[-w.width*.14,y+.03,front-2]} width={Math.min(3.8,w.width*.5)} />
+91:       <Veranda width={b-a-.9} depth={w.veranda!} height={Math.min(3.35,h-.55)} config={c.config} />
+93:     {!gallery && c.config.style==='modern' && <Slats at={[-w.width/2+.22,BASE+wall/2,w.depth/2+.2]} count={9} spacing={.15} size={[.055,wall,.34]} color="#8b694b" />}
+96:       {Array.from({length:22},(_,i)=><FinishBox key={i} name="stair-tread" at={[i*.24,(i+.5)*h/22,0]} size={[.26,h/22,1.25]} color="#baaa8c" />)}
+108:     <FinishBox name="landscape" at={[g.x,-.61,g.z]} size={[Math.max(500,g.width*3),.2,Math.max(500,g.depth*3)]} color="#788268" surface="grass" />
+112:       <Slats at={[t.x-t.width/2+.6,.304,t.z]} count={Math.max(1,Math.floor(t.width/2.4))} spacing={2.4} size={[.012,.008,t.depth-.1]} color="#b4ae9d" />
+119:     <Planter at={[p.x,.2,p.z+p.depth/2+1.5]} width={Math.min(8,p.width)} depth={.8} />
+131:     {[-1,1].flatMap(s=>Array.from({length:12},(_,i)=><group key={`${s}-${i}`} position={[(c.authored?g.x:0)+s*(g.width/2-.7),-.4,c.authored?g.z-g.depth/2+1+i*(g.depth-2)/11:-10+i*2.5]}><Vegetation kind={i%3?'shrub':'shrub-flowering'} variant={i%2} height={.8+i%3*.2} tint={tint} /></group>))}
+132:     {Array.from({length:23},(_,i)=><group key={i} position={[(c.authored?g.x:0)-g.width/2+i*g.width/22,-.5,g.z-g.depth/2-1]}><Vegetation kind="shrub" variant={i%2} height={1+i%3*.2} tint={tint} /></group>)}
+
+src/app/dev/villa-playground/composition-editor.tsx
+36:         <label>Faces<select aria-label={`${w.id} orientation`} name={`${w.id}-orientation`} defaultValue={w.orientation}>{(w.detached ? Array.from({length:24},(_,i)=>[i*15,`${i*15}°`]) : [[0,'South'],[90,'East'],[180,'North'],[270,'West']]).map(([value,label])=><option value={value} key={value}>{label}</option>)}</select></label>
+
+src/app/dev/villa-playground/viewer.tsx
+35:     setAuthored(undefined); setCompositionId(id); if(id) { setConfig(undefined); setMode('generate'); setTerraMessage(''); setTerraError(''); setUnsupported([]); } setCustomize(false); setTour(false); setReset(v => v + 1);
+88:           camera={{ position: VIEWS.Poolside.position, fov: 39, near: .1, far: Math.max(800,composition ? Math.max(composition.garden.width,composition.garden.depth)*10 : 800) }}
+110:       <p className={styles.description}>{composition ? `${composition.wings.filter(w => w.role !== "gallery").length} ${composition.wings.filter(w => w.role !== "gallery").length === 1 ? "wing" : "wings"} · ${authored?.estateLandscape ? 'offline estate study' : authored ? 'Terra composition' : 'local composition study'}` : config ? `${config.levels} levels · ${config.composition.replace("-", " ")} · ${config.roof} roofs` : "Sculpted stone. Open horizons. Tropical calm."}<br />{authored ? `${authored.garden.width.toFixed(1)} × ${authored.garden.depth.toFixed(1)} m ${authored.siteMode==='derived' ? 'auto-sized garden' : 'fixed site'}` : 'Explore a home shaped around the outdoors.'}</p>
+133:           <label>Pool length <output>{config.pool.width.toFixed(1)} m</output><input aria-label="Pool length" type="range" min="10" max="18" step="0.5" value={config.pool.width} onChange={e => edit({ pool: { width: +e.target.value } })} /></label>
+147:         {unsupported.length > 0 && <p className={styles.unsupported}>Not yet supported: {unsupported.join(' · ')}</p>}
+163:       <div className={styles.caption}><span className={styles.number}>{config ? String(STYLES.indexOf(config.style) + 2).padStart(2, "0") : "01"} /</span><div><strong>{composition ? STYLE_RULES[composition.config.style].label : rule?.label ?? "Contemporary tropical residence"}</strong><span>{composition ? `${composition.pool.enabled === false ? "Garden terrace" : composition.pool.width + " m pool"} · ${composition.wings.length} connected / detached volumes` : config ? `${config.pool.enabled ? config.pool.width + " m pool" : "Garden terrace"} · ${config.landscape} garden` : "Two levels · Sky terrace · 17 m infinity pool"}</span></div></div>
+172:     <span className={styles.credit}>{authored?.estateLandscape ? "ESTATE LANDSCAPE @1 · DETERMINISTIC LOCAL STUDY" : composition?.components?.length ? "TERRA · APPROVED CURVED PAVILION" : composition?.experimentalForms?.length ? "PROCEDURAL CURVED PAVILION · LOCAL STUDY" : authored ? "TERRA · COMPOSABLE ARCHITECTURE" : composition ? "WING COMPOSITION STUDIES · LOCAL DESIGN" : config ? "THE SOLANA COLLECTION · DESIGNED TO EXPLORE" : "VILLA SOLANA · ORIGINAL DESIGN STUDY"}</span>
+
+src/app/dev/villa-playground/estate-grounds.tsx
+21:       const a=samples[Math.min(i*2+2,samples.length-1)],b=samples[i*2],len=Math.hypot(a.x-b.x,a.z-b.z)||1;
+38:     {Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return <mesh key={i} position={[Math.sin(a)*.79,.57,Math.cos(a)*.79]}><cylinderGeometry args={[.012,.018,.6,5]} /><meshPhysicalMaterial color="#b6ded3" transparent opacity={.65} roughness={.12} /></mesh>;})}
+60:           {Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return <group key={i} position={[Math.sin(a)*(court.islandWidth/2-.7),.44,Math.cos(a)*(court.islandDepth/2-.7)]}><Vegetation kind="shrub-flowering" variant={i%2} height={.6} tint={tint} /></group>;})}
+70:       {[-1,1].flatMap(s=>Array.from({length:Math.min(L.bedEdgePlants,Math.max(2,Math.floor(b.width/.8)))},(_,i)=>{
+71:         const n=Math.min(L.bedEdgePlants,Math.max(2,Math.floor(b.width/.8)));return <group key={`${s}-x-${i}`} position={[-b.width/2+.5+i*(b.width-1)/(n-1),.08,s*(b.depth/2-.45)]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>;
+73:       {[-1,1].flatMap(s=>Array.from({length:Math.min(L.bedEdgePlants,Math.max(1,Math.floor((b.depth-1.5)/.85)))},(_,i)=><group key={`${s}-z-${i}`} position={[s*(b.width/2-.45),.08,-b.depth/2+1.2+i*Math.max(0,b.depth-2.4)/Math.max(1,Math.min(L.bedEdgePlants,Math.max(1,Math.floor((b.depth-1.5)/.85)))-1)]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>))}
+
+src/app/dev/villa-playground/architecture.tsx
+41:     for (let i = 0; i < count; i++) {
+42:       matrix.makeTranslation(at[0] + (axis === "x" ? i * spacing : 0), at[1] + (axis === "y" ? i * spacing : 0), at[2] + (axis === "z" ? i * spacing : 0));
+64:     {!railing && Array.from({ length: panels + 1 }, (_, i) => <Box key={i} at={[-width / 2 + i * width / panels, 0, 0]} size={[.055, height, .085]} />)}
+131:     <Slats at={[-13.6, 6.6, 2.55]} count={12} spacing={.23} size={[.09, 3.6, .35]} />
+150:     <Slats at={[4.762, .85, 3.8]} count={14} spacing={.6} size={[.012, .012, 1.48]} axis="y" color="#aca18a" />
+151:     <Slats at={[-.352, .85, 3.8]} count={14} spacing={.6} size={[.012, .012, 1.48]} axis="y" color="#aca18a" />
+152:     <Slats at={[2.2, .85, -5.228]} count={14} spacing={.6} size={[4.59, .012, .012]} axis="y" color="#aca18a" />
+156:     {Array.from({ length: 22 }, (_, i) => <Box key={i} at={[1.1, .65 + i * .194, 2.3 - i * .31]} size={[1.55, .1, .32]} color="#a18a67" />)}
+167:     <Slats at={[.93, 2.5, 4.23]} count={16} spacing={.17} size={[.035, 4, .045]} color="#987552" />
+178:     {Array.from({ length: 24 }, (_, i) => <FinishBox key={i} name={`sky-stair-${i}`} at={[5.65 + i * .36, .56 + i * .18, -8.5]} size={[.38, .18, 1.5]} color={ivory} />)}
+207:     <Slats at={[9.72, 6.25, -5.7]} count={16} spacing={.23} size={[.14, 2.9, .07]} axis="z" />
+216:     <Slats at={[4.2, 4.4, 6.6]} count={39} spacing={.277} size={[.085, .19, 3.1]} />
+
+src/app/dev/villa-playground/scene.tsx
+37:       camera.far=Math.max(800,composition ? Math.max(composition.garden.width,composition.garden.depth)*10 : 800);
+50:     const t = Math.min(1, move.elapsed / 1.2), eased = t * t * (3 - 2 * t);
+55:       if(view==='Above') {position.set(g.x+span*.67,span*1.35,g.z+span*.87);target.set(g.x,0,g.z);}
+56:       if(view==='Arrival') {position.set(g.x-span*.65,span*.38,g.z-span*.65);target.set(main.x,2,g.z+3);}
+57:       if(view==='Poolside' && p) {position.set(p.x+span*.34,span*.22,p.z+span*.34);target.set(main.x,3,main.z+main.depth/2);}
+58:       if(view==='Garden') {position.set(g.x+span*.64,span*.48,g.z-span*.55);target.set(g.x,1,g.z);}
+63:     if (t === 1) flight.current = null;
+66:     target={VIEWS.Poolside.target} minDistance={6} maxDistance={Math.max(100,100*factor)} minPolarAngle={.12}
+74:   const extent=composition ? Math.max(1,Math.max(composition.garden.width,composition.garden.depth)/40) : 1;
+88:     <CameraControls view={view} reset={reset} tour={tour} composition={composition} factor={composition ? composition.authored ? Math.max(.92, Math.max(composition.garden.width,composition.garden.depth)/40) : composition.id === "compact-l" ? .92 : 1.18 : 1} centerX={composition?.authored ? composition.garden.x : 0} centerZ={composition?.authored ? composition.garden.z : 0} />
+
+src/app/dev/villa-playground/wing-composition.ts
+50:   if(a.orientation % 90 || b.orientation % 90) throw new Error('Rotated wings are detached; diagonal gallery joins are unsupported');
+54:   const base = { id, connectionWidth: width, orientation: 0 as const, storeys: 1 as const, storeyHeight: Math.min(3.3, a.storeyHeight, b.storeyHeight), role: 'gallery' as const, connects: [from, to] as [string, string] };
+55:   if (commonX[1] - commonX[0] >= width && (A.front < B.rear || B.front < A.rear)) {
+59:   if (commonZ[1] - commonZ[0] >= width && (A.right < B.left || B.right < A.left)) {
+71:       Math.max(w.width, w.depth) > (w.role === 'gallery' ? L.gallerySpan : L.wing) || w.storeyHeight < 3 || w.storeyHeight > L.storeyHeight ||
+73:       (w.balcony !== undefined && (w.balcony < 0 || w.balcony > Math.min(2.4, w.depth / 3)))) throw new Error(`Unsupported wing proportions: ${w.id}`);
+77:       if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > .01 && Math.min(a.front, b.front) - Math.max(a.rear, b.rear) > .01) throw new Error(`Overlapping wings: ${w.id}, ${other.id}`);
+103:   if(wing.orientation % 90) return [];
+112:     if (Math.abs((sign > 0 ? Math.min(...normal) : Math.max(...normal)) - edge) > .02) return [];
+
+src/app/api/ai/villa/route.ts
+17:   if (process.env.NODE_ENV !== 'development') return json({ error: 'Villa playground is development only.' }, 404);
+21:   if (!input.success) return json({ error: 'Enter a brief and a supported villa configuration.', findings: input.error.issues, providerCalls: 0 }, 400);
+26:   if (!isAiConfigured()) return json({ error: AI_NOT_CONFIGURED_MESSAGE, providerCalls: 0 }, 503);
+54:     if (result.finishReason !== 'stop') return json({ error: 'Terra did not finish this design. Your current villa is preserved. No automatic retry was made.', diagnostics, providerCalls: 1 }, 502);
+

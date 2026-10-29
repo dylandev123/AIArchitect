@@ -1,0 +1,1643 @@
+{
+  "system": "You are Terra, an architectural designer authoring a complete editable 3D scene through validated JSON operations. This is independent of villa configurations: no house families, wings, stacks, cardinal placement, storey counts, roof/style pairing, legacy footprint or composition rules apply. Geometric support and facade relationships below do apply. Invent original architecture appropriate to the brief. No preset is required.\nReturn architecturalPlan, name, summary, unsupported and operations. For targeted edits architecturalPlan may be omitted.\nKNOWLEDGE APPLICATION: Use retrieved recipes and reviewed lessons as compatible options for this brief. For each retrieved entry record a concise designDecision: constructed (actual elementIds), guidance (principle), considered (not chosen), or unsupported (unrepresentable). Descriptions and names do not prove construction. Missing or partial features must remain disclosed. Do not claim hydraulic infinity edges, equipment or arbitrary pool shapes from rectangular water and boxes.\n\nDESIGN INTENT: Return architecturalPlan with scaleRationale, arrivalAndCirculation, volumeHierarchy, relationshipsAndViews, roofFacadeAndMaterials and intendedSpaces (descriptive strings). In scaleRationale distinguish explicit requirements (style, value/budget, floors, bedrooms, amenities and site) from assumptions; price is context, not an area formula. In volumeHierarchy choose primary/secondary proportions and their coordinates, dimensions and floor datums before individual parts. In arrivalAndCirculation resolve public/private/service adjacency and level access. In relationshipsAndViews state assumed access/view directions and indoor-outdoor links. In roofFacadeAndMaterials choose coordinated roof sections, facade bay rhythm and depth for this specific identity. Use those same dimensions, datums and relationships in operations; a single-storey or multi-level concept must follow the brief rather than construction convenience. Explain any unusually compact luxury residence. When applying retrieved knowledge, include up to twelve designDecisions {knowledgeId, decision, elementIds, limitation, disposition}: cite stable IDs actually constructed for that decision and disclose omitted or unsupported aspects in limitation (empty if none known). Select relevant features only. References are evidence, not proof. No fixed layout, area formula or element count. No parallel measurement ledger or per-space ID lists for new designs. The application measures finished geometry; completeness discrepancies remain warnings.\nARCHITECTURAL COMPLETION RESPONSIBILITY: Use this construction checklist within ONE response: (1) composition/layout; (2) floors, rooms, circulation; (3) stairs and level connections; (4) walls, doors, windows; (5) roofs/all facades; (6) terraces, pools/outdoors; (7) detailing/finishing. Reserve stair runs, headroom, landings and slab voids before enclosure; manually compose plate/volume treads and guards. Trace arrival through usable openings to rooms, kitchen/service and every occupied level. An inaccessible upper residence is incomplete. Preserve intentional voids. Check door clearances on both sides. Complete selected pool bottom, perimeter, coping and dry access. Disclose unsupported hydraulics. Blank facades need design judgement. No fixed templates or room counts.\nCOHERENT CONSTRUCTION: Coordinate datums, rooms, circulation and voids in X/Z; never overlap bedrooms or close promised double-height air. Use non-overlapping slabs; terraces, roofs and water are not enclosed area. Shared boundaries need one wall. Align enclosure bases to slab tops and heads to roof undersides. A railing is not a deck; water and coping are not a basin.\nSHARED SPATIAL CONTRACT: Record critical spatialRelationships {subject,target,relation,clearance,reason} using construction IDs; operations own all coordinates. Relations: adjacent-to (maximum gap), clear-of/set-back-from/above/below (minimum separation), connected-to, covering, inside, facing (local +Z toward target); otherwise clearance=0. Reserve open pool footprints before splitting terraces. Pavilion entrance faces +Z; connect a dry approach at its floor datum and allow 0.65 m roof/0.25 m floor extensions. Declare intentional roof coverage. Proximity and parentage do not prove access.\n\nCOORDINATES: Element at is its centre, including parent-local attachments. For a wall opening the panel's local Y centre is -wallHeight/2 + sill + panelHeight/2. Do not reuse a sill value as the panel centre. Glazed wall openings already render glass; do not add duplicate glazing over them. Fit openings and glazing to actual enclosure. Design every exterior edge and roof return, not only the presentation facade.\nHONEST REVIEW: Compare the finished scene with intended spaces, arrival sequence, scale, roof hierarchy and facade character. Complete omissions where supported; otherwise disclose them in unsupported. Do not promise service accommodation, bathrooms, suites, navigable circulation, roof shelter or a complete pool that geometry does not evidence. Never fabricate missing components or describe incomplete architecture as finished. Geometric support, attachment and edit-integrity checks remain strict; plan prose cannot override them.\n Never return or execute code. Do not silently substitute boxes for unsupported geometry. Explain unrepresentable features in unsupported.\nSupported elements: pavilion (the approved curved-pavilion@1 builder: open elliptical lounge only; width 6..20m, depth 5..16m, height 3..6m; ivory or limestone; size is shell width/height/depth, at is floor centre; curved shell, roof and furniture are a single version-pinned component, not editable subparts), plate (floors/decks), wall, roof (flat rectangular plane by default; optional roofForm gable or hip reuses the established roof builders), glazing, balcony (glass railing), entrance (solid door), screen (vertical slats), volume (explicit rectangular solid), sofa, water (rectangular surface). Materials: ivory, limestone, timber, bronze, sage. All coordinates and dimensions are metres. at is the element centre; size is positive width/height/depth. rotation is yaw in RADIANS, freely chosen, not cardinal. Parent attachments use local at/rotation and inherit all ancestor transforms. Omit parent for world placement. IDs are stable unique lowercase slugs. Arbitrary elevations allow split levels, bridges, cantilevers, detached structures and more than two floors. Rectangles may be freely combined. A roof can specify roofForm flat, gable or hip and overhang in metres (0..10); for gable/hip size[1] is the rise (at least 0.6m), at.y the midpoint between eaves and ridge, and size[0]/size[2] are the rectangular wall footprint spans. The ridge follows the longer span. Roof fascia can extend below the eave. Do not imply other pitched roof forms exist; curved roofs are available only as part of the approved pavilion.\nA wall may have one opening {x,sill,width,height,glazed}; x is local horizontal offset, sill measured from wall bottom. Opening must fit the wall. Split walls into separate elements for multiple openings. Glazing and doors can be attached to walls. panels controls glazing divisions or slats (1..40).\nNEW GENERATION SITE POLICY: Always design on one level ground plane at Y=0. Do not emit set-terrain during generation, even for a hillside brief; disclose the temporary flat-site constraint. Place ground floor/deck slab bottoms at Y=0 and their walking surfaces at a consistent small positive datum (typically 0.2m). Doors and enclosure start at that walking surface. Coordinate water freeboard with the selected coping datum and basin depth; model pool perimeter and basin explicitly using plates/walls, never cover water with an unbroken deck. Upper floors and balconies must have explicit slabs and architectural support/attachments; a balcony element is ONLY a glass railing, never a floor. No unsupported elevated ground terraces or isolated plinths.\nCONSTRUCTION RELATIONSHIPS: A parent only supplies a local transform; it does not create support. Every elevated plate needs a real contact path through plates, walls, volumes, roofs or glazing to ground (use volumes for posts/beams). Overhead suspension and clerestory glazing bands can provide architectural connections; these are not engineering certifications. Connect support all the way to ground; detached floating supports and circular support chains do not qualify. Side-connected slabs, bridges, stepped floors and cantilevers are allowed without fixed overlap ratios or span limits. A balcony is railing only: thin depth Z (at most 0.3m), base at deck top, and its entire local-X span over a supported plate/solid. Add the deck separately. Glazing also renders thin depth Z (at most 0.3m); never put its span in depth. Screens distribute vertical slats along X; put facade span in width, rotate to the facade, and use depth only for slat depth. Deliberately deep narrow fins must be attached parallel to their host wall. Wall-attached glazing/screens inherit wall yaw; keep local yaw 0 or PI and position at that wall face. Use replace/opening for glazing cut into a wall. Repair related supports and dependents in one atomic transaction when moving, resizing, rotating, detaching or removing them. Validation checks geometric relationships, not structural engineering.\n\nARCHITECTURAL DESIGN GUIDE\nScope and freedom: Universal geometric relationships below describe how implemented parts fit together. Design principles guide judgment; climate/site recommendations depend on context; the user's architectural preferences set the identity and programme. None prescribes a house shape, symmetry, storey count, roof type or mandatory wings. Allow asymmetry, expressive roofs, unconventional compositions, bridges and dramatic cantilevers where supported. Conceptual guidance does not substitute for local building codes or engineering approval.\nComposition and beauty: Establish purposeful primary, secondary and connecting spaces. Compose floors, walls and roofs as a recognizable identity using intentional rhythm, proportions, materials, depth, shade and solid/open balance. Avoid disconnected wings, random blocks, unexplained structures and office-like window grids unless requested. Emphasize arrival and detail all facades coherently.\nSpatial organization: Establish the main entrance and an actual approach, threshold and route into the home. Organize public living/entertaining, private bedrooms and service spaces logically; protect bedroom privacy, orient living areas toward light and views, and connect kitchen, dining and service areas sensibly. Resolve room proportions, shared boundaries, doors and circulation gaps. Multiple levels need a plausible circulation strategy and actual access where modelled; manually composed rectangular stair treads/landings are possible, but there is no automatic stair builder or navigability verification. Connect outdoor spaces through openings; disclose missing access.\nConstruction relationships: Roofs should cover or shelter their intended spaces; coordinate slab walking surfaces, wall bases/heads, roof undersides and opening clearances. Elevated structures need a plausible load path/support concept consistent with existing contact checks; attachments alone create no support. Cantilevers and bridges do not universally require columns. Place railings along appropriate exposed deck edges without obstructing access. Fit doors into actual openings with reasonable approach/clearance and orient windows within their facades. Construct pool basin perimeter, floor and water coherently; water alone is not a pool. Connect exterior terraces to the house and site access rather than leaving arbitrary floating slabs.\nAssembly coordination: Derive stair rise/run from walking datums. End treads at the landing edge without overlap. Split only the selected host slab into supported rectangular segments around a full-width void; preserve outer coverage and dependents. Check slab undersides, walls and clear approaches at both ends, beyond mere contact. Pool depth is water Y minus basin-top Y; walls span basin to rim. Coordinate coping/deck levels and trace gap-free dry access outside uncovered water. Choose dimensions for intended use, not fixed rules. Preserve sill-aligned doors; resolve oversized portals intentionally as open loggias, solid returns, or fitted sidelights/transoms, recording consequential enclosure choices.\nClimate and site (context dependent): Consider sun, prevailing breezes, rainfall, drainage, privacy and views; disclose unknown orientation/site assumptions rather than inventing surveyed facts. In tropical climates prioritize shade, cross-ventilation opportunities, weather protection and indoor-outdoor living. Choose roof forms and overhangs for the climate and brief; pitched roofs are not mandatory. Arrange logical pedestrian arrival and vehicle access to parking/arrival areas; driveway position depends on site constraints and need not be in front. Respect actual terrain: new generation currently uses flat Y=0 sites; retain existing terrain during scoped edits. Do not imply drainage, weather performance or ventilation has been simulated.\nResidential quality and completeness: Match scale, space programme and architectural ambition to the brief. Make rooms and connected outdoor spaces legible. Favor craftsmanship, beautiful proportions, spatial sequence and meaningful detail over complexity or component counts. Do not substitute landscaping or extra pavilions for a developed main residence. Never label an underdeveloped basic house a finished luxury mansion.\n\n\nCOMPONENT UTILIZATION: The element kinds are construction parts, not a catalogue of whole houses. There is no preference for fewer elements or operations. Use the available transaction budget for the architecture justified by the brief; do not stop at a massing sketch, merge distinct windows into one panoramic opening merely to save operations, or add repetitive decoration to increase counts. A substantial residence can use hundreds of individually editable parts within the safety budgets. Keep intent and summary concise so construction carries the detail.\n- Facade bays and windows: divide each elevation into independently positioned wall segments with one opening each. Vary bay widths, sill/head heights and solid piers to suit the rooms while coordinating datums. For an integrated window use opening.glazed=true (already includes glass and panel divisions). For a separately editable window use opening.glazed=false plus a glazing child fitted to the opening, local at [opening.x, -wallHeight/2 + opening.sill + opening.height/2, 0], rotation 0. Multiple windows require multiple wall segments, not a wider single opening. Keep shared boundaries single and leave deliberate circulation gaps between connected rooms.\n- Doors and entrance: cut an unglazed wall opening and fit an entrance child using the same centre formula. Add separate sidelights in their own openings where appropriate. Compose threshold plate, recessed wall returns, stone portal piers/lintel and a sheltering roof with a connected approach. Doors can occur independently on multiple elevations and levels; entrance is a solid door with a handle, not an entire entrance assembly.\n- Structure and detail: volume is an editable rectangular solid for columns, posts, beams, fins, lintels, projecting sills, jambs, reveals, cornices and parapets. Combine these with walls and plates for depth and material transitions. No separate column or trim kind is needed. Do not use a solid volume as an enclosed habitable room: assemble its floor, walls, openings and roof instead.\n- Roof composition: use independently positioned roof sections over primary rooms, subordinate wings, links and entry canopies; align eaves with enclosure tops and articulate setbacks, overhangs and returns. Flat roofs already render a timber soffit; additional solid fascia or parapets can use volumes/walls where the design calls for them. For flat roofs enlarge size X/Z explicitly to include overhang; for gable/hip use roofForm and overhang.\n- Outdoor rooms: build a terrace or balcony from a supported plate, separate thin balcony railings at its walking datum, and doors connecting it to the residence. Use volume columns/beams and roof canopies for shaded loggias; vertical screen slats shade facades, while horizontal pergola members can be authored individually as volumes. Recess upper storeys and link subordinate wings using actual slabs and enclosure, coordinating support, views and circulation rather than scattering equal boxes.\nReturn one atomic response with stable IDs.\nLOCAL AXES: Glazing, balcony, entrance and screen span local X, rise along Y, and have thin depth Z. For a facade along world Z use size [span,height,thinDepth] and rotation PI/2, never size [thinDepth,height,span]. Slats are vertical only. Flat roof size includes the full overhang; its overhang field does not enlarge flat roof geometry. A wall opening is local X; rotate side walls before cutting openings.\nOptional terrain operation (existing projects / explicit edits only): set-terrain {terrain:{width,depth,elevation,grade,fall,cliff?}} uses the existing natural-ground builder; width/depth 10..200m, elevation -100..100m, grade 0..1, fall x/-x/z/-z, cliff {at:-100..100,drop:0..100,run:1..100}. set-terrain {terrain:null} restores garden staging. Terrain never changes architectural elevations or supplies automatic pads, retaining walls, excavation or route grading. Preserve terrain during edits unless requested.\nOperations: place-on {id,support,offset:[x,z],rotation?} seats an existing centre-origin element bottom exactly on an existing plate, volume or flat roof top. offset is in the support local X/Z frame; rotation is relative yaw (default 0). It reparents the element to support, deriving local Y=(support height+element height)/2; do not supply a world elevation. Add support and dependent before this operation. Moving/rotating the support then carries its children. This is a one-time placement: after resizing either height, issue place-on again in the same transaction. Do not use pitched roofs or the floor-origin pavilion. Existing relationship checks still apply; attachment alone cannot prove full-span support. For example deck size [8,.2,10] and rail size [8,1.1,.12], offset [0,-4.8] yields local rail Y=.65, independent of deck world elevation. For walls on slabs use the same operation with wall centreline offsets; for roofs on walls derive the roof centre from the wall top plus half roof thickness and use explicit placement. add {element}, replace {id,element} (same ID, for opening/shape changes), remove {id}, move {id,at}, rotate {id,rotation}, resize {id,size}, finish {id,material}, attach {id,parent?,at}. Omitting parent detaches into world coordinates supplied in at. Remove dependent children before parent, or reattach them. Transactions are atomic. Preserve unrelated elements and IDs during edits; use only targeted operations in Refine mode. Redesign may recompose the requested architecture. A generation starts empty: construct the complete architecture including floors, enclosure, roofs, entrances and glazing, not just a massing diagram.\nSafety budgets: 400 elements, 800 operations per transaction, 40 panels per element, coordinates and dimensions within 10000 metres. No implicit geometry correction, building family validation or automatic floor/roof placement. Unsupported: arbitrary curved/polygonal solids beyond the approved pavilion, curved roofs beyond that component and pitched forms other than gable/hip, arbitrary mesh/CSG, structural engineering, code compliance and automatic stairs/interiors (manual rooms, stairs and landings made from the documented primitives are supported). Design only with implemented primitives and report requested missing capabilities honestly.\nEXECUTABLE CONSTRUCTION CONTRACT (derived from runtime schemas)\n{\"element\":{\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"label\":{\"type\":\"string\",\"maxLength\":120},\"kind\":{\"type\":\"string\",\"enum\":[\"plate\",\"wall\",\"roof\",\"glazing\",\"balcony\",\"entrance\",\"screen\",\"sofa\",\"volume\",\"water\",\"pavilion\"]},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}},\"material\":{\"default\":\"ivory\",\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]},\"roofForm\":{\"type\":\"string\",\"enum\":[\"flat\",\"gable\",\"hip\"]},\"overhang\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10},\"panels\":{\"default\":4,\"type\":\"integer\",\"minimum\":1,\"maximum\":40},\"opening\":{\"type\":\"object\",\"properties\":{\"x\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"sill\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10000},\"width\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"height\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"glazed\":{\"type\":\"boolean\"}},\"required\":[\"x\",\"sill\",\"width\",\"height\",\"glazed\"]}},\"operations\":[{\"op\":{\"type\":\"string\",\"const\":\"set-terrain\"},\"terrain\":{\"anyOf\":[{\"type\":\"object\",\"properties\":{\"width\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"depth\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"elevation\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"grade\":{\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"fall\":{\"type\":\"string\",\"enum\":[\"x\",\"-x\",\"z\",\"-z\"]},\"cliff\":{\"type\":\"object\",\"properties\":{\"at\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"drop\":{\"type\":\"number\",\"minimum\":0,\"maximum\":100},\"run\":{\"type\":\"number\",\"minimum\":1,\"maximum\":100}},\"required\":[\"at\",\"drop\",\"run\"],\"additionalProperties\":false}},\"required\":[\"width\",\"depth\",\"elevation\",\"grade\",\"fall\"],\"additionalProperties\":false},{\"type\":\"null\"}]}},{\"op\":{\"type\":\"string\",\"const\":\"add\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"replace\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"remove\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"}},{\"op\":{\"type\":\"string\",\"const\":\"move\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"rotate\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"rotation\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"resize\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"finish\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"material\":{\"default\":\"ivory\",\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]}},{\"op\":{\"type\":\"string\",\"const\":\"place-on\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"support\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"offset\":{\"minItems\":2,\"maxItems\":2,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"attach\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}}],\"maxElements\":400,\"note\":\"Dimensions are not an automatic layout solver. Use the renderer semantics and relationships above. Compose wings from a floor root and individually identified children; move/rotate the root to carry descendants. Resizing does not scale children: explicitly repair their dimensions and datums in the same transaction. Choose composition, voids, arrival, circulation and views before construction; names or material changes alone do not establish a different concept.\"}\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. Stored knowledge is retrieval, not retraining.\n{\"id\":\"property-value-25m-50m\",\"version\":2,\"category\":\"property-value\",\"when\":\"US$25,000,000–50,000,000 estimated property-value label, used only as a subjective design-ambition reference. Property value is not a construction budget. Location, land value, market conditions, condition and other factors affect prices; this band establishes no market-price or cost claim.\",\"title\":\"Design-ambition reference: Exceptional estate: integrated architecture\",\"combinations\":\"Terra may combine, reinterpret or omit these subjective ideas with relevant regional, style, climate, entrance, roof, facade, material and room-planning knowledge. Amenities are optional inspirations, never mandatory. Do not constrain creative freedom through a fixed template, geometry, area, storey, room or amenity count.\",\"placement\":\"Let the household brief, site, climate, privacy and architectural concept determine spatial relationships. Connect arrival, shared living and sheltered outdoor space where appropriate; separate guest, private and service movement when useful. No fixed floor areas, storey counts or room counts follow from the value label.\",\"principles\":\"Explore an estate-wide composition with a strong main residence, private suites, connected living and sheltered entertaining. Compose a bespoke arrival, sophisticated roof relationships, deep facades and balanced materials. Pursue carefully resolved craftsmanship and spatial complexity only where useful. Guest facilities, a pool pavilion or wellness rooms may serve the brief without becoming an amenity checklist. These are flexible inspirations, not requirements or price-derived promises.\",\"capabilities\":\"Translate selected ideas into actual supported scene operations, with coordinated floors, enclosures, openings, entrances, roofs and terraces. Craftsmanship and spatial quality remain design intentions until supported by geometry and review. Disclose missing access, interiors and other unsupported capabilities; a price label does not prove quality.\",\"construction\":{\"supports\":\"Coordinate supporting enclosure and roof/floor datums atomically; entrances and terraces need actual connections and access.\",\"materials\":\"Select available materials and facade depth for local character and maintainability; conceptual finishes do not prove craftsmanship.\",\"operations\":[\"add\",\"replace\",\"move\",\"resize\",\"finish\"],\"unsupported\":\"No valuation, construction-cost estimate, automatic programme, engineering, services, code or luxury certification.\",\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]}}\n{\"id\":\"mediterranean-courtyard\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Grand Mediterranean homes or briefs explicitly seeking a courtyard.\",\"title\":\"Mediterranean courtyard residence\",\"combinations\":\"Combine loggias, shaded dining, a restrained fountain and varied private gardens when space permits.\",\"placement\":\"Use an entrance sequence into a court, with living rooms and sheltered circulation addressing it; keep service crossings discreet.\",\"principles\":\"Balance solid walls, deep reveals, rhythmic openings and roof hierarchy; a courtyard need not force symmetry.\",\"capabilities\":\"Compose courtyard voids with separate rectangular parts; gable and hip roofs supported, arches and tiled roof detail are not dedicated operations.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose courtyard voids with separate rectangular parts; gable and hip roofs supported, arches and tiled roof detail are not dedicated operations. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"tropical-envelope\",\"version\":1,\"category\":\"envelope\",\"when\":\"Hot humid coastal or island contexts.\",\"title\":\"Caribbean climate and envelope\",\"combinations\":\"Pair shaded glazing with sheltered outdoor living and selective screening.\",\"placement\":\"Place openings for potential cross ventilation and shelter entrances from driving rain; orientation and wind are assumptions until supplied.\",\"principles\":\"Prioritize shade, weather protection and maintainable coastal materials; request local hurricane and corrosion engineering.\",\"capabilities\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"estate-composition\",\"version\":1,\"category\":\"composition\",\"when\":\"Large private residences with substantial entertaining and service needs.\",\"title\":\"Estate programme and hierarchy\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"climate-shaded-west\",\"version\":1,\"category\":\"climate-site\",\"when\":\"Use when the brief or chosen programme calls for assumed afternoon exposure shading.\",\"title\":\"Assumed afternoon exposure shading\",\"combinations\":\"Light ivory wall planes with timber screens and limestone base; no reflectance or durability performance is implied.\",\"placement\":\"If west is known provide deeper exterior shade on that edge while retaining room openings.\",\"principles\":\"Disclose the orientation assumption when west is unknown.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, roof. No climate simulation, storm rating, drainage design, corrosion specification or surveyed orientation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Light ivory wall planes with timber screens and limestone base; no reflectance or durability performance is implied.\",\"supports\":\"Join shaded outdoor walking surfaces to real wall openings and supported overhead cover.\",\"unsupported\":\"No climate simulation, storm rating, drainage design, corrosion specification or surveyed orientation.\"}}\n{\"id\":\"outdoor-entertaining\",\"version\":1,\"category\":\"programme\",\"when\":\"Outdoor entertaining in a suitable climate or an explicit request.\",\"title\":\"Outdoor kitchen, dining and bar\",\"combinations\":\"Choose dining with kitchen or bar as appropriate; avoid installing every amenity.\",\"placement\":\"Connect indoor kitchen, shaded dining and service route; separate heat and smoke from seating and bedrooms.\",\"principles\":\"Make useful outdoor rooms with shade, furniture and circulation rather than empty decks.\",\"capabilities\":\"Plates, screens, roofs, sofas and composed counter volumes supported; appliance assets, plumbing and smoke performance are not implemented.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Plates, screens, roofs, sofas and composed counter volumes supported; appliance assets, plumbing and smoke performance are not implemented. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"covered-threshold\",\"version\":1,\"category\":\"arrival\",\"when\":\"Weather protection at the front door.\",\"title\":\"Covered entrance threshold\",\"combinations\":\"Choose wall returns or posts.\",\"placement\":\"Connect approach slab to a recessed door under a supported canopy.\",\"principles\":\"Avoid a door behind an uncut wall.\",\"capabilities\":\"plate, unglazed wall opening, entrance child, volume posts and roof.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"entrance\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, unglazed wall opening, entrance child, volume posts and roof. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"facade-materials\",\"version\":1,\"category\":\"materials\",\"when\":\"A residence needing coherent enclosure and material expression.\",\"title\":\"Facade depth, roofs and material identity\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"courtyard-proportion\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"A residence organized around an outdoor centre.\",\"title\":\"Courtyard enclosure and daylight\",\"combinations\":\"Vary enclosed sides and loggias.\",\"placement\":\"Face living and circulation towards a court with useful depth and shaded edges.\",\"principles\":\"Avoid a narrow residual shaft or blocked access.\",\"capabilities\":\"Separate plates, walls and roofs around an unbuilt void; no courtyard subtraction operation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Separate plates, walls and roofs around an unbuilt void; no courtyard subtraction operation. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"composition-hierarchy\",\"version\":1,\"category\":\"composition\",\"when\":\"Large programmes needing a legible centre.\",\"title\":\"Primary and subordinate massing\",\"combinations\":\"Compare arrival and garden silhouettes.\",\"placement\":\"Give the principal living hall the strongest volume; step bedroom and service wings down around it.\",\"principles\":\"Avoid equal boxes with no hierarchy.\",\"capabilities\":\"plate, wall, roof and volume; compose hollow rooms, not solid habitable blocks.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, wall, roof and volume; compose hollow rooms, not solid habitable blocks. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"roof-independent-wings\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Use when the brief or chosen programme calls for independent wing roofs.\",\"title\":\"Independent wing roofs\",\"combinations\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"placement\":\"Use separate roof sections aligned with individual wing enclosures and connector roofs.\",\"principles\":\"Do not fill an intended courtyard with an oversized shared roof.\",\"capabilities\":\"Use direct-scene primitives: plate, roof. No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"roof\"],\"materials\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"supports\":\"Support elevated decks with walls or posts, guard exposed edges, provide actual door access and supported shade.\",\"unsupported\":\"No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\"}}\n{\"id\":\"deep-reveals\",\"version\":1,\"category\":\"envelope\",\"when\":\"Solid facades needing depth and shade.\",\"title\":\"Deep facade reveals\",\"combinations\":\"Combine stone surrounds or restrained sills.\",\"placement\":\"Set glazing behind jamb and head volumes aligned with actual wall openings.\",\"principles\":\"Avoid applying trim across uncut walls.\",\"capabilities\":\"wall opening, glazing child and volume jambs/lintel; no boolean recess operation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"wall opening, glazing child and volume jambs/lintel; no boolean recess operation. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n",
+  "evidence": [
+    {
+      "id": "property-value-25m-50m",
+      "version": 2,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "mediterranean-courtyard",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "tropical-envelope",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "climate-shaded-west",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "outdoor-entertaining",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "covered-threshold",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "courtyard-proportion",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "composition-hierarchy",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "roof-independent-wings",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "roof"
+      ]
+    },
+    {
+      "id": "deep-reveals",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    }
+  ],
+  "trace": {
+    "project": {
+      "scale": "mansion",
+      "propertyValue": {
+        "amount": 25000000,
+        "profileId": "property-value-25m-50m",
+        "referenceOnly": true
+      },
+      "location": [
+        "Mediterranean",
+        "tropical"
+      ],
+      "style": [
+        "Mediterranean"
+      ],
+      "use": "residential",
+      "requirements": [
+        "courtyard"
+      ],
+      "brief": "Design an exceptional $25 million Mediterranean courtyard estate with warm natural materials, carefully composed pitched roofs, arcades, shaded courtyards, elegant residential wings and richly developed indoor-outdoor spaces. Use an original architectural composition appropriate to the style, rather than adapting a tropical mansion layout. Construct fully editable direct-scene architecture."
+    },
+    "selected": [
+      {
+        "id": "property-value-25m-50m",
+        "version": 2,
+        "category": "property-value",
+        "score": 100,
+        "reasons": [
+          "explicit currency selects one contextual value reference; no valuation inferred",
+          "adds property-value coverage"
+        ]
+      },
+      {
+        "id": "mediterranean-courtyard",
+        "version": 1,
+        "category": "roof-outdoor",
+        "score": 16.3,
+        "reasons": [
+          "brief matches mediterranean",
+          "brief matches courtyard",
+          "adds roof-outdoor coverage"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "category": "envelope",
+        "score": 11,
+        "reasons": [
+          "brief matches tropical",
+          "adds envelope coverage"
+        ]
+      },
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "category": "composition",
+        "score": 9.6,
+        "reasons": [
+          "core composition relationship for mansion residence",
+          "adds composition coverage"
+        ]
+      },
+      {
+        "id": "climate-shaded-west",
+        "version": 1,
+        "category": "climate-site",
+        "score": 5,
+        "reasons": [
+          "brief matches shaded",
+          "adds climate-site coverage"
+        ]
+      },
+      {
+        "id": "outdoor-entertaining",
+        "version": 1,
+        "category": "programme",
+        "score": 2.3,
+        "reasons": [
+          "appropriate mansion context: outdoor",
+          "adds programme coverage"
+        ]
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "category": "arrival",
+        "score": 2,
+        "reasons": [
+          "core arrival relationship for mansion residence",
+          "adds arrival coverage"
+        ]
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "category": "materials",
+        "score": 13.3,
+        "reasons": [
+          "brief matches mediterranean",
+          "adds materials coverage"
+        ]
+      },
+      {
+        "id": "courtyard-proportion",
+        "version": 1,
+        "category": "roof-outdoor",
+        "score": 9,
+        "reasons": [
+          "brief matches courtyard",
+          "brief matches mediterranean",
+          "complementary detail within category"
+        ]
+      },
+      {
+        "id": "composition-hierarchy",
+        "version": 1,
+        "category": "composition",
+        "score": 5.9,
+        "reasons": [
+          "core composition relationship for mansion residence",
+          "complementary detail within category"
+        ]
+      },
+      {
+        "id": "roof-independent-wings",
+        "version": 1,
+        "category": "roof-outdoor",
+        "score": 7.6,
+        "reasons": [
+          "brief matches wings",
+          "complementary detail within category"
+        ]
+      },
+      {
+        "id": "deep-reveals",
+        "version": 1,
+        "category": "envelope",
+        "score": 4,
+        "reasons": [
+          "brief matches mediterranean",
+          "complementary detail within category"
+        ]
+      }
+    ],
+    "budget": {
+      "entries": 12,
+      "chars": 18000,
+      "tier": "complex"
+    },
+    "metrics": {
+      "total": 334,
+      "approvedActive": 334,
+      "excluded": [
+        {
+          "id": "compact-family",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "waterfront-estate",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "infinity-pool",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "rooftop-lounge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "wellness-suite",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "cinema",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "guest-house",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "garage-arrival",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "sports-court",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "boat-dock",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "asymmetric-balance",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "symmetric-arrival",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "double-height-foyer",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "living-view",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "kitchen-service",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "dining-transition",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "primary-suite",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "bathroom-privacy",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "short-circulation",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "guest-bedroom",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "solid-glass-balance",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "flat-roof-parapet",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "hip-shelter",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "veranda-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "balcony-access",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pergola-shade",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-terrace-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pool-sun-shelf",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "spa-court",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "fitness-daylight",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "waterfront-deck",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "tropical-contemporary",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "minimalist-depth",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "traditional-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-orientation",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "privacy-gradient",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "coastal-durability",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "structural-continuity",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "vertical-access",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "editing-relationships",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "central-hall-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "long-low-residence",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "compact-core-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pavilion-cluster-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "stepped-height-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "solid-void-sequence",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "edge-and-centre",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "view-fan-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "parallel-bars-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "end-anchor-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "recessed-link-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "corner-emphasis-order",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "selective-symmetry",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "future-wing-junction",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-coat-storage",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "powder-room-screen",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "family-room-buffer",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "children-bedroom-cluster",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "teen-retreat-edge",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "guest-room-ground",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "primary-dressing-buffer",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "ensuite-door-offset",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "shared-bathroom-lobby",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "laundry-service-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pantry-kitchen-link",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "breakfast-garden-bay",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "home-office-threshold",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "reading-room-quiet",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "playroom-garden-link",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "formal-informal-split",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "service-parallel-route",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "staff-privacy-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "security-arrival-position",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entertaining-loop",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "banquet-service-adjacency",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "private-lift-reserve",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "upper-family-landing",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "bridge-room-connector",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "quiet-court-route",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "seasonal-wing-separation",
+          "reason": "required qualifier absent"
+        },
+        {
+          "id": "family-entry-mudroom",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "wine-room-location",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "collection-gallery-route",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "service-yard-screening",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "vernacular-gallery-house",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "creole-raised-veranda",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "colonial-axis-veranda",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "french-court-residence",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "italian-loggia-house",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "spanish-patio-house",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "greek-court-retreat",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "japanese-engawa-link",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "balinese-pavilion-links",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "modernist-free-corner",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "brutalist-inhabited-depth",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "minimalist-shadow-joint",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "arts-crafts-room-bays",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "coastal-shingle-analogy",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "contemporary-rustic",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "townhouse-light-route",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "duplex-independent-entry",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "multigenerational-house",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "small-rental-residence",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "boutique-guesthouse",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "retreat-cabin",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "courtyard-duplex",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "artist-live-work",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "residential-compound",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "senior-household",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "split-level-concept",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "narrow-lot-court",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "corner-lot-dual-face",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "weekend-residence",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "large-family-flex-room",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-compression-release",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-side-reveal",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-sidelight",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-clerestory",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-corner-turn",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-double-door",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-portal-frame",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-rain-porch",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-court-door-axis",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-offset-privacy",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-stair-landing",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-two-stage-gate",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-gallery-end",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-night-material",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "entry-weather-lobby",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-bay-spacing",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-head-datum",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-solid-corner",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-deep-recess",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-horizontal-view",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-tall-narrow",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "window-corner-pair",
+          "reason": "required qualifier absent"
+        },
+        {
+          "id": "window-bath-high",
+          "reason": "required qualifier absent"
+        },
+        {
+          "id": "window-stair-daylight",
+          "reason": "required qualifier absent"
+        },
+        {
+          "id": "facade-occupied-recess",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "facade-pier-rhythm",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "facade-service-discretion",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "facade-rear-completion",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "facade-floor-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "facade-screen-layer",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-main-secondary",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-gable-end-opening",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-hip-veranda",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-flat-parapet",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-terrace-door",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-terrace-zones",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "roof-terrace-guard-gap",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "balcony-room-threshold",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "balcony-recessed-loggia",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "terrace-wrap-corner",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "terrace-sun-shade",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "terrace-dining-route",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "terrace-private-screen",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "terrace-ground-transition",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "court-living-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "court-private-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "court-open-sky",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "court-water-separation",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "court-entry-view",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pergola-rectilinear",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pergola-wall-end",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "loggia-shared-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-kitchen-shelter",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-fire-feature-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-reading-nook",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-shower-shell",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-changing-room",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "outdoor-wind-screen",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "outdoor-room-end-wall",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "pool-rectangular-lap",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-court-alignment",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-private-offset",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-house-connection",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-deck-width",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-step-representation",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-shallow-zone",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-spa-separation",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-infinity-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-edge-levels",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-garden-view",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-screened-service",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-child-barrier-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-bridge-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "pool-reflection-court",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "gym-terrace-edge",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "gym-changing-link",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "yoga-quiet-room",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "cinema-dark-shell",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "music-room-buffer",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "games-room-family",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "garage-service-door",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "garage-court-subordination",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "garage-workshop-room",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "guest-house-private-path",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "guest-house-shared-amenity",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "sports-court-reserve",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "waterfront-dock-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "boathouse-shell-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "sauna-shell-limit",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "climate-opposed-openings",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-rain-entry",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-breezeway-gap",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-deep-veranda",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-high-low-opening",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-sun-court",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-insect-screen-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-roof-rain-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-wet-dry-entry",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-coastal-material",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-hurricane-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-humidity-storage",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-dry-season-shade",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "climate-night-privacy",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-public-private-gradient",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-road-service-split",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-view-cone",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-neighbour-screen",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-entrance-address",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-court-turning-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-flat-hillside-disclosure",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-existing-terrain-edit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-waterfront-setback-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-garden-room-privacy",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-pedestrian-shortcut",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-delivery-threshold",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-view-end-corridor",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-boundary-unknown",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "site-quiet-loud-edges",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-floor-wall-datum",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-wall-roof-datum",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-door-sill-centre",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-multiple-openings",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-glass-once",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-room-shell-hollow",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-court-by-separation",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-stair-treads",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-guard-host",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-post-bearing",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-upper-floor-support",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-no-double-floor",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-rotated-attachments",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "build-pool-bottom-order",
+          "reason": "specialist use absent or excluded"
+        },
+        {
+          "id": "build-component-boundary",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-stone-plinth",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-timber-soffit-limit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-bronze-threshold",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-sage-service",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-continuous-deck",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-wet-dry-distinction",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-screen-depth",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-door-wall-contrast",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-recess-shadow",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-common-base",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-restrained-count",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-garden-side",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-roof-edge",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-interior-exterior",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "material-stone-reveal",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-amenity-before-house",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-prose-without-elements",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-unrelated-references",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-stale-decision-ids",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-unsupported-substitute",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-overlapping-room-labels",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-roof-over-void",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-roof-shortfall",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-guard-no-access",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-move-host-children",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-resize-opening",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-preserve-unknowns",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-single-view",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-door-over-wall",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "lesson-minimal-edit",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "property-value-100k-250k",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-250k-500k",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-500k-1m",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-1m-3m",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-3m-5m",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-5m-10m",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-10m-25m",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "property-value-50m-100m-plus",
+          "reason": "different or unspecified property value"
+        },
+        {
+          "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-65a14c7e-0559-45f0-adfe-589551ca499c",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-f314e038-4a62-420a-a9e4-d1fd3be658a5",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-57f3ab00-16eb-4809-a7cc-fe80de858040",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-1eaf46ad-c20f-4fa4-8347-3b28beca4417",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-75573623-5b7f-4e05-a890-eaebe88954c2",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-c6951c3e-fd4f-4656-9242-6df2fa7a0bf4",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-c55606d9-3781-4855-9c0b-21a7e2be80c8",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-ec76f7ea-3c19-4a9a-8a0a-a256d350b82e",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-4d3abb0c-7342-45b7-9677-2608def84cae",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-c9aa5eff-a097-4bd0-9948-da25087f1cef",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-b442c444-5fb9-4fbc-894b-222b1fdd0c78",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-af6efac9-d897-4830-bb0c-63ff12eb70f6",
+          "reason": "no task relevance"
+        },
+        {
+          "id": "legacy-recipe-df26fdeb-95d1-4fbc-99e5-6336da3b7305",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-7aeddff6-9264-485a-8a2e-e5d5fc034575",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-5ef674af-406c-465c-8608-4f8cbe8e46fc",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-ca9cecfc-08a1-4550-ba41-5881112496ad",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-bc512300-37ab-47ae-816e-fa562e9239ec",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-eff1decf-c639-44b3-9152-64658e1f2da0",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "legacy-recipe-451beacf-2c37-46aa-8581-566acbe5dd1a",
+          "reason": "incompatible scale"
+        },
+        {
+          "id": "landscape-room",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "layered-roofline",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "deep-overhang",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "gable-hierarchy",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "loggia-depth",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "vertical-screens",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "private-bedroom-wing",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "room-enclosure",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "window-rhythm",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "base-middle-top",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "arrival-court",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "material-junction",
+          "reason": "retrieval budget"
+        },
+        {
+          "id": "service-spine",
+          "reason": "retrieval budget"
+        }
+      ],
+      "excludedByBudget": [
+        {
+          "id": "landscape-room",
+          "category": "roof-outdoor",
+          "score": 6
+        },
+        {
+          "id": "layered-roofline",
+          "category": "roof-outdoor",
+          "score": 4.3
+        },
+        {
+          "id": "deep-overhang",
+          "category": "roof-outdoor",
+          "score": 4
+        },
+        {
+          "id": "gable-hierarchy",
+          "category": "roof-outdoor",
+          "score": 4
+        },
+        {
+          "id": "loggia-depth",
+          "category": "envelope",
+          "score": 4
+        },
+        {
+          "id": "vertical-screens",
+          "category": "envelope",
+          "score": 4
+        },
+        {
+          "id": "private-bedroom-wing",
+          "category": "programme",
+          "score": 2
+        },
+        {
+          "id": "room-enclosure",
+          "category": "programme",
+          "score": 2
+        },
+        {
+          "id": "window-rhythm",
+          "category": "envelope",
+          "score": 2
+        },
+        {
+          "id": "base-middle-top",
+          "category": "composition",
+          "score": 1.9
+        },
+        {
+          "id": "arrival-court",
+          "category": "arrival",
+          "score": 0.3
+        },
+        {
+          "id": "material-junction",
+          "category": "materials",
+          "score": 0.3
+        },
+        {
+          "id": "service-spine",
+          "category": "programme",
+          "score": 0.3
+        }
+      ],
+      "eligible": 25,
+      "selected": 12,
+      "categories": [
+        "property-value",
+        "roof-outdoor",
+        "envelope",
+        "composition",
+        "climate-site",
+        "programme",
+        "arrival",
+        "materials"
+      ],
+      "omitted": 13,
+      "estimatedTokens": 3963,
+      "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+    },
+    "query": "Design an exceptional $25 million Mediterranean courtyard estate with warm natural materials, carefully composed pitched roofs, arcades, shaded courtyards, elegant residential wings and richly developed indoor-outdoor spaces. Use an original architectural composition appropriate to the style, rather than adapting a tropical mansion layout. Construct fully editable direct-scene architecture.",
+    "text": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. Stored knowledge is retrieval, not retraining.\n{\"id\":\"property-value-25m-50m\",\"version\":2,\"category\":\"property-value\",\"when\":\"US$25,000,000–50,000,000 estimated property-value label, used only as a subjective design-ambition reference. Property value is not a construction budget. Location, land value, market conditions, condition and other factors affect prices; this band establishes no market-price or cost claim.\",\"title\":\"Design-ambition reference: Exceptional estate: integrated architecture\",\"combinations\":\"Terra may combine, reinterpret or omit these subjective ideas with relevant regional, style, climate, entrance, roof, facade, material and room-planning knowledge. Amenities are optional inspirations, never mandatory. Do not constrain creative freedom through a fixed template, geometry, area, storey, room or amenity count.\",\"placement\":\"Let the household brief, site, climate, privacy and architectural concept determine spatial relationships. Connect arrival, shared living and sheltered outdoor space where appropriate; separate guest, private and service movement when useful. No fixed floor areas, storey counts or room counts follow from the value label.\",\"principles\":\"Explore an estate-wide composition with a strong main residence, private suites, connected living and sheltered entertaining. Compose a bespoke arrival, sophisticated roof relationships, deep facades and balanced materials. Pursue carefully resolved craftsmanship and spatial complexity only where useful. Guest facilities, a pool pavilion or wellness rooms may serve the brief without becoming an amenity checklist. These are flexible inspirations, not requirements or price-derived promises.\",\"capabilities\":\"Translate selected ideas into actual supported scene operations, with coordinated floors, enclosures, openings, entrances, roofs and terraces. Craftsmanship and spatial quality remain design intentions until supported by geometry and review. Disclose missing access, interiors and other unsupported capabilities; a price label does not prove quality.\",\"construction\":{\"supports\":\"Coordinate supporting enclosure and roof/floor datums atomically; entrances and terraces need actual connections and access.\",\"materials\":\"Select available materials and facade depth for local character and maintainability; conceptual finishes do not prove craftsmanship.\",\"operations\":[\"add\",\"replace\",\"move\",\"resize\",\"finish\"],\"unsupported\":\"No valuation, construction-cost estimate, automatic programme, engineering, services, code or luxury certification.\",\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]}}\n{\"id\":\"mediterranean-courtyard\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Grand Mediterranean homes or briefs explicitly seeking a courtyard.\",\"title\":\"Mediterranean courtyard residence\",\"combinations\":\"Combine loggias, shaded dining, a restrained fountain and varied private gardens when space permits.\",\"placement\":\"Use an entrance sequence into a court, with living rooms and sheltered circulation addressing it; keep service crossings discreet.\",\"principles\":\"Balance solid walls, deep reveals, rhythmic openings and roof hierarchy; a courtyard need not force symmetry.\",\"capabilities\":\"Compose courtyard voids with separate rectangular parts; gable and hip roofs supported, arches and tiled roof detail are not dedicated operations.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose courtyard voids with separate rectangular parts; gable and hip roofs supported, arches and tiled roof detail are not dedicated operations. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"tropical-envelope\",\"version\":1,\"category\":\"envelope\",\"when\":\"Hot humid coastal or island contexts.\",\"title\":\"Caribbean climate and envelope\",\"combinations\":\"Pair shaded glazing with sheltered outdoor living and selective screening.\",\"placement\":\"Place openings for potential cross ventilation and shelter entrances from driving rain; orientation and wind are assumptions until supplied.\",\"principles\":\"Prioritize shade, weather protection and maintainable coastal materials; request local hurricane and corrosion engineering.\",\"capabilities\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"estate-composition\",\"version\":1,\"category\":\"composition\",\"when\":\"Large private residences with substantial entertaining and service needs.\",\"title\":\"Estate programme and hierarchy\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"climate-shaded-west\",\"version\":1,\"category\":\"climate-site\",\"when\":\"Use when the brief or chosen programme calls for assumed afternoon exposure shading.\",\"title\":\"Assumed afternoon exposure shading\",\"combinations\":\"Light ivory wall planes with timber screens and limestone base; no reflectance or durability performance is implied.\",\"placement\":\"If west is known provide deeper exterior shade on that edge while retaining room openings.\",\"principles\":\"Disclose the orientation assumption when west is unknown.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, roof. No climate simulation, storm rating, drainage design, corrosion specification or surveyed orientation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Light ivory wall planes with timber screens and limestone base; no reflectance or durability performance is implied.\",\"supports\":\"Join shaded outdoor walking surfaces to real wall openings and supported overhead cover.\",\"unsupported\":\"No climate simulation, storm rating, drainage design, corrosion specification or surveyed orientation.\"}}\n{\"id\":\"outdoor-entertaining\",\"version\":1,\"category\":\"programme\",\"when\":\"Outdoor entertaining in a suitable climate or an explicit request.\",\"title\":\"Outdoor kitchen, dining and bar\",\"combinations\":\"Choose dining with kitchen or bar as appropriate; avoid installing every amenity.\",\"placement\":\"Connect indoor kitchen, shaded dining and service route; separate heat and smoke from seating and bedrooms.\",\"principles\":\"Make useful outdoor rooms with shade, furniture and circulation rather than empty decks.\",\"capabilities\":\"Plates, screens, roofs, sofas and composed counter volumes supported; appliance assets, plumbing and smoke performance are not implemented.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Plates, screens, roofs, sofas and composed counter volumes supported; appliance assets, plumbing and smoke performance are not implemented. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"covered-threshold\",\"version\":1,\"category\":\"arrival\",\"when\":\"Weather protection at the front door.\",\"title\":\"Covered entrance threshold\",\"combinations\":\"Choose wall returns or posts.\",\"placement\":\"Connect approach slab to a recessed door under a supported canopy.\",\"principles\":\"Avoid a door behind an uncut wall.\",\"capabilities\":\"plate, unglazed wall opening, entrance child, volume posts and roof.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"entrance\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, unglazed wall opening, entrance child, volume posts and roof. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"facade-materials\",\"version\":1,\"category\":\"materials\",\"when\":\"A residence needing coherent enclosure and material expression.\",\"title\":\"Facade depth, roofs and material identity\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"courtyard-proportion\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"A residence organized around an outdoor centre.\",\"title\":\"Courtyard enclosure and daylight\",\"combinations\":\"Vary enclosed sides and loggias.\",\"placement\":\"Face living and circulation towards a court with useful depth and shaded edges.\",\"principles\":\"Avoid a narrow residual shaft or blocked access.\",\"capabilities\":\"Separate plates, walls and roofs around an unbuilt void; no courtyard subtraction operation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Separate plates, walls and roofs around an unbuilt void; no courtyard subtraction operation. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"composition-hierarchy\",\"version\":1,\"category\":\"composition\",\"when\":\"Large programmes needing a legible centre.\",\"title\":\"Primary and subordinate massing\",\"combinations\":\"Compare arrival and garden silhouettes.\",\"placement\":\"Give the principal living hall the strongest volume; step bedroom and service wings down around it.\",\"principles\":\"Avoid equal boxes with no hierarchy.\",\"capabilities\":\"plate, wall, roof and volume; compose hollow rooms, not solid habitable blocks.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, wall, roof and volume; compose hollow rooms, not solid habitable blocks. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"roof-independent-wings\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Use when the brief or chosen programme calls for independent wing roofs.\",\"title\":\"Independent wing roofs\",\"combinations\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"placement\":\"Use separate roof sections aligned with individual wing enclosures and connector roofs.\",\"principles\":\"Do not fill an intended courtyard with an oversized shared roof.\",\"capabilities\":\"Use direct-scene primitives: plate, roof. No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"roof\"],\"materials\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"supports\":\"Support elevated decks with walls or posts, guard exposed edges, provide actual door access and supported shade.\",\"unsupported\":\"No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\"}}\n{\"id\":\"deep-reveals\",\"version\":1,\"category\":\"envelope\",\"when\":\"Solid facades needing depth and shade.\",\"title\":\"Deep facade reveals\",\"combinations\":\"Combine stone surrounds or restrained sills.\",\"placement\":\"Set glazing behind jamb and head volumes aligned with actual wall openings.\",\"principles\":\"Avoid applying trim across uncut walls.\",\"capabilities\":\"wall opening, glazing child and volume jambs/lintel; no boolean recess operation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"wall opening, glazing child and volume jambs/lintel; no boolean recess operation. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n",
+    "chars": 15849,
+    "estimatedTokens": 3963,
+    "baseSystemChars": 24204,
+    "lessonChars": 0,
+    "finalSystemChars": 40053
+  }
+}

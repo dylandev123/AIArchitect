@@ -1,0 +1,33 @@
+{
+  "providerCalls": 0,
+  "approved": false,
+  "sceneTests": {
+    "files": 15,
+    "passed": 67,
+    "command": "node_modules/.bin/vitest run src/lib/villa/scene"
+  },
+  "typecheck": {
+    "command": "node_modules/.bin/tsc --noEmit",
+    "passed": true
+  },
+  "lint": {
+    "scope": [
+      "focusedConstruction.ts",
+      "focusedConstruction.test.ts",
+      "planning.ts",
+      "completion.ts",
+      "completion-functional-review.ts",
+      "completion-functional-capture.mjs"
+    ],
+    "passed": true
+  },
+  "offlineReplay": "46 operations exactly reproduce retained scene elements and terrain",
+  "repair": "Only stair-tread-17 changed; walking surface union preserved",
+  "sourceHashes": "Verified before and after rendering",
+  "screenshots": 32,
+  "browserApiAndExternalRequests": "blocked",
+  "liveProjectModified": false,
+  "commits": 0,
+  "deployments": 0,
+  "migrations": 0
+}

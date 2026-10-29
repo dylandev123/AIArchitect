@@ -2,11 +2,13 @@ import { NoObjectGeneratedError } from 'ai';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { COMPOSITION_EXAMPLES } from '@/lib/villa/composition-examples';
 import { validateComposition } from '@/lib/villa/composition';
+import { VILLA_LIMITS } from '@/lib/villa/limits';
 import { defaultVilla } from '@/lib/villa/design';
 const generate = vi.hoisted(() => vi.fn());
 vi.mock('ai', async original => ({ ...await original<typeof import('ai')>(), generateText: generate }));
 vi.mock('@/lib/ai/usage/track', () => ({ withUsageLogging: async (_meta: unknown, run: () => Promise<unknown>) => run() }));
-vi.mock('@/lib/villa/responseArtifact', () => ({ retainVillaResponse: vi.fn(async () => ({ retained: true })) }));
+vi.mock('@/lib/villa/responseArtifact', () => ({ retainVillaGeneration: vi.fn(async () => ({ retained:true })), retainVillaResponse: vi.fn(async () => ({ retained: true })) }));
+vi.mock('@/lib/villa/requestArtifact', () => ({ beginVillaRequest: vi.fn(async () => true), finishVillaRequest: vi.fn(async () => {}), readVillaRequest: vi.fn() }));
 import { POST } from './route';
 const usage = { inputTokens: 100, outputTokens: 80 };
 const call = (body: unknown) => POST(new Request('http://localhost/api/ai/villa', { method: 'POST', body: JSON.stringify(body) }));
@@ -20,7 +22,7 @@ describe('villa Terra boundary', () => {
     expect(body.config).toEqual(validateComposition({...COMPOSITION_EXAMPLES[2],siteMode:'derived'})); expect(body.providerCalls).toBe(1);
     expect(generate).toHaveBeenCalledTimes(1);
     const args = generate.mock.calls[0][0]; expect(args.maxRetries).toBe(0); expect(args.tools).toBeUndefined();
-    expect(args.system).toContain('Never return meshes'); expect(args.maxOutputTokens).toBe(6000);
+    expect(args.system).toContain('Never return meshes'); expect(args.maxOutputTokens).toBe(VILLA_LIMITS.outputTokens);
   });
   it('honours an authoritative fixed lot even when the provider requests a derived garden', async()=>{
     const candidate={...COMPOSITION_EXAMPLES[0],siteMode:'derived'};
@@ -50,7 +52,7 @@ describe('villa Terra boundary', () => {
     generate.mockResolvedValue({output:{changes:config,summary:'Unsupported rotation.',unsupported:[]},finishReason:'stop',totalUsage:usage});
     const response=await call({prompt:'Diagonal villa',mode:'generate'});
     expect(response.status).toBe(422);
-    const body=await response.json();expect(body.findings.some((f:{path:string})=>f.path==='changes.wings.0.orientation')).toBe(true);
+    const body=await response.json();expect(body.findings.some((f:{path:string})=>f.path==='wings.main.orientation')).toBe(true);
     expect(generate).toHaveBeenCalledTimes(1);
   });
   it('recovers local field diagnostics when the SDK rejects the structured output first',async()=>{
@@ -62,7 +64,7 @@ describe('villa Terra boundary', () => {
       usage:{inputTokens:100,outputTokens:80,totalTokens:180,inputTokenDetails:{noCacheTokens:100,cacheReadTokens:0,cacheWriteTokens:0},outputTokenDetails:{textTokens:80,reasoningTokens:0}},
     }));
     const response=await call({prompt:'Diagonal villa',mode:'generate'}),body=await response.json();
-    expect(response.status).toBe(422);expect(body.findings.some((f:{path:string})=>f.path==='changes.wings.0.orientation')).toBe(true);
+    expect(response.status).toBe(422);expect(body.findings.some((f:{path:string})=>f.path==='wings.main.orientation')).toBe(true);
     expect(body.changes).toBeUndefined();expect(generate).toHaveBeenCalledTimes(1);
   });
   it('rejects an invalid current composition before any provider call',async()=>{

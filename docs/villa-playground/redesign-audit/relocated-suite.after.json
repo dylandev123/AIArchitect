@@ -1,0 +1,1699 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Maison des Alizés",
+  "elements": [
+    {
+      "id": "salon-floor",
+      "label": "Central salon floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-wing-floor",
+      "label": "West private wing floor",
+      "kind": "plate",
+      "at": [
+        -13,
+        0.1,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-wing-floor",
+      "label": "East private wing floor",
+      "kind": "plate",
+      "at": [
+        13,
+        0.1,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-court",
+      "label": "Landward arrival court",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -9
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.2,
+        6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "ocean-terrace",
+      "label": "Covered ocean terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        8
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "salon-view-left",
+      "label": "Ocean glazing left bay",
+      "kind": "wall",
+      "at": [
+        -5.4,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-view-center",
+      "label": "Ocean glazing center bay",
+      "kind": "wall",
+      "at": [
+        0,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-view-right",
+      "label": "Ocean glazing right bay",
+      "kind": "wall",
+      "at": [
+        5.4,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "entry-wall-left",
+      "label": "Entry rear wall left return",
+      "kind": "wall",
+      "at": [
+        -5,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "entry-wall-door",
+      "label": "Entry door wall",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.8,
+        "height": 2.8,
+        "glazed": false
+      }
+    },
+    {
+      "id": "entry-door",
+      "label": "Recessed bronze entrance door",
+      "kind": "entrance",
+      "parent": "entry-wall-door",
+      "at": [
+        0,
+        -0.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.8,
+        2.8,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "entry-wall-right",
+      "label": "Entry rear wall right return",
+      "kind": "wall",
+      "at": [
+        5,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-west-return",
+      "label": "Salon west ocean return",
+      "kind": "wall",
+      "at": [
+        -8,
+        2.4,
+        5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-east-return",
+      "label": "Salon east ocean return",
+      "kind": "wall",
+      "at": [
+        8,
+        2.4,
+        5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-outer-wall",
+      "label": "West wing private outer wall",
+      "kind": "wall",
+      "at": [
+        -17.99998775598299,
+        1.9,
+        2.3333333333108457
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-rear-wall",
+      "label": "West wing landward wall",
+      "kind": "wall",
+      "at": [
+        -16.333333333333332,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-front-wall",
+      "label": "West wing garden wall",
+      "kind": "wall",
+      "at": [
+        -16.333333333333332,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-inner-wall",
+      "label": "West wing inner privacy wall",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.6,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-outer-wall",
+      "label": "East wing private outer wall",
+      "kind": "wall",
+      "at": [
+        18.00001224401701,
+        1.9,
+        2.3333333333108457
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-rear-wall",
+      "label": "East wing landward wall",
+      "kind": "wall",
+      "at": [
+        9.666666666666668,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-front-wall",
+      "label": "East wing garden wall",
+      "kind": "wall",
+      "at": [
+        9.666666666666668,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-inner-wall",
+      "label": "East wing inner privacy wall",
+      "kind": "wall",
+      "at": [
+        8,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.6,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-roof",
+      "label": "Tall central salon roof",
+      "kind": "roof",
+      "at": [
+        0,
+        4.71,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16.6,
+        0.22,
+        12.8
+      ],
+      "material": "limestone",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "west-wing-roof",
+      "label": "West wing roof",
+      "kind": "plate",
+      "at": [
+        -13,
+        3.7,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.3,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-wing-roof",
+      "label": "West wing roof",
+      "kind": "plate",
+      "at": [
+        13,
+        3.7,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.3,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-post-west",
+      "label": "Entry canopy west post",
+      "kind": "volume",
+      "at": [
+        -3.4,
+        1.8,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-post-east",
+      "label": "Entry canopy east post",
+      "kind": "volume",
+      "at": [
+        3.4,
+        1.8,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-canopy",
+      "label": "Entrance weather canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.58,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        8.4,
+        0.35,
+        5.2
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-west",
+      "label": "Terrace canopy west ocean post",
+      "kind": "volume",
+      "at": [
+        -7.5,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-midwest",
+      "label": "Terrace canopy west middle post",
+      "kind": "volume",
+      "at": [
+        -2.7,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-mideast",
+      "label": "Terrace canopy east middle post",
+      "kind": "volume",
+      "at": [
+        2.7,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-east",
+      "label": "Terrace canopy east ocean post",
+      "kind": "volume",
+      "at": [
+        7.5,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-canopy",
+      "label": "Deep ocean terrace canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.58,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        17.2,
+        0.35,
+        8
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "screen-west",
+      "label": "West bronze privacy screen",
+      "kind": "screen",
+      "at": [
+        -17.82,
+        1.9,
+        1.9
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 12
+    },
+    {
+      "id": "screen-east",
+      "label": "East bronze privacy screen",
+      "kind": "screen",
+      "at": [
+        17.82,
+        1.9,
+        1.9
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 12
+    },
+    {
+      "id": "pool-basin-floor",
+      "label": "Pool basin floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.03,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.06,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-water",
+      "label": "Rectangular pool water surface",
+      "kind": "water",
+      "at": [
+        0,
+        0.2,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.05,
+        5
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-west",
+      "label": "Pool west coping",
+      "kind": "plate",
+      "at": [
+        -7.45,
+        0.1,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        0.9,
+        0.2,
+        6.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-east",
+      "label": "Pool east coping",
+      "kind": "plate",
+      "at": [
+        7.45,
+        0.1,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        0.9,
+        0.2,
+        6.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-south",
+      "label": "Pool south coping",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        15.05
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.9
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-north",
+      "label": "Pool north coping",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        20.95
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.9
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-west",
+      "label": "Pool basin west wall",
+      "kind": "wall",
+      "at": [
+        -7,
+        0.1,
+        18
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-east",
+      "label": "Pool basin east wall",
+      "kind": "wall",
+      "at": [
+        7,
+        0.1,
+        18
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-south",
+      "label": "Pool basin south wall",
+      "kind": "wall",
+      "at": [
+        0,
+        0.1,
+        15.5
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-north",
+      "label": "Pool basin north wall",
+      "kind": "wall",
+      "at": [
+        0,
+        0.1,
+        20.5
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "ocean-pavilion",
+      "label": "Open elliptical ocean lounge pavilion",
+      "kind": "pavilion",
+      "at": [
+        0,
+        0.2,
+        26
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        4.2,
+        8
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "poolside-lounge-deck",
+      "label": "Poolside limestone lounge deck",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        23
+      ],
+      "rotation": 0,
+      "size": [
+        15,
+        0.2,
+        3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-upper-floor",
+      "label": "west-upper-floor",
+      "kind": "plate",
+      "at": [
+        13,
+        3.92,
+        -2
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.14,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-upper-land",
+      "label": "west-upper-land",
+      "kind": "wall",
+      "at": [
+        11,
+        5.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-sea",
+      "label": "west-upper-sea",
+      "kind": "wall",
+      "at": [
+        11,
+        5.8,
+        2
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 2.5,
+        "height": 2.8,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-upper-outer",
+      "label": "west-upper-outer",
+      "kind": "wall",
+      "at": [
+        9,
+        5.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-inner",
+      "label": "west-upper-inner",
+      "kind": "wall",
+      "at": [
+        17,
+        5.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-roof",
+      "label": "west-upper-roof",
+      "kind": "roof",
+      "at": [
+        13,
+        7.75,
+        -2
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.3,
+        9
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-entry-clerestory",
+      "label": "salon-entry-clerestory",
+      "kind": "wall",
+      "at": [
+        0,
+        4.1,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        1,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 8,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 14,
+        "height": 0.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-side-clerestory-west",
+      "label": "salon-side-clerestory-west",
+      "kind": "wall",
+      "at": [
+        -8,
+        4.1,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        1,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 6,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 10.5,
+        "height": 0.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-side-clerestory-east",
+      "label": "salon-side-clerestory-east",
+      "kind": "wall",
+      "at": [
+        8,
+        4.1,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        1,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 6,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 10.5,
+        "height": 0.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-rear-wall-bay-1",
+      "label": "West wing landward wall",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-rear-wall-bay-2",
+      "label": "West wing landward wall",
+      "kind": "wall",
+      "at": [
+        -9.666666666666666,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-rear-wall-bay-1",
+      "label": "East wing landward wall",
+      "kind": "wall",
+      "at": [
+        13,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-rear-wall-bay-2",
+      "label": "East wing landward wall",
+      "kind": "wall",
+      "at": [
+        16.333333333333336,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-front-wall-bay-1",
+      "label": "West wing garden wall",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-front-wall-bay-2",
+      "label": "West wing garden wall",
+      "kind": "wall",
+      "at": [
+        -9.666666666666666,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-front-wall-bay-1",
+      "label": "East wing garden wall",
+      "kind": "wall",
+      "at": [
+        13,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-front-wall-bay-2",
+      "label": "East wing garden wall",
+      "kind": "wall",
+      "at": [
+        16.333333333333336,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-outer-wall-bay-1",
+      "label": "West wing private outer wall",
+      "kind": "wall",
+      "at": [
+        -18,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-outer-wall-bay-2",
+      "label": "West wing private outer wall",
+      "kind": "wall",
+      "at": [
+        -18.00001224401701,
+        1.9,
+        -4.333333333310846
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-outer-wall-bay-1",
+      "label": "East wing private outer wall",
+      "kind": "wall",
+      "at": [
+        18,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-outer-wall-bay-2",
+      "label": "East wing private outer wall",
+      "kind": "wall",
+      "at": [
+        17.99998775598299,
+        1.9,
+        -4.333333333310846
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.3333333333333335,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 2.533333333333333,
+        "height": 2.4,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-land-bay-1",
+      "label": "west-upper-land",
+      "kind": "wall",
+      "at": [
+        15,
+        5.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-sea-bay-1",
+      "label": "west-upper-sea",
+      "kind": "wall",
+      "at": [
+        15,
+        5.8,
+        2
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-outer-bay-1",
+      "label": "west-upper-outer",
+      "kind": "wall",
+      "at": [
+        9,
+        5.8,
+        -4
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-inner-bay-1",
+      "label": "west-upper-inner",
+      "kind": "wall",
+      "at": [
+        17,
+        5.8,
+        -4
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.2,
+        "height": 2.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-upper-terrace-rail",
+      "label": "west-upper-terrace-rail",
+      "kind": "balcony",
+      "at": [
+        13,
+        4.4,
+        3.8
+      ],
+      "rotation": 0,
+      "size": [
+        9.4,
+        1.1,
+        0.12
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-upper-terrace-door",
+      "label": "west-upper-terrace-door",
+      "kind": "entrance",
+      "parent": "west-upper-sea",
+      "at": [
+        0,
+        -0.4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.5,
+        2.8,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "entry-portal-west",
+      "label": "entry-portal-west",
+      "kind": "volume",
+      "at": [
+        -2.5,
+        2.3,
+        -6.35
+      ],
+      "rotation": 0,
+      "size": [
+        0.55,
+        4.2,
+        0.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-portal-east",
+      "label": "entry-portal-east",
+      "kind": "volume",
+      "at": [
+        2.5,
+        2.3,
+        -6.35
+      ],
+      "rotation": 0,
+      "size": [
+        0.55,
+        4.2,
+        0.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-portal-head",
+      "label": "entry-portal-head",
+      "kind": "volume",
+      "at": [
+        0,
+        4.25,
+        -6.35
+      ],
+      "rotation": 0,
+      "size": [
+        5.55,
+        0.3,
+        0.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "Offline composition revision: retain the ground-floor residence and add a recessed 64 m² upper west suite. Budget adequacy and full programme remain unproven.",
+    "arrivalAndCirculation": "Arrival is assumed from the landward south side. A limestone approach court leads to a recessed bronze front door beneath a dedicated canopy. The entrance opens directly into the tall central living salon, with bedroom wings branching west and east. The oceanward axis continues through broad glazed openings to a shaded terrace, pool court and a detached open elliptical ocean lounge pavilion.",
+    "volumeHierarchy": "Two-storey recessed west anchor, intermediate tall salon, low east wing and shaded sea veranda. Distinct heights and setbacks replace equal lateral bars.",
+    "relationshipsAndViews": "The central salon is oriented toward the assumed ocean outlook to the north, with three separate framed glazed bays rather than an indiscriminate glass curtain. Its terrace is immediately beyond, shaded by a deep flat canopy and structured by timber posts. The lateral wings retain comparatively solid, private external edges while their inner walls connect back to the central living volume. The pool court and pavilion extend the same central axis without claiming a surveyed shoreline.",
+    "roofFacadeAndMaterials": "Coordinated stepped flat roofs; west lower roof becomes terrace slab. Upper suite has its own smaller cap.",
+    "intendedSpaces": [
+      "Covered landward arrival court and recessed entrance threshold",
+      "Double-height central living and entertaining salon",
+      "West private bedroom-suite wing",
+      "East private bedroom-suite and flexible service wing",
+      "Large covered ocean-view dining and lounge terrace",
+      "Rectangular pool court with explicit perimeter coping and basin floor",
+      "Detached open elliptical ocean lounge pavilion"
+    ],
+    "designDecisions": []
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "entry-night-material",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "facade-pier-rhythm",
+      "version": 1,
+      "requiredKinds": [
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "roof-terrace-door",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "balcony",
+        "entrance",
+        "roof"
+      ]
+    }
+  ]
+}

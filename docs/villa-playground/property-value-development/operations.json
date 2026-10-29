@@ -1,0 +1,176 @@
+[
+  {
+    "op": "replace",
+    "id": "salon-view-center",
+    "element": {
+      "id": "salon-view-center",
+      "label": "Ocean terrace central door bay",
+      "kind": "wall",
+      "at": [
+        0,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 2.8,
+        "height": 3.1,
+        "glazed": false
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "salon-ocean-door",
+      "label": "Central bronze ocean terrace door",
+      "kind": "entrance",
+      "parent": "salon-view-center",
+      "at": [
+        0,
+        -0.65,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.8,
+        3.1,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "west-upper-terrace-deck",
+      "label": "West upper suite ocean terrace deck",
+      "kind": "plate",
+      "at": [
+        -13,
+        4.06,
+        3.7
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.14,
+        3.4
+      ],
+      "material": "timber",
+      "panels": 4
+    }
+  },
+  {
+    "op": "move",
+    "id": "west-upper-terrace-rail",
+    "at": [
+      -13,
+      4.68,
+      5.34
+    ]
+  },
+  {
+    "op": "resize",
+    "id": "west-upper-terrace-rail",
+    "size": [
+      8,
+      1.1,
+      0.12
+    ]
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "west-upper-terrace-rail-west",
+      "label": "West upper terrace side guard",
+      "kind": "balcony",
+      "at": [
+        -16.94,
+        4.68,
+        3.7
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        3.4,
+        1.1,
+        0.12
+      ],
+      "material": "ivory",
+      "panels": 3
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "west-upper-terrace-rail-east",
+      "label": "East upper terrace side guard",
+      "kind": "balcony",
+      "at": [
+        -9.06,
+        4.68,
+        3.7
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        3.4,
+        1.1,
+        0.12
+      ],
+      "material": "ivory",
+      "panels": 3
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "terrace-screen-west",
+      "label": "West lateral terrace shade screen",
+      "kind": "screen",
+      "at": [
+        -7.84,
+        1.7,
+        10
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 16
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "terrace-screen-east",
+      "label": "East lateral terrace shade screen",
+      "kind": "screen",
+      "at": [
+        7.84,
+        1.7,
+        10
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        7.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 16
+    }
+  }
+]

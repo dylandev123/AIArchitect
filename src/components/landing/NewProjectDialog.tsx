@@ -20,7 +20,7 @@ export function NewProjectDialog({ onClose }: { onClose: () => void }) {
 
   /** Dev-only: opens the deterministic architecture fixture through the exact same HouseRenderer path live generation uses, for visual testing. */
   const handleLoadFixture = () => {
-    const project = createProject(name || "Fixture: Modern Tropical Pavilion House");
+    const project = createProject(name || "Fixture: Modern Tropical Pavilion House", "house", "v2-architectural");
     updateHouseConfig(project.id, JSON.stringify({
       ...JSON.parse(BLANK_HOUSE_JSON),
       architecturalDesignDocument: ARCHITECTURE_FIXTURES.modernTropicalPavilionHouse,

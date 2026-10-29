@@ -115,6 +115,7 @@ export async function requestHouseEdit(req: HouseEditRequest): Promise<HouseEdit
   const resolved = resolveClientGenerationMode(project);
   if (!resolved.ok) return { ok: false, error: resolved.error, status: 409 };
   const generationMode = resolved.mode;
+  if (generationMode === "direct-scene") return { ok: false, error: "Open the scene editor for direct-scene generation and editing.", status: 409 };
   // This is intentionally before every network call. It makes the client
   // routing decision visible and auditable before spending an AI request.
   console.info(`[client-generation] resolvedMode: ${generationMode}`);

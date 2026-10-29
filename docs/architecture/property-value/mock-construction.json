@@ -1,0 +1,197 @@
+{
+  "providerCalls": 0,
+  "approval": "mock only",
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "Entrance contract fixture",
+    "elements": [
+      {
+        "id": "threshold",
+        "label": "threshold",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.2,
+          4
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "entry-wall",
+        "label": "entry wall",
+        "kind": "wall",
+        "at": [
+          0,
+          2.2,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          4,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 2,
+          "height": 3,
+          "glazed": false
+        }
+      },
+      {
+        "id": "door",
+        "label": "door",
+        "kind": "entrance",
+        "parent": "entry-wall",
+        "at": [
+          0,
+          -0.5,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          3,
+          0.15
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "shelter",
+        "label": "shelter",
+        "kind": "roof",
+        "at": [
+          0,
+          4.35,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.3,
+          4
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    ],
+    "knowledgeEvidence": [
+      {
+        "id": "property-value-25m-50m",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "requiredKinds": [
+          "wall"
+        ]
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "requiredKinds": [
+          "wall"
+        ]
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "entrance",
+          "roof"
+        ]
+      },
+      {
+        "id": "roof-flat-parapet",
+        "version": 1,
+        "requiredKinds": [
+          "roof",
+          "wall"
+        ]
+      },
+      {
+        "id": "build-wall-roof-datum",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "living-view",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "vertical-screens",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "entry-double-door",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "entrance",
+          "roof"
+        ]
+      },
+      {
+        "id": "roof-gable-end-opening",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "roof"
+        ]
+      }
+    ]
+  },
+  "limitation": "Proves construction/evidence transport, not autonomous value-driven quality. One entrance assembly is not an estate."
+}

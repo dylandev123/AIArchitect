@@ -1,7 +1,7 @@
 export type ProjectType = "house" | "villa" | "resort" | "restaurant" | "commercial";
 export type TimeOfDay = "morning" | "midday" | "sunset" | "night";
-/** V3 is opt-in; persisted V2 projects retain their existing default. */
-export type GenerationMode = "v2-architectural" | "v3-scene";
+/** Home creation uses direct scenes; V2/V3 roots retain their compatibility workflows. */
+export type GenerationMode = "v2-architectural" | "v3-scene" | "direct-scene";
 
 /** Presentation preferences only; architectural geometry remains in houseConfigJson. */
 export interface ArchitecturalWorkspaceView {

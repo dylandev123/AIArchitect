@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "id": "cascade-skyline-residence",
+  "name": "Cascade Skyline Residence",
+  "character": "A four-level glazed composition of shifting terraces, shaded sky lounges and a dramatic stone-framed arrival.",
+  "appearance": {
+    "style": "modern",
+    "roof": "flat",
+    "exterior": "limestone",
+    "glazing": "panoramic",
+    "landscape": "mediterranean"
+  },
+  "wings": [],
+  "connections": [],
+  "terraces": [
+    {
+      "x": 0,
+      "z": 13,
+      "width": 20,
+      "depth": 5,
+      "id": "arrival-plinth",
+      "kind": "terrace",
+      "timber": false
+    }
+  ],
+  "pool": null,
+  "garden": {
+    "x": 0,
+    "z": 2.67,
+    "width": 54.32,
+    "depth": 49.66
+  },
+  "siteMode": "derived",
+  "landscapeMargin": 12,
+  "components": [],
+  "forms": [
+    {
+      "id": "main-residence",
+      "builder": "footprint-building@1",
+      "x": 0,
+      "z": 0,
+      "orientation": 0,
+      "points": [
+        {
+          "x": -15,
+          "z": -10
+        },
+        {
+          "x": 15,
+          "z": -10
+        },
+        {
+          "x": 15,
+          "z": 10
+        },
+        {
+          "x": -15,
+          "z": 10
+        }
+      ],
+      "height": 3.6,
+      "stack": [
+        {
+          "id": "level-two",
+          "parentId": "base",
+          "x": -2,
+          "z": -2,
+          "width": 26,
+          "depth": 14,
+          "height": 3.3,
+          "rooftop": "lounge"
+        },
+        {
+          "id": "level-three",
+          "parentId": "level-two",
+          "x": -6,
+          "z": -2,
+          "width": 18,
+          "depth": 14,
+          "height": 3.2,
+          "rooftop": "railed"
+        },
+        {
+          "id": "sky-pavilion",
+          "parentId": "level-three",
+          "x": -1,
+          "z": -2,
+          "width": 12,
+          "depth": 10,
+          "height": 3,
+          "rooftop": "shaded"
+        }
+      ],
+      "rooftop": "railed",
+      "facades": [
+        {
+          "edges": [
+            0
+          ],
+          "treatment": "loggia",
+          "material": "limestone",
+          "terraceEdge": "glass"
+        },
+        {
+          "edges": [
+            1
+          ],
+          "treatment": "screen",
+          "material": "limestone",
+          "terraceEdge": "solid"
+        },
+        {
+          "edges": [
+            2
+          ],
+          "treatment": "entrance",
+          "material": "warm-stone",
+          "terraceEdge": "solid"
+        },
+        {
+          "edges": [
+            3
+          ],
+          "treatment": "solid",
+          "material": "limestone",
+          "terraceEdge": "solid"
+        }
+      ],
+      "material": "limestone",
+      "openings": "rhythm"
+    }
+  ]
+}

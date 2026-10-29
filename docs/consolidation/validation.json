@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-26",
+  "liveOpenAICalls": 0,
+  "fullSuite": {
+    "command": "OPENAI_API_KEY='' NATIVE_LIVE_QA=0 TEST_DATABASE_URL='' npm test",
+    "testFilesPassed": 252,
+    "testFilesSkipped": 2,
+    "testsPassed": 2891,
+    "testsSkipped": 3,
+    "testsFailed": 0
+  },
+  "focusedFinalContract": {
+    "testsPassed": 7,
+    "testsFailed": 0
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "passed": true
+  },
+  "lint": {
+    "command": "npm run lint",
+    "passed": true,
+    "errors": 0,
+    "warnings": 3,
+    "notes": "Existing unused-variable warnings in capture scripts."
+  },
+  "whitespace": {
+    "command": "git diff --check",
+    "passed": true
+  },
+  "build": {
+    "command": "OPENAI_API_KEY='' NATIVE_LIVE_QA=0 npx next build --webpack",
+    "passed": true,
+    "notes": [
+      "Default Turbopack build stalled and was stopped.",
+      "Sandboxed webpack build could not fetch existing Google Fonts.",
+      "Webpack production build passed with access to download existing fonts; OpenAI key cleared."
+    ]
+  },
+  "browser": {
+    "providerCalls": 0,
+    "mockedRequests": 2,
+    "errors": [],
+    "unexpected": [],
+    "checks": [
+      "home Generate -> normal workspace -> canonical scene API",
+      "targeted conversational edit preserves every unrelated element and ID",
+      "undo, redo and reload use durable project versions with no regeneration",
+      "reopen from normal recent projects",
+      "Casa Ladera imported losslessly into normal project history",
+      "shared legacy gable roof builder renders under a targeted editable scene element",
+      "legacy saved house opens normal workspace with source JSON unchanged",
+      "existing Villa Solana playground renderer opens",
+      "offline image-first renderer opens"
+    ]
+  },
+  "migrations": false,
+  "commit": false,
+  "deployment": false,
+  "productionBrowser": {
+    "providerCalls": 0,
+    "mockedRequests": 2,
+    "errors": [],
+    "unexpected": [],
+    "checks": [
+      "home Generate -> normal workspace -> canonical scene API",
+      "targeted conversational edit preserves every unrelated element and ID",
+      "undo, redo and reload use durable project versions with no regeneration",
+      "reopen from normal recent projects",
+      "Casa Ladera imported losslessly into normal project history",
+      "shared legacy gable roof builder renders under a targeted editable scene element",
+      "legacy saved house opens normal workspace with source JSON unchanged"
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "mode": "offline",
+  "paidCalls": 0,
+  "conceptStage": {
+    "model": "gpt-image-2.5-sunburst",
+    "enabled": false,
+    "prompt": "Create an original, beautiful residential architectural concept with a distinctive silhouette, coherent massing, tactile materials and generous outdoor rooms. Show the whole residence in an unobstructed three-quarter view. Explore architectural forms freely; do not select from building templates. No text or diagrams."
+  },
+  "sourceSha256": "49c387b2ebd1a97333154707309da0c4faf9df9058a58c83e411f43aac6608d7",
+  "spec": {
+    "version": 1,
+    "source": "/inspiration/villa.jpg",
+    "provenance": "manual-offline",
+    "massing": "One elongated rectangular residence; broad hip roof dominates the silhouette.",
+    "floorLevels": 1,
+    "entrances": "Door position obscured by trees; no reliable entrance identification.",
+    "roofs": "Terracotta hip roof, estimated broad eaves.",
+    "glazing": "Sparse rectangular blue-tinted windows with dark timber surrounds.",
+    "materials": "Pale stucco, terracotta tile, dark timber trim, grey terrace paving.",
+    "relationships": [
+      "Terrace lies alongside the long left elevation.",
+      "Pool is detached in the foreground.",
+      "No visible detached residential wing."
+    ],
+    "uncertainty": [
+      "No scale reference: 18 × 10 m plan and 3.3 m wall height are estimates.",
+      "Rear facade, room plan, exact entrance and roof pitch are hidden or ambiguous.",
+      "Tree occlusion prevents complete opening counts."
+    ],
+    "features": [
+      {
+        "id": "massing",
+        "observation": "Single rectangular one-storey residence",
+        "confidence": "high",
+        "disposition": "built",
+        "target": "wings.0",
+        "limitation": ""
+      },
+      {
+        "id": "roof",
+        "observation": "Terracotta hip roof",
+        "confidence": "high",
+        "disposition": "approximate",
+        "target": "appearance.roof",
+        "limitation": "Existing Spanish hip roof has fixed pitch, tile detail and eaves."
+      },
+      {
+        "id": "facade",
+        "observation": "Pale stucco and sparse framed windows",
+        "confidence": "medium",
+        "disposition": "approximate",
+        "target": "appearance",
+        "limitation": "Existing facade rhythm and loggia differ; exact opening positions and timber trim are unavailable."
+      },
+      {
+        "id": "terrace",
+        "observation": "Grey side terrace",
+        "confidence": "medium",
+        "disposition": "approximate",
+        "target": "terraces.0",
+        "limitation": "Estimated dimensions; paving and furniture differ."
+      },
+      {
+        "id": "pool",
+        "observation": "Foreground rectangular pool",
+        "confidence": "medium",
+        "disposition": "approximate",
+        "target": "pool",
+        "limitation": "Occluded edges; dimensions and offset estimated."
+      },
+      {
+        "id": "entrance",
+        "observation": "Entrance not reliably visible",
+        "confidence": "low",
+        "disposition": "hidden",
+        "target": null,
+        "limitation": "Builder-generated entrance is an assumption, not reconstructed evidence."
+      },
+      {
+        "id": "timber-trim",
+        "observation": "Dark exposed timber facade trim",
+        "confidence": "high",
+        "disposition": "unsupported",
+        "target": null,
+        "limitation": "Exact facade timber frame needs a reusable trim builder."
+      }
+    ],
+    "architecture": {
+      "appearance": {
+        "style": "spanish",
+        "roof": "hip",
+        "exterior": "sand",
+        "glazing": "divided",
+        "landscape": "mediterranean"
+      },
+      "wings": [
+        {
+          "id": "residence",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": 0,
+          "z": 0,
+          "width": 18,
+          "depth": 10,
+          "orientation": 0,
+          "storeys": 1,
+          "storeyHeight": 3.3,
+          "veranda": 0,
+          "balcony": 0
+        }
+      ],
+      "terraces": [
+        {
+          "x": -11,
+          "z": 0,
+          "width": 4,
+          "depth": 12,
+          "id": "side-terrace",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": 4,
+        "z": 14,
+        "width": 8,
+        "depth": 4
+      }
+    }
+  },
+  "changes": {
+    "version": 1,
+    "id": "image-first-proof",
+    "name": "Saved Image Residence",
+    "character": "Offline image interpretation · estimated geometry",
+    "appearance": {
+      "style": "spanish",
+      "roof": "hip",
+      "exterior": "sand",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "id": "residence",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 0,
+        "width": 18,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.3,
+        "veranda": 0,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": -11,
+        "z": 0,
+        "width": 4,
+        "depth": 12,
+        "id": "side-terrace",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 4,
+      "z": 14,
+      "width": 8,
+      "depth": 4
+    },
+    "garden": {
+      "x": 0,
+      "z": 0,
+      "width": 50,
+      "depth": 50
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 5
+  },
+  "summary": "Saved concept reconstructed through existing editable wing builders. Approximate exterior only.",
+  "unsupported": [
+    "roof: Existing Spanish hip roof has fixed pitch, tile detail and eaves.",
+    "facade: Existing facade rhythm and loggia differ; exact opening positions and timber trim are unavailable.",
+    "terrace: Estimated dimensions; paving and furniture differ.",
+    "pool: Occluded edges; dimensions and offset estimated.",
+    "timber-trim: Exact facade timber frame needs a reusable trim builder."
+  ],
+  "config": {
+    "version": 1,
+    "id": "image-first-proof",
+    "name": "Saved Image Residence",
+    "character": "Offline image interpretation · estimated geometry",
+    "appearance": {
+      "style": "spanish",
+      "roof": "hip",
+      "exterior": "sand",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "id": "residence",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 0,
+        "width": 18,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.3,
+        "veranda": 0,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": -11,
+        "z": 0,
+        "width": 4,
+        "depth": 12,
+        "id": "side-terrace",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 4,
+      "z": 14,
+      "width": 8,
+      "depth": 4
+    },
+    "garden": {
+      "x": -0.5999999999999996,
+      "z": 6.1,
+      "width": 34.8,
+      "depth": 34.2
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 5
+  }
+}

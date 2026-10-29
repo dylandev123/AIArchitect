@@ -12,7 +12,6 @@ import { PROMPT_SUGGESTIONS } from "@/lib/promptSuggestions";
 import { AdminButton } from "@/components/admin/AdminButton";
 import { HeroInspiration } from "@/components/landing/HeroInspiration";
 import { AllProjectsDialog } from "@/components/landing/AllProjectsDialog";
-import { Design2DPlan } from "@/components/landing/Design2DPlan";
 import { RecoveredMansion } from "@/components/landing/RecoveredMansion";
 
 /** "A modern two-storey house with a pool…" → "A modern two-storey house with a". */
@@ -30,8 +29,6 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [creating, setCreating] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const [v3SceneMode, setV3SceneMode] = useState(false);
-  const [advancedTerrain, setAdvancedTerrain] = useState(false);
   const [creationError, setCreationError] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -51,11 +48,10 @@ export default function Home() {
     if (!brief || creating) return;
     setCreating(true);
     setCreationError(null);
-    const project = createProject(projectNameFromBrief(brief), "house", v3SceneMode ? "v3-scene" : "v2-architectural", advancedTerrain ? "advanced" : "flat");
-    if (v3SceneMode) {
-      // Do not let a transient checkbox claim V3: re-read the persisted V3 root
-      // before a workspace (or its pending AI request) can open.
-      const verified = verifyPersistedProjectMode(project.id, "v3-scene");
+    const project = createProject(projectNameFromBrief(brief), "house", "direct-scene");
+    {
+      // Verify the durable root before opening the workspace or dispatching AI.
+      const verified = verifyPersistedProjectMode(project.id, "direct-scene");
       if (!verified.ok) {
         setCreationError(verified.error);
         setCreating(false);
@@ -108,7 +104,6 @@ export default function Home() {
 
       {/* Hero */}
       <main className="relative flex-1 flex flex-col items-center px-4 sm:px-8 pb-24 pt-8 sm:pt-14">
-        {hydrated && <Design2DPlan />}
         {process.env.NODE_ENV === "development" && hydrated && <RecoveredMansion />}
         <div className="grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div>
@@ -146,16 +141,6 @@ export default function Home() {
                 className="w-full resize-none bg-transparent px-2 py-1.5 text-base leading-relaxed text-neutral-100 outline-none placeholder:text-neutral-600 disabled:opacity-60"
               />
               <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-                <div className="flex flex-wrap items-center gap-3">
-                  <label className="flex cursor-pointer items-center gap-1.5 pl-2 text-[11px] text-neutral-500">
-                    <input type="checkbox" checked={v3SceneMode} onChange={(e) => setV3SceneMode(e.target.checked)} className="accent-amber-500" />
-                    Experimental V3 scene mode
-                  </label>
-                  <label className={`flex items-center gap-1.5 text-[11px] ${v3SceneMode ? "cursor-pointer text-neutral-400" : "text-neutral-600"}`} title="New V3 generations only. Off: flat land. On: slopes, cliffs and stepped sites.">
-                    <input type="checkbox" checked={advancedTerrain} disabled={!v3SceneMode || creating} onChange={(e) => setAdvancedTerrain(e.target.checked)} className="accent-amber-500" />
-                    Advanced Terrain &amp; Elevation
-                  </label>
-                </div>
                 <button
                   type="submit"
                   disabled={!prompt.trim() || creating}

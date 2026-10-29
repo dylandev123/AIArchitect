@@ -1,0 +1,1385 @@
+{
+  "originalBrief": "Design an extraordinary $25m contemporary tropical waterfront mansion in Saint Lucia, on a flat site. Create a sophisticated luxury residence with a distinctive entrance, beautiful living spaces, private bedroom wings, purposeful upper-level architecture where appropriate, and integrated outdoor living. Choose a coherent architectural concept using relevant knowledge and construction capabilities. The result should feel like a remarkable luxury estate, not a basic bungalow. Construct fully editable direct-scene architecture.",
+  "coordinates": [
+    {
+      "id": "salon",
+      "world": [
+        0,
+        0.1,
+        0,
+        0
+      ],
+      "size": [
+        18,
+        0.2,
+        10
+      ],
+      "bottom": 0,
+      "top": 0.2,
+      "operationIndexes": [
+        0
+      ]
+    },
+    {
+      "id": "salon-roof",
+      "world": [
+        0,
+        4.125,
+        0,
+        0
+      ],
+      "size": [
+        20,
+        0.25,
+        12
+      ],
+      "bottom": 3.92,
+      "top": 4.3,
+      "operationIndexes": [
+        0
+      ]
+    },
+    {
+      "id": "upper-floor",
+      "world": [
+        0,
+        3.6,
+        -1.8,
+        0
+      ],
+      "size": [
+        11,
+        0.2,
+        7
+      ],
+      "bottom": 3.5,
+      "top": 3.7,
+      "operationIndexes": [
+        11
+      ]
+    },
+    {
+      "id": "upper-roof",
+      "world": [
+        0,
+        7.02,
+        -1.8,
+        0
+      ],
+      "size": [
+        12.2,
+        0.24,
+        8.2
+      ],
+      "bottom": 6.819999999999999,
+      "top": 7.14,
+      "operationIndexes": [
+        19
+      ]
+    },
+    {
+      "id": "upper-landing",
+      "world": [
+        0,
+        3.6,
+        2.3,
+        0
+      ],
+      "size": [
+        3,
+        0.2,
+        1.2
+      ],
+      "bottom": 3.5,
+      "top": 3.7,
+      "operationIndexes": [
+        21
+      ]
+    },
+    {
+      "id": "upper-door",
+      "world": [
+        0,
+        4.95,
+        1.7,
+        0
+      ],
+      "size": [
+        1.8,
+        2.5,
+        0.12
+      ],
+      "bottom": 3.7,
+      "top": 6.2,
+      "operationIndexes": [
+        14
+      ]
+    },
+    {
+      "id": "stair-01",
+      "world": [
+        0,
+        0.185,
+        6.75,
+        0
+      ],
+      "size": [
+        2.4,
+        0.37,
+        0.5
+      ],
+      "bottom": 0,
+      "top": 0.37,
+      "operationIndexes": [
+        22
+      ]
+    },
+    {
+      "id": "stair-10",
+      "world": [
+        0,
+        1.85,
+        2.25,
+        0
+      ],
+      "size": [
+        2.4,
+        3.7,
+        0.5
+      ],
+      "bottom": 0,
+      "top": 3.7,
+      "operationIndexes": [
+        31
+      ]
+    }
+  ],
+  "roofConflicts": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "roof-envelope-review",
+      "elementIds": [
+        "family-wing-roof",
+        "salon",
+        "salon-rear",
+        "salon-west",
+        "salon-east",
+        "salon-bay-0",
+        "salon-bay-1",
+        "salon-bay-2",
+        "salon-bay-3"
+      ],
+      "message": "family-wing-roof at world [-13, 3.625, 0.5], size [8.4, 0.25, 10.4], rendered Y=[3.42, 3.75] crosses Great salon, dining and kitchen above salon at walking Y=0.2, enclosure head Y=4. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    },
+    {
+      "category": "confirmed-technical-defect",
+      "code": "roof-occupied-volume",
+      "elementIds": [
+        "salon-roof",
+        "upper-floor",
+        "upper-front-left",
+        "upper-front-doorwall",
+        "upper-front-right",
+        "upper-east",
+        "upper-west",
+        "upper-rear"
+      ],
+      "message": "salon-roof at world [0, 4.125, 0], size [20, 0.25, 12], rendered Y=[3.92, 4.3] crosses Upper owner suite above upper-floor at walking Y=3.7, enclosure head Y=6.9. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    },
+    {
+      "category": "confirmed-technical-defect",
+      "code": "roof-occupied-volume",
+      "elementIds": [
+        "salon-roof",
+        "upper-landing",
+        "upper-front-doorwall"
+      ],
+      "message": "salon-roof at world [0, 4.125, 0], size [20, 0.25, 12], rendered Y=[3.92, 4.3] crosses Upper owner suite above upper-landing at walking Y=3.7, enclosure head Y=6.9. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    }
+  ],
+  "findings": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "salon"
+      ],
+      "message": "Programme Great salon, dining and kitchen: No internal kitchen fixtures, partitions, or separately enclosed dining room are represented."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Family bedroom pavilion: Bedrooms and bathrooms are programme allocations within the one-storey shell; internal partitions are not built."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Guest bedroom pavilion: Guest sleeping and bath subdivisions are not modeled."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "upper-landing"
+      ],
+      "message": "Programme Upper owner suite: upper-landing: full overhead coverage unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Upper owner suite: The suite is a single open enclosure; dressing and bath rooms are not partitioned."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court",
+        "pool-court-floor"
+      ],
+      "message": "Programme Pool terrace and water court: enclosure: pool-court-floor missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court"
+      ],
+      "message": "Programme Pool terrace and water court: enclosure: pool-court-west missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court"
+      ],
+      "message": "Programme Pool terrace and water court: enclosure: pool-court-east missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court"
+      ],
+      "message": "Programme Pool terrace and water court: enclosure: pool-court-north missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court"
+      ],
+      "message": "Programme Pool terrace and water court: enclosure: pool-court-south missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court"
+      ],
+      "message": "Programme Pool terrace and water court: pool-court: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Pool terrace and water court: The pool assembly represents basin, coping, dry circuit, and water surface only; no hydraulic edge, filtration, excavation, or drainage is claimed."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-lounge"
+      ],
+      "message": "Programme Open pool lounge: enclosure: pool-lounge missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Open pool lounge: no access construction evidence"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-lounge"
+      ],
+      "message": "Programme Open pool lounge: pool-lounge: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Open pool lounge: The approved pavilion component contains its own fixed open lounge geometry and is not subdividable."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "entry-post-west"
+      ],
+      "message": "Programme Arrival threshold: enclosure: entry-post-west missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "entry-post-east"
+      ],
+      "message": "Programme Arrival threshold: enclosure: entry-post-east missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "arrival-walk"
+      ],
+      "message": "Programme Arrival threshold: arrival-walk: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Arrival threshold: Vehicle driveway, gate, and site boundary are not modeled."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "upper-landing",
+        "stair-08",
+        "stair-09",
+        "stair-10"
+      ],
+      "message": "Programme Exterior stair and upper landing: floor: stair-08`,`stair-09`,`stair-10`,`upper-landing missing or wrong kind"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-01"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-01: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-02"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-02: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-03"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-03: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-04"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-04: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-05"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-05: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-06"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-06: local access at walking datum unverified"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "stair-07"
+      ],
+      "message": "Programme Exterior stair and upper landing: stair-07: local access at walking datum unverified"
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Programme Exterior stair and upper landing: The stair is manually composed from solid steps; guard compliance, handrails, and accessibility compliance are not verified."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision property-value-25m-50m: No valuation, cost estimate, market claim, or luxury certification is made."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision estate-composition: The pavilions are reached across exterior circulation; no enclosed inter-wing corridor is modeled."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision tropical-envelope: Wind, rainfall, thermal, corrosion, and hurricane performance are not simulated or certified."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision living-view: Glare and actual view analysis are not available."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [
+        "salon",
+        "salon-glass-1",
+        "entry-post-west",
+        "entry-post-east"
+      ],
+      "message": "Knowledge decision covered-threshold: evidence salon-glass-1, entry-post-west, entry-post-east is remote from referenced floors; feature relationship unverified."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision covered-threshold: The canopy is an architectural shelter concept, not a structural or weatherproofing certification."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision roof-flat-parapet: Drainage, waterproofing, roof loading, and guard compliance are not modeled."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [
+        "upper-floor",
+        "stair-01"
+      ],
+      "message": "Knowledge decision build-upper-floor-support: evidence stair-01 is remote from referenced floors; feature relationship unverified."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [
+        "upper-floor"
+      ],
+      "message": "Knowledge decision build-upper-floor-support: Geometric support contact is not structural-engineering verification."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [
+        "salon",
+        "salon-glass-1",
+        "entry-post-west",
+        "entry-post-east"
+      ],
+      "message": "Knowledge decision site-entrance-address: evidence salon-glass-1, entry-post-west, entry-post-east is remote from referenced floors; feature relationship unverified."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "feature-evidence",
+      "elementIds": [],
+      "message": "Knowledge decision site-entrance-address: Road alignment, cadastral access, grading, and setbacks are unknown."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court",
+        "pool-court-coping-x-minus",
+        "pool-court-deck-x-minus"
+      ],
+      "message": "Floor surfaces pool-court-deck-x-minus and pool-court-coping-x-minus overlap at the same datum; summed usable area is withheld."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "pool-court",
+        "pool-court-coping-x-plus",
+        "pool-court-deck-x-plus"
+      ],
+      "message": "Floor surfaces pool-court-deck-x-plus and pool-court-coping-x-plus overlap at the same datum; summed usable area is withheld."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "water-terrace",
+        "arrival-walk"
+      ],
+      "message": "Floor surfaces arrival-walk and water-terrace overlap at the same datum; summed usable area is withheld."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [
+        "salon"
+      ],
+      "message": "Requested space: Great salon, dining and kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Family bedroom pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Guest bedroom pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Upper owner suite. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Pool terrace and water court. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Open pool lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Arrival threshold. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Requested space: Exterior stair and upper landing. Geometry inventory is available; enclosure, allocation and completeness require review."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "architectural-review",
+      "elementIds": [],
+      "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "vertical-route-missing",
+      "elementIds": [
+        "upper-floor"
+      ],
+      "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-02",
+        "stair-01"
+      ],
+      "message": "stair-02 / stair-01: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-03",
+        "stair-02"
+      ],
+      "message": "stair-03 / stair-02: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-04",
+        "stair-03"
+      ],
+      "message": "stair-04 / stair-03: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-05",
+        "stair-04"
+      ],
+      "message": "stair-05 / stair-04: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-06",
+        "stair-05"
+      ],
+      "message": "stair-06 / stair-05: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-07",
+        "stair-06"
+      ],
+      "message": "stair-07 / stair-06: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-08",
+        "stair-07"
+      ],
+      "message": "stair-08 / stair-07: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-09",
+        "stair-08"
+      ],
+      "message": "stair-09 / stair-08: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-rise-gap",
+      "elementIds": [
+        "stair-10",
+        "stair-09"
+      ],
+      "message": "stair-10 / stair-09: adjacent tread surfaces differ by 0.370 m; the 0.25 m circulation evidence probe cannot connect them. Review rise/run, endpoint datums and slab openings; this is not a code certification.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-05",
+        "salon-bay-1"
+      ],
+      "message": "stair-05: centreline overhead solid salon-bay-1 underside Y=0.200, tread Y=1.850, clearance -1.650 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "confirmed-technical-defect"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-05",
+        "salon-bay-2"
+      ],
+      "message": "stair-05: centreline overhead solid salon-bay-2 underside Y=0.200, tread Y=1.850, clearance -1.650 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "confirmed-technical-defect"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-06",
+        "salon-roof"
+      ],
+      "message": "stair-06: centreline overhead solid salon-roof underside Y=4.000, tread Y=2.220, clearance 1.780 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-07",
+        "salon-roof"
+      ],
+      "message": "stair-07: centreline overhead solid salon-roof underside Y=4.000, tread Y=2.590, clearance 1.410 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-08",
+        "salon-roof"
+      ],
+      "message": "stair-08: centreline overhead solid salon-roof underside Y=4.000, tread Y=2.960, clearance 1.040 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-09",
+        "salon-roof"
+      ],
+      "message": "stair-09: centreline overhead solid salon-roof underside Y=4.000, tread Y=3.330, clearance 0.670 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-09",
+        "upper-landing-support"
+      ],
+      "message": "stair-09: centreline overhead solid upper-landing-support underside Y=0.000, tread Y=3.330, clearance -3.330 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "confirmed-technical-defect"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-09",
+        "upper-landing"
+      ],
+      "message": "stair-09: centreline overhead solid upper-landing underside Y=3.500, tread Y=3.330, clearance 0.170 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "code": "stair-landing-overlap",
+      "elementIds": [
+        "stair-10",
+        "upper-landing"
+      ],
+      "message": "stair-10: positive-area duplicate walking surface with upper-landing at Y=3.700; this alone does not prove an unusable stair.",
+      "category": "confirmed-technical-defect"
+    },
+    {
+      "code": "stair-headroom-obstructed",
+      "elementIds": [
+        "stair-10",
+        "salon-roof"
+      ],
+      "message": "stair-10: centreline overhead solid salon-roof underside Y=4.000, tread Y=3.700, clearance 0.300 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+      "category": "likely-architectural-incompleteness"
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "roof-envelope-review",
+      "elementIds": [
+        "family-wing-roof",
+        "salon",
+        "salon-rear",
+        "salon-west",
+        "salon-east",
+        "salon-bay-0",
+        "salon-bay-1",
+        "salon-bay-2",
+        "salon-bay-3"
+      ],
+      "message": "family-wing-roof at world [-13, 3.625, 0.5], size [8.4, 0.25, 10.4], rendered Y=[3.42, 3.75] crosses Great salon, dining and kitchen above salon at walking Y=0.2, enclosure head Y=4. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    },
+    {
+      "category": "confirmed-technical-defect",
+      "code": "roof-occupied-volume",
+      "elementIds": [
+        "salon-roof",
+        "upper-floor",
+        "upper-front-left",
+        "upper-front-doorwall",
+        "upper-front-right",
+        "upper-east",
+        "upper-west",
+        "upper-rear"
+      ],
+      "message": "salon-roof at world [0, 4.125, 0], size [20, 0.25, 12], rendered Y=[3.92, 4.3] crosses Upper owner suite above upper-floor at walking Y=3.7, enclosure head Y=6.9. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    },
+    {
+      "category": "confirmed-technical-defect",
+      "code": "roof-occupied-volume",
+      "elementIds": [
+        "salon-roof",
+        "upper-landing",
+        "upper-front-doorwall"
+      ],
+      "message": "salon-roof at world [0, 4.125, 0], size [20, 0.25, 12], rendered Y=[3.92, 4.3] crosses Upper owner suite above upper-landing at walking Y=3.7, enclosure head Y=6.9. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "salon-glass-1",
+        "water-terrace"
+      ],
+      "message": "salon-glass-1 connected-to water-terrace: geometry does not evidence the declared relationship (clearance 0 m). The principal salon entry opens to the limestone outdoor living terrace. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    }
+  ],
+  "programme": {
+    "status": "recorded",
+    "spaces": [
+      {
+        "name": "Great salon, dining and kitchen",
+        "zone": "public",
+        "strategy": "Primary ground-level salon opens through its central glazed entry bay to the waterfront terrace; dining/kitchen use is an open-plan allocation within the same constructed shell.",
+        "floorIds": [
+          "salon"
+        ],
+        "enclosureIds": [
+          "salon-rear",
+          "salon-west",
+          "salon-east",
+          "salon-bay-0",
+          "salon-bay-1",
+          "salon-bay-2",
+          "salon-bay-3"
+        ],
+        "roofIds": [
+          "salon-roof"
+        ],
+        "accessIds": [
+          "salon-glass-1"
+        ],
+        "limitation": "No internal kitchen fixtures, partitions, or separately enclosed dining room are represented.",
+        "floorSurfaceM2": 180,
+        "walkingDatums": [
+          0.2
+        ],
+        "allocation": [
+          {
+            "id": "salon",
+            "world": [
+              0,
+              0.1,
+              0,
+              0
+            ],
+            "size": [
+              18,
+              0.2,
+              10
+            ],
+            "walkingDatum": 0.2
+          }
+        ],
+        "issues": [
+          "No internal kitchen fixtures, partitions, or separately enclosed dining room are represented."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Family bedroom pavilion",
+        "zone": "private",
+        "strategy": "Independent west pavilion uses a screened pool-facing entry bay and remains outside the principal arrival line.",
+        "floorIds": [
+          "family-wing"
+        ],
+        "enclosureIds": [
+          "family-wing-rear",
+          "family-wing-west",
+          "family-wing-east",
+          "family-wing-bay-0",
+          "family-wing-bay-1",
+          "family-wing-bay-2"
+        ],
+        "roofIds": [
+          "family-wing-roof"
+        ],
+        "accessIds": [
+          "family-wing-glass-1"
+        ],
+        "limitation": "Bedrooms and bathrooms are programme allocations within the one-storey shell; internal partitions are not built.",
+        "floorSurfaceM2": 63,
+        "walkingDatums": [
+          0.2
+        ],
+        "allocation": [
+          {
+            "id": "family-wing",
+            "world": [
+              -13,
+              0.1,
+              0.5,
+              0
+            ],
+            "size": [
+              7,
+              0.2,
+              9
+            ],
+            "walkingDatum": 0.2
+          }
+        ],
+        "issues": [
+          "Bedrooms and bathrooms are programme allocations within the one-storey shell; internal partitions are not built."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Guest bedroom pavilion",
+        "zone": "private",
+        "strategy": "East pavilion is separate from the owner suite and has its own pool-court entrance for guest privacy.",
+        "floorIds": [
+          "guest-wing"
+        ],
+        "enclosureIds": [
+          "guest-wing-rear",
+          "guest-wing-west",
+          "guest-wing-east",
+          "guest-wing-bay-0",
+          "guest-wing-bay-1",
+          "guest-wing-bay-2"
+        ],
+        "roofIds": [
+          "guest-wing-roof"
+        ],
+        "accessIds": [
+          "guest-wing-glass-1"
+        ],
+        "limitation": "Guest sleeping and bath subdivisions are not modeled.",
+        "floorSurfaceM2": 48,
+        "walkingDatums": [
+          0.2
+        ],
+        "allocation": [
+          {
+            "id": "guest-wing",
+            "world": [
+              13,
+              0.1,
+              1,
+              0
+            ],
+            "size": [
+              6,
+              0.2,
+              8
+            ],
+            "walkingDatum": 0.2
+          }
+        ],
+        "issues": [
+          "Guest sleeping and bath subdivisions are not modeled."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Upper owner suite",
+        "zone": "private",
+        "strategy": "A recessed upper shell rises over the salon and is reached from the constructed exterior stair and landing; its broad rear glazing faces the water court.",
+        "floorIds": [
+          "upper-floor",
+          "upper-landing"
+        ],
+        "enclosureIds": [
+          "upper-front-left",
+          "upper-front-doorwall",
+          "upper-front-right",
+          "upper-east",
+          "upper-west",
+          "upper-rear"
+        ],
+        "roofIds": [
+          "upper-roof"
+        ],
+        "accessIds": [
+          "upper-door"
+        ],
+        "limitation": "The suite is a single open enclosure; dressing and bath rooms are not partitioned.",
+        "floorSurfaceM2": 80.6,
+        "walkingDatums": [
+          3.7,
+          3.7
+        ],
+        "allocation": [
+          {
+            "id": "upper-floor",
+            "world": [
+              0,
+              3.6,
+              -1.8,
+              0
+            ],
+            "size": [
+              11,
+              0.2,
+              7
+            ],
+            "walkingDatum": 3.7
+          },
+          {
+            "id": "upper-landing",
+            "world": [
+              0,
+              3.6,
+              2.3,
+              0
+            ],
+            "size": [
+              3,
+              0.2,
+              1.2
+            ],
+            "walkingDatum": 3.7
+          }
+        ],
+        "issues": [
+          "upper-landing: full overhead coverage unverified",
+          "The suite is a single open enclosure; dressing and bath rooms are not partitioned."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Pool terrace and water court",
+        "zone": "outdoor",
+        "strategy": "A continuous limestone terrace advances from the salon to the explicitly constructed rectangular pool assembly and its dry circuit.",
+        "floorIds": [
+          "water-terrace",
+          "pool-court"
+        ],
+        "enclosureIds": [
+          "pool-court-floor",
+          "pool-court-west",
+          "pool-court-east",
+          "pool-court-north",
+          "pool-court-south"
+        ],
+        "roofIds": [],
+        "accessIds": [
+          "salon-glass-1",
+          "guest-wing-glass-1",
+          "family-wing-glass-1"
+        ],
+        "limitation": "The pool assembly represents basin, coping, dry circuit, and water surface only; no hydraulic edge, filtration, excavation, or drainage is claimed.",
+        "floorSurfaceM2": 115.8,
+        "walkingDatums": [
+          0.2,
+          0.3
+        ],
+        "allocation": [
+          {
+            "id": "water-terrace",
+            "world": [
+              0,
+              0.1,
+              7.5,
+              0
+            ],
+            "size": [
+              18,
+              0.2,
+              5
+            ],
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "pool-court",
+            "world": [
+              0,
+              0.15,
+              11,
+              0
+            ],
+            "size": [
+              17.2,
+              0.3,
+              1.5
+            ],
+            "walkingDatum": 0.3
+          }
+        ],
+        "issues": [
+          "enclosure: pool-court-floor missing or wrong kind",
+          "enclosure: pool-court-west missing or wrong kind",
+          "enclosure: pool-court-east missing or wrong kind",
+          "enclosure: pool-court-north missing or wrong kind",
+          "enclosure: pool-court-south missing or wrong kind",
+          "pool-court: local access at walking datum unverified",
+          "The pool assembly represents basin, coping, dry circuit, and water surface only; no hydraulic edge, filtration, excavation, or drainage is claimed."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Open pool lounge",
+        "zone": "outdoor",
+        "strategy": "A curved open lounge is placed beside the pool court as a sheltered social destination, not as enclosed accommodation.",
+        "floorIds": [
+          "pool-lounge"
+        ],
+        "enclosureIds": [
+          "pool-lounge"
+        ],
+        "roofIds": [
+          "pool-lounge"
+        ],
+        "accessIds": [],
+        "limitation": "The approved pavilion component contains its own fixed open lounge geometry and is not subdividable.",
+        "floorSurfaceM2": 48,
+        "walkingDatums": [
+          0.2
+        ],
+        "allocation": [
+          {
+            "id": "pool-lounge",
+            "world": [
+              11,
+              0.2,
+              15,
+              -0.35
+            ],
+            "size": [
+              8,
+              3.8,
+              6
+            ],
+            "walkingDatum": 0.2
+          }
+        ],
+        "issues": [
+          "enclosure: pool-lounge missing or wrong kind",
+          "no access construction evidence",
+          "pool-lounge: local access at walking datum unverified",
+          "The approved pavilion component contains its own fixed open lounge geometry and is not subdividable."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Arrival threshold",
+        "zone": "circulation",
+        "strategy": "A broad limestone approach terminates at the salon’s central operable glazed entry beneath a framed canopy.",
+        "floorIds": [
+          "arrival-walk"
+        ],
+        "enclosureIds": [
+          "entry-post-west",
+          "entry-post-east"
+        ],
+        "roofIds": [
+          "entry-canopy"
+        ],
+        "accessIds": [
+          "salon-glass-1"
+        ],
+        "limitation": "Vehicle driveway, gate, and site boundary are not modeled.",
+        "floorSurfaceM2": 6,
+        "walkingDatums": [
+          0.2
+        ],
+        "allocation": [
+          {
+            "id": "arrival-walk",
+            "world": [
+              0,
+              0.1,
+              10.25,
+              0
+            ],
+            "size": [
+              4,
+              0.2,
+              1.5
+            ],
+            "walkingDatum": 0.2
+          }
+        ],
+        "issues": [
+          "enclosure: entry-post-west missing or wrong kind",
+          "enclosure: entry-post-east missing or wrong kind",
+          "arrival-walk: local access at walking datum unverified",
+          "Vehicle driveway, gate, and site boundary are not modeled."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "name": "Exterior stair and upper landing",
+        "zone": "circulation",
+        "strategy": "Ten progressively rising solid stair treads make a direct exterior route from the pool terrace to the supported upper landing and suite door.",
+        "floorIds": [
+          "stair-01",
+          "stair-02",
+          "stair-03",
+          "stair-04",
+          "stair-05",
+          "stair-06",
+          "stair-07",
+          "stair-08`,`stair-09`,`stair-10`,`upper-landing"
+        ],
+        "enclosureIds": [],
+        "roofIds": [
+          "upper-roof"
+        ],
+        "accessIds": [
+          "upper-door"
+        ],
+        "limitation": "The stair is manually composed from solid steps; guard compliance, handrails, and accessibility compliance are not verified.",
+        "floorSurfaceM2": 8.4,
+        "walkingDatums": [
+          0.37,
+          0.74,
+          1.11,
+          1.48,
+          1.85,
+          2.22,
+          2.59
+        ],
+        "allocation": [
+          {
+            "id": "stair-01",
+            "world": [
+              0,
+              0.185,
+              6.75,
+              0
+            ],
+            "size": [
+              2.4,
+              0.37,
+              0.5
+            ],
+            "walkingDatum": 0.37
+          },
+          {
+            "id": "stair-02",
+            "world": [
+              0,
+              0.37,
+              6.25,
+              0
+            ],
+            "size": [
+              2.4,
+              0.74,
+              0.5
+            ],
+            "walkingDatum": 0.74
+          },
+          {
+            "id": "stair-03",
+            "world": [
+              0,
+              0.555,
+              5.75,
+              0
+            ],
+            "size": [
+              2.4,
+              1.11,
+              0.5
+            ],
+            "walkingDatum": 1.11
+          },
+          {
+            "id": "stair-04",
+            "world": [
+              0,
+              0.74,
+              5.25,
+              0
+            ],
+            "size": [
+              2.4,
+              1.48,
+              0.5
+            ],
+            "walkingDatum": 1.48
+          },
+          {
+            "id": "stair-05",
+            "world": [
+              0,
+              0.925,
+              4.75,
+              0
+            ],
+            "size": [
+              2.4,
+              1.85,
+              0.5
+            ],
+            "walkingDatum": 1.85
+          },
+          {
+            "id": "stair-06",
+            "world": [
+              0,
+              1.11,
+              4.25,
+              0
+            ],
+            "size": [
+              2.4,
+              2.22,
+              0.5
+            ],
+            "walkingDatum": 2.22
+          },
+          {
+            "id": "stair-07",
+            "world": [
+              0,
+              1.295,
+              3.75,
+              0
+            ],
+            "size": [
+              2.4,
+              2.59,
+              0.5
+            ],
+            "walkingDatum": 2.59
+          }
+        ],
+        "issues": [
+          "floor: stair-08`,`stair-09`,`stair-10`,`upper-landing missing or wrong kind",
+          "stair-01: local access at walking datum unverified",
+          "stair-02: local access at walking datum unverified",
+          "stair-03: local access at walking datum unverified",
+          "stair-04: local access at walking datum unverified",
+          "stair-05: local access at walking datum unverified",
+          "stair-06: local access at walking datum unverified",
+          "stair-07: local access at walking datum unverified",
+          "The stair is manually composed from solid steps; guard compliance, handrails, and accessibility compliance are not verified."
+        ],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      }
+    ],
+    "issues": [
+      "Programme Great salon, dining and kitchen: No internal kitchen fixtures, partitions, or separately enclosed dining room are represented.",
+      "Programme Family bedroom pavilion: Bedrooms and bathrooms are programme allocations within the one-storey shell; internal partitions are not built.",
+      "Programme Guest bedroom pavilion: Guest sleeping and bath subdivisions are not modeled.",
+      "Programme Upper owner suite: upper-landing: full overhead coverage unverified",
+      "Programme Upper owner suite: The suite is a single open enclosure; dressing and bath rooms are not partitioned.",
+      "Programme Pool terrace and water court: enclosure: pool-court-floor missing or wrong kind",
+      "Programme Pool terrace and water court: enclosure: pool-court-west missing or wrong kind",
+      "Programme Pool terrace and water court: enclosure: pool-court-east missing or wrong kind",
+      "Programme Pool terrace and water court: enclosure: pool-court-north missing or wrong kind",
+      "Programme Pool terrace and water court: enclosure: pool-court-south missing or wrong kind",
+      "Programme Pool terrace and water court: pool-court: local access at walking datum unverified",
+      "Programme Pool terrace and water court: The pool assembly represents basin, coping, dry circuit, and water surface only; no hydraulic edge, filtration, excavation, or drainage is claimed.",
+      "Programme Open pool lounge: enclosure: pool-lounge missing or wrong kind",
+      "Programme Open pool lounge: no access construction evidence",
+      "Programme Open pool lounge: pool-lounge: local access at walking datum unverified",
+      "Programme Open pool lounge: The approved pavilion component contains its own fixed open lounge geometry and is not subdividable.",
+      "Programme Arrival threshold: enclosure: entry-post-west missing or wrong kind",
+      "Programme Arrival threshold: enclosure: entry-post-east missing or wrong kind",
+      "Programme Arrival threshold: arrival-walk: local access at walking datum unverified",
+      "Programme Arrival threshold: Vehicle driveway, gate, and site boundary are not modeled.",
+      "Programme Exterior stair and upper landing: floor: stair-08`,`stair-09`,`stair-10`,`upper-landing missing or wrong kind",
+      "Programme Exterior stair and upper landing: stair-01: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-02: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-03: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-04: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-05: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-06: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: stair-07: local access at walking datum unverified",
+      "Programme Exterior stair and upper landing: The stair is manually composed from solid steps; guard compliance, handrails, and accessibility compliance are not verified."
+    ]
+  }
+}

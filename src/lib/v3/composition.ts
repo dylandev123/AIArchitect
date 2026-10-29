@@ -18,7 +18,7 @@ const opening = z.discriminatedUnion("type", [
   z.object({ ...common, type: z.literal("opening-rhythm"), count: z.number().int().min(1).max(64), width: positive, height: positive, sill: n.min(0) }).strict(),
   // Walkable floor-level glazing: a glazed door or sliding door wall. `serves` optionally names the balcony slab,
   // assembly or terrace it opens onto. Unlike glazing-zone (always a raised sill), its threshold is the floor.
-  z.object({ ...common, type: z.literal("glazed-door"), start: unit, end: unit, height: positive.optional(), operation: z.enum(["hinged", "sliding"]).optional(), reveal: n.min(0).optional(), serves: id.optional() }).strict(),
+  z.object({ ...common, type: z.literal("glazed-door"), start: unit, end: unit, height: positive.optional(), operation: z.enum(["hinged", "sliding"]).optional(), frame: z.boolean().optional(), reveal: n.min(0).optional(), serves: id.optional() }).strict(),
 ]);
 /** Openings a person can walk through. Glazing zones and rhythms are windows, however large. */
 export const WALKABLE_OPENING_TYPES: ReadonlySet<string> = new Set(["door", "glazed-door"]);
@@ -119,7 +119,7 @@ type BuilderOpening = Parameters<typeof buildMassOpenings>[3][number];
  * band (floor threshold, door height, semantic ids) and then re-framed as glazing by `glazeDoorLeaves`.
  */
 export function builderOpening(op: V3Opening): BuilderOpening {
-  if (op.type === "glazed-door") return { id: op.id, type: "door", facade: op.facade, floors: op.floors, start: op.start, end: op.end, height: op.height, frame: false, reveal: op.reveal };
+  if (op.type === "glazed-door") return { id: op.id, type: "door", facade: op.facade, floors: op.floors, start: op.start, end: op.end, height: op.height, frame: op.frame ?? false, reveal: op.reveal };
   if (op.type === "door") return { id: op.id, type: "door", facade: op.facade, floors: op.floors, start: op.start, end: op.end, height: op.height, frame: op.frame, reveal: op.reveal };
   return op;
 }

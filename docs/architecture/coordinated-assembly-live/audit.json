@@ -1,0 +1,1445 @@
+{
+  "accepted": true,
+  "approved": false,
+  "operationCounts": {
+    "assemble": 4,
+    "replace": 1,
+    "add": 11
+  },
+  "assemblyOperations": [
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "main-living",
+          "at": [
+            0,
+            0.1,
+            0
+          ],
+          "rotation": 0,
+          "width": 18,
+          "depth": 9,
+          "height": 3.6,
+          "bays": 5,
+          "material": "ivory",
+          "roofForm": "gable",
+          "roofRise": 1.4,
+          "overhang": 0,
+          "entryBay": null
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "west-suite",
+          "at": [
+            -13,
+            0.1,
+            -9
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 7,
+          "height": 3.3,
+          "bays": 3,
+          "material": "ivory",
+          "roofForm": "flat",
+          "roofRise": 0.6,
+          "overhang": 0,
+          "entryBay": 1
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "east-suite",
+          "at": [
+            13,
+            0.1,
+            -9
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 7,
+          "height": 3.3,
+          "bays": 3,
+          "material": "ivory",
+          "roofForm": "flat",
+          "roofRise": 0.6,
+          "overhang": 0,
+          "entryBay": 1
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "rectangular-pool",
+        "parameters": {
+          "id": "sea-pool",
+          "at": [
+            4,
+            0.15,
+            11
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 10,
+          "basinDepth": 1.45,
+          "material": "limestone"
+        }
+      }
+    }
+  ],
+  "elements": 73,
+  "assemblies": [
+    {
+      "id": "main-living",
+      "kind": "residential-wing",
+      "children": [
+        "main-living-rear",
+        "main-living-west",
+        "main-living-east",
+        "main-living-bay-0",
+        "main-living-glass-0",
+        "main-living-reveal-0",
+        "main-living-bay-1",
+        "main-living-glass-1",
+        "main-living-reveal-1",
+        "main-living-bay-2",
+        "main-living-glass-2",
+        "main-living-reveal-2",
+        "main-living-bay-3",
+        "main-living-glass-3",
+        "main-living-reveal-3",
+        "main-living-bay-4",
+        "main-living-glass-4",
+        "main-living-reveal-4",
+        "main-living-roof",
+        "arrival-door"
+      ],
+      "world": [
+        0,
+        0.1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "west-suite",
+      "kind": "residential-wing",
+      "children": [
+        "west-suite-rear",
+        "west-suite-west",
+        "west-suite-east",
+        "west-suite-bay-0",
+        "west-suite-glass-0",
+        "west-suite-reveal-0",
+        "west-suite-bay-1",
+        "west-suite-glass-1",
+        "west-suite-reveal-1",
+        "west-suite-bay-2",
+        "west-suite-glass-2",
+        "west-suite-reveal-2",
+        "west-suite-roof"
+      ],
+      "world": [
+        -13,
+        0.1,
+        -9,
+        0
+      ]
+    },
+    {
+      "id": "east-suite",
+      "kind": "residential-wing",
+      "children": [
+        "east-suite-rear",
+        "east-suite-west",
+        "east-suite-east",
+        "east-suite-bay-0",
+        "east-suite-glass-0",
+        "east-suite-reveal-0",
+        "east-suite-bay-1",
+        "east-suite-glass-1",
+        "east-suite-reveal-1",
+        "east-suite-bay-2",
+        "east-suite-glass-2",
+        "east-suite-reveal-2",
+        "east-suite-roof"
+      ],
+      "world": [
+        13,
+        0.1,
+        -9,
+        0
+      ]
+    },
+    {
+      "id": "sea-pool",
+      "kind": "rectangular-pool",
+      "children": [
+        "sea-pool-floor",
+        "sea-pool-water",
+        "sea-pool-wall-z-minus",
+        "sea-pool-wall-x-minus",
+        "sea-pool-coping-z-minus",
+        "sea-pool-coping-x-minus",
+        "sea-pool-deck-x-minus",
+        "sea-pool-wall-z-plus",
+        "sea-pool-wall-x-plus",
+        "sea-pool-coping-z-plus",
+        "sea-pool-coping-x-plus",
+        "sea-pool-deck-x-plus",
+        "sea-pool-deck-far"
+      ],
+      "world": [
+        4,
+        0.15,
+        11,
+        0
+      ]
+    }
+  ],
+  "assemblyChildElements": 63,
+  "relationships": [],
+  "focused": [],
+  "spatial": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "arrival-gallery",
+        "main-living-rear"
+      ],
+      "message": "arrival-gallery adjacent-to main-living-rear: geometry does not evidence the declared relationship (clearance 0 m). The gallery meets the rear threshold for the formal landward entry. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "arrival-gallery",
+        "west-suite-glass-1"
+      ],
+      "message": "arrival-gallery adjacent-to west-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the west suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "arrival-gallery",
+        "east-suite-glass-1"
+      ],
+      "message": "arrival-gallery adjacent-to east-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the east suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "sea-pavilion",
+        "sea-terrace"
+      ],
+      "message": "sea-pavilion inside sea-terrace: geometry does not evidence the declared relationship (clearance 0 m). The shaded entertainment lounge is supported by and accessed from the primary terrace. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "sea-pool",
+        "sea-terrace"
+      ],
+      "message": "sea-pool clear-of sea-terrace: geometry does not evidence the declared relationship (clearance 0.5 m). A dry approach separates the pool assembly from the principal terrace while preserving pool-side circulation. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    }
+  ],
+  "waterObstructions": [],
+  "roofPlanOverlaps": [],
+  "worldElements": [
+    {
+      "id": "main-living",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0,
+        0
+      ],
+      "size": [
+        18,
+        0.2,
+        9
+      ]
+    },
+    {
+      "id": "main-living-rear",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9000000000000001,
+        -4.5,
+        0
+      ],
+      "size": [
+        18,
+        3.6,
+        0.25
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.6,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-west",
+      "kind": "wall",
+      "at": [
+        -8.85,
+        2,
+        0,
+        1.5707963267948966
+      ],
+      "size": [
+        8.4,
+        3.6,
+        0.3
+      ]
+    },
+    {
+      "id": "main-living-east",
+      "kind": "wall",
+      "at": [
+        8.85,
+        2,
+        0,
+        1.5707963267948966
+      ],
+      "size": [
+        8.4,
+        3.6,
+        0.3
+      ]
+    },
+    {
+      "id": "main-living-bay-0",
+      "kind": "wall",
+      "at": [
+        -7.2,
+        2,
+        4.35,
+        0
+      ],
+      "size": [
+        3.6,
+        3.6,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.15,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-glass-0",
+      "kind": "glazing",
+      "at": [
+        -7.2,
+        1.95,
+        4.35,
+        0
+      ],
+      "size": [
+        3.15,
+        3.2,
+        0.04
+      ]
+    },
+    {
+      "id": "main-living-reveal-0",
+      "kind": "volume",
+      "at": [
+        -7.2,
+        3.72,
+        4.56,
+        0
+      ],
+      "size": [
+        3.6,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "main-living-bay-1",
+      "kind": "wall",
+      "at": [
+        -3.5999999999999996,
+        2,
+        4.35,
+        0
+      ],
+      "size": [
+        3.6,
+        3.6,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.15,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-glass-1",
+      "kind": "glazing",
+      "at": [
+        -3.5999999999999996,
+        1.95,
+        4.35,
+        0
+      ],
+      "size": [
+        3.15,
+        3.2,
+        0.04
+      ]
+    },
+    {
+      "id": "main-living-reveal-1",
+      "kind": "volume",
+      "at": [
+        -3.5999999999999996,
+        3.72,
+        4.56,
+        0
+      ],
+      "size": [
+        3.6,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "main-living-bay-2",
+      "kind": "wall",
+      "at": [
+        0,
+        2,
+        4.35,
+        0
+      ],
+      "size": [
+        3.6,
+        3.6,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.15,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-glass-2",
+      "kind": "glazing",
+      "at": [
+        0,
+        1.95,
+        4.35,
+        0
+      ],
+      "size": [
+        3.15,
+        3.2,
+        0.04
+      ]
+    },
+    {
+      "id": "main-living-reveal-2",
+      "kind": "volume",
+      "at": [
+        0,
+        3.72,
+        4.56,
+        0
+      ],
+      "size": [
+        3.6,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "main-living-bay-3",
+      "kind": "wall",
+      "at": [
+        3.5999999999999996,
+        2,
+        4.35,
+        0
+      ],
+      "size": [
+        3.6,
+        3.6,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.15,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-glass-3",
+      "kind": "glazing",
+      "at": [
+        3.5999999999999996,
+        1.95,
+        4.35,
+        0
+      ],
+      "size": [
+        3.15,
+        3.2,
+        0.04
+      ]
+    },
+    {
+      "id": "main-living-reveal-3",
+      "kind": "volume",
+      "at": [
+        3.5999999999999996,
+        3.72,
+        4.56,
+        0
+      ],
+      "size": [
+        3.6,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "main-living-bay-4",
+      "kind": "wall",
+      "at": [
+        7.199999999999999,
+        2,
+        4.35,
+        0
+      ],
+      "size": [
+        3.6,
+        3.6,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.15,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "main-living-glass-4",
+      "kind": "glazing",
+      "at": [
+        7.199999999999999,
+        1.95,
+        4.35,
+        0
+      ],
+      "size": [
+        3.15,
+        3.2,
+        0.04
+      ]
+    },
+    {
+      "id": "main-living-reveal-4",
+      "kind": "volume",
+      "at": [
+        7.199999999999999,
+        3.72,
+        4.56,
+        0
+      ],
+      "size": [
+        3.6,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "main-living-roof",
+      "kind": "roof",
+      "at": [
+        0,
+        4.5,
+        0,
+        0
+      ],
+      "size": [
+        18,
+        1.4,
+        9
+      ]
+    },
+    {
+      "id": "arrival-door",
+      "kind": "entrance",
+      "at": [
+        0,
+        1.35,
+        -4.69,
+        0
+      ],
+      "size": [
+        1.6,
+        2.5,
+        0.12
+      ]
+    },
+    {
+      "id": "west-suite",
+      "kind": "plate",
+      "at": [
+        -13,
+        0.1,
+        -9,
+        0
+      ],
+      "size": [
+        8,
+        0.2,
+        7
+      ]
+    },
+    {
+      "id": "west-suite-rear",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.85,
+        -12.35,
+        0
+      ],
+      "size": [
+        8,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "west-suite-west",
+      "kind": "wall",
+      "at": [
+        -16.85,
+        1.85,
+        -9,
+        1.5707963267948966
+      ],
+      "size": [
+        6.4,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "west-suite-east",
+      "kind": "wall",
+      "at": [
+        -9.15,
+        1.85,
+        -9,
+        1.5707963267948966
+      ],
+      "size": [
+        6.4,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "west-suite-bay-0",
+      "kind": "wall",
+      "at": [
+        -15.666666666666668,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.2166666666666663,
+        "height": 2.9,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-suite-glass-0",
+      "kind": "glazing",
+      "at": [
+        -15.666666666666668,
+        1.8,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        2.9,
+        0.04
+      ]
+    },
+    {
+      "id": "west-suite-reveal-0",
+      "kind": "volume",
+      "at": [
+        -15.666666666666668,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "west-suite-bay-1",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 2.2166666666666663,
+        "height": 3.05,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-suite-glass-1",
+      "kind": "entrance",
+      "at": [
+        -13,
+        1.725,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        3.05,
+        0.1
+      ]
+    },
+    {
+      "id": "west-suite-reveal-1",
+      "kind": "volume",
+      "at": [
+        -13,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "west-suite-bay-2",
+      "kind": "wall",
+      "at": [
+        -10.333333333333334,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.2166666666666663,
+        "height": 2.9,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-suite-glass-2",
+      "kind": "glazing",
+      "at": [
+        -10.333333333333334,
+        1.8,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        2.9,
+        0.04
+      ]
+    },
+    {
+      "id": "west-suite-reveal-2",
+      "kind": "volume",
+      "at": [
+        -10.333333333333334,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "west-suite-roof",
+      "kind": "roof",
+      "at": [
+        -13,
+        3.625,
+        -9,
+        0
+      ],
+      "size": [
+        8,
+        0.25,
+        7
+      ]
+    },
+    {
+      "id": "east-suite",
+      "kind": "plate",
+      "at": [
+        13,
+        0.1,
+        -9,
+        0
+      ],
+      "size": [
+        8,
+        0.2,
+        7
+      ]
+    },
+    {
+      "id": "east-suite-rear",
+      "kind": "wall",
+      "at": [
+        13,
+        1.85,
+        -12.35,
+        0
+      ],
+      "size": [
+        8,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "east-suite-west",
+      "kind": "wall",
+      "at": [
+        9.15,
+        1.85,
+        -9,
+        1.5707963267948966
+      ],
+      "size": [
+        6.4,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "east-suite-east",
+      "kind": "wall",
+      "at": [
+        16.85,
+        1.85,
+        -9,
+        1.5707963267948966
+      ],
+      "size": [
+        6.4,
+        3.3,
+        0.3
+      ]
+    },
+    {
+      "id": "east-suite-bay-0",
+      "kind": "wall",
+      "at": [
+        10.333333333333332,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.2166666666666663,
+        "height": 2.9,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-suite-glass-0",
+      "kind": "glazing",
+      "at": [
+        10.333333333333332,
+        1.8,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        2.9,
+        0.04
+      ]
+    },
+    {
+      "id": "east-suite-reveal-0",
+      "kind": "volume",
+      "at": [
+        10.333333333333332,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "east-suite-bay-1",
+      "kind": "wall",
+      "at": [
+        13,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 2.2166666666666663,
+        "height": 3.05,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-suite-glass-1",
+      "kind": "entrance",
+      "at": [
+        13,
+        1.725,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        3.05,
+        0.1
+      ]
+    },
+    {
+      "id": "east-suite-reveal-1",
+      "kind": "volume",
+      "at": [
+        13,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "east-suite-bay-2",
+      "kind": "wall",
+      "at": [
+        15.666666666666666,
+        1.85,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        3.3,
+        0.3
+      ],
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 2.2166666666666663,
+        "height": 2.9,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-suite-glass-2",
+      "kind": "glazing",
+      "at": [
+        15.666666666666666,
+        1.8,
+        -5.65,
+        0
+      ],
+      "size": [
+        2.2166666666666663,
+        2.9,
+        0.04
+      ]
+    },
+    {
+      "id": "east-suite-reveal-2",
+      "kind": "volume",
+      "at": [
+        15.666666666666666,
+        3.42,
+        -5.4399999999999995,
+        0
+      ],
+      "size": [
+        2.6666666666666665,
+        0.16,
+        0.5
+      ]
+    },
+    {
+      "id": "east-suite-roof",
+      "kind": "roof",
+      "at": [
+        13,
+        3.625,
+        -9,
+        0
+      ],
+      "size": [
+        8,
+        0.25,
+        7
+      ]
+    },
+    {
+      "id": "arrival-gallery",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -5,
+        0
+      ],
+      "size": [
+        26,
+        0.2,
+        1
+      ]
+    },
+    {
+      "id": "arrival-step",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -5.75,
+        0
+      ],
+      "size": [
+        4.8,
+        0.2,
+        0.5
+      ]
+    },
+    {
+      "id": "arrival-portal-west",
+      "kind": "volume",
+      "at": [
+        -2.15,
+        1.7,
+        -5.2,
+        0
+      ],
+      "size": [
+        0.45,
+        3.4,
+        0.7
+      ]
+    },
+    {
+      "id": "arrival-portal-east",
+      "kind": "volume",
+      "at": [
+        2.15,
+        1.7,
+        -5.2,
+        0
+      ],
+      "size": [
+        0.45,
+        3.4,
+        0.7
+      ]
+    },
+    {
+      "id": "arrival-canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.52,
+        -5.25,
+        0
+      ],
+      "size": [
+        4.8,
+        0.24,
+        1.5
+      ]
+    },
+    {
+      "id": "sea-terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        7.5,
+        0
+      ],
+      "size": [
+        18,
+        0.2,
+        6
+      ]
+    },
+    {
+      "id": "sea-pavilion",
+      "kind": "pavilion",
+      "at": [
+        -4.5,
+        0.2,
+        7.5,
+        0
+      ],
+      "size": [
+        8,
+        4.3,
+        6
+      ]
+    },
+    {
+      "id": "pool-approach",
+      "kind": "plate",
+      "at": [
+        4,
+        0.1,
+        10.75,
+        0
+      ],
+      "size": [
+        6,
+        0.2,
+        0.5
+      ]
+    },
+    {
+      "id": "sea-pool",
+      "kind": "plate",
+      "at": [
+        4,
+        0.15,
+        11,
+        0
+      ],
+      "size": [
+        11.2,
+        0.3,
+        1.5
+      ]
+    },
+    {
+      "id": "sea-pool-floor",
+      "kind": "plate",
+      "at": [
+        4,
+        -1.35,
+        17.45,
+        0
+      ],
+      "size": [
+        8.4,
+        0.2,
+        10.4
+      ]
+    },
+    {
+      "id": "sea-pool-water",
+      "kind": "water",
+      "at": [
+        4,
+        0.2,
+        17.45,
+        0
+      ],
+      "size": [
+        8,
+        0.02,
+        10
+      ]
+    },
+    {
+      "id": "sea-pool-wall-z-minus",
+      "kind": "wall",
+      "at": [
+        4,
+        -0.475,
+        12.350000000000001,
+        0
+      ],
+      "size": [
+        8.4,
+        1.55,
+        0.2
+      ]
+    },
+    {
+      "id": "sea-pool-wall-x-minus",
+      "kind": "wall",
+      "at": [
+        -0.09999999999999964,
+        -0.475,
+        17.45,
+        0
+      ],
+      "size": [
+        0.2,
+        1.55,
+        10
+      ]
+    },
+    {
+      "id": "sea-pool-coping-z-minus",
+      "kind": "plate",
+      "at": [
+        4,
+        0.25,
+        12.100000000000001,
+        0
+      ],
+      "size": [
+        9.2,
+        0.1,
+        0.7
+      ]
+    },
+    {
+      "id": "sea-pool-coping-x-minus",
+      "kind": "plate",
+      "at": [
+        -0.34999999999999964,
+        0.25,
+        17.45,
+        0
+      ],
+      "size": [
+        0.7,
+        0.1,
+        10
+      ]
+    },
+    {
+      "id": "sea-pool-deck-x-minus",
+      "kind": "plate",
+      "at": [
+        -1.0999999999999996,
+        0.15,
+        17.45,
+        0
+      ],
+      "size": [
+        1,
+        0.3,
+        11.4
+      ]
+    },
+    {
+      "id": "sea-pool-wall-z-plus",
+      "kind": "wall",
+      "at": [
+        4,
+        -0.475,
+        22.55,
+        0
+      ],
+      "size": [
+        8.4,
+        1.55,
+        0.2
+      ]
+    },
+    {
+      "id": "sea-pool-wall-x-plus",
+      "kind": "wall",
+      "at": [
+        8.1,
+        -0.475,
+        17.45,
+        0
+      ],
+      "size": [
+        0.2,
+        1.55,
+        10
+      ]
+    },
+    {
+      "id": "sea-pool-coping-z-plus",
+      "kind": "plate",
+      "at": [
+        4,
+        0.25,
+        22.8,
+        0
+      ],
+      "size": [
+        9.2,
+        0.1,
+        0.7
+      ]
+    },
+    {
+      "id": "sea-pool-coping-x-plus",
+      "kind": "plate",
+      "at": [
+        8.35,
+        0.25,
+        17.45,
+        0
+      ],
+      "size": [
+        0.7,
+        0.1,
+        10
+      ]
+    },
+    {
+      "id": "sea-pool-deck-x-plus",
+      "kind": "plate",
+      "at": [
+        9.1,
+        0.15,
+        17.45,
+        0
+      ],
+      "size": [
+        1,
+        0.3,
+        11.4
+      ]
+    },
+    {
+      "id": "sea-pool-deck-far",
+      "kind": "plate",
+      "at": [
+        4,
+        0.15,
+        23.9,
+        0
+      ],
+      "size": [
+        11.2,
+        0.3,
+        1.5
+      ]
+    },
+    {
+      "id": "living-sofa-west",
+      "kind": "sofa",
+      "at": [
+        -3,
+        0.65,
+        1.1,
+        0
+      ],
+      "size": [
+        3.2,
+        0.9,
+        1
+      ]
+    },
+    {
+      "id": "living-sofa-east",
+      "kind": "sofa",
+      "at": [
+        3,
+        0.65,
+        1.1,
+        3.14159
+      ],
+      "size": [
+        3.2,
+        0.9,
+        1
+      ]
+    }
+  ]
+}

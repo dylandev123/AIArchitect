@@ -1,0 +1,15 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {validateScene} from '../src/lib/villa/scene/model';
+import {sceneRelationshipIssues} from '../src/lib/villa/scene/relationships';
+import {sceneSpatialGeometry,waterObstructions,spatialCoordinationFindings} from '../src/lib/villa/scene/spatial';
+import {focusedConstructionFindings} from '../src/lib/villa/scene/focusedConstruction';
+const dir='docs/architecture/coordinated-assembly-live';
+const result=JSON.parse(readFileSync(`${dir}/route-response.json`,'utf8'));
+const artifact=JSON.parse(readFileSync(`${dir}/retained-response.json`,'utf8'));
+const scene=validateScene(result.scene??result.recoverableDraft);
+if(!result.scene)writeFileSync(`${dir}/scene.UNAPPROVED.json`,JSON.stringify(scene,null,2));
+const ops=artifact.output?.operations??JSON.parse(artifact.rawResponse).operations;
+const g=sceneSpatialGeometry(scene),roofs=scene.elements.filter(e=>e.kind==='roof');
+const assemblies=scene.elements.filter(e=>e.assemblyKind).map(root=>{const children=scene.elements.filter(e=>{let p=e.parent;while(p){if(p===root.id)return true;p=g.map.get(p)?.parent;}return false;});return {id:root.id,kind:root.assemblyKind,children:children.map(e=>e.id),world:g.world(root)};});
+const audit={accepted:!!result.scene,approved:false,operationCounts:ops.reduce((a:any,o:any)=>(a[o.op]=(a[o.op]??0)+1,a),{}),assemblyOperations:ops.filter((o:any)=>o.op==='assemble'),elements:scene.elements.length,assemblies,assemblyChildElements:assemblies.reduce((n,a)=>n+a.children.length+1,0),relationships:sceneRelationshipIssues(scene),focused:focusedConstructionFindings(scene),spatial:spatialCoordinationFindings(scene),waterObstructions:waterObstructions(scene).map(o=>({water:o.water.id,solid:o.solid.id})),roofPlanOverlaps:roofs.flatMap((a,i)=>roofs.slice(i+1).filter(b=>g.separation(a,b)<-.001).map(b=>({ids:[a.id,b.id],penetration:-g.separation(a,b)}))),worldElements:scene.elements.map(e=>({id:e.id,kind:e.kind,at:g.world(e),size:e.size,opening:e.opening}))};
+writeFileSync(`${dir}/audit.json`,JSON.stringify(audit,null,2));console.log(JSON.stringify({...audit,worldElements:undefined}));

@@ -77,7 +77,7 @@ describe('versioned composable villa contract (deterministic, no provider)',()=>
     ['stairs',c=>{c.wings[0].width=7;},'width'],
     ['one-storey balcony',c=>{c.wings[0].storeys=1;},'balcony'],
     ['roof',c=>{c.appearance.roof='hip';},'appearance.roof'],
-    ['dimensions',c=>{c.wings[0].depth=40;},'depth'],
+    ['dimensions',c=>{c.wings[0].depth=65;},'depth'],
     ['parent',c=>{c.wings.push({...c.wings[0],id:'child',role:'guest',parentId:'missing',detached:true,x:20});},'parentId'],
     ['overlap',c=>{c.wings.push({...c.wings[0],id:'child',role:'guest',parentId:'main',detached:true});},'wings'],
     ['pool clearance',c=>{c.pool!.z=-5;c.terraces=[];},'pool'],

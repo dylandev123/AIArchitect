@@ -352,6 +352,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Current project JSON is invalid; cannot apply edits." }, { status: 400 });
   }
 
+  // Direct scenes must never be interpreted as legacy house documents, even by a stale client.
+  if (root.version === "architectural-scene-1") {
+    return NextResponse.json({ error: "Use /api/ai/scene for direct-scene generation and editing.", code: "DIRECT_SCENE_ENDPOINT_REQUIRED", providerCalls: 0 }, { status: 409 });
+  }
+
   const assets = parseAssets(body.assets);
   const projectId = parseProjectId(body.projectId);
   const resolvedMode = resolveGenerationMode(body.generationMode, root);

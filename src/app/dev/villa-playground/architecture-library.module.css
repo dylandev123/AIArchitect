@@ -1,0 +1,9 @@
+.library { margin: 1rem 0; padding: .8rem 0; border-block: 1px solid #d5dbd1; }
+.library summary { cursor: pointer; font-weight: 600; }
+.library p { line-height: 1.5; }
+.library label { display: grid; gap: .4rem; margin: .7rem 0; }
+.library textarea, .library input, .library select { box-sizing: border-box; width: 100%; padding: .5rem; border: 1px solid #b8c3b5; border-radius: .4rem; background: #fafbf7; color: #294438; }
+.library textarea { min-height: 8rem; font: .7rem/1.4 monospace; resize: vertical; }
+.library button { display: inline-block; margin: .25rem .3rem .25rem 0; padding: .45rem .6rem; border: 1px solid #b8c3b5; border-radius: .4rem; background: #f4f6ef; color: #294438; cursor: pointer; }
+.library button:disabled { opacity: .45; cursor: default; }
+.library [role='status'] { overflow-wrap: anywhere; }

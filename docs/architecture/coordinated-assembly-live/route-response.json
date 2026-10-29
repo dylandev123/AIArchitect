@@ -1,0 +1,2652 @@
+{
+  "architecturalPlan": {
+    "scaleRationale": "Explicit requirements are a contemporary tropical luxury villa in Saint Lucia, on a flat sea-view property, with sophisticated residential wings, distinctive roof character, generous glazing, a formal entrance, pool, deck, and shaded entertaining. The design therefore uses a substantial single-level 274 m² enclosed composition rather than adding unsupported upper levels: a 162 m² communal great-room pavilion is paired with two 56 m² private suite wings. Assumptions: the sea is toward local +Z, landward arrival is from -Z, and the climate benefits from deep shade and cross-ventilation opportunities. The budget/value is treated as a mandate for crafted proportions, layered outdoor rooms, and durable material contrast rather than as an area formula.",
+    "arrivalAndCirculation": "A landward arrival reaches the limestone threshold plate and a protected rear entrance at the centre of the communal pavilion. A continuous open-air gallery along the rear façade links this entry to the two independently accessible suite-wing doors, separating private-room circulation from the sea-facing entertaining terrace. The principal living pavilion opens toward +Z to the sea terrace; the curved lounge pavilion is approached dry from that terrace and faces +Z. The residence is single-level, so no stair or lift circulation is required.",
+    "volumeHierarchy": "The primary volume is main-living at [0, 0.1, 0], 18 m wide by 9 m deep, with a 3.6 m enclosure and a 1.4 m gable roof rise. Two quieter, low flat-roofed suite volumes sit at [-13, 0.1, -9] and [13, 0.1, -9], each 8 m by 7 m. They are held 1 m behind the primary pavilion, allowing a 26 m long arrival gallery at datum Y=0.2. The sea terrace occupies [0, 0.1, 7.5], 18 m by 6 m, extending directly from the main pavilion; the pool is beyond it at [4, 0.15, 11].",
+    "relationshipsAndViews": "The assumed principal sea outlook is +Z. Five articulated glazed bays across the living pavilion face the sea terrace, with solid side and rear walls retaining privacy and furniture walls. The terrace begins at the living threshold and carries the open elliptical lounge pavilion on its western side, while a dry approach runs eastward to the rectangular pool's coordinated deck. The private suites face the arrival gallery rather than the pool, giving them a calm, protected orientation while remaining connected to the main residence.",
+    "roofFacadeAndMaterials": "A restrained gable roof gives the communal pavilion its high, memorable silhouette; the two suite wings use lower flat roofs as deliberately recessive companions. The shaded entertainment pavilion provides the only curved roof expression, avoiding repetitive roof forms. Ivory enclosure walls, limestone terrace and pool finishes, bronze-framed generated glazing, and timber roof soffits create a warm coastal palette. The living façade is rhythmically divided into five deep glazed bays rather than a single undifferentiated glass wall; the entry is framed by limestone portal piers and a separate flat canopy.",
+    "intendedSpaces": [
+      "Sea-facing communal living, dining, and flexible kitchen zone within the main pavilion",
+      "Two private single-room bedroom-suite wings, each with a glazed entry and protected solid enclosure",
+      "Landward arrival gallery and formal covered threshold",
+      "Large limestone sea terrace for outdoor dining and lounging",
+      "Open curved shaded entertainment lounge pavilion",
+      "Rectangular swimming pool with generated basin, coping, dry circuit, and connected approach"
+    ],
+    "spatialRelationships": [
+      {
+        "subject": "arrival-gallery",
+        "target": "main-living-rear",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The gallery meets the rear threshold for the formal landward entry."
+      },
+      {
+        "subject": "arrival-gallery",
+        "target": "west-suite-glass-1",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The protected gallery reaches the west suite door."
+      },
+      {
+        "subject": "arrival-gallery",
+        "target": "east-suite-glass-1",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The protected gallery reaches the east suite door."
+      },
+      {
+        "subject": "sea-terrace",
+        "target": "main-living",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The terrace begins at the primary sea-facing façade."
+      },
+      {
+        "subject": "sea-pavilion",
+        "target": "sea-terrace",
+        "relation": "inside",
+        "clearance": 0,
+        "reason": "The shaded entertainment lounge is supported by and accessed from the primary terrace."
+      },
+      {
+        "subject": "pool-approach",
+        "target": "sea-pool",
+        "relation": "connected-to",
+        "clearance": 0,
+        "reason": "The dry limestone approach meets the coordinated pool assembly's near deck."
+      },
+      {
+        "subject": "sea-pool",
+        "target": "sea-terrace",
+        "relation": "clear-of",
+        "clearance": 0.5,
+        "reason": "A dry approach separates the pool assembly from the principal terrace while preserving pool-side circulation."
+      },
+      {
+        "subject": "main-living",
+        "target": "sea-pool",
+        "relation": "facing",
+        "clearance": 0,
+        "reason": "The living pavilion's local +Z glazed façade is directed toward the pool and assumed sea view."
+      }
+    ],
+    "designDecisions": [
+      {
+        "disposition": "considered",
+        "knowledgeId": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+        "decision": "Used the recipe's deep-shade and sheltered-outdoor-living principle, but selected a supported gable roof for the principal volume rather than its unimplemented mono-pitch roof.",
+        "elementIds": [
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "limitation": "Mono-pitch roof geometry, ventilated ridge detailing, gutters, downpipes, and rainwater equipment are not represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "tropical-envelope",
+        "decision": "Layered shaded glazing, solid side/rear enclosure, a gable roof, and a covered outdoor lounge establish a climate-responsive tropical envelope.",
+        "elementIds": [
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "limitation": "No wind, corrosion, thermal, drainage, hurricane, or ventilation performance is simulated or certified."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+        "decision": "Created a legible pedestrian arrival threshold and protected gallery distinct from the pool terrace.",
+        "elementIds": [
+          "arrival-gallery",
+          "arrival-step",
+          "arrival-door",
+          "arrival-canopy",
+          "arrival-portal-west",
+          "arrival-portal-east"
+        ],
+        "limitation": "Vehicle driveway, gate, turning bay, planting, and lighting are not modelled."
+      },
+      {
+        "disposition": "unsupported",
+        "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+        "decision": "Poolside planting was not constructed because planting, boulders, and lighting are outside the supported editable component set.",
+        "elementIds": [],
+        "limitation": "The pool perimeter remains architectural hardscape only; no landscape, pool equipment concealment, or irrigation is represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "living-view",
+        "decision": "The main pavilion uses a five-bay sea-facing glazed façade, solid flanking walls, and a direct terrace connection to establish a view hierarchy.",
+        "elementIds": [
+          "main-living",
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "sea-terrace"
+        ],
+        "limitation": "Furniture layout, glare analysis, and detailed kitchen equipment are not modelled."
+      }
+    ]
+  },
+  "name": "Azure Fold Villa",
+  "summary": "A single-level Saint Lucian tropical villa composed as a high communal sea pavilion, two lower private suite wings, a landward arrival gallery, a broad limestone sea terrace, curved shaded lounge, and coordinated rectangular pool assembly.",
+  "unsupported": [
+    "The generation uses the required flat Y=0 ground-plane constraint; surveyed Saint Lucia terrain, drainage, planting, and coastal grading are not represented.",
+    "The rectangular pool assembly models basin, coping, water, and dry circulation only. Infinity edges, hydraulics, filtration, lighting, and equipment are not represented.",
+    "Kitchen equipment, bathrooms, wardrobes, mechanical systems, interior finishes, and detailed furniture beyond the pavilion's supplied lounge furniture are not explicitly modelled.",
+    "No structural engineering, hurricane/corrosion certification, code compliance, glare analysis, or weather-performance validation is provided.",
+    "The suite wings are editable enclosed rooms but do not include separately modelled bathroom compartments or internal millwork."
+  ],
+  "operations": [
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "main-living",
+          "at": [
+            0,
+            0.1,
+            0
+          ],
+          "rotation": 0,
+          "width": 18,
+          "depth": 9,
+          "height": 3.6,
+          "bays": 5,
+          "material": "ivory",
+          "roofForm": "gable",
+          "roofRise": 1.4,
+          "overhang": 0,
+          "entryBay": null
+        }
+      }
+    },
+    {
+      "op": "replace",
+      "id": "main-living-rear",
+      "element": {
+        "id": "main-living-rear",
+        "label": "Living pavilion landward wall with arrival opening",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          0,
+          1.8,
+          -4.5
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          3.6,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.6,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-door",
+        "label": "Landward pivot entry door",
+        "kind": "entrance",
+        "parent": "main-living-rear",
+        "at": [
+          0,
+          -0.55,
+          -0.19
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          2.5,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "west-suite",
+          "at": [
+            -13,
+            0.1,
+            -9
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 7,
+          "height": 3.3,
+          "bays": 3,
+          "material": "ivory",
+          "roofForm": "flat",
+          "roofRise": 0.6,
+          "overhang": 0,
+          "entryBay": 1
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "residential-wing",
+        "parameters": {
+          "id": "east-suite",
+          "at": [
+            13,
+            0.1,
+            -9
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 7,
+          "height": 3.3,
+          "bays": 3,
+          "material": "ivory",
+          "roofForm": "flat",
+          "roofRise": 0.6,
+          "overhang": 0,
+          "entryBay": 1
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-gallery",
+        "label": "Landward circulation gallery",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          26,
+          0.2,
+          1
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-step",
+        "label": "Entry threshold landing",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -5.75
+        ],
+        "rotation": 0,
+        "size": [
+          4.8,
+          0.2,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-portal-west",
+        "label": "West limestone entry portal pier",
+        "kind": "volume",
+        "at": [
+          -2.15,
+          1.7,
+          -5.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          3.4,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-portal-east",
+        "label": "East limestone entry portal pier",
+        "kind": "volume",
+        "at": [
+          2.15,
+          1.7,
+          -5.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          3.4,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-canopy",
+        "label": "Flat bronze-framed entry canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.52,
+          -5.25
+        ],
+        "rotation": 0,
+        "size": [
+          4.8,
+          0.24,
+          1.5
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "sea-terrace",
+        "label": "Limestone sea terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          0.2,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "sea-pavilion",
+        "label": "Curved shaded outdoor entertainment lounge",
+        "kind": "pavilion",
+        "at": [
+          -4.5,
+          0.2,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          4.3,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-approach",
+        "label": "Dry pool approach",
+        "kind": "plate",
+        "at": [
+          4,
+          0.1,
+          10.75
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.2,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "rectangular-pool",
+        "parameters": {
+          "id": "sea-pool",
+          "at": [
+            4,
+            0.15,
+            11
+          ],
+          "rotation": 0,
+          "width": 8,
+          "depth": 10,
+          "basinDepth": 1.45,
+          "material": "limestone"
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "living-sofa-west",
+        "label": "Living lounge sofa",
+        "kind": "sofa",
+        "at": [
+          -3,
+          0.65,
+          1.1
+        ],
+        "rotation": 0,
+        "size": [
+          3.2,
+          0.9,
+          1
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "living-sofa-east",
+        "label": "Living lounge sofa",
+        "kind": "sofa",
+        "at": [
+          3,
+          0.65,
+          1.1
+        ],
+        "rotation": 3.14159,
+        "size": [
+          3.2,
+          0.9,
+          1
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  ],
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "Azure Fold Villa",
+    "elements": [
+      {
+        "id": "main-living",
+        "label": "main-living floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          0.2,
+          9
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "assemblyKind": "residential-wing"
+      },
+      {
+        "id": "main-living-rear",
+        "label": "Living pavilion landward wall with arrival opening",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          0,
+          1.8,
+          -4.5
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          3.6,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.6,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-west",
+        "label": "main-living west",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          -8.85,
+          1.9000000000000001,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          8.4,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "main-living-east",
+        "label": "main-living east",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          8.85,
+          1.9000000000000001,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          8.4,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "main-living-bay-0",
+        "label": "main-living bay-0",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          -7.2,
+          1.9000000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.15,
+          "height": 3.2,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-glass-0",
+        "label": "main-living glass-0",
+        "kind": "glazing",
+        "parent": "main-living-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.15,
+          3.2,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "main-living-reveal-0",
+        "label": "main-living reveal-0",
+        "kind": "volume",
+        "parent": "main-living",
+        "at": [
+          -7.2,
+          3.62,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-living-bay-1",
+        "label": "main-living bay-1",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          -3.5999999999999996,
+          1.9000000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.15,
+          "height": 3.2,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-glass-1",
+        "label": "main-living glass-1",
+        "kind": "glazing",
+        "parent": "main-living-bay-1",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.15,
+          3.2,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "main-living-reveal-1",
+        "label": "main-living reveal-1",
+        "kind": "volume",
+        "parent": "main-living",
+        "at": [
+          -3.5999999999999996,
+          3.62,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-living-bay-2",
+        "label": "main-living bay-2",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          0,
+          1.9000000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.15,
+          "height": 3.2,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-glass-2",
+        "label": "main-living glass-2",
+        "kind": "glazing",
+        "parent": "main-living-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.15,
+          3.2,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "main-living-reveal-2",
+        "label": "main-living reveal-2",
+        "kind": "volume",
+        "parent": "main-living",
+        "at": [
+          0,
+          3.62,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-living-bay-3",
+        "label": "main-living bay-3",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          3.5999999999999996,
+          1.9000000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.15,
+          "height": 3.2,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-glass-3",
+        "label": "main-living glass-3",
+        "kind": "glazing",
+        "parent": "main-living-bay-3",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.15,
+          3.2,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "main-living-reveal-3",
+        "label": "main-living reveal-3",
+        "kind": "volume",
+        "parent": "main-living",
+        "at": [
+          3.5999999999999996,
+          3.62,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-living-bay-4",
+        "label": "main-living bay-4",
+        "kind": "wall",
+        "parent": "main-living",
+        "at": [
+          7.199999999999999,
+          1.9000000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.15,
+          "height": 3.2,
+          "glazed": false
+        }
+      },
+      {
+        "id": "main-living-glass-4",
+        "label": "main-living glass-4",
+        "kind": "glazing",
+        "parent": "main-living-bay-4",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.15,
+          3.2,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "main-living-reveal-4",
+        "label": "main-living reveal-4",
+        "kind": "volume",
+        "parent": "main-living",
+        "at": [
+          7.199999999999999,
+          3.62,
+          4.56
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-living-roof",
+        "label": "main-living roof",
+        "kind": "roof",
+        "parent": "main-living",
+        "at": [
+          0,
+          4.4,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          1.4,
+          9
+        ],
+        "material": "ivory",
+        "roofForm": "gable",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "arrival-door",
+        "label": "Landward pivot entry door",
+        "kind": "entrance",
+        "parent": "main-living-rear",
+        "at": [
+          0,
+          -0.55,
+          -0.19
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          2.5,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "west-suite",
+        "label": "west-suite floor",
+        "kind": "plate",
+        "at": [
+          -13,
+          0.1,
+          -9
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          7
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "assemblyKind": "residential-wing"
+      },
+      {
+        "id": "west-suite-rear",
+        "label": "west-suite rear",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          0,
+          1.75,
+          -3.35
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-west",
+        "label": "west-suite west",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          -3.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          6.4,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-east",
+        "label": "west-suite east",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          3.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          6.4,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-bay-0",
+        "label": "west-suite bay-0",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          -2.666666666666667,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 2.2166666666666663,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "west-suite-glass-0",
+        "label": "west-suite glass-0",
+        "kind": "glazing",
+        "parent": "west-suite-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          2.9,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "west-suite-reveal-0",
+        "label": "west-suite reveal-0",
+        "kind": "volume",
+        "parent": "west-suite",
+        "at": [
+          -2.666666666666667,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-bay-1",
+        "label": "west-suite bay-1",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          0,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 2.2166666666666663,
+          "height": 3.05,
+          "glazed": false
+        }
+      },
+      {
+        "id": "west-suite-glass-1",
+        "label": "west-suite glass-1",
+        "kind": "entrance",
+        "parent": "west-suite-bay-1",
+        "at": [
+          0,
+          -0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          3.05,
+          0.1
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "west-suite-reveal-1",
+        "label": "west-suite reveal-1",
+        "kind": "volume",
+        "parent": "west-suite",
+        "at": [
+          0,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-bay-2",
+        "label": "west-suite bay-2",
+        "kind": "wall",
+        "parent": "west-suite",
+        "at": [
+          2.666666666666666,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 2.2166666666666663,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "west-suite-glass-2",
+        "label": "west-suite glass-2",
+        "kind": "glazing",
+        "parent": "west-suite-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          2.9,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "west-suite-reveal-2",
+        "label": "west-suite reveal-2",
+        "kind": "volume",
+        "parent": "west-suite",
+        "at": [
+          2.666666666666666,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-roof",
+        "label": "west-suite roof",
+        "kind": "roof",
+        "parent": "west-suite",
+        "at": [
+          0,
+          3.525,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.25,
+          7
+        ],
+        "material": "ivory",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "east-suite",
+        "label": "east-suite floor",
+        "kind": "plate",
+        "at": [
+          13,
+          0.1,
+          -9
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          7
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "assemblyKind": "residential-wing"
+      },
+      {
+        "id": "east-suite-rear",
+        "label": "east-suite rear",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          0,
+          1.75,
+          -3.35
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-west",
+        "label": "east-suite west",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          -3.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          6.4,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-east",
+        "label": "east-suite east",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          3.85,
+          1.75,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          6.4,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-bay-0",
+        "label": "east-suite bay-0",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          -2.666666666666667,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 2.2166666666666663,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "east-suite-glass-0",
+        "label": "east-suite glass-0",
+        "kind": "glazing",
+        "parent": "east-suite-bay-0",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          2.9,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "east-suite-reveal-0",
+        "label": "east-suite reveal-0",
+        "kind": "volume",
+        "parent": "east-suite",
+        "at": [
+          -2.666666666666667,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-bay-1",
+        "label": "east-suite bay-1",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          0,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 2.2166666666666663,
+          "height": 3.05,
+          "glazed": false
+        }
+      },
+      {
+        "id": "east-suite-glass-1",
+        "label": "east-suite glass-1",
+        "kind": "entrance",
+        "parent": "east-suite-bay-1",
+        "at": [
+          0,
+          -0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          3.05,
+          0.1
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "east-suite-reveal-1",
+        "label": "east-suite reveal-1",
+        "kind": "volume",
+        "parent": "east-suite",
+        "at": [
+          0,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-bay-2",
+        "label": "east-suite bay-2",
+        "kind": "wall",
+        "parent": "east-suite",
+        "at": [
+          2.666666666666666,
+          1.75,
+          3.35
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          3.3,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 2.2166666666666663,
+          "height": 2.9,
+          "glazed": false
+        }
+      },
+      {
+        "id": "east-suite-glass-2",
+        "label": "east-suite glass-2",
+        "kind": "glazing",
+        "parent": "east-suite-bay-2",
+        "at": [
+          0,
+          -0.05,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.2166666666666663,
+          2.9,
+          0.04
+        ],
+        "material": "ivory",
+        "panels": 2
+      },
+      {
+        "id": "east-suite-reveal-2",
+        "label": "east-suite reveal-2",
+        "kind": "volume",
+        "parent": "east-suite",
+        "at": [
+          2.666666666666666,
+          3.32,
+          3.56
+        ],
+        "rotation": 0,
+        "size": [
+          2.6666666666666665,
+          0.16,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-roof",
+        "label": "east-suite roof",
+        "kind": "roof",
+        "parent": "east-suite",
+        "at": [
+          0,
+          3.525,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.25,
+          7
+        ],
+        "material": "ivory",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "arrival-gallery",
+        "label": "Landward circulation gallery",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          26,
+          0.2,
+          1
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-step",
+        "label": "Entry threshold landing",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -5.75
+        ],
+        "rotation": 0,
+        "size": [
+          4.8,
+          0.2,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-portal-west",
+        "label": "West limestone entry portal pier",
+        "kind": "volume",
+        "at": [
+          -2.15,
+          1.7,
+          -5.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          3.4,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-portal-east",
+        "label": "East limestone entry portal pier",
+        "kind": "volume",
+        "at": [
+          2.15,
+          1.7,
+          -5.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.45,
+          3.4,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-canopy",
+        "label": "Flat bronze-framed entry canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.52,
+          -5.25
+        ],
+        "rotation": 0,
+        "size": [
+          4.8,
+          0.24,
+          1.5
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "id": "sea-terrace",
+        "label": "Limestone sea terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          18,
+          0.2,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pavilion",
+        "label": "Curved shaded outdoor entertainment lounge",
+        "kind": "pavilion",
+        "at": [
+          -4.5,
+          0.2,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          4.3,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-approach",
+        "label": "Dry pool approach",
+        "kind": "plate",
+        "at": [
+          4,
+          0.1,
+          10.75
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.2,
+          0.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool",
+        "label": "sea-pool deck",
+        "kind": "plate",
+        "at": [
+          4,
+          0.15,
+          11
+        ],
+        "rotation": 0,
+        "size": [
+          11.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "assemblyKind": "rectangular-pool"
+      },
+      {
+        "id": "sea-pool-floor",
+        "label": "sea-pool floor",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          -1.5,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          8.4,
+          0.2,
+          10.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-water",
+        "label": "sea-pool water",
+        "kind": "water",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          0.05,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.02,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-wall-z-minus",
+        "label": "sea-pool wall-z-minus",
+        "kind": "wall",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          -0.625,
+          1.3500000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          8.4,
+          1.55,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-wall-x-minus",
+        "label": "sea-pool wall-x-minus",
+        "kind": "wall",
+        "parent": "sea-pool",
+        "at": [
+          -4.1,
+          -0.625,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.55,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-coping-z-minus",
+        "label": "sea-pool coping-z-minus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          0.1,
+          1.1000000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          9.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-coping-x-minus",
+        "label": "sea-pool coping-x-minus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          -4.35,
+          0.1,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.7,
+          0.1,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-deck-x-minus",
+        "label": "sea-pool deck-x-minus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          -5.1,
+          0,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          11.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-wall-z-plus",
+        "label": "sea-pool wall-z-plus",
+        "kind": "wall",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          -0.625,
+          11.55
+        ],
+        "rotation": 0,
+        "size": [
+          8.4,
+          1.55,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-wall-x-plus",
+        "label": "sea-pool wall-x-plus",
+        "kind": "wall",
+        "parent": "sea-pool",
+        "at": [
+          4.1,
+          -0.625,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.55,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-coping-z-plus",
+        "label": "sea-pool coping-z-plus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          0.1,
+          11.8
+        ],
+        "rotation": 0,
+        "size": [
+          9.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-coping-x-plus",
+        "label": "sea-pool coping-x-plus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          4.35,
+          0.1,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.7,
+          0.1,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-deck-x-plus",
+        "label": "sea-pool deck-x-plus",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          5.1,
+          0,
+          6.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          11.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "sea-pool-deck-far",
+        "label": "sea-pool deck-far",
+        "kind": "plate",
+        "parent": "sea-pool",
+        "at": [
+          0,
+          0,
+          12.9
+        ],
+        "rotation": 0,
+        "size": [
+          11.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "living-sofa-west",
+        "label": "Living lounge sofa",
+        "kind": "sofa",
+        "at": [
+          -3,
+          0.65,
+          1.1
+        ],
+        "rotation": 0,
+        "size": [
+          3.2,
+          0.9,
+          1
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "living-sofa-east",
+        "label": "Living lounge sofa",
+        "kind": "sofa",
+        "at": [
+          3,
+          0.65,
+          1.1
+        ],
+        "rotation": 3.14159,
+        "size": [
+          3.2,
+          0.9,
+          1
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    ],
+    "architecturalPlan": {
+      "scaleRationale": "Explicit requirements are a contemporary tropical luxury villa in Saint Lucia, on a flat sea-view property, with sophisticated residential wings, distinctive roof character, generous glazing, a formal entrance, pool, deck, and shaded entertaining. The design therefore uses a substantial single-level 274 m² enclosed composition rather than adding unsupported upper levels: a 162 m² communal great-room pavilion is paired with two 56 m² private suite wings. Assumptions: the sea is toward local +Z, landward arrival is from -Z, and the climate benefits from deep shade and cross-ventilation opportunities. The budget/value is treated as a mandate for crafted proportions, layered outdoor rooms, and durable material contrast rather than as an area formula.",
+      "arrivalAndCirculation": "A landward arrival reaches the limestone threshold plate and a protected rear entrance at the centre of the communal pavilion. A continuous open-air gallery along the rear façade links this entry to the two independently accessible suite-wing doors, separating private-room circulation from the sea-facing entertaining terrace. The principal living pavilion opens toward +Z to the sea terrace; the curved lounge pavilion is approached dry from that terrace and faces +Z. The residence is single-level, so no stair or lift circulation is required.",
+      "volumeHierarchy": "The primary volume is main-living at [0, 0.1, 0], 18 m wide by 9 m deep, with a 3.6 m enclosure and a 1.4 m gable roof rise. Two quieter, low flat-roofed suite volumes sit at [-13, 0.1, -9] and [13, 0.1, -9], each 8 m by 7 m. They are held 1 m behind the primary pavilion, allowing a 26 m long arrival gallery at datum Y=0.2. The sea terrace occupies [0, 0.1, 7.5], 18 m by 6 m, extending directly from the main pavilion; the pool is beyond it at [4, 0.15, 11].",
+      "relationshipsAndViews": "The assumed principal sea outlook is +Z. Five articulated glazed bays across the living pavilion face the sea terrace, with solid side and rear walls retaining privacy and furniture walls. The terrace begins at the living threshold and carries the open elliptical lounge pavilion on its western side, while a dry approach runs eastward to the rectangular pool's coordinated deck. The private suites face the arrival gallery rather than the pool, giving them a calm, protected orientation while remaining connected to the main residence.",
+      "roofFacadeAndMaterials": "A restrained gable roof gives the communal pavilion its high, memorable silhouette; the two suite wings use lower flat roofs as deliberately recessive companions. The shaded entertainment pavilion provides the only curved roof expression, avoiding repetitive roof forms. Ivory enclosure walls, limestone terrace and pool finishes, bronze-framed generated glazing, and timber roof soffits create a warm coastal palette. The living façade is rhythmically divided into five deep glazed bays rather than a single undifferentiated glass wall; the entry is framed by limestone portal piers and a separate flat canopy.",
+      "intendedSpaces": [
+        "Sea-facing communal living, dining, and flexible kitchen zone within the main pavilion",
+        "Two private single-room bedroom-suite wings, each with a glazed entry and protected solid enclosure",
+        "Landward arrival gallery and formal covered threshold",
+        "Large limestone sea terrace for outdoor dining and lounging",
+        "Open curved shaded entertainment lounge pavilion",
+        "Rectangular swimming pool with generated basin, coping, dry circuit, and connected approach"
+      ],
+      "spatialRelationships": [
+        {
+          "subject": "arrival-gallery",
+          "target": "main-living-rear",
+          "relation": "adjacent-to",
+          "clearance": 0,
+          "reason": "The gallery meets the rear threshold for the formal landward entry."
+        },
+        {
+          "subject": "arrival-gallery",
+          "target": "west-suite-glass-1",
+          "relation": "adjacent-to",
+          "clearance": 0,
+          "reason": "The protected gallery reaches the west suite door."
+        },
+        {
+          "subject": "arrival-gallery",
+          "target": "east-suite-glass-1",
+          "relation": "adjacent-to",
+          "clearance": 0,
+          "reason": "The protected gallery reaches the east suite door."
+        },
+        {
+          "subject": "sea-terrace",
+          "target": "main-living",
+          "relation": "adjacent-to",
+          "clearance": 0,
+          "reason": "The terrace begins at the primary sea-facing façade."
+        },
+        {
+          "subject": "sea-pavilion",
+          "target": "sea-terrace",
+          "relation": "inside",
+          "clearance": 0,
+          "reason": "The shaded entertainment lounge is supported by and accessed from the primary terrace."
+        },
+        {
+          "subject": "pool-approach",
+          "target": "sea-pool",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The dry limestone approach meets the coordinated pool assembly's near deck."
+        },
+        {
+          "subject": "sea-pool",
+          "target": "sea-terrace",
+          "relation": "clear-of",
+          "clearance": 0.5,
+          "reason": "A dry approach separates the pool assembly from the principal terrace while preserving pool-side circulation."
+        },
+        {
+          "subject": "main-living",
+          "target": "sea-pool",
+          "relation": "facing",
+          "clearance": 0,
+          "reason": "The living pavilion's local +Z glazed façade is directed toward the pool and assumed sea view."
+        }
+      ],
+      "designDecisions": [
+        {
+          "disposition": "considered",
+          "knowledgeId": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+          "decision": "Used the recipe's deep-shade and sheltered-outdoor-living principle, but selected a supported gable roof for the principal volume rather than its unimplemented mono-pitch roof.",
+          "elementIds": [
+            "main-living-roof",
+            "sea-pavilion"
+          ],
+          "limitation": "Mono-pitch roof geometry, ventilated ridge detailing, gutters, downpipes, and rainwater equipment are not represented."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "tropical-envelope",
+          "decision": "Layered shaded glazing, solid side/rear enclosure, a gable roof, and a covered outdoor lounge establish a climate-responsive tropical envelope.",
+          "elementIds": [
+            "main-living-glass-0",
+            "main-living-glass-1",
+            "main-living-glass-2",
+            "main-living-glass-3",
+            "main-living-glass-4",
+            "main-living-roof",
+            "sea-pavilion"
+          ],
+          "limitation": "No wind, corrosion, thermal, drainage, hurricane, or ventilation performance is simulated or certified."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+          "decision": "Created a legible pedestrian arrival threshold and protected gallery distinct from the pool terrace.",
+          "elementIds": [
+            "arrival-gallery",
+            "arrival-step",
+            "arrival-door",
+            "arrival-canopy",
+            "arrival-portal-west",
+            "arrival-portal-east"
+          ],
+          "limitation": "Vehicle driveway, gate, turning bay, planting, and lighting are not modelled."
+        },
+        {
+          "disposition": "unsupported",
+          "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "decision": "Poolside planting was not constructed because planting, boulders, and lighting are outside the supported editable component set.",
+          "elementIds": [],
+          "limitation": "The pool perimeter remains architectural hardscape only; no landscape, pool equipment concealment, or irrigation is represented."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "living-view",
+          "decision": "The main pavilion uses a five-bay sea-facing glazed façade, solid flanking walls, and a direct terrace connection to establish a view hierarchy.",
+          "elementIds": [
+            "main-living",
+            "main-living-glass-0",
+            "main-living-glass-1",
+            "main-living-glass-2",
+            "main-living-glass-3",
+            "main-living-glass-4",
+            "sea-terrace"
+          ],
+          "limitation": "Furniture layout, glare analysis, and detailed kitchen equipment are not modelled."
+        }
+      ]
+    },
+    "knowledgeEvidence": [
+      {
+        "id": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "requiredKinds": [
+          "wall"
+        ]
+      },
+      {
+        "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "living-view",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      }
+    ]
+  },
+  "architecturalAudit": {
+    "status": "incomplete",
+    "issues": [
+      "Knowledge decision tropical-envelope: referenced geometry lacks required kinds wall; descriptions are not construction.",
+      "Knowledge decision tropical-envelope: No wind, corrosion, thermal, drainage, hurricane, or ventilation performance is simulated or certified.",
+      "Knowledge decision legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97: referenced geometry lacks required kinds wall; descriptions are not construction.",
+      "Knowledge decision legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97: Vehicle driveway, gate, turning bay, planting, and lighting are not modelled.",
+      "Knowledge decision living-view: referenced geometry lacks required kinds wall, roof; descriptions are not construction.",
+      "Knowledge decision living-view: Furniture layout, glare analysis, and detailed kitchen equipment are not modelled.",
+      "Floor surfaces sea-pool-deck-x-minus and sea-pool-coping-x-minus overlap at the same datum; summed usable area is withheld.",
+      "Floor surfaces sea-pool-deck-x-plus and sea-pool-coping-x-plus overlap at the same datum; summed usable area is withheld.",
+      "Requested space: Sea-facing communal living, dining, and flexible kitchen zone within the main pavilion. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Two private single-room bedroom-suite wings, each with a glazed entry and protected solid enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Landward arrival gallery and formal covered threshold. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Large limestone sea terrace for outdoor dining and lounging. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Open curved shaded entertainment lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Rectangular swimming pool with generated basin, coping, dry circuit, and connected approach. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+      "arrival-gallery adjacent-to main-living-rear: geometry does not evidence the declared relationship (clearance 0 m). The gallery meets the rear threshold for the formal landward entry. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "arrival-gallery adjacent-to west-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the west suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "arrival-gallery adjacent-to east-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the east suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "sea-pavilion inside sea-terrace: geometry does not evidence the declared relationship (clearance 0 m). The shaded entertainment lounge is supported by and accessed from the primary terrace. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "sea-pool clear-of sea-terrace: geometry does not evidence the declared relationship (clearance 0.5 m). A dry approach separates the pool assembly from the principal terrace while preserving pool-side circulation. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    ],
+    "findings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision tropical-envelope: referenced geometry lacks required kinds wall; descriptions are not construction."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision tropical-envelope: No wind, corrosion, thermal, drainage, hurricane, or ventilation performance is simulated or certified."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97: referenced geometry lacks required kinds wall; descriptions are not construction."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97: Vehicle driveway, gate, turning bay, planting, and lighting are not modelled."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision living-view: referenced geometry lacks required kinds wall, roof; descriptions are not construction."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Knowledge decision living-view: Furniture layout, glare analysis, and detailed kitchen equipment are not modelled."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "sea-pool",
+          "sea-pool-coping-x-minus",
+          "sea-pool-deck-x-minus"
+        ],
+        "message": "Floor surfaces sea-pool-deck-x-minus and sea-pool-coping-x-minus overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "sea-pool",
+          "sea-pool-coping-x-plus",
+          "sea-pool-deck-x-plus"
+        ],
+        "message": "Floor surfaces sea-pool-deck-x-plus and sea-pool-coping-x-plus overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Sea-facing communal living, dining, and flexible kitchen zone within the main pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Two private single-room bedroom-suite wings, each with a glazed entry and protected solid enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Landward arrival gallery and formal covered threshold. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Large limestone sea terrace for outdoor dining and lounging. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Open curved shaded entertainment lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Requested space: Rectangular swimming pool with generated basin, coping, dry circuit, and connected approach. Geometry inventory is available; enclosure, allocation and completeness require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "arrival-gallery",
+          "main-living-rear"
+        ],
+        "message": "arrival-gallery adjacent-to main-living-rear: geometry does not evidence the declared relationship (clearance 0 m). The gallery meets the rear threshold for the formal landward entry. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "arrival-gallery",
+          "west-suite-glass-1"
+        ],
+        "message": "arrival-gallery adjacent-to west-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the west suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "arrival-gallery",
+          "east-suite-glass-1"
+        ],
+        "message": "arrival-gallery adjacent-to east-suite-glass-1: geometry does not evidence the declared relationship (clearance 0 m). The protected gallery reaches the east suite door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "sea-pavilion",
+          "sea-terrace"
+        ],
+        "message": "sea-pavilion inside sea-terrace: geometry does not evidence the declared relationship (clearance 0 m). The shaded entertainment lounge is supported by and accessed from the primary terrace. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "sea-pool",
+          "sea-terrace"
+        ],
+        "message": "sea-pool clear-of sea-terrace: geometry does not evidence the declared relationship (clearance 0.5 m). A dry approach separates the pool assembly from the principal terrace while preserving pool-side circulation. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      }
+    ],
+    "designDecisions": [
+      {
+        "disposition": "considered",
+        "knowledgeId": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+        "decision": "Used the recipe's deep-shade and sheltered-outdoor-living principle, but selected a supported gable roof for the principal volume rather than its unimplemented mono-pitch roof.",
+        "elementIds": [
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "limitation": "Mono-pitch roof geometry, ventilated ridge detailing, gutters, downpipes, and rainwater equipment are not represented.",
+        "existingElementIds": [],
+        "missingElementIds": [],
+        "missingKinds": [],
+        "detachedElementIds": [],
+        "status": "considered",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "tropical-envelope",
+        "decision": "Layered shaded glazing, solid side/rear enclosure, a gable roof, and a covered outdoor lounge establish a climate-responsive tropical envelope.",
+        "elementIds": [
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "limitation": "No wind, corrosion, thermal, drainage, hurricane, or ventilation performance is simulated or certified.",
+        "existingElementIds": [
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "wall"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+        "decision": "Created a legible pedestrian arrival threshold and protected gallery distinct from the pool terrace.",
+        "elementIds": [
+          "arrival-gallery",
+          "arrival-step",
+          "arrival-door",
+          "arrival-canopy",
+          "arrival-portal-west",
+          "arrival-portal-east"
+        ],
+        "limitation": "Vehicle driveway, gate, turning bay, planting, and lighting are not modelled.",
+        "existingElementIds": [
+          "arrival-gallery",
+          "arrival-step",
+          "arrival-door",
+          "arrival-canopy",
+          "arrival-portal-west",
+          "arrival-portal-east"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "wall"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "unsupported",
+        "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+        "decision": "Poolside planting was not constructed because planting, boulders, and lighting are outside the supported editable component set.",
+        "elementIds": [],
+        "limitation": "The pool perimeter remains architectural hardscape only; no landscape, pool equipment concealment, or irrigation is represented.",
+        "existingElementIds": [],
+        "missingElementIds": [],
+        "missingKinds": [],
+        "detachedElementIds": [],
+        "status": "unsupported",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "living-view",
+        "decision": "The main pavilion uses a five-bay sea-facing glazed façade, solid flanking walls, and a direct terrace connection to establish a view hierarchy.",
+        "elementIds": [
+          "main-living",
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "sea-terrace"
+        ],
+        "limitation": "Furniture layout, glare analysis, and detailed kitchen equipment are not modelled.",
+        "existingElementIds": [
+          "main-living",
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "sea-terrace"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "wall",
+          "roof"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      }
+    ],
+    "knowledgeUse": [
+      {
+        "id": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+        "version": 1,
+        "status": "considered",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "main-living-roof",
+          "sea-pavilion"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "arrival-gallery",
+          "arrival-step",
+          "arrival-door",
+          "arrival-canopy",
+          "arrival-portal-west",
+          "arrival-portal-east"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+        "version": 1,
+        "status": "unsupported",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "living-view",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "main-living",
+          "main-living-glass-0",
+          "main-living-glass-1",
+          "main-living-glass-2",
+          "main-living-glass-3",
+          "main-living-glass-4",
+          "sea-terrace"
+        ],
+        "verifiedComplete": false
+      }
+    ],
+    "geometry": {
+      "kindCounts": {
+        "plate": 16,
+        "wall": 24,
+        "glazing": 9,
+        "volume": 13,
+        "roof": 4,
+        "entrance": 3,
+        "pavilion": 1,
+        "water": 1,
+        "sofa": 2
+      },
+      "surfaces": [
+        {
+          "id": "main-living",
+          "kind": "plate",
+          "areaM2": 162,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "west-suite",
+          "kind": "plate",
+          "areaM2": 56,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "east-suite",
+          "kind": "plate",
+          "areaM2": 56,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival-gallery",
+          "kind": "plate",
+          "areaM2": 26,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival-step",
+          "kind": "plate",
+          "areaM2": 2.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "sea-terrace",
+          "kind": "plate",
+          "areaM2": 108,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-approach",
+          "kind": "plate",
+          "areaM2": 3,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "sea-pool",
+          "kind": "plate",
+          "areaM2": 16.799999999999997,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-floor",
+          "kind": "plate",
+          "areaM2": 87.36000000000001,
+          "walkingDatum": -1.25
+        },
+        {
+          "id": "sea-pool-water",
+          "kind": "water",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "sea-pool-coping-z-minus",
+          "kind": "plate",
+          "areaM2": 6.4399999999999995,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-coping-x-minus",
+          "kind": "plate",
+          "areaM2": 7,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-deck-x-minus",
+          "kind": "plate",
+          "areaM2": 11.4,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-coping-z-plus",
+          "kind": "plate",
+          "areaM2": 6.4399999999999995,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-coping-x-plus",
+          "kind": "plate",
+          "areaM2": 7,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-deck-x-plus",
+          "kind": "plate",
+          "areaM2": 11.4,
+          "walkingDatum": 0.3
+        },
+        {
+          "id": "sea-pool-deck-far",
+          "kind": "plate",
+          "areaM2": 16.799999999999997,
+          "walkingDatum": 0.3
+        }
+      ],
+      "overlaps": [
+        [
+          "sea-pool-deck-x-minus",
+          "sea-pool-coping-x-minus"
+        ],
+        [
+          "sea-pool-deck-x-plus",
+          "sea-pool-coping-x-plus"
+        ]
+      ],
+      "walkingDatums": [
+        0.2,
+        0.3,
+        -1.25
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 80
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "responseId": "209f3426-0267-44a9-a0a4-2dfc943b6d1d",
+  "providerCalls": 1
+}

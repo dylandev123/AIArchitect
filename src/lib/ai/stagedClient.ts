@@ -93,6 +93,9 @@ export async function requestStagedGeneration(req: StagedGenerationRequest): Pro
   if (modeError) return { ok: false, error: modeError, status: 409 };
   // SSE stages are V2 ArchitecturalDesignDocument previews. Never put a V3
   // project through this transport, even if an obsolete caller bypasses ChatPanel.
+  if (authority.persistedMode === "direct-scene") {
+    return { ok: false, error: "Direct scenes use /api/ai/scene; staged house generation is disabled.", status: 409 };
+  }
   if (authority.persistedMode === "v3-scene") {
     return { ok: false, error: "V3 scene projects must use the V3 scene generation route; V2 staged generation is disabled.", status: 409 };
   }

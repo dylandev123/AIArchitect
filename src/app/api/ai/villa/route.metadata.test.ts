@@ -1,7 +1,10 @@
+import { mockProposal, defaultPlacement } from '@/lib/villa/creation/model';
+import { listCandidates } from '@/lib/villa/creation/store';
+import { COMPOSITION_EXAMPLES } from '@/lib/villa/composition-examples';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MockLanguageModelV3 } from 'ai/test';
 import { Output } from 'ai';
-import { mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -139,7 +142,7 @@ describe('Villa metadata replay through the real AI SDK, using only an offline p
     const raw = JSON.stringify(invalid), provider = model(raw);
     const response = await call(), body = await response.json();
     expect(response.status).toBe(422); expect(body.config).toBeUndefined();
-    expect(body.findings).toContainEqual(expect.objectContaining({ path: 'changes.wings.0.orientation' }));
+    expect(body.findings).toContainEqual(expect.objectContaining({ path: 'wings.main.orientation' }));
     expect(body.findings.some((f: { path: string }) => f.path === 'changes.character')).toBe(false);
     expect(await readFile(artifactPath(body.diagnostics.responseId), 'utf8')).toBe(raw);
     expect(provider.doGenerateCalls).toHaveLength(1);
@@ -191,6 +194,33 @@ describe('Villa metadata replay through the real AI SDK, using only an offline p
     expect(provider.doGenerateCalls).toHaveLength(1);
   });
 
+  it('automatically creates and saves a component through the real SDK and normal endpoint with no network',async()=>{
+    const raw=JSON.stringify({changes:{...COMPOSITION_EXAMPLES[0],siteMode:'derived'},summary:'A house with a new experimental wave canopy.',unsupported:[],componentRequests:[{type:'create',id:'wave-shelter',missingCapability:'Original banked canopy absent from the approved catalogue.',proposal:mockProposal(),placement:defaultPlacement}]});
+    const provider=model(raw), response=await call(), body=await response.json();
+    expect(response.status).toBe(200);expect(body.providerCalls).toBe(1);
+    expect(body.config.createdComponents[0]).toMatchObject({id:'wave-shelter',status:'experimental',candidateVersion:1,proposal:{geometry:{builder:'swept-ribbon@1'}}});
+    expect(body.changes).toEqual(body.config);
+    expect((await listCandidates())[0]).toMatchObject({status:'experimental',evidence:[],version:1});
+    expect(await readFile(artifactPath(body.diagnostics.responseId),'utf8')).toBe(raw);
+    expect((await replayRetainedVillaResponse(body.assembledDiagnostics.responseId))?.config).toEqual(body.config);
+    await expect(replayRetainedVillaResponse(body.diagnostics.responseId)).rejects.toThrow(/assembledDiagnostics/);
+    const trace=JSON.parse(await readFile(path.join(directory,'.data','villa-generations',body.generation.generationId+'.json'),'utf8'));
+    expect(trace.metadata.stages).toContainEqual(expect.objectContaining({stage:'experimental-candidate-saved'}));
+    expect(trace.metadata.usage.inputTokens).toBe(100);
+    expect(provider.doGenerateCalls).toHaveLength(1);
+  });
+
+  it('retains rejected component responses before local validation without saving or retrying',async()=>{
+    const proposal=mockProposal();proposal.geometry.height=3;proposal.geometry.width=5;proposal.geometry.stations=proposal.geometry.stations.map(s=>({...s,width:1.5,bank:18}));
+    const raw=JSON.stringify({changes:{...COMPOSITION_EXAMPLES[0],siteMode:'derived'},summary:'Experimental canopy.',unsupported:[],componentRequests:[{type:'create',id:'wave',missingCapability:'Canopy',proposal,placement:defaultPlacement}]});
+    const provider=model(raw),response=await call(),body=await response.json();
+    expect(response.status).toBe(422);expect(body.config).toBeUndefined();
+    expect(body.findings[0].message).toContain('soffit');
+    expect(await listCandidates()).toEqual([]);
+    expect(await readFile(artifactPath(body.diagnostics.responseId),'utf8')).toBe(raw);
+    expect(provider.doGenerateCalls).toHaveLength(1);
+  });
+
   it('keeps capture development-only', async () => {
     vi.stubEnv('NODE_ENV', 'production');
     const provider = model(JSON.stringify(fixture));
@@ -201,7 +231,8 @@ describe('Villa metadata replay through the real AI SDK, using only an offline p
   });
 
   it('keeps an accepted design usable when diagnostic storage is unavailable', async () => {
-    await writeFile(path.join(directory, '.data'), 'Directory unavailable in this fixture');
+    await mkdir(path.join(directory, '.data'));
+    await writeFile(path.join(directory, '.data', 'villa-responses'), 'Raw diagnostic directory unavailable in this fixture');
     const provider = model(JSON.stringify(fixture));
     const response = await call(), body = await response.json();
     expect(response.status).toBe(200);

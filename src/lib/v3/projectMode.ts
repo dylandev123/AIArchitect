@@ -9,7 +9,9 @@ import { isV3ProjectRoot } from "./scene";
  */
 export function resolveProjectGenerationMode(project: { houseConfigJson: string }): GenerationMode {
   try {
-    return isV3ProjectRoot(JSON.parse(project.houseConfigJson)) ? "v3-scene" : "v2-architectural";
+    const root = JSON.parse(project.houseConfigJson);
+    if (root?.version === "architectural-scene-1") return "direct-scene";
+    return isV3ProjectRoot(root) ? "v3-scene" : "v2-architectural";
   } catch {
     return "v2-architectural";
   }
@@ -33,7 +35,8 @@ export function projectModeAuthority(project: { generationMode?: GenerationMode;
 }
 
 /** The exact development badge text, intentionally derived only from the durable root. */
-export function projectModeBadgeLabel(project: { houseConfigJson: string }): "V2 ARCHITECTURAL" | "V3 SCENE" {
+export function projectModeBadgeLabel(project: { houseConfigJson: string }): "V2 ARCHITECTURAL" | "V3 SCENE" | "DIRECT SCENE" {
+  if (resolveProjectGenerationMode(project) === "direct-scene") return "DIRECT SCENE";
   return resolveProjectGenerationMode(project) === "v3-scene" ? "V3 SCENE" : "V2 ARCHITECTURAL";
 }
 

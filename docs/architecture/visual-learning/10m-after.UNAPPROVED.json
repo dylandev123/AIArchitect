@@ -1,0 +1,1020 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Casa Brisa Caribe",
+  "elements": [
+    {
+      "id": "living-floor",
+      "label": "Primary living hall floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-floor",
+      "label": "West private wing floor",
+      "kind": "plate",
+      "at": [
+        -12,
+        0.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "service-floor",
+      "label": "East service wing floor",
+      "kind": "plate",
+      "at": [
+        10,
+        0.1,
+        2
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.2,
+        6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-approach",
+      "label": "North arrival approach",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        7
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        0.2,
+        4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-terrace",
+      "label": "South pool terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -7.25
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        0.2,
+        4.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-wall",
+      "label": "North entry wall",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.4,
+        "glazed": false
+      }
+    },
+    {
+      "id": "entry-door",
+      "label": "Recessed front door",
+      "kind": "entrance",
+      "parent": "entry-wall",
+      "at": [
+        0,
+        -0.4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.5,
+        2.4,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "living-south-west",
+      "label": "Living south glazed bay west",
+      "kind": "wall",
+      "at": [
+        -4.67,
+        1.8,
+        -5
+      ],
+      "rotation": 0,
+      "size": [
+        4.66,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 3.65,
+        "height": 2.45,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-south-centre",
+      "label": "Living south glazed bay centre",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -5
+      ],
+      "rotation": 0,
+      "size": [
+        4.66,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 3.65,
+        "height": 2.45,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-south-east",
+      "label": "Living south glazed bay east",
+      "kind": "wall",
+      "at": [
+        4.67,
+        1.8,
+        -5
+      ],
+      "rotation": 0,
+      "size": [
+        4.66,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 3.65,
+        "height": 2.45,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-east-wall",
+      "label": "Living east solid return",
+      "kind": "wall",
+      "at": [
+        7,
+        1.8,
+        -3
+      ],
+      "rotation": 1.5708,
+      "size": [
+        4,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "living-west-wall",
+      "label": "Living west solid return",
+      "kind": "wall",
+      "at": [
+        -7,
+        1.8,
+        -4
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-connector-wall",
+      "label": "Private wing internal connector",
+      "kind": "wall",
+      "at": [
+        -7,
+        1.8,
+        1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        8,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.1,
+        "height": 2.3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-connector-door",
+      "label": "Private wing door",
+      "kind": "entrance",
+      "parent": "private-connector-wall",
+      "at": [
+        0,
+        -0.45,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.1,
+        2.3,
+        0.1
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "private-north-wall",
+      "label": "Private wing north wall",
+      "kind": "wall",
+      "at": [
+        -12,
+        1.8,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-south-wall",
+      "label": "Private wing south glazed wall",
+      "kind": "wall",
+      "at": [
+        -12,
+        1.8,
+        -3
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.55,
+        "width": 4.2,
+        "height": 2.05,
+        "glazed": true
+      }
+    },
+    {
+      "id": "private-west-wall",
+      "label": "Private wing west wall",
+      "kind": "wall",
+      "at": [
+        -17,
+        1.8,
+        1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        8,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.7,
+        "width": 3.2,
+        "height": 1.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-connector-wall",
+      "label": "Service wing internal connector",
+      "kind": "wall",
+      "at": [
+        7,
+        1.8,
+        2
+      ],
+      "rotation": 1.5708,
+      "size": [
+        6,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.1,
+        "height": 2.3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "service-connector-door",
+      "label": "Service wing door",
+      "kind": "entrance",
+      "parent": "service-connector-wall",
+      "at": [
+        0,
+        -0.45,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.1,
+        2.3,
+        0.1
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "service-north-wall",
+      "label": "Service wing north wall",
+      "kind": "wall",
+      "at": [
+        10,
+        1.8,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.7,
+        "width": 2.4,
+        "height": 1.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-south-wall",
+      "label": "Service wing south wall",
+      "kind": "wall",
+      "at": [
+        10,
+        1.8,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.2,
+        "height": 2.3,
+        "glazed": false
+      }
+    },
+    {
+      "id": "service-east-wall",
+      "label": "Service wing east wall",
+      "kind": "wall",
+      "at": [
+        13,
+        1.8,
+        2
+      ],
+      "rotation": 1.5708,
+      "size": [
+        6,
+        3.2,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.7,
+        "width": 2.4,
+        "height": 1.7,
+        "glazed": true
+      }
+    },
+    {
+      "id": "main-roof",
+      "label": "Deep flat roof over living hall",
+      "kind": "roof",
+      "at": [
+        0,
+        3.55,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        15,
+        0.3,
+        11
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "private-hip-roof",
+      "label": "Private wing hip roof",
+      "kind": "roof",
+      "at": [
+        -12,
+        3.85,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.9,
+        8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.45,
+      "panels": 4
+    },
+    {
+      "id": "service-roof",
+      "label": "Service wing flat roof",
+      "kind": "roof",
+      "at": [
+        10,
+        3.55,
+        2
+      ],
+      "rotation": 0,
+      "size": [
+        6.7,
+        0.3,
+        6.7
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.35,
+      "panels": 4
+    },
+    {
+      "id": "entry-post-west",
+      "label": "Entry canopy west post",
+      "kind": "volume",
+      "at": [
+        -2,
+        1.7,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-post-east",
+      "label": "Entry canopy east post",
+      "kind": "volume",
+      "at": [
+        2,
+        1.7,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-canopy",
+      "label": "Covered entry canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.25,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        0.25,
+        2.4
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.2,
+      "panels": 4
+    },
+    {
+      "id": "pergola-post-west",
+      "label": "Terrace pergola west post",
+      "kind": "volume",
+      "at": [
+        6.2,
+        1.7,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        3,
+        0.25
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "pergola-post-east",
+      "label": "Terrace pergola east post",
+      "kind": "volume",
+      "at": [
+        9,
+        1.7,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        3,
+        0.25
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-pergola",
+      "label": "Outdoor kitchen shade canopy",
+      "kind": "roof",
+      "at": [
+        7.6,
+        3.25,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        3.4,
+        0.25,
+        4.5
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.2,
+      "panels": 4
+    },
+    {
+      "id": "outdoor-counter",
+      "label": "Outdoor kitchen counter",
+      "kind": "volume",
+      "at": [
+        7.5,
+        0.65,
+        -7.7
+      ],
+      "rotation": 0,
+      "size": [
+        2.4,
+        0.9,
+        0.75
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "outdoor-bar",
+      "label": "Outdoor bar counter",
+      "kind": "volume",
+      "at": [
+        7.5,
+        0.65,
+        -9.5
+      ],
+      "rotation": 0,
+      "size": [
+        2.4,
+        0.9,
+        0.65
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "terrace-sofa",
+      "label": "Terrace lounge sofa",
+      "kind": "sofa",
+      "at": [
+        3.5,
+        0.55,
+        -8.2
+      ],
+      "rotation": 0,
+      "size": [
+        2.6,
+        0.7,
+        1
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "id": "pool-bottom",
+      "label": "Pool basin floor",
+      "kind": "plate",
+      "at": [
+        -0.5,
+        -0.9,
+        -12.5
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        0.2,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-north-wall",
+      "label": "Pool north basin wall",
+      "kind": "wall",
+      "at": [
+        -0.5,
+        -0.3,
+        -9.85
+      ],
+      "rotation": 0,
+      "size": [
+        12.6,
+        1,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-south-wall",
+      "label": "Pool south basin wall",
+      "kind": "wall",
+      "at": [
+        -0.5,
+        -0.3,
+        -15.15
+      ],
+      "rotation": 0,
+      "size": [
+        12.6,
+        1,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-west-wall",
+      "label": "Pool west basin wall",
+      "kind": "wall",
+      "at": [
+        -6.65,
+        -0.3,
+        -12.5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5.6,
+        1,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-east-wall",
+      "label": "Pool east basin wall",
+      "kind": "wall",
+      "at": [
+        5.65,
+        -0.3,
+        -12.5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5.6,
+        1,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-water",
+      "label": "Rectangular pool water surface",
+      "kind": "water",
+      "at": [
+        -0.5,
+        0.02,
+        -12.5
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        0.1,
+        5
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "id": "beach-lounge-pavilion",
+      "label": "Open poolside elliptical lounge pavilion",
+      "kind": "pavilion",
+      "at": [
+        10.5,
+        0,
+        -13
+      ],
+      "rotation": 0,
+      "size": [
+        7,
+        3.8,
+        6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-edge-seat",
+      "label": "Poolside timber daybed",
+      "kind": "sofa",
+      "at": [
+        7.5,
+        0.55,
+        -12.5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2.4,
+        0.7,
+        1
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "The explicit request is for a Caribbean beach-house mansion with a US$10M value context. That value label is treated as an ambition for a substantial, carefully composed residence—not as an area or cost formula. This design therefore uses a single-level, approximately 290 m² enclosed main residence plus a large shaded terrace, pool court, arrival forecourt, and detached open lounge pavilion. A one-level arrangement is an intentional accessibility and indoor-outdoor-living response to the assumed beachfront setting, not a reduced programme. Assumptions: the sea/view lies south, the landward arrival is north, the climate is hot-humid, and the site is presently represented as a flat Y=0 plane because generated terrain is not available.",
+    "arrivalAndCirculation": "Arrival is from the assumed north/landward side across a limestone approach plate to a recessed solid front door under a post-supported canopy. The entry opens into the primary living hall. The private west wing and the compact east service wing connect directly to the hall through shared enclosure walls with actual internal door openings. Broad glazed southern bays lead from the living hall to a continuous pool terrace. The outdoor kitchen sits at the terrace’s eastern end, separated from the pool edge by a clear dry circulation band. The house is single-level, so no stair or upper-level access is required.",
+    "volumeHierarchy": "Primary volume: living hall centred at [0, 0.1, 0], 14 m wide by 10 m deep, with a 3.2 m enclosure height and broad south-facing glazed bays. Secondary private volume: west wing centred at [-12, 0.1, 1], 10 m by 8 m, visually subordinate beneath a limestone hip roof. Secondary service volume: east wing centred at [10, 0.1, 2], 6 m by 6 m, beneath a lower flat roof. A 18 m by 8 m south terrace begins directly at the living-room threshold. The pool is aligned parallel to the southern view, while the small open elliptical pavilion is set to the pool’s east as a separate sunset lounge.",
+    "relationshipsAndViews": "The plan assumes south-facing sea views and north-side arrival; these directions are conceptual and not survey data. The living hall is the view-facing centre, with glazed southern bays opening directly to the terrace. The private wing is set westward for separation from the entrance and active outdoor-kitchen zone. The service wing is eastward, adjacent to the outdoor kitchen and away from the pavilion lounge. The pool is rectangular and fully bounded by a modeled basin perimeter; it is not represented as an infinity-edge or hydraulically equipped pool.",
+    "roofFacadeAndMaterials": "A restrained Caribbean-contemporary palette combines ivory enclosure walls, limestone roof and pool-basin elements, bronze-framed glazed openings, and timber outdoor furnishings. The main hall has a deep flat roof with a 0.5 m perimeter overhang for shade. The private wing is deliberately lower and finished with a hip roof, giving the residence a clear central-to-secondary silhouette. Facade rhythm uses three independent broad glazed south bays across the living hall, smaller shaded openings to the side volumes, solid side returns, and a deeply sheltered entrance rather than an undifferentiated glass box.",
+    "intendedSpaces": [
+      "Covered north arrival threshold and approach",
+      "Primary living / dining hall",
+      "West private bedroom-suite wing shell",
+      "East service / kitchen-support wing shell",
+      "South shaded pool terrace",
+      "Outdoor kitchen and bar counter zone",
+      "Rectangular pool with explicit floor and perimeter walls",
+      "Detached open elliptical lounge pavilion"
+    ],
+    "designDecisions": [
+      {
+        "disposition": "guidance",
+        "knowledgeId": "property-value-10m-25m",
+        "decision": "Used the value label only as a prompt for a signature arrival, substantial central hall, purposeful secondary volumes, and entertaining terrace; it did not determine a cost or fixed area.",
+        "elementIds": [
+          "living-floor",
+          "private-floor",
+          "service-floor",
+          "arrival-approach",
+          "pool-terrace"
+        ],
+        "limitation": "No valuation, construction-cost estimate, luxury certification, or detailed interior fit-out is represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "tropical-envelope",
+        "decision": "Created shaded glazed southern openings, deep roof overhangs, a protected entry, and sheltered outdoor living appropriate to an assumed hot-humid Caribbean climate.",
+        "elementIds": [
+          "main-roof",
+          "living-south-west",
+          "living-south-centre",
+          "living-south-east",
+          "entry-canopy",
+          "terrace-pergola"
+        ],
+        "limitation": "Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "outdoor-entertaining",
+        "decision": "Constructed a covered terrace-end kitchen/bar counter zone with seating and direct adjacency to the indoor service wing.",
+        "elementIds": [
+          "pool-terrace",
+          "outdoor-counter",
+          "outdoor-bar",
+          "terrace-pergola",
+          "terrace-sofa"
+        ],
+        "limitation": "Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented."
+      },
+      {
+        "disposition": "guidance",
+        "knowledgeId": "waterfront-estate",
+        "decision": "Assumed a south-facing water view and located living, terrace, pool, and lounge toward it while keeping entry on the north side.",
+        "elementIds": [
+          "living-floor",
+          "pool-terrace",
+          "pool-water",
+          "beach-lounge-pavilion"
+        ],
+        "limitation": "No surveyed shoreline, flood elevation, setbacks, terrain, coastal access, or marine engineering is represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "estate-composition",
+        "decision": "Established a legible sequence from arrival to living hall to sheltered terrace and separated private and service volumes from the central entertaining space.",
+        "elementIds": [
+          "arrival-approach",
+          "entry-door",
+          "living-floor",
+          "private-floor",
+          "service-floor",
+          "pool-terrace"
+        ],
+        "limitation": "The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "covered-threshold",
+        "decision": "Built a genuine recessed door opening, solid door, approach plate, posts, and canopy at the north entry.",
+        "elementIds": [
+          "entry-wall",
+          "entry-door",
+          "arrival-approach",
+          "entry-post-west",
+          "entry-post-east",
+          "entry-canopy"
+        ],
+        "limitation": "Vehicle drive and drop-off geometry are not modeled."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "facade-materials",
+        "decision": "Applied coordinated ivory, limestone, bronze, and timber elements with deep roof edges and an articulated entrance.",
+        "elementIds": [
+          "main-roof",
+          "private-hip-roof",
+          "service-roof",
+          "entry-canopy",
+          "living-south-west",
+          "living-south-centre",
+          "living-south-east"
+        ],
+        "limitation": "Materials are scene-material representations, not product specifications or workmanship certification."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "hip-shelter",
+        "decision": "Used a subordinate hip roof over the private wing while retaining flat roofs over the principal hall and service wing.",
+        "elementIds": [
+          "private-hip-roof",
+          "main-roof",
+          "service-roof"
+        ],
+        "limitation": "Roof flashing, drainage, uplift resistance, and structural design require separate engineering."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "tropical-contemporary",
+        "decision": "Avoided a generic glass box by combining substantial walls, deep roofs, shaded glazing, a pool terrace, and an open lounge pavilion.",
+        "elementIds": [
+          "main-roof",
+          "living-south-west",
+          "living-south-centre",
+          "living-south-east",
+          "pool-terrace",
+          "beach-lounge-pavilion"
+        ],
+        "limitation": "Landscape, planting, and climate-performance simulation are not available."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "composition-hierarchy",
+        "decision": "Made the living hall the largest and most open volume, stepping the private and service volumes down around it.",
+        "elementIds": [
+          "living-floor",
+          "private-floor",
+          "service-floor",
+          "main-roof",
+          "private-hip-roof",
+          "service-roof"
+        ],
+        "limitation": "Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "veranda-edge",
+        "decision": "Created a broad occupied terrace with a continuous dry route, posts, canopy, direct glazed access, and a pool-facing lounge edge.",
+        "elementIds": [
+          "pool-terrace",
+          "terrace-pergola",
+          "pergola-post-west",
+          "pergola-post-east",
+          "living-south-west",
+          "living-south-centre",
+          "living-south-east"
+        ],
+        "limitation": "The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented."
+      }
+    ]
+  }
+}

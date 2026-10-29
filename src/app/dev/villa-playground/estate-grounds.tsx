@@ -1,4 +1,5 @@
 'use client';
+import { VILLA_LIMITS as L } from '@/lib/villa/limits';
 import { memo, useMemo } from 'react';
 import * as THREE from 'three';
 import { Vegetation } from '@/components/workspace/viewport/scenery/vegetation';
@@ -66,10 +67,10 @@ export const EstateGrounds=memo(function EstateGrounds({composition:c}:{composit
     {l.beds.map(b=><group key={b.id} position={[b.x,-.16,b.z]} name={`Formal garden · ${b.id}`}>
       <FinishBox name="garden-bed-stone-edge" at={[0,-.12,0]} size={[b.width,.32,b.depth]} color="#bbae8c" surface="stone" />
       <FinishBox name="garden-bed-soil" at={[0,.05,0]} size={[b.width-.22,.04,b.depth-.22]} color="#717d55" surface="grass" />
-      {[-1,1].flatMap(s=>Array.from({length:Math.max(2,Math.floor(b.width/.8))},(_,i)=>{
-        const n=Math.max(2,Math.floor(b.width/.8));return <group key={`${s}-x-${i}`} position={[-b.width/2+.5+i*(b.width-1)/(n-1),.08,s*(b.depth/2-.45)]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>;
+      {[-1,1].flatMap(s=>Array.from({length:Math.min(L.bedEdgePlants,Math.max(2,Math.floor(b.width/.8)))},(_,i)=>{
+        const n=Math.min(L.bedEdgePlants,Math.max(2,Math.floor(b.width/.8)));return <group key={`${s}-x-${i}`} position={[-b.width/2+.5+i*(b.width-1)/(n-1),.08,s*(b.depth/2-.45)]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>;
       }))}
-      {[-1,1].flatMap(s=>Array.from({length:Math.max(1,Math.floor((b.depth-1.5)/.85))},(_,i)=><group key={`${s}-z-${i}`} position={[s*(b.width/2-.45),.08,-b.depth/2+1.2+i*.85]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>))}
+      {[-1,1].flatMap(s=>Array.from({length:Math.min(L.bedEdgePlants,Math.max(1,Math.floor((b.depth-1.5)/.85)))},(_,i)=><group key={`${s}-z-${i}`} position={[s*(b.width/2-.45),.08,-b.depth/2+1.2+i*Math.max(0,b.depth-2.4)/Math.max(1,Math.min(L.bedEdgePlants,Math.max(1,Math.floor((b.depth-1.5)/.85)))-1)]}><Vegetation kind="shrub" variant={0} height={.65} tint={tint} /></group>))}
       <Vegetation kind="oak" variant={0} height={3.5} tint={tint} />
     </group>)}
   </group>;

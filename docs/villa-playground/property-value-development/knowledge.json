@@ -1,0 +1,119 @@
+{
+  "project": {
+    "scale": "estate",
+    "propertyValue": {
+      "amount": 25000000,
+      "profileId": "property-value-25m-50m",
+      "referenceOnly": true
+    },
+    "location": [
+      "tropical",
+      "waterfront"
+    ],
+    "style": [
+      "contemporary"
+    ],
+    "use": "residential",
+    "requirements": [],
+    "brief": "ARCHITECTURAL DEVELOPMENT PASS: Improve the retained $25m contemporary tropical waterfront residence. Review actual composition, proportions, primary/secondary volumes, entrance hierarchy, suite privacy, facade glazing/material balance, roof setbacks, shade and connected indoor-outdoor spaces. Prioritize meaningful massing improvements when needed, rather than decorating. Select only justified amenities. Do not inflate counts. Resolve access/enclosure with existing operations where possible; disclose remaining unsupported features. No invented market or construction-cost claims.\nDevelop this existing composition using targeted atomic scene operations. Coordinate entrances, facade bay proportions, openings, roof edges, shade, balconies and material depth with the existing spatial hierarchy. Preserve unrelated elements, terrain and stable IDs. Repair related supports together. Retrieve scoped lightweight knowledge for these areas. Do not replace the house or add repetitive decoration. Disclose unresolved circulation/enclosure; Massing revision is authorized: prioritize meaningful primary/secondary volume and programme improvement; coordinate all dependent geometry and explain the change. Preserve the existing residence rather than generating a replacement."
+  },
+  "budget": {
+    "entries": 4,
+    "chars": 6500,
+    "tier": "scoped"
+  },
+  "selected": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "category": "materials",
+      "score": 18,
+      "reasons": [
+        "brief matches facade",
+        "brief matches roof",
+        "adds materials coverage"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "category": "composition",
+      "score": 15,
+      "reasons": [
+        "brief matches waterfront",
+        "adds composition coverage"
+      ]
+    },
+    {
+      "id": "roof-main-secondary",
+      "version": 1,
+      "category": "roof-outdoor",
+      "score": 14.3,
+      "reasons": [
+        "brief matches roof",
+        "brief matches secondary",
+        "adds roof-outdoor coverage"
+      ]
+    },
+    {
+      "id": "waterfront-estate",
+      "version": 1,
+      "category": "climate-site",
+      "score": 13,
+      "reasons": [
+        "brief matches waterfront",
+        "adds climate-site coverage"
+      ]
+    }
+  ],
+  "text": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions prevail. Select relevant combinations, never all amenities. Resolve building character, programme, primary and secondary volumes, entrance, circulation and privacy before detailing. Construct actual floors, enclosure, openings, roofs and required support using only scene operations. Cite relevant constructed IDs in designDecisions; disclose unsupported parts and missing access/services. Descriptions and element names are not construction evidence. Unknown site facts remain assumptions. Scoped edit: preserve unrelated geometry and programme. Stored knowledge is retrieval, not retraining.\n{\"id\":\"facade-materials\",\"version\":1,\"category\":\"materials\",\"when\":\"A residence needing coherent enclosure and material expression.\",\"title\":\"Facade depth, roofs and material identity\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"estate-composition\",\"version\":1,\"category\":\"composition\",\"when\":\"Large private residences with substantial entertaining and service needs.\",\"title\":\"Estate programme and hierarchy\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"roof-main-secondary\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Use when the brief or chosen programme calls for primary and secondary roof hierarchy.\",\"title\":\"Primary and secondary roof hierarchy\",\"combinations\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"placement\":\"Give the principal occupied volume a clear roof and set lower roofs over subordinate spaces.\",\"principles\":\"Do not let lower roofs intersect upper room windows.\",\"capabilities\":\"Use direct-scene primitives: plate, roof. No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"roof\"],\"materials\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"supports\":\"Support elevated decks with walls or posts, guard exposed edges, provide actual door access and supported shade.\",\"unsupported\":\"No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\"}}\n{\"id\":\"waterfront-estate\",\"version\":1,\"category\":\"climate-site\",\"when\":\"Sites with a stated water edge or coastal view.\",\"title\":\"Waterfront privacy and site sequence\",\"combinations\":\"Consider view terraces and pools; docks only with suitable water access, brief and permissions.\",\"placement\":\"Protect the public shore edge and setbacks; place living towards views, private suites away from public routes, vehicle arrival landward when feasible.\",\"principles\":\"Do not invent a surveyed shore, flood elevation or legal setback; keep site assumptions explicit.\",\"capabilities\":\"Flat site composition and water surfaces are available; no coastal terrain, flood simulation or marine engineering.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Flat site composition and water surfaces are available; no coastal terrain, flood simulation or marine engineering. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n",
+  "chars": 5644,
+  "evidence": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "roof-main-secondary",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "roof"
+      ]
+    },
+    {
+      "id": "waterfront-estate",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    }
+  ],
+  "metrics": {
+    "eligible": 84,
+    "selected": 4,
+    "categories": [
+      "materials",
+      "composition",
+      "roof-outdoor",
+      "climate-site"
+    ],
+    "omitted": 80,
+    "estimatedTokens": 1411,
+    "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+  }
+}

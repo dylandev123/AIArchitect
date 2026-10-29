@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { ArchitecturalWorkspaceView, GenerationMode, Project, ProjectType, ProjectVersion, TimeOfDay } from "@/types/project";
+import { validateScene } from "@/lib/villa/scene/model";
 import { BLANK_HOUSE_JSON } from "@/types/house";
 import { BLANK_V3_SCENE, isV3ProjectRoot } from "@/lib/v3/scene";
 import { projectModeAuthority, resolveProjectGenerationMode } from "@/lib/v3/projectMode";
@@ -34,8 +35,12 @@ function normalizePersistedProject(project: Project): Project {
   return { ...project, generationMode: project.generationMode === "v3-scene" ? "v3-scene" : resolveProjectGenerationMode(project) };
 }
 
-/** V3 commits cannot silently replace semantic authority with another project format. */
-function assertV3Commit(project: Project | undefined, json: string): void {
+/** Current scene commits cannot silently replace their authoritative project format. */
+function assertProjectCommit(project: Project | undefined, json: string): void {
+  if (project && resolveProjectGenerationMode(project) === "direct-scene") {
+    validateScene(JSON.parse(json));
+    return;
+  }
   if (!project || (project.generationMode !== "v3-scene" && resolveProjectGenerationMode(project) !== "v3-scene")) return;
   let root: unknown;
   try { root = JSON.parse(json); } catch { throw new Error("V3 commit requires valid JSON; the current scene was preserved."); }
@@ -56,7 +61,7 @@ function assertV3Commit(project: Project | undefined, json: string): void {
 
 /** State and diagnostics are committed in the same JSON/version as the scene. */
 function prepareArchitecturalCommit(project: Project | undefined, json: string, writer: string): string {
-  assertV3Commit(project,json);
+  assertProjectCommit(project,json);
   if (!project || (project.generationMode!=="v3-scene" && resolveProjectGenerationMode(project)!=="v3-scene")) return json;
   const root = JSON.parse(json);
   if (!isV3ProjectRoot(root)) return json;
@@ -103,6 +108,10 @@ function logConfigChange(id: string, houseConfigJson: string, source: string): v
   if (process.env.NODE_ENV === "production") return;
   try {
     const raw = JSON.parse(houseConfigJson) as Record<string, unknown>;
+    if (raw.version === "architectural-scene-1") {
+      console.info("[DIRECT SCENE]", {revision:++devConfigRevision,source,projectId:id});
+      return;
+    }
     if (isV3ProjectRoot(raw)) {
       console.info("[V3 CONFIG]", { revision: ++devConfigRevision, source, projectId: id, objectCount: raw.v3Scene.objects.length });
       return;
@@ -184,8 +193,8 @@ export const useProjectStore = create<ProjectStore>()(
         return project;
       },
 
-      createProject: (name, projectType = "house", generationMode = "v2-architectural", v3TerrainMode = "flat") => {
-        const initialJson = generationMode === "v3-scene" ? JSON.stringify(BLANK_V3_SCENE) : BLANK_HOUSE_JSON;
+      createProject: (name, projectType = "house", generationMode = "direct-scene", v3TerrainMode = "flat") => {
+        const initialJson = generationMode === "direct-scene" ? JSON.stringify({version:"architectural-scene-1",name,elements:[]}) : generationMode === "v3-scene" ? JSON.stringify(BLANK_V3_SCENE) : BLANK_HOUSE_JSON;
         const initialVersion = makeVersion("Blank project", initialJson);
         const project: Project = {
           id: crypto.randomUUID(),
@@ -286,7 +295,7 @@ export const useProjectStore = create<ProjectStore>()(
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex <= 0) return p;
             const nextIndex = p.currentVersionIndex - 1;
-            assertV3Commit(p, p.versions[nextIndex].houseConfigJson);
+            assertProjectCommit(p, p.versions[nextIndex].houseConfigJson);
             logConfigChange(id, p.versions[nextIndex].houseConfigJson, "undo");
             return {
               ...p,
@@ -302,7 +311,7 @@ export const useProjectStore = create<ProjectStore>()(
           projects: state.projects.map((p) => {
             if (p.id !== id || p.currentVersionIndex >= p.versions.length - 1) return p;
             const nextIndex = p.currentVersionIndex + 1;
-            assertV3Commit(p, p.versions[nextIndex].houseConfigJson);
+            assertProjectCommit(p, p.versions[nextIndex].houseConfigJson);
             logConfigChange(id, p.versions[nextIndex].houseConfigJson, "redo");
             return {
               ...p,
@@ -317,7 +326,7 @@ export const useProjectStore = create<ProjectStore>()(
         set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id || versionIndex < 0 || versionIndex >= p.versions.length) return p;
-            assertV3Commit(p, p.versions[versionIndex].houseConfigJson);
+            assertProjectCommit(p, p.versions[versionIndex].houseConfigJson);
             logConfigChange(id, p.versions[versionIndex].houseConfigJson, "restoreVersion");
             return {
               ...p,

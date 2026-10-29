@@ -1,0 +1,1133 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Maison des Alizés",
+  "elements": [
+    {
+      "id": "salon-floor",
+      "label": "Central salon floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-wing-floor",
+      "label": "West private wing floor",
+      "kind": "plate",
+      "at": [
+        -13,
+        0.1,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-wing-floor",
+      "label": "East private wing floor",
+      "kind": "plate",
+      "at": [
+        13,
+        0.1,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "arrival-court",
+      "label": "Landward arrival court",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -9
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.2,
+        6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "ocean-terrace",
+      "label": "Covered ocean terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        8
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "salon-view-left",
+      "label": "Ocean glazing left bay",
+      "kind": "wall",
+      "at": [
+        -5.4,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-view-center",
+      "label": "Ocean glazing center bay",
+      "kind": "wall",
+      "at": [
+        0,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "salon-view-right",
+      "label": "Ocean glazing right bay",
+      "kind": "wall",
+      "at": [
+        5.4,
+        2.4,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        5.2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.5,
+        "height": 3.35,
+        "glazed": true
+      }
+    },
+    {
+      "id": "entry-wall-left",
+      "label": "Entry rear wall left return",
+      "kind": "wall",
+      "at": [
+        -5,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "entry-wall-door",
+      "label": "Entry door wall",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.8,
+        "height": 2.8,
+        "glazed": false
+      }
+    },
+    {
+      "id": "entry-door",
+      "label": "Recessed bronze entrance door",
+      "kind": "entrance",
+      "parent": "entry-wall-door",
+      "at": [
+        0,
+        -0.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.8,
+        2.8,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "entry-wall-right",
+      "label": "Entry rear wall right return",
+      "kind": "wall",
+      "at": [
+        5,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-west-return",
+      "label": "Salon west ocean return",
+      "kind": "wall",
+      "at": [
+        -8,
+        2.4,
+        5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "salon-east-return",
+      "label": "Salon east ocean return",
+      "kind": "wall",
+      "at": [
+        8,
+        2.4,
+        5
+      ],
+      "rotation": 1.5708,
+      "size": [
+        2,
+        4.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-outer-wall",
+      "label": "West wing private outer wall",
+      "kind": "wall",
+      "at": [
+        -18,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1.1,
+        "width": 3.2,
+        "height": 1.5,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-rear-wall",
+      "label": "West wing landward wall",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": -2.5,
+        "sill": 1,
+        "width": 2.5,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-front-wall",
+      "label": "West wing garden wall",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 2.5,
+        "sill": 1,
+        "width": 2.5,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "west-inner-wall",
+      "label": "West wing inner privacy wall",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.6,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-outer-wall",
+      "label": "East wing private outer wall",
+      "kind": "wall",
+      "at": [
+        18,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1.1,
+        "width": 3.2,
+        "height": 1.5,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-rear-wall",
+      "label": "East wing landward wall",
+      "kind": "wall",
+      "at": [
+        13,
+        1.9,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 2.5,
+        "sill": 1,
+        "width": 2.5,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-front-wall",
+      "label": "East wing garden wall",
+      "kind": "wall",
+      "at": [
+        13,
+        1.9,
+        4
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": -2.5,
+        "sill": 1,
+        "width": 2.5,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "east-inner-wall",
+      "label": "East wing inner privacy wall",
+      "kind": "wall",
+      "at": [
+        8,
+        1.9,
+        -1
+      ],
+      "rotation": 1.5708,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.6,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "salon-roof",
+      "label": "Tall central salon roof",
+      "kind": "roof",
+      "at": [
+        0,
+        4.78,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        17.2,
+        0.35,
+        13.2
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "west-wing-roof",
+      "label": "West wing roof",
+      "kind": "roof",
+      "at": [
+        -13,
+        3.58,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        0.35,
+        10.8
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "id": "east-wing-roof",
+      "label": "East wing roof",
+      "kind": "roof",
+      "at": [
+        13,
+        3.58,
+        -1
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        0.35,
+        10.8
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "id": "entry-post-west",
+      "label": "Entry canopy west post",
+      "kind": "volume",
+      "at": [
+        -3.4,
+        1.8,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-post-east",
+      "label": "Entry canopy east post",
+      "kind": "volume",
+      "at": [
+        3.4,
+        1.8,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-canopy",
+      "label": "Entrance weather canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.58,
+        -8.5
+      ],
+      "rotation": 0,
+      "size": [
+        8.4,
+        0.35,
+        5.2
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-west",
+      "label": "Terrace canopy west ocean post",
+      "kind": "volume",
+      "at": [
+        -7.5,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-midwest",
+      "label": "Terrace canopy west middle post",
+      "kind": "volume",
+      "at": [
+        -2.7,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-mideast",
+      "label": "Terrace canopy east middle post",
+      "kind": "volume",
+      "at": [
+        2.7,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-post-east",
+      "label": "Terrace canopy east ocean post",
+      "kind": "volume",
+      "at": [
+        7.5,
+        1.8,
+        13.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.35,
+        3.4,
+        0.35
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-canopy",
+      "label": "Deep ocean terrace canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.58,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        17.2,
+        0.35,
+        8
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "screen-west",
+      "label": "West bronze privacy screen",
+      "kind": "screen",
+      "at": [
+        -17.82,
+        1.9,
+        1.9
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 12
+    },
+    {
+      "id": "screen-east",
+      "label": "East bronze privacy screen",
+      "kind": "screen",
+      "at": [
+        17.82,
+        1.9,
+        1.9
+      ],
+      "rotation": 1.5708,
+      "size": [
+        3.2,
+        3,
+        0.12
+      ],
+      "material": "bronze",
+      "panels": 12
+    },
+    {
+      "id": "pool-basin-floor",
+      "label": "Pool basin floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.03,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.06,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-water",
+      "label": "Rectangular pool water surface",
+      "kind": "water",
+      "at": [
+        0,
+        0.2,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.05,
+        5
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-west",
+      "label": "Pool west coping",
+      "kind": "plate",
+      "at": [
+        -7.45,
+        0.1,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        0.9,
+        0.2,
+        6.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-east",
+      "label": "Pool east coping",
+      "kind": "plate",
+      "at": [
+        7.45,
+        0.1,
+        18
+      ],
+      "rotation": 0,
+      "size": [
+        0.9,
+        0.2,
+        6.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-south",
+      "label": "Pool south coping",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        15.05
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.9
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-coping-north",
+      "label": "Pool north coping",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        20.95
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.9
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-west",
+      "label": "Pool basin west wall",
+      "kind": "wall",
+      "at": [
+        -7,
+        0.1,
+        18
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-east",
+      "label": "Pool basin east wall",
+      "kind": "wall",
+      "at": [
+        7,
+        0.1,
+        18
+      ],
+      "rotation": 1.5708,
+      "size": [
+        5,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-south",
+      "label": "Pool basin south wall",
+      "kind": "wall",
+      "at": [
+        0,
+        0.1,
+        15.5
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-wall-north",
+      "label": "Pool basin north wall",
+      "kind": "wall",
+      "at": [
+        0,
+        0.1,
+        20.5
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.15
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "ocean-pavilion",
+      "label": "Open elliptical ocean lounge pavilion",
+      "kind": "pavilion",
+      "at": [
+        0,
+        0.2,
+        26
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        4.2,
+        8
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "poolside-lounge-deck",
+      "label": "Poolside limestone lounge deck",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        23
+      ],
+      "rotation": 0,
+      "size": [
+        15,
+        0.2,
+        3
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "This is a deliberately expansive single-storey waterfront estate: approximately 390 m² of enclosed principal accommodation plus a substantial sheltered ocean terrace, arrival court, pool surround and detached open-air lounge. The low, spread composition suits a completely flat Saint Lucia oceanfront property, keeps every major room directly connected to exterior living, and invests the $25 million ambition in generous spans, deep shade, crafted material contrast and a complete arrival-to-water sequence rather than unnecessary storeys.",
+    "arrivalAndCirculation": "Arrival is assumed from the landward south side. A limestone approach court leads to a recessed bronze front door beneath a dedicated canopy. The entrance opens directly into the tall central living salon, with bedroom wings branching west and east. The oceanward axis continues through broad glazed openings to a shaded terrace, pool court and a detached open elliptical ocean lounge pavilion.",
+    "volumeHierarchy": "The double-height central salon is the unmistakable primary volume. Two lower, broad bedroom/service wings extend laterally from it as quiet subordinate bars. The entrance canopy, ocean terrace canopy and pavilion read as lighter outdoor structures, creating a clear progression from protected landward arrival to open seaward living.",
+    "relationshipsAndViews": "The central salon is oriented toward the assumed ocean outlook to the north, with three separate framed glazed bays rather than an indiscriminate glass curtain. Its terrace is immediately beyond, shaded by a deep flat canopy and structured by timber posts. The lateral wings retain comparatively solid, private external edges while their inner walls connect back to the central living volume. The pool court and pavilion extend the same central axis without claiming a surveyed shoreline.",
+    "roofFacadeAndMaterials": "A family of thin, deep flat roofs unifies the low wings, taller salon, entry threshold and terrace canopy. Limestone ground planes and coping establish a durable base palette; ivory walls provide calm tropical mass; bronze doors and slatted screens add depth; timber posts and pavilion furniture soften the ocean-facing outdoor rooms. Material selections express coastal character only and are not corrosion, waterproofing, hurricane, drainage or thermal-performance certifications.",
+    "intendedSpaces": [
+      "Covered landward arrival court and recessed entrance threshold",
+      "Double-height central living and entertaining salon",
+      "West private bedroom-suite wing",
+      "East private bedroom-suite and flexible service wing",
+      "Large covered ocean-view dining and lounge terrace",
+      "Rectangular pool court with explicit perimeter coping and basin floor",
+      "Detached open elliptical ocean lounge pavilion"
+    ],
+    "designDecisions": [
+      {
+        "disposition": "constructed",
+        "knowledgeId": "estate-composition",
+        "decision": "Organized the estate as arrival, central salon, shaded ocean terrace, pool court and a subordinate open pavilion; private wings remain secondary to the main residence.",
+        "elementIds": [
+          "arrival-court",
+          "entry-door",
+          "salon-floor",
+          "salon-roof",
+          "ocean-terrace",
+          "pool-water",
+          "ocean-pavilion"
+        ],
+        "limitation": "Individual bedrooms and service rooms are spatially represented by wings, not fully partitioned interior fit-outs."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "tropical-envelope",
+        "decision": "Used deep canopies, shaded view glazing and selective bronze screens to support a tropical indoor-outdoor lifestyle.",
+        "elementIds": [
+          "terrace-canopy",
+          "terrace-post-west",
+          "terrace-post-east",
+          "salon-view-left",
+          "salon-view-center",
+          "salon-view-right",
+          "screen-west",
+          "screen-east"
+        ],
+        "limitation": "Wind, rain, thermal, corrosion and hurricane performance are not simulated or certified."
+      },
+      {
+        "disposition": "guidance",
+        "knowledgeId": "waterfront-estate",
+        "decision": "Assumed the ocean is north of the composition and placed arrival to the south, while orienting shared living and terrace spaces toward the view.",
+        "elementIds": [
+          "entry-door",
+          "salon-floor",
+          "ocean-terrace",
+          "pool-water"
+        ],
+        "limitation": "No shoreline, surveyed flood datum, coastal setback, public access route or marine work is modelled."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "contemporary-rustic",
+        "decision": "Balanced ivory enclosure with limestone planes, timber outdoor supports and bronze accents for a warm contemporary tropical character.",
+        "elementIds": [
+          "salon-floor",
+          "west-wing-floor",
+          "east-wing-floor",
+          "salon-roof",
+          "entry-door",
+          "terrace-post-west",
+          "terrace-post-east"
+        ],
+        "limitation": "Material enums are visual scene materials, not specifications for stone, timber or metal construction."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "roof-flat-parapet",
+        "decision": "Used independent thin flat roof planes to establish a calm horizontal roof hierarchy over salon, wings and exterior rooms.",
+        "elementIds": [
+          "salon-roof",
+          "west-wing-roof",
+          "east-wing-roof",
+          "entry-canopy",
+          "terrace-canopy"
+        ],
+        "limitation": "No parapet drainage, waterproofing, roof loading or code-compliant guard design is represented."
+      },
+      {
+        "disposition": "guidance",
+        "knowledgeId": "coastal-durability",
+        "decision": "Protected the most exposed glazed terrace edge with a deep roof and restrained material palette.",
+        "elementIds": [
+          "terrace-canopy",
+          "salon-view-left",
+          "salon-view-center",
+          "salon-view-right",
+          "screen-west",
+          "screen-east"
+        ],
+        "limitation": "Coastal corrosion resistance, fixings and hurricane engineering require local design professionals."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "living-view",
+        "decision": "Connected the central salon to its covered terrace through three distinct ocean-facing glazed bays, retaining solid edge walls for composition.",
+        "elementIds": [
+          "salon-view-left",
+          "salon-view-center",
+          "salon-view-right",
+          "ocean-terrace",
+          "terrace-canopy"
+        ],
+        "limitation": "Furniture layout, glare control and view analysis are not modelled."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "covered-threshold",
+        "decision": "Built a real approach slab, recessed door opening, solid entrance door, posts and canopy as a weather-protected arrival sequence.",
+        "elementIds": [
+          "arrival-court",
+          "entry-wall-left",
+          "entry-wall-door",
+          "entry-wall-right",
+          "entry-door",
+          "entry-canopy",
+          "entry-post-west",
+          "entry-post-east"
+        ],
+        "limitation": "Door swing, lock hardware and accessibility clearance are not verified."
+      },
+      {
+        "disposition": "guidance",
+        "knowledgeId": "site-flat-hillside-disclosure",
+        "decision": "Kept every floor datum at a consistent low level over the mandated flat Y=0 site staging plane.",
+        "elementIds": [
+          "salon-floor",
+          "west-wing-floor",
+          "east-wing-floor",
+          "arrival-court",
+          "ocean-terrace"
+        ],
+        "limitation": "The scene intentionally does not model Saint Lucia topography, cut/fill, road grades, retaining walls or a surveyed site."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "asymmetric-balance",
+        "decision": "Balanced a taller central salon against long low lateral wings and a light ocean terrace canopy, all tied by common horizontal datums.",
+        "elementIds": [
+          "salon-roof",
+          "west-wing-roof",
+          "east-wing-roof",
+          "terrace-canopy"
+        ],
+        "limitation": ""
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "deep-overhang",
+        "decision": "Extended flat roof coverage over both the view glazing and principal outdoor terrace, with posts providing a visible support path to the terrace slab.",
+        "elementIds": [
+          "terrace-canopy",
+          "terrace-post-west",
+          "terrace-post-east",
+          "terrace-post-midwest",
+          "terrace-post-mideast",
+          "ocean-terrace"
+        ],
+        "limitation": "Rainfall and solar performance are not simulated."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "solid-glass-balance",
+        "decision": "Concentrated broad glazing at the principal ocean-facing living elevation while keeping bedroom-wing exterior edges mostly solid and screened.",
+        "elementIds": [
+          "salon-view-left",
+          "salon-view-center",
+          "salon-view-right",
+          "west-outer-wall",
+          "east-outer-wall",
+          "screen-west",
+          "screen-east"
+        ],
+        "limitation": "Thermal and privacy performance have not been calculated."
+      }
+    ]
+  }
+}

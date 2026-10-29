@@ -1,0 +1,162 @@
+{
+  "source": "docs/villa-playground/25m-mansion-recovery/original.scene.json",
+  "sha256": "429b5da93a705c881b6943fc8877a56499845dd14405faea42ef2157710b9219",
+  "rawOriginal": true,
+  "elements": 67,
+  "relationshipIssues": [
+    {
+      "id": "east-terrace-rail",
+      "rule": "railing-deck",
+      "message": "east-terrace-rail: Railing base and full rendered span need a supporting deck at the walking surface."
+    },
+    {
+      "id": "west-terrace-rail",
+      "rule": "railing-deck",
+      "message": "west-terrace-rail: Railing base and full rendered span need a supporting deck at the walking surface."
+    }
+  ],
+  "architecturalAudit": {
+    "status": "incomplete",
+    "issues": [
+      "Floor surfaces retreat-floor and owner-floor overlap at the same datum; summed usable area is withheld.",
+      "Floor surfaces retreat-floor and guest-floor overlap at the same datum; summed usable area is withheld.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+      "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+    ],
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 15,
+        "wall": 35,
+        "glazing": 3,
+        "entrance": 1,
+        "roof": 6,
+        "volume": 2,
+        "screen": 1,
+        "balcony": 2,
+        "water": 1,
+        "sofa": 1
+      },
+      "surfaces": [
+        {
+          "id": "salon-floor",
+          "kind": "plate",
+          "areaM2": 192,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "lounge-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "dining-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "gallery-floor",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "kitchen-floor",
+          "kind": "plate",
+          "areaM2": 48,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "loggia-deck",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "owner-floor",
+          "kind": "plate",
+          "areaM2": 120,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "guest-floor",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "retreat-floor",
+          "kind": "plate",
+          "areaM2": 88,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "east-terrace-deck",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 3.65
+        },
+        {
+          "id": "west-terrace-deck",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 3.65
+        },
+        {
+          "id": "pool-basin",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 0.04
+        },
+        {
+          "id": "pool-coping-south",
+          "kind": "plate",
+          "areaM2": 8.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-west",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-east",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-water",
+          "kind": "water",
+          "areaM2": 72,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [
+        [
+          "retreat-floor",
+          "owner-floor"
+        ],
+        [
+          "retreat-floor",
+          "guest-floor"
+        ]
+      ],
+      "walkingDatums": [
+        0.2,
+        3.6,
+        3.65,
+        0.04
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 72
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  }
+}

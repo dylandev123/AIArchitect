@@ -1,9 +1,16 @@
+import type { CreatedComponent } from '@/lib/villa/creation/instance';
+import type { FootprintBuilding } from '@/lib/villa/footprint';
+import { VILLA_LIMITS as L } from '@/lib/villa/limits';
 import type { PavilionPlacement } from '@/lib/villa/experimental/curved-pavilion';
 import type { EstateLandscape } from '@/lib/villa/estate-landscape';
 import { defaultVilla, type VillaConfig } from '@/lib/villa/design';
 
 /** Shared metre-based wing model. Terra authors validated component configurations. */
 export interface Wing {
+  roofRise?:number;
+  facadeOpenings?:{face:'front'|'rear'|'left'|'right';level:number;openings:Omit<NonNullable<FootprintBuilding['preciseOpenings']>[number],'edge'>[]}[];
+  eave?: number;
+  appearance?: Pick<VillaConfig,'style'|'roof'|'exterior'|'glazing'>;
   id: string;
   x: number; z: number;
   width: number; depth: number;
@@ -19,6 +26,8 @@ export interface Wing {
 export interface Terrace { id: string; x: number; z: number; width: number; depth: number; timber?: boolean }
 export interface WingComposition {
   authored?: boolean;
+  createdComponents?: CreatedComponent[];
+  forms?: FootprintBuilding[];
   components?: PavilionPlacement[];
   experimentalForms?: PavilionPlacement[];
   estateLandscape?: EstateLandscape;
@@ -67,8 +76,8 @@ export function validateWings(wings: Wing[]) {
     if (![w.x, w.z, w.width, w.depth, w.storeyHeight].every(Number.isFinite) ||
       !Number.isFinite(w.orientation) || w.orientation < 0 || w.orientation > 345 || w.orientation % 15 !== 0 || ![1, 2].includes(w.storeys) ||
       w.width < (w.role === 'gallery' ? 1 : w.storeys === 2 ? 8 : 4) || w.depth < (w.role === 'gallery' ? 1 : 4) ||
-      Math.max(w.width, w.depth) > 32 || w.storeyHeight < 3 || w.storeyHeight > 4.5 ||
-      (w.veranda !== undefined && (w.veranda < 0 || w.veranda > 3)) ||
+      Math.max(w.width, w.depth) > (w.role === 'gallery' ? L.gallerySpan : L.wing) || w.storeyHeight < 3 || w.storeyHeight > L.storeyHeight ||
+      (w.veranda !== undefined && (w.veranda < 0 || w.veranda > L.veranda)) ||
       (w.balcony !== undefined && (w.balcony < 0 || w.balcony > Math.min(2.4, w.depth / 3)))) throw new Error(`Unsupported wing proportions: ${w.id}`);
     for (const other of wings) {
       if (other === w) continue;

@@ -1,0 +1,113 @@
+{
+  "project": {
+    "scale": "family",
+    "location": [],
+    "style": [],
+    "use": "residential",
+    "requirements": [],
+    "brief": "ARCHITECTURAL DEVELOPMENT PASS: Develop entrance portal, window rhythm, recessed facade bays, terrace doors and roof edges. Preserve unrelated elements.\nDevelop this existing composition using targeted atomic scene operations. Coordinate entrances, facade bay proportions, openings, roof edges, shade, balconies and material depth with the existing spatial hierarchy. Preserve unrelated elements, terrain and stable IDs. Repair related supports together. Retrieve scoped lightweight knowledge for these areas. Do not replace the house or add repetitive decoration. Disclose unresolved circulation/enclosure; if massing needs revision, explain it rather than silently changing the composition."
+  },
+  "budget": {
+    "entries": 4,
+    "chars": 6500,
+    "tier": "scoped"
+  },
+  "selected": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "category": "materials",
+      "score": 18,
+      "reasons": [
+        "brief matches facade",
+        "brief matches roof",
+        "adds materials coverage"
+      ]
+    },
+    {
+      "id": "entry-night-material",
+      "version": 1,
+      "category": "arrival",
+      "score": 10.3,
+      "reasons": [
+        "brief matches entrance",
+        "brief matches material",
+        "adds arrival coverage"
+      ]
+    },
+    {
+      "id": "facade-pier-rhythm",
+      "version": 1,
+      "category": "envelope",
+      "score": 10.3,
+      "reasons": [
+        "brief matches facade",
+        "brief matches rhythm",
+        "adds envelope coverage"
+      ]
+    },
+    {
+      "id": "roof-terrace-door",
+      "version": 1,
+      "category": "roof-outdoor",
+      "score": 10,
+      "reasons": [
+        "brief matches roof",
+        "brief matches terrace",
+        "adds roof-outdoor coverage"
+      ]
+    }
+  ],
+  "text": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions prevail. Select relevant combinations, never all amenities. Resolve building character, programme, primary and secondary volumes, entrance, circulation and privacy before detailing. Construct actual floors, enclosure, openings, roofs and required support using only scene operations. Cite relevant constructed IDs in designDecisions; disclose unsupported parts and missing access/services. Descriptions and element names are not construction evidence. Unknown site facts remain assumptions. Scoped edit: preserve unrelated geometry and programme. Stored knowledge is retrieval, not retraining.\n{\"id\":\"facade-materials\",\"version\":1,\"category\":\"materials\",\"when\":\"A residence needing coherent enclosure and material expression.\",\"title\":\"Facade depth, roofs and material identity\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"entry-night-material\",\"version\":1,\"category\":\"arrival\",\"when\":\"Use when the brief or chosen programme calls for entrance material emphasis.\",\"title\":\"Entrance material emphasis\",\"combinations\":\"Timber or bronze doors with limestone threshold and ivory returns; vary recess depth rather than arbitrary decoration.\",\"placement\":\"Use bronze or timber at the threshold and quieter ivory planes beside it.\",\"principles\":\"No lighting fixtures or illumination performance are implemented.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, entrance, roof. No automatic door swing collision, vehicle tracking, security or accessibility certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"entrance\",\"roof\"],\"materials\":\"Timber or bronze doors with limestone threshold and ivory returns; vary recess depth rather than arbitrary decoration.\",\"supports\":\"Cut a real unglazed wall opening, align door centre to it and connect approach floor to interior datum; support shelter.\",\"unsupported\":\"No automatic door swing collision, vehicle tracking, security or accessibility certification.\"}}\n{\"id\":\"facade-pier-rhythm\",\"version\":1,\"category\":\"envelope\",\"when\":\"Use when the brief or chosen programme calls for facade pier rhythm.\",\"title\":\"Facade pier rhythm\",\"combinations\":\"Ivory enclosure with limestone base or timber recess; bronze can distinguish selected panels.\",\"placement\":\"Alternate actual wall segments and openings to express room spacing.\",\"principles\":\"Avoid office-like uniformity when room programmes differ.\",\"capabilities\":\"Use direct-scene primitives: wall, roof. No weatherproofing, glazing specification, acoustic rating or thermal calculation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\",\"roof\"],\"materials\":\"Ivory enclosure with limestone base or timber recess; bronze can distinguish selected panels.\",\"supports\":\"Place opening-bearing walls on floor edges; keep opening bounds within host walls and align heads with roof undersides.\",\"unsupported\":\"No weatherproofing, glazing specification, acoustic rating or thermal calculation.\"}}\n{\"id\":\"roof-terrace-door\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Use when the brief or chosen programme calls for roof terrace access door.\",\"title\":\"Roof terrace access door\",\"combinations\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"placement\":\"Connect the roof deck to an enclosed upper landing through an actual opening.\",\"principles\":\"A rooftop deck without access is incomplete.\",\"capabilities\":\"Use direct-scene primitives: plate, balcony, entrance, roof. No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"balcony\",\"entrance\",\"roof\"],\"materials\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"supports\":\"Support elevated decks with walls or posts, guard exposed edges, provide actual door access and supported shade.\",\"unsupported\":\"No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\"}}\n",
+  "chars": 5275,
+  "evidence": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "entry-night-material",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "facade-pier-rhythm",
+      "version": 1,
+      "requiredKinds": [
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "roof-terrace-door",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "balcony",
+        "entrance",
+        "roof"
+      ]
+    }
+  ],
+  "metrics": {
+    "eligible": 74,
+    "selected": 4,
+    "categories": [
+      "materials",
+      "arrival",
+      "envelope",
+      "roof-outdoor"
+    ],
+    "omitted": 70,
+    "estimatedTokens": 1319,
+    "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+  }
+}

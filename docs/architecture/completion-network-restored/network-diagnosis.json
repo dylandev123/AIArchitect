@@ -1,0 +1,32 @@
+{
+  "cause": "sandbox DNS/network restrictions",
+  "sandbox": {
+    "dns": {
+      "api.openai.com": "ENOTFOUND",
+      "example.com": "ENOTFOUND"
+    },
+    "curlExit": 6,
+    "scutil": "No DNS configuration available"
+  },
+  "outsideSandbox": {
+    "dns": "Both hosts resolved",
+    "https": {
+      "method": "HEAD",
+      "url": "https://api.openai.com/v1/models",
+      "authenticated": false,
+      "status": 401,
+      "requestId": "7971faec-7bb9-4d6b-a1cb-3b29d1fdb311"
+    }
+  },
+  "priorAttempt": {
+    "error": "getaddrinfo ENOTFOUND api.openai.com",
+    "failedBeforeProvider": true,
+    "httpArtifact": false,
+    "providerResponseArtifact": false
+  },
+  "completionAuthorization": {
+    "calls": 1,
+    "maxRetries": 0
+  },
+  "credentialExposed": false
+}

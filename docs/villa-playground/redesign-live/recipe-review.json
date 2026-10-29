@@ -1,0 +1,113 @@
+{
+  "status": "APPROVED_SUBJECTIVE_CURATION",
+  "approved": 9,
+  "paidCalls": 0,
+  "providerTokens": 0,
+  "constructionOperations": 0,
+  "profileAt25m": "property-value-25m-50m",
+  "retrieved": true,
+  "findings": [
+    "All nine are proposed and their only source is marked unverified; the approval schema requires a nonempty review and at least one verified source.",
+    "No verified market evidence establishes the association between each numeric band and its architectural guidance.",
+    "The bands are usable as subjective design curation only; area, programme and amenities are explicitly not price formulas.",
+    "Adjacent display ranges share endpoints; the parser deterministically selects lower-inclusive bands, so exactly $25m selects 25m\u201350m.",
+    "The phrase property-value or budget context conflates asset value with construction budget; proposed correction separates them.",
+    "Repository sources can verify implemented construction and retrieval only; they cannot verify price-band associations."
+  ],
+  "recipes": [
+    {
+      "id": "property-value-100k-250k",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-250k-500k",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-500k-1m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-1m-3m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-3m-5m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-5m-10m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-10m-25m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-25m-50m",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    },
+    {
+      "id": "property-value-50m-100m-plus",
+      "version": 2,
+      "status": "approved",
+      "decision": "approved through existing versioned import workflow; current user preference source verified only for curation intent"
+    }
+  ],
+  "automaticReviewRejection": "Approval rejected: repository source verifies implementation capabilities, not property-value claims; conditional authorization not satisfied.",
+  "proposedResolution": "Explicitly accept all nine as subjective design-ambition curation, with no market-validity claim, separate property value from construction budget, and retain unverified user-brief provenance. Requires explicit user approval before any import.",
+  "resolution": "Current user explicitly approved subjective design-ambition revision; revised content and source scope recorded in authorized-recipe-brief.md and revised-recipe-submission.json. Approval still requires existing schema and import workflow.",
+  "failedEntries": [],
+  "profileVersion": 2,
+  "selectedKnowledge": [
+    {
+      "id": "property-value-25m-50m",
+      "version": 2,
+      "category": "property-value",
+      "score": 100,
+      "reasons": [
+        "explicit currency selects one contextual value reference; no valuation inferred",
+        "adds property-value coverage"
+      ]
+    },
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "category": "materials",
+      "score": 22,
+      "reasons": [
+        "brief matches facade",
+        "brief matches roof",
+        "adds materials coverage"
+      ]
+    },
+    {
+      "id": "roof-main-secondary",
+      "version": 1,
+      "category": "roof-outdoor",
+      "score": 19,
+      "reasons": [
+        "brief matches roof",
+        "brief matches main",
+        "brief matches secondary",
+        "adds roof-outdoor coverage"
+      ]
+    }
+  ]
+}

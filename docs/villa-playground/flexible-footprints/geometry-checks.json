@@ -1,0 +1,113 @@
+{
+  "providerCalls": 0,
+  "retained": [
+    {
+      "file": "src/lib/villa/__tests__/fixtures/garden-boundary.response.json",
+      "name": "Caribbean Crown Estate",
+      "character": "An expansive Saint Lucian sea-view estate arranged as a refined Caribbean pavilion compound: a grand central villa, a south garden salon, an east guest pavilion, and a secluded west guest retreat framing a long resort pool and sunset decks.",
+      "summary": "Caribbean Crown Estate is a dramatic, approximately $15-million-calibre tropical compound centered on a two-storey ivory main villa. Hip roofs, panoramic glazing, deep verandas, and upper balconies create a resort-like silhouette, while two low covered galleries link the principal social and east guest wings without compromising the pitched-roof composition. A detached west retreat offers privacy, and the north-facing 14-metre pool ensemble provides layered timber sun decks, dining space, and a clear Caribbean-view foreground.",
+      "unsupported": [],
+      "wingCount": 4,
+      "builders": [],
+      "accepted": true,
+      "garden": {
+        "x": -1.0749999999999993,
+        "z": -0.45000000000000107,
+        "width": 54.15,
+        "depth": 53.3
+      }
+    },
+    {
+      "file": "src/lib/villa/__tests__/fixtures/long-summary.response.json",
+      "name": "Caribbean Crown Estate",
+      "character": "An expansive Saint Lucian sea-view estate composed as a calm, ivory Caribbean compound: a two-storey central residence anchors the crest, with low pavilion wings framing an axial infinity-pool terrace toward the southern Caribbean horizon. Detached guest retreats sit discreetly in tropical planting, while a sculptural open garden lounge offers a sunset destination away from the main house.",
+      "summary": "Caribbean Crown Estate is conceived as a substantial but legible six-pavilion hilltop compound. The principal two-storey residence and its deep sea-facing veranda command the southern pool axis; low great-room and dining pavilions are linked by sheltered galleries, preserving a breezy resort-like rhythm beneath coordinated hipped roofs. Two detached guest retreats receive privacy within tropical gardens, while the northern arrival court creates a ceremonial approach. A long timber-decked pool terrace, framed by lounge decks and a separate curved sunset pavilion, makes the Caribbean view the estate’s defining outdoor room.",
+      "unsupported": [],
+      "wingCount": 6,
+      "builders": [
+        "curved-pavilion@1"
+      ],
+      "accepted": true,
+      "garden": {
+        "x": 0,
+        "z": -1.25,
+        "width": 126.3,
+        "depth": 113.5
+      }
+    },
+    {
+      "file": "docs/villa-playground/expanded-limits/original.response.json",
+      "name": "Sea Crown Estate",
+      "character": "A grand Caribbean hilltop estate composed around an arrival court, palm gardens and commanding sea-facing terraces.",
+      "summary": "Sea Crown Estate is a Caribbean hilltop compound with a two-storey ivory main house, a sea-facing gallery wing, angled private guest retreats, an infinity-style pool terrace, open garden pavilion, fountain arrival court and palm-lined approach.",
+      "unsupported": [],
+      "wingCount": 4,
+      "builders": [
+        "curved-pavilion@1"
+      ],
+      "accepted": false,
+      "findings": [
+        {
+          "path": "estateLandscape.routes.west-retreat-walk",
+          "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+        },
+        {
+          "path": "estateLandscape.routes.east-retreat-walk",
+          "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+        },
+        {
+          "path": "estateLandscape.routes.pool-promenade",
+          "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+        },
+        {
+          "path": "estateLandscape.beds.pool-west-tropical-bed",
+          "message": "Planting beds must leave circulation clear."
+        }
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "id": "ocean-arc",
+      "controls": 4,
+      "facadeBays": 86,
+      "bounds": {
+        "left": -16.16,
+        "right": 16.16,
+        "rear": -3.66,
+        "front": 10.16
+      },
+      "plateTriangles": 340,
+      "closedPlateEveryEdgeTwice": true,
+      "finite": true
+    },
+    {
+      "id": "asymmetric-crescent",
+      "controls": 6,
+      "facadeBays": 125,
+      "bounds": {
+        "left": -16.491632653061224,
+        "right": 17.3475,
+        "rear": -10.35047619047619,
+        "front": 9.16
+      },
+      "plateTriangles": 496,
+      "closedPlateEveryEdgeTwice": true,
+      "finite": true
+    },
+    {
+      "id": "articulated-house",
+      "controls": 11,
+      "facadeBays": 46,
+      "bounds": {
+        "left": -15.16,
+        "right": 17.16,
+        "rear": -7.16,
+        "front": 8.16
+      },
+      "plateTriangles": 180,
+      "closedPlateEveryEdgeTwice": true,
+      "finite": true
+    }
+  ]
+}

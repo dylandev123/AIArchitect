@@ -1,0 +1,12 @@
+import { mkdirSync, copyFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { constructImageSpec, offlineImageSpec, conceptStage, analysisInstructions } from '../src/lib/villa/image-first';
+import { buildComposition } from '../src/lib/villa/composition';
+const dir='docs/villa-playground/image-first'; mkdirSync(dir,{recursive:true});
+const proof=constructImageSpec(offlineImageSpec);
+buildComposition(proof.config);
+copyFileSync('public/inspiration/villa.jpg',`${dir}/concept-original.jpg`);
+writeFileSync(`${dir}/proof.json`,JSON.stringify({mode:'offline',paidCalls:0,conceptStage,sourceSha256:createHash('sha256').update(readFileSync(`${dir}/concept-original.jpg`)).digest('hex'),...proof},null,2));
+writeFileSync(`${dir}/terra-analysis-instructions.txt`,analysisInstructions());
+console.log('Offline proof validated and retained. Paid calls: 0.');

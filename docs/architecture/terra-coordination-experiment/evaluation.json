@@ -1,0 +1,58 @@
+{
+  "providerCalls": 1,
+  "retries": 0,
+  "approval": "UNAPPROVED \u2014 experiment failed",
+  "operations": [
+    {
+      "op": "remove",
+      "id": "salon-roof"
+    }
+  ],
+  "removed": [
+    "salon-roof"
+  ],
+  "added": [],
+  "changed": [],
+  "unchangedElements": 87,
+  "findings": {
+    "before": {
+      "architectural-review": 41,
+      "feature-evidence": 11,
+      "vertical-route-missing": 1,
+      "stair-rise-gap": 9,
+      "stair-headroom-obstructed": 9,
+      "stair-landing-overlap": 1,
+      "roof-envelope-review": 1,
+      "roof-occupied-volume": 2,
+      "spatial-intent-mismatch": 1
+    },
+    "after": {
+      "architectural-review": 45,
+      "feature-evidence": 13,
+      "vertical-route-missing": 1,
+      "stair-rise-gap": 9,
+      "stair-headroom-obstructed": 4,
+      "stair-landing-overlap": 1,
+      "roof-envelope-review": 1,
+      "spatial-intent-mismatch": 7
+    }
+  },
+  "usage": {
+    "inputTokens": 29867,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 29864
+    },
+    "outputTokens": 5785,
+    "outputTokenDetails": {
+      "textTokens": 2888,
+      "reasoningTokens": 2897
+    },
+    "totalTokens": 35652,
+    "reasoningTokens": 2897,
+    "cachedInputTokens": 0
+  },
+  "sourcePreserved": true,
+  "success": false
+}

@@ -1,0 +1,677 @@
+[
+  {
+    "version": 1,
+    "id": "freedom-sky",
+    "name": "Sky Court Mansion",
+    "character": "A double-height arrival, splayed salon and four-storey stone tower with a roof garden.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [],
+    "connections": [],
+    "terraces": [],
+    "pool": null,
+    "garden": {
+      "x": 0.5,
+      "z": -1,
+      "width": 53.32,
+      "depth": 38.32
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 8,
+    "components": [],
+    "forms": [
+      {
+        "id": "sky-court",
+        "builder": "footprint-building@1",
+        "x": 0,
+        "z": 0,
+        "orientation": 0,
+        "points": [
+          {
+            "x": -18,
+            "z": -12
+          },
+          {
+            "x": 13,
+            "z": -12
+          },
+          {
+            "x": 18,
+            "z": -5
+          },
+          {
+            "x": 18,
+            "z": 10
+          },
+          {
+            "x": 2,
+            "z": 10
+          },
+          {
+            "x": 2,
+            "z": 5
+          },
+          {
+            "x": -18,
+            "z": 5
+          }
+        ],
+        "height": 6.8,
+        "levels": [
+          {
+            "id": "west-suites",
+            "parentId": "base",
+            "points": [
+              {
+                "x": -16,
+                "z": -10
+              },
+              {
+                "x": -2,
+                "z": -10
+              },
+              {
+                "x": -2,
+                "z": 3
+              },
+              {
+                "x": -16,
+                "z": 3
+              }
+            ],
+            "height": 3.3,
+            "material": "warm-stone",
+            "openings": "private",
+            "rooftop": "railed",
+            "facades": [
+              {
+                "edges": [
+                  2
+                ],
+                "treatment": "screen"
+              }
+            ]
+          },
+          {
+            "id": "view-salon",
+            "parentId": "base",
+            "points": [
+              {
+                "x": 1,
+                "z": -10
+              },
+              {
+                "x": 14,
+                "z": -9
+              },
+              {
+                "x": 19,
+                "z": 1
+              },
+              {
+                "x": 16,
+                "z": 9
+              },
+              {
+                "x": 1,
+                "z": 7
+              }
+            ],
+            "height": 3.2,
+            "material": "ivory",
+            "openings": "panoramic",
+            "rooftop": "lounge",
+            "facades": [
+              {
+                "edges": [
+                  0
+                ],
+                "treatment": "solid"
+              },
+              {
+                "edges": [
+                  2,
+                  3
+                ],
+                "treatment": "loggia"
+              }
+            ]
+          },
+          {
+            "id": "library-tower",
+            "parentId": "west-suites",
+            "points": [
+              {
+                "x": -15,
+                "z": -9
+              },
+              {
+                "x": -4,
+                "z": -9
+              },
+              {
+                "x": -4,
+                "z": 1
+              },
+              {
+                "x": -15,
+                "z": 1
+              }
+            ],
+            "height": 3.4,
+            "material": "limestone",
+            "openings": "rhythm",
+            "rooftop": "none",
+            "facades": [
+              {
+                "edges": [
+                  0,
+                  3
+                ],
+                "treatment": "solid"
+              },
+              {
+                "edges": [
+                  2
+                ],
+                "treatment": "glass"
+              }
+            ]
+          },
+          {
+            "id": "sky-room",
+            "parentId": "library-tower",
+            "points": [
+              {
+                "x": -15,
+                "z": -9
+              },
+              {
+                "x": -4,
+                "z": -9
+              },
+              {
+                "x": -3,
+                "z": -1
+              },
+              {
+                "x": -14,
+                "z": 1
+              }
+            ],
+            "height": 3.1,
+            "material": "ivory",
+            "openings": "panoramic",
+            "rooftop": "shaded",
+            "facades": [
+              {
+                "edges": [
+                  2
+                ],
+                "treatment": "screen"
+              },
+              {
+                "edges": [
+                  3
+                ],
+                "treatment": "solid"
+              }
+            ]
+          }
+        ],
+        "rooftop": "railed",
+        "facades": [
+          {
+            "edges": [
+              0
+            ],
+            "treatment": "entrance",
+            "material": "warm-stone"
+          },
+          {
+            "edges": [
+              1
+            ],
+            "treatment": "screen",
+            "material": "limestone"
+          },
+          {
+            "edges": [
+              3,
+              5
+            ],
+            "treatment": "loggia"
+          },
+          {
+            "edges": [
+              6
+            ],
+            "treatment": "screen"
+          }
+        ],
+        "material": "ivory",
+        "openings": "panoramic"
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "freedom-estate",
+    "name": "Palm Court Estate",
+    "character": "A tall central palazzo and unequal arcaded wings around an open court.",
+    "appearance": {
+      "style": "spanish",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "id": "main",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -10,
+        "width": 28,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 1.6,
+        "balcony": 1.5
+      },
+      {
+        "eave": 1.8,
+        "appearance": {
+          "style": "caribbean",
+          "roof": "gable",
+          "exterior": "warm-stone",
+          "glazing": "panoramic"
+        },
+        "id": "west",
+        "role": "living",
+        "parentId": "main",
+        "detached": false,
+        "x": -15,
+        "z": 10,
+        "width": 18,
+        "depth": 9,
+        "orientation": 90,
+        "storeys": 1,
+        "storeyHeight": 4.1,
+        "veranda": 1.6,
+        "balcony": 0
+      },
+      {
+        "appearance": {
+          "style": "modern",
+          "roof": "flat",
+          "exterior": "limestone",
+          "glazing": "panoramic"
+        },
+        "id": "east",
+        "role": "living",
+        "parentId": "main",
+        "detached": false,
+        "x": 15,
+        "z": 5,
+        "width": 16,
+        "depth": 9,
+        "orientation": 270,
+        "storeys": 2,
+        "storeyHeight": 3.6,
+        "veranda": 1.6,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "west-link",
+        "from": "main",
+        "to": "west",
+        "width": 2.4
+      },
+      {
+        "id": "east-link",
+        "from": "main",
+        "to": "east",
+        "width": 2.4
+      }
+    ],
+    "terraces": [],
+    "pool": null,
+    "garden": {
+      "x": -0.5999999999999996,
+      "z": 3.125,
+      "width": 57.599999999999994,
+      "depth": 51.55
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 8
+  },
+  {
+    "version": 1,
+    "id": "freedom-fold",
+    "name": "Folded Ridge House",
+    "character": "An angular living landscape with a stone library crossing its shaded garden edge.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [],
+    "connections": [],
+    "terraces": [],
+    "pool": null,
+    "garden": {
+      "x": 1,
+      "z": -0.5,
+      "width": 58.32,
+      "depth": 37.32
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 8,
+    "components": [],
+    "forms": [
+      {
+        "id": "folded-ridge",
+        "builder": "footprint-building@1",
+        "x": 0,
+        "z": 0,
+        "orientation": 0,
+        "points": [
+          {
+            "x": -20,
+            "z": -7
+          },
+          {
+            "x": -4,
+            "z": -11
+          },
+          {
+            "x": 19,
+            "z": -4
+          },
+          {
+            "x": 22,
+            "z": 5
+          },
+          {
+            "x": 5,
+            "z": 10
+          },
+          {
+            "x": -6,
+            "z": 3
+          },
+          {
+            "x": -20,
+            "z": 7
+          }
+        ],
+        "height": 4.1,
+        "levels": [
+          {
+            "id": "splayed-library",
+            "parentId": "base",
+            "points": [
+              {
+                "x": -17,
+                "z": -6
+              },
+              {
+                "x": -5,
+                "z": -9
+              },
+              {
+                "x": 3,
+                "z": -6
+              },
+              {
+                "x": 0,
+                "z": 0
+              },
+              {
+                "x": -17,
+                "z": 4
+              }
+            ],
+            "height": 4.5,
+            "material": "limestone",
+            "openings": "private",
+            "rooftop": "none",
+            "facades": [
+              {
+                "edges": [
+                  0
+                ],
+                "treatment": "solid"
+              },
+              {
+                "edges": [
+                  2,
+                  3
+                ],
+                "treatment": "glass"
+              }
+            ]
+          }
+        ],
+        "rooftop": "none",
+        "facades": [
+          {
+            "edges": [
+              0
+            ],
+            "treatment": "solid",
+            "material": "warm-stone"
+          },
+          {
+            "edges": [
+              1
+            ],
+            "treatment": "screen"
+          },
+          {
+            "edges": [
+              2
+            ],
+            "treatment": "entrance"
+          },
+          {
+            "edges": [
+              3,
+              4
+            ],
+            "treatment": "loggia"
+          },
+          {
+            "edges": [
+              5
+            ],
+            "treatment": "colonnade"
+          }
+        ],
+        "material": "ivory",
+        "openings": "panoramic"
+      }
+    ]
+  },
+  {
+    "version": 1,
+    "id": "freedom-river",
+    "name": "River Ribbon House",
+    "character": "A flowing shaded lower salon and an asymmetric curved sky wing.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [],
+    "connections": [],
+    "terraces": [],
+    "pool": null,
+    "garden": {
+      "x": 0.43216306939217297,
+      "z": -0.5631770922317223,
+      "width": 63.8765922285626,
+      "depth": 39.61244414986137
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 8,
+    "forms": [
+      {
+        "id": "flowing-house",
+        "builder": "footprint-building@1",
+        "x": 0,
+        "z": 0,
+        "orientation": 0,
+        "points": [
+          {
+            "x": -23,
+            "z": 7,
+            "curve": {
+              "x": -26,
+              "z": -12
+            }
+          },
+          {
+            "x": -3,
+            "z": -12,
+            "curve": {
+              "x": 20,
+              "z": -14
+            }
+          },
+          {
+            "x": 24,
+            "z": 3,
+            "curve": {
+              "x": 26,
+              "z": 13
+            }
+          },
+          {
+            "x": 9,
+            "z": 10,
+            "curve": {
+              "x": -1,
+              "z": 0
+            }
+          },
+          {
+            "x": -12,
+            "z": 9,
+            "curve": {
+              "x": -19,
+              "z": 14
+            }
+          }
+        ],
+        "height": 3.8,
+        "levels": [
+          {
+            "id": "curved-library",
+            "parentId": "base",
+            "points": [
+              {
+                "x": -19,
+                "z": 2,
+                "curve": {
+                  "x": -22,
+                  "z": -10
+                }
+              },
+              {
+                "x": -5,
+                "z": -10,
+                "curve": {
+                  "x": 4,
+                  "z": -10
+                }
+              },
+              {
+                "x": 7,
+                "z": -6
+              },
+              {
+                "x": 5,
+                "z": -2,
+                "curve": {
+                  "x": -6,
+                  "z": -6
+                }
+              },
+              {
+                "x": -15,
+                "z": 4
+              }
+            ],
+            "height": 4.6,
+            "material": "warm-stone",
+            "openings": "panoramic",
+            "rooftop": "none",
+            "facades": [
+              {
+                "edges": [
+                  0
+                ],
+                "treatment": "solid",
+                "material": "limestone"
+              },
+              {
+                "edges": [
+                  1
+                ],
+                "treatment": "screen"
+              },
+              {
+                "edges": [
+                  3,
+                  4
+                ],
+                "treatment": "glass"
+              }
+            ]
+          }
+        ],
+        "facades": [
+          {
+            "edges": [
+              0
+            ],
+            "treatment": "solid",
+            "material": "limestone"
+          },
+          {
+            "edges": [
+              1
+            ],
+            "treatment": "screen"
+          },
+          {
+            "edges": [
+              2,
+              3,
+              4
+            ],
+            "treatment": "loggia"
+          }
+        ],
+        "material": "ivory",
+        "openings": "panoramic"
+      }
+    ]
+  }
+]

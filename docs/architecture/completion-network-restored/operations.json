@@ -1,0 +1,997 @@
+[
+  {
+    "op": "add",
+    "element": {
+      "id": "arrival-threshold-court",
+      "label": "North Arrival Threshold Court",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.2,
+        2
+      ],
+      "material": "limestone",
+      "panels": 2
+    }
+  },
+  {
+    "op": "replace",
+    "id": "salon-south-wall-new",
+    "element": {
+      "id": "salon-south-wall-new",
+      "label": "Salon Ocean Opening Wall",
+      "kind": "wall",
+      "at": [
+        0,
+        3.5,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        6.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 6,
+      "opening": {
+        "x": 0,
+        "sill": 0.2,
+        "width": 13.2,
+        "height": 5.8,
+        "glazed": false
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "ocean-loggia-door",
+      "label": "Salon to Ocean Loggia Door",
+      "kind": "entrance",
+      "parent": "salon-south-wall-new",
+      "at": [
+        0,
+        -1.7,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.2,
+        2.8,
+        0.16
+      ],
+      "material": "bronze",
+      "panels": 3
+    }
+  },
+  {
+    "op": "replace",
+    "id": "kitchen-west-wall-new",
+    "element": {
+      "id": "kitchen-west-wall-new",
+      "label": "Kitchen West Salon Access Wall",
+      "kind": "wall",
+      "at": [
+        9,
+        1.8,
+        6
+      ],
+      "rotation": 1.5708,
+      "size": [
+        6,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 3,
+      "opening": {
+        "x": -2,
+        "sill": 0.2,
+        "width": 1.2,
+        "height": 2.4,
+        "glazed": false
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "kitchen-salon-door",
+      "label": "Kitchen to Salon Door",
+      "kind": "entrance",
+      "parent": "kitchen-west-wall-new",
+      "at": [
+        -2,
+        -0.2,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.2,
+        2.4,
+        0.16
+      ],
+      "material": "bronze",
+      "panels": 1
+    }
+  },
+  {
+    "op": "replace",
+    "id": "dining-north-wall-new",
+    "element": {
+      "id": "dining-north-wall-new",
+      "label": "Dining Kitchen Access Wall",
+      "kind": "wall",
+      "at": [
+        11,
+        1.8,
+        3
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 2,
+      "opening": {
+        "x": 0,
+        "sill": 0.2,
+        "width": 1.2,
+        "height": 2.4,
+        "glazed": false
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "kitchen-dining-door",
+      "label": "Dining to Kitchen Door",
+      "kind": "entrance",
+      "parent": "dining-north-wall-new",
+      "at": [
+        0,
+        -0.2,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.2,
+        2.4,
+        0.16
+      ],
+      "material": "bronze",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "owner-suite-door",
+      "label": "Owner Suite Access Door",
+      "kind": "entrance",
+      "parent": "owner-east-wall-new",
+      "at": [
+        0,
+        -0.2,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.1,
+        2.4,
+        0.16
+      ],
+      "material": "bronze",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "guest-suite-door",
+      "label": "Guest Suite Access Door",
+      "kind": "entrance",
+      "parent": "guest-west-wall-new",
+      "at": [
+        0,
+        -0.2,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.1,
+        2.4,
+        0.16
+      ],
+      "material": "bronze",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-01",
+      "label": "Stair Support 01",
+      "kind": "volume",
+      "at": [
+        5.875,
+        0.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-01",
+      "label": "Stair Tread 01",
+      "kind": "plate",
+      "at": [
+        5.875,
+        0.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-02",
+      "label": "Stair Support 02",
+      "kind": "volume",
+      "at": [
+        5.625,
+        0.2,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.4,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-02",
+      "label": "Stair Tread 02",
+      "kind": "plate",
+      "at": [
+        5.625,
+        0.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-03",
+      "label": "Stair Support 03",
+      "kind": "volume",
+      "at": [
+        5.375,
+        0.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.6,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-03",
+      "label": "Stair Tread 03",
+      "kind": "plate",
+      "at": [
+        5.375,
+        0.7,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-04",
+      "label": "Stair Support 04",
+      "kind": "volume",
+      "at": [
+        5.125,
+        0.4,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.8,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-04",
+      "label": "Stair Tread 04",
+      "kind": "plate",
+      "at": [
+        5.125,
+        0.9,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-05",
+      "label": "Stair Support 05",
+      "kind": "volume",
+      "at": [
+        4.875,
+        0.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        1,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-05",
+      "label": "Stair Tread 05",
+      "kind": "plate",
+      "at": [
+        4.875,
+        1.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-06",
+      "label": "Stair Support 06",
+      "kind": "volume",
+      "at": [
+        4.625,
+        0.6,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        1.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-06",
+      "label": "Stair Tread 06",
+      "kind": "plate",
+      "at": [
+        4.625,
+        1.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-07",
+      "label": "Stair Support 07",
+      "kind": "volume",
+      "at": [
+        4.375,
+        0.7,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        1.4,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-07",
+      "label": "Stair Tread 07",
+      "kind": "plate",
+      "at": [
+        4.375,
+        1.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-08",
+      "label": "Stair Support 08",
+      "kind": "volume",
+      "at": [
+        4.125,
+        0.8,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        1.6,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-08",
+      "label": "Stair Tread 08",
+      "kind": "plate",
+      "at": [
+        4.125,
+        1.7,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-09",
+      "label": "Stair Support 09",
+      "kind": "volume",
+      "at": [
+        3.875,
+        0.9,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        1.8,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-09",
+      "label": "Stair Tread 09",
+      "kind": "plate",
+      "at": [
+        3.875,
+        1.9,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-10",
+      "label": "Stair Support 10",
+      "kind": "volume",
+      "at": [
+        3.625,
+        1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-10",
+      "label": "Stair Tread 10",
+      "kind": "plate",
+      "at": [
+        3.625,
+        2.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-11",
+      "label": "Stair Support 11",
+      "kind": "volume",
+      "at": [
+        3.375,
+        1.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        2.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-11",
+      "label": "Stair Tread 11",
+      "kind": "plate",
+      "at": [
+        3.375,
+        2.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-12",
+      "label": "Stair Support 12",
+      "kind": "volume",
+      "at": [
+        3.125,
+        1.2,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        2.4,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-12",
+      "label": "Stair Tread 12",
+      "kind": "plate",
+      "at": [
+        3.125,
+        2.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-13",
+      "label": "Stair Support 13",
+      "kind": "volume",
+      "at": [
+        2.875,
+        1.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        2.6,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-13",
+      "label": "Stair Tread 13",
+      "kind": "plate",
+      "at": [
+        2.875,
+        2.7,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-14",
+      "label": "Stair Support 14",
+      "kind": "volume",
+      "at": [
+        2.625,
+        1.4,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        2.8,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-14",
+      "label": "Stair Tread 14",
+      "kind": "plate",
+      "at": [
+        2.625,
+        2.9,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-15",
+      "label": "Stair Support 15",
+      "kind": "volume",
+      "at": [
+        2.375,
+        1.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        3,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-15",
+      "label": "Stair Tread 15",
+      "kind": "plate",
+      "at": [
+        2.375,
+        3.1,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-16",
+      "label": "Stair Support 16",
+      "kind": "volume",
+      "at": [
+        2.125,
+        1.6,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        3.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-16",
+      "label": "Stair Tread 16",
+      "kind": "plate",
+      "at": [
+        2.125,
+        3.3,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-support-17",
+      "label": "Stair Support 17",
+      "kind": "volume",
+      "at": [
+        1.875,
+        1.7,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        3.4,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "stair-tread-17",
+      "label": "Stair Tread 17",
+      "kind": "plate",
+      "at": [
+        1.875,
+        3.5,
+        1
+      ],
+      "rotation": 0,
+      "size": [
+        0.25,
+        0.2,
+        1.4
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "upper-bridge-landing",
+      "label": "Upper Suite Bridge Landing",
+      "kind": "plate",
+      "at": [
+        1.75,
+        3.5,
+        0.5
+      ],
+      "rotation": 0,
+      "size": [
+        1.5,
+        0.2,
+        2
+      ],
+      "material": "limestone",
+      "panels": 2
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "pool-north-wall",
+      "label": "Pool North Basin Wall",
+      "kind": "wall",
+      "at": [
+        0,
+        0.6,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        1.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "id": "pool-coping-north",
+      "label": "Pool North Coping",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -11.7
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        0.6
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  }
+]

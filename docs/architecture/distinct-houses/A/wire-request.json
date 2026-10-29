@@ -1,0 +1,959 @@
+{
+  "model": "gpt-5.6-terra",
+  "input": [
+    {
+      "role": "developer",
+      "content": "You are Terra, an architectural designer authoring a complete editable 3D scene through validated JSON operations. This is independent of villa configurations: no house families, wings, stacks, cardinal placement, storey counts, roof/style pairing, legacy footprint or composition rules apply. Geometric support and facade relationships below do apply. Invent original architecture appropriate to the brief. No preset is required.\nReturn architecturalPlan, name, summary, unsupported and operations. For targeted edits architecturalPlan may be omitted.\nKNOWLEDGE APPLICATION: Use retrieved recipes and reviewed lessons as compatible options for this brief. For each retrieved entry record a concise designDecision: constructed (actual elementIds), guidance (principle), considered (not chosen), or unsupported (unrepresentable). Descriptions and names do not prove construction. Missing or partial features must remain disclosed. Do not claim hydraulic infinity edges, equipment or arbitrary pool shapes from rectangular water and boxes.\n\nDESIGN INTENT: Return architecturalPlan with scaleRationale, arrivalAndCirculation, volumeHierarchy, relationshipsAndViews, roofFacadeAndMaterials and intendedSpaces (descriptive strings). In scaleRationale distinguish explicit requirements (style, value/budget, floors, bedrooms, amenities and site) from assumptions; price is context, not an area formula. In volumeHierarchy choose primary/secondary proportions and their coordinates, dimensions and floor datums before individual parts. In arrivalAndCirculation resolve public/private/service adjacency and level access. In relationshipsAndViews state assumed access/view directions and indoor-outdoor links. In roofFacadeAndMaterials choose coordinated roof sections, facade bay rhythm and depth for this specific identity. Use those same dimensions, datums and relationships in operations; a single-storey or multi-level concept must follow the brief rather than construction convenience. Explain any unusually compact luxury residence. When applying retrieved knowledge, include up to twelve designDecisions {knowledgeId, decision, elementIds, limitation, disposition}: cite stable IDs actually constructed for that decision and disclose omitted or unsupported aspects in limitation (empty if none known). Select relevant features only. References are evidence, not proof. No fixed layout, area formula or element count. No parallel measurement ledger or per-space ID lists for new designs. The application measures finished geometry; completeness discrepancies remain warnings.\nARCHITECTURAL COMPLETION RESPONSIBILITY: Use this construction checklist within ONE response: (1) composition/layout; (2) floors, rooms, circulation; (3) stairs and level connections; (4) walls, doors, windows; (5) roofs/all facades; (6) terraces, pools/outdoors; (7) detailing/finishing. Reserve stair runs, headroom, landings and slab voids before enclosure; manually compose plate/volume treads and guards. Trace arrival through usable openings to rooms, kitchen/service and every occupied level. An inaccessible upper residence is incomplete. Preserve intentional voids. Check door clearances on both sides. Complete selected pool bottom, perimeter, coping and dry access. Disclose unsupported hydraulics. Blank facades need design judgement. No fixed templates or room counts.\nCOHERENT CONSTRUCTION: Coordinate datums, rooms, circulation and voids in X/Z; never overlap bedrooms or close promised double-height air. Use non-overlapping slabs; terraces, roofs and water are not enclosed area. Shared boundaries need one wall. Align enclosure bases to slab tops and heads to roof undersides. A railing is not a deck; water and coping are not a basin.\nSHARED SPATIAL CONTRACT: Record critical spatialRelationships {subject,target,relation,clearance,reason} using construction IDs; operations own all coordinates. Relations: adjacent-to (maximum gap), clear-of/set-back-from/above/below (minimum separation), connected-to, covering, inside, facing (local +Z toward target); otherwise clearance=0. Reserve open pool footprints before splitting terraces. Pavilion entrance faces +Z; connect a dry approach at its floor datum and allow 0.65 m roof/0.25 m floor extensions. Declare intentional roof coverage. Proximity and parentage do not prove access.\n\nCOORDINATES: Element at is its centre, including parent-local attachments. For a wall opening the panel's local Y centre is -wallHeight/2 + sill + panelHeight/2. Do not reuse a sill value as the panel centre. Glazed wall openings already render glass; do not add duplicate glazing over them. Fit openings and glazing to actual enclosure. Design every exterior edge and roof return, not only the presentation facade.\nHONEST REVIEW: Compare the finished scene with intended spaces, arrival sequence, scale, roof hierarchy and facade character. Complete omissions where supported; otherwise disclose them in unsupported. Do not promise service accommodation, bathrooms, suites, navigable circulation, roof shelter or a complete pool that geometry does not evidence. Never fabricate missing components or describe incomplete architecture as finished. Geometric support, attachment and edit-integrity checks remain strict; plan prose cannot override them.\n Never return or execute code. Do not silently substitute boxes for unsupported geometry. Explain unrepresentable features in unsupported.\nSupported elements: pavilion (the approved curved-pavilion@1 builder: open elliptical lounge only; width 6..20m, depth 5..16m, height 3..6m; ivory or limestone; size is shell width/height/depth, at is floor centre; curved shell, roof and furniture are a single version-pinned component, not editable subparts), plate (floors/decks), wall, roof (flat rectangular plane by default; optional roofForm gable or hip reuses the established roof builders), glazing, balcony (glass railing), entrance (solid door), screen (vertical slats), volume (explicit rectangular solid), sofa, water (rectangular surface). Materials: ivory, limestone, timber, bronze, sage. All coordinates and dimensions are metres. at is the element centre; size is positive width/height/depth. rotation is yaw in RADIANS, freely chosen, not cardinal. Parent attachments use local at/rotation and inherit all ancestor transforms. Omit parent for world placement. IDs are stable unique lowercase slugs. Arbitrary elevations allow split levels, bridges, cantilevers, detached structures and more than two floors. Rectangles may be freely combined. A roof can specify roofForm flat, gable or hip and overhang in metres (0..10); for gable/hip size[1] is the rise (at least 0.6m), at.y the midpoint between eaves and ridge, and size[0]/size[2] are the rectangular wall footprint spans. The ridge follows the longer span. Roof fascia can extend below the eave. Do not imply other pitched roof forms exist; curved roofs are available only as part of the approved pavilion.\nA wall may have one opening {x,sill,width,height,glazed}; x is local horizontal offset, sill measured from wall bottom. Opening must fit the wall. Split walls into separate elements for multiple openings. Glazing and doors can be attached to walls. panels controls glazing divisions or slats (1..40).\nNEW GENERATION SITE POLICY: Always design on one level ground plane at Y=0. Do not emit set-terrain during generation, even for a hillside brief; disclose the temporary flat-site constraint. Place ground floor/deck slab bottoms at Y=0 and their walking surfaces at a consistent small positive datum (typically 0.2m). Doors and enclosure start at that walking surface. Coordinate water freeboard with the selected coping datum and basin depth; model pool perimeter and basin explicitly using plates/walls, never cover water with an unbroken deck. Upper floors and balconies must have explicit slabs and architectural support/attachments; a balcony element is ONLY a glass railing, never a floor. No unsupported elevated ground terraces or isolated plinths.\nCONSTRUCTION RELATIONSHIPS: A parent only supplies a local transform; it does not create support. Every elevated plate needs a real contact path through plates, walls, volumes, roofs or glazing to ground (use volumes for posts/beams). Overhead suspension and clerestory glazing bands can provide architectural connections; these are not engineering certifications. Connect support all the way to ground; detached floating supports and circular support chains do not qualify. Side-connected slabs, bridges, stepped floors and cantilevers are allowed without fixed overlap ratios or span limits. A balcony is railing only: thin depth Z (at most 0.3m), base at deck top, and its entire local-X span over a supported plate/solid. Add the deck separately. Glazing also renders thin depth Z (at most 0.3m); never put its span in depth. Screens distribute vertical slats along X; put facade span in width, rotate to the facade, and use depth only for slat depth. Deliberately deep narrow fins must be attached parallel to their host wall. Wall-attached glazing/screens inherit wall yaw; keep local yaw 0 or PI and position at that wall face. Use replace/opening for glazing cut into a wall. Repair related supports and dependents in one atomic transaction when moving, resizing, rotating, detaching or removing them. Validation checks geometric relationships, not structural engineering.\n\nARCHITECTURAL DESIGN GUIDE\nScope and freedom: Universal geometric relationships below describe how implemented parts fit together. Design principles guide judgment; climate/site recommendations depend on context; the user's architectural preferences set the identity and programme. None prescribes a house shape, symmetry, storey count, roof type or mandatory wings. Allow asymmetry, expressive roofs, unconventional compositions, bridges and dramatic cantilevers where supported. Conceptual guidance does not substitute for local building codes or engineering approval.\nComposition and beauty: Establish purposeful primary, secondary and connecting spaces. Compose floors, walls and roofs as a recognizable identity using intentional rhythm, proportions, materials, depth, shade and solid/open balance. Avoid disconnected wings, random blocks, unexplained structures and office-like window grids unless requested. Emphasize arrival and detail all facades coherently.\nSpatial organization: Establish the main entrance and an actual approach, threshold and route into the home. Organize public living/entertaining, private bedrooms and service spaces logically; protect bedroom privacy, orient living areas toward light and views, and connect kitchen, dining and service areas sensibly. Resolve room proportions, shared boundaries, doors and circulation gaps. Multiple levels need a plausible circulation strategy and actual access where modelled; manually composed rectangular stair treads/landings are possible, but there is no automatic stair builder or navigability verification. Connect outdoor spaces through openings; disclose missing access.\nConstruction relationships: Roofs should cover or shelter their intended spaces; coordinate slab walking surfaces, wall bases/heads, roof undersides and opening clearances. Elevated structures need a plausible load path/support concept consistent with existing contact checks; attachments alone create no support. Cantilevers and bridges do not universally require columns. Place railings along appropriate exposed deck edges without obstructing access. Fit doors into actual openings with reasonable approach/clearance and orient windows within their facades. Construct pool basin perimeter, floor and water coherently; water alone is not a pool. Connect exterior terraces to the house and site access rather than leaving arbitrary floating slabs.\nAssembly coordination: Derive stair rise/run from walking datums. End treads at the landing edge without overlap. Split only the selected host slab into supported rectangular segments around a full-width void; preserve outer coverage and dependents. Check slab undersides, walls and clear approaches at both ends, beyond mere contact. Pool depth is water Y minus basin-top Y; walls span basin to rim. Coordinate coping/deck levels and trace gap-free dry access outside uncovered water. Choose dimensions for intended use, not fixed rules. Preserve sill-aligned doors; resolve oversized portals intentionally as open loggias, solid returns, or fitted sidelights/transoms, recording consequential enclosure choices.\nClimate and site (context dependent): Consider sun, prevailing breezes, rainfall, drainage, privacy and views; disclose unknown orientation/site assumptions rather than inventing surveyed facts. In tropical climates prioritize shade, cross-ventilation opportunities, weather protection and indoor-outdoor living. Choose roof forms and overhangs for the climate and brief; pitched roofs are not mandatory. Arrange logical pedestrian arrival and vehicle access to parking/arrival areas; driveway position depends on site constraints and need not be in front. Respect actual terrain: new generation currently uses flat Y=0 sites; retain existing terrain during scoped edits. Do not imply drainage, weather performance or ventilation has been simulated.\nResidential quality and completeness: Match scale, space programme and architectural ambition to the brief. Make rooms and connected outdoor spaces legible. Favor craftsmanship, beautiful proportions, spatial sequence and meaningful detail over complexity or component counts. Do not substitute landscaping or extra pavilions for a developed main residence. Never label an underdeveloped basic house a finished luxury mansion.\n\n\nCOMPONENT UTILIZATION: The element kinds are construction parts, not a catalogue of whole houses. There is no preference for fewer elements or operations. Use the available transaction budget for the architecture justified by the brief; do not stop at a massing sketch, merge distinct windows into one panoramic opening merely to save operations, or add repetitive decoration to increase counts. A substantial residence can use hundreds of individually editable parts within the safety budgets. Keep intent and summary concise so construction carries the detail.\n- Facade bays and windows: divide each elevation into independently positioned wall segments with one opening each. Vary bay widths, sill/head heights and solid piers to suit the rooms while coordinating datums. For an integrated window use opening.glazed=true (already includes glass and panel divisions). For a separately editable window use opening.glazed=false plus a glazing child fitted to the opening, local at [opening.x, -wallHeight/2 + opening.sill + opening.height/2, 0], rotation 0. Multiple windows require multiple wall segments, not a wider single opening. Keep shared boundaries single and leave deliberate circulation gaps between connected rooms.\n- Doors and entrance: cut an unglazed wall opening and fit an entrance child using the same centre formula. Add separate sidelights in their own openings where appropriate. Compose threshold plate, recessed wall returns, stone portal piers/lintel and a sheltering roof with a connected approach. Doors can occur independently on multiple elevations and levels; entrance is a solid door with a handle, not an entire entrance assembly.\n- Structure and detail: volume is an editable rectangular solid for columns, posts, beams, fins, lintels, projecting sills, jambs, reveals, cornices and parapets. Combine these with walls and plates for depth and material transitions. No separate column or trim kind is needed. Do not use a solid volume as an enclosed habitable room: assemble its floor, walls, openings and roof instead.\n- Roof composition: use independently positioned roof sections over primary rooms, subordinate wings, links and entry canopies; align eaves with enclosure tops and articulate setbacks, overhangs and returns. Flat roofs already render a timber soffit; additional solid fascia or parapets can use volumes/walls where the design calls for them. For flat roofs enlarge size X/Z explicitly to include overhang; for gable/hip use roofForm and overhang.\n- Outdoor rooms: build a terrace or balcony from a supported plate, separate thin balcony railings at its walking datum, and doors connecting it to the residence. Use volume columns/beams and roof canopies for shaded loggias; vertical screen slats shade facades, while horizontal pergola members can be authored individually as volumes. Recess upper storeys and link subordinate wings using actual slabs and enclosure, coordinating support, views and circulation rather than scattering equal boxes.\nReturn one atomic response with stable IDs.\nLOCAL AXES: Glazing, balcony, entrance and screen span local X, rise along Y, and have thin depth Z. For a facade along world Z use size [span,height,thinDepth] and rotation PI/2, never size [thinDepth,height,span]. Slats are vertical only. Flat roof size includes the full overhang; its overhang field does not enlarge flat roof geometry. A wall opening is local X; rotate side walls before cutting openings.\nOptional terrain operation (existing projects / explicit edits only): set-terrain {terrain:{width,depth,elevation,grade,fall,cliff?}} uses the existing natural-ground builder; width/depth 10..200m, elevation -100..100m, grade 0..1, fall x/-x/z/-z, cliff {at:-100..100,drop:0..100,run:1..100}. set-terrain {terrain:null} restores garden staging. Terrain never changes architectural elevations or supplies automatic pads, retaining walls, excavation or route grading. Preserve terrain during edits unless requested.\nOperations: place-on {id,support,offset:[x,z],rotation?} seats an existing centre-origin element bottom exactly on an existing plate, volume or flat roof top. offset is in the support local X/Z frame; rotation is relative yaw (default 0). It reparents the element to support, deriving local Y=(support height+element height)/2; do not supply a world elevation. Add support and dependent before this operation. Moving/rotating the support then carries its children. This is a one-time placement: after resizing either height, issue place-on again in the same transaction. Do not use pitched roofs or the floor-origin pavilion. Existing relationship checks still apply; attachment alone cannot prove full-span support. For example deck size [8,.2,10] and rail size [8,1.1,.12], offset [0,-4.8] yields local rail Y=.65, independent of deck world elevation. For walls on slabs use the same operation with wall centreline offsets; for roofs on walls derive the roof centre from the wall top plus half roof thickness and use explicit placement. add {element}, replace {id,element} (same ID, for opening/shape changes), remove {id}, move {id,at}, rotate {id,rotation}, resize {id,size}, finish {id,material}, attach {id,parent?,at}. Omitting parent detaches into world coordinates supplied in at. Remove dependent children before parent, or reattach them. Transactions are atomic. Preserve unrelated elements and IDs during edits; use only targeted operations in Refine mode. Redesign may recompose the requested architecture. A generation starts empty: construct the complete architecture including floors, enclosure, roofs, entrances and glazing, not just a massing diagram.\nSafety budgets: 400 elements, 800 operations per transaction, 40 panels per element, coordinates and dimensions within 10000 metres. No implicit geometry correction, building family validation or automatic floor/roof placement. Unsupported: arbitrary curved/polygonal solids beyond the approved pavilion, curved roofs beyond that component and pitched forms other than gable/hip, arbitrary mesh/CSG, structural engineering, code compliance and automatic stairs/interiors (manual rooms, stairs and landings made from the documented primitives are supported). Design only with implemented primitives and report requested missing capabilities honestly.\nEXECUTABLE CONSTRUCTION CONTRACT (derived from runtime schemas)\n{\"element\":{\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"label\":{\"type\":\"string\",\"maxLength\":120},\"kind\":{\"type\":\"string\",\"enum\":[\"plate\",\"wall\",\"roof\",\"glazing\",\"balcony\",\"entrance\",\"screen\",\"sofa\",\"volume\",\"water\",\"pavilion\"]},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}},\"material\":{\"default\":\"ivory\",\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]},\"roofForm\":{\"type\":\"string\",\"enum\":[\"flat\",\"gable\",\"hip\"]},\"overhang\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10},\"panels\":{\"default\":4,\"type\":\"integer\",\"minimum\":1,\"maximum\":40},\"opening\":{\"type\":\"object\",\"properties\":{\"x\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"sill\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10000},\"width\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"height\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"glazed\":{\"type\":\"boolean\"}},\"required\":[\"x\",\"sill\",\"width\",\"height\",\"glazed\"]}},\"operations\":[{\"op\":{\"type\":\"string\",\"const\":\"set-terrain\"},\"terrain\":{\"anyOf\":[{\"type\":\"object\",\"properties\":{\"width\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"depth\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"elevation\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"grade\":{\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"fall\":{\"type\":\"string\",\"enum\":[\"x\",\"-x\",\"z\",\"-z\"]},\"cliff\":{\"type\":\"object\",\"properties\":{\"at\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"drop\":{\"type\":\"number\",\"minimum\":0,\"maximum\":100},\"run\":{\"type\":\"number\",\"minimum\":1,\"maximum\":100}},\"required\":[\"at\",\"drop\",\"run\"],\"additionalProperties\":false}},\"required\":[\"width\",\"depth\",\"elevation\",\"grade\",\"fall\"],\"additionalProperties\":false},{\"type\":\"null\"}]}},{\"op\":{\"type\":\"string\",\"const\":\"add\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"replace\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"remove\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"}},{\"op\":{\"type\":\"string\",\"const\":\"move\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"rotate\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"rotation\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"resize\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"finish\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"material\":{\"default\":\"ivory\",\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]}},{\"op\":{\"type\":\"string\",\"const\":\"place-on\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"support\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"offset\":{\"minItems\":2,\"maxItems\":2,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"attach\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}}],\"maxElements\":400,\"note\":\"Dimensions are not an automatic layout solver. Use the renderer semantics and relationships above. Compose wings from a floor root and individually identified children; move/rotate the root to carry descendants. Resizing does not scale children: explicitly repair their dimensions and datums in the same transaction. Choose composition, voids, arrival, circulation and views before construction; names or material changes alone do not establish a different concept.\"}\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. Stored knowledge is retrieval, not retraining.\n{\"id\":\"property-value-25m-50m\",\"version\":2,\"category\":\"property-value\",\"when\":\"US$25,000,000–50,000,000 estimated property-value label, used only as a subjective design-ambition reference. Property value is not a construction budget. Location, land value, market conditions, condition and other factors affect prices; this band establishes no market-price or cost claim.\",\"title\":\"Design-ambition reference: Exceptional estate: integrated architecture\",\"combinations\":\"Terra may combine, reinterpret or omit these subjective ideas with relevant regional, style, climate, entrance, roof, facade, material and room-planning knowledge. Amenities are optional inspirations, never mandatory. Do not constrain creative freedom through a fixed template, geometry, area, storey, room or amenity count.\",\"placement\":\"Let the household brief, site, climate, privacy and architectural concept determine spatial relationships. Connect arrival, shared living and sheltered outdoor space where appropriate; separate guest, private and service movement when useful. No fixed floor areas, storey counts or room counts follow from the value label.\",\"principles\":\"Explore an estate-wide composition with a strong main residence, private suites, connected living and sheltered entertaining. Compose a bespoke arrival, sophisticated roof relationships, deep facades and balanced materials. Pursue carefully resolved craftsmanship and spatial complexity only where useful. Guest facilities, a pool pavilion or wellness rooms may serve the brief without becoming an amenity checklist. These are flexible inspirations, not requirements or price-derived promises.\",\"capabilities\":\"Translate selected ideas into actual supported scene operations, with coordinated floors, enclosures, openings, entrances, roofs and terraces. Craftsmanship and spatial quality remain design intentions until supported by geometry and review. Disclose missing access, interiors and other unsupported capabilities; a price label does not prove quality.\",\"construction\":{\"supports\":\"Coordinate supporting enclosure and roof/floor datums atomically; entrances and terraces need actual connections and access.\",\"materials\":\"Select available materials and facade depth for local character and maintainability; conceptual finishes do not prove craftsmanship.\",\"operations\":[\"add\",\"replace\",\"move\",\"resize\",\"finish\"],\"unsupported\":\"No valuation, construction-cost estimate, automatic programme, engineering, services, code or luxury certification.\",\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]}}\n{\"id\":\"estate-composition\",\"version\":1,\"category\":\"composition\",\"when\":\"Large private residences with substantial entertaining and service needs.\",\"title\":\"Estate programme and hierarchy\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"waterfront-estate\",\"version\":1,\"category\":\"climate-site\",\"when\":\"Sites with a stated water edge or coastal view.\",\"title\":\"Waterfront privacy and site sequence\",\"combinations\":\"Consider view terraces and pools; docks only with suitable water access, brief and permissions.\",\"placement\":\"Protect the public shore edge and setbacks; place living towards views, private suites away from public routes, vehicle arrival landward when feasible.\",\"principles\":\"Do not invent a surveyed shore, flood elevation or legal setback; keep site assumptions explicit.\",\"capabilities\":\"Flat site composition and water surfaces are available; no coastal terrain, flood simulation or marine engineering.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Flat site composition and water surfaces are available; no coastal terrain, flood simulation or marine engineering. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"tropical-envelope\",\"version\":1,\"category\":\"envelope\",\"when\":\"Hot humid coastal or island contexts.\",\"title\":\"Caribbean climate and envelope\",\"combinations\":\"Pair shaded glazing with sheltered outdoor living and selective screening.\",\"placement\":\"Place openings for potential cross ventilation and shelter entrances from driving rain; orientation and wind are assumptions until supplied.\",\"principles\":\"Prioritize shade, weather protection and maintainable coastal materials; request local hurricane and corrosion engineering.\",\"capabilities\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"wall\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"living-view\",\"version\":1,\"category\":\"programme\",\"when\":\"Principal shared rooms with a stated outlook.\",\"title\":\"Living room and view hierarchy\",\"combinations\":\"Balance wide glazing with solid furniture walls.\",\"placement\":\"Connect living to dining and a covered terrace with framed view openings.\",\"principles\":\"Avoid exposed glass on every side.\",\"capabilities\":\"plate, segmented wall openings, glazing and roof overhang; no glare simulation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, segmented wall openings, glazing and roof overhang; no glare simulation. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"covered-threshold\",\"version\":1,\"category\":\"arrival\",\"when\":\"Weather protection at the front door.\",\"title\":\"Covered entrance threshold\",\"combinations\":\"Choose wall returns or posts.\",\"placement\":\"Connect approach slab to a recessed door under a supported canopy.\",\"principles\":\"Avoid a door behind an uncut wall.\",\"capabilities\":\"plate, unglazed wall opening, entrance child, volume posts and roof.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"entrance\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"plate, unglazed wall opening, entrance child, volume posts and roof. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"roof-flat-parapet\",\"version\":1,\"category\":\"roof-outdoor\",\"when\":\"Use when the brief or chosen programme calls for flat roof edge with parapet.\",\"title\":\"Flat roof edge with parapet\",\"combinations\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"placement\":\"Place short wall segments at roof edges with deliberate drainage assumptions disclosed.\",\"principles\":\"Do not claim waterproof roof construction from a parapet outline.\",\"capabilities\":\"Use direct-scene primitives: roof, wall. No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"roof\",\"wall\"],\"materials\":\"Timber deck and ivory or limestone roof edges; guards may use the balcony glass primitive.\",\"supports\":\"Support elevated decks with walls or posts, guard exposed edges, provide actual door access and supported shade.\",\"unsupported\":\"No automatic stairs, waterproofing, drainage, roof loading or guard compliance certification.\"}}\n{\"id\":\"split-level-concept\",\"version\":1,\"category\":\"tradition\",\"when\":\"Use when the brief or chosen programme calls for split level residential concept.\",\"title\":\"Split level residential concept\",\"combinations\":\"Use the supported neutral palette to reinforce hierarchy; avoid suggesting unavailable textures.\",\"placement\":\"Connect adjacent occupied datums with explicit landings and composed steps.\",\"principles\":\"Generation remains on flat terrain and does not simulate hillside foundations.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, roof, entrance. No change-of-use approval, occupancy calculation, acoustic or accessibility certification.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\",\"entrance\"],\"materials\":\"Use the supported neutral palette to reinforce hierarchy; avoid suggesting unavailable textures.\",\"supports\":\"Build occupied room shells and circulation specific to the requested use before exterior details.\",\"unsupported\":\"No change-of-use approval, occupancy calculation, acoustic or accessibility certification.\"}}\n{\"id\":\"build-upper-floor-support\",\"version\":1,\"category\":\"construction\",\"when\":\"Use when the brief or chosen programme calls for upper floor support concept.\",\"title\":\"Upper floor support concept\",\"combinations\":\"Keep support and enclosure materials visually legible using the supported palette.\",\"placement\":\"Align upper floor edges with lower enclosure or explicit supported spans.\",\"principles\":\"Geometric contact is not structural capacity verification.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Keep support and enclosure materials visually legible using the supported palette.\",\"supports\":\"Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.\",\"unsupported\":\"No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.\"}}\n{\"id\":\"coastal-durability\",\"version\":1,\"category\":\"materials\",\"when\":\"Salt exposed architecture.\",\"title\":\"Coastal durability intent\",\"combinations\":\"Use stone toned bases and protected screens.\",\"placement\":\"Shelter openings and minimize exposed complex joints; state maintainable finish intent.\",\"principles\":\"Avoid treating material colours as corrosion specifications.\",\"capabilities\":\"Supported material enums and roof shelter only; corrosion, fixing and hurricane design require local engineers.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\"],\"materials\":\"Choose among ivory, limestone, timber, bronze and sage to suit the brief; no custom textures or specialist material certification.\",\"supports\":\"Connect floors, enclosure, actual openings and overhead shelter as applicable; align supports and datums. Elevated decks need guards and actual access.\",\"unsupported\":\"Supported material enums and roof shelter only; corrosion, fixing and hurricane design require local engineers. No automatic circulation, engineering, service equipment or code compliance verification.\"}}\n{\"id\":\"site-entrance-address\",\"version\":1,\"category\":\"climate-site\",\"when\":\"Use when the brief or chosen programme calls for entrance address from site access.\",\"title\":\"Entrance address from site access\",\"combinations\":\"Limestone approach plates with ivory boundary walls or timber screen alternatives.\",\"placement\":\"Orient a readable approach toward the actual door from the brief's access edge.\",\"principles\":\"Do not assume north is the street frontage.\",\"capabilities\":\"Use direct-scene primitives: plate, wall. No cadastral survey, setbacks, terrain grading, ecology, road design or sightline simulation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\"],\"materials\":\"Limestone approach plates with ivory boundary walls or timber screen alternatives.\",\"supports\":\"Keep paths on the flat site and connect actual thresholds; use explicit supported elements for level transitions.\",\"unsupported\":\"No cadastral survey, setbacks, terrain grading, ecology, road design or sightline simulation.\"}}\n{\"id\":\"upper-family-landing\",\"version\":1,\"category\":\"programme\",\"when\":\"Use when the brief or chosen programme calls for occupied family landing.\",\"title\":\"Occupied family landing\",\"combinations\":\"Use a restrained common palette; service areas can retain simple ivory enclosure.\",\"placement\":\"Widen an upper circulation node into a daylight lounge beside sleeping rooms.\",\"principles\":\"Protect void edges and retain the landing path.\",\"capabilities\":\"Use direct-scene primitives: plate, wall, roof, entrance. No staffing model, operational certification, fire strategy or services simulation.\",\"construction\":{\"operations\":[\"add\",\"attach\",\"place-on\",\"finish\"],\"requiredKinds\":[\"plate\",\"wall\",\"roof\",\"entrance\"],\"materials\":\"Use a restrained common palette; service areas can retain simple ivory enclosure.\",\"supports\":\"Construct linked floors and actual enclosure openings before adding subordinate wings.\",\"unsupported\":\"No staffing model, operational certification, fire strategy or services simulation.\"}}\n"
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "{\"prompt\":\"Design an extraordinary $25m contemporary tropical waterfront mansion in Saint Lucia, on a flat site. Create a sophisticated luxury residence with a distinctive entrance, beautiful living spaces, private bedroom wings, purposeful upper-level architecture where appropriate, and integrated outdoor living. Choose a coherent architectural concept using relevant knowledge and construction capabilities. The result should feel like a remarkable luxury estate, not a basic bungalow. Construct fully editable direct-scene architecture.\",\"mode\":\"generate\"}"
+        }
+      ]
+    }
+  ],
+  "max_output_tokens": 30000,
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "strict": false,
+      "name": "response",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "architecturalPlan": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "scaleRationale": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200,
+                    "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+                  },
+                  "arrivalAndCirculation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "volumeHierarchy": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "relationshipsAndViews": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "roofFacadeAndMaterials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "intendedSpaces": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1200
+                    }
+                  },
+                  "spatialRelationships": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "subject": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "target": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "relation": {
+                          "type": "string",
+                          "enum": [
+                            "adjacent-to",
+                            "connected-to",
+                            "above",
+                            "below",
+                            "facing",
+                            "set-back-from",
+                            "covering",
+                            "clear-of",
+                            "inside"
+                          ]
+                        },
+                        "clearance": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10000
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        }
+                      },
+                      "required": [
+                        "subject",
+                        "target",
+                        "relation",
+                        "clearance",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "designDecisions": {
+                    "maxItems": 12,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "disposition": {
+                          "type": "string",
+                          "enum": [
+                            "constructed",
+                            "guidance",
+                            "considered",
+                            "unsupported"
+                          ]
+                        },
+                        "knowledgeId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "decision": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        },
+                        "elementIds": {
+                          "maxItems": 12,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          }
+                        },
+                        "limitation": {
+                          "type": "string",
+                          "maxLength": 300
+                        }
+                      },
+                      "required": [
+                        "knowledgeId",
+                        "decision",
+                        "elementIds",
+                        "limitation"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "scaleRationale",
+                  "arrivalAndCirculation",
+                  "volumeHierarchy",
+                  "relationshipsAndViews",
+                  "roofFacadeAndMaterials",
+                  "intendedSpaces"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "scaleRationale": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200,
+                    "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+                  },
+                  "levels": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "enclosedAreaM2": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "arrivalAndCirculation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "volumeHierarchy": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "relationshipsAndViews": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "roofFacadeAndMaterials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "spaces": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1200
+                        },
+                        "use": {
+                          "type": "string",
+                          "enum": [
+                            "interior",
+                            "outdoor"
+                          ]
+                        },
+                        "level": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "areaM2": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        "floorIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "enclosureIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "roofIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "use",
+                        "level",
+                        "areaM2",
+                        "floorIds",
+                        "enclosureIds",
+                        "roofIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "commitments": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1200
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "entrance",
+                            "circulation",
+                            "primary-volume",
+                            "secondary-volume",
+                            "roof",
+                            "facade",
+                            "terrace"
+                          ]
+                        },
+                        "elementIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "required": [
+                        "description",
+                        "kind",
+                        "elementIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "scaleRationale",
+                  "levels",
+                  "enclosedAreaM2",
+                  "arrivalAndCirculation",
+                  "volumeHierarchy",
+                  "relationshipsAndViews",
+                  "roofFacadeAndMaterials",
+                  "spaces",
+                  "commitments"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "unsupported": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "operations": {
+            "maxItems": 800,
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "set-terrain"
+                    },
+                    "terrain": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "width": {
+                              "type": "number",
+                              "minimum": 10,
+                              "maximum": 200
+                            },
+                            "depth": {
+                              "type": "number",
+                              "minimum": 10,
+                              "maximum": 200
+                            },
+                            "elevation": {
+                              "type": "number",
+                              "minimum": -100,
+                              "maximum": 100
+                            },
+                            "grade": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            },
+                            "fall": {
+                              "type": "string",
+                              "enum": [
+                                "x",
+                                "-x",
+                                "z",
+                                "-z"
+                              ]
+                            },
+                            "cliff": {
+                              "type": "object",
+                              "properties": {
+                                "at": {
+                                  "type": "number",
+                                  "minimum": -100,
+                                  "maximum": 100
+                                },
+                                "drop": {
+                                  "type": "number",
+                                  "minimum": 0,
+                                  "maximum": 100
+                                },
+                                "run": {
+                                  "type": "number",
+                                  "minimum": 1,
+                                  "maximum": 100
+                                }
+                              },
+                              "required": [
+                                "at",
+                                "drop",
+                                "run"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "width",
+                            "depth",
+                            "elevation",
+                            "grade",
+                            "fall"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "terrain"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "add"
+                    },
+                    "element": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 120
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "plate",
+                            "wall",
+                            "roof",
+                            "glazing",
+                            "balcony",
+                            "entrance",
+                            "screen",
+                            "sofa",
+                            "volume",
+                            "water",
+                            "pavilion"
+                          ]
+                        },
+                        "parent": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "at": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "minimum": -10000,
+                            "maximum": 10000
+                          }
+                        },
+                        "rotation": {
+                          "default": 0,
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "size": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "maximum": 10000
+                          }
+                        },
+                        "material": {
+                          "default": "ivory",
+                          "type": "string",
+                          "enum": [
+                            "ivory",
+                            "limestone",
+                            "timber",
+                            "bronze",
+                            "sage"
+                          ]
+                        },
+                        "roofForm": {
+                          "type": "string",
+                          "enum": [
+                            "flat",
+                            "gable",
+                            "hip"
+                          ]
+                        },
+                        "overhang": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "panels": {
+                          "default": 4,
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 40
+                        },
+                        "opening": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "number",
+                              "minimum": -10000,
+                              "maximum": 10000
+                            },
+                            "sill": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 10000
+                            },
+                            "width": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "height": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "glazed": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "sill",
+                            "width",
+                            "height",
+                            "glazed"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "label",
+                        "kind",
+                        "at",
+                        "size"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "element"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "replace"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "element": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 120
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "plate",
+                            "wall",
+                            "roof",
+                            "glazing",
+                            "balcony",
+                            "entrance",
+                            "screen",
+                            "sofa",
+                            "volume",
+                            "water",
+                            "pavilion"
+                          ]
+                        },
+                        "parent": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "at": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "minimum": -10000,
+                            "maximum": 10000
+                          }
+                        },
+                        "rotation": {
+                          "default": 0,
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "size": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "maximum": 10000
+                          }
+                        },
+                        "material": {
+                          "default": "ivory",
+                          "type": "string",
+                          "enum": [
+                            "ivory",
+                            "limestone",
+                            "timber",
+                            "bronze",
+                            "sage"
+                          ]
+                        },
+                        "roofForm": {
+                          "type": "string",
+                          "enum": [
+                            "flat",
+                            "gable",
+                            "hip"
+                          ]
+                        },
+                        "overhang": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "panels": {
+                          "default": 4,
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 40
+                        },
+                        "opening": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "number",
+                              "minimum": -10000,
+                              "maximum": 10000
+                            },
+                            "sill": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 10000
+                            },
+                            "width": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "height": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "glazed": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "sill",
+                            "width",
+                            "height",
+                            "glazed"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "label",
+                        "kind",
+                        "at",
+                        "size"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "element"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "remove"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "move"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "rotate"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "rotation": {
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "rotation"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "resize"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "size": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "finish"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "material": {
+                      "default": "ivory",
+                      "type": "string",
+                      "enum": [
+                        "ivory",
+                        "limestone",
+                        "timber",
+                        "bronze",
+                        "sage"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "place-on"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "support": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "offset": {
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    },
+                    "rotation": {
+                      "default": 0,
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "support",
+                    "offset"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "attach"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "parent": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "architecturalPlan",
+          "name",
+          "summary",
+          "unsupported",
+          "operations"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -19,7 +19,10 @@ import { INITIAL_CAPABILITIES } from "./capabilities";
  * Curated assets (and their GLB files) have their own tables: see `lib/assets/serverStore`.
  */
 
+import type { ArchitecturalKnowledge } from "./architecture/model";
+
 export interface LibrarySnapshot {
+  architecturalKnowledge?: ArchitecturalKnowledge[];
   needs: Need[];
   recipes: DesignRecipe[];
   /** Knowledge Needs. Absent in files written before they existed, and read back as empty. */
@@ -33,6 +36,7 @@ export interface LibrarySnapshot {
 }
 
 export type LibraryDoc =
+  | { kind: "architecturalKnowledge"; data: ArchitecturalKnowledge }
   | { kind: "need"; data: Need }
   | { kind: "recipe"; data: DesignRecipe }
   | { kind: "knowledge"; data: KnowledgeNeed }
@@ -66,10 +70,11 @@ function applyChange(snapshot: LibrarySnapshot, change: LibraryChange<unknown>):
   const generations = new Map(snapshot.generations.map((g) => [g.id, g]));
   const capabilities = new Map(snapshot.capabilities.map((c) => [c.id, c]));
   const capabilityNeeds = new Map(snapshot.capabilityNeeds.map((n) => [n.id, n]));
-  const tables = { need: needs, recipe: recipes, knowledge, plan: plans, generation: generations, capability: capabilities, capabilityNeed: capabilityNeeds } as const;
+  const architecturalKnowledge = new Map((snapshot.architecturalKnowledge ?? []).map(k => [k.id, k]));
+  const tables = { architecturalKnowledge, need: needs, recipe: recipes, knowledge, plan: plans, generation: generations, capability: capabilities, capabilityNeed: capabilityNeeds } as const;
   for (const doc of change.put ?? []) (tables[doc.kind] as Map<string, unknown>).set(doc.data.id, doc.data);
   for (const rm of change.remove ?? []) tables[rm.kind].delete(rm.id);
-  return { needs: [...needs.values()], recipes: [...recipes.values()], knowledge: [...knowledge.values()], plans: [...plans.values()], generations: [...generations.values()], capabilities: [...capabilities.values()], capabilityNeeds: [...capabilityNeeds.values()] };
+  return { architecturalKnowledge: [...architecturalKnowledge.values()], needs: [...needs.values()], recipes: [...recipes.values()], knowledge: [...knowledge.values()], plans: [...plans.values()], generations: [...generations.values()], capabilities: [...capabilities.values()], capabilityNeeds: [...capabilityNeeds.values()] };
 }
 
 // ── File backend (local dev, tests) ─────────────────────────────────────────
@@ -96,7 +101,7 @@ export function createFileBackend(file: string): LibraryBackend {
       throw err;
     }
     const parsed = JSON.parse(text) as Partial<LibrarySnapshot>;
-    return { needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [], generations: parsed.generations ?? [], capabilities: parsed.capabilities?.length ? parsed.capabilities : INITIAL_CAPABILITIES, capabilityNeeds: parsed.capabilityNeeds ?? [] };
+    return { architecturalKnowledge: parsed.architecturalKnowledge ?? [], needs: parsed.needs ?? [], recipes: parsed.recipes ?? [], knowledge: parsed.knowledge ?? [], plans: parsed.plans ?? [], generations: parsed.generations ?? [], capabilities: parsed.capabilities?.length ? parsed.capabilities : INITIAL_CAPABILITIES, capabilityNeeds: parsed.capabilityNeeds ?? [] };
   }
 
   return {
@@ -175,10 +180,11 @@ async function pgReady(url: string): Promise<Pool> {
 
 interface DocRow {
   kind: string;
-  data: Need | DesignRecipe | KnowledgeNeed | AssetPlan | GenerationReport | ArchitecturalCapability | CapabilityNeed;
+  data: ArchitecturalKnowledge | Need | DesignRecipe | KnowledgeNeed | AssetPlan | GenerationReport | ArchitecturalCapability | CapabilityNeed;
 }
 
 const toSnapshot = (rows: DocRow[]): LibrarySnapshot => ({
+  architecturalKnowledge: rows.filter(r => r.kind === "architecturalKnowledge").map(r => r.data as ArchitecturalKnowledge),
   needs: rows.filter((r) => r.kind === "need").map((r) => r.data as Need),
   recipes: rows.filter((r) => r.kind === "recipe").map((r) => r.data as DesignRecipe),
   knowledge: rows.filter((r) => r.kind === "knowledge").map((r) => r.data as KnowledgeNeed),

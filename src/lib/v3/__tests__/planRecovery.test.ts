@@ -1,10 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { preparePlanEvaluation, checkoutPlanEvaluation, unresolvedPlanItems } from '../architecturalPlanEvaluation';
 import { prepareV3ArchitecturalPlan, elaborateV3ArchitecturalPlan, unresolvedPlanFindings } from '../architecturalPlanFirst';
 import { expandPlanAuthoring } from '../architecturalPlanAuthoring';
 import { compileV3Scene } from '../scene';
 import { deriveArchitecturalPlan } from '../architecturalPlanning';
 import { useProjectStore } from '@/store/useProjectStore';
+
+beforeEach(()=>{const data=new Map<string,string>();vi.stubGlobal('window',{localStorage:{getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>data.set(key,value),removeItem:(key:string)=>data.delete(key)}});});
+afterEach(()=>vi.unstubAllGlobals());
 
 /** An estate unrelated to any retained provider response: two small buildings, a terrace, a pool and a lawn. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- a provider-shaped JSON document that each case edits freely

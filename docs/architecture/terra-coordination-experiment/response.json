@@ -1,0 +1,377 @@
+{
+  "output": {
+    "architecturalPlan": {
+      "scaleRationale": "The US$25m figure remains an assumed-USD ambition reference rather than a construction-cost, valuation, or floor-area formula. This unapproved revision preserves the estate-scale salon, private pavilions, owner suite, water court, and lounge while correcting the upper-level geometry rather than enlarging the compound. The flat Y=0 site remains a temporary modeled condition, not a survey, flood datum, or coastal approval.",
+      "arrivalAndCirculation": "Public arrival remains through arrival-walk and the sheltered salon threshold; private family and guest pavilions retain independent court-facing entries. The owner suite now has a new east-side door reached by an explicit, exterior eighteen-tread stair, upper landing, supported north-south walk, and bridge at the upper walking datum. Assumptions: the reconstructed stair is intentionally exterior to avoid cutting the salon’s occupied slab and roof, with 0.206 m modeled rises from water-terrace to owner-stair-18; constructed IDs are owner-stair-01 through owner-stair-18, owner-stair-landing, owner-stair-walk, owner-stair-bridge, owner-stair-post-a, owner-stair-post-b, upper-east, and upper-east-door. The rectangular pool remains a dry-deck assembly with basin perimeter, bottom, coping, and water only; no hydraulic, filtration, excavation, or drainage decision is represented.",
+      "volumeHierarchy": "Two possible corrections were considered: a central roof opening with an internal stair through the salon, or an exterior east-side ascent with roofs restricted to the salon’s flanking bays. The selected concept, “Water Court Promenade—Flanking Roof Edition,” retains the salon as the primary low datum and makes the owner suite a visibly independent lantern above an intentional roof void. The side pavilions, pool lounge, portal canopy, and new circulation bridge remain subordinate to that main section.",
+      "relationshipsAndViews": "The salon continues to open toward water-terrace and the pool court, while the suite reaches its new east door from an external bridge and retains its broad view opening. owner-stair-01 starts from a new narrow extension of the existing terrace, then rises clear of the salon envelope at the east side before turning to the bridge. The pool lounge remains beside the dry pool circuit, with its access still dependent on the adjoining pool deck geometry rather than a modeled door.",
+      "roofFacadeAndMaterials": "The conflict is resolved by removing salon-roof and replacing it with salon-roof-west and salon-roof-east, two flat, deep soffit roof fields that stop 0.2 m clear of the owner-suite footprint; the upper suite therefore has no lower roof passing through its floor or enclosure. family-wing-roof is narrowed to terminate at the salon edge, eliminating its plan overlap into the salon. Ivory enclosure, limestone floors and stair solids, bronze upper entry, and timber screens continue the tropical palette; facade assumptions are that deep eaves and screens express shade intent only, with drainage, waterproofing, hurricane, corrosion, and thermal performance unverified.",
+      "intendedSpaces": [
+        "Great salon, dining and kitchen",
+        "Family bedroom pavilion",
+        "Guest bedroom pavilion",
+        "Upper owner suite",
+        "Pool terrace and water court",
+        "Open pool lounge",
+        "Arrival threshold",
+        "Owner stair, bridge and upper landing"
+      ],
+      "programme": [
+        {
+          "name": "Great salon, dining and kitchen",
+          "zone": "public",
+          "strategy": "Primary ground-level salon remains an open-plan shared volume linked to water-terrace through salon-glass-1.",
+          "floorIds": [
+            "salon"
+          ],
+          "enclosureIds": [
+            "salon-rear",
+            "salon-west",
+            "salon-east",
+            "salon-bay-0",
+            "salon-bay-1",
+            "salon-bay-2",
+            "salon-bay-3"
+          ],
+          "roofIds": [
+            "salon-roof-west",
+            "salon-roof-east"
+          ],
+          "accessIds": [
+            "salon-glass-1"
+          ],
+          "limitation": "Dining and kitchen remain open-plan allocations; no fixtures or internal room partitions are constructed, and the central upper-suite zone is intentionally uncovered by a salon low"
+        },
+        {
+          "name": "Family bedroom pavilion",
+          "zone": "private",
+          "strategy": "Independent west ground pavilion uses its central pool-facing entrance and is held apart from the public salon.",
+          "floorIds": [
+            "family-wing"
+          ],
+          "enclosureIds": [
+            "family-wing-rear",
+            "family-wing-west",
+            "family-wing-east",
+            "family-wing-bay-0",
+            "family-wing-bay-1",
+            "family-wing-bay-2"
+          ],
+          "roofIds": [
+            "family-wing-roof"
+          ],
+          "accessIds": [
+            "family-wing-glass-1"
+          ],
+          "limitation": "Sleeping, bath, and storage partitions are not represented within the one-storey shell."
+        },
+        {
+          "name": "Guest bedroom pavilion",
+          "zone": "private",
+          "strategy": "Independent east ground pavilion retains its own court-facing entry and separate low roof.",
+          "floorIds": [
+            "guest-wing"
+          ],
+          "enclosureIds": [
+            "guest-wing-rear",
+            "guest-wing-west",
+            "guest-wing-east",
+            "guest-wing-bay-0",
+            "guest-wing-bay-1",
+            "guest-wing-bay-2"
+          ],
+          "roofIds": [
+            "guest-wing-roof"
+          ],
+          "accessIds": [
+            "guest-wing-glass-1"
+          ],
+          "limitation": "Guest sleeping and bath subdivisions are not modeled."
+        },
+        {
+          "name": "Upper owner suite",
+          "zone": "private",
+          "strategy": "Upper shell remains above the salon but is now reached from the east through owner-stair-bridge and the new opening in upper-east.",
+          "floorIds": [
+            "upper-floor"
+          ],
+          "enclosureIds": [
+            "upper-front-left",
+            "upper-front-doorwall",
+            "upper-front-right",
+            "upper-east",
+            "upper-west",
+            "upper-rear"
+          ],
+          "roofIds": [
+            "upper-roof"
+          ],
+          "accessIds": [
+            "upper-east-door"
+          ],
+          "limitation": "The existing former front suite door is removed; the suite remains a single open enclosure without modeled dressing or bath partitions."
+        },
+        {
+          "name": "Pool terrace and water court",
+          "zone": "outdoor",
+          "strategy": "water-terrace leads to the rectangular pool dry circuit and also supports the new east-side stair approach.",
+          "floorIds": [
+            "water-terrace",
+            "pool-court",
+            "pool-court-deck-x-minus",
+            "pool-court-deck-x-plus",
+            "pool-court-deck-far"
+          ],
+          "enclosureIds": [
+            "pool-court-wall-x-minus",
+            "pool-court-wall-x-plus",
+            "pool-court-wall-z-minus",
+            "pool-court-wall-z-plus"
+          ],
+          "roofIds": [],
+          "accessIds": [
+            "salon-glass-1",
+            "family-wing-glass-1",
+            "guest-wing-glass-1"
+          ],
+          "limitation": "pool-court-floor is a basin floor, not room enclosure. The assembly does not provide hydraulic edges, equipment, drainage, or excavation."
+        },
+        {
+          "name": "Open pool lounge",
+          "zone": "outdoor",
+          "strategy": "The approved curved pavilion remains an open, sheltered lounge beside the pool court.",
+          "floorIds": [],
+          "enclosureIds": [],
+          "roofIds": [
+            "pool-lounge"
+          ],
+          "accessIds": [],
+          "limitation": "pool-lounge is a version-pinned open pavilion component with fixed integrated shell, roof, and furniture; no separate editable enclosure, door, or dedicated access path is modeled."
+        },
+        {
+          "name": "Arrival threshold",
+          "zone": "circulation",
+          "strategy": "arrival-walk reaches salon-glass-1 under the independently supported portal canopy.",
+          "floorIds": [
+            "arrival-walk"
+          ],
+          "enclosureIds": [],
+          "roofIds": [
+            "entry-canopy"
+          ],
+          "accessIds": [
+            "salon-glass-1"
+          ],
+          "limitation": "The posts are structural volumes rather than enclosure. Vehicle access, property boundary, gate, and site grading are not modeled."
+        },
+        {
+          "name": "Owner stair, bridge and upper landing",
+          "zone": "circulation",
+          "strategy": "A fully exterior east-side rise uses eighteen 2.0 m-wide solid treads, then a landing, supported walk, and bridge to the new east-suite door.",
+          "floorIds": [
+            "owner-stair-01",
+            "owner-stair-02",
+            "owner-stair-03",
+            "owner-stair-04",
+            "owner-stair-05",
+            "owner-stair-06",
+            "owner-stair-07",
+            "owner-stair-08\",\"owner-stair-09\",\"owner-stair-10\",\"owner-stair-11\",\"owner-stair-12\",\"owner-stair-13\",\"owner-stair-14\",\"'"
+          ],
+          "enclosureIds": [],
+          "roofIds": [],
+          "accessIds": [
+            "upper-east-door"
+          ],
+          "limitation": "The preceding fifteen cited treads plus owner-stair-15 through owner-stair-18, owner-stair-landing, owner-stair-walk, and owner-stair-bridge form the route; the compact ID evidence"
+        }
+      ],
+      "spatialRelationships": [
+        {
+          "subject": "upper-floor",
+          "target": "salon-roof-west",
+          "relation": "clear-of",
+          "clearance": 0.2,
+          "reason": "The revised west salon roof stops before the upper suite’s west edge."
+        },
+        {
+          "subject": "upper-floor",
+          "target": "salon-roof-east",
+          "relation": "clear-of",
+          "clearance": 0.2,
+          "reason": "The revised east salon roof stops before the upper suite’s east edge."
+        },
+        {
+          "subject": "family-wing-roof",
+          "target": "salon",
+          "relation": "clear-of",
+          "clearance": 0,
+          "reason": "The narrowed pavilion roof terminates at, but does not enter, the salon footprint."
+        },
+        {
+          "subject": "owner-stair-01",
+          "target": "water-terrace",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The stair approach extension meets the terrace and first tread at the common ground walking datum."
+        },
+        {
+          "subject": "owner-stair-18",
+          "target": "owner-stair-landing",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The final tread and landing meet at the 3.7 m upper walking datum."
+        },
+        {
+          "subject": "owner-stair-bridge",
+          "target": "upper-east-door",
+          "relation": "connected-to",
+          "clearance": 0,
+          "reason": "The bridge terminates at the new exterior east-wall suite entry."
+        },
+        {
+          "subject": "owner-stair-walk",
+          "target": "owner-stair-post-b",
+          "relation": "above",
+          "clearance": 0,
+          "reason": "The ground-contact post supplies a geometric support path to the elevated walk."
+        }
+      ],
+      "designDecisions": [
+        {
+          "disposition": "constructed",
+          "knowledgeId": "property-value-25m-50m",
+          "decision": "Retained an ambitious but coordinated main residence, owner suite, private pavilions, arrival sequence, and pool court without treating the value label as an area or cost formula.",
+          "elementIds": [
+            "salon",
+            "upper-floor",
+            "family-wing",
+            "guest-wing",
+            "pool-court"
+          ],
+          "limitation": "No valuation, construction-cost estimate, market claim, or luxury certification is made."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "estate-composition",
+          "decision": "Preserved the dominant salon and separate private pavilions while making upper-suite circulation explicit.",
+          "elementIds": [
+            "salon",
+            "family-wing",
+            "guest-wing",
+            "owner-stair-landing",
+            "owner-stair-bridge"
+          ],
+          "limitation": "Inter-wing circulation is exterior rather than an enclosed corridor."
+        },
+        {
+          "disposition": "guidance",
+          "knowledgeId": "waterfront-estate",
+          "decision": "Maintained the shared salon, terrace, pool, and upper suite toward an assumed waterfront outlook.",
+          "elementIds": [
+            "salon",
+            "water-terrace",
+            "pool-court",
+            "upper-floor"
+          ],
+          "limitation": "No surveyed shoreline, setback, flood elevation, or marine work is modeled."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "tropical-envelope",
+          "decision": "Used flanking deep eaves, existing timber screens, and a covered portal while preserving the raised suite roof as its own plane.",
+          "elementIds": [
+            "salon-roof-west",
+            "salon-roof-east",
+            "family-screen",
+            "guest-screen",
+            "entry-canopy",
+            "upper-roof"
+          ],
+          "limitation": "No weather, wind, corrosion, or hurricane performance is simulated or certified."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "covered-threshold",
+          "decision": "Retained the real portal posts, canopy, approach, and salon threshold.",
+          "elementIds": [
+            "arrival-walk",
+            "entry-post-west",
+            "entry-post-east",
+            "entry-canopy",
+            "salon-glass-1"
+          ],
+          "limitation": "Canopy structure and weatherproofing are not certified."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "roof-flat-parapet",
+          "decision": "Recomposed the salon low roof into two distinct flat side fields to preserve a deliberate upper-suite void.",
+          "elementIds": [
+            "salon-roof-west",
+            "salon-roof-east",
+            "family-wing-roof",
+            "upper-roof"
+          ],
+          "limitation": "Drainage, waterproofing, roof loading, and guard compliance are not modeled."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "split-level-concept",
+          "decision": "Replaced the obstructed central stair with an exterior step-and-landing sequence at a consistent 0.206 m modeled rise.",
+          "elementIds": [
+            "owner-stair-01",
+            "owner-stair-18",
+            "owner-stair-landing",
+            "owner-stair-walk",
+            "owner-stair-bridge"
+          ],
+          "limitation": "Manual stair geometry is not a code, accessibility, handrail, or certified navigability assessment."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "build-upper-floor-support",
+          "decision": "Placed the upper access bridge in contact with the upper floor edge and supported its outer circulation walk using ground-contact volumes.",
+          "elementIds": [
+            "upper-floor",
+            "owner-stair-bridge",
+            "owner-stair-walk",
+            "owner-stair-post-a",
+            "owner-stair-post-b"
+          ],
+          "limitation": "Geometric support contact is not structural-engineering verification."
+        }
+      ]
+    },
+    "name": "Water Court Promenade Estate — Roof and Stair Coordination Candidate",
+    "summary": "Unapproved coordination candidate: the continuous salon roof is removed and replaced by two side roof fields that clear the owner-suite footprint by 0.2 m, while the family pavilion roof is narrowed to the salon edge. The obstructed ten-step central stair, its overlapping landing, blocking support, and inaccessible front suite door are removed. A new exterior east stair has eighteen 0.206 m rises from the terrace to a supported upper landing and bridge, ending at a new east-wall owner-suite door. The estate character, private pavilions, pool court, and elevated owner retreat are preserved; unp",
+    "unsupported": [
+      "The following candidate includes malformed incomplete programme descriptions and invalid escaped quotes in output, so cannot be accepted as validated JSON."
+    ],
+    "operations": [
+      {
+        "op": "remove",
+        "id": "salon-roof"
+      }
+    ]
+  },
+  "text": "{\"architecturalPlan\":{\"scaleRationale\":\"The US$25m figure remains an assumed-USD ambition reference rather than a construction-cost, valuation, or floor-area formula. This unapproved revision preserves the estate-scale salon, private pavilions, owner suite, water court, and lounge while correcting the upper-level geometry rather than enlarging the compound. The flat Y=0 site remains a temporary modeled condition, not a survey, flood datum, or coastal approval.\",\"arrivalAndCirculation\":\"Public arrival remains through arrival-walk and the sheltered salon threshold; private family and guest pavilions retain independent court-facing entries. The owner suite now has a new east-side door reached by an explicit, exterior eighteen-tread stair, upper landing, supported north-south walk, and bridge at the upper walking datum. Assumptions: the reconstructed stair is intentionally exterior to avoid cutting the salon’s occupied slab and roof, with 0.206 m modeled rises from water-terrace to owner-stair-18; constructed IDs are owner-stair-01 through owner-stair-18, owner-stair-landing, owner-stair-walk, owner-stair-bridge, owner-stair-post-a, owner-stair-post-b, upper-east, and upper-east-door. The rectangular pool remains a dry-deck assembly with basin perimeter, bottom, coping, and water only; no hydraulic, filtration, excavation, or drainage decision is represented.\",\"volumeHierarchy\":\"Two possible corrections were considered: a central roof opening with an internal stair through the salon, or an exterior east-side ascent with roofs restricted to the salon’s flanking bays. The selected concept, “Water Court Promenade—Flanking Roof Edition,” retains the salon as the primary low datum and makes the owner suite a visibly independent lantern above an intentional roof void. The side pavilions, pool lounge, portal canopy, and new circulation bridge remain subordinate to that main section.\",\"relationshipsAndViews\":\"The salon continues to open toward water-terrace and the pool court, while the suite reaches its new east door from an external bridge and retains its broad view opening. owner-stair-01 starts from a new narrow extension of the existing terrace, then rises clear of the salon envelope at the east side before turning to the bridge. The pool lounge remains beside the dry pool circuit, with its access still dependent on the adjoining pool deck geometry rather than a modeled door.\",\"roofFacadeAndMaterials\":\"The conflict is resolved by removing salon-roof and replacing it with salon-roof-west and salon-roof-east, two flat, deep soffit roof fields that stop 0.2 m clear of the owner-suite footprint; the upper suite therefore has no lower roof passing through its floor or enclosure. family-wing-roof is narrowed to terminate at the salon edge, eliminating its plan overlap into the salon. Ivory enclosure, limestone floors and stair solids, bronze upper entry, and timber screens continue the tropical palette; facade assumptions are that deep eaves and screens express shade intent only, with drainage, waterproofing, hurricane, corrosion, and thermal performance unverified.\",\"intendedSpaces\":[\"Great salon, dining and kitchen\",\"Family bedroom pavilion\",\"Guest bedroom pavilion\",\"Upper owner suite\",\"Pool terrace and water court\",\"Open pool lounge\",\"Arrival threshold\",\"Owner stair, bridge and upper landing\"],\"programme\":[{\"name\":\"Great salon, dining and kitchen\",\"zone\":\"public\",\"strategy\":\"Primary ground-level salon remains an open-plan shared volume linked to water-terrace through salon-glass-1.\",\"floorIds\":[\"salon\"],\"enclosureIds\":[\"salon-rear\",\"salon-west\",\"salon-east\",\"salon-bay-0\",\"salon-bay-1\",\"salon-bay-2\",\"salon-bay-3\"],\"roofIds\":[\"salon-roof-west\",\"salon-roof-east\"],\"accessIds\":[\"salon-glass-1\"],\"limitation\":\"Dining and kitchen remain open-plan allocations; no fixtures or internal room partitions are constructed, and the central upper-suite zone is intentionally uncovered by a salon low\" } ,{\"name\":\"Family bedroom pavilion\",\"zone\":\"private\",\"strategy\":\"Independent west ground pavilion uses its central pool-facing entrance and is held apart from the public salon.\",\"floorIds\":[\"family-wing\"],\"enclosureIds\":[\"family-wing-rear\",\"family-wing-west\",\"family-wing-east\",\"family-wing-bay-0\",\"family-wing-bay-1\",\"family-wing-bay-2\"],\"roofIds\":[\"family-wing-roof\"],\"accessIds\":[\"family-wing-glass-1\"],\"limitation\":\"Sleeping, bath, and storage partitions are not represented within the one-storey shell.\"},{\"name\":\"Guest bedroom pavilion\",\"zone\":\"private\",\"strategy\":\"Independent east ground pavilion retains its own court-facing entry and separate low roof.\",\"floorIds\":[\"guest-wing\"],\"enclosureIds\":[\"guest-wing-rear\",\"guest-wing-west\",\"guest-wing-east\",\"guest-wing-bay-0\",\"guest-wing-bay-1\",\"guest-wing-bay-2\"],\"roofIds\":[\"guest-wing-roof\"],\"accessIds\":[\"guest-wing-glass-1\"],\"limitation\":\"Guest sleeping and bath subdivisions are not modeled.\"},{\"name\":\"Upper owner suite\",\"zone\":\"private\",\"strategy\":\"Upper shell remains above the salon but is now reached from the east through owner-stair-bridge and the new opening in upper-east.\",\"floorIds\":[\"upper-floor\"],\"enclosureIds\":[\"upper-front-left\",\"upper-front-doorwall\",\"upper-front-right\",\"upper-east\",\"upper-west\",\"upper-rear\"],\"roofIds\":[\"upper-roof\"],\"accessIds\":[\"upper-east-door\"],\"limitation\":\"The existing former front suite door is removed; the suite remains a single open enclosure without modeled dressing or bath partitions.\"},{\"name\":\"Pool terrace and water court\",\"zone\":\"outdoor\",\"strategy\":\"water-terrace leads to the rectangular pool dry circuit and also supports the new east-side stair approach.\",\"floorIds\":[\"water-terrace\",\"pool-court\",\"pool-court-deck-x-minus\",\"pool-court-deck-x-plus\",\"pool-court-deck-far\"],\"enclosureIds\":[\"pool-court-wall-x-minus\",\"pool-court-wall-x-plus\",\"pool-court-wall-z-minus\",\"pool-court-wall-z-plus\"],\"roofIds\":[],\"accessIds\":[\"salon-glass-1\",\"family-wing-glass-1\",\"guest-wing-glass-1\"],\"limitation\":\"pool-court-floor is a basin floor, not room enclosure. The assembly does not provide hydraulic edges, equipment, drainage, or excavation.\"},{\"name\":\"Open pool lounge\",\"zone\":\"outdoor\",\"strategy\":\"The approved curved pavilion remains an open, sheltered lounge beside the pool court.\",\"floorIds\":[],\"enclosureIds\":[],\"roofIds\":[\"pool-lounge\"],\"accessIds\":[],\"limitation\":\"pool-lounge is a version-pinned open pavilion component with fixed integrated shell, roof, and furniture; no separate editable enclosure, door, or dedicated access path is modeled.\"},{\"name\":\"Arrival threshold\",\"zone\":\"circulation\",\"strategy\":\"arrival-walk reaches salon-glass-1 under the independently supported portal canopy.\",\"floorIds\":[\"arrival-walk\"],\"enclosureIds\":[],\"roofIds\":[\"entry-canopy\"],\"accessIds\":[\"salon-glass-1\"],\"limitation\":\"The posts are structural volumes rather than enclosure. Vehicle access, property boundary, gate, and site grading are not modeled.\"},{\"name\":\"Owner stair, bridge and upper landing\",\"zone\":\"circulation\",\"strategy\":\"A fully exterior east-side rise uses eighteen 2.0 m-wide solid treads, then a landing, supported walk, and bridge to the new east-suite door.\",\"floorIds\":[\"owner-stair-01\",\"owner-stair-02\",\"owner-stair-03\",\"owner-stair-04\",\"owner-stair-05\",\"owner-stair-06\",\"owner-stair-07\",\"owner-stair-08\\\",\\\"owner-stair-09\\\",\\\"owner-stair-10\\\",\\\"owner-stair-11\\\",\\\"owner-stair-12\\\",\\\"owner-stair-13\\\",\\\"owner-stair-14\\\",\\\"'\" ] ,\"enclosureIds\":[],\"roofIds\":[],\"accessIds\":[\"upper-east-door\"],\"limitation\":\"The preceding fifteen cited treads plus owner-stair-15 through owner-stair-18, owner-stair-landing, owner-stair-walk, and owner-stair-bridge form the route; the compact ID evidence\" }],\"spatialRelationships\":[{\"subject\":\"upper-floor\",\"target\":\"salon-roof-west\",\"relation\":\"clear-of\",\"clearance\":0.2,\"reason\":\"The revised west salon roof stops before the upper suite’s west edge.\"},{\"subject\":\"upper-floor\",\"target\":\"salon-roof-east\",\"relation\":\"clear-of\",\"clearance\":0.2,\"reason\":\"The revised east salon roof stops before the upper suite’s east edge.\"},{\"subject\":\"family-wing-roof\",\"target\":\"salon\",\"relation\":\"clear-of\",\"clearance\":0,\"reason\":\"The narrowed pavilion roof terminates at, but does not enter, the salon footprint.\"},{\"subject\":\"owner-stair-01\",\"target\":\"water-terrace\",\"relation\":\"connected-to\",\"clearance\":0,\"reason\":\"The stair approach extension meets the terrace and first tread at the common ground walking datum.\"},{\"subject\":\"owner-stair-18\",\"target\":\"owner-stair-landing\",\"relation\":\"connected-to\",\"clearance\":0,\"reason\":\"The final tread and landing meet at the 3.7 m upper walking datum.\"},{\"subject\":\"owner-stair-bridge\",\"target\":\"upper-east-door\",\"relation\":\"connected-to\",\"clearance\":0,\"reason\":\"The bridge terminates at the new exterior east-wall suite entry.\"},{\"subject\":\"owner-stair-walk\",\"target\":\"owner-stair-post-b\",\"relation\":\"above\",\"clearance\":0,\"reason\":\"The ground-contact post supplies a geometric support path to the elevated walk.\"}],\"designDecisions\":[{\"disposition\":\"constructed\",\"knowledgeId\":\"property-value-25m-50m\",\"decision\":\"Retained an ambitious but coordinated main residence, owner suite, private pavilions, arrival sequence, and pool court without treating the value label as an area or cost formula.\",\"elementIds\":[\"salon\",\"upper-floor\",\"family-wing\",\"guest-wing\",\"pool-court\"],\"limitation\":\"No valuation, construction-cost estimate, market claim, or luxury certification is made.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"estate-composition\",\"decision\":\"Preserved the dominant salon and separate private pavilions while making upper-suite circulation explicit.\",\"elementIds\":[\"salon\",\"family-wing\",\"guest-wing\",\"owner-stair-landing\",\"owner-stair-bridge\"],\"limitation\":\"Inter-wing circulation is exterior rather than an enclosed corridor.\"},{\"disposition\":\"guidance\",\"knowledgeId\":\"waterfront-estate\",\"decision\":\"Maintained the shared salon, terrace, pool, and upper suite toward an assumed waterfront outlook.\",\"elementIds\":[\"salon\",\"water-terrace\",\"pool-court\",\"upper-floor\"],\"limitation\":\"No surveyed shoreline, setback, flood elevation, or marine work is modeled.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"tropical-envelope\",\"decision\":\"Used flanking deep eaves, existing timber screens, and a covered portal while preserving the raised suite roof as its own plane.\",\"elementIds\":[\"salon-roof-west\",\"salon-roof-east\",\"family-screen\",\"guest-screen\",\"entry-canopy\",\"upper-roof\"],\"limitation\":\"No weather, wind, corrosion, or hurricane performance is simulated or certified.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"covered-threshold\",\"decision\":\"Retained the real portal posts, canopy, approach, and salon threshold.\",\"elementIds\":[\"arrival-walk\",\"entry-post-west\",\"entry-post-east\",\"entry-canopy\",\"salon-glass-1\"],\"limitation\":\"Canopy structure and weatherproofing are not certified.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"roof-flat-parapet\",\"decision\":\"Recomposed the salon low roof into two distinct flat side fields to preserve a deliberate upper-suite void.\",\"elementIds\":[\"salon-roof-west\",\"salon-roof-east\",\"family-wing-roof\",\"upper-roof\"],\"limitation\":\"Drainage, waterproofing, roof loading, and guard compliance are not modeled.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"split-level-concept\",\"decision\":\"Replaced the obstructed central stair with an exterior step-and-landing sequence at a consistent 0.206 m modeled rise.\",\"elementIds\":[\"owner-stair-01\",\"owner-stair-18\",\"owner-stair-landing\",\"owner-stair-walk\",\"owner-stair-bridge\"],\"limitation\":\"Manual stair geometry is not a code, accessibility, handrail, or certified navigability assessment.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"build-upper-floor-support\",\"decision\":\"Placed the upper access bridge in contact with the upper floor edge and supported its outer circulation walk using ground-contact volumes.\",\"elementIds\":[\"upper-floor\",\"owner-stair-bridge\",\"owner-stair-walk\",\"owner-stair-post-a\",\"owner-stair-post-b\"],\"limitation\":\"Geometric support contact is not structural-engineering verification.\"}]},\"name\":\"Water Court Promenade Estate — Roof and Stair Coordination Candidate\",\"summary\":\"Unapproved coordination candidate: the continuous salon roof is removed and replaced by two side roof fields that clear the owner-suite footprint by 0.2 m, while the family pavilion roof is narrowed to the salon edge. The obstructed ten-step central stair, its overlapping landing, blocking support, and inaccessible front suite door are removed. A new exterior east stair has eighteen 0.206 m rises from the terrace to a supported upper landing and bridge, ending at a new east-wall owner-suite door. The estate character, private pavilions, pool court, and elevated owner retreat are preserved; unp\" ,\"unsupported\":[\"The following candidate includes malformed incomplete programme descriptions and invalid escaped quotes in output, so cannot be accepted as validated JSON.\"] ,\"operations\": [ {\"op\":\"remove\",\"id\":\"salon-roof\"} ]}",
+  "usage": {
+    "inputTokens": 29867,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 29864
+    },
+    "outputTokens": 5785,
+    "outputTokenDetails": {
+      "textTokens": 2888,
+      "reasoningTokens": 2897
+    },
+    "totalTokens": 35652,
+    "reasoningTokens": 2897,
+    "cachedInputTokens": 0
+  },
+  "finishReason": "stop",
+  "providerCalls": 1
+}

@@ -1,0 +1,1458 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Offline developer study: Garden court",
+  "elements": [
+    {
+      "id": "primary",
+      "label": "primary floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        36,
+        0.2,
+        18
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "assemblyKind": "residential-wing"
+    },
+    {
+      "id": "primary-rear",
+      "label": "primary rear",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        0,
+        2.5,
+        -8.85
+      ],
+      "rotation": 0,
+      "size": [
+        36,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "primary-west",
+      "label": "primary west",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        -17.85,
+        2.5,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        17.4,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "primary-east",
+      "label": "primary east",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        17.85,
+        2.5,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        17.4,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "primary-bay-0",
+      "label": "primary bay-0",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        -13.5,
+        2.5,
+        8.85
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 8.55,
+        "height": 4.3999999999999995,
+        "glazed": false
+      }
+    },
+    {
+      "id": "primary-glass-0",
+      "label": "primary glass-0",
+      "kind": "glazing",
+      "parent": "primary-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        8.55,
+        4.3999999999999995,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "primary-reveal-0",
+      "label": "primary reveal-0",
+      "kind": "volume",
+      "parent": "primary",
+      "at": [
+        -13.5,
+        4.819999999999999,
+        9.06
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "primary-bay-1",
+      "label": "primary bay-1",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        -4.5,
+        2.5,
+        8.85
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 8.55,
+        "height": 4.55,
+        "glazed": false
+      }
+    },
+    {
+      "id": "primary-glass-1",
+      "label": "primary glass-1",
+      "kind": "entrance",
+      "parent": "primary-bay-1",
+      "at": [
+        0,
+        -0.125,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        8.55,
+        4.55,
+        0.1
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "primary-reveal-1",
+      "label": "primary reveal-1",
+      "kind": "volume",
+      "parent": "primary",
+      "at": [
+        -4.5,
+        4.819999999999999,
+        9.06
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "primary-bay-2",
+      "label": "primary bay-2",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        4.5,
+        2.5,
+        8.85
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 8.55,
+        "height": 4.3999999999999995,
+        "glazed": false
+      }
+    },
+    {
+      "id": "primary-glass-2",
+      "label": "primary glass-2",
+      "kind": "glazing",
+      "parent": "primary-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        8.55,
+        4.3999999999999995,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "primary-reveal-2",
+      "label": "primary reveal-2",
+      "kind": "volume",
+      "parent": "primary",
+      "at": [
+        4.5,
+        4.819999999999999,
+        9.06
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "primary-bay-3",
+      "label": "primary bay-3",
+      "kind": "wall",
+      "parent": "primary",
+      "at": [
+        13.5,
+        2.5,
+        8.85
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        4.8,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 8.55,
+        "height": 4.3999999999999995,
+        "glazed": false
+      }
+    },
+    {
+      "id": "primary-glass-3",
+      "label": "primary glass-3",
+      "kind": "glazing",
+      "parent": "primary-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        8.55,
+        4.3999999999999995,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "primary-reveal-3",
+      "label": "primary reveal-3",
+      "kind": "volume",
+      "parent": "primary",
+      "at": [
+        13.5,
+        4.819999999999999,
+        9.06
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "primary-roof",
+      "label": "primary roof",
+      "kind": "roof",
+      "parent": "primary",
+      "at": [
+        0,
+        5.0249999999999995,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        37.2,
+        0.25,
+        19.2
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "private-west",
+      "label": "private-west floor",
+      "kind": "plate",
+      "at": [
+        -32,
+        0.1,
+        4
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        18,
+        0.2,
+        24
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "assemblyKind": "residential-wing"
+    },
+    {
+      "id": "private-west-rear",
+      "label": "private-west rear",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        0,
+        1.9000000000000001,
+        -11.85
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-west-west",
+      "label": "private-west west",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        -8.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        23.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-west-east",
+      "label": "private-west east",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        8.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        23.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-west-bay-0",
+      "label": "private-west bay-0",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        -6.75,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-west-glass-0",
+      "label": "private-west glass-0",
+      "kind": "glazing",
+      "parent": "private-west-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-west-reveal-0",
+      "label": "private-west reveal-0",
+      "kind": "volume",
+      "parent": "private-west",
+      "at": [
+        -6.75,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-west-bay-1",
+      "label": "private-west bay-1",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        -2.25,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 4.05,
+        "height": 3.35,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-west-glass-1",
+      "label": "private-west glass-1",
+      "kind": "entrance",
+      "parent": "private-west-bay-1",
+      "at": [
+        0,
+        -0.125,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.35,
+        0.1
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-west-reveal-1",
+      "label": "private-west reveal-1",
+      "kind": "volume",
+      "parent": "private-west",
+      "at": [
+        -2.25,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-west-bay-2",
+      "label": "private-west bay-2",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        2.25,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-west-glass-2",
+      "label": "private-west glass-2",
+      "kind": "glazing",
+      "parent": "private-west-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-west-reveal-2",
+      "label": "private-west reveal-2",
+      "kind": "volume",
+      "parent": "private-west",
+      "at": [
+        2.25,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-west-bay-3",
+      "label": "private-west bay-3",
+      "kind": "wall",
+      "parent": "private-west",
+      "at": [
+        6.75,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-west-glass-3",
+      "label": "private-west glass-3",
+      "kind": "glazing",
+      "parent": "private-west-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-west-reveal-3",
+      "label": "private-west reveal-3",
+      "kind": "volume",
+      "parent": "private-west",
+      "at": [
+        6.75,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-west-roof",
+      "label": "private-west roof",
+      "kind": "roof",
+      "parent": "private-west",
+      "at": [
+        0,
+        3.825,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        19.2,
+        0.25,
+        25.2
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "private-east",
+      "label": "private-east floor",
+      "kind": "plate",
+      "at": [
+        32,
+        0.1,
+        4
+      ],
+      "rotation": -1.5707963267948966,
+      "size": [
+        18,
+        0.2,
+        24
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "assemblyKind": "residential-wing"
+    },
+    {
+      "id": "private-east-rear",
+      "label": "private-east rear",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        0,
+        1.9000000000000001,
+        -11.85
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-east-west",
+      "label": "private-east west",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        -8.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        23.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-east-east",
+      "label": "private-east east",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        8.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        23.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "private-east-bay-0",
+      "label": "private-east bay-0",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        -6.75,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-east-glass-0",
+      "label": "private-east glass-0",
+      "kind": "glazing",
+      "parent": "private-east-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-east-reveal-0",
+      "label": "private-east reveal-0",
+      "kind": "volume",
+      "parent": "private-east",
+      "at": [
+        -6.75,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-east-bay-1",
+      "label": "private-east bay-1",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        -2.25,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 4.05,
+        "height": 3.35,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-east-glass-1",
+      "label": "private-east glass-1",
+      "kind": "entrance",
+      "parent": "private-east-bay-1",
+      "at": [
+        0,
+        -0.125,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.35,
+        0.1
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-east-reveal-1",
+      "label": "private-east reveal-1",
+      "kind": "volume",
+      "parent": "private-east",
+      "at": [
+        -2.25,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-east-bay-2",
+      "label": "private-east bay-2",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        2.25,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-east-glass-2",
+      "label": "private-east glass-2",
+      "kind": "glazing",
+      "parent": "private-east-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-east-reveal-2",
+      "label": "private-east reveal-2",
+      "kind": "volume",
+      "parent": "private-east",
+      "at": [
+        2.25,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-east-bay-3",
+      "label": "private-east bay-3",
+      "kind": "wall",
+      "parent": "private-east",
+      "at": [
+        6.75,
+        1.9000000000000001,
+        11.85
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 4.05,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "private-east-glass-3",
+      "label": "private-east glass-3",
+      "kind": "glazing",
+      "parent": "private-east-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.05,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "private-east-reveal-3",
+      "label": "private-east reveal-3",
+      "kind": "volume",
+      "parent": "private-east",
+      "at": [
+        6.75,
+        3.62,
+        12.06
+      ],
+      "rotation": 0,
+      "size": [
+        4.5,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "private-east-roof",
+      "label": "private-east roof",
+      "kind": "roof",
+      "parent": "private-east",
+      "at": [
+        0,
+        3.825,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        19.2,
+        0.25,
+        25.2
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "guest",
+      "label": "guest floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        36
+      ],
+      "rotation": 3.141592653589793,
+      "size": [
+        24,
+        0.2,
+        16
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "assemblyKind": "residential-wing"
+    },
+    {
+      "id": "guest-rear",
+      "label": "guest rear",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        0,
+        1.9000000000000001,
+        -7.85
+      ],
+      "rotation": 0,
+      "size": [
+        24,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "guest-west",
+      "label": "guest west",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        -11.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        15.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "guest-east",
+      "label": "guest east",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        11.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        15.4,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "guest-bay-0",
+      "label": "guest bay-0",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        -9,
+        1.9000000000000001,
+        7.85
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 5.55,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "guest-glass-0",
+      "label": "guest glass-0",
+      "kind": "glazing",
+      "parent": "guest-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.55,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "guest-reveal-0",
+      "label": "guest reveal-0",
+      "kind": "volume",
+      "parent": "guest",
+      "at": [
+        -9,
+        3.62,
+        8.06
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "guest-bay-1",
+      "label": "guest bay-1",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        -3,
+        1.9000000000000001,
+        7.85
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5.55,
+        "height": 3.35,
+        "glazed": false
+      }
+    },
+    {
+      "id": "guest-glass-1",
+      "label": "guest glass-1",
+      "kind": "entrance",
+      "parent": "guest-bay-1",
+      "at": [
+        0,
+        -0.125,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.55,
+        3.35,
+        0.1
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "guest-reveal-1",
+      "label": "guest reveal-1",
+      "kind": "volume",
+      "parent": "guest",
+      "at": [
+        -3,
+        3.62,
+        8.06
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "guest-bay-2",
+      "label": "guest bay-2",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        3,
+        1.9000000000000001,
+        7.85
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 5.55,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "guest-glass-2",
+      "label": "guest glass-2",
+      "kind": "glazing",
+      "parent": "guest-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.55,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "guest-reveal-2",
+      "label": "guest reveal-2",
+      "kind": "volume",
+      "parent": "guest",
+      "at": [
+        3,
+        3.62,
+        8.06
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "guest-bay-3",
+      "label": "guest bay-3",
+      "kind": "wall",
+      "parent": "guest",
+      "at": [
+        9,
+        1.9000000000000001,
+        7.85
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        3.6,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 5.55,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "guest-glass-3",
+      "label": "guest glass-3",
+      "kind": "glazing",
+      "parent": "guest-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.55,
+        3.2,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "guest-reveal-3",
+      "label": "guest reveal-3",
+      "kind": "volume",
+      "parent": "guest",
+      "at": [
+        9,
+        3.62,
+        8.06
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "guest-roof",
+      "label": "guest roof",
+      "kind": "roof",
+      "parent": "guest",
+      "at": [
+        0,
+        3.825,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        25.2,
+        0.25,
+        17.2
+      ],
+      "material": "ivory",
+      "roofForm": "flat",
+      "overhang": 0.6,
+      "panels": 4
+    },
+    {
+      "id": "court-walk",
+      "label": "court-walk",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        18.5
+      ],
+      "rotation": 0,
+      "size": [
+        40,
+        0.2,
+        19
+      ],
+      "material": "limestone",
+      "panels": 1
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "Assume an estate programme for the stated qualitative property value, not construction spend. Different residential blocks distribute floor surfaces while preserving room-scale bay heights. Surface totals do not certify enclosed usable area.",
+    "arrivalAndCirculation": "Assumptions: arrival crosses court-walk; each wing entry faces the court. Internal subdivisions and weather protection need further design.",
+    "volumeHierarchy": "Garden court: taller primary salon anchors two unequal-use private wings and a subordinate guest block across an outdoor room.",
+    "relationshipsAndViews": "Assume water toward +Z; primary living and outdoor approach relate to the view. No surveyed north, coastline or access is asserted.",
+    "roofFacadeAndMaterials": "Independent flat roofs at enclosure heads; recessed framed glazing and stone reveals. Roof envelopes remain separated. Covered external circulation is not claimed.",
+    "intendedSpaces": [
+      "Primary living and entertaining",
+      "Private accommodation",
+      "Guest accommodation",
+      "Outdoor arrival and living"
+    ],
+    "spatialRelationships": [
+      {
+        "subject": "primary",
+        "target": "court-walk",
+        "relation": "connected-to",
+        "clearance": 0,
+        "reason": "Shared floor datum at the main entrance side."
+      }
+    ]
+  }
+}

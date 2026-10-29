@@ -1,0 +1,335 @@
+{
+  "approval": "unapproved",
+  "beforeIssues": [],
+  "afterIssues": [],
+  "architecturalAudit": {
+    "status": "incomplete",
+    "issues": [
+      "Knowledge decision facade-materials: No solar, weathering, or material-performance simulation is represented.",
+      "Knowledge decision estate-composition: referenced geometry lacks required kinds wall, roof; descriptions are not construction.",
+      "Knowledge decision estate-composition: Upper-suite internal programme and vertical access are not geometrically modelled.",
+      "Knowledge decision roof-main-secondary: The open upper terrace is not roof-sheltered; waterproofing, drainage, guard compliance, and engineering are not verified.",
+      "Knowledge decision waterfront-estate: referenced geometry lacks required kinds roof; descriptions are not construction.",
+      "Knowledge decision waterfront-estate: Ocean orientation, shoreline location, flood elevation, legal setbacks, and marine conditions remain unverified assumptions.",
+      "Retrieved knowledge entry-night-material: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge facade-pier-rhythm: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge roof-terrace-door: selected but no construction or explicit disposition evidence.",
+      "Requested space: Covered landward arrival court with recessed entrance portal. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Tall central salon with operable ocean terrace threshold. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: West private suite wing with elevated ocean terrace. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: East private suite and flexible support wing. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Deep covered ocean-facing dining and lounge terrace with lateral privacy shade. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Rectangular pool court with coping and basin geometry. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Detached open elliptical ocean lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+    ],
+    "designDecisions": [
+      {
+        "disposition": "constructed",
+        "knowledgeId": "facade-materials",
+        "decision": "Reinforced a restrained palette and facade depth through the existing ivory/limestone/timber composition, a bronze salon door, and lateral bronze terrace screens.",
+        "elementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "terrace-canopy"
+        ],
+        "limitation": "No solar, weathering, or material-performance simulation is represented.",
+        "existingElementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "terrace-canopy"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [],
+        "detachedElementIds": [],
+        "status": "referenced-geometry",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "estate-composition",
+        "decision": "Retained the central salon as the primary communal volume and made the pre-existing upper west suite a more useful secondary private volume through an actual guarded terrace rather than adding more programme.",
+        "elementIds": [
+          "salon-floor",
+          "west-upper-floor",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail",
+          "west-upper-terrace-rail-west",
+          "west-upper-terrace-rail-east"
+        ],
+        "limitation": "Upper-suite internal programme and vertical access are not geometrically modelled.",
+        "existingElementIds": [
+          "salon-floor",
+          "west-upper-floor",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail",
+          "west-upper-terrace-rail-west",
+          "west-upper-terrace-rail-east"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "wall",
+          "roof"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "roof-main-secondary",
+        "decision": "Kept the salon roof dominant and the west upper roof subordinate; the new terrace projects beyond the recessed upper roof as an intentionally open, guarded outdoor room.",
+        "elementIds": [
+          "salon-roof",
+          "west-upper-roof",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail"
+        ],
+        "limitation": "The open upper terrace is not roof-sheltered; waterproofing, drainage, guard compliance, and engineering are not verified.",
+        "existingElementIds": [
+          "salon-roof",
+          "west-upper-roof",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [],
+        "detachedElementIds": [],
+        "status": "referenced-geometry",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "waterfront-estate",
+        "decision": "Prioritized direct communal movement from the salon to the covered view terrace and screened its lateral edges while retaining the existing axial pool and pavilion sequence.",
+        "elementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "ocean-terrace",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "pool-water",
+          "ocean-pavilion"
+        ],
+        "limitation": "Ocean orientation, shoreline location, flood elevation, legal setbacks, and marine conditions remain unverified assumptions.",
+        "existingElementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "ocean-terrace",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "pool-water",
+          "ocean-pavilion"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "roof"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      }
+    ],
+    "knowledgeUse": [
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "status": "construction-evidence",
+        "elementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "terrace-canopy"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "entry-night-material",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "facade-pier-rhythm",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "roof-terrace-door",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "salon-floor",
+          "west-upper-floor",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail",
+          "west-upper-terrace-rail-west",
+          "west-upper-terrace-rail-east"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "roof-main-secondary",
+        "version": 1,
+        "status": "construction-evidence",
+        "elementIds": [
+          "salon-roof",
+          "west-upper-roof",
+          "west-upper-terrace-deck",
+          "west-upper-terrace-rail"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "salon-view-center",
+          "salon-ocean-door",
+          "ocean-terrace",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "pool-water",
+          "ocean-pavilion"
+        ],
+        "verifiedComplete": false
+      }
+    ],
+    "geometry": {
+      "kindCounts": {
+        "plate": 14,
+        "wall": 43,
+        "entrance": 3,
+        "roof": 5,
+        "volume": 9,
+        "screen": 4,
+        "water": 1,
+        "pavilion": 1,
+        "balcony": 3
+      },
+      "surfaces": [
+        {
+          "id": "salon-floor",
+          "kind": "plate",
+          "areaM2": 192,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "west-wing-floor",
+          "kind": "plate",
+          "areaM2": 100,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "east-wing-floor",
+          "kind": "plate",
+          "areaM2": 100,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival-court",
+          "kind": "plate",
+          "areaM2": 48,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-terrace",
+          "kind": "plate",
+          "areaM2": 128,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "west-wing-roof",
+          "kind": "plate",
+          "areaM2": 100,
+          "walkingDatum": 3.85
+        },
+        {
+          "id": "pool-basin-floor",
+          "kind": "plate",
+          "areaM2": 70,
+          "walkingDatum": 0.06
+        },
+        {
+          "id": "pool-water",
+          "kind": "water",
+          "areaM2": 70,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-west",
+          "kind": "plate",
+          "areaM2": 6.12,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-east",
+          "kind": "plate",
+          "areaM2": 6.12,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-south",
+          "kind": "plate",
+          "areaM2": 12.6,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-north",
+          "kind": "plate",
+          "areaM2": 12.6,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "poolside-lounge-deck",
+          "kind": "plate",
+          "areaM2": 45,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "west-upper-floor",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 3.9899999999999998
+        },
+        {
+          "id": "west-upper-terrace-deck",
+          "kind": "plate",
+          "areaM2": 27.2,
+          "walkingDatum": 4.13
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.2,
+        3.85,
+        0.06,
+        3.99,
+        4.13
+      ],
+      "plateSurfaceAreaM2": 911.6400000000001,
+      "waterSurfaceAreaM2": 70
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "providerCalls": 1,
+  "roundtrip": true
+}

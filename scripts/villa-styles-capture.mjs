@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { mkdirSync, writeFileSync } from 'node:fs';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE ?? '/private/tmp/aiarchitect-studio-browser/node_modules/playwright-core');
-const directory = 'docs/villa-playground/styles';
+const directory = process.env.VILLA_STYLE_EVIDENCE_DIR ?? 'docs/villa-playground/styles';
 mkdirSync(directory, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE ?? `${process.env.HOME}/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`, args: ['--use-angle=metal', '--enable-webgl', '--ignore-gpu-blocklist'] });
 const errors = [], checks = [];
@@ -11,6 +11,7 @@ try {
   const context = await browser.newContext({ viewport: { width: 1500, height: 1050 }, deviceScaleFactor: 1 });
   const page = await context.newPage();
   page.on('pageerror', e => errors.push(String(e)));
+  await page.route('**/api/ai/**',r=>r.abort());
   await page.goto(process.env.VILLA_URL ?? 'http://127.0.0.1:3107/dev/villa-playground', { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.locator('canvas').waitFor();
   await page.waitForTimeout(10000);

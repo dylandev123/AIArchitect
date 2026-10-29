@@ -1,0 +1,3234 @@
+{
+  "providerCalls": 0,
+  "source": ".data/scene-responses/437d25b1-ff69-462c-ab34-a8deb7861c67.json",
+  "sha256": "7283c674231249995785d9236603c243c480e9881955c669fc8308f6af42b30e",
+  "originalError": "Error: Architectural plan incomplete: Great salon: salon-gallery-wall missing or wrong architectural kind. Dining room: dining-salon-wall missing or wrong architectural kind. Show kitchen: kitchen-dining-wall missing or wrong architectural kind. Pool loggia terrace: measured floor 636.0 m² differs from planned 320 m². Pool basin: pool-water missing or wrong architectural kind. Pool basin: measured floor 0.0 m² differs from planned 84 m². Planned enclosed area 1024 m²; measured floor evidence 1320.0 m². Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.: west-gallery-wall missing or wrong architectural kind. The salon is the dominant civic room and has the tallest roof datum.: salon-roof missing or wrong architectural kind.",
+  "originalAudit": {
+    "status": "incomplete",
+    "enclosedAreaM2": 1320,
+    "levels": 1,
+    "spaces": [
+      {
+        "name": "Arrival gallery",
+        "areaM2": 120,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Great salon",
+        "areaM2": 252,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Dining room",
+        "areaM2": 140,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Show kitchen",
+        "areaM2": 168,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Primary suite",
+        "areaM2": 288,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Guest suite one",
+        "areaM2": 160,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Guest suite two",
+        "areaM2": 192,
+        "level": 0,
+        "use": "interior"
+      },
+      {
+        "name": "Pool loggia terrace",
+        "areaM2": 636,
+        "level": 0,
+        "use": "outdoor"
+      },
+      {
+        "name": "Pool basin",
+        "areaM2": 0,
+        "level": 0,
+        "use": "outdoor"
+      }
+    ],
+    "issues": [
+      "Great salon: salon-gallery-wall missing or wrong architectural kind.",
+      "Dining room: dining-salon-wall missing or wrong architectural kind.",
+      "Show kitchen: kitchen-dining-wall missing or wrong architectural kind.",
+      "Pool loggia terrace: measured floor 636.0 m² differs from planned 320 m².",
+      "Pool basin: pool-water missing or wrong architectural kind.",
+      "Pool basin: measured floor 0.0 m² differs from planned 84 m².",
+      "Planned enclosed area 1024 m²; measured floor evidence 1320.0 m².",
+      "Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.: west-gallery-wall missing or wrong architectural kind.",
+      "The salon is the dominant civic room and has the tallest roof datum.: salon-roof missing or wrong architectural kind."
+    ],
+    "limitations": [
+      "Floor evidence estimates area; enclosure completeness, spatial quality and circulation usability require visual review."
+    ]
+  },
+  "geometryIssues": [],
+  "result": {
+    "architecturalPlan": {
+      "scaleRationale": "A $25 million brief is resolved as a highly crafted, single-level 1,024 m² courtyard residence rather than an inflated acreage exercise. Its value is concentrated in a long ceremonial gallery, generously proportioned public rooms, three fully realised bedroom domains, deep outdoor living, a formal pool court, limestone-and-bronze detailing, and independently articulated roof planes. The deliberately compact one-level arrangement provides step-free living and makes every major room engage the pool court while preserving the estate-like arrival sequence.",
+      "levels": 1,
+      "enclosedAreaM2": 1024,
+      "arrivalAndCirculation": "Level 0 walking-surface datum is Y=0.20 m. Arrival approaches the west-facing bronze entrance in the long limestone gallery at X=-4.00. The 4 m-wide gallery is the primary circulation spine: it connects the salon, dining room, kitchen, primary suite and both guest suites through actual openings in its east wall. The pool court is reached from the north-facing glazed public-room elevation. Internal stair geometry is not required because the residence is single level.",
+      "volumeHierarchy": "The 18 x 14 m salon is the primary public volume, expressed with the highest and deepest flat roof plane. Dining and kitchen form a lower eastward service-and-entertaining bar. The 18 x 16 m primary suite is a quiet south volume, while two substantial guest suites form a secondary eastward sleeping bar. The narrow gallery is deliberately lower and reads as a sheltered arrival datum rather than a competing volume.",
+      "relationshipsAndViews": "Level 0 plan tiles without overlap: gallery X=-4..0, Z=-16..14; salon X=0..18, Z=0..14; dining X=18..28, Z=0..14; kitchen X=28..40, Z=0..14; primary suite X=0..18, Z=-16..0; guest suite one X=18..28, Z=-16..0; guest suite two X=28..40, Z=-16..0. The shared boundary at X=0 is divided into gallery-to-primary and gallery-to-salon walls; the Z=0 crosswall divides public and private rooms. The north side opens onto a 40 x 18 m articulated pool terrace; a 14 x 6 m water basin is surrounded by separate walkable deck plates. The salon has the principal pool-facing outlook, with dining and kitchen extending the entertaining frontage.",
+      "roofFacadeAndMaterials": "All ground slabs are 0.20 m thick with top walking surface at Y=0.20 m. Gallery enclosure rises from Y=0.20 to its roof underside at Y=3.20 m; its 0.30 m roof occupies Y=3.20..3.50 m. Secondary rooms rise to Y=3.35 m and receive 0.30 m roofs occupying Y=3.35..3.65 m. The salon rises to Y=3.85 m and its 0.35 m primary roof occupies Y=3.85..4.20 m. Limestone walls establish the heavy enclosure and framing piers; bronze is reserved for the recessed entrance and glazing frames; timber screens create shade at the public pool facade. Flat roofs have deep, deliberate overhangs, with the salon roof visibly more substantial than the subsidiary planes.",
+      "spaces": [
+        {
+          "name": "Arrival gallery",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 120,
+          "floorIds": [
+            "gallery-floor"
+          ],
+          "enclosureIds": [
+            "west-gallery-wall",
+            "north-gallery-wall",
+            "south-gallery-wall",
+            "gallery-primary-wall",
+            "gallery-salon-wall"
+          ],
+          "roofIds": [
+            "gallery-roof"
+          ]
+        },
+        {
+          "name": "Great salon",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 252,
+          "floorIds": [
+            "salon-floor"
+          ],
+          "enclosureIds": [
+            "north-salon-wall",
+            "salon-gallery-wall",
+            "salon-dining-wall",
+            "salon-primary-wall"
+          ],
+          "roofIds": [
+            "salon-roof"
+          ]
+        },
+        {
+          "name": "Dining room",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 140,
+          "floorIds": [
+            "dining-floor"
+          ],
+          "enclosureIds": [
+            "north-dining-wall",
+            "dining-salon-wall",
+            "dining-kitchen-wall",
+            "dining-guestone-wall"
+          ],
+          "roofIds": [
+            "dining-roof"
+          ]
+        },
+        {
+          "name": "Show kitchen",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 168,
+          "floorIds": [
+            "kitchen-floor"
+          ],
+          "enclosureIds": [
+            "north-kitchen-wall",
+            "east-kitchen-wall",
+            "kitchen-dining-wall",
+            "kitchen-guesttwo-wall"
+          ],
+          "roofIds": [
+            "kitchen-roof"
+          ]
+        },
+        {
+          "name": "Primary suite",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 288,
+          "floorIds": [
+            "primary-floor"
+          ],
+          "enclosureIds": [
+            "south-primary-wall",
+            "gallery-primary-wall",
+            "primary-guestone-wall",
+            "salon-primary-wall"
+          ],
+          "roofIds": [
+            "primary-roof"
+          ]
+        },
+        {
+          "name": "Guest suite one",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 160,
+          "floorIds": [
+            "guestone-floor"
+          ],
+          "enclosureIds": [
+            "south-guestone-wall",
+            "primary-guestone-wall",
+            "guestone-guesttwo-wall",
+            "dining-guestone-wall"
+          ],
+          "roofIds": [
+            "guestone-roof"
+          ]
+        },
+        {
+          "name": "Guest suite two",
+          "use": "interior",
+          "level": 0,
+          "areaM2": 192,
+          "floorIds": [
+            "guesttwo-floor"
+          ],
+          "enclosureIds": [
+            "south-guesttwo-wall",
+            "guestone-guesttwo-wall",
+            "east-guesttwo-wall",
+            "kitchen-guesttwo-wall"
+          ],
+          "roofIds": [
+            "guesttwo-roof"
+          ]
+        },
+        {
+          "name": "Pool loggia terrace",
+          "use": "outdoor",
+          "level": 0,
+          "areaM2": 320,
+          "floorIds": [
+            "terrace-south",
+            "terrace-north",
+            "terrace-west",
+            "terrace-east"
+          ],
+          "enclosureIds": [],
+          "roofIds": []
+        },
+        {
+          "name": "Pool basin",
+          "use": "outdoor",
+          "level": 0,
+          "areaM2": 84,
+          "floorIds": [
+            "pool-water"
+          ],
+          "enclosureIds": [
+            "pool-north-coping",
+            "pool-south-coping",
+            "pool-west-coping",
+            "pool-east-coping"
+          ],
+          "roofIds": []
+        }
+      ],
+      "commitments": [
+        {
+          "description": "Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.",
+          "kind": "entrance",
+          "elementIds": [
+            "main-entrance",
+            "west-gallery-wall"
+          ]
+        },
+        {
+          "description": "The gallery is the legible horizontal circulation spine at the level-zero walking datum.",
+          "kind": "circulation",
+          "elementIds": [
+            "gallery-floor"
+          ]
+        },
+        {
+          "description": "The salon is the dominant civic room and has the tallest roof datum.",
+          "kind": "primary-volume",
+          "elementIds": [
+            "salon-floor",
+            "salon-roof",
+            "north-salon-wall"
+          ]
+        },
+        {
+          "description": "The dining, kitchen, primary suite and guest suites are subordinate but complete residential volumes.",
+          "kind": "secondary-volume",
+          "elementIds": [
+            "dining-floor",
+            "kitchen-floor",
+            "primary-floor",
+            "guestone-floor",
+            "guesttwo-floor"
+          ]
+        },
+        {
+          "description": "Layered flat roof planes distinguish gallery, secondary rooms and the principal salon.",
+          "kind": "roof",
+          "elementIds": [
+            "gallery-roof",
+            "salon-roof",
+            "dining-roof",
+            "kitchen-roof",
+            "primary-roof",
+            "guestone-roof",
+            "guesttwo-roof"
+          ]
+        },
+        {
+          "description": "The pool facade is composed as actual glazed openings within limestone enclosure, softened by timber shade screens.",
+          "kind": "facade",
+          "elementIds": [
+            "north-salon-glazing",
+            "north-dining-glazing",
+            "north-kitchen-glazing",
+            "salon-shade-screen",
+            "dining-shade-screen"
+          ]
+        },
+        {
+          "description": "The pool court is a walkable sequence of separately modelled deck plates around an explicit water basin.",
+          "kind": "terrace",
+          "elementIds": [
+            "terrace-south",
+            "terrace-north",
+            "terrace-west",
+            "terrace-east"
+          ]
+        }
+      ]
+    },
+    "name": "Limestone Gallery Court",
+    "summary": "A single-level, 1,024 m² luxury courtyard mansion organised around a ceremonial gallery and a long pool court. A high salon roof anchors the composition, while lower limestone sleeping and entertaining volumes create a calm, layered estate character.",
+    "unsupported": [
+      "The site is temporarily represented as level ground at Y=0 in accordance with generation-site policy; no terrain, grading, planting, driveway, or landscape topography is modelled.",
+      "Internal furniture, bathrooms, cabinetry, stair/interior construction, MEP, structural engineering, code compliance, drainage, and pool excavation are not represented.",
+      "Curved or polygonal mansion shells, arbitrary mesh forms, and custom curved roofs are not supported by the available editable primitives."
+    ],
+    "operations": [
+      {
+        "op": "add",
+        "element": {
+          "id": "gallery-floor",
+          "label": "Arrival gallery floor",
+          "kind": "plate",
+          "at": [
+            -2,
+            0.1,
+            -1
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            0.2,
+            30
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "salon-floor",
+          "label": "Great salon floor",
+          "kind": "plate",
+          "at": [
+            9,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-floor",
+          "label": "Dining floor",
+          "kind": "plate",
+          "at": [
+            23,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "kitchen-floor",
+          "label": "Show kitchen floor",
+          "kind": "plate",
+          "at": [
+            34,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "primary-floor",
+          "label": "Primary suite floor",
+          "kind": "plate",
+          "at": [
+            9,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guestone-floor",
+          "label": "Guest suite one floor",
+          "kind": "plate",
+          "at": [
+            23,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guesttwo-floor",
+          "label": "Guest suite two floor",
+          "kind": "plate",
+          "at": [
+            34,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "terrace-south",
+          "label": "Pool court south deck",
+          "kind": "plate",
+          "at": [
+            20,
+            0.1,
+            18
+          ],
+          "rotation": 0,
+          "size": [
+            40,
+            0.2,
+            8
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "terrace-north",
+          "label": "Pool court north deck",
+          "kind": "plate",
+          "at": [
+            20,
+            0.1,
+            30
+          ],
+          "rotation": 0,
+          "size": [
+            40,
+            0.2,
+            4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "terrace-west",
+          "label": "Pool court west deck",
+          "kind": "plate",
+          "at": [
+            6.5,
+            0.1,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            13,
+            0.2,
+            6
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "terrace-east",
+          "label": "Pool court east deck",
+          "kind": "plate",
+          "at": [
+            33.5,
+            0.1,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            13,
+            0.2,
+            6
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-water",
+          "label": "Reflecting pool water",
+          "kind": "water",
+          "at": [
+            20,
+            0.2,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            14,
+            0.05,
+            6
+          ],
+          "material": "sage",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-north-coping",
+          "label": "Pool north coping",
+          "kind": "wall",
+          "at": [
+            20,
+            0.35,
+            28.15
+          ],
+          "rotation": 0,
+          "size": [
+            14.4,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-south-coping",
+          "label": "Pool south coping",
+          "kind": "wall",
+          "at": [
+            20,
+            0.35,
+            21.85
+          ],
+          "rotation": 0,
+          "size": [
+            14.4,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-west-coping",
+          "label": "Pool west coping",
+          "kind": "wall",
+          "at": [
+            12.85,
+            0.35,
+            25
+          ],
+          "rotation": 1.5708,
+          "size": [
+            6,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-east-coping",
+          "label": "Pool east coping",
+          "kind": "wall",
+          "at": [
+            27.15,
+            0.35,
+            25
+          ],
+          "rotation": 1.5708,
+          "size": [
+            6,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-gallery-wall",
+          "label": "Gallery arrival facade",
+          "kind": "wall",
+          "at": [
+            -4,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            30,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 8,
+            "sill": 0,
+            "width": 2.2,
+            "height": 2.6,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "west-gallery-wall",
+        "support": "gallery-floor",
+        "offset": [
+          -2,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-gallery-wall",
+          "label": "Gallery north return",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "north-gallery-wall",
+        "support": "gallery-floor",
+        "offset": [
+          0,
+          15
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "south-gallery-wall",
+          "label": "Gallery south return",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "south-gallery-wall",
+        "support": "gallery-floor",
+        "offset": [
+          0,
+          -15
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "gallery-primary-wall",
+          "label": "Gallery to primary suite wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.4,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "gallery-primary-wall",
+        "support": "gallery-floor",
+        "offset": [
+          2,
+          -7
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "gallery-salon-wall",
+          "label": "Gallery to salon wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.6,
+            "height": 2.5,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "gallery-salon-wall",
+        "support": "gallery-floor",
+        "offset": [
+          2,
+          8
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-salon-wall",
+          "label": "Salon pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.65,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.35,
+            "width": 13.5,
+            "height": 2.8,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "north-salon-wall",
+        "support": "salon-floor",
+        "offset": [
+          0,
+          7
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-dining-wall",
+          "label": "Dining pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.45,
+            "width": 7.2,
+            "height": 2.3,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "north-dining-wall",
+        "support": "dining-floor",
+        "offset": [
+          0,
+          7
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-kitchen-wall",
+          "label": "Kitchen pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 1,
+            "width": 6.5,
+            "height": 1.7,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "north-kitchen-wall",
+        "support": "kitchen-floor",
+        "offset": [
+          0,
+          7
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-kitchen-wall",
+          "label": "Kitchen east facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 3,
+            "sill": 1,
+            "width": 3.5,
+            "height": 1.7,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "east-kitchen-wall",
+        "support": "kitchen-floor",
+        "offset": [
+          6,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "south-primary-wall",
+          "label": "Primary suite garden facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.5,
+            "width": 8,
+            "height": 2.2,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "south-primary-wall",
+        "support": "primary-floor",
+        "offset": [
+          0,
+          -8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "south-guestone-wall",
+          "label": "Guest suite one south facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.8,
+            "width": 4.5,
+            "height": 1.9,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "south-guestone-wall",
+        "support": "guestone-floor",
+        "offset": [
+          0,
+          -8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "south-guesttwo-wall",
+          "label": "Guest suite two south facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.8,
+            "width": 5,
+            "height": 1.9,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "south-guesttwo-wall",
+        "support": "guesttwo-floor",
+        "offset": [
+          0,
+          -8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-guesttwo-wall",
+          "label": "Guest suite two east facade",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -3,
+            "sill": 1,
+            "width": 3.5,
+            "height": 1.7,
+            "glazed": true
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "east-guesttwo-wall",
+        "support": "guesttwo-floor",
+        "offset": [
+          6,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "salon-dining-wall",
+          "label": "Salon dining dividing wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.65,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 3,
+            "height": 2.8,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "salon-dining-wall",
+        "support": "salon-floor",
+        "offset": [
+          9,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-kitchen-wall",
+          "label": "Dining kitchen dividing wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 2.4,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "dining-kitchen-wall",
+        "support": "dining-floor",
+        "offset": [
+          5,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "primary-guestone-wall",
+          "label": "Primary guest one dividing wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -4,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.3,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "primary-guestone-wall",
+        "support": "primary-floor",
+        "offset": [
+          9,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guestone-guesttwo-wall",
+          "label": "Guest suite dividing wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 4,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.3,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "guestone-guesttwo-wall",
+        "support": "guestone-floor",
+        "offset": [
+          5,
+          0
+        ],
+        "rotation": 1.5708
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "salon-primary-wall",
+          "label": "Salon primary crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -5,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "salon-primary-wall",
+        "support": "primary-floor",
+        "offset": [
+          0,
+          8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-guestone-wall",
+          "label": "Dining guest one crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.3,
+            "height": 2.3,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "dining-guestone-wall",
+        "support": "guestone-floor",
+        "offset": [
+          0,
+          8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "kitchen-guesttwo-wall",
+          "label": "Kitchen guest two crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.3,
+            "height": 2.3,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "place-on",
+        "id": "kitchen-guesttwo-wall",
+        "support": "guesttwo-floor",
+        "offset": [
+          0,
+          8
+        ],
+        "rotation": 0
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-entrance",
+          "label": "Recessed bronze gallery entrance",
+          "kind": "entrance",
+          "parent": "west-gallery-wall",
+          "at": [
+            8,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            2.2,
+            2.6,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-salon-glazing",
+          "label": "Salon pool glazing",
+          "kind": "glazing",
+          "parent": "north-salon-wall",
+          "at": [
+            0,
+            0.35,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            13.5,
+            2.8,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 6
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-dining-glazing",
+          "label": "Dining pool glazing",
+          "kind": "glazing",
+          "parent": "north-dining-wall",
+          "at": [
+            0,
+            0.45,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            7.2,
+            2.3,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "north-kitchen-glazing",
+          "label": "Kitchen clerestory",
+          "kind": "glazing",
+          "parent": "north-kitchen-wall",
+          "at": [
+            0,
+            1,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            6.5,
+            1.7,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 3
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "south-primary-glazing",
+          "label": "Primary suite glazing",
+          "kind": "glazing",
+          "parent": "south-primary-wall",
+          "at": [
+            0,
+            0.5,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            8,
+            2.2,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "salon-shade-screen",
+          "label": "Salon timber shade screen",
+          "kind": "screen",
+          "parent": "north-salon-wall",
+          "at": [
+            0,
+            0.35,
+            -0.16
+          ],
+          "rotation": 0,
+          "size": [
+            13.5,
+            2.8,
+            0.16
+          ],
+          "material": "timber",
+          "panels": 14
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-shade-screen",
+          "label": "Dining timber shade screen",
+          "kind": "screen",
+          "parent": "north-dining-wall",
+          "at": [
+            0,
+            0.45,
+            -0.16
+          ],
+          "rotation": 0,
+          "size": [
+            7.2,
+            2.3,
+            0.16
+          ],
+          "material": "timber",
+          "panels": 8
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "gallery-roof",
+          "label": "Low gallery roof",
+          "kind": "roof",
+          "at": [
+            -2,
+            3.35,
+            -1
+          ],
+          "rotation": 0,
+          "size": [
+            4.8,
+            0.3,
+            30.8
+          ],
+          "material": "timber",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "salon-roof",
+          "label": "Primary salon roof",
+          "kind": "roof",
+          "at": [
+            9,
+            4.025,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            19.2,
+            0.35,
+            15.2
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.6,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-roof",
+          "label": "Dining roof",
+          "kind": "roof",
+          "at": [
+            23,
+            3.5,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            10.8,
+            0.3,
+            14.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "kitchen-roof",
+          "label": "Kitchen roof",
+          "kind": "roof",
+          "at": [
+            34,
+            3.5,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            12.8,
+            0.3,
+            14.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "primary-roof",
+          "label": "Primary suite roof",
+          "kind": "roof",
+          "at": [
+            9,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            18.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guestone-roof",
+          "label": "Guest suite one roof",
+          "kind": "roof",
+          "at": [
+            23,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            10.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guesttwo-roof",
+          "label": "Guest suite two roof",
+          "kind": "roof",
+          "at": [
+            34,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            12.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      }
+    ],
+    "scene": {
+      "version": "architectural-scene-1",
+      "name": "Limestone Gallery Court",
+      "elements": [
+        {
+          "id": "gallery-floor",
+          "label": "Arrival gallery floor",
+          "kind": "plate",
+          "at": [
+            -2,
+            0.1,
+            -1
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            0.2,
+            30
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "salon-floor",
+          "label": "Great salon floor",
+          "kind": "plate",
+          "at": [
+            9,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "dining-floor",
+          "label": "Dining floor",
+          "kind": "plate",
+          "at": [
+            23,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "kitchen-floor",
+          "label": "Show kitchen floor",
+          "kind": "plate",
+          "at": [
+            34,
+            0.1,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.2,
+            14
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "primary-floor",
+          "label": "Primary suite floor",
+          "kind": "plate",
+          "at": [
+            9,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "guestone-floor",
+          "label": "Guest suite one floor",
+          "kind": "plate",
+          "at": [
+            23,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "guesttwo-floor",
+          "label": "Guest suite two floor",
+          "kind": "plate",
+          "at": [
+            34,
+            0.1,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.2,
+            16
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "terrace-south",
+          "label": "Pool court south deck",
+          "kind": "plate",
+          "at": [
+            20,
+            0.1,
+            18
+          ],
+          "rotation": 0,
+          "size": [
+            40,
+            0.2,
+            8
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "terrace-north",
+          "label": "Pool court north deck",
+          "kind": "plate",
+          "at": [
+            20,
+            0.1,
+            30
+          ],
+          "rotation": 0,
+          "size": [
+            40,
+            0.2,
+            4
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "terrace-west",
+          "label": "Pool court west deck",
+          "kind": "plate",
+          "at": [
+            6.5,
+            0.1,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            13,
+            0.2,
+            6
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "terrace-east",
+          "label": "Pool court east deck",
+          "kind": "plate",
+          "at": [
+            33.5,
+            0.1,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            13,
+            0.2,
+            6
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "pool-water",
+          "label": "Reflecting pool water",
+          "kind": "water",
+          "at": [
+            20,
+            0.2,
+            25
+          ],
+          "rotation": 0,
+          "size": [
+            14,
+            0.05,
+            6
+          ],
+          "material": "sage",
+          "panels": 4
+        },
+        {
+          "id": "pool-north-coping",
+          "label": "Pool north coping",
+          "kind": "wall",
+          "at": [
+            20,
+            0.35,
+            28.15
+          ],
+          "rotation": 0,
+          "size": [
+            14.4,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "pool-south-coping",
+          "label": "Pool south coping",
+          "kind": "wall",
+          "at": [
+            20,
+            0.35,
+            21.85
+          ],
+          "rotation": 0,
+          "size": [
+            14.4,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "pool-west-coping",
+          "label": "Pool west coping",
+          "kind": "wall",
+          "at": [
+            12.85,
+            0.35,
+            25
+          ],
+          "rotation": 1.5708,
+          "size": [
+            6,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "pool-east-coping",
+          "label": "Pool east coping",
+          "kind": "wall",
+          "at": [
+            27.15,
+            0.35,
+            25
+          ],
+          "rotation": 1.5708,
+          "size": [
+            6,
+            0.3,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "west-gallery-wall",
+          "label": "Gallery arrival facade",
+          "kind": "wall",
+          "at": [
+            -2,
+            1.6,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            30,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 8,
+            "sill": 0,
+            "width": 2.2,
+            "height": 2.6,
+            "glazed": false
+          },
+          "parent": "gallery-floor"
+        },
+        {
+          "id": "north-gallery-wall",
+          "label": "Gallery north return",
+          "kind": "wall",
+          "at": [
+            0,
+            1.6,
+            15
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "parent": "gallery-floor"
+        },
+        {
+          "id": "south-gallery-wall",
+          "label": "Gallery south return",
+          "kind": "wall",
+          "at": [
+            0,
+            1.6,
+            -15
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "parent": "gallery-floor"
+        },
+        {
+          "id": "gallery-primary-wall",
+          "label": "Gallery to primary suite wall",
+          "kind": "wall",
+          "at": [
+            2,
+            1.6,
+            -7
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.4,
+            "height": 2.4,
+            "glazed": false
+          },
+          "parent": "gallery-floor"
+        },
+        {
+          "id": "gallery-salon-wall",
+          "label": "Gallery to salon wall",
+          "kind": "wall",
+          "at": [
+            2,
+            1.6,
+            8
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.6,
+            "height": 2.5,
+            "glazed": false
+          },
+          "parent": "gallery-floor"
+        },
+        {
+          "id": "north-salon-wall",
+          "label": "Salon pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.925,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.65,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.35,
+            "width": 13.5,
+            "height": 2.8,
+            "glazed": true
+          },
+          "parent": "salon-floor"
+        },
+        {
+          "id": "north-dining-wall",
+          "label": "Dining pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.45,
+            "width": 7.2,
+            "height": 2.3,
+            "glazed": true
+          },
+          "parent": "dining-floor"
+        },
+        {
+          "id": "north-kitchen-wall",
+          "label": "Kitchen pool facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 1,
+            "width": 6.5,
+            "height": 1.7,
+            "glazed": true
+          },
+          "parent": "kitchen-floor"
+        },
+        {
+          "id": "east-kitchen-wall",
+          "label": "Kitchen east facade",
+          "kind": "wall",
+          "at": [
+            6,
+            1.675,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 3,
+            "sill": 1,
+            "width": 3.5,
+            "height": 1.7,
+            "glazed": true
+          },
+          "parent": "kitchen-floor"
+        },
+        {
+          "id": "south-primary-wall",
+          "label": "Primary suite garden facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.5,
+            "width": 8,
+            "height": 2.2,
+            "glazed": true
+          },
+          "parent": "primary-floor"
+        },
+        {
+          "id": "south-guestone-wall",
+          "label": "Guest suite one south facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.8,
+            "width": 4.5,
+            "height": 1.9,
+            "glazed": true
+          },
+          "parent": "guestone-floor"
+        },
+        {
+          "id": "south-guesttwo-wall",
+          "label": "Guest suite two south facade",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0.8,
+            "width": 5,
+            "height": 1.9,
+            "glazed": true
+          },
+          "parent": "guesttwo-floor"
+        },
+        {
+          "id": "east-guesttwo-wall",
+          "label": "Guest suite two east facade",
+          "kind": "wall",
+          "at": [
+            6,
+            1.675,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -3,
+            "sill": 1,
+            "width": 3.5,
+            "height": 1.7,
+            "glazed": true
+          },
+          "parent": "guesttwo-floor"
+        },
+        {
+          "id": "salon-dining-wall",
+          "label": "Salon dining dividing wall",
+          "kind": "wall",
+          "at": [
+            9,
+            1.925,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.65,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 3,
+            "height": 2.8,
+            "glazed": false
+          },
+          "parent": "salon-floor"
+        },
+        {
+          "id": "dining-kitchen-wall",
+          "label": "Dining kitchen dividing wall",
+          "kind": "wall",
+          "at": [
+            5,
+            1.675,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            14,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 2.4,
+            "height": 2.4,
+            "glazed": false
+          },
+          "parent": "dining-floor"
+        },
+        {
+          "id": "primary-guestone-wall",
+          "label": "Primary guest one dividing wall",
+          "kind": "wall",
+          "at": [
+            9,
+            1.675,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -4,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.3,
+            "glazed": false
+          },
+          "parent": "primary-floor"
+        },
+        {
+          "id": "guestone-guesttwo-wall",
+          "label": "Guest suite dividing wall",
+          "kind": "wall",
+          "at": [
+            5,
+            1.675,
+            0
+          ],
+          "rotation": 1.5708,
+          "size": [
+            16,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 4,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.3,
+            "glazed": false
+          },
+          "parent": "guestone-floor"
+        },
+        {
+          "id": "salon-primary-wall",
+          "label": "Salon primary crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            8
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": -5,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          },
+          "parent": "primary-floor"
+        },
+        {
+          "id": "dining-guestone-wall",
+          "label": "Dining guest one crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            8
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.3,
+            "height": 2.3,
+            "glazed": false
+          },
+          "parent": "guestone-floor"
+        },
+        {
+          "id": "kitchen-guesttwo-wall",
+          "label": "Kitchen guest two crosswall",
+          "kind": "wall",
+          "at": [
+            0,
+            1.675,
+            8
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            3.15,
+            0.25
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.3,
+            "height": 2.3,
+            "glazed": false
+          },
+          "parent": "guesttwo-floor"
+        },
+        {
+          "id": "main-entrance",
+          "label": "Recessed bronze gallery entrance",
+          "kind": "entrance",
+          "parent": "west-gallery-wall",
+          "at": [
+            8,
+            0,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            2.2,
+            2.6,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "north-salon-glazing",
+          "label": "Salon pool glazing",
+          "kind": "glazing",
+          "parent": "north-salon-wall",
+          "at": [
+            0,
+            0.35,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            13.5,
+            2.8,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 6
+        },
+        {
+          "id": "north-dining-glazing",
+          "label": "Dining pool glazing",
+          "kind": "glazing",
+          "parent": "north-dining-wall",
+          "at": [
+            0,
+            0.45,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            7.2,
+            2.3,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "north-kitchen-glazing",
+          "label": "Kitchen clerestory",
+          "kind": "glazing",
+          "parent": "north-kitchen-wall",
+          "at": [
+            0,
+            1,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            6.5,
+            1.7,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 3
+        },
+        {
+          "id": "south-primary-glazing",
+          "label": "Primary suite glazing",
+          "kind": "glazing",
+          "parent": "south-primary-wall",
+          "at": [
+            0,
+            0.5,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            8,
+            2.2,
+            0.12
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "salon-shade-screen",
+          "label": "Salon timber shade screen",
+          "kind": "screen",
+          "parent": "north-salon-wall",
+          "at": [
+            0,
+            0.35,
+            -0.16
+          ],
+          "rotation": 0,
+          "size": [
+            13.5,
+            2.8,
+            0.16
+          ],
+          "material": "timber",
+          "panels": 14
+        },
+        {
+          "id": "dining-shade-screen",
+          "label": "Dining timber shade screen",
+          "kind": "screen",
+          "parent": "north-dining-wall",
+          "at": [
+            0,
+            0.45,
+            -0.16
+          ],
+          "rotation": 0,
+          "size": [
+            7.2,
+            2.3,
+            0.16
+          ],
+          "material": "timber",
+          "panels": 8
+        },
+        {
+          "id": "gallery-roof",
+          "label": "Low gallery roof",
+          "kind": "roof",
+          "at": [
+            -2,
+            3.35,
+            -1
+          ],
+          "rotation": 0,
+          "size": [
+            4.8,
+            0.3,
+            30.8
+          ],
+          "material": "timber",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        },
+        {
+          "id": "salon-roof",
+          "label": "Primary salon roof",
+          "kind": "roof",
+          "at": [
+            9,
+            4.025,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            19.2,
+            0.35,
+            15.2
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.6,
+          "panels": 4
+        },
+        {
+          "id": "dining-roof",
+          "label": "Dining roof",
+          "kind": "roof",
+          "at": [
+            23,
+            3.5,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            10.8,
+            0.3,
+            14.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        },
+        {
+          "id": "kitchen-roof",
+          "label": "Kitchen roof",
+          "kind": "roof",
+          "at": [
+            34,
+            3.5,
+            7
+          ],
+          "rotation": 0,
+          "size": [
+            12.8,
+            0.3,
+            14.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        },
+        {
+          "id": "primary-roof",
+          "label": "Primary suite roof",
+          "kind": "roof",
+          "at": [
+            9,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            18.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        },
+        {
+          "id": "guestone-roof",
+          "label": "Guest suite one roof",
+          "kind": "roof",
+          "at": [
+            23,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            10.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        },
+        {
+          "id": "guesttwo-roof",
+          "label": "Guest suite two roof",
+          "kind": "roof",
+          "at": [
+            34,
+            3.5,
+            -8
+          ],
+          "rotation": 0,
+          "size": [
+            12.8,
+            0.3,
+            16.8
+          ],
+          "material": "ivory",
+          "roofForm": "flat",
+          "overhang": 0.4,
+          "panels": 4
+        }
+      ],
+      "architecturalPlan": {
+        "scaleRationale": "A $25 million brief is resolved as a highly crafted, single-level 1,024 m² courtyard residence rather than an inflated acreage exercise. Its value is concentrated in a long ceremonial gallery, generously proportioned public rooms, three fully realised bedroom domains, deep outdoor living, a formal pool court, limestone-and-bronze detailing, and independently articulated roof planes. The deliberately compact one-level arrangement provides step-free living and makes every major room engage the pool court while preserving the estate-like arrival sequence.",
+        "levels": 1,
+        "enclosedAreaM2": 1024,
+        "arrivalAndCirculation": "Level 0 walking-surface datum is Y=0.20 m. Arrival approaches the west-facing bronze entrance in the long limestone gallery at X=-4.00. The 4 m-wide gallery is the primary circulation spine: it connects the salon, dining room, kitchen, primary suite and both guest suites through actual openings in its east wall. The pool court is reached from the north-facing glazed public-room elevation. Internal stair geometry is not required because the residence is single level.",
+        "volumeHierarchy": "The 18 x 14 m salon is the primary public volume, expressed with the highest and deepest flat roof plane. Dining and kitchen form a lower eastward service-and-entertaining bar. The 18 x 16 m primary suite is a quiet south volume, while two substantial guest suites form a secondary eastward sleeping bar. The narrow gallery is deliberately lower and reads as a sheltered arrival datum rather than a competing volume.",
+        "relationshipsAndViews": "Level 0 plan tiles without overlap: gallery X=-4..0, Z=-16..14; salon X=0..18, Z=0..14; dining X=18..28, Z=0..14; kitchen X=28..40, Z=0..14; primary suite X=0..18, Z=-16..0; guest suite one X=18..28, Z=-16..0; guest suite two X=28..40, Z=-16..0. The shared boundary at X=0 is divided into gallery-to-primary and gallery-to-salon walls; the Z=0 crosswall divides public and private rooms. The north side opens onto a 40 x 18 m articulated pool terrace; a 14 x 6 m water basin is surrounded by separate walkable deck plates. The salon has the principal pool-facing outlook, with dining and kitchen extending the entertaining frontage.",
+        "roofFacadeAndMaterials": "All ground slabs are 0.20 m thick with top walking surface at Y=0.20 m. Gallery enclosure rises from Y=0.20 to its roof underside at Y=3.20 m; its 0.30 m roof occupies Y=3.20..3.50 m. Secondary rooms rise to Y=3.35 m and receive 0.30 m roofs occupying Y=3.35..3.65 m. The salon rises to Y=3.85 m and its 0.35 m primary roof occupies Y=3.85..4.20 m. Limestone walls establish the heavy enclosure and framing piers; bronze is reserved for the recessed entrance and glazing frames; timber screens create shade at the public pool facade. Flat roofs have deep, deliberate overhangs, with the salon roof visibly more substantial than the subsidiary planes.",
+        "spaces": [
+          {
+            "name": "Arrival gallery",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 120,
+            "floorIds": [
+              "gallery-floor"
+            ],
+            "enclosureIds": [
+              "west-gallery-wall",
+              "north-gallery-wall",
+              "south-gallery-wall",
+              "gallery-primary-wall",
+              "gallery-salon-wall"
+            ],
+            "roofIds": [
+              "gallery-roof"
+            ]
+          },
+          {
+            "name": "Great salon",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 252,
+            "floorIds": [
+              "salon-floor"
+            ],
+            "enclosureIds": [
+              "north-salon-wall",
+              "salon-gallery-wall",
+              "salon-dining-wall",
+              "salon-primary-wall"
+            ],
+            "roofIds": [
+              "salon-roof"
+            ]
+          },
+          {
+            "name": "Dining room",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 140,
+            "floorIds": [
+              "dining-floor"
+            ],
+            "enclosureIds": [
+              "north-dining-wall",
+              "dining-salon-wall",
+              "dining-kitchen-wall",
+              "dining-guestone-wall"
+            ],
+            "roofIds": [
+              "dining-roof"
+            ]
+          },
+          {
+            "name": "Show kitchen",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 168,
+            "floorIds": [
+              "kitchen-floor"
+            ],
+            "enclosureIds": [
+              "north-kitchen-wall",
+              "east-kitchen-wall",
+              "kitchen-dining-wall",
+              "kitchen-guesttwo-wall"
+            ],
+            "roofIds": [
+              "kitchen-roof"
+            ]
+          },
+          {
+            "name": "Primary suite",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 288,
+            "floorIds": [
+              "primary-floor"
+            ],
+            "enclosureIds": [
+              "south-primary-wall",
+              "gallery-primary-wall",
+              "primary-guestone-wall",
+              "salon-primary-wall"
+            ],
+            "roofIds": [
+              "primary-roof"
+            ]
+          },
+          {
+            "name": "Guest suite one",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 160,
+            "floorIds": [
+              "guestone-floor"
+            ],
+            "enclosureIds": [
+              "south-guestone-wall",
+              "primary-guestone-wall",
+              "guestone-guesttwo-wall",
+              "dining-guestone-wall"
+            ],
+            "roofIds": [
+              "guestone-roof"
+            ]
+          },
+          {
+            "name": "Guest suite two",
+            "use": "interior",
+            "level": 0,
+            "areaM2": 192,
+            "floorIds": [
+              "guesttwo-floor"
+            ],
+            "enclosureIds": [
+              "south-guesttwo-wall",
+              "guestone-guesttwo-wall",
+              "east-guesttwo-wall",
+              "kitchen-guesttwo-wall"
+            ],
+            "roofIds": [
+              "guesttwo-roof"
+            ]
+          },
+          {
+            "name": "Pool loggia terrace",
+            "use": "outdoor",
+            "level": 0,
+            "areaM2": 320,
+            "floorIds": [
+              "terrace-south",
+              "terrace-north",
+              "terrace-west",
+              "terrace-east"
+            ],
+            "enclosureIds": [],
+            "roofIds": []
+          },
+          {
+            "name": "Pool basin",
+            "use": "outdoor",
+            "level": 0,
+            "areaM2": 84,
+            "floorIds": [
+              "pool-water"
+            ],
+            "enclosureIds": [
+              "pool-north-coping",
+              "pool-south-coping",
+              "pool-west-coping",
+              "pool-east-coping"
+            ],
+            "roofIds": []
+          }
+        ],
+        "commitments": [
+          {
+            "description": "Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.",
+            "kind": "entrance",
+            "elementIds": [
+              "main-entrance",
+              "west-gallery-wall"
+            ]
+          },
+          {
+            "description": "The gallery is the legible horizontal circulation spine at the level-zero walking datum.",
+            "kind": "circulation",
+            "elementIds": [
+              "gallery-floor"
+            ]
+          },
+          {
+            "description": "The salon is the dominant civic room and has the tallest roof datum.",
+            "kind": "primary-volume",
+            "elementIds": [
+              "salon-floor",
+              "salon-roof",
+              "north-salon-wall"
+            ]
+          },
+          {
+            "description": "The dining, kitchen, primary suite and guest suites are subordinate but complete residential volumes.",
+            "kind": "secondary-volume",
+            "elementIds": [
+              "dining-floor",
+              "kitchen-floor",
+              "primary-floor",
+              "guestone-floor",
+              "guesttwo-floor"
+            ]
+          },
+          {
+            "description": "Layered flat roof planes distinguish gallery, secondary rooms and the principal salon.",
+            "kind": "roof",
+            "elementIds": [
+              "gallery-roof",
+              "salon-roof",
+              "dining-roof",
+              "kitchen-roof",
+              "primary-roof",
+              "guestone-roof",
+              "guesttwo-roof"
+            ]
+          },
+          {
+            "description": "The pool facade is composed as actual glazed openings within limestone enclosure, softened by timber shade screens.",
+            "kind": "facade",
+            "elementIds": [
+              "north-salon-glazing",
+              "north-dining-glazing",
+              "north-kitchen-glazing",
+              "salon-shade-screen",
+              "dining-shade-screen"
+            ]
+          },
+          {
+            "description": "The pool court is a walkable sequence of separately modelled deck plates around an explicit water basin.",
+            "kind": "terrace",
+            "elementIds": [
+              "terrace-south",
+              "terrace-north",
+              "terrace-west",
+              "terrace-east"
+            ]
+          }
+        ]
+      }
+    },
+    "architecturalAudit": {
+      "status": "incomplete",
+      "issues": [
+        "Great salon: salon-gallery-wall missing or wrong architectural kind.",
+        "Dining room: dining-salon-wall missing or wrong architectural kind.",
+        "Show kitchen: kitchen-dining-wall missing or wrong architectural kind.",
+        "Pool loggia terrace: measured floor 636.0 m² differs from planned 320 m².",
+        "Pool basin: pool-water missing or wrong architectural kind.",
+        "Pool basin: measured floor 0.0 m² differs from planned 84 m².",
+        "Planned enclosed area 1024 m²; measured floor evidence 1320.0 m².",
+        "Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.: west-gallery-wall missing or wrong architectural kind.",
+        "The salon is the dominant civic room and has the tallest roof datum.: salon-roof missing or wrong architectural kind.",
+        "pool-water: water surface exists, but a complete basin bottom is not evidenced; coping alone is not a constructed pool.",
+        "main-entrance: attached panel centre does not align with west-gallery-wall's opening (expected local Y -0.200, actual 0). Review centre versus sill coordinates; geometry was preserved.",
+        "north-salon-glazing: north-salon-wall's glazed opening already renders glass; the extra attached panel duplicates glazing evidence and needs review.",
+        "north-salon-glazing: attached panel centre does not align with north-salon-wall's opening (expected local Y -0.075, actual 0.35). Review centre versus sill coordinates; geometry was preserved.",
+        "north-dining-glazing: north-dining-wall's glazed opening already renders glass; the extra attached panel duplicates glazing evidence and needs review.",
+        "north-dining-glazing: attached panel centre does not align with north-dining-wall's opening (expected local Y 0.025, actual 0.45). Review centre versus sill coordinates; geometry was preserved.",
+        "north-kitchen-glazing: north-kitchen-wall's glazed opening already renders glass; the extra attached panel duplicates glazing evidence and needs review.",
+        "north-kitchen-glazing: attached panel centre does not align with north-kitchen-wall's opening (expected local Y 0.275, actual 1). Review centre versus sill coordinates; geometry was preserved.",
+        "south-primary-glazing: south-primary-wall's glazed opening already renders glass; the extra attached panel duplicates glazing evidence and needs review.",
+        "south-primary-glazing: attached panel centre does not align with south-primary-wall's opening (expected local Y 0.025, actual 0.5). Review centre versus sill coordinates; geometry was preserved."
+      ],
+      "originalPlanAudit": {
+        "status": "incomplete",
+        "enclosedAreaM2": 1320,
+        "levels": 1,
+        "spaces": [
+          {
+            "name": "Arrival gallery",
+            "areaM2": 120,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Great salon",
+            "areaM2": 252,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Dining room",
+            "areaM2": 140,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Show kitchen",
+            "areaM2": 168,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Primary suite",
+            "areaM2": 288,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Guest suite one",
+            "areaM2": 160,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Guest suite two",
+            "areaM2": 192,
+            "level": 0,
+            "use": "interior"
+          },
+          {
+            "name": "Pool loggia terrace",
+            "areaM2": 636,
+            "level": 0,
+            "use": "outdoor"
+          },
+          {
+            "name": "Pool basin",
+            "areaM2": 0,
+            "level": 0,
+            "use": "outdoor"
+          }
+        ],
+        "issues": [
+          "Great salon: salon-gallery-wall missing or wrong architectural kind.",
+          "Dining room: dining-salon-wall missing or wrong architectural kind.",
+          "Show kitchen: kitchen-dining-wall missing or wrong architectural kind.",
+          "Pool loggia terrace: measured floor 636.0 m² differs from planned 320 m².",
+          "Pool basin: pool-water missing or wrong architectural kind.",
+          "Pool basin: measured floor 0.0 m² differs from planned 84 m².",
+          "Planned enclosed area 1024 m²; measured floor evidence 1320.0 m².",
+          "Recessed, sheltered west arrival is evidenced by the bronze entry door set into the gallery's dedicated entry opening.: west-gallery-wall missing or wrong architectural kind.",
+          "The salon is the dominant civic room and has the tallest roof datum.: salon-roof missing or wrong architectural kind."
+        ],
+        "limitations": [
+          "Floor evidence estimates area; enclosure completeness, spatial quality and circulation usability require visual review."
+        ]
+      },
+      "geometry": {
+        "kindCounts": {
+          "plate": 11,
+          "water": 1,
+          "wall": 24,
+          "entrance": 1,
+          "glazing": 4,
+          "screen": 2,
+          "roof": 7
+        },
+        "surfaces": [
+          {
+            "id": "gallery-floor",
+            "kind": "plate",
+            "areaM2": 120,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "salon-floor",
+            "kind": "plate",
+            "areaM2": 252,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "dining-floor",
+            "kind": "plate",
+            "areaM2": 140,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "kitchen-floor",
+            "kind": "plate",
+            "areaM2": 168,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "primary-floor",
+            "kind": "plate",
+            "areaM2": 288,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "guestone-floor",
+            "kind": "plate",
+            "areaM2": 160,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "guesttwo-floor",
+            "kind": "plate",
+            "areaM2": 192,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "terrace-south",
+            "kind": "plate",
+            "areaM2": 320,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "terrace-north",
+            "kind": "plate",
+            "areaM2": 160,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "terrace-west",
+            "kind": "plate",
+            "areaM2": 78,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "terrace-east",
+            "kind": "plate",
+            "areaM2": 78,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "pool-water",
+            "kind": "water",
+            "areaM2": 84,
+            "walkingDatum": 0.2
+          }
+        ],
+        "overlaps": [],
+        "walkingDatums": [
+          0.2
+        ],
+        "plateSurfaceAreaM2": 1956,
+        "waterSurfaceAreaM2": 84
+      },
+      "limitations": [
+        "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+      ]
+    }
+  }
+}

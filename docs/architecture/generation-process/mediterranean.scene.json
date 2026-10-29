@@ -1,0 +1,983 @@
+{
+  "version": "architectural-scene-1",
+  "name": "mediterranean offline study",
+  "elements": [
+    {
+      "id": "living-floor",
+      "label": "living-floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "living-front",
+      "label": "living-front",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "living-door",
+      "label": "living-door",
+      "kind": "entrance",
+      "parent": "living-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "living-back",
+      "label": "living-back",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -17
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-left",
+      "label": "living-left",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-right",
+      "label": "living-right",
+      "kind": "wall",
+      "at": [
+        8,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-roof",
+      "label": "living-roof",
+      "kind": "roof",
+      "at": [
+        0,
+        4.3,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        16.8,
+        1.8,
+        10.8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "dining-kitchen-floor",
+      "label": "dining-kitchen-floor",
+      "kind": "plate",
+      "at": [
+        -13,
+        0.1,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-kitchen-front",
+      "label": "dining-kitchen-front",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.8,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "dining-kitchen-door",
+      "label": "dining-kitchen-door",
+      "kind": "entrance",
+      "parent": "dining-kitchen-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "dining-kitchen-back",
+      "label": "dining-kitchen-back",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.8,
+        -17
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-kitchen-left",
+      "label": "dining-kitchen-left",
+      "kind": "wall",
+      "at": [
+        -18,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-kitchen-right",
+      "label": "dining-kitchen-right",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-kitchen-roof",
+      "label": "dining-kitchen-roof",
+      "kind": "roof",
+      "at": [
+        -13,
+        4.3,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        1.8,
+        10.8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "family-suites-floor",
+      "label": "family-suites-floor",
+      "kind": "plate",
+      "at": [
+        -13,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        14
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-suites-front",
+      "label": "family-suites-front",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.8,
+        7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "family-suites-door",
+      "label": "family-suites-door",
+      "kind": "entrance",
+      "parent": "family-suites-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "family-suites-back",
+      "label": "family-suites-back",
+      "kind": "wall",
+      "at": [
+        -13,
+        1.8,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "family-suites-left",
+      "label": "family-suites-left",
+      "kind": "wall",
+      "at": [
+        -18,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        14,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "family-suites-right",
+      "label": "family-suites-right",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        14,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "family-suites-roof",
+      "label": "family-suites-roof",
+      "kind": "roof",
+      "at": [
+        -13,
+        4.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        1.8,
+        14.8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "guest-suites-floor",
+      "label": "guest-suites-floor",
+      "kind": "plate",
+      "at": [
+        13,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        14
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "guest-suites-front",
+      "label": "guest-suites-front",
+      "kind": "wall",
+      "at": [
+        13,
+        1.8,
+        7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "guest-suites-door",
+      "label": "guest-suites-door",
+      "kind": "entrance",
+      "parent": "guest-suites-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "guest-suites-back",
+      "label": "guest-suites-back",
+      "kind": "wall",
+      "at": [
+        13,
+        1.8,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "guest-suites-left",
+      "label": "guest-suites-left",
+      "kind": "wall",
+      "at": [
+        8,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        14,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "guest-suites-right",
+      "label": "guest-suites-right",
+      "kind": "wall",
+      "at": [
+        18,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        14,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "guest-suites-roof",
+      "label": "guest-suites-roof",
+      "kind": "roof",
+      "at": [
+        13,
+        4.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        1.8,
+        14.8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "service-floor",
+      "label": "service-floor",
+      "kind": "plate",
+      "at": [
+        13,
+        0.1,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "service-front",
+      "label": "service-front",
+      "kind": "wall",
+      "at": [
+        13,
+        1.8,
+        -7
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "service-door",
+      "label": "service-door",
+      "kind": "entrance",
+      "parent": "service-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "service-back",
+      "label": "service-back",
+      "kind": "wall",
+      "at": [
+        13,
+        1.8,
+        -17
+      ],
+      "rotation": 0,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-left",
+      "label": "service-left",
+      "kind": "wall",
+      "at": [
+        8,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-right",
+      "label": "service-right",
+      "kind": "wall",
+      "at": [
+        18,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        10,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-roof",
+      "label": "service-roof",
+      "kind": "roof",
+      "at": [
+        13,
+        4.3,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        10.8,
+        1.8,
+        10.8
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.5,
+      "panels": 4
+    },
+    {
+      "id": "connected-terrace",
+      "label": "connected-terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        14
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-canopy",
+      "label": "terrace-canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.55,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.3,
+        14
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "canopy-post-left",
+      "label": "canopy-post-left",
+      "kind": "volume",
+      "at": [
+        -7.7,
+        1.8,
+        6.7
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "canopy-post-right",
+      "label": "canopy-post-right",
+      "kind": "volume",
+      "at": [
+        7.7,
+        1.8,
+        6.7
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "Hand-authored offline capability study sized for mediterranean",
+    "arrivalAndCirculation": "Doors face connected outdoor routes; internal navigation remains unverified.",
+    "volumeHierarchy": "Living primary; sleeping and service rooms subordinate.",
+    "relationshipsAndViews": "Terrace connects the occupied volumes; orientation assumed.",
+    "roofFacadeAndMaterials": "Coordinated roof sections, real openings and limestone/timber.",
+    "intendedSpaces": [
+      "living",
+      "dining-kitchen",
+      "family-suites",
+      "guest-suites",
+      "service"
+    ],
+    "designDecisions": [
+      {
+        "knowledgeId": "mediterranean-courtyard",
+        "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+        "elementIds": [
+          "connected-terrace",
+          "living-roof",
+          "dining-kitchen-roof"
+        ],
+        "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+      },
+      {
+        "knowledgeId": "guest-house",
+        "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+        "elementIds": [
+          "guest-suites-floor",
+          "guest-suites-door",
+          "guest-suites-roof"
+        ],
+        "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+      },
+      {
+        "knowledgeId": "courtyard-proportion",
+        "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+        "elementIds": [
+          "connected-terrace",
+          "living-roof",
+          "dining-kitchen-roof"
+        ],
+        "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+      }
+    ]
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "property-value-1m-3m",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "mediterranean-courtyard",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    },
+    {
+      "id": "deep-reveals",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "courtyard-proportion",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "covered-threshold",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "private-bedroom-wing",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof",
+        "entrance"
+      ]
+    },
+    {
+      "id": "loggia-depth",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    }
+  ]
+}

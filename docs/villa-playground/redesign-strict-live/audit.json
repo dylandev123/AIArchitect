@@ -1,0 +1,547 @@
+{
+  "status": "constructed-unapproved",
+  "providerCalls": 1,
+  "operations": 100,
+  "operationCounts": {
+    "remove": 51,
+    "replace": 8,
+    "add": 41
+  },
+  "beforeElements": 67,
+  "afterElements": 57,
+  "removed": [
+    "retreat-floor",
+    "east-terrace-deck",
+    "west-terrace-deck",
+    "salon-north-wall",
+    "salon-south-wall",
+    "salon-west-wall",
+    "salon-east-wall",
+    "salon-ocean-glazing",
+    "lounge-north-wall",
+    "lounge-south-wall",
+    "lounge-west-wall",
+    "lounge-east-wall",
+    "lounge-ocean-glazing",
+    "dining-north-wall",
+    "dining-south-wall",
+    "dining-west-wall",
+    "dining-east-wall",
+    "dining-ocean-glazing",
+    "gallery-north-wall",
+    "gallery-south-wall",
+    "gallery-west-wall",
+    "gallery-east-wall",
+    "main-entrance",
+    "kitchen-north-wall",
+    "kitchen-south-wall",
+    "kitchen-west-wall",
+    "kitchen-east-wall",
+    "owner-north-wall",
+    "owner-south-wall",
+    "owner-west-wall",
+    "owner-east-wall",
+    "guest-north-wall",
+    "guest-south-wall",
+    "guest-east-wall",
+    "guest-divider-wall",
+    "retreat-north-wall",
+    "retreat-south-wall",
+    "retreat-west-wall",
+    "retreat-east-wall",
+    "lounge-roof",
+    "dining-roof",
+    "gallery-roof",
+    "kitchen-roof",
+    "loggia-roof",
+    "loggia-west-pier",
+    "loggia-east-pier",
+    "ocean-screen",
+    "east-terrace-rail",
+    "west-terrace-rail",
+    "loggia-sofa"
+  ],
+  "added": [
+    "salon-north-wall-new",
+    "salon-south-wall-new",
+    "salon-west-wall-new",
+    "salon-east-wall-new",
+    "arrival-north-wall-new",
+    "arrival-west-wall-new",
+    "arrival-east-wall-new",
+    "guest-lounge-north-wall-new",
+    "guest-lounge-south-wall-new",
+    "guest-lounge-west-wall-new",
+    "dining-north-wall-new",
+    "dining-south-wall-new",
+    "dining-east-wall-new",
+    "kitchen-north-wall-new",
+    "kitchen-east-wall-new",
+    "kitchen-west-wall-new",
+    "owner-north-wall-new",
+    "owner-south-wall-new",
+    "owner-west-wall-new",
+    "owner-east-wall-new",
+    "guest-north-wall-new",
+    "guest-south-wall-new",
+    "guest-west-wall-new",
+    "guest-east-wall-new",
+    "owner-support-core",
+    "guest-support-core",
+    "main-entrance-new",
+    "gallery-salon-door",
+    "salon-guest-door",
+    "salon-dining-door",
+    "gallery-roof-new",
+    "guest-lounge-roof-new",
+    "dining-roof-new",
+    "kitchen-roof-new",
+    "ocean-loggia-roof",
+    "loggia-west-pier-new",
+    "loggia-east-pier-new",
+    "ocean-screen-new",
+    "arrival-portal-west",
+    "arrival-portal-east"
+  ],
+  "changed": [
+    "salon-floor",
+    "lounge-floor",
+    "dining-floor",
+    "gallery-floor",
+    "kitchen-floor",
+    "loggia-deck",
+    "owner-floor",
+    "guest-floor",
+    "salon-roof"
+  ],
+  "beforeIssues": [
+    {
+      "id": "east-terrace-rail",
+      "rule": "railing-deck",
+      "message": "east-terrace-rail: Railing base and full rendered span need a supporting deck at the walking surface."
+    },
+    {
+      "id": "west-terrace-rail",
+      "rule": "railing-deck",
+      "message": "west-terrace-rail: Railing base and full rendered span need a supporting deck at the walking surface."
+    }
+  ],
+  "afterIssues": [],
+  "architecturalAudit": {
+    "status": "incomplete",
+    "issues": [
+      "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction.",
+      "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+      "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+      "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction.",
+      "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+      "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+      "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete.",
+      "gallery-salon-door: attached panel centre does not align with salon-north-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+      "salon-guest-door: attached panel centre does not align with salon-west-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+      "salon-dining-door: attached panel centre does not align with salon-east-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+    ],
+    "designDecisions": [
+      {
+        "disposition": "constructed",
+        "knowledgeId": "property-value-25m-50m",
+        "decision": "Used the ambition reference to create a clear estate-scale hierarchy: bespoke arrival, dominant shared living volume, protected private suites and sheltered ocean entertaining, without making a value or cost claim.",
+        "elementIds": [
+          "salon-floor",
+          "gallery-floor",
+          "salon-roof",
+          "ocean-loggia-roof",
+          "owner-floor",
+          "guest-floor"
+        ],
+        "limitation": "No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+        "existingElementIds": [
+          "salon-floor",
+          "gallery-floor",
+          "salon-roof",
+          "ocean-loggia-roof",
+          "owner-floor",
+          "guest-floor"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "wall"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "facade-materials",
+        "decision": "Applied a restrained limestone, ivory, timber and bronze palette with recessed openings, deep roof shelter and a timber ocean screen around the rebuilt residence.",
+        "elementIds": [
+          "salon-south-wall-new",
+          "arrival-north-wall-new",
+          "salon-roof",
+          "ocean-screen-new",
+          "main-entrance-new"
+        ],
+        "limitation": "Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+        "existingElementIds": [
+          "salon-south-wall-new",
+          "arrival-north-wall-new",
+          "salon-roof",
+          "ocean-screen-new",
+          "main-entrance-new"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [],
+        "detachedElementIds": [],
+        "status": "referenced-geometry",
+        "verifiedComplete": false
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "roof-main-secondary",
+        "decision": "Established a high primary roof over the salon and reduced roofs over arrival, guest, dining, kitchen and loggia volumes.",
+        "elementIds": [
+          "salon-roof",
+          "gallery-roof-new",
+          "guest-lounge-roof-new",
+          "dining-roof-new",
+          "kitchen-roof-new",
+          "ocean-loggia-roof"
+        ],
+        "limitation": "Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+        "existingElementIds": [
+          "salon-roof",
+          "gallery-roof-new",
+          "guest-lounge-roof-new",
+          "dining-roof-new",
+          "kitchen-roof-new",
+          "ocean-loggia-roof"
+        ],
+        "missingElementIds": [],
+        "missingKinds": [
+          "plate"
+        ],
+        "detachedElementIds": [],
+        "status": "missing-evidence",
+        "verifiedComplete": false
+      }
+    ],
+    "knowledgeUse": [
+      {
+        "id": "property-value-25m-50m",
+        "version": 2,
+        "status": "partial-construction",
+        "elementIds": [
+          "salon-floor",
+          "gallery-floor",
+          "salon-roof",
+          "ocean-loggia-roof",
+          "owner-floor",
+          "guest-floor"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "status": "construction-evidence",
+        "elementIds": [
+          "salon-south-wall-new",
+          "arrival-north-wall-new",
+          "salon-roof",
+          "ocean-screen-new",
+          "main-entrance-new"
+        ],
+        "verifiedComplete": false
+      },
+      {
+        "id": "roof-main-secondary",
+        "version": 1,
+        "status": "partial-construction",
+        "elementIds": [
+          "salon-roof",
+          "gallery-roof-new",
+          "guest-lounge-roof-new",
+          "dining-roof-new",
+          "kitchen-roof-new",
+          "ocean-loggia-roof"
+        ],
+        "verifiedComplete": false
+      }
+    ],
+    "geometry": {
+      "kindCounts": {
+        "plate": 12,
+        "wall": 27,
+        "water": 1,
+        "volume": 6,
+        "entrance": 4,
+        "roof": 6,
+        "screen": 1
+      },
+      "surfaces": [
+        {
+          "id": "salon-floor",
+          "kind": "plate",
+          "areaM2": 216,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "lounge-floor",
+          "kind": "plate",
+          "areaM2": 32,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "dining-floor",
+          "kind": "plate",
+          "areaM2": 32,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "gallery-floor",
+          "kind": "plate",
+          "areaM2": 40,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "kitchen-floor",
+          "kind": "plate",
+          "areaM2": 24,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "loggia-deck",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "owner-floor",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "guest-floor",
+          "kind": "plate",
+          "areaM2": 30,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "pool-basin",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 0.04
+        },
+        {
+          "id": "pool-coping-south",
+          "kind": "plate",
+          "areaM2": 8.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-west",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-east",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-water",
+          "kind": "water",
+          "areaM2": 72,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.2,
+        3.6,
+        0.04
+      ],
+      "plateSurfaceAreaM2": 597.6,
+      "waterSurfaceAreaM2": 72
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "originalArchitecturalAudit": {
+    "status": "incomplete",
+    "issues": [
+      "Floor surfaces retreat-floor and owner-floor overlap at the same datum; summed usable area is withheld.",
+      "Floor surfaces retreat-floor and guest-floor overlap at the same datum; summed usable area is withheld.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+      "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+    ],
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 15,
+        "wall": 35,
+        "glazing": 3,
+        "entrance": 1,
+        "roof": 6,
+        "volume": 2,
+        "screen": 1,
+        "balcony": 2,
+        "water": 1,
+        "sofa": 1
+      },
+      "surfaces": [
+        {
+          "id": "salon-floor",
+          "kind": "plate",
+          "areaM2": 192,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "lounge-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "dining-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "gallery-floor",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "kitchen-floor",
+          "kind": "plate",
+          "areaM2": 48,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "loggia-deck",
+          "kind": "plate",
+          "areaM2": 64,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "owner-floor",
+          "kind": "plate",
+          "areaM2": 120,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "guest-floor",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "retreat-floor",
+          "kind": "plate",
+          "areaM2": 88,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "east-terrace-deck",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 3.65
+        },
+        {
+          "id": "west-terrace-deck",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 3.65
+        },
+        {
+          "id": "pool-basin",
+          "kind": "plate",
+          "areaM2": 72,
+          "walkingDatum": 0.04
+        },
+        {
+          "id": "pool-coping-south",
+          "kind": "plate",
+          "areaM2": 8.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-west",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-coping-east",
+          "kind": "plate",
+          "areaM2": 3.5999999999999996,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-water",
+          "kind": "water",
+          "areaM2": 72,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [
+        [
+          "retreat-floor",
+          "owner-floor"
+        ],
+        [
+          "retreat-floor",
+          "guest-floor"
+        ]
+      ],
+      "walkingDatums": [
+        0.2,
+        3.6,
+        3.65,
+        0.04
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 72
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "terrainPreserved": true,
+  "poolPreserved": true,
+  "roundtrip": true,
+  "usage": {
+    "inputTokens": 11353,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 11350
+    },
+    "outputTokens": 9168,
+    "outputTokenDetails": {
+      "textTokens": 6382,
+      "reasoningTokens": 2786
+    },
+    "totalTokens": 20521,
+    "reasoningTokens": 2786,
+    "cachedInputTokens": 0
+  }
+}

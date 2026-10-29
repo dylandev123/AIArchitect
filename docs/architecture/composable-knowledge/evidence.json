@@ -1,0 +1,3062 @@
+{
+  "providerCalls": 0,
+  "provenance": "Deterministic hand-authored contract studies, not model generation or approved learning.",
+  "entries": 301,
+  "systemChars": 19877,
+  "results": [
+    {
+      "id": "caribbean",
+      "brief": "A $25m Caribbean waterfront estate with infinity edge pool, stone deck and ocean-facing lounge",
+      "chars": 15264,
+      "budget": {
+        "entries": 12,
+        "chars": 18000,
+        "tier": "complex"
+      },
+      "metrics": {
+        "eligible": 52,
+        "selected": 12,
+        "categories": [
+          "amenity",
+          "composition",
+          "climate-site",
+          "roof-outdoor",
+          "envelope",
+          "materials",
+          "programme",
+          "construction",
+          "arrival"
+        ],
+        "omitted": 40,
+        "estimatedTokens": 3816,
+        "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+      },
+      "selected": [
+        {
+          "id": "pool-infinity-limit",
+          "version": 1,
+          "category": "amenity",
+          "score": 21,
+          "reasons": [
+            "brief matches pool",
+            "brief matches infinity edge",
+            "brief matches ocean-facing",
+            "brief matches infinity",
+            "adds amenity coverage"
+          ]
+        },
+        {
+          "id": "estate-composition",
+          "version": 1,
+          "category": "composition",
+          "score": 16.3,
+          "reasons": [
+            "brief matches waterfront",
+            "core composition relationship for estate residence",
+            "adds composition coverage"
+          ]
+        },
+        {
+          "id": "waterfront-estate",
+          "version": 1,
+          "category": "climate-site",
+          "score": 16,
+          "reasons": [
+            "brief matches waterfront",
+            "brief matches ocean",
+            "adds climate-site coverage"
+          ]
+        },
+        {
+          "id": "rooftop-lounge",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 11,
+          "reasons": [
+            "brief matches lounge",
+            "adds roof-outdoor coverage"
+          ]
+        },
+        {
+          "id": "tropical-envelope",
+          "version": 1,
+          "category": "envelope",
+          "score": 11,
+          "reasons": [
+            "brief matches caribbean",
+            "adds envelope coverage"
+          ]
+        },
+        {
+          "id": "facade-materials",
+          "version": 1,
+          "category": "materials",
+          "score": 9,
+          "reasons": [
+            "brief matches caribbean",
+            "adds materials coverage"
+          ]
+        },
+        {
+          "id": "outdoor-entertaining",
+          "version": 1,
+          "category": "programme",
+          "score": 9,
+          "reasons": [
+            "brief matches caribbean",
+            "adds programme coverage"
+          ]
+        },
+        {
+          "id": "infinity-pool",
+          "version": 1,
+          "category": "amenity",
+          "score": 19,
+          "reasons": [
+            "brief matches infinity",
+            "brief matches pool",
+            "brief matches waterfront",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "build-pool-bottom-order",
+          "version": 1,
+          "category": "construction",
+          "score": 5,
+          "reasons": [
+            "brief matches pool",
+            "adds construction coverage"
+          ]
+        },
+        {
+          "id": "pool-deck-width",
+          "version": 1,
+          "category": "amenity",
+          "score": 18,
+          "reasons": [
+            "brief matches pool",
+            "brief matches stone deck",
+            "brief matches deck",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "living-view",
+          "version": 1,
+          "category": "programme",
+          "score": 7,
+          "reasons": [
+            "brief matches ocean",
+            "brief matches waterfront",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "category": "arrival",
+          "score": 2,
+          "reasons": [
+            "core arrival relationship for estate residence",
+            "adds arrival coverage"
+          ]
+        }
+      ],
+      "audit": {
+        "status": "incomplete",
+        "issues": [
+          "Knowledge decision pool-infinity-limit: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision estate-composition: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision estate-composition: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision waterfront-estate: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision waterfront-estate: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision rooftop-lounge: referenced geometry lacks required kinds balcony, entrance, roof; descriptions are not construction.",
+          "Knowledge decision rooftop-lounge: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision tropical-envelope: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision facade-materials: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision outdoor-entertaining: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision outdoor-entertaining: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision infinity-pool: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision build-pool-bottom-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision pool-deck-width: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision living-view: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision living-view: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision covered-threshold: referenced geometry lacks required kinds entrance, roof; descriptions are not construction.",
+          "Knowledge decision covered-threshold: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        ],
+        "designDecisions": [
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pool-infinity-limit",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "estate-composition",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "waterfront-estate",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "rooftop-lounge",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "balcony",
+              "entrance",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "tropical-envelope",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "facade-materials",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "outdoor-entertaining",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "infinity-pool",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "build-pool-bottom-order",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pool-deck-width",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "living-view",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "covered-threshold",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "entrance",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "knowledgeUse": [
+          {
+            "id": "pool-infinity-limit",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "estate-composition",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "waterfront-estate",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "rooftop-lounge",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "tropical-envelope",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "facade-materials",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "outdoor-entertaining",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "infinity-pool",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "build-pool-bottom-order",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "pool-deck-width",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "living-view",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "covered-threshold",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1"
+            ],
+            "verifiedComplete": false
+          }
+        ],
+        "geometry": {
+          "kindCounts": {
+            "plate": 8,
+            "wall": 28,
+            "entrance": 6,
+            "roof": 7,
+            "volume": 2,
+            "water": 1
+          },
+          "surfaces": [
+            {
+              "id": "living-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "dining-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-one-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-two-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "kitchen-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "service-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "connected-terrace",
+              "kind": "plate",
+              "areaM2": 272,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "pool-bottom",
+              "kind": "plate",
+              "areaM2": 80,
+              "walkingDatum": 0.15
+            },
+            {
+              "id": "pool-water",
+              "kind": "water",
+              "areaM2": 71.75999999999999,
+              "walkingDatum": 0.25
+            }
+          ],
+          "overlaps": [],
+          "walkingDatums": [
+            0.2,
+            0.15
+          ],
+          "plateSurfaceAreaM2": 1648,
+          "waterSurfaceAreaM2": 71.75999999999999
+        },
+        "limitations": [
+          "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+        ]
+      },
+      "elements": 52
+    },
+    {
+      "id": "compact",
+      "brief": "A compact three-bedroom family villa without pool or gym",
+      "chars": 6088,
+      "budget": {
+        "entries": 5,
+        "chars": 6500,
+        "tier": "compact"
+      },
+      "metrics": {
+        "eligible": 10,
+        "selected": 5,
+        "categories": [
+          "programme",
+          "composition",
+          "arrival",
+          "envelope"
+        ],
+        "omitted": 5,
+        "estimatedTokens": 1522,
+        "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+      },
+      "selected": [
+        {
+          "id": "compact-family",
+          "version": 1,
+          "category": "programme",
+          "score": 18.6,
+          "reasons": [
+            "brief matches compact",
+            "core programme relationship for compact residence",
+            "adds programme coverage"
+          ]
+        },
+        {
+          "id": "compact-core-order",
+          "version": 1,
+          "category": "composition",
+          "score": 5,
+          "reasons": [
+            "brief matches compact",
+            "adds composition coverage"
+          ]
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "category": "arrival",
+          "score": 2,
+          "reasons": [
+            "core arrival relationship for compact residence",
+            "adds arrival coverage"
+          ]
+        },
+        {
+          "id": "window-rhythm",
+          "version": 1,
+          "category": "envelope",
+          "score": 2,
+          "reasons": [
+            "core envelope relationship for compact residence",
+            "adds envelope coverage"
+          ]
+        },
+        {
+          "id": "private-bedroom-wing",
+          "version": 1,
+          "category": "programme",
+          "score": 4.3,
+          "reasons": [
+            "core programme relationship for compact residence",
+            "complementary detail within category"
+          ]
+        }
+      ],
+      "audit": {
+        "status": "incomplete",
+        "issues": [
+          "Knowledge decision compact-family: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision compact-family: referenced geometry lacks required kinds plate, wall, roof, entrance; descriptions are not construction.",
+          "Knowledge decision compact-family: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision compact-core-order: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision compact-core-order: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision compact-core-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision covered-threshold: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision covered-threshold: referenced geometry lacks required kinds plate, wall, entrance, roof; descriptions are not construction.",
+          "Knowledge decision covered-threshold: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision window-rhythm: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision window-rhythm: referenced geometry lacks required kinds wall; descriptions are not construction.",
+          "Knowledge decision window-rhythm: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision private-bedroom-wing: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision private-bedroom-wing: referenced geometry lacks required kinds plate, wall, roof, entrance; descriptions are not construction.",
+          "Knowledge decision private-bedroom-wing: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Retrieved knowledge compact-family: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge compact-core-order: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge window-rhythm: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge private-bedroom-wing: selected but no construction or explicit disposition evidence.",
+          "Requested space: living-kitchen-dining. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: bedroom-one. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: bedroom-two. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: bedroom-three. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: bathroom. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: laundry-entry. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        ],
+        "designDecisions": [
+          {
+            "disposition": "constructed",
+            "knowledgeId": "compact-family",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "compact-core-order",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "covered-threshold",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "entrance",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "window-rhythm",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "wall"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "private-bedroom-wing",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "knowledgeUse": [
+          {
+            "id": "compact-family",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "compact-core-order",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "covered-threshold",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "window-rhythm",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "private-bedroom-wing",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          }
+        ],
+        "geometry": {
+          "kindCounts": {
+            "plate": 7,
+            "wall": 24,
+            "entrance": 6,
+            "roof": 6
+          },
+          "surfaces": [
+            {
+              "id": "living-kitchen-dining-floor",
+              "kind": "plate",
+              "areaM2": 60,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "bedroom-one-floor",
+              "kind": "plate",
+              "areaM2": 20,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "bedroom-two-floor",
+              "kind": "plate",
+              "areaM2": 20,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "bedroom-three-floor",
+              "kind": "plate",
+              "areaM2": 20,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "bathroom-floor",
+              "kind": "plate",
+              "areaM2": 18,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "laundry-entry-floor",
+              "kind": "plate",
+              "areaM2": 18,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "connected-terrace",
+              "kind": "plate",
+              "areaM2": 24,
+              "walkingDatum": 0.2
+            }
+          ],
+          "overlaps": [],
+          "walkingDatums": [
+            0.2
+          ],
+          "plateSurfaceAreaM2": 180,
+          "waterSurfaceAreaM2": 0
+        },
+        "limitations": [
+          "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+        ]
+      },
+      "elements": 43
+    },
+    {
+      "id": "mediterranean",
+      "brief": "A Mediterranean courtyard mansion with loggias and private guest suites",
+      "chars": 14289,
+      "budget": {
+        "entries": 12,
+        "chars": 18000,
+        "tier": "complex"
+      },
+      "metrics": {
+        "eligible": 14,
+        "selected": 12,
+        "categories": [
+          "roof-outdoor",
+          "materials",
+          "programme",
+          "composition",
+          "envelope",
+          "climate-site",
+          "arrival"
+        ],
+        "omitted": 2,
+        "estimatedTokens": 3573,
+        "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+      },
+      "selected": [
+        {
+          "id": "mediterranean-courtyard",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 16.3,
+          "reasons": [
+            "brief matches mediterranean",
+            "brief matches courtyard",
+            "adds roof-outdoor coverage"
+          ]
+        },
+        {
+          "id": "facade-materials",
+          "version": 1,
+          "category": "materials",
+          "score": 9,
+          "reasons": [
+            "brief matches mediterranean",
+            "adds materials coverage"
+          ]
+        },
+        {
+          "id": "private-bedroom-wing",
+          "version": 1,
+          "category": "programme",
+          "score": 6,
+          "reasons": [
+            "brief matches suites",
+            "core programme relationship for mansion residence",
+            "adds programme coverage"
+          ]
+        },
+        {
+          "id": "estate-composition",
+          "version": 1,
+          "category": "composition",
+          "score": 5.3,
+          "reasons": [
+            "core composition relationship for mansion residence",
+            "adds composition coverage"
+          ]
+        },
+        {
+          "id": "deep-reveals",
+          "version": 1,
+          "category": "envelope",
+          "score": 4,
+          "reasons": [
+            "brief matches mediterranean",
+            "adds envelope coverage"
+          ]
+        },
+        {
+          "id": "privacy-gradient",
+          "version": 1,
+          "category": "climate-site",
+          "score": 4,
+          "reasons": [
+            "brief matches guest",
+            "adds climate-site coverage"
+          ]
+        },
+        {
+          "id": "courtyard-proportion",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 9,
+          "reasons": [
+            "brief matches courtyard",
+            "brief matches mediterranean",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "category": "arrival",
+          "score": 2,
+          "reasons": [
+            "core arrival relationship for mansion residence",
+            "adds arrival coverage"
+          ]
+        },
+        {
+          "id": "loggia-depth",
+          "version": 1,
+          "category": "envelope",
+          "score": 4,
+          "reasons": [
+            "brief matches mediterranean",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "composition-hierarchy",
+          "version": 1,
+          "category": "composition",
+          "score": 3.3,
+          "reasons": [
+            "core composition relationship for mansion residence",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "landscape-room",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 4,
+          "reasons": [
+            "brief matches courtyard",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "room-enclosure",
+          "version": 1,
+          "category": "programme",
+          "score": 2,
+          "reasons": [
+            "core programme relationship for mansion residence",
+            "complementary detail within category"
+          ]
+        }
+      ],
+      "audit": {
+        "status": "incomplete",
+        "issues": [
+          "Knowledge decision mediterranean-courtyard: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision mediterranean-courtyard: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision mediterranean-courtyard: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision facade-materials: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision facade-materials: referenced geometry lacks required kinds wall; descriptions are not construction.",
+          "Knowledge decision facade-materials: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision private-bedroom-wing: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision private-bedroom-wing: referenced geometry lacks required kinds plate, wall, roof, entrance; descriptions are not construction.",
+          "Knowledge decision private-bedroom-wing: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision estate-composition: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision estate-composition: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision estate-composition: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision deep-reveals: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision deep-reveals: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision deep-reveals: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision privacy-gradient: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision privacy-gradient: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision privacy-gradient: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision courtyard-proportion: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision courtyard-proportion: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision courtyard-proportion: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision covered-threshold: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision covered-threshold: referenced geometry lacks required kinds plate, wall, entrance, roof; descriptions are not construction.",
+          "Knowledge decision covered-threshold: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision loggia-depth: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision loggia-depth: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision loggia-depth: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision composition-hierarchy: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision composition-hierarchy: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision composition-hierarchy: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision landscape-room: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision landscape-room: referenced geometry lacks required kinds plate, wall, roof; descriptions are not construction.",
+          "Knowledge decision landscape-room: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision room-enclosure: Study of primitive construction; review relationships and completeness.; no constructed element evidence.",
+          "Knowledge decision room-enclosure: referenced geometry lacks required kinds plate, wall, roof, entrance; descriptions are not construction.",
+          "Knowledge decision room-enclosure: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Retrieved knowledge mediterranean-courtyard: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge facade-materials: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge private-bedroom-wing: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge estate-composition: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge deep-reveals: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge privacy-gradient: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge courtyard-proportion: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge loggia-depth: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge composition-hierarchy: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge landscape-room: selected but no construction or explicit disposition evidence.",
+          "Retrieved knowledge room-enclosure: selected but no construction or explicit disposition evidence.",
+          "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: dining-kitchen. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: family-suites. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: guest-suites. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        ],
+        "designDecisions": [
+          {
+            "disposition": "constructed",
+            "knowledgeId": "mediterranean-courtyard",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "facade-materials",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "wall"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "private-bedroom-wing",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "estate-composition",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "deep-reveals",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "privacy-gradient",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "courtyard-proportion",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "covered-threshold",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "entrance",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "loggia-depth",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "composition-hierarchy",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "landscape-room",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "room-enclosure",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [],
+            "missingElementIds": [],
+            "missingKinds": [
+              "plate",
+              "wall",
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "knowledgeUse": [
+          {
+            "id": "mediterranean-courtyard",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "facade-materials",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "private-bedroom-wing",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "estate-composition",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "deep-reveals",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "privacy-gradient",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "courtyard-proportion",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "covered-threshold",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "loggia-depth",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "composition-hierarchy",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "landscape-room",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          },
+          {
+            "id": "room-enclosure",
+            "version": 1,
+            "status": "selected-missing",
+            "elementIds": [],
+            "verifiedComplete": false
+          }
+        ],
+        "geometry": {
+          "kindCounts": {
+            "plate": 6,
+            "wall": 20,
+            "entrance": 5,
+            "roof": 6,
+            "volume": 2
+          },
+          "surfaces": [
+            {
+              "id": "living-floor",
+              "kind": "plate",
+              "areaM2": 160,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "dining-kitchen-floor",
+              "kind": "plate",
+              "areaM2": 100,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "family-suites-floor",
+              "kind": "plate",
+              "areaM2": 140,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "guest-suites-floor",
+              "kind": "plate",
+              "areaM2": 140,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "service-floor",
+              "kind": "plate",
+              "areaM2": 100,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "connected-terrace",
+              "kind": "plate",
+              "areaM2": 224,
+              "walkingDatum": 0.2
+            }
+          ],
+          "overlaps": [],
+          "walkingDatums": [
+            0.2
+          ],
+          "plateSurfaceAreaM2": 864,
+          "waterSurfaceAreaM2": 0
+        },
+        "limitations": [
+          "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+        ]
+      },
+      "elements": 39
+    },
+    {
+      "id": "family-pool",
+      "brief": "A family villa with a pool sun shelf and submerged seating beside a shaded terrace",
+      "chars": 6327,
+      "budget": {
+        "entries": 5,
+        "chars": 6500,
+        "tier": "compact"
+      },
+      "metrics": {
+        "eligible": 36,
+        "selected": 5,
+        "categories": [
+          "amenity",
+          "programme",
+          "roof-outdoor",
+          "construction",
+          "climate-site"
+        ],
+        "omitted": 31,
+        "estimatedTokens": 1582,
+        "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+      },
+      "selected": [
+        {
+          "id": "pool-sun-shelf",
+          "version": 1,
+          "category": "amenity",
+          "score": 14,
+          "reasons": [
+            "brief matches sun shelf",
+            "brief matches pool",
+            "adds amenity coverage"
+          ]
+        },
+        {
+          "id": "compact-family",
+          "version": 1,
+          "category": "programme",
+          "score": 7.3,
+          "reasons": [
+            "core programme relationship for family residence",
+            "adds programme coverage"
+          ]
+        },
+        {
+          "id": "pergola-shade",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 7,
+          "reasons": [
+            "brief matches shaded terrace",
+            "adds roof-outdoor coverage"
+          ]
+        },
+        {
+          "id": "build-pool-bottom-order",
+          "version": 1,
+          "category": "construction",
+          "score": 5,
+          "reasons": [
+            "brief matches pool",
+            "adds construction coverage"
+          ]
+        },
+        {
+          "id": "climate-shaded-west",
+          "version": 1,
+          "category": "climate-site",
+          "score": 5,
+          "reasons": [
+            "brief matches shaded",
+            "adds climate-site coverage"
+          ]
+        }
+      ],
+      "audit": {
+        "status": "incomplete",
+        "issues": [
+          "Knowledge decision pool-sun-shelf: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision compact-family: referenced geometry lacks required kinds roof, entrance; descriptions are not construction.",
+          "Knowledge decision compact-family: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision pergola-shade: referenced geometry lacks required kinds volume; descriptions are not construction.",
+          "Knowledge decision pergola-shade: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision build-pool-bottom-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision climate-shaded-west: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision climate-shaded-west: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        ],
+        "designDecisions": [
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pool-sun-shelf",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "compact-family",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pergola-shade",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "volume"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "build-pool-bottom-order",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "climate-shaded-west",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "knowledgeUse": [
+          {
+            "id": "pool-sun-shelf",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "compact-family",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "pergola-shade",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "build-pool-bottom-order",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "climate-shaded-west",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "submerged-shelf"
+            ],
+            "verifiedComplete": false
+          }
+        ],
+        "geometry": {
+          "kindCounts": {
+            "plate": 9,
+            "wall": 28,
+            "entrance": 6,
+            "roof": 7,
+            "volume": 2,
+            "water": 1
+          },
+          "surfaces": [
+            {
+              "id": "living-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "dining-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-one-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-two-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "kitchen-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "service-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "connected-terrace",
+              "kind": "plate",
+              "areaM2": 272,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "pool-bottom",
+              "kind": "plate",
+              "areaM2": 80,
+              "walkingDatum": 0.15
+            },
+            {
+              "id": "pool-water",
+              "kind": "water",
+              "areaM2": 71.75999999999999,
+              "walkingDatum": 0.25
+            },
+            {
+              "id": "submerged-shelf",
+              "kind": "plate",
+              "areaM2": 13.799999999999999,
+              "walkingDatum": 0.245
+            }
+          ],
+          "overlaps": [],
+          "walkingDatums": [
+            0.2,
+            0.15,
+            0.245
+          ],
+          "plateSurfaceAreaM2": 1661.8,
+          "waterSurfaceAreaM2": 71.75999999999999
+        },
+        "limitations": [
+          "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+        ]
+      },
+      "elements": 53
+    },
+    {
+      "id": "spa-pool",
+      "brief": "A luxury waterfront estate with rectangular lap pool, separate spa and private pool deck",
+      "chars": 14438,
+      "budget": {
+        "entries": 12,
+        "chars": 18000,
+        "tier": "complex"
+      },
+      "metrics": {
+        "eligible": 36,
+        "selected": 12,
+        "categories": [
+          "composition",
+          "amenity",
+          "climate-site",
+          "construction",
+          "materials",
+          "programme",
+          "roof-outdoor",
+          "arrival",
+          "envelope"
+        ],
+        "omitted": 24,
+        "estimatedTokens": 3610,
+        "tokenMeasurement": "character estimate only; provider usage is recorded separately"
+      },
+      "selected": [
+        {
+          "id": "estate-composition",
+          "version": 1,
+          "category": "composition",
+          "score": 16.6,
+          "reasons": [
+            "brief matches waterfront",
+            "core composition relationship for estate residence",
+            "adds composition coverage"
+          ]
+        },
+        {
+          "id": "pool-deck-width",
+          "version": 1,
+          "category": "amenity",
+          "score": 16.3,
+          "reasons": [
+            "brief matches pool",
+            "brief matches pool deck",
+            "brief matches deck",
+            "adds amenity coverage"
+          ]
+        },
+        {
+          "id": "waterfront-estate",
+          "version": 1,
+          "category": "climate-site",
+          "score": 13,
+          "reasons": [
+            "brief matches waterfront",
+            "adds climate-site coverage"
+          ]
+        },
+        {
+          "id": "wellness-suite",
+          "version": 1,
+          "category": "amenity",
+          "score": 9.3,
+          "reasons": [
+            "brief matches spa",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "build-pool-bottom-order",
+          "version": 1,
+          "category": "construction",
+          "score": 5,
+          "reasons": [
+            "brief matches pool",
+            "adds construction coverage"
+          ]
+        },
+        {
+          "id": "infinity-pool",
+          "version": 1,
+          "category": "amenity",
+          "score": 14,
+          "reasons": [
+            "brief matches pool",
+            "brief matches waterfront",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "material-continuous-deck",
+          "version": 1,
+          "category": "materials",
+          "score": 5,
+          "reasons": [
+            "brief matches deck",
+            "adds materials coverage"
+          ]
+        },
+        {
+          "id": "living-view",
+          "version": 1,
+          "category": "programme",
+          "score": 4,
+          "reasons": [
+            "brief matches waterfront",
+            "adds programme coverage"
+          ]
+        },
+        {
+          "id": "spa-court",
+          "version": 1,
+          "category": "roof-outdoor",
+          "score": 4,
+          "reasons": [
+            "brief matches spa",
+            "adds roof-outdoor coverage"
+          ]
+        },
+        {
+          "id": "pool-rectangular-lap",
+          "version": 1,
+          "category": "amenity",
+          "score": 10.3,
+          "reasons": [
+            "brief matches pool",
+            "brief matches rectangular",
+            "complementary detail within category"
+          ]
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "category": "arrival",
+          "score": 2,
+          "reasons": [
+            "core arrival relationship for estate residence",
+            "adds arrival coverage"
+          ]
+        },
+        {
+          "id": "window-rhythm",
+          "version": 1,
+          "category": "envelope",
+          "score": 2,
+          "reasons": [
+            "core envelope relationship for estate residence",
+            "adds envelope coverage"
+          ]
+        }
+      ],
+      "audit": {
+        "status": "incomplete",
+        "issues": [
+          "Knowledge decision estate-composition: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision estate-composition: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision pool-deck-width: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision waterfront-estate: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision waterfront-estate: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision wellness-suite: referenced geometry lacks required kinds roof, entrance; descriptions are not construction.",
+          "Knowledge decision wellness-suite: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision build-pool-bottom-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision infinity-pool: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision material-continuous-deck: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision material-continuous-deck: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision living-view: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision living-view: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision spa-court: referenced geometry lacks required kinds roof; descriptions are not construction.",
+          "Knowledge decision spa-court: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision pool-rectangular-lap: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision covered-threshold: referenced geometry lacks required kinds entrance, roof; descriptions are not construction.",
+          "Knowledge decision covered-threshold: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Knowledge decision window-rhythm: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+          "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review.",
+          "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        ],
+        "designDecisions": [
+          {
+            "disposition": "constructed",
+            "knowledgeId": "estate-composition",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pool-deck-width",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "waterfront-estate",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "wellness-suite",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof",
+              "entrance"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "build-pool-bottom-order",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "infinity-pool",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "material-continuous-deck",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "living-view",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "spa-court",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "pool-rectangular-lap",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "covered-threshold",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [
+              "entrance",
+              "roof"
+            ],
+            "detachedElementIds": [],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "disposition": "constructed",
+            "knowledgeId": "window-rhythm",
+            "decision": "Study of primitive construction; review relationships and completeness.",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+            "existingElementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "missingElementIds": [],
+            "missingKinds": [],
+            "detachedElementIds": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          }
+        ],
+        "knowledgeUse": [
+          {
+            "id": "estate-composition",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "pool-deck-width",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "waterfront-estate",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "wellness-suite",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "build-pool-bottom-order",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "infinity-pool",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "material-continuous-deck",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "living-view",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "spa-court",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "pool-rectangular-lap",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "covered-threshold",
+            "version": 1,
+            "status": "partial-construction",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          },
+          {
+            "id": "window-rhythm",
+            "version": 1,
+            "status": "construction-evidence",
+            "elementIds": [
+              "pool-bottom",
+              "pool-water",
+              "pool-long--1",
+              "pool-end--1",
+              "pool-long-1",
+              "pool-end-1",
+              "spa-bottom",
+              "spa-water",
+              "spa-edge-x--1",
+              "spa-edge-z--1",
+              "spa-edge-x-1",
+              "spa-edge-z-1"
+            ],
+            "verifiedComplete": false
+          }
+        ],
+        "geometry": {
+          "kindCounts": {
+            "plate": 10,
+            "wall": 32,
+            "entrance": 6,
+            "roof": 7,
+            "volume": 2,
+            "water": 2
+          },
+          "surfaces": [
+            {
+              "id": "living-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "dining-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-one-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "suite-two-floor",
+              "kind": "plate",
+              "areaM2": 192,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "kitchen-floor",
+              "kind": "plate",
+              "areaM2": 240,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "service-floor",
+              "kind": "plate",
+              "areaM2": 216,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "connected-terrace",
+              "kind": "plate",
+              "areaM2": 272,
+              "walkingDatum": 0.2
+            },
+            {
+              "id": "pool-bottom",
+              "kind": "plate",
+              "areaM2": 80,
+              "walkingDatum": 0.15
+            },
+            {
+              "id": "pool-water",
+              "kind": "water",
+              "areaM2": 71.75999999999999,
+              "walkingDatum": 0.25
+            },
+            {
+              "id": "spa-bottom",
+              "kind": "plate",
+              "areaM2": 9,
+              "walkingDatum": 0.15
+            },
+            {
+              "id": "spa-water",
+              "kind": "water",
+              "areaM2": 6.760000000000001,
+              "walkingDatum": 0.25
+            },
+            {
+              "id": "spa-approach",
+              "kind": "plate",
+              "areaM2": 12,
+              "walkingDatum": 0.2
+            }
+          ],
+          "overlaps": [],
+          "walkingDatums": [
+            0.2,
+            0.15
+          ],
+          "plateSurfaceAreaM2": 1669,
+          "waterSurfaceAreaM2": 78.52
+        },
+        "limitations": [
+          "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+        ]
+      },
+      "elements": 59
+    }
+  ]
+}

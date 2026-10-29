@@ -66,7 +66,7 @@ describe('fictional-site derivation and experimental reusable geometry (offline)
       }
     }
     expect(pavilionEntry({...p,orientation:90})).toMatchObject({position:[p.x+p.depth/2*Math.sqrt(1-(1.2/(p.width/2))**2),.47,p.z],normal:[1,0,expect.any(Number)]});
-    expect(pavilionPlacementSchema.safeParse({...p,width:11}).success).toBe(false);
+    expect(pavilionPlacementSchema.safeParse({...p,width:21}).success).toBe(false);
     expect(pavilionPlacementSchema.safeParse({...p,orientation:NaN}).success).toBe(false);
   });
   it('produces finite genuine curved surfaces across supported dimension limits',()=>{
@@ -79,7 +79,7 @@ describe('fictional-site derivation and experimental reusable geometry (offline)
     }
   });
   it('promotes the reviewed builder while keeping legacy experimental fields out of provider output',()=>{
-    expect(approvedComponents(EXPERIMENTAL_COMPONENTS).filter(c=>c.availability!=='local').map(c=>c.reference)).toEqual([{kind:'builder',id:'curved-pavilion@1'}]);
+    expect(approvedComponents(EXPERIMENTAL_COMPONENTS).filter(c=>c.availability!=='local').map(c=>c.reference)).toEqual([{kind:'builder',id:'curved-pavilion@1'},{kind:'builder',id:'estate-landscape@1'},{kind:'builder',id:'rotated-detached-wing@1'},{kind:'builder',id:'footprint-building@1'}]);
     const c={...COMPOSITION_EXAMPLES[0],siteMode:'derived',experimentalForms:experimentalExamples()[0].experimentalForms};
     expect(villaProviderOutputSchema({mode:'generate',prompt:'x'}).safeParse({changes:c,summary:'x',unsupported:[]}).success).toBe(false);
     const original=structuredClone(COMPOSITION_EXAMPLES);

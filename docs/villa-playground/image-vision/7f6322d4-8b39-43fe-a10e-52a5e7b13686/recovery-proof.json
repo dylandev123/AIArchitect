@@ -1,0 +1,96 @@
+{
+  "run": "7f6322d4-8b39-43fe-a10e-52a5e7b13686",
+  "accepted": true,
+  "providerCalls": 0,
+  "responseSha256": "31b8ed6e5b5cba501680c05d3b55de39f403c0474c6f167c85dbe50db865df77",
+  "exactTextFixture": true,
+  "architectureUnchanged": true,
+  "canonicalTargets": {
+    "main-massing": "wings.0",
+    "single-storey": "wings.0.storeys",
+    "hip-roof": "appearance.roof",
+    "deep-eaves": "wings.0.eave",
+    "warm-wall-finish": "appearance.exterior",
+    "near-window": "appearance.glazing",
+    "obscured-entrance": null,
+    "west-patio": "terraces.0",
+    "rectangular-pool": "pool",
+    "parking-pad": "terraces.1",
+    "garden-trees": null,
+    "terrain-and-grid": null,
+    "interior-layout": null
+  },
+  "config": {
+    "version": 1,
+    "id": "image-first-proof",
+    "name": "Saved Image Residence",
+    "character": "Image interpretation \u00b7 estimated exterior geometry",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "hip",
+      "exterior": "warm-stone",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "eave": 1.4,
+        "id": "main-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": 0,
+        "width": 23,
+        "depth": 10,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.4,
+        "veranda": 0,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": -14,
+        "z": 1.5,
+        "width": 7,
+        "depth": 6,
+        "id": "west-sitting-patio",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 15,
+        "z": -8,
+        "width": 8,
+        "depth": 4,
+        "id": "north-east-paved-pad",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 10,
+      "z": 13,
+      "width": 12,
+      "depth": 5
+    },
+    "garden": {
+      "x": 1.1500000000000004,
+      "z": 3.8499999999999996,
+      "width": 47.3,
+      "depth": 37.7
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 5
+  },
+  "unsupported": [
+    "deep-eaves: Eave projection is estimated from foreshortened imagery.",
+    "near-window: Supported wing glazing is property-wide; exact individual window placement is not editable.",
+    "parking-pad: Vehicle and dedicated parking construction are unavailable; only the paved rectangle is represented.",
+    "garden-trees: This contract has no editable tree, shrub, terrain, or planting-placement field; a landscape builder would need vegetation controls.",
+    "terrain-and-grid: Terrain shaping and reference-grid overlays have no supported construction fields."
+  ]
+}

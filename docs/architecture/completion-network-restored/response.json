@@ -1,0 +1,1088 @@
+{
+  "output": {
+    "architecturalPlan": {
+      "scaleRationale": "Calypsonian House remains a substantial but disciplined waterfront residence: the double-height ocean salon is the primary shared volume, with lower guest, dining, kitchen, arrival and loggia components arranged around it. The completion pass retains the compact separated upper suites while adding a real stair-and-landing sequence instead of enlarging the house or introducing unsupported amenities.",
+      "arrivalAndCirculation": "Arrival remains from the north across a new limestone threshold court into the recessed bronze entrance and gallery, then through the salon threshold. The salon now has a fitted south loggia door within its broad ocean opening. The guest lounge and dining room remain directly accessible from the salon; new doors establish kitchen access from both salon and dining. A manually constructed east-side stair rises from the salon to an upper bridge landing, which connects both suite thresholds. Assumptions: the stair is located along the salon’s east side to preserve the central double-height volume and to align with the existing suite gap; it uses solid stepped supports and tread plates, IDs stair-support-01 through stair-support-17, stair-tread-01 through stair-tread-17, and upper-bridge-landing. Kitchen access is assumed desirable from both entertaining rooms and is resolved by kitchen-salon-door and kitchen-dining-door. Pool completion retains the selected rectangular precinct and adds only the missing north basin edge and coping, IDs pool-north-wall and pool-coping-north; no hydraulic edge is inferred.",
+      "volumeHierarchy": "The tall salon and its high roof remain the principal composition. Arrival, guest lounge, dining, kitchen and the ocean loggia remain lower and subordinate. The stair is intentionally absorbed into the east edge of the salon rather than becoming a competing tower. The owner and guest suites remain separated above, joined only by a narrow bridge landing at their existing access edges.",
+      "relationshipsAndViews": "The central salon retains a broad shaded south opening toward the ocean loggia and pool, now with a usable bronze door at its centre. Ground-level social rooms have direct internal connections: guest lounge to salon, dining to salon, kitchen to salon and kitchen to dining. The upper bridge gives both private suites a common arrival point while preserving their physical separation and their south-facing openings.",
+      "roofFacadeAndMaterials": "Existing timber flat roofs retain the primary-and-secondary hierarchy, with limestone wall planes, ivory upper-suite enclosure, bronze doors and timber shade components. Assumptions: the existing flat roofs are retained as geometric shelter only; material selections are editable scene materials, and no weathering, waterproofing, drainage, structural loading, ventilation or specialist craftsmanship certification is represented.",
+      "intendedSpaces": [
+        "North arrival gallery with recessed main entrance",
+        "Double-height ocean salon with direct loggia access",
+        "West guest lounge",
+        "East dining room",
+        "Northeast kitchen/service room with dining and salon access",
+        "Sheltered ocean loggia",
+        "Separated upper owner suite enclosure with stair access",
+        "Separated upper guest suite enclosure with stair access",
+        "Retained rectangular pool precinct with complete modeled perimeter"
+      ],
+      "designDecisions": [
+        {
+          "disposition": "constructed",
+          "knowledgeId": "property-value-25m-50m",
+          "decision": "The estate-scale ambition is expressed through an explicit arrival court, hierarchy of social and private volumes, sheltered ocean entertaining and connected circulation rather than a valuation or amenity claim.",
+          "elementIds": [
+            "arrival-threshold-court",
+            "salon-floor",
+            "salon-roof",
+            "upper-bridge-landing",
+            "ocean-loggia-door"
+          ],
+          "limitation": "No construction-cost, property-value, luxury certification, services or amenity performance is represented."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "facade-materials",
+          "decision": "Retained the coordinated limestone, ivory, timber and bronze language while adding fitted bronze doors to the ocean loggia, kitchen connections and suite thresholds.",
+          "elementIds": [
+            "salon-south-wall-new",
+            "ocean-loggia-door",
+            "kitchen-salon-door",
+            "kitchen-dining-door",
+            "owner-suite-door",
+            "guest-suite-door"
+          ],
+          "limitation": "Materials are editable scene materials only; specialist finishes, weathering, craftsmanship and weather performance are not represented."
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "roof-main-secondary",
+          "decision": "Retained the existing high salon roof and lower supporting roofs while completing the associated supported floor and circulation geometry.",
+          "elementIds": [
+            "salon-floor",
+            "salon-roof",
+            "gallery-roof-new",
+            "ocean-loggia-roof",
+            "upper-bridge-landing"
+          ],
+          "limitation": "Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+        }
+      ]
+    },
+    "name": "Calypsonian House — Connected Completion",
+    "summary": "This completion candidate preserves the existing waterfront composition while adding a north arrival threshold, direct loggia access, kitchen connections, a supported 17-riser stair with upper bridge landing, suite doors, and the missing north pool wall and coping.",
+    "unsupported": [
+      "The scene uses the required temporary flat Y=0 site plane; no surveyed slope, coastal retaining system or drainage route is represented.",
+      "Stair geometry provides a modeled route, but code compliance, handrails, headroom, fire egress, structural engineering and certified navigability are unverified.",
+      "The pool is a modeled rectangular basin with floor, perimeter walls, coping and water surface. Filtration, excavation, hydraulic infinity-edge behavior, waterproofing and equipment are not represented.",
+      "No bathrooms, interior millwork, appliances, service equipment, accessibility analysis, construction cost, property value or luxury certification is represented."
+    ],
+    "operations": [
+      {
+        "op": "add",
+        "element": {
+          "id": "arrival-threshold-court",
+          "label": "North Arrival Threshold Court",
+          "kind": "plate",
+          "at": [
+            0,
+            0.1,
+            10
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            0.2,
+            2
+          ],
+          "material": "limestone",
+          "panels": 2
+        }
+      },
+      {
+        "op": "replace",
+        "id": "salon-south-wall-new",
+        "element": {
+          "id": "salon-south-wall-new",
+          "label": "Salon Ocean Opening Wall",
+          "kind": "wall",
+          "at": [
+            0,
+            3.5,
+            -7
+          ],
+          "rotation": 0,
+          "size": [
+            18,
+            6.6,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 6,
+          "opening": {
+            "x": 0,
+            "sill": 0.2,
+            "width": 13.2,
+            "height": 5.8,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-loggia-door",
+          "label": "Salon to Ocean Loggia Door",
+          "kind": "entrance",
+          "parent": "salon-south-wall-new",
+          "at": [
+            0,
+            -1.7,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            3.2,
+            2.8,
+            0.16
+          ],
+          "material": "bronze",
+          "panels": 3
+        }
+      },
+      {
+        "op": "replace",
+        "id": "kitchen-west-wall-new",
+        "element": {
+          "id": "kitchen-west-wall-new",
+          "label": "Kitchen West Salon Access Wall",
+          "kind": "wall",
+          "at": [
+            9,
+            1.8,
+            6
+          ],
+          "rotation": 1.5708,
+          "size": [
+            6,
+            3.2,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 3,
+          "opening": {
+            "x": -2,
+            "sill": 0.2,
+            "width": 1.2,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "kitchen-salon-door",
+          "label": "Kitchen to Salon Door",
+          "kind": "entrance",
+          "parent": "kitchen-west-wall-new",
+          "at": [
+            -2,
+            -0.2,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            1.2,
+            2.4,
+            0.16
+          ],
+          "material": "bronze",
+          "panels": 1
+        }
+      },
+      {
+        "op": "replace",
+        "id": "dining-north-wall-new",
+        "element": {
+          "id": "dining-north-wall-new",
+          "label": "Dining Kitchen Access Wall",
+          "kind": "wall",
+          "at": [
+            11,
+            1.8,
+            3
+          ],
+          "rotation": 0,
+          "size": [
+            4,
+            3.2,
+            0.3
+          ],
+          "material": "limestone",
+          "panels": 2,
+          "opening": {
+            "x": 0,
+            "sill": 0.2,
+            "width": 1.2,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "kitchen-dining-door",
+          "label": "Dining to Kitchen Door",
+          "kind": "entrance",
+          "parent": "dining-north-wall-new",
+          "at": [
+            0,
+            -0.2,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            1.2,
+            2.4,
+            0.16
+          ],
+          "material": "bronze",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "owner-suite-door",
+          "label": "Owner Suite Access Door",
+          "kind": "entrance",
+          "parent": "owner-east-wall-new",
+          "at": [
+            0,
+            -0.2,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.4,
+            0.16
+          ],
+          "material": "bronze",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "guest-suite-door",
+          "label": "Guest Suite Access Door",
+          "kind": "entrance",
+          "parent": "guest-west-wall-new",
+          "at": [
+            0,
+            -0.2,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.4,
+            0.16
+          ],
+          "material": "bronze",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-01",
+          "label": "Stair Support 01",
+          "kind": "volume",
+          "at": [
+            5.875,
+            0.1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-01",
+          "label": "Stair Tread 01",
+          "kind": "plate",
+          "at": [
+            5.875,
+            0.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-02",
+          "label": "Stair Support 02",
+          "kind": "volume",
+          "at": [
+            5.625,
+            0.2,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.4,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-02",
+          "label": "Stair Tread 02",
+          "kind": "plate",
+          "at": [
+            5.625,
+            0.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-03",
+          "label": "Stair Support 03",
+          "kind": "volume",
+          "at": [
+            5.375,
+            0.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.6,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-03",
+          "label": "Stair Tread 03",
+          "kind": "plate",
+          "at": [
+            5.375,
+            0.7,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-04",
+          "label": "Stair Support 04",
+          "kind": "volume",
+          "at": [
+            5.125,
+            0.4,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.8,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-04",
+          "label": "Stair Tread 04",
+          "kind": "plate",
+          "at": [
+            5.125,
+            0.9,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-05",
+          "label": "Stair Support 05",
+          "kind": "volume",
+          "at": [
+            4.875,
+            0.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            1,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-05",
+          "label": "Stair Tread 05",
+          "kind": "plate",
+          "at": [
+            4.875,
+            1.1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-06",
+          "label": "Stair Support 06",
+          "kind": "volume",
+          "at": [
+            4.625,
+            0.6,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            1.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-06",
+          "label": "Stair Tread 06",
+          "kind": "plate",
+          "at": [
+            4.625,
+            1.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-07",
+          "label": "Stair Support 07",
+          "kind": "volume",
+          "at": [
+            4.375,
+            0.7,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            1.4,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-07",
+          "label": "Stair Tread 07",
+          "kind": "plate",
+          "at": [
+            4.375,
+            1.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-08",
+          "label": "Stair Support 08",
+          "kind": "volume",
+          "at": [
+            4.125,
+            0.8,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            1.6,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-08",
+          "label": "Stair Tread 08",
+          "kind": "plate",
+          "at": [
+            4.125,
+            1.7,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-09",
+          "label": "Stair Support 09",
+          "kind": "volume",
+          "at": [
+            3.875,
+            0.9,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            1.8,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-09",
+          "label": "Stair Tread 09",
+          "kind": "plate",
+          "at": [
+            3.875,
+            1.9,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-10",
+          "label": "Stair Support 10",
+          "kind": "volume",
+          "at": [
+            3.625,
+            1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-10",
+          "label": "Stair Tread 10",
+          "kind": "plate",
+          "at": [
+            3.625,
+            2.1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-11",
+          "label": "Stair Support 11",
+          "kind": "volume",
+          "at": [
+            3.375,
+            1.1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            2.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-11",
+          "label": "Stair Tread 11",
+          "kind": "plate",
+          "at": [
+            3.375,
+            2.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-12",
+          "label": "Stair Support 12",
+          "kind": "volume",
+          "at": [
+            3.125,
+            1.2,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            2.4,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-12",
+          "label": "Stair Tread 12",
+          "kind": "plate",
+          "at": [
+            3.125,
+            2.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-13",
+          "label": "Stair Support 13",
+          "kind": "volume",
+          "at": [
+            2.875,
+            1.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            2.6,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-13",
+          "label": "Stair Tread 13",
+          "kind": "plate",
+          "at": [
+            2.875,
+            2.7,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-14",
+          "label": "Stair Support 14",
+          "kind": "volume",
+          "at": [
+            2.625,
+            1.4,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            2.8,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-14",
+          "label": "Stair Tread 14",
+          "kind": "plate",
+          "at": [
+            2.625,
+            2.9,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-15",
+          "label": "Stair Support 15",
+          "kind": "volume",
+          "at": [
+            2.375,
+            1.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            3,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-15",
+          "label": "Stair Tread 15",
+          "kind": "plate",
+          "at": [
+            2.375,
+            3.1,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-16",
+          "label": "Stair Support 16",
+          "kind": "volume",
+          "at": [
+            2.125,
+            1.6,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            3.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-16",
+          "label": "Stair Tread 16",
+          "kind": "plate",
+          "at": [
+            2.125,
+            3.3,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-support-17",
+          "label": "Stair Support 17",
+          "kind": "volume",
+          "at": [
+            1.875,
+            1.7,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            3.4,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "stair-tread-17",
+          "label": "Stair Tread 17",
+          "kind": "plate",
+          "at": [
+            1.875,
+            3.5,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            0.25,
+            0.2,
+            1.4
+          ],
+          "material": "limestone",
+          "panels": 1
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-bridge-landing",
+          "label": "Upper Suite Bridge Landing",
+          "kind": "plate",
+          "at": [
+            1.75,
+            3.5,
+            0.5
+          ],
+          "rotation": 0,
+          "size": [
+            1.5,
+            0.2,
+            2
+          ],
+          "material": "limestone",
+          "panels": 2
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-north-wall",
+          "label": "Pool North Basin Wall",
+          "kind": "wall",
+          "at": [
+            0,
+            0.6,
+            -12
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            1.2,
+            0.2
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "pool-coping-north",
+          "label": "Pool North Coping",
+          "kind": "plate",
+          "at": [
+            0,
+            0.1,
+            -11.7
+          ],
+          "rotation": 0,
+          "size": [
+            14,
+            0.2,
+            0.6
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      }
+    ]
+  },
+  "text": "{\"architecturalPlan\":{\"scaleRationale\":\"Calypsonian House remains a substantial but disciplined waterfront residence: the double-height ocean salon is the primary shared volume, with lower guest, dining, kitchen, arrival and loggia components arranged around it. The completion pass retains the compact separated upper suites while adding a real stair-and-landing sequence instead of enlarging the house or introducing unsupported amenities.\",\"arrivalAndCirculation\":\"Arrival remains from the north across a new limestone threshold court into the recessed bronze entrance and gallery, then through the salon threshold. The salon now has a fitted south loggia door within its broad ocean opening. The guest lounge and dining room remain directly accessible from the salon; new doors establish kitchen access from both salon and dining. A manually constructed east-side stair rises from the salon to an upper bridge landing, which connects both suite thresholds. Assumptions: the stair is located along the salon’s east side to preserve the central double-height volume and to align with the existing suite gap; it uses solid stepped supports and tread plates, IDs stair-support-01 through stair-support-17, stair-tread-01 through stair-tread-17, and upper-bridge-landing. Kitchen access is assumed desirable from both entertaining rooms and is resolved by kitchen-salon-door and kitchen-dining-door. Pool completion retains the selected rectangular precinct and adds only the missing north basin edge and coping, IDs pool-north-wall and pool-coping-north; no hydraulic edge is inferred.\",\"volumeHierarchy\":\"The tall salon and its high roof remain the principal composition. Arrival, guest lounge, dining, kitchen and the ocean loggia remain lower and subordinate. The stair is intentionally absorbed into the east edge of the salon rather than becoming a competing tower. The owner and guest suites remain separated above, joined only by a narrow bridge landing at their existing access edges.\",\"relationshipsAndViews\":\"The central salon retains a broad shaded south opening toward the ocean loggia and pool, now with a usable bronze door at its centre. Ground-level social rooms have direct internal connections: guest lounge to salon, dining to salon, kitchen to salon and kitchen to dining. The upper bridge gives both private suites a common arrival point while preserving their physical separation and their south-facing openings.\",\"roofFacadeAndMaterials\":\"Existing timber flat roofs retain the primary-and-secondary hierarchy, with limestone wall planes, ivory upper-suite enclosure, bronze doors and timber shade components. Assumptions: the existing flat roofs are retained as geometric shelter only; material selections are editable scene materials, and no weathering, waterproofing, drainage, structural loading, ventilation or specialist craftsmanship certification is represented.\",\"intendedSpaces\":[\"North arrival gallery with recessed main entrance\",\"Double-height ocean salon with direct loggia access\",\"West guest lounge\",\"East dining room\",\"Northeast kitchen/service room with dining and salon access\",\"Sheltered ocean loggia\",\"Separated upper owner suite enclosure with stair access\",\"Separated upper guest suite enclosure with stair access\",\"Retained rectangular pool precinct with complete modeled perimeter\"],\"designDecisions\":[{\"disposition\":\"constructed\",\"knowledgeId\":\"property-value-25m-50m\",\"decision\":\"The estate-scale ambition is expressed through an explicit arrival court, hierarchy of social and private volumes, sheltered ocean entertaining and connected circulation rather than a valuation or amenity claim.\",\"elementIds\":[\"arrival-threshold-court\",\"salon-floor\",\"salon-roof\",\"upper-bridge-landing\",\"ocean-loggia-door\"],\"limitation\":\"No construction-cost, property-value, luxury certification, services or amenity performance is represented.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"facade-materials\",\"decision\":\"Retained the coordinated limestone, ivory, timber and bronze language while adding fitted bronze doors to the ocean loggia, kitchen connections and suite thresholds.\",\"elementIds\":[\"salon-south-wall-new\",\"ocean-loggia-door\",\"kitchen-salon-door\",\"kitchen-dining-door\",\"owner-suite-door\",\"guest-suite-door\"],\"limitation\":\"Materials are editable scene materials only; specialist finishes, weathering, craftsmanship and weather performance are not represented.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"roof-main-secondary\",\"decision\":\"Retained the existing high salon roof and lower supporting roofs while completing the associated supported floor and circulation geometry.\",\"elementIds\":[\"salon-floor\",\"salon-roof\",\"gallery-roof-new\",\"ocean-loggia-roof\",\"upper-bridge-landing\"],\"limitation\":\"Roof waterproofing, drainage, loading and guard-code compliance are not represented.\"}]},\"name\":\"Calypsonian House — Connected Completion\",\"summary\":\"This completion candidate preserves the existing waterfront composition while adding a north arrival threshold, direct loggia access, kitchen connections, a supported 17-riser stair with upper bridge landing, suite doors, and the missing north pool wall and coping.\",\"unsupported\":[\"The scene uses the required temporary flat Y=0 site plane; no surveyed slope, coastal retaining system or drainage route is represented.\",\"Stair geometry provides a modeled route, but code compliance, handrails, headroom, fire egress, structural engineering and certified navigability are unverified.\",\"The pool is a modeled rectangular basin with floor, perimeter walls, coping and water surface. Filtration, excavation, hydraulic infinity-edge behavior, waterproofing and equipment are not represented.\",\"No bathrooms, interior millwork, appliances, service equipment, accessibility analysis, construction cost, property value or luxury certification is represented.\"],\"operations\":[{\"op\":\"add\",\"element\":{\"id\":\"arrival-threshold-court\",\"label\":\"North Arrival Threshold Court\",\"kind\":\"plate\",\"parent\":null,\"at\":[0,0.1,10],\"rotation\":0,\"size\":[4,0.2,2],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":2,\"opening\":null}},{\"op\":\"replace\",\"id\":\"salon-south-wall-new\",\"element\":{\"id\":\"salon-south-wall-new\",\"label\":\"Salon Ocean Opening Wall\",\"kind\":\"wall\",\"parent\":null,\"at\":[0,3.5,-7],\"rotation\":0,\"size\":[18,6.6,0.3],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":6,\"opening\":{\"x\":0,\"sill\":0.2,\"width\":13.2,\"height\":5.8,\"glazed\":false}}},{\"op\":\"add\",\"element\":{\"id\":\"ocean-loggia-door\",\"label\":\"Salon to Ocean Loggia Door\",\"kind\":\"entrance\",\"parent\":\"salon-south-wall-new\",\"at\":[0,-1.7,0],\"rotation\":0,\"size\":[3.2,2.8,0.16],\"material\":\"bronze\",\"roofForm\":null,\"overhang\":null,\"panels\":3,\"opening\":null}},{\"op\":\"replace\",\"id\":\"kitchen-west-wall-new\",\"element\":{\"id\":\"kitchen-west-wall-new\",\"label\":\"Kitchen West Salon Access Wall\",\"kind\":\"wall\",\"parent\":null,\"at\":[9,1.8,6],\"rotation\":1.5708,\"size\":[6,3.2,0.3],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":3,\"opening\":{\"x\":-2,\"sill\":0.2,\"width\":1.2,\"height\":2.4,\"glazed\":false}}},{\"op\":\"add\",\"element\":{\"id\":\"kitchen-salon-door\",\"label\":\"Kitchen to Salon Door\",\"kind\":\"entrance\",\"parent\":\"kitchen-west-wall-new\",\"at\":[-2,-0.2,0],\"rotation\":0,\"size\":[1.2,2.4,0.16],\"material\":\"bronze\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"replace\",\"id\":\"dining-north-wall-new\",\"element\":{\"id\":\"dining-north-wall-new\",\"label\":\"Dining Kitchen Access Wall\",\"kind\":\"wall\",\"parent\":null,\"at\":[11,1.8,3],\"rotation\":0,\"size\":[4,3.2,0.3],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":2,\"opening\":{\"x\":0,\"sill\":0.2,\"width\":1.2,\"height\":2.4,\"glazed\":false}}},{\"op\":\"add\",\"element\":{\"id\":\"kitchen-dining-door\",\"label\":\"Dining to Kitchen Door\",\"kind\":\"entrance\",\"parent\":\"dining-north-wall-new\",\"at\":[0,-0.2,0],\"rotation\":0,\"size\":[1.2,2.4,0.16],\"material\":\"bronze\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"owner-suite-door\",\"label\":\"Owner Suite Access Door\",\"kind\":\"entrance\",\"parent\":\"owner-east-wall-new\",\"at\":[0,-0.2,0],\"rotation\":0,\"size\":[1.1,2.4,0.16],\"material\":\"bronze\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"guest-suite-door\",\"label\":\"Guest Suite Access Door\",\"kind\":\"entrance\",\"parent\":\"guest-west-wall-new\",\"at\":[0,-0.2,0],\"rotation\":0,\"size\":[1.1,2.4,0.16],\"material\":\"bronze\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-01\",\"label\":\"Stair Support 01\",\"kind\":\"volume\",\"parent\":null,\"at\":[5.875,0.1,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-01\",\"label\":\"Stair Tread 01\",\"kind\":\"plate\",\"parent\":null,\"at\":[5.875,0.3,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-02\",\"label\":\"Stair Support 02\",\"kind\":\"volume\",\"parent\":null,\"at\":[5.625,0.2,1],\"rotation\":0,\"size\":[0.25,0.4,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-02\",\"label\":\"Stair Tread 02\",\"kind\":\"plate\",\"parent\":null,\"at\":[5.625,0.5,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-03\",\"label\":\"Stair Support 03\",\"kind\":\"volume\",\"parent\":null,\"at\":[5.375,0.3,1],\"rotation\":0,\"size\":[0.25,0.6,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-03\",\"label\":\"Stair Tread 03\",\"kind\":\"plate\",\"parent\":null,\"at\":[5.375,0.7,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-04\",\"label\":\"Stair Support 04\",\"kind\":\"volume\",\"parent\":null,\"at\":[5.125,0.4,1],\"rotation\":0,\"size\":[0.25,0.8,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-04\",\"label\":\"Stair Tread 04\",\"kind\":\"plate\",\"parent\":null,\"at\":[5.125,0.9,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-05\",\"label\":\"Stair Support 05\",\"kind\":\"volume\",\"parent\":null,\"at\":[4.875,0.5,1],\"rotation\":0,\"size\":[0.25,1,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-05\",\"label\":\"Stair Tread 05\",\"kind\":\"plate\",\"parent\":null,\"at\":[4.875,1.1,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-06\",\"label\":\"Stair Support 06\",\"kind\":\"volume\",\"parent\":null,\"at\":[4.625,0.6,1],\"rotation\":0,\"size\":[0.25,1.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-06\",\"label\":\"Stair Tread 06\",\"kind\":\"plate\",\"parent\":null,\"at\":[4.625,1.3,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-07\",\"label\":\"Stair Support 07\",\"kind\":\"volume\",\"parent\":null,\"at\":[4.375,0.7,1],\"rotation\":0,\"size\":[0.25,1.4,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-07\",\"label\":\"Stair Tread 07\",\"kind\":\"plate\",\"parent\":null,\"at\":[4.375,1.5,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-08\",\"label\":\"Stair Support 08\",\"kind\":\"volume\",\"parent\":null,\"at\":[4.125,0.8,1],\"rotation\":0,\"size\":[0.25,1.6,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-08\",\"label\":\"Stair Tread 08\",\"kind\":\"plate\",\"parent\":null,\"at\":[4.125,1.7,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-09\",\"label\":\"Stair Support 09\",\"kind\":\"volume\",\"parent\":null,\"at\":[3.875,0.9,1],\"rotation\":0,\"size\":[0.25,1.8,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-09\",\"label\":\"Stair Tread 09\",\"kind\":\"plate\",\"parent\":null,\"at\":[3.875,1.9,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-10\",\"label\":\"Stair Support 10\",\"kind\":\"volume\",\"parent\":null,\"at\":[3.625,1,1],\"rotation\":0,\"size\":[0.25,2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-10\",\"label\":\"Stair Tread 10\",\"kind\":\"plate\",\"parent\":null,\"at\":[3.625,2.1,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-11\",\"label\":\"Stair Support 11\",\"kind\":\"volume\",\"parent\":null,\"at\":[3.375,1.1,1],\"rotation\":0,\"size\":[0.25,2.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-11\",\"label\":\"Stair Tread 11\",\"kind\":\"plate\",\"parent\":null,\"at\":[3.375,2.3,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-12\",\"label\":\"Stair Support 12\",\"kind\":\"volume\",\"parent\":null,\"at\":[3.125,1.2,1],\"rotation\":0,\"size\":[0.25,2.4,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-12\",\"label\":\"Stair Tread 12\",\"kind\":\"plate\",\"parent\":null,\"at\":[3.125,2.5,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-13\",\"label\":\"Stair Support 13\",\"kind\":\"volume\",\"parent\":null,\"at\":[2.875,1.3,1],\"rotation\":0,\"size\":[0.25,2.6,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-13\",\"label\":\"Stair Tread 13\",\"kind\":\"plate\",\"parent\":null,\"at\":[2.875,2.7,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-14\",\"label\":\"Stair Support 14\",\"kind\":\"volume\",\"parent\":null,\"at\":[2.625,1.4,1],\"rotation\":0,\"size\":[0.25,2.8,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-14\",\"label\":\"Stair Tread 14\",\"kind\":\"plate\",\"parent\":null,\"at\":[2.625,2.9,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-15\",\"label\":\"Stair Support 15\",\"kind\":\"volume\",\"parent\":null,\"at\":[2.375,1.5,1],\"rotation\":0,\"size\":[0.25,3,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-15\",\"label\":\"Stair Tread 15\",\"kind\":\"plate\",\"parent\":null,\"at\":[2.375,3.1,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-16\",\"label\":\"Stair Support 16\",\"kind\":\"volume\",\"parent\":null,\"at\":[2.125,1.6,1],\"rotation\":0,\"size\":[0.25,3.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-16\",\"label\":\"Stair Tread 16\",\"kind\":\"plate\",\"parent\":null,\"at\":[2.125,3.3,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-support-17\",\"label\":\"Stair Support 17\",\"kind\":\"volume\",\"parent\":null,\"at\":[1.875,1.7,1],\"rotation\":0,\"size\":[0.25,3.4,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":null,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"stair-tread-17\",\"label\":\"Stair Tread 17\",\"kind\":\"plate\",\"parent\":null,\"at\":[1.875,3.5,1],\"rotation\":0,\"size\":[0.25,0.2,1.4],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":1,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"upper-bridge-landing\",\"label\":\"Upper Suite Bridge Landing\",\"kind\":\"plate\",\"parent\":null,\"at\":[1.75,3.5,0.5],\"rotation\":0,\"size\":[1.5,0.2,2],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":2,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"pool-north-wall\",\"label\":\"Pool North Basin Wall\",\"kind\":\"wall\",\"parent\":null,\"at\":[0,0.6,-12],\"rotation\":0,\"size\":[12,1.2,0.2],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":4,\"opening\":null}},{\"op\":\"add\",\"element\":{\"id\":\"pool-coping-north\",\"label\":\"Pool North Coping\",\"kind\":\"plate\",\"parent\":null,\"at\":[0,0.1,-11.7],\"rotation\":0,\"size\":[14,0.2,0.6],\"material\":\"limestone\",\"roofForm\":null,\"overhang\":null,\"panels\":4,\"opening\":null}}]}",
+  "usage": {
+    "inputTokens": 13114,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 13111
+    },
+    "outputTokens": 7180,
+    "outputTokenDetails": {
+      "textTokens": 5128,
+      "reasoningTokens": 2052
+    },
+    "totalTokens": 20294,
+    "reasoningTokens": 2052,
+    "cachedInputTokens": 0
+  },
+  "finishReason": "stop",
+  "providerCalls": 1
+}

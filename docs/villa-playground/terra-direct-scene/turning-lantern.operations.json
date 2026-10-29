@@ -1,0 +1,894 @@
+{
+  "name": "Five-level Turning Lantern",
+  "summary": "Five offset rotated storeys with a diagonal elevated bridge",
+  "unsupported": [
+    "Stair circulation and structural engineering are not generated."
+  ],
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "id": "floor-0",
+        "label": "floor-0",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          0
+        ],
+        "size": [
+          12,
+          0.3,
+          9
+        ],
+        "rotation": 0.22,
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "back-0",
+        "label": "back-0",
+        "kind": "wall",
+        "at": [
+          0,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          12,
+          3,
+          0.3
+        ],
+        "parent": "floor-0",
+        "opening": {
+          "x": 0,
+          "sill": 0.6,
+          "width": 7,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-0",
+        "label": "west-0",
+        "kind": "wall",
+        "at": [
+          -5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.3
+        ],
+        "parent": "floor-0",
+        "rotation": 1.5707963267948966,
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "front-0",
+        "label": "front-0",
+        "kind": "glazing",
+        "at": [
+          0,
+          1.65,
+          4.35
+        ],
+        "size": [
+          11.6,
+          3,
+          0.06
+        ],
+        "parent": "floor-0",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-0",
+        "label": "east-0",
+        "kind": "glazing",
+        "at": [
+          5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.06
+        ],
+        "parent": "floor-0",
+        "rotation": 1.5707963267948966
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "shade-0",
+        "label": "shade-0",
+        "kind": "roof",
+        "at": [
+          0,
+          3.18,
+          0
+        ],
+        "size": [
+          13,
+          0.25,
+          10
+        ],
+        "parent": "floor-0"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "deck-0",
+        "label": "deck-0",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          5.4
+        ],
+        "size": [
+          12,
+          0.3,
+          2.2
+        ],
+        "parent": "floor-0",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "rail-0",
+        "label": "rail-0",
+        "kind": "balcony",
+        "at": [
+          0,
+          0.7,
+          6.4
+        ],
+        "size": [
+          12,
+          1.1,
+          0.05
+        ],
+        "parent": "floor-0"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "floor-1",
+        "label": "floor-1",
+        "kind": "plate",
+        "at": [
+          3,
+          3.3,
+          0
+        ],
+        "size": [
+          12,
+          0.3,
+          9
+        ],
+        "rotation": 0.31,
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "back-1",
+        "label": "back-1",
+        "kind": "wall",
+        "at": [
+          0,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          12,
+          3,
+          0.3
+        ],
+        "parent": "floor-1",
+        "opening": {
+          "x": 0,
+          "sill": 0.6,
+          "width": 7,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-1",
+        "label": "west-1",
+        "kind": "wall",
+        "at": [
+          -5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.3
+        ],
+        "parent": "floor-1",
+        "rotation": 1.5707963267948966,
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "front-1",
+        "label": "front-1",
+        "kind": "glazing",
+        "at": [
+          0,
+          1.65,
+          4.35
+        ],
+        "size": [
+          11.6,
+          3,
+          0.06
+        ],
+        "parent": "floor-1",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-1",
+        "label": "east-1",
+        "kind": "glazing",
+        "at": [
+          5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.06
+        ],
+        "parent": "floor-1",
+        "rotation": 1.5707963267948966
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "shade-1",
+        "label": "shade-1",
+        "kind": "roof",
+        "at": [
+          0,
+          3.18,
+          0
+        ],
+        "size": [
+          13,
+          0.25,
+          10
+        ],
+        "parent": "floor-1"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "deck-1",
+        "label": "deck-1",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          5.4
+        ],
+        "size": [
+          12,
+          0.3,
+          2.2
+        ],
+        "parent": "floor-1",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "rail-1",
+        "label": "rail-1",
+        "kind": "balcony",
+        "at": [
+          0,
+          0.7,
+          6.4
+        ],
+        "size": [
+          12,
+          1.1,
+          0.05
+        ],
+        "parent": "floor-1"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "floor-2",
+        "label": "floor-2",
+        "kind": "plate",
+        "at": [
+          0,
+          6.6,
+          0
+        ],
+        "size": [
+          12,
+          0.3,
+          9
+        ],
+        "rotation": 0.4,
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "back-2",
+        "label": "back-2",
+        "kind": "wall",
+        "at": [
+          0,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          12,
+          3,
+          0.3
+        ],
+        "parent": "floor-2",
+        "opening": {
+          "x": 0,
+          "sill": 0.6,
+          "width": 7,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-2",
+        "label": "west-2",
+        "kind": "wall",
+        "at": [
+          -5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.3
+        ],
+        "parent": "floor-2",
+        "rotation": 1.5707963267948966,
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "front-2",
+        "label": "front-2",
+        "kind": "glazing",
+        "at": [
+          0,
+          1.65,
+          4.35
+        ],
+        "size": [
+          11.6,
+          3,
+          0.06
+        ],
+        "parent": "floor-2",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-2",
+        "label": "east-2",
+        "kind": "glazing",
+        "at": [
+          5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.06
+        ],
+        "parent": "floor-2",
+        "rotation": 1.5707963267948966
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "shade-2",
+        "label": "shade-2",
+        "kind": "roof",
+        "at": [
+          0,
+          3.18,
+          0
+        ],
+        "size": [
+          13,
+          0.25,
+          10
+        ],
+        "parent": "floor-2"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "deck-2",
+        "label": "deck-2",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          5.4
+        ],
+        "size": [
+          12,
+          0.3,
+          2.2
+        ],
+        "parent": "floor-2",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "rail-2",
+        "label": "rail-2",
+        "kind": "balcony",
+        "at": [
+          0,
+          0.7,
+          6.4
+        ],
+        "size": [
+          12,
+          1.1,
+          0.05
+        ],
+        "parent": "floor-2"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "floor-3",
+        "label": "floor-3",
+        "kind": "plate",
+        "at": [
+          3,
+          9.899999999999999,
+          0
+        ],
+        "size": [
+          12,
+          0.3,
+          9
+        ],
+        "rotation": 0.49,
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "back-3",
+        "label": "back-3",
+        "kind": "wall",
+        "at": [
+          0,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          12,
+          3,
+          0.3
+        ],
+        "parent": "floor-3",
+        "opening": {
+          "x": 0,
+          "sill": 0.6,
+          "width": 7,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-3",
+        "label": "west-3",
+        "kind": "wall",
+        "at": [
+          -5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.3
+        ],
+        "parent": "floor-3",
+        "rotation": 1.5707963267948966,
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "front-3",
+        "label": "front-3",
+        "kind": "glazing",
+        "at": [
+          0,
+          1.65,
+          4.35
+        ],
+        "size": [
+          11.6,
+          3,
+          0.06
+        ],
+        "parent": "floor-3",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-3",
+        "label": "east-3",
+        "kind": "glazing",
+        "at": [
+          5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.06
+        ],
+        "parent": "floor-3",
+        "rotation": 1.5707963267948966
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "shade-3",
+        "label": "shade-3",
+        "kind": "roof",
+        "at": [
+          0,
+          3.18,
+          0
+        ],
+        "size": [
+          13,
+          0.25,
+          10
+        ],
+        "parent": "floor-3"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "deck-3",
+        "label": "deck-3",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          5.4
+        ],
+        "size": [
+          12,
+          0.3,
+          2.2
+        ],
+        "parent": "floor-3",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "rail-3",
+        "label": "rail-3",
+        "kind": "balcony",
+        "at": [
+          0,
+          0.7,
+          6.4
+        ],
+        "size": [
+          12,
+          1.1,
+          0.05
+        ],
+        "parent": "floor-3"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "floor-4",
+        "label": "floor-4",
+        "kind": "plate",
+        "at": [
+          0,
+          13.2,
+          0
+        ],
+        "size": [
+          12,
+          0.3,
+          9
+        ],
+        "rotation": 0.58,
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "back-4",
+        "label": "back-4",
+        "kind": "wall",
+        "at": [
+          0,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          12,
+          3,
+          0.3
+        ],
+        "parent": "floor-4",
+        "opening": {
+          "x": 0,
+          "sill": 0.6,
+          "width": 7,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-4",
+        "label": "west-4",
+        "kind": "wall",
+        "at": [
+          -5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.3
+        ],
+        "parent": "floor-4",
+        "rotation": 1.5707963267948966,
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "front-4",
+        "label": "front-4",
+        "kind": "glazing",
+        "at": [
+          0,
+          1.65,
+          4.35
+        ],
+        "size": [
+          11.6,
+          3,
+          0.06
+        ],
+        "parent": "floor-4",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-4",
+        "label": "east-4",
+        "kind": "glazing",
+        "at": [
+          5.85,
+          1.65,
+          0
+        ],
+        "size": [
+          8.4,
+          3,
+          0.06
+        ],
+        "parent": "floor-4",
+        "rotation": 1.5707963267948966
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "shade-4",
+        "label": "shade-4",
+        "kind": "roof",
+        "at": [
+          0,
+          3.18,
+          0
+        ],
+        "size": [
+          13,
+          0.25,
+          10
+        ],
+        "parent": "floor-4"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "deck-4",
+        "label": "deck-4",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          5.4
+        ],
+        "size": [
+          12,
+          0.3,
+          2.2
+        ],
+        "parent": "floor-4",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "rail-4",
+        "label": "rail-4",
+        "kind": "balcony",
+        "at": [
+          0,
+          0.7,
+          6.4
+        ],
+        "size": [
+          12,
+          1.1,
+          0.05
+        ],
+        "parent": "floor-4"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "entry",
+        "label": "entry",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.6,
+          4.4
+        ],
+        "size": [
+          1.4,
+          2.9,
+          0.15
+        ],
+        "parent": "floor-0",
+        "material": "timber"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "privacy",
+        "label": "privacy",
+        "kind": "screen",
+        "at": [
+          -5,
+          1.6,
+          5.5
+        ],
+        "size": [
+          2.2,
+          2.8,
+          0.15
+        ],
+        "parent": "floor-0",
+        "material": "bronze"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "sky-bridge",
+        "label": "sky-bridge",
+        "kind": "plate",
+        "at": [
+          16,
+          9.8,
+          0
+        ],
+        "size": [
+          20,
+          0.35,
+          3
+        ],
+        "rotation": 0.4,
+        "material": "limestone"
+      }
+    }
+  ]
+}

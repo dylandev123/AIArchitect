@@ -1,0 +1,602 @@
+{
+  "providerCalls": 0,
+  "sha256": "9df5809490c54424224320edab7611baaf88c51aaa232e250794d9c1037ca445",
+  "legacy": {
+    "ok": false,
+    "phase": "planning",
+    "findings": [
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level"
+        ],
+        "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level"
+        ],
+        "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+      },
+      {
+        "code": "ESTATE_RELATIONSHIP_MISSING",
+        "severity": "fatal",
+        "targetIds": [
+          "north-gate",
+          "main-house"
+        ],
+        "message": "arrival-sequence: missing authored connects relationship."
+      },
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "main-house"
+        ],
+        "message": "luxury-brief: style is retained as intent; no deterministic verification is available."
+      },
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "main-house",
+          "sea-terrace",
+          "infinity-pool"
+        ],
+        "message": "budget-ambition: budget is retained as intent; no deterministic verification is available."
+      },
+      {
+        "code": "ESTATE_FORM_UNBUILT",
+        "severity": "fatal",
+        "targetIds": [
+          "main-house"
+        ],
+        "message": "articulated-belvedere: declared connected composition lacks touching authored objects."
+      },
+      {
+        "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "main-house"
+        ],
+        "message": "articulated-belvedere: composition connectivity checked; exact joined silhouette and roof intersections require review."
+      },
+      {
+        "code": "ESTATE_ACCESS_MISSING",
+        "severity": "fatal",
+        "targetIds": [
+          "sea-terrace"
+        ],
+        "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+      },
+      {
+        "code": "ESTATE_ACCESS_MISSING",
+        "severity": "fatal",
+        "targetIds": [
+          "infinity-pool"
+        ],
+        "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+      },
+      {
+        "code": "ESTATE_ROUTE_BLOCKED",
+        "severity": "fatal",
+        "targetIds": [
+          "arrival-drive-surface",
+          "main-house"
+        ],
+        "message": "arrival-drive: route width intersects main-house; an authored detour or explicit supported bridge is required."
+      },
+      {
+        "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+        "severity": "advisory",
+        "targetIds": [
+          "terrace-pool",
+          "sea-terrace",
+          "infinity-pool"
+        ],
+        "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract."
+      },
+      {
+        "code": "BLUEPRINT_REFERENCE",
+        "severity": "advisory",
+        "targetIds": [
+          "blueprint.roofObjectIds",
+          "main-roof"
+        ],
+        "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form main-roof."
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "foyer|stair-hall",
+          "foyer",
+          "stair-hall"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "stair-hall|dining-hall",
+          "stair-hall",
+          "dining-hall"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "dining-hall|living-room",
+          "dining-hall",
+          "living-room"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "dining-hall|kitchen",
+          "dining-hall",
+          "kitchen"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "living-room|family-lounge",
+          "living-room",
+          "family-lounge"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "gallery|guest-bedroom",
+          "gallery",
+          "guest-bedroom"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "guest-bedroom|guest-dressing",
+          "guest-bedroom",
+          "guest-dressing"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "guest-dressing|guest-bath",
+          "guest-dressing",
+          "guest-bath"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "kitchen|pantry",
+          "kitchen",
+          "pantry"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "kitchen|family-lounge",
+          "kitchen",
+          "family-lounge"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "upper-landing|upper-gallery",
+          "upper-landing",
+          "upper-gallery"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "upper-landing|suite-one-bedroom",
+          "upper-landing",
+          "suite-one-bedroom"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "upper-landing|primary-bedroom",
+          "upper-landing",
+          "primary-bedroom"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "upper-gallery|suite-two-bedroom",
+          "upper-gallery",
+          "suite-two-bedroom"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "suite-one-bedroom|suite-one-dressing",
+          "suite-one-bedroom",
+          "suite-one-dressing"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "suite-one-dressing|suite-one-bath",
+          "suite-one-dressing",
+          "suite-one-bath"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "suite-two-bedroom|suite-two-dressing",
+          "suite-two-bedroom",
+          "suite-two-dressing"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "suite-two-dressing|suite-two-bath",
+          "suite-two-dressing",
+          "suite-two-bath"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "primary-bedroom|primary-dressing",
+          "primary-bedroom",
+          "primary-dressing"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "PLAN_ADJACENCY",
+        "targetIds": [
+          "primary-dressing|primary-bath",
+          "primary-dressing",
+          "primary-bath"
+        ],
+        "message": "Adjacent rooms must occupy the same planned storey.",
+        "severity": "fatal"
+      },
+      {
+        "code": "ESTATE_ROUTE_BLOCKED",
+        "severity": "fatal",
+        "targetIds": [
+          "terrace-walk",
+          "terrace-walk-surface",
+          "main-house"
+        ],
+        "message": "terrace-walk: route width intersects main-house; an authored detour or explicit supported bridge is required."
+      },
+      {
+        "code": "PLAN_ENTRY_ROOM_GAP",
+        "targetIds": [
+          "main-entry",
+          "main-house"
+        ],
+        "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+        "severity": "advisory"
+      },
+      {
+        "code": "PLAN_STAIR_LANDING_ZONE",
+        "targetIds": [
+          "central-stair",
+          "ground-level"
+        ],
+        "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+        "severity": "advisory"
+      },
+      {
+        "code": "PLAN_STAIR_LANDING_ZONE",
+        "targetIds": [
+          "central-stair",
+          "upper-level"
+        ],
+        "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+        "severity": "advisory"
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "ground-west"
+        ],
+        "message": "Functional region leaves the actual host storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "ground-east"
+        ],
+        "message": "Functional region leaves the actual host storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "gallery"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "guest-bedroom"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "guest-dressing"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "guest-bath"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "living-room"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "powder-room"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "powder-room"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "pantry"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "family-lounge"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "ground-level",
+          "living-room",
+          "family-lounge"
+        ],
+        "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "upper-west"
+        ],
+        "message": "Functional region leaves the actual host storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "upper-east"
+        ],
+        "message": "Functional region leaves the actual host storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-one-bedroom"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-one-dressing"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-one-bath"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-two-bedroom"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-two-dressing"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-two-dressing"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "suite-two-bath"
+        ],
+        "message": "Chosen zone proportions cannot satisfy this room size intention."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "primary-bedroom"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "primary-bath"
+        ],
+        "message": "Developed room leaves the actual storey footprint."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "upper-landing",
+          "suite-one-bedroom"
+        ],
+        "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "upper-landing",
+          "primary-bedroom"
+        ],
+        "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "upper-gallery",
+          "suite-two-bedroom"
+        ],
+        "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+      },
+      {
+        "code": "ROOM_LAYOUT_UNRESOLVED",
+        "severity": "advisory",
+        "targetIds": [
+          "upper-level",
+          "central-stair"
+        ],
+        "message": "An aligned stair/lift hall must contain the fixed reservation on every connected storey."
+      }
+    ]
+  },
+  "direct": {
+    "version": "architectural-scene-1",
+    "elements": 43
+  },
+  "note": "Direct operations are a separate retained fixture, not a lossless conversion of the failed blueprint."
+}

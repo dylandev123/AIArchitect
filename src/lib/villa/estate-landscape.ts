@@ -1,34 +1,39 @@
+import { VILLA_LIMITS as L } from './limits';
 import { z } from 'zod';
 import { CatmullRomCurve3, Vector3 } from 'three';
 import { ribbon, type P2 } from '@/lib/house/geometry/mesh';
 
 const id=z.string().regex(/^[a-z][a-z0-9-]{0,47}$/);
-const point=z.object({x:z.number().min(-200).max(200),z:z.number().min(-200).max(200)}).strict();
+const point=z.object({x:z.number().min(-L.position).max(L.position),z:z.number().min(-L.position).max(L.position)}).strict();
 export const estateRouteSchema=z.object({
-  id,kind:z.enum(['drive','walk']),width:z.number().min(.9).max(6),
-  points:z.array(point).min(2).max(8),planting:z.enum(['avenue','border','none']),
+  id,kind:z.enum(['drive','walk']),width:z.number().min(.9).max(L.driveWidth),
+  points:z.array(point).min(2).max(L.controls),planting:z.enum(['avenue','border','none']),
 }).strict().superRefine((r,ctx)=>{
   if(r.kind==='drive' && r.width<3.5) ctx.addIssue({code:'custom',message:'Driveways need at least 3.5 m clear width.'});
-  if(r.kind==='walk' && r.width>3) ctx.addIssue({code:'custom',message:'Pedestrian paths are bounded to 3 m.'});
+  if(r.kind==='walk' && r.width>L.walkWidth) ctx.addIssue({code:'custom',message:`Pedestrian paths are bounded to ${L.walkWidth} m.`});
+  if(r.points.length>=2) {
+    const curve=new CatmullRomCurve3(r.points.map(p=>new Vector3(p.x,0,p.z)),false,'centripetal');
+    if(curve.getLength()>L.routeSamples*L.routeSpacing) ctx.addIssue({code:'custom',message:`Route exceeds the ${L.routeSamples*L.routeSpacing} m safe sampling budget. Use shorter routes; do not coarsen collision sampling.`});
+  }
   for(let i=1;i<r.points.length;i++) if(Math.hypot(r.points[i].x-r.points[i-1].x,r.points[i].z-r.points[i-1].z)<2)
     ctx.addIssue({code:'custom',message:'Successive path controls need at least 2 m separation.'});
 });
 export const estateLandscapeSchema=z.object({
-  builder:z.literal('estate-landscape@1'),routes:z.array(estateRouteSchema).min(1).max(10),
-  court:z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(12).max(28),depth:z.number().min(12).max(28),
-    island:z.enum(['none','planted','fountain']),islandWidth:z.number().min(2).max(12),islandDepth:z.number().min(2).max(12),
+  builder:z.literal('estate-landscape@1'),routes:z.array(estateRouteSchema).min(1).max(L.routes),
+  court:z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(12).max(L.court),depth:z.number().min(12).max(L.court),
+    island:z.enum(['none','planted','fountain']),islandWidth:z.number().min(2).max(L.island),islandDepth:z.number().min(2).max(L.island),
   }).strict().refine(c=>c.island==='none' || Math.min((c.width-c.islandWidth)/2,(c.depth-c.islandDepth)/2)>=3.5,
     'Motor courts need a clear lane of at least 3.5 m around the island.').optional(),
-  beds:z.array(z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(1.5).max(12),depth:z.number().min(1.5).max(12)}).strict()).max(12),
+  beds:z.array(z.object({id,x:point.shape.x,z:point.shape.z,width:z.number().min(1.5).max(L.bed),depth:z.number().min(1.5).max(L.bed)}).strict()).max(L.beds),
 }).strict();
 export type EstateLandscape=z.infer<typeof estateLandscapeSchema>;
 export type EstateRoute=z.infer<typeof estateRouteSchema>;
 export type Point={x:number;z:number};
 export type Bounds={left:number;right:number;rear:number;front:number};
 /** Centripetal interpolation passes through authored controls without uniform-spline loops. */
-export function routeSamples(route:EstateRoute, spacing=.65):Point[] {
+export function routeSamples(route:EstateRoute, spacing:number=L.routeSpacing):Point[] {
   const curve=new CatmullRomCurve3(route.points.map(p=>new Vector3(p.x,0,p.z)),false,'centripetal');
-  const count=Math.min(1200,Math.max(12,Math.ceil(curve.getLength()/spacing)));
+  const count=Math.min(L.routeSamples,Math.max(12,Math.ceil(curve.getLength()/spacing)));
   return curve.getSpacedPoints(count).map(p=>({x:p.x,z:p.z}));
 }
 export function pointSegmentDistance(p:Point,a:Point,b:Point) {
@@ -69,7 +74,7 @@ export function circulationPlanting(l:EstateLandscape,obstacles:Bounds[]) {
       if(routes.some(({r,samples})=>routeDistance(p,samples)<r.width/2+radius) ||
         (l.court && insideCourt(p,l.court,radius)) || obstacles.some(b=>distanceToBounds(p,b)<radius) ||
         plants.some(q=>Math.hypot(q.x-p.x,q.z-p.z)<(tree?4:1.25))) continue;
-      plants.push(p);
+      if(plants.length<L.circulationPlants) plants.push(p);
     }
   }
   return plants;

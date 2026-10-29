@@ -1,0 +1,1225 @@
+{
+  "prompt": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+  "provider": {
+    "changes": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "id": "garden-room",
+          "kind": "terrace",
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 0,
+        "z": 3,
+        "width": 42,
+        "depth": 42
+      },
+      "siteMode": "derived"
+    },
+    "summary": "An island residence with an original bronze sail canopy. The new canopy is experimental and awaits review.",
+    "unsupported": [],
+    "componentRequests": [
+      {
+        "type": "create",
+        "id": "garden-sail",
+        "missingCapability": "A rising flared bronze canopy absent from the approved library.",
+        "proposal": {
+          "id": "flared-sail",
+          "name": "Flared Sail",
+          "intent": "A shaded outdoor gathering place beside the villa terrace.",
+          "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+          "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+          "attachment": "freestanding-four-post",
+          "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+          "reuses": [
+            "PrimitiveMesh",
+            "villa-PBR",
+            "Box",
+            "VillaScene"
+          ],
+          "geometry": {
+            "builder": "swept-ribbon@1",
+            "length": 9,
+            "width": 3,
+            "height": 3.4,
+            "thickness": 0.18,
+            "stations": [
+              {
+                "offset": 0,
+                "rise": 0,
+                "width": 0.5,
+                "bank": 0
+              },
+              {
+                "offset": 0,
+                "rise": 0.1,
+                "width": 0.7,
+                "bank": 4
+              },
+              {
+                "offset": 0.3,
+                "rise": 0.8,
+                "width": 1.1,
+                "bank": 10
+              },
+              {
+                "offset": 0.8,
+                "rise": 2.3,
+                "width": 1.5,
+                "bank": 18
+              }
+            ],
+            "material": "bronze"
+          }
+        },
+        "placement": {
+          "x": 15,
+          "z": 8,
+          "orientation": 25
+        }
+      }
+    ]
+  },
+  "created": {
+    "componentRequests": [
+      {
+        "type": "create",
+        "id": "garden-sail",
+        "missingCapability": "A rising flared bronze canopy absent from the approved library.",
+        "proposal": {
+          "id": "flared-sail",
+          "name": "Flared Sail",
+          "intent": "A shaded outdoor gathering place beside the villa terrace.",
+          "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+          "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+          "attachment": "freestanding-four-post",
+          "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+          "reuses": [
+            "PrimitiveMesh",
+            "villa-PBR",
+            "Box",
+            "VillaScene"
+          ],
+          "geometry": {
+            "builder": "swept-ribbon@1",
+            "length": 9,
+            "width": 3,
+            "height": 3.4,
+            "thickness": 0.18,
+            "stations": [
+              {
+                "offset": 0,
+                "rise": 0,
+                "width": 0.5,
+                "bank": 0
+              },
+              {
+                "offset": 0,
+                "rise": 0.1,
+                "width": 0.7,
+                "bank": 4
+              },
+              {
+                "offset": 0.3,
+                "rise": 0.8,
+                "width": 1.1,
+                "bank": 10
+              },
+              {
+                "offset": 0.8,
+                "rise": 2.3,
+                "width": 1.5,
+                "bank": 18
+              }
+            ],
+            "material": "bronze"
+          }
+        },
+        "placement": {
+          "x": 15,
+          "z": 8,
+          "orientation": 25
+        }
+      }
+    ],
+    "changes": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.6798162830740635,
+        "z": 2.8999999999999995,
+        "width": 37.659632566148126,
+        "depth": 34.1
+      },
+      "siteMode": "derived",
+      "createdComponents": [
+        {
+          "id": "garden-sail",
+          "candidateId": "flared-sail",
+          "candidateVersion": 1,
+          "status": "experimental",
+          "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+          "proposal": {
+            "id": "flared-sail",
+            "name": "Flared Sail",
+            "intent": "A shaded outdoor gathering place beside the villa terrace.",
+            "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+            "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+            "attachment": "freestanding-four-post",
+            "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+            "reuses": [
+              "PrimitiveMesh",
+              "villa-PBR",
+              "Box",
+              "VillaScene"
+            ],
+            "geometry": {
+              "builder": "swept-ribbon@1",
+              "length": 9,
+              "width": 3,
+              "height": 3.4,
+              "thickness": 0.18,
+              "stations": [
+                {
+                  "offset": 0,
+                  "rise": 0,
+                  "width": 0.5,
+                  "bank": 0
+                },
+                {
+                  "offset": 0,
+                  "rise": 0.1,
+                  "width": 0.7,
+                  "bank": 4
+                },
+                {
+                  "offset": 0.3,
+                  "rise": 0.8,
+                  "width": 1.1,
+                  "bank": 10
+                },
+                {
+                  "offset": 0.8,
+                  "rise": 2.3,
+                  "width": 1.5,
+                  "bank": 18
+                }
+              ],
+              "material": "bronze"
+            }
+          },
+          "placement": {
+            "x": 15,
+            "z": 8,
+            "orientation": 25
+          }
+        }
+      ]
+    },
+    "summary": "An island residence with an original bronze sail canopy. The new canopy is experimental and awaits review.",
+    "unsupported": [],
+    "config": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.6798162830740635,
+        "z": 2.8999999999999995,
+        "width": 37.659632566148126,
+        "depth": 34.1
+      },
+      "siteMode": "derived",
+      "createdComponents": [
+        {
+          "id": "garden-sail",
+          "candidateId": "flared-sail",
+          "candidateVersion": 1,
+          "status": "experimental",
+          "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+          "proposal": {
+            "id": "flared-sail",
+            "name": "Flared Sail",
+            "intent": "A shaded outdoor gathering place beside the villa terrace.",
+            "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+            "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+            "attachment": "freestanding-four-post",
+            "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+            "reuses": [
+              "PrimitiveMesh",
+              "villa-PBR",
+              "Box",
+              "VillaScene"
+            ],
+            "geometry": {
+              "builder": "swept-ribbon@1",
+              "length": 9,
+              "width": 3,
+              "height": 3.4,
+              "thickness": 0.18,
+              "stations": [
+                {
+                  "offset": 0,
+                  "rise": 0,
+                  "width": 0.5,
+                  "bank": 0
+                },
+                {
+                  "offset": 0,
+                  "rise": 0.1,
+                  "width": 0.7,
+                  "bank": 4
+                },
+                {
+                  "offset": 0.3,
+                  "rise": 0.8,
+                  "width": 1.1,
+                  "bank": 10
+                },
+                {
+                  "offset": 0.8,
+                  "rise": 2.3,
+                  "width": 1.5,
+                  "bank": 18
+                }
+              ],
+              "material": "bronze"
+            }
+          },
+          "placement": {
+            "x": 15,
+            "z": 8,
+            "orientation": 25
+          }
+        }
+      ]
+    },
+    "componentStages": [
+      {
+        "stage": "missing-capability",
+        "id": "garden-sail",
+        "message": "A rising flared bronze canopy absent from the approved library."
+      },
+      {
+        "stage": "geometry-validated",
+        "id": "garden-sail",
+        "builder": "swept-ribbon@1"
+      },
+      {
+        "stage": "experimental-candidate-saved",
+        "id": "garden-sail",
+        "candidateId": "flared-sail",
+        "candidateVersion": 1,
+        "builder": "swept-ribbon@1"
+      },
+      {
+        "stage": "property-assembled"
+      }
+    ]
+  },
+  "reused": {
+    "componentRequests": [
+      {
+        "type": "reuse",
+        "id": "garden-sail",
+        "candidateId": "flared-sail",
+        "candidateVersion": 3,
+        "placement": {
+          "x": 15,
+          "z": 8,
+          "orientation": 25
+        }
+      }
+    ],
+    "changes": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.6798162830740635,
+        "z": 2.8999999999999995,
+        "width": 37.659632566148126,
+        "depth": 34.1
+      },
+      "siteMode": "derived",
+      "createdComponents": [
+        {
+          "id": "garden-sail",
+          "candidateId": "flared-sail",
+          "candidateVersion": 3,
+          "status": "approved",
+          "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+          "proposal": {
+            "id": "flared-sail",
+            "name": "Flared Sail",
+            "intent": "A shaded outdoor gathering place beside the villa terrace.",
+            "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+            "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+            "attachment": "freestanding-four-post",
+            "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+            "reuses": [
+              "PrimitiveMesh",
+              "villa-PBR",
+              "Box",
+              "VillaScene"
+            ],
+            "geometry": {
+              "builder": "swept-ribbon@1",
+              "length": 9,
+              "width": 3,
+              "height": 3.4,
+              "thickness": 0.18,
+              "stations": [
+                {
+                  "offset": 0,
+                  "rise": 0,
+                  "width": 0.5,
+                  "bank": 0
+                },
+                {
+                  "offset": 0,
+                  "rise": 0.1,
+                  "width": 0.7,
+                  "bank": 4
+                },
+                {
+                  "offset": 0.3,
+                  "rise": 0.8,
+                  "width": 1.1,
+                  "bank": 10
+                },
+                {
+                  "offset": 0.8,
+                  "rise": 2.3,
+                  "width": 1.5,
+                  "bank": 18
+                }
+              ],
+              "material": "bronze"
+            }
+          },
+          "placement": {
+            "x": 15,
+            "z": 8,
+            "orientation": 25
+          }
+        }
+      ]
+    },
+    "summary": "Reused the approved bronze sail canopy without a creation request.",
+    "unsupported": [],
+    "config": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.6798162830740635,
+        "z": 2.8999999999999995,
+        "width": 37.659632566148126,
+        "depth": 34.1
+      },
+      "siteMode": "derived",
+      "createdComponents": [
+        {
+          "id": "garden-sail",
+          "candidateId": "flared-sail",
+          "candidateVersion": 3,
+          "status": "approved",
+          "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+          "proposal": {
+            "id": "flared-sail",
+            "name": "Flared Sail",
+            "intent": "A shaded outdoor gathering place beside the villa terrace.",
+            "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+            "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+            "attachment": "freestanding-four-post",
+            "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+            "reuses": [
+              "PrimitiveMesh",
+              "villa-PBR",
+              "Box",
+              "VillaScene"
+            ],
+            "geometry": {
+              "builder": "swept-ribbon@1",
+              "length": 9,
+              "width": 3,
+              "height": 3.4,
+              "thickness": 0.18,
+              "stations": [
+                {
+                  "offset": 0,
+                  "rise": 0,
+                  "width": 0.5,
+                  "bank": 0
+                },
+                {
+                  "offset": 0,
+                  "rise": 0.1,
+                  "width": 0.7,
+                  "bank": 4
+                },
+                {
+                  "offset": 0.3,
+                  "rise": 0.8,
+                  "width": 1.1,
+                  "bank": 10
+                },
+                {
+                  "offset": 0.8,
+                  "rise": 2.3,
+                  "width": 1.5,
+                  "bank": 18
+                }
+              ],
+              "material": "bronze"
+            }
+          },
+          "placement": {
+            "x": 15,
+            "z": 8,
+            "orientation": 25
+          }
+        }
+      ]
+    },
+    "componentStages": [
+      {
+        "stage": "approved-reuse",
+        "id": "garden-sail",
+        "builder": "swept-ribbon@1"
+      },
+      {
+        "stage": "property-assembled"
+      }
+    ]
+  },
+  "plain": {
+    "componentRequests": [],
+    "changes": {
+      "version": 1,
+      "id": "breeze-pair",
+      "name": "Breeze Pair",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 0,
+        "z": 3,
+        "width": 42,
+        "depth": 42
+      },
+      "siteMode": "derived"
+    },
+    "summary": "A normal Caribbean house using existing builders.",
+    "unsupported": [],
+    "config": {
+      "version": 1,
+      "id": "breeze-pair",
+      "name": "Breeze Pair",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 0.4999999999999991,
+        "z": 2.8999999999999995,
+        "width": 31.299999999999997,
+        "depth": 34.1
+      },
+      "siteMode": "derived"
+    },
+    "componentStages": []
+  },
+  "edited": {
+    "changes": {
+      "createdComponents": [
+        {
+          "type": "adjust",
+          "id": "garden-sail",
+          "placement": {
+            "orientation": 35
+          }
+        }
+      ]
+    },
+    "summary": "Rotated the existing canopy, preserving its version and geometry.",
+    "unsupported": [],
+    "config": {
+      "version": 1,
+      "id": "sail-house",
+      "name": "Sail House",
+      "character": "An island hall and a low garden salon.",
+      "appearance": {
+        "style": "caribbean",
+        "roof": "hip",
+        "exterior": "ivory",
+        "glazing": "panoramic",
+        "landscape": "tropical"
+      },
+      "wings": [
+        {
+          "id": "main",
+          "role": "main",
+          "parentId": null,
+          "detached": false,
+          "x": -5,
+          "z": -7,
+          "width": 14,
+          "depth": 8,
+          "orientation": 0,
+          "storeys": 2,
+          "storeyHeight": 4.1,
+          "veranda": 2,
+          "balcony": 1.5
+        },
+        {
+          "id": "salon",
+          "role": "living",
+          "parentId": "main",
+          "detached": false,
+          "x": 9,
+          "z": -4,
+          "width": 8,
+          "depth": 6,
+          "orientation": 180,
+          "storeys": 1,
+          "storeyHeight": 3.8,
+          "veranda": 1.8,
+          "balcony": 0
+        }
+      ],
+      "connections": [
+        {
+          "id": "breeze-link",
+          "from": "main",
+          "to": "salon",
+          "width": 2.4
+        }
+      ],
+      "terraces": [
+        {
+          "x": -3,
+          "z": 3,
+          "width": 20,
+          "depth": 7,
+          "id": "garden-room",
+          "kind": "terrace",
+          "timber": false
+        }
+      ],
+      "pool": {
+        "x": -2,
+        "z": 13,
+        "width": 12,
+        "depth": 5.5
+      },
+      "garden": {
+        "x": 3.7214749869031296,
+        "z": 2.8999999999999995,
+        "width": 37.74294997380626,
+        "depth": 34.1
+      },
+      "siteMode": "derived",
+      "createdComponents": [
+        {
+          "id": "garden-sail",
+          "candidateId": "flared-sail",
+          "candidateVersion": 1,
+          "status": "experimental",
+          "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+          "proposal": {
+            "id": "flared-sail",
+            "name": "Flared Sail",
+            "intent": "A shaded outdoor gathering place beside the villa terrace.",
+            "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+            "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+            "attachment": "freestanding-four-post",
+            "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+            "reuses": [
+              "PrimitiveMesh",
+              "villa-PBR",
+              "Box",
+              "VillaScene"
+            ],
+            "geometry": {
+              "builder": "swept-ribbon@1",
+              "length": 9,
+              "width": 3,
+              "height": 3.4,
+              "thickness": 0.18,
+              "stations": [
+                {
+                  "offset": 0,
+                  "rise": 0,
+                  "width": 0.5,
+                  "bank": 0
+                },
+                {
+                  "offset": 0,
+                  "rise": 0.1,
+                  "width": 0.7,
+                  "bank": 4
+                },
+                {
+                  "offset": 0.3,
+                  "rise": 0.8,
+                  "width": 1.1,
+                  "bank": 10
+                },
+                {
+                  "offset": 0.8,
+                  "rise": 2.3,
+                  "width": 1.5,
+                  "bank": 18
+                }
+              ],
+              "material": "bronze"
+            }
+          },
+          "placement": {
+            "x": 15,
+            "z": 8,
+            "orientation": 35
+          }
+        }
+      ]
+    }
+  },
+  "experimental": {
+    "schemaVersion": 1,
+    "id": "flared-sail",
+    "version": 1,
+    "status": "experimental",
+    "availability": "development-only",
+    "proposal": {
+      "id": "flared-sail",
+      "name": "Flared Sail",
+      "intent": "A shaded outdoor gathering place beside the villa terrace.",
+      "character": "A bronze fan widens toward the garden with a rising folded silhouette.",
+      "details": "Closed solid ribbon with four slender edge posts; existing villa materials. No glazing. Concept design only; drainage and engineering unresolved.",
+      "attachment": "freestanding-four-post",
+      "compatibility": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+      "reuses": [
+        "PrimitiveMesh",
+        "villa-PBR",
+        "Box",
+        "VillaScene"
+      ],
+      "geometry": {
+        "builder": "swept-ribbon@1",
+        "length": 9,
+        "width": 3,
+        "height": 3.4,
+        "thickness": 0.18,
+        "stations": [
+          {
+            "offset": 0,
+            "rise": 0,
+            "width": 0.5,
+            "bank": 0
+          },
+          {
+            "offset": 0,
+            "rise": 0.1,
+            "width": 0.7,
+            "bank": 4
+          },
+          {
+            "offset": 0.3,
+            "rise": 0.8,
+            "width": 1.1,
+            "bank": 10
+          },
+          {
+            "offset": 0.8,
+            "rise": 2.3,
+            "width": 1.5,
+            "bank": 18
+          }
+        ],
+        "material": "bronze"
+      }
+    },
+    "originalIntent": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+    "evidence": [],
+    "createdAt": "2026-10-26T13:41:41.098Z",
+    "capabilities": {
+      "builder": "swept-ribbon@1",
+      "coordinates": "metres, +Y up, floor at y=.47; length along local X; yaw about +Y",
+      "dimensions": {
+        "length": [
+          4,
+          14
+        ],
+        "width": [
+          1.5,
+          5
+        ],
+        "height": [
+          3,
+          6
+        ],
+        "thickness": [
+          0.12,
+          0.4
+        ]
+      },
+      "customization": "Four equally spaced longitudinal stations: lateral offset [-2,2]m, rise [0,3]m, width multiplier [.5,1.5], bank [-18,18]deg. Smoothstep interpolation, solid closed ribbon, four vertical edge posts. Minimum clear soffit 2.6m.",
+      "attachment": "Freestanding only. Entire rotated roof/post envelope must fit garden and clear buildings, pavilions, pools, courtyards, planting beds and circulation by .3m. Ordinary terrace paving allowed beneath posts.",
+      "gaps": [
+        "Enclosed/glazed rooms",
+        "Wall or roof attachment",
+        "Branches, holes or intersecting ribbons",
+        "Arbitrary surfaces, code or imported meshes",
+        "Structural engineering, foundations, drainage or fabrication certification"
+      ]
+    }
+  },
+  "approvalNote": "Synthetic reviewed evidence in a temporary library only; no real design approved or published."
+}

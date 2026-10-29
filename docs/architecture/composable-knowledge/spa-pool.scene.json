@@ -1,0 +1,1608 @@
+{
+  "version": "architectural-scene-1",
+  "name": "spa-pool",
+  "elements": [
+    {
+      "id": "living-floor",
+      "label": "living-floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "living-front",
+      "label": "living-front",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "living-door",
+      "label": "living-door",
+      "kind": "entrance",
+      "parent": "living-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "living-back",
+      "label": "living-back",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-left",
+      "label": "living-left",
+      "kind": "wall",
+      "at": [
+        -9,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-right",
+      "label": "living-right",
+      "kind": "wall",
+      "at": [
+        9,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "living-roof",
+      "label": "living-roof",
+      "kind": "roof",
+      "at": [
+        0,
+        3.55,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        18.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-floor",
+      "label": "dining-floor",
+      "kind": "plate",
+      "at": [
+        19,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "dining-front",
+      "label": "dining-front",
+      "kind": "wall",
+      "at": [
+        19,
+        1.8,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "dining-door",
+      "label": "dining-door",
+      "kind": "entrance",
+      "parent": "dining-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "dining-back",
+      "label": "dining-back",
+      "kind": "wall",
+      "at": [
+        19,
+        1.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-left",
+      "label": "dining-left",
+      "kind": "wall",
+      "at": [
+        9,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-right",
+      "label": "dining-right",
+      "kind": "wall",
+      "at": [
+        29,
+        1.8,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "dining-roof",
+      "label": "dining-roof",
+      "kind": "roof",
+      "at": [
+        19,
+        3.55,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        20.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-one-floor",
+      "label": "suite-one-floor",
+      "kind": "plate",
+      "at": [
+        -17,
+        0.1,
+        -8
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-one-front",
+      "label": "suite-one-front",
+      "kind": "wall",
+      "at": [
+        -17,
+        1.8,
+        -2
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "suite-one-door",
+      "label": "suite-one-door",
+      "kind": "entrance",
+      "parent": "suite-one-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "suite-one-back",
+      "label": "suite-one-back",
+      "kind": "wall",
+      "at": [
+        -17,
+        1.8,
+        -14
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-one-left",
+      "label": "suite-one-left",
+      "kind": "wall",
+      "at": [
+        -25,
+        1.8,
+        -8
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-one-right",
+      "label": "suite-one-right",
+      "kind": "wall",
+      "at": [
+        -9,
+        1.8,
+        -8
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-one-roof",
+      "label": "suite-one-roof",
+      "kind": "roof",
+      "at": [
+        -17,
+        3.55,
+        -8
+      ],
+      "rotation": 0,
+      "size": [
+        16.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-two-floor",
+      "label": "suite-two-floor",
+      "kind": "plate",
+      "at": [
+        -17,
+        0.1,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "suite-two-front",
+      "label": "suite-two-front",
+      "kind": "wall",
+      "at": [
+        -17,
+        1.8,
+        12
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "suite-two-door",
+      "label": "suite-two-door",
+      "kind": "entrance",
+      "parent": "suite-two-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "suite-two-back",
+      "label": "suite-two-back",
+      "kind": "wall",
+      "at": [
+        -17,
+        1.8,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-two-left",
+      "label": "suite-two-left",
+      "kind": "wall",
+      "at": [
+        -25,
+        1.8,
+        6
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-two-right",
+      "label": "suite-two-right",
+      "kind": "wall",
+      "at": [
+        -9,
+        1.8,
+        6
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "suite-two-roof",
+      "label": "suite-two-roof",
+      "kind": "roof",
+      "at": [
+        -17,
+        3.55,
+        6
+      ],
+      "rotation": 0,
+      "size": [
+        16.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "kitchen-floor",
+      "label": "kitchen-floor",
+      "kind": "plate",
+      "at": [
+        19,
+        0.1,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "kitchen-front",
+      "label": "kitchen-front",
+      "kind": "wall",
+      "at": [
+        19,
+        1.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "kitchen-door",
+      "label": "kitchen-door",
+      "kind": "entrance",
+      "parent": "kitchen-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "kitchen-back",
+      "label": "kitchen-back",
+      "kind": "wall",
+      "at": [
+        19,
+        1.8,
+        -18
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "kitchen-left",
+      "label": "kitchen-left",
+      "kind": "wall",
+      "at": [
+        9,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "kitchen-right",
+      "label": "kitchen-right",
+      "kind": "wall",
+      "at": [
+        29,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "kitchen-roof",
+      "label": "kitchen-roof",
+      "kind": "roof",
+      "at": [
+        19,
+        3.55,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        20.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "service-floor",
+      "label": "service-floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        0.2,
+        12
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "service-front",
+      "label": "service-front",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      }
+    },
+    {
+      "id": "service-door",
+      "label": "service-door",
+      "kind": "entrance",
+      "parent": "service-front",
+      "at": [
+        0,
+        -0.35,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "service-back",
+      "label": "service-back",
+      "kind": "wall",
+      "at": [
+        0,
+        1.8,
+        -18
+      ],
+      "rotation": 0,
+      "size": [
+        18,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-left",
+      "label": "service-left",
+      "kind": "wall",
+      "at": [
+        -9,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-right",
+      "label": "service-right",
+      "kind": "wall",
+      "at": [
+        9,
+        1.8,
+        -12
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        3.2,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.6,
+        "glazed": true
+      }
+    },
+    {
+      "id": "service-roof",
+      "label": "service-roof",
+      "kind": "roof",
+      "at": [
+        0,
+        3.55,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        18.8,
+        0.3,
+        12.8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "connected-terrace",
+      "label": "connected-terrace",
+      "kind": "plate",
+      "at": [
+        8,
+        0.1,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        34,
+        0.2,
+        8
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "terrace-canopy",
+      "label": "terrace-canopy",
+      "kind": "roof",
+      "at": [
+        8,
+        3.55,
+        10
+      ],
+      "rotation": 0,
+      "size": [
+        34,
+        0.3,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "canopy-post-left",
+      "label": "canopy-post-left",
+      "kind": "volume",
+      "at": [
+        -8.7,
+        1.8,
+        13.7
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "canopy-post-right",
+      "label": "canopy-post-right",
+      "kind": "volume",
+      "at": [
+        24.7,
+        1.8,
+        13.7
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3.2,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-bottom",
+      "label": "pool-bottom",
+      "kind": "plate",
+      "at": [
+        8,
+        0.075,
+        20
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.15,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-water",
+      "label": "pool-water",
+      "kind": "water",
+      "at": [
+        8,
+        0.25,
+        20
+      ],
+      "rotation": 0,
+      "size": [
+        15.6,
+        0.05,
+        4.6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-long--1",
+      "label": "pool-long--1",
+      "kind": "wall",
+      "at": [
+        8,
+        0.2,
+        17.5
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-end--1",
+      "label": "pool-end--1",
+      "kind": "wall",
+      "at": [
+        0,
+        0.2,
+        20
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        5,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-long-1",
+      "label": "pool-long-1",
+      "kind": "wall",
+      "at": [
+        8,
+        0.2,
+        22.5
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-end-1",
+      "label": "pool-end-1",
+      "kind": "wall",
+      "at": [
+        16,
+        0.2,
+        20
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        5,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-bottom",
+      "label": "spa-bottom",
+      "kind": "plate",
+      "at": [
+        20,
+        0.075,
+        20
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.15,
+        3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-water",
+      "label": "spa-water",
+      "kind": "water",
+      "at": [
+        20,
+        0.25,
+        20
+      ],
+      "rotation": 0,
+      "size": [
+        2.6,
+        0.05,
+        2.6
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-edge-x--1",
+      "label": "spa-edge-x--1",
+      "kind": "wall",
+      "at": [
+        20,
+        0.2,
+        18.5
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-edge-z--1",
+      "label": "spa-edge-z--1",
+      "kind": "wall",
+      "at": [
+        18.5,
+        0.2,
+        20
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        3,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-edge-x-1",
+      "label": "spa-edge-x-1",
+      "kind": "wall",
+      "at": [
+        20,
+        0.2,
+        21.5
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-edge-z-1",
+      "label": "spa-edge-z-1",
+      "kind": "wall",
+      "at": [
+        21.5,
+        0.2,
+        20
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        3,
+        0.4,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "spa-approach",
+      "label": "spa-approach",
+      "kind": "plate",
+      "at": [
+        20,
+        0.1,
+        16
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.2,
+        4
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "Hand-authored offline capability study sized for caribbean",
+    "arrivalAndCirculation": "Doors face connected outdoor routes; internal navigation remains unverified.",
+    "volumeHierarchy": "Living primary; sleeping and service rooms subordinate.",
+    "relationshipsAndViews": "Terrace connects the occupied volumes; orientation assumed.",
+    "roofFacadeAndMaterials": "Coordinated roof sections, real openings and limestone/timber.",
+    "intendedSpaces": [
+      "living",
+      "dining",
+      "suite-one",
+      "suite-two",
+      "kitchen",
+      "service"
+    ],
+    "designDecisions": [
+      {
+        "knowledgeId": "estate-composition",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "pool-deck-width",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "waterfront-estate",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "wellness-suite",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "build-pool-bottom-order",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "infinity-pool",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "material-continuous-deck",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "living-view",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "spa-court",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "pool-rectangular-lap",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "covered-threshold",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      },
+      {
+        "knowledgeId": "window-rhythm",
+        "decision": "Study of primitive construction; review relationships and completeness.",
+        "elementIds": [
+          "pool-bottom",
+          "pool-water",
+          "pool-long--1",
+          "pool-end--1",
+          "pool-long-1",
+          "pool-end-1",
+          "spa-bottom",
+          "spa-water",
+          "spa-edge-x--1",
+          "spa-edge-z--1",
+          "spa-edge-x-1",
+          "spa-edge-z-1"
+        ],
+        "limitation": "Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature.",
+        "disposition": "constructed"
+      }
+    ]
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "pool-deck-width",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "water"
+      ]
+    },
+    {
+      "id": "waterfront-estate",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "wellness-suite",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof",
+        "entrance"
+      ]
+    },
+    {
+      "id": "build-pool-bottom-order",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "water"
+      ]
+    },
+    {
+      "id": "infinity-pool",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "water"
+      ]
+    },
+    {
+      "id": "material-continuous-deck",
+      "version": 1,
+      "requiredKinds": [
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "living-view",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "spa-court",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "pool-rectangular-lap",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "water"
+      ]
+    },
+    {
+      "id": "covered-threshold",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "window-rhythm",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,936 @@
+{
+  "type": "json",
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "architecturalPlan": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "scaleRationale": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200,
+                "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+              },
+              "arrivalAndCirculation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "volumeHierarchy": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "relationshipsAndViews": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "roofFacadeAndMaterials": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "intendedSpaces": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1200
+                }
+              },
+              "spatialRelationships": {
+                "maxItems": 40,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "subject": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "target": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "relation": {
+                      "type": "string",
+                      "enum": [
+                        "adjacent-to",
+                        "connected-to",
+                        "above",
+                        "below",
+                        "facing",
+                        "set-back-from",
+                        "covering",
+                        "clear-of",
+                        "inside"
+                      ]
+                    },
+                    "clearance": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10000
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    }
+                  },
+                  "required": [
+                    "subject",
+                    "target",
+                    "relation",
+                    "clearance",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "designDecisions": {
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "disposition": {
+                      "type": "string",
+                      "enum": [
+                        "constructed",
+                        "guidance",
+                        "considered",
+                        "unsupported"
+                      ]
+                    },
+                    "knowledgeId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "decision": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "elementIds": {
+                      "maxItems": 12,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      }
+                    },
+                    "limitation": {
+                      "type": "string",
+                      "maxLength": 300
+                    }
+                  },
+                  "required": [
+                    "knowledgeId",
+                    "decision",
+                    "elementIds",
+                    "limitation"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "scaleRationale",
+              "arrivalAndCirculation",
+              "volumeHierarchy",
+              "relationshipsAndViews",
+              "roofFacadeAndMaterials",
+              "intendedSpaces"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "scaleRationale": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200,
+                "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+              },
+              "levels": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "enclosedAreaM2": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "arrivalAndCirculation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "volumeHierarchy": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "relationshipsAndViews": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "roofFacadeAndMaterials": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1200
+              },
+              "spaces": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1200
+                    },
+                    "use": {
+                      "type": "string",
+                      "enum": [
+                        "interior",
+                        "outdoor"
+                      ]
+                    },
+                    "level": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "areaM2": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "floorIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "enclosureIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "roofIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "use",
+                    "level",
+                    "areaM2",
+                    "floorIds",
+                    "enclosureIds",
+                    "roofIds"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "commitments": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1200
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "entrance",
+                        "circulation",
+                        "primary-volume",
+                        "secondary-volume",
+                        "roof",
+                        "facade",
+                        "terrace"
+                      ]
+                    },
+                    "elementIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "description",
+                    "kind",
+                    "elementIds"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "scaleRationale",
+              "levels",
+              "enclosedAreaM2",
+              "arrivalAndCirculation",
+              "volumeHierarchy",
+              "relationshipsAndViews",
+              "roofFacadeAndMaterials",
+              "spaces",
+              "commitments"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "summary": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 600
+      },
+      "unsupported": {
+        "maxItems": 20,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      },
+      "operations": {
+        "maxItems": 800,
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "set-terrain"
+                },
+                "terrain": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "width": {
+                          "type": "number",
+                          "minimum": 10,
+                          "maximum": 200
+                        },
+                        "depth": {
+                          "type": "number",
+                          "minimum": 10,
+                          "maximum": 200
+                        },
+                        "elevation": {
+                          "type": "number",
+                          "minimum": -100,
+                          "maximum": 100
+                        },
+                        "grade": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "fall": {
+                          "type": "string",
+                          "enum": [
+                            "x",
+                            "-x",
+                            "z",
+                            "-z"
+                          ]
+                        },
+                        "cliff": {
+                          "type": "object",
+                          "properties": {
+                            "at": {
+                              "type": "number",
+                              "minimum": -100,
+                              "maximum": 100
+                            },
+                            "drop": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "run": {
+                              "type": "number",
+                              "minimum": 1,
+                              "maximum": 100
+                            }
+                          },
+                          "required": [
+                            "at",
+                            "drop",
+                            "run"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "width",
+                        "depth",
+                        "elevation",
+                        "grade",
+                        "fall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "op",
+                "terrain"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "add"
+                },
+                "element": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "plate",
+                        "wall",
+                        "roof",
+                        "glazing",
+                        "balcony",
+                        "entrance",
+                        "screen",
+                        "sofa",
+                        "volume",
+                        "water",
+                        "pavilion"
+                      ]
+                    },
+                    "parent": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    },
+                    "rotation": {
+                      "default": 0,
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    },
+                    "size": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 10000
+                      }
+                    },
+                    "material": {
+                      "default": "ivory",
+                      "type": "string",
+                      "enum": [
+                        "ivory",
+                        "limestone",
+                        "timber",
+                        "bronze",
+                        "sage"
+                      ]
+                    },
+                    "roofForm": {
+                      "type": "string",
+                      "enum": [
+                        "flat",
+                        "gable",
+                        "hip"
+                      ]
+                    },
+                    "overhang": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "panels": {
+                      "default": 4,
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 40
+                    },
+                    "opening": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "sill": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10000
+                        },
+                        "width": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000
+                        },
+                        "height": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000
+                        },
+                        "glazed": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "sill",
+                        "width",
+                        "height",
+                        "glazed"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "kind",
+                    "at",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "op",
+                "element"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "replace"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "element": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "plate",
+                        "wall",
+                        "roof",
+                        "glazing",
+                        "balcony",
+                        "entrance",
+                        "screen",
+                        "sofa",
+                        "volume",
+                        "water",
+                        "pavilion"
+                      ]
+                    },
+                    "parent": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    },
+                    "rotation": {
+                      "default": 0,
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    },
+                    "size": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 10000
+                      }
+                    },
+                    "material": {
+                      "default": "ivory",
+                      "type": "string",
+                      "enum": [
+                        "ivory",
+                        "limestone",
+                        "timber",
+                        "bronze",
+                        "sage"
+                      ]
+                    },
+                    "roofForm": {
+                      "type": "string",
+                      "enum": [
+                        "flat",
+                        "gable",
+                        "hip"
+                      ]
+                    },
+                    "overhang": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "panels": {
+                      "default": 4,
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 40
+                    },
+                    "opening": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "sill": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10000
+                        },
+                        "width": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000
+                        },
+                        "height": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 10000
+                        },
+                        "glazed": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "sill",
+                        "width",
+                        "height",
+                        "glazed"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "kind",
+                    "at",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "element"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "remove"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                }
+              },
+              "required": [
+                "op",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "move"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "at": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": -10000,
+                    "maximum": 10000
+                  }
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "at"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "rotate"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "rotation": {
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "rotation"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "resize"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "size": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 10000
+                  }
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "size"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "finish"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "material": {
+                  "default": "ivory",
+                  "type": "string",
+                  "enum": [
+                    "ivory",
+                    "limestone",
+                    "timber",
+                    "bronze",
+                    "sage"
+                  ]
+                }
+              },
+              "required": [
+                "op",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "place-on"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "support": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "offset": {
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": -10000,
+                    "maximum": 10000
+                  }
+                },
+                "rotation": {
+                  "default": 0,
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "support",
+                "offset"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "op": {
+                  "type": "string",
+                  "const": "attach"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "parent": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                },
+                "at": {
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": -10000,
+                    "maximum": 10000
+                  }
+                }
+              },
+              "required": [
+                "op",
+                "id",
+                "at"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      }
+    },
+    "required": [
+      "architecturalPlan",
+      "name",
+      "summary",
+      "unsupported",
+      "operations"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,5 +1,8 @@
 "use client";
 
+import { PreciseFacade } from './precise-facade';
+import { CreatedRibbon } from './create-component/ribbon';
+
 import { memo } from 'react';
 import * as THREE from 'three';
 import { Vegetation } from '@/components/workspace/viewport/scenery/vegetation';
@@ -11,6 +14,8 @@ import { wallContacts, type Wing, type WingComposition } from './wing-compositio
 
 import { CurvedPavilion } from './curved-pavilion';
 import { EstateGrounds } from './estate-grounds';
+
+import { FootprintBuilding } from './footprint-building';
 
 const BASE = .47;
 function WallPanel({width,height,composition,back,entrance=false}:{width:number;height:number;composition:WingComposition;back:boolean;entrance?:boolean}) {
@@ -31,6 +36,8 @@ function FloorPlate({wing:w,y,thickness,opening=false}:{wing:Wing;y:number;thick
 function WingWall({ wing, composition, face, level, width, y, height }: {
   wing: Wing; composition: WingComposition; face: 'front'|'rear'|'left'|'right'; level: number; width: number; y: number; height: number;
 }) {
+  const precise=wing.facadeOpenings?.find(f=>f.face===face&&f.level===level);
+  if(precise){const material=composition.config.exterior;return <group position={[-width/2,y,0]}><PreciseFacade length={width} height={height} openings={precise.openings.map(o=>({...o,edge:0}))} color={{ivory:'#e4dfd1',sand:'#d4c5ab',limestone:'#cabc9d','warm-stone':'#b6a080'}[material]} surface={material.includes('stone')?'stone':'render'}/></group>;}
   const contacts = wallContacts(wing, composition.wings, face).filter(c => c.height > level * wing.storeyHeight);
   // Side facades run in opposite tangent directions after their local rotation.
   const flip = face === 'right' || face === 'rear';
@@ -46,7 +53,8 @@ function WingWall({ wing, composition, face, level, width, y, height }: {
   if (cursor < width/2-.08) panels.push(<group key="last" position={[(cursor+width/2)/2,0,0]}><WallPanel width={width/2-cursor} height={height} composition={composition} back={face !== 'front'} entrance={wing.role === 'main' && level === 0 && face === 'rear'} /></group>);
   return <group position={[0,y,0]}>{panels}</group>;
 }
-function ComposedWing({ wing: w, composition: c }: { wing: Wing; composition: WingComposition }) {
+function ComposedWing({ wing: w, composition: inherited }: { wing: Wing; composition: WingComposition }) {
+  const c=w.appearance?{...inherited,config:{...inherited.config,...w.appearance}}:inherited;
   const gallery = w.role === 'gallery', h = w.storeyHeight, wall = h-.24;
   const balcony = w.storeys === 2 ? w.balcony ?? 0 : 0;
   const roofY = BASE+w.storeys*h;
@@ -85,8 +93,8 @@ function ComposedWing({ wing: w, composition: c }: { wing: Wing; composition: Wi
       </group>;
     })}
     {gallery ? <Roof at={[0,roofY+.04,0]} size={[w.width+.12,.2,w.depth+.12]} /> : c.config.roof==='flat' ?
-      <Roof at={[0,roofY+.06,0]} size={[w.width+1.3,.28,w.depth+1.3]} /> :
-      <group position={[0,roofY+.08,0]}><PitchedRoof width={w.width} depth={w.depth} config={c.config} /></group>}
+      <Roof at={[0,roofY+.06,0]} size={[w.width+2*(w.eave??.65),.28,w.depth+2*(w.eave??.65)]} /> :
+      <group position={[0,roofY+.08,0]}><PitchedRoof width={w.width} depth={w.depth} config={c.config} eave={w.eave} roofRise={w.roofRise} /></group>}
     {!gallery && w.veranda && spans.map(([a,b],i)=><group key={i} position={[(a+b)/2,BASE,w.depth/2+.03]}>
       <Veranda width={b-a-.9} depth={w.veranda!} height={Math.min(3.35,h-.55)} config={c.config} />
     </group>)}
@@ -98,8 +106,8 @@ function ComposedWing({ wing: w, composition: c }: { wing: Wing; composition: Wi
   </group>;
 }
 
-export const ComposedVilla = memo(function ComposedVilla({composition:c}:{composition:WingComposition}) {
-  return <group name={`Local composition · ${c.id}`}>{c.wings.map(w=><ComposedWing key={w.id} wing={w} composition={c} />)}{[...(c.components ?? []),...(c.experimentalForms ?? [])].map(p=><CurvedPavilion key={p.id} placement={p} />)}</group>;
+export const ComposedVilla = memo(function ComposedVilla({composition:c,residenceOnly=false}:{composition:WingComposition;residenceOnly?:boolean}) {
+  return <group name={`Local composition · ${c.id}`}>{!residenceOnly && c.createdComponents?.map(i=><CreatedRibbon key={i.id} proposal={i.proposal} placement={i.placement} />)}{c.forms?.map(f=><FootprintBuilding key={f.id} placement={f} />)}{c.wings.map(w=><ComposedWing key={w.id} wing={w} composition={c} />)}{!residenceOnly && [...(c.components ?? []),...(c.experimentalForms ?? [])].map(p=><CurvedPavilion key={p.id} placement={p} />)}</group>;
 });
 const tint=new THREE.Color('#7e8977');
 export const CompositionGrounds = memo(function CompositionGrounds({composition:c}:{composition:WingComposition}) {

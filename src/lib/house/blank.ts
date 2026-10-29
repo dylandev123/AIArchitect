@@ -16,6 +16,7 @@ export function isBlankSite(jsonText: string): boolean {
   if (typeof root !== "object" || root === null || Array.isArray(root)) return false;
   if (isV3ProjectRoot(root)) return root.v3Scene.objects.length === 0;
   const record = root as Record<string, unknown>;
+  if(record.version === "architectural-scene-1") return Array.isArray(record.elements) && record.elements.length === 0;
   return FEATURE_TYPES.every((type) => {
     const arr = record[FEATURE_JSON_KEY[type]];
     return arr === undefined || (Array.isArray(arr) && arr.length === 0);

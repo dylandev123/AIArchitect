@@ -1,0 +1,45 @@
+{
+  "providerCalls": 0,
+  "mockedRequests": [
+    {
+      "path": "/api/ai/scene",
+      "mode": "generate",
+      "reference": true
+    },
+    {
+      "path": "/api/ai/scene",
+      "mode": "edit",
+      "version": "architectural-scene-1",
+      "reference": true
+    },
+    {
+      "path": "/api/ai/scene",
+      "mode": "generate",
+      "reference": false
+    },
+    {
+      "path": "/api/ai/villa/visual-review",
+      "version": "architectural-scene-1",
+      "reference": true
+    },
+    {
+      "path": "/api/ai/scene",
+      "mode": "edit",
+      "version": "architectural-scene-1",
+      "reference": true
+    },
+    {
+      "path": "/api/dev/villa-design-lessons",
+      "reference": true
+    }
+  ],
+  "errors": [],
+  "unexpected": [],
+  "checks": [
+    "normal Playground opens direct studio; New Design with reference uses canonical API, no legacy fallback",
+    "Playground Refine, undo and reload preserve direct-scene identities and unrelated geometry",
+    "legacy-shaped New Design output is rejected without fallback or scene replacement",
+    "three actual reference-aware scene captures; scoped proposal remains staged until approval; feedback payload supports direct snapshots (storage mocked)",
+    "image-first default enters primary studio with reference pixels ready; retained replay requires explicit compatibility URL"
+  ]
+}

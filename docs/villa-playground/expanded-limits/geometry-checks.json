@@ -1,0 +1,162 @@
+{
+  "providerCalls": 0,
+  "configurations": [
+    {
+      "id": "estate-palmhaven-large",
+      "wings": 3,
+      "garden": {
+        "x": -6.01195806569978,
+        "z": -35.650000000000006,
+        "width": 210.57608386860045,
+        "depth": 223.3
+      }
+    },
+    {
+      "id": "estate-splay-large",
+      "wings": 3,
+      "garden": {
+        "x": -3.1706892185830213,
+        "z": -12.350000000000001,
+        "width": 197.39696694125087,
+        "depth": 184.7
+      }
+    },
+    {
+      "id": "estate-cortile-large",
+      "wings": 3,
+      "garden": {
+        "x": 12.27181356354312,
+        "z": -23.5,
+        "width": 181.45637287291376,
+        "depth": 219
+      }
+    },
+    {
+      "id": "large-modern",
+      "wings": 16,
+      "garden": {
+        "x": 0,
+        "z": 49.75,
+        "width": 645,
+        "depth": 744.5
+      }
+    },
+    {
+      "id": "large-caribbean",
+      "wings": 3,
+      "garden": {
+        "x": 0,
+        "z": 49.75,
+        "width": 645,
+        "depth": 744.5
+      }
+    },
+    {
+      "id": "large-spanish",
+      "wings": 3,
+      "garden": {
+        "x": 0,
+        "z": 49.75,
+        "width": 645,
+        "depth": 744.5
+      }
+    },
+    {
+      "id": "large-tuscan",
+      "wings": 3,
+      "garden": {
+        "x": 0,
+        "z": 49.75,
+        "width": 645,
+        "depth": 744.5
+      }
+    },
+    {
+      "id": "large-gallery",
+      "wings": 2,
+      "garden": {
+        "x": 0,
+        "z": 49.75,
+        "width": 645,
+        "depth": 744.5
+      }
+    },
+    {
+      "id": "large-fixed-grounds",
+      "wings": 3,
+      "garden": {
+        "x": 0,
+        "z": 0,
+        "width": 2048,
+        "depth": 2048
+      }
+    },
+    {
+      "id": "estate-splay",
+      "wings": 3,
+      "garden": {
+        "x": -1.585505539951086,
+        "z": -7.800000000000001,
+        "width": 78.19880533194458,
+        "depth": 73.6
+      }
+    },
+    {
+      "id": "family-breeze",
+      "wings": 1,
+      "garden": {
+        "x": 0.4249999999999998,
+        "z": 2.5249999999999995,
+        "width": 22.15,
+        "depth": 29.35
+      }
+    }
+  ],
+  "rejected": [
+    [
+      {
+        "path": "estateLandscape",
+        "message": "Circulation and its planting reserve extend outside the fixed site. Revise the landscape or explicitly change the boundary."
+      }
+    ],
+    [
+      {
+        "path": "appearance.roof",
+        "message": "modern supports flat roofs."
+      }
+    ],
+    [
+      {
+        "path": "wings.0.width",
+        "message": "Too big: expected number to be <=64"
+      }
+    ],
+    [
+      {
+        "path": "estateLandscape.beds.large-parterre",
+        "message": "Planting beds must leave circulation clear."
+      }
+    ]
+  ],
+  "recovery": {
+    "accepted": false,
+    "findings": [
+      {
+        "path": "estateLandscape.routes.west-retreat-walk",
+        "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+      },
+      {
+        "path": "estateLandscape.routes.east-retreat-walk",
+        "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+      },
+      {
+        "path": "estateLandscape.routes.pool-promenade",
+        "message": "Paved width intersects a building or pool clearance. Move the controls; paths must approach entrances from outside the footprint."
+      },
+      {
+        "path": "estateLandscape.beds.pool-west-tropical-bed",
+        "message": "Planting beds must leave circulation clear."
+      }
+    ]
+  }
+}

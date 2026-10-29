@@ -1,0 +1,47 @@
+# Terra architectural and technical review — 28 October 2026
+
+**Decision: needs further architectural development. The repaired candidate remains UNAPPROVED.** The 100-operation output is a substantial successful scene edit, but neither architectural completeness nor the visual ambition of a $25m estate is established. This is a design assessment, not a property valuation.
+
+[Matched screenshot gallery](gallery.html) — original, raw Terra and repaired candidate, each in arrival, aerial, entrance and poolside views. Twelve full-resolution images were captured in the existing workspace viewer. Camera positions, targets and FOV are asserted identical for each view. Browser inspection checks all rendered operation IDs against saved scene IDs and checks mesh coordinates for finite values. See browser-result.json. No rendering errors or blocked network requests were recorded. AI endpoints and external traffic were intercepted and forbidden throughout capture.
+
+## Architectural assessment
+
+- **Massing and identity:** The candidate gives the 18 × 12 m salon a clear dominant roof with subordinate gallery, lounge, dining/service and loggia roofs. This is more legible than the original's sprawling terraces and overlapping upper programme. However, it remains a broad rectangular box with a large blank north/east upper envelope; the upper suites are contained inside that box rather than expressed as a convincing private wing. Identity depends heavily on the simple stone/timber palette.
+- **Arrival and entrance:** The projecting low gallery, bronze door and paired piers make the front door easier to find. The close view shows a modest canopy/portal rather than a developed ceremonial arrival. There is no constructed driveway, forecourt, approach walk or carefully resolved ground-to-threshold sequence. The tall blank salon wall overwhelms this low entrance. These are review findings, not automatic geometry errors.
+- **Façades and roofs:** Primary versus secondary heights are clear and the ocean aperture is generous. The arrival elevation loses the original's upper window articulation. Repeated flat timber slabs and minimally detailed wall returns feel schematic. The primary roof's upper edge reads as one large uninterrupted cap; neither restraint nor expensive material labels alone delivers bespoke luxury.
+- **Bedrooms and salon:** Owner floor is 64 m² and guest floor 30 m², both at walking Y=3.6. They occupy 94 m² of the 216 m² salon footprint; the salon is therefore only partially double height. The suites have windowed walls but no bathrooms, closets, landings or access system. Their 1.5 m separation in X (owner east edge X=1; guest west edge X=2.5) is air rather than a constructed gallery floor. Public/private separation is asserted more strongly than it is built.
+- **Outdoor living:** The 18 × 4 m loggia, deep low roof and timber screen create a coherent shaded pool-facing band. Yet no operable opening is represented in the salon's south glazing, and no route through that glazed boundary is modelled. The pool is separated from the deck by a 1 m plan gap (deck ends Z=-11; water starts Z=-12), with no constructed connecting surface. The screen can suggest enclosure/shade but is not a developed furnishing or landscape programme. Pool equipment and a complete basin remain absent.
+- **Estate ambition:** It looks like a preliminary modern tropical residence study, with a promising ocean elevation. It does not yet visually or functionally substantiate the requested $25m estate ambition: arrival, landscape, spatial sequence, private accommodation, service circulation, craftsmanship and amenities remain undeveloped. Fewer defects and better hierarchy do not by themselves establish beauty or estate quality.
+
+The original also has major shortcomings: overlapping upper floors, unsupported terrace rail spans, repetitive broad roofs, sparse arrival and incomplete pool/circulation. The redesign improves some of those issues without resolving the entire building.
+
+## Exact defects, causes and disposition
+
+| Finding | Evidence / cause | Action |
+|---|---|---|
+| Three internal doors 1.6 m too high | gallery-salon-door, salon-guest-door and salon-dining-door have local Y=-0.1. Their 6.6 m host walls have sill .2 and opening height 2.8, requiring -6.6/2+.2+2.8/2=-1.7. Raw operations contain those wrong coordinates. Renderer uses centre coordinates faithfully. Model coordinate error; existing audit saw it, transaction support checks did not. | Three explicit `move` operations to local Y=-1.7. Dimensions, parents, X/Z and rotations preserved. |
+| Raised thresholds remain | Wall bottoms Y=.2 plus opening sill .2 put these door bottoms at Y=.4, versus floor walking Y=.2. Main entrance also bottoms at .4. | Not changed: lowering openings versus adding threshold steps requires a design choice. Door alignment repair does not certify access. |
+| No stair connections | Candidate contains no tread/landing sequence, ramp or lift. Support cores are solid 1.2 × 3.4 × 1.2 m volumes, not stairs. Terra explicitly disclosed missing stairs and navigable circulation. | No repair: manual treads are supported primitives, but stair location, direction, landings, headroom and slab voids need design. No automatic stair builder or navigation checker exists. |
+| Unfloored upper circulation | Two suite floors at Y=3.6; no intermediate stair levels or landing/gallery slab between suite door openings. | Warning and architectural development; do not fill the gap automatically or destroy the double-height void. |
+| Dining/kitchen blocked relationship | Dining north wall at Z=3 has a glazed opening with sill .7; kitchen floor begins there. Adjacency is present; traversable internal connection is absent. | Leave for design review; changing window to door is not an unambiguous coordinate correction. |
+| Salon/loggia connection | South wall opening is glazed, with no operable door representation. Glass can render a view but cannot evidence an access route. | Leave for design review. |
+| Incomplete knowledge evidence | property-value-25m-50m cites plates/roofs but no wall, required by retrieved evidence. roof-main-secondary cites roofs but no plate, required by that entry. Existing relevant geometry exists elsewhere; the references are incomplete, not proof that walls/floors do not exist. | Preserve Terra's original claims and pointers; do not manufacture certainty by silently expanding citations. Material evidence has the required kind but still proves neither craftsmanship nor value. |
+| Incomplete pool | Original pool retained exactly. North perimeter lacks basin wall evidence; shallow bottom/water placement and three raised walls are not a complete hydraulic infinity pool. | Outside deterministic repair; preserved. |
+
+The prior strict-live REPORT.md describes salon-roof as an executor adjustment. The actual retained operations **remove then add salon-roof** at Y=6.975, matching the saved candidate. Its ninth changed stable ID comes from that explicit remove/add pair, not an inferred executor roof correction. No executor-created geometry was found for the three bad doors or absent circulation.
+
+## Repair and preservation
+
+`repair.operations.json` contains exactly three existing-format moves. `repaired.UNAPPROVED.json` is a separate 57-element scene. Every other element, terrain state, design intent and knowledge citation is unchanged. Source hashes and audits are in audit.json. Original mansion, raw paid response, original operations, prior candidate and earlier versions were not overwritten. `preserved-versions.UNAPPROVED.json` packages original / raw Terra / repaired as three separate versions for inspection; no existing user project was replaced. Captures used an isolated browser context.
+
+## Validation improvements and limits
+
+Added read-only architectural warnings in planning.ts for attached doors that overrun the actual host opening, lie outside the rendered wall plane, rotate out of alignment, or occupy a glazed opening. Existing centre-alignment warnings remain. Added a conservative warning when separated plate levels have no intermediate plate sequence; this is absence-of-evidence reporting, not a stair or accessibility certification. Neither test enforces a layout, minimum area, luxury style, stair dimensions or substitute geometry.
+
+These are warnings rather than new transaction vetoes: historical geometry remains loadable and replayable, and design choices are not silently rewritten. A trial strict door gate broke historical replay tests and was removed. Future scenes can remain renderable while visibly architecturally incomplete.
+
+Verification: all 56 tests across 13 scene suites pass, including regressions for door centre defects, host opening edits, oversized panels, parent rotation, preserved source geometry and unresolved circulation. Screenshot harness verified 12 renders and matched camera settings. Focused ESLint passed with zero warnings.
+
+Automatic stairs, interiors/fit-out generation, operable-glazing semantics, navigation, structural engineering, fire egress, accessibility/code verification, waterproofing, drainage, HVAC and certified material performance remain unsupported or unverified. Some missing pieces can be manually authored from current primitives, but selecting them would be architectural development rather than technical repair.
+
+Zero OpenAI/provider calls during this review. No migrations, commits or deployment.

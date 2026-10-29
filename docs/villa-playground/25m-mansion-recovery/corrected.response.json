@@ -1,0 +1,1857 @@
+{
+  "architecturalPlan": {
+    "scaleRationale": "A $25 million oceanfront residence is expressed as a highly resolved, compact estate rather than a sprawling compound: approximately 792 m² enclosed over two levels, with a dramatic six-metre salon, substantial entertaining rooms, three private upper suites, service accommodation, roof terraces, a shaded ocean loggia and a 72 m² pool. The investment is concentrated in generous spatial volume, deep shade, large operable glazed openings, limestone structure, bronze detailing and crafted timber soffits rather than excessive enclosed area.",
+    "levels": 2,
+    "enclosedAreaM2": 792,
+    "arrivalAndCirculation": "Arrival is from the landward north into a sheltered entrance gallery. A central axial gallery leads south into the principal salon and through to the ocean loggia, pool and sea horizon. The upper level is represented by supported floor plates over the salon; internal stairs are intentionally not modeled because stair geometry is unsupported by the current primitives.",
+    "volumeHierarchy": "The primary volume is a tall, limestone-framed central salon under the highest flat roof datum. Lower east and west pavilions form dining/kitchen and lounge/service counterparts. The upper private level is nested within the principal volume, while low side-wing roofs become usable outlook terraces.",
+    "relationshipsAndViews": "The salon, dining room and west lounge all open toward the south-facing ocean loggia. The arrival gallery is deliberately more solid and shaded on the north side. Upper bedroom volumes overlook the pool and ocean, while side roof terraces face the water over the low wings.",
+    "roofFacadeAndMaterials": "A layered composition of deep flat roofs gives the residence a contemporary tropical profile. Ivory limestone walls and piers provide thermal mass; recessed bronze glazing faces the ocean; timber screens and soffits make shade tactile. Side-wing roofs sit lower than the central salon roof and establish protected outdoor terraces.",
+    "spaces": [
+      {
+        "name": "Ocean Salon",
+        "use": "interior",
+        "level": 0,
+        "areaM2": 192,
+        "floorIds": [
+          "salon-floor"
+        ],
+        "enclosureIds": [
+          "salon-north-wall",
+          "salon-south-wall",
+          "salon-west-wall",
+          "salon-east-wall"
+        ],
+        "roofIds": [
+          "salon-roof"
+        ]
+      },
+      {
+        "name": "West Lounge",
+        "use": "interior",
+        "level": 0,
+        "areaM2": 80,
+        "floorIds": [
+          "lounge-floor"
+        ],
+        "enclosureIds": [
+          "lounge-north-wall",
+          "lounge-south-wall",
+          "lounge-west-wall",
+          "lounge-east-wall"
+        ],
+        "roofIds": [
+          "lounge-roof"
+        ]
+      },
+      {
+        "name": "Dining Pavilion",
+        "use": "interior",
+        "level": 0,
+        "areaM2": 80,
+        "floorIds": [
+          "dining-floor"
+        ],
+        "enclosureIds": [
+          "dining-north-wall",
+          "dining-south-wall",
+          "dining-west-wall",
+          "dining-east-wall"
+        ],
+        "roofIds": [
+          "dining-roof"
+        ]
+      },
+      {
+        "name": "Arrival Gallery",
+        "use": "interior",
+        "level": 0,
+        "areaM2": 64,
+        "floorIds": [
+          "gallery-floor"
+        ],
+        "enclosureIds": [
+          "gallery-north-wall",
+          "gallery-south-wall",
+          "gallery-west-wall",
+          "gallery-east-wall"
+        ],
+        "roofIds": [
+          "gallery-roof"
+        ]
+      },
+      {
+        "name": "Kitchen and Service",
+        "use": "interior",
+        "level": 0,
+        "areaM2": 48,
+        "floorIds": [
+          "kitchen-floor"
+        ],
+        "enclosureIds": [
+          "kitchen-north-wall",
+          "kitchen-south-wall",
+          "kitchen-west-wall",
+          "kitchen-east-wall"
+        ],
+        "roofIds": [
+          "kitchen-roof"
+        ]
+      },
+      {
+        "name": "Owner Suite",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 120,
+        "floorIds": [
+          "owner-floor"
+        ],
+        "enclosureIds": [
+          "owner-north-wall",
+          "owner-south-wall",
+          "owner-west-wall",
+          "owner-east-wall"
+        ],
+        "roofIds": [
+          "salon-roof"
+        ]
+      },
+      {
+        "name": "Guest Suite",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 72,
+        "floorIds": [
+          "guest-floor"
+        ],
+        "enclosureIds": [
+          "guest-north-wall",
+          "guest-south-wall",
+          "guest-east-wall",
+          "guest-divider-wall"
+        ],
+        "roofIds": [
+          "salon-roof"
+        ]
+      },
+      {
+        "name": "Upper Retreat",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 88,
+        "floorIds": [
+          "retreat-floor"
+        ],
+        "enclosureIds": [
+          "retreat-north-wall",
+          "retreat-south-wall",
+          "retreat-west-wall",
+          "retreat-east-wall"
+        ],
+        "roofIds": [
+          "salon-roof"
+        ]
+      },
+      {
+        "name": "Ocean Loggia",
+        "use": "outdoor",
+        "level": 0,
+        "areaM2": 64,
+        "floorIds": [
+          "loggia-deck"
+        ],
+        "enclosureIds": [],
+        "roofIds": [
+          "loggia-roof"
+        ]
+      },
+      {
+        "name": "East Roof Terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 80,
+        "floorIds": [
+          "east-terrace-deck"
+        ],
+        "enclosureIds": [
+          "east-terrace-rail"
+        ],
+        "roofIds": []
+      },
+      {
+        "name": "West Roof Terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 80,
+        "floorIds": [
+          "west-terrace-deck"
+        ],
+        "enclosureIds": [
+          "west-terrace-rail"
+        ],
+        "roofIds": []
+      },
+      {
+        "name": "Infinity Pool Court",
+        "use": "outdoor",
+        "level": 0,
+        "areaM2": 120,
+        "floorIds": [
+          "pool-coping-south",
+          "pool-coping-west",
+          "pool-coping-east",
+          "pool-basin"
+        ],
+        "enclosureIds": [
+          "pool-west-wall",
+          "pool-east-wall",
+          "pool-south-wall"
+        ],
+        "roofIds": []
+      }
+    ],
+    "commitments": [
+      {
+        "description": "The north arrival is a sheltered, recessed bronze entrance within the low gallery volume.",
+        "kind": "entrance",
+        "elementIds": [
+          "gallery-roof",
+          "gallery-north-wall",
+          "main-entrance"
+        ]
+      },
+      {
+        "description": "The main axial circulation sequence runs from the arrival gallery through the central salon to the ocean loggia.",
+        "kind": "circulation",
+        "elementIds": [
+          "gallery-floor",
+          "salon-floor",
+          "loggia-deck"
+        ]
+      },
+      {
+        "description": "The double-height central salon is the primary ocean-facing volume and carries the highest roof datum.",
+        "kind": "primary-volume",
+        "elementIds": [
+          "salon-floor",
+          "salon-north-wall",
+          "salon-south-wall",
+          "salon-roof"
+        ]
+      },
+      {
+        "description": "West lounge, east dining pavilion and kitchen are lower subordinate volumes flanking the salon.",
+        "kind": "secondary-volume",
+        "elementIds": [
+          "lounge-floor",
+          "lounge-roof",
+          "dining-floor",
+          "dining-roof",
+          "kitchen-floor",
+          "kitchen-roof"
+        ]
+      },
+      {
+        "description": "Layered flat roofs create deep tropical shade, with the principal roof above the upper private rooms.",
+        "kind": "roof",
+        "elementIds": [
+          "salon-roof",
+          "lounge-roof",
+          "dining-roof",
+          "gallery-roof",
+          "kitchen-roof",
+          "loggia-roof"
+        ]
+      },
+      {
+        "description": "Ocean elevations use actual recessed glazed openings, bronze doors and timber shade screens.",
+        "kind": "facade",
+        "elementIds": [
+          "salon-ocean-glazing",
+          "lounge-ocean-glazing",
+          "dining-ocean-glazing",
+          "ocean-screen"
+        ]
+      },
+      {
+        "description": "The shaded ocean loggia, two roof terraces and explicit pool court are the principal outdoor rooms.",
+        "kind": "terrace",
+        "elementIds": [
+          "loggia-deck",
+          "loggia-roof",
+          "east-terrace-deck",
+          "west-terrace-deck",
+          "pool-water"
+        ]
+      }
+    ]
+  },
+  "name": "Calypsonian House",
+  "summary": "A two-level contemporary tropical Saint Lucia residence arranged as a limestone-and-bronze ocean pavilion: a tall central salon, lower entertaining wings, elevated private suites, roof terraces and a deeply shaded pool loggia facing the Caribbean.",
+  "unsupported": [
+    "The requested oceanfront site is represented on the mandated temporary flat Y=0 ground plane; coastline, slope, planting, retaining works and beach access are not modeled.",
+    "Internal stair geometry, detailed bathrooms, cabinetry, operable-window mechanics, structural engineering and code compliance are not represented by the supported primitives.",
+    "The model uses only rectilinear volumes and flat roofs; arbitrary curved mansion shells and custom curved roof forms are unsupported."
+  ],
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-floor",
+        "label": "Ocean Salon Floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          0.2,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-floor",
+        "label": "West Lounge Floor",
+        "kind": "plate",
+        "at": [
+          -12,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-floor",
+        "label": "Dining Pavilion Floor",
+        "kind": "plate",
+        "at": [
+          12,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-floor",
+        "label": "Arrival Gallery Floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-floor",
+        "label": "Kitchen Service Floor",
+        "kind": "plate",
+        "at": [
+          12,
+          0.1,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "loggia-deck",
+        "label": "Ocean Loggia Deck",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -8
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "owner-floor",
+        "label": "Owner Suite Upper Floor",
+        "kind": "plate",
+        "at": [
+          -3,
+          3.5,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "guest-floor",
+        "label": "Guest Suite Upper Floor",
+        "kind": "plate",
+        "at": [
+          5,
+          3.5,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.2,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "retreat-floor",
+        "label": "Upper Retreat Floor",
+        "kind": "plate",
+        "at": [
+          0,
+          3.5,
+          4
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          0.2,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-terrace-deck",
+        "label": "East Roof Terrace Deck",
+        "kind": "plate",
+        "at": [
+          12,
+          3.55,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-terrace-deck",
+        "label": "West Roof Terrace Deck",
+        "kind": "plate",
+        "at": [
+          -12,
+          3.55,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          0.2,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-north-wall",
+        "label": "Salon North Limestone Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          3.4,
+          6
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          6.4,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5,
+          "height": 3.1,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-south-wall",
+        "label": "Salon Ocean Glazed Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          3.4,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          6.4,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 12,
+          "height": 5.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-west-wall",
+        "label": "Salon West Wall",
+        "kind": "wall",
+        "at": [
+          -8,
+          3.4,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          6.4,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5,
+          "height": 3.1,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-east-wall",
+        "label": "Salon East Wall",
+        "kind": "wall",
+        "at": [
+          8,
+          3.4,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          6.4,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5,
+          "height": 3.1,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-ocean-glazing",
+        "label": "Salon Ocean Recessed Glazing",
+        "kind": "glazing",
+        "at": [
+          0,
+          3.1,
+          -6.16
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          5.4,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 6
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-north-wall",
+        "label": "Lounge North Wall",
+        "kind": "wall",
+        "at": [
+          -12,
+          1.8,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 3,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-south-wall",
+        "label": "Lounge Ocean Wall",
+        "kind": "wall",
+        "at": [
+          -12,
+          1.8,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5.5,
+          "height": 2.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-west-wall",
+        "label": "Lounge West Wall",
+        "kind": "wall",
+        "at": [
+          -16,
+          1.8,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-east-wall",
+        "label": "Lounge Inner Wall",
+        "kind": "wall",
+        "at": [
+          -8,
+          1.8,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-ocean-glazing",
+        "label": "Lounge Ocean Glazing",
+        "kind": "glazing",
+        "at": [
+          -12,
+          1.7,
+          -5.16
+        ],
+        "rotation": 0,
+        "size": [
+          5.5,
+          2.6,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 3
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-north-wall",
+        "label": "Dining North Wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.8,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 3,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-south-wall",
+        "label": "Dining Ocean Wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.8,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5.5,
+          "height": 2.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-west-wall",
+        "label": "Dining Inner Wall",
+        "kind": "wall",
+        "at": [
+          8,
+          1.8,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-east-wall",
+        "label": "Dining East Wall",
+        "kind": "wall",
+        "at": [
+          16,
+          1.8,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-ocean-glazing",
+        "label": "Dining Ocean Glazing",
+        "kind": "glazing",
+        "at": [
+          12,
+          1.7,
+          -5.16
+        ],
+        "rotation": 0,
+        "size": [
+          5.5,
+          2.6,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 3
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-north-wall",
+        "label": "Arrival Gallery North Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          1.8,
+          10
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 2.4,
+          "height": 2.6,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-south-wall",
+        "label": "Gallery Salon Link Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          1.8,
+          6
+        ],
+        "rotation": 0,
+        "size": [
+          16,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 5,
+          "height": 2.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-west-wall",
+        "label": "Gallery West Wall",
+        "kind": "wall",
+        "at": [
+          -8,
+          1.8,
+          8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          4,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-east-wall",
+        "label": "Gallery East Wall",
+        "kind": "wall",
+        "at": [
+          8,
+          1.8,
+          8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          4,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "main-entrance",
+        "label": "Bronze Pivot Entrance",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.6,
+          9.82
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          2.6,
+          0.16
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-north-wall",
+        "label": "Kitchen North Wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.8,
+          11
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-south-wall",
+        "label": "Kitchen South Wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.8,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 3,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-west-wall",
+        "label": "Kitchen West Wall",
+        "kind": "wall",
+        "at": [
+          8,
+          1.8,
+          8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          6,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-east-wall",
+        "label": "Kitchen East Wall",
+        "kind": "wall",
+        "at": [
+          16,
+          1.8,
+          8
+        ],
+        "rotation": 1.5708,
+        "size": [
+          6,
+          3.2,
+          0.3
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 2,
+          "height": 2.4,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "owner-north-wall",
+        "label": "Owner Suite North Wall",
+        "kind": "wall",
+        "at": [
+          -3,
+          5.3,
+          6
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "owner-south-wall",
+        "label": "Owner Ocean Wall",
+        "kind": "wall",
+        "at": [
+          -3,
+          5.3,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 7,
+          "height": 2.5,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "owner-west-wall",
+        "label": "Owner West Wall",
+        "kind": "wall",
+        "at": [
+          -8,
+          5.3,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "owner-east-wall",
+        "label": "Owner Suite Divider",
+        "kind": "wall",
+        "at": [
+          2,
+          5.3,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "guest-north-wall",
+        "label": "Guest Suite North Wall",
+        "kind": "wall",
+        "at": [
+          5,
+          5.3,
+          6
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 2.5,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "guest-south-wall",
+        "label": "Guest Ocean Wall",
+        "kind": "wall",
+        "at": [
+          5,
+          5.3,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.5,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "guest-east-wall",
+        "label": "Guest East Wall",
+        "kind": "wall",
+        "at": [
+          8,
+          5.3,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "guest-divider-wall",
+        "label": "Guest Divider Wall",
+        "kind": "wall",
+        "at": [
+          2,
+          5.3,
+          0
+        ],
+        "rotation": 1.5708,
+        "size": [
+          12,
+          3.2,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "retreat-north-wall",
+        "label": "Upper Retreat North Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.3,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          3.2,
+          0.3
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "retreat-south-wall",
+        "label": "Upper Retreat South Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.3,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          3.2,
+          0.3
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.2,
+          "width": 4,
+          "height": 2.4,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "retreat-west-wall",
+        "label": "Upper Retreat West Wall",
+        "kind": "wall",
+        "at": [
+          -5.5,
+          5.3,
+          4
+        ],
+        "rotation": 1.5708,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "retreat-east-wall",
+        "label": "Upper Retreat East Wall",
+        "kind": "wall",
+        "at": [
+          5.5,
+          5.3,
+          4
+        ],
+        "rotation": 1.5708,
+        "size": [
+          8,
+          3.2,
+          0.3
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "salon-roof",
+        "label": "High Central Roof",
+        "kind": "roof",
+        "at": [
+          0,
+          6.95,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          17.4,
+          0.35,
+          13.4
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.7,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "lounge-roof",
+        "label": "Low West Lounge Roof",
+        "kind": "roof",
+        "at": [
+          -12,
+          3.55,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8.8,
+          0.3,
+          10.8
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.4,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "dining-roof",
+        "label": "Low Dining Roof",
+        "kind": "roof",
+        "at": [
+          12,
+          3.55,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          8.8,
+          0.3,
+          10.8
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.4,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-roof",
+        "label": "Arrival Canopy Roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.55,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          17,
+          0.3,
+          5
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.5,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "kitchen-roof",
+        "label": "Kitchen Roof",
+        "kind": "roof",
+        "at": [
+          12,
+          3.55,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          8.8,
+          0.3,
+          6.8
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.4,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "loggia-roof",
+        "label": "Ocean Loggia Canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.55,
+          -8
+        ],
+        "rotation": 0,
+        "size": [
+          16.8,
+          0.3,
+          4.8
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "overhang": 0.5,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "loggia-west-pier",
+        "label": "Loggia West Stone Pier",
+        "kind": "volume",
+        "at": [
+          -7.3,
+          1.8,
+          -8
+        ],
+        "rotation": 0,
+        "size": [
+          0.8,
+          3.4,
+          0.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "loggia-east-pier",
+        "label": "Loggia East Stone Pier",
+        "kind": "volume",
+        "at": [
+          7.3,
+          1.8,
+          -8
+        ],
+        "rotation": 0,
+        "size": [
+          0.8,
+          3.4,
+          0.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "ocean-screen",
+        "label": "Timber Ocean Shade Screen",
+        "kind": "screen",
+        "at": [
+          0,
+          2,
+          -9.9
+        ],
+        "rotation": 0,
+        "size": [
+          11,
+          3.4,
+          0.22
+        ],
+        "material": "timber",
+        "panels": 18
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-terrace-rail",
+        "label": "East Terrace Glass Rail",
+        "kind": "balcony",
+        "at": [
+          12,
+          4.2,
+          -4.8
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          1.1,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-terrace-rail",
+        "label": "West Terrace Glass Rail",
+        "kind": "balcony",
+        "at": [
+          -12,
+          4.2,
+          -4.8
+        ],
+        "rotation": 0,
+        "size": [
+          8,
+          1.1,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-basin",
+        "label": "Pool Basin Floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.02,
+          -15
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          0.04,
+          6
+        ],
+        "material": "sage",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-coping-south",
+        "label": "Pool South Coping",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -18.3
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          0.2,
+          0.6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-coping-west",
+        "label": "Pool West Coping",
+        "kind": "plate",
+        "at": [
+          -6.3,
+          0.1,
+          -15
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.2,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-coping-east",
+        "label": "Pool East Coping",
+        "kind": "plate",
+        "at": [
+          6.3,
+          0.1,
+          -15
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.2,
+          6
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-west-wall",
+        "label": "Pool West Basin Wall",
+        "kind": "wall",
+        "at": [
+          -6,
+          0.6,
+          -15
+        ],
+        "rotation": 1.5708,
+        "size": [
+          6,
+          1.2,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-east-wall",
+        "label": "Pool East Basin Wall",
+        "kind": "wall",
+        "at": [
+          6,
+          0.6,
+          -15
+        ],
+        "rotation": 1.5708,
+        "size": [
+          6,
+          1.2,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-south-wall",
+        "label": "Pool Infinity Basin Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          0.6,
+          -18
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          1.2,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "pool-water",
+        "label": "Infinity Pool Water",
+        "kind": "water",
+        "at": [
+          0,
+          0.2,
+          -15
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          0.05,
+          6
+        ],
+        "material": "sage",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "loggia-sofa",
+        "label": "Ocean Loggia Seating",
+        "kind": "sofa",
+        "at": [
+          0,
+          0.55,
+          -8
+        ],
+        "rotation": 3.1416,
+        "size": [
+          6,
+          0.8,
+          1.2
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    }
+  ]
+}

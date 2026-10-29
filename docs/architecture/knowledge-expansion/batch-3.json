@@ -1,0 +1,2084 @@
+[
+  {
+    "entry": {
+      "id": "build-room-shell-hollow",
+      "title": "Hollow room construction",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "room",
+        "shell",
+        "hollow"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for hollow room construction.",
+      "placement": "Compose floors enclosure openings and roof for occupied rooms.",
+      "principles": "A solid volume with a bedroom label is not a bedroom.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-court-by-separation",
+      "title": "Court built by separated shells",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "court",
+        "separation"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for court built by separated shells.",
+      "placement": "Place room shells around an unbuilt void instead of requesting subtraction.",
+      "principles": "No CSG courtyard cut operation exists.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-stair-treads",
+      "title": "Manual rectangular stair representation",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "stair",
+        "treads"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for manual rectangular stair representation.",
+      "placement": "Compose explicit treads landings and guards connecting floor levels when feasible.",
+      "principles": "No automatic stair generation headroom or egress certification.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-guard-host",
+      "title": "Guard and deck relationship",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "guard",
+        "host"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for guard and deck relationship.",
+      "placement": "Seat glass guard bottoms on actual exposed deck edges.",
+      "principles": "A balcony primitive creates railing rather than floor.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-post-bearing",
+      "title": "Post and beam contact",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "post",
+        "bearing"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for post and beam contact.",
+      "placement": "Align post tops to roof or beam underside and bottoms to floor or foundation.",
+      "principles": "Do not float a post near its supposed support.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-upper-floor-support",
+      "title": "Upper floor support concept",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "upper",
+        "floor"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for upper floor support concept.",
+      "placement": "Align upper floor edges with lower enclosure or explicit supported spans.",
+      "principles": "Geometric contact is not structural capacity verification.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-no-double-floor",
+      "title": "Nonoverlapping floor allocation",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "double",
+        "floor"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for nonoverlapping floor allocation.",
+      "placement": "Split room plates into nonoverlapping zones when calculating occupied surfaces.",
+      "principles": "Do not count coincident surfaces twice.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-rotated-attachments",
+      "title": "Rotated local attachments",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "rotated",
+        "attachments"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for rotated local attachments.",
+      "placement": "Convert intended panel placements into the rotated host's local coordinates.",
+      "principles": "Do not mix world offsets with parent local offsets.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-pool-bottom-order",
+      "title": "Pool bottom and rim elevations",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "pool",
+        "bottom",
+        "order"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for pool bottom and rim elevations.",
+      "placement": "Keep a bottom below water and perimeter walls above it with a surrounding dry plate.",
+      "principles": "Do not claim a water plane and coping are a complete basin.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "build-component-boundary",
+      "title": "Approved component boundary",
+      "kind": "recipe",
+      "category": "construction",
+      "recipeType": "feature",
+      "tags": [
+        "construction",
+        "complete",
+        "house",
+        "support",
+        "operations",
+        "build",
+        "component",
+        "boundary"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for approved component boundary.",
+      "placement": "Use the curved pavilion only for its implemented open lounge purpose.",
+      "principles": "It is not an editable enclosed bedroom or arbitrary curved building.",
+      "combinations": "Keep support and enclosure materials visually legible using the supported palette.",
+      "capabilities": "Use direct-scene primitives: plate, wall, roof. No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ],
+        "materials": "Keep support and enclosure materials visually legible using the supported palette.",
+        "supports": "Check physical contact using world coordinates including parent transforms; metadata cannot manufacture geometry.",
+        "unsupported": "No automatic engineering, code compliance, arbitrary meshes or boolean cutting beyond wall openings."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-stone-plinth",
+      "title": "Stone-like base and light enclosure",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "stone",
+        "plinth"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for stone-like base and light enclosure.",
+      "placement": "Use limestone on an actual low plinth and ivory for room enclosure above.",
+      "principles": "A finish band alone is not a foundation.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-timber-soffit-limit",
+      "title": "Timber shade member expression",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "soffit",
+        "limit"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for timber shade member expression.",
+      "placement": "Use supported timber members at a porch roof edge to express warmth.",
+      "principles": "No separately mapped roof underside texture is provided.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-bronze-threshold",
+      "title": "Bronze threshold emphasis",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "bronze",
+        "threshold"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for bronze threshold emphasis.",
+      "placement": "Use bronze selectively on a real entrance panel within a restrained wall composition.",
+      "principles": "Do not change every facade element to bronze for luxury.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-sage-service",
+      "title": "Quiet sage service enclosure",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "sage",
+        "service"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for quiet sage service enclosure.",
+      "placement": "Use sage sparingly on secondary service surfaces subordinate to primary living volumes.",
+      "principles": "A colour change does not create a separate room.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-continuous-deck",
+      "title": "Continuous deck material",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "continuous",
+        "deck"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for continuous deck material.",
+      "placement": "Use a shared timber finish on physically connected outdoor plates.",
+      "principles": "Do not imply separate disconnected slabs form one route.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-wet-dry-distinction",
+      "title": "Wet and dry surface distinction",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "distinction"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for wet and dry surface distinction.",
+      "placement": "Use limestone-looking deck edges to distinguish dry access from water surfaces.",
+      "principles": "No anti-slip or wet-area rating is certified.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-screen-depth",
+      "title": "Material and screen depth",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "screen",
+        "depth"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for material and screen depth.",
+      "placement": "Use timber screen slats outside quieter enclosure to create actual layered depth.",
+      "principles": "Do not describe a wall colour as a three-dimensional screen.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-door-wall-contrast",
+      "title": "Door and wall contrast",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "door",
+        "wall",
+        "contrast"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for door and wall contrast.",
+      "placement": "Give the real door a distinct timber or bronze finish within light enclosure.",
+      "principles": "Do not paint a solid wall and call it an entrance.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-recess-shadow",
+      "title": "Recess geometry before finish",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "recess",
+        "shadow"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for recess geometry before finish.",
+      "placement": "Set back a connector or opening plane to create depth before choosing finishes.",
+      "principles": "No shadow-gap texture is a substitute for geometry.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-common-base",
+      "title": "Shared base across wings",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "common",
+        "base"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for shared base across wings.",
+      "placement": "Align limestone base elements between wings while allowing different roof heights.",
+      "principles": "Do not add a slab crossing an intended court just to unify colour.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-restrained-count",
+      "title": "Restrained material hierarchy",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "restrained",
+        "count"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for restrained material hierarchy.",
+      "placement": "Choose a dominant enclosure finish and one accent tied to entrance or shelter.",
+      "principles": "Do not assign arbitrary colours to every room shell.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-garden-side",
+      "title": "Garden side material continuity",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "garden",
+        "side"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for garden side material continuity.",
+      "placement": "Continue the primary wall palette through rear returns and terrace thresholds.",
+      "principles": "Do not leave the rear elevation as an unrelated material set.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-roof-edge",
+      "title": "Roof edge material hierarchy",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "roof",
+        "edge"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for roof edge material hierarchy.",
+      "placement": "Use a consistent finish on related roof sections to clarify the overall silhouette.",
+      "principles": "Do not let finish imply unavailable roof tile geometry.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-interior-exterior",
+      "title": "Interior and exterior continuity",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "interior",
+        "exterior"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for interior and exterior continuity.",
+      "placement": "Relate floor finishes across a real garden doorway while maintaining separate dry and outdoor zones.",
+      "principles": "No weatherproof threshold assembly is implemented.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "material-stone-reveal",
+      "title": "Stone-like opening reveal",
+      "kind": "recipe",
+      "category": "materials",
+      "recipeType": "material",
+      "tags": [
+        "materials",
+        "detailing",
+        "facade",
+        "timber",
+        "limestone",
+        "material",
+        "stone",
+        "reveal"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for stone-like opening reveal.",
+      "placement": "Use actual wall thickness and limestone finish around selected openings.",
+      "principles": "Do not claim individual masonry blocks or carved profiles.",
+      "combinations": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+      "capabilities": "Use direct-scene primitives: wall, roof. No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "wall",
+          "roof"
+        ],
+        "materials": "Only ivory limestone timber bronze and sage are direct-scene material keys; use geometry for depth and disclose absent textures.",
+        "supports": "Finishes change existing element materials; actual layered details require separate supported elements.",
+        "unsupported": "No custom shader materials, textures, joinery, fasteners, thermal assemblies or fabrication details."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-amenity-before-house",
+      "title": "Prevent amenities replacing residence",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "amenity",
+        "before",
+        "house"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent amenities replacing residence.",
+      "placement": "Complete the main occupied shell and room relationships before optional leisure structures.",
+      "principles": "Do not label a small shell plus large pool a finished estate.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-prose-without-elements",
+      "title": "Prevent prose-only construction claims",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "prose",
+        "without",
+        "elements"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent prose-only construction claims.",
+      "placement": "Tie each applied feature decision to actual editable element IDs and disclose omitted parts.",
+      "principles": "A design description is not completed construction.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-unrelated-references",
+      "title": "Prevent unrelated evidence pointers",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "unrelated",
+        "references"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent unrelated evidence pointers.",
+      "placement": "Reference elements that provide the physical parts required by the cited recipe.",
+      "principles": "A remote slab cannot evidence an entrance or bedroom wing.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-stale-decision-ids",
+      "title": "Prevent stale decision references",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "stale",
+        "decision"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent stale decision references.",
+      "placement": "Recheck cited IDs after removals replacements and scoped edits.",
+      "principles": "Do not preserve a completion claim after its geometry was removed.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-unsupported-substitute",
+      "title": "Prevent invented amenity substitution",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "unsupported",
+        "substitute"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent invented amenity substitution.",
+      "placement": "Disclose a missing capability and construct only the supported portion requested.",
+      "principles": "Do not turn a sauna dock or lift into a named solid block.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-overlapping-room-labels",
+      "title": "Prevent duplicate room claims",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "overlapping",
+        "room",
+        "labels"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent duplicate room claims.",
+      "placement": "Allocate distinct nonoverlapping room floors and actual partitions where separate rooms are intended.",
+      "principles": "Do not assign three bedroom names to the same slab.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-roof-over-void",
+      "title": "Prevent covered double height void",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "roof",
+        "over",
+        "void"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent covered double height void.",
+      "placement": "Coordinate upper floor plates around the intended open volume.",
+      "principles": "Do not close a promised void with an upper slab.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-roof-shortfall",
+      "title": "Prevent incomplete overhead coverage",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "roof",
+        "shortfall"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent incomplete overhead coverage.",
+      "placement": "Check roof extents against all occupied floor edges after resizing.",
+      "principles": "Do not infer shelter from a roof label or centre point.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-guard-no-access",
+      "title": "Prevent inaccessible guarded deck",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "guard",
+        "access"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent inaccessible guarded deck.",
+      "placement": "Connect the deck to a door landing and explicit vertical access when elevated.",
+      "principles": "Guard presence does not prove usable access.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-move-host-children",
+      "title": "Prevent detached edit dependents",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "move",
+        "host",
+        "children"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent detached edit dependents.",
+      "placement": "Move host-attached panels and connected support geometry coherently.",
+      "principles": "Do not leave glazing guards or roofs at old positions.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-resize-opening",
+      "title": "Prevent opening and host mismatch",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "resize",
+        "opening"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent opening and host mismatch.",
+      "placement": "Recheck opening bounds and panel alignment after wall resizing.",
+      "principles": "Do not assume resize updates every dependent dimension.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-preserve-unknowns",
+      "title": "Prevent invented site facts",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "preserve",
+        "unknowns"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent invented site facts.",
+      "placement": "Keep orientation boundary and terrain assumptions explicit in design decisions.",
+      "principles": "Do not present conceptual site placement as surveyed.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-single-view",
+      "title": "Prevent presentation-only completion",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "single",
+        "view"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent presentation-only completion.",
+      "placement": "Check rear side roof and approach relationships in addition to the main view.",
+      "principles": "A successful camera angle does not evidence enclosure completeness.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-door-over-wall",
+      "title": "Prevent doors on uncut enclosure",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "door",
+        "over",
+        "wall"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent doors on uncut enclosure.",
+      "placement": "Cut a real opening in the door host and align the panel to its sill and head.",
+      "principles": "Do not paste a door over a solid wall and claim room access.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  },
+  {
+    "entry": {
+      "id": "lesson-minimal-edit",
+      "title": "Prevent unrelated redesign on edit",
+      "kind": "experience",
+      "category": "construction",
+      "recipeType": "failure",
+      "tags": [
+        "failure",
+        "edit",
+        "complete",
+        "construction",
+        "review",
+        "lesson",
+        "minimal"
+      ],
+      "scales": [],
+      "when": "Use when the brief or chosen programme calls for prevent unrelated redesign on edit.",
+      "placement": "Restrict retrieval and geometry changes to the requested feature while preserving unrelated stable IDs.",
+      "principles": "Do not regenerate the house to add a doorway.",
+      "combinations": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+      "capabilities": "Use direct-scene primitives: plate. These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures.",
+      "construction": {
+        "operations": [
+          "add",
+          "attach",
+          "place-on",
+          "finish"
+        ],
+        "requiredKinds": [
+          "plate"
+        ],
+        "materials": "Preserve the established palette in targeted edits; use finish only on intended elements.",
+        "supports": "Audit actual referenced elements and spatial relationships after operations; preserve stable IDs for unrelated architecture.",
+        "unsupported": "These are prevention lessons curated from contract risks, not claimed empirical provider successes or failures."
+      },
+      "sources": [
+        {
+          "reference": "src/lib/villa/scene/terra.ts",
+          "kind": "repository",
+          "verified": true,
+          "note": "Checked primitive names against the direct-scene contract; individually curated conceptual relationships, not external research or a regulation."
+        }
+      ],
+      "status": "approved",
+      "supersedes": [],
+      "review": "Conceptual design and supported-primitive review. No claim of engineering, historical authenticity or completed provider construction."
+    },
+    "expectedVersion": 1
+  }
+]

@@ -1,0 +1,95 @@
+{
+  "errors": [],
+  "blocked": [],
+  "requests": [
+    {
+      "mode": "generate",
+      "prompt": "Design an extraordinary Caribbean house with a new freestanding bronze sail canopy beside the garden terrace.",
+      "hasCurrentCreatedComponent": false
+    },
+    {
+      "mode": "edit",
+      "prompt": "Rotate the existing garden sail to 35 degrees.",
+      "hasCurrentCreatedComponent": true
+    },
+    {
+      "mode": "generate",
+      "prompt": "Build a canopy outside the fixed lot.",
+      "hasCurrentCreatedComponent": false
+    },
+    {
+      "mode": "generate",
+      "prompt": "Reuse the reviewed bronze sail on a new house.",
+      "hasCurrentCreatedComponent": false
+    },
+    {
+      "mode": "generate",
+      "prompt": "Design a normal Caribbean house with existing components.",
+      "hasCurrentCreatedComponent": false
+    }
+  ],
+  "checks": [
+    {
+      "case": "Solana original",
+      "meshes": 572,
+      "finite": true,
+      "canopies": []
+    },
+    {
+      "case": "Automatic creation through normal prompt",
+      "meshes": 702,
+      "finite": true,
+      "canopies": [
+        {
+          "name": "Created component flared-sail · swept-ribbon@1",
+          "position": [
+            15,
+            0.47,
+            8
+          ],
+          "rotation": 0.4363323129985824
+        }
+      ]
+    },
+    {
+      "case": "Conversational placement edit retains geometry and version",
+      "meshes": 702,
+      "finite": true,
+      "canopies": [
+        {
+          "name": "Created component flared-sail · swept-ribbon@1",
+          "position": [
+            15,
+            0.47,
+            8
+          ],
+          "rotation": 0.6108652381980153
+        }
+      ]
+    },
+    {
+      "case": "Approved candidate reused without a create request",
+      "meshes": 702,
+      "finite": true,
+      "canopies": [
+        {
+          "name": "Created component flared-sail · swept-ribbon@1",
+          "position": [
+            15,
+            0.47,
+            8
+          ],
+          "rotation": 0.4363323129985824
+        }
+      ]
+    },
+    {
+      "case": "Normal generation without creation",
+      "meshes": 697,
+      "finite": true,
+      "canopies": []
+    }
+  ],
+  "providerCalls": 0,
+  "note": "API responses mocked at the browser boundary; endpoint and SDK covered separately offline. Approval is synthetic in a temporary evidence library."
+}

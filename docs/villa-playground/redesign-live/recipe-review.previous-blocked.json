@@ -1,0 +1,84 @@
+{
+  "status": "BLOCKED_PENDING_EXPLICIT_APPROVAL",
+  "approved": 0,
+  "paidCalls": 0,
+  "providerTokens": 0,
+  "constructionOperations": 0,
+  "profileAt25m": "property-value-25m-50m",
+  "retrieved": false,
+  "findings": [
+    "All nine are proposed and their only source is marked unverified; the approval schema requires a nonempty review and at least one verified source.",
+    "No verified market evidence establishes the association between each numeric band and its architectural guidance.",
+    "The bands are usable as subjective design curation only; area, programme and amenities are explicitly not price formulas.",
+    "Adjacent display ranges share endpoints; the parser deterministically selects lower-inclusive bands, so exactly $25m selects 25m\u201350m.",
+    "The phrase property-value or budget context conflates asset value with construction budget; proposed correction separates them.",
+    "Repository sources can verify implemented construction and retrieval only; they cannot verify price-band associations."
+  ],
+  "recipes": [
+    {
+      "id": "property-value-100k-250k",
+      "title": "Property value reference: Compact efficiency",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-250k-500k",
+      "title": "Property value reference: Comfortable family living",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-500k-1m",
+      "title": "Property value reference: Refined residential identity",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-1m-3m",
+      "title": "Property value reference: Premium villa experience",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-3m-5m",
+      "title": "Property value reference: Luxury residential composition",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-5m-10m",
+      "title": "Property value reference: High-end estate relationships",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-10m-25m",
+      "title": "Property value reference: Grand luxury residence",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-25m-50m",
+      "title": "Property value reference: Exceptional estate architecture",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    },
+    {
+      "id": "property-value-50m-100m-plus",
+      "title": "Property value reference: Trophy estate ambition",
+      "status": "proposed",
+      "sourceVerified": false,
+      "decision": "not approved; subjective association needs explicit acceptance or independently verified support"
+    }
+  ],
+  "automaticReviewRejection": "Approval rejected: repository source verifies implementation capabilities, not property-value claims; conditional authorization not satisfied.",
+  "proposedResolution": "Explicitly accept all nine as subjective design-ambition curation, with no market-validity claim, separate property value from construction budget, and retain unverified user-brief provenance. Requires explicit user approval before any import."
+}

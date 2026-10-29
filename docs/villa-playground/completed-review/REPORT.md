@@ -1,0 +1,27 @@
+# Completed Terra review: offline assessment
+
+[Camera-matched comparison](comparison.html) · [Retained response](review-response.json) · [Unapproved revision](revised.config.json) · [Verification](verification.json)
+
+The completed response was recovered from `/private/tmp/reference-review.wdnQVU/response.json`. It identifies model `gpt-5.6-terra`, one provider call, 10,718 total tokens and reported cost $0.026296. Those are retained response metadata, not independently verified billing. This task made zero additional OpenAI calls. The earlier `reference-review` report concerns a failed direct request and a manual patio study; it is separate evidence and has not been overwritten.
+
+Terra identified three weaknesses: closely repeated full-height glazing that reads like an office; an allegedly overemphasized hip-roof ridge; and patio slabs that appear detached from the house. It acknowledged uncertainty about hidden patio relationships. Its sole proposed improvement was sparse, asymmetric individual openings on the long elevations, generous warm blank wall, and a larger blue window at the visible end. It did not propose a roof or patio edit.
+
+The glazing diagnosis is useful architectural judgment: it connects a visible problem to the reference's residential character and selects a supported, limited intervention. The roof diagnosis is weakly established: the reference itself has a substantial pitched hip roof, and perspective differs. Patio integration is a reasonable concern, but the original west pad actually overlaps the building footprint by 1 m; “detached” is an appearance assessment rather than a precise geometric finding. Reference long-side openings are partly obscured, so exact number and placement cannot be recovered confidently.
+
+Existing builders can construct the facade intervention without new geometry code. `WingWall` replaces procedural walls per face/storey using `PreciseFacade`; this creates real masonry panels around individual openings, timber frames and existing glazing. Composition validation checks dimensions, separation and exposed-wall suitability. No new component, model call or builder was needed. Roof-rise and terrace controls exist, but were deliberately left untouched because Terra's one proposal concerns facade openings only.
+
+There is an automatic execution problem: Terra returned scope `wings.0.facadeOpenings`, although its prompt requests exact leaf paths. `assertReviewScope` compares individual changed paths by exact equality, so this response would be rejected by the automatic staging path. Geometry feasibility therefore does not imply automatic proposal compatibility. This study explicitly expands the paths for offline validation; it does not silently accept Terra's scope or change application behavior.
+
+The candidate is a human-authored interpretation of Terra's prose, not Terra-generated geometry. On each 23 m long elevation it uses three separated openings, including a rear timber entry door to retain entrance intent. The visible end receives one 2.4 × 2.25 m window with a 0.55 m sill. Dimensions and hidden-side arrangement are estimates. The opposite short end retains its original procedural glazing. Only `wings.0.facadeOpenings` descendants change. Original roof, massing, eaves, materials, garden, pool, patios, site policy and stable identities remain equal. Unlike the earlier manual study, no patio move is included.
+
+Visual judgment from matched aerial, arrival and poolside renders:
+
+- Poolside: markedly less repetitive, with more solid wall and a single end window closer to the reference. The three long-wall windows also leave broad bare areas; this is not a resolved facade composition.
+- Arrival: entry remains legible, but it is austere. Dense glazing on the unchanged opposite end is conspicuously inconsistent with the revised long wall.
+- Aerial: footprint, roof, shade and outdoor relationships are unchanged. Facade editing cannot remedy patio layout or landscape fidelity.
+
+Verdict: Terra demonstrated useful but limited architectural judgment, strongest on glazing rhythm and restraint in proposing only one change. The offline candidate improves that specific mismatch. It is not established as a better design overall: facade balance is mixed, reference evidence is incomplete, and there is no interior/daylight/program information to justify these opening positions. It remains an unapproved comparison study, unsuitable as successful-design learning evidence.
+
+Validation: existing precise-opening and visual-review suites passed (14 tests); `npm run typecheck` passed. Six actual renderer PNGs were captured with identical camera objects in all three pairs, no browser page errors, and all API/external browser requests blocked. Only the unrelated asset-list request was attempted and blocked. The offline construction runner forbids fetch, validates/builds the candidate, checks exact changed paths, and confirms all previously recorded source SHA-256 hashes. Original baseline bytes remain unchanged. No approval, library acceptance or learning-store writes were performed.
+
+Reproduce construction with `./node_modules/.bin/vite-node --config vitest.config.mts scripts/completed-review-offline.ts`. With the local dev server running, use `node scripts/completed-review-render.mjs` and `node scripts/completed-review-render.mjs --after` for blocked-network rendering. The development-only preview route has no review or acceptance controls.

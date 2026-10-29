@@ -1,3 +1,4 @@
+import { VILLA_LIMITS as L } from '../limits';
 import { z } from 'zod';
 
 /** Version-pinned procedural component; also retained for the original local studies. Metres, +Y up,
@@ -5,10 +6,10 @@ import { z } from 'zod';
 export const pavilionPlacementSchema = z.object({
   id: z.string().regex(/^[a-z][a-z0-9-]{0,47}$/),
   builder: z.literal('curved-pavilion@1'),
-  x: z.number().min(-200).max(200), z: z.number().min(-200).max(200),
+  x: z.number().min(-L.position).max(L.position), z: z.number().min(-L.position).max(L.position),
   orientation: z.number().min(0).max(359),
-  width: z.number().min(6).max(10), depth: z.number().min(5).max(8),
-  height: z.number().min(3).max(4.2),
+  width: z.number().min(6).max(L.pavilionWidth), depth: z.number().min(5).max(L.pavilionDepth),
+  height: z.number().min(3).max(L.pavilionHeight),
   material: z.enum(['ivory', 'limestone']),
 }).strict();
 export type PavilionPlacement = z.infer<typeof pavilionPlacementSchema>;

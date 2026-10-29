@@ -1,0 +1,509 @@
+{
+  "source": ".data/villa-responses/322247c40a2c1eb0b3e667280d7f9551759779cb4b753e6c925c386e99664036.response.json",
+  "responseId": "322247c40a2c1eb0b3e667280d7f9551759779cb4b753e6c925c386e99664036",
+  "providerCalls": 0,
+  "provenance": "Human-authored offline revisions; not a live Terra review or generation",
+  "baselinePreserved": true,
+  "steps": [
+    {
+      "improvement": "Reduce floor heights to residential proportions, reduce repeated glazing, and recess the opposite base facade.",
+      "scope": [
+        "forms.0.height",
+        "forms.0.stack.0.height",
+        "forms.0.stack.1.height",
+        "forms.0.stack.2.height",
+        "forms.0.facades.0.treatment",
+        "forms.0.openings"
+      ],
+      "output": {
+        "changes": {
+          "forms": [
+            {
+              "type": "put",
+              "form": {
+                "id": "main-residence",
+                "builder": "footprint-building@1",
+                "x": 0,
+                "z": 0,
+                "orientation": 0,
+                "points": [
+                  {
+                    "x": -15,
+                    "z": -10
+                  },
+                  {
+                    "x": 15,
+                    "z": -10
+                  },
+                  {
+                    "x": 15,
+                    "z": 10
+                  },
+                  {
+                    "x": -15,
+                    "z": 10
+                  }
+                ],
+                "height": 3.6,
+                "stack": [
+                  {
+                    "id": "level-two",
+                    "parentId": "base",
+                    "x": -1,
+                    "z": -1,
+                    "width": 28,
+                    "depth": 18,
+                    "height": 3.3,
+                    "rooftop": "lounge"
+                  },
+                  {
+                    "id": "level-three",
+                    "parentId": "level-two",
+                    "x": 1,
+                    "z": -0.5,
+                    "width": 25,
+                    "depth": 16,
+                    "height": 3.2,
+                    "rooftop": "railed"
+                  },
+                  {
+                    "id": "sky-pavilion",
+                    "parentId": "level-three",
+                    "x": -1,
+                    "z": 0,
+                    "width": 21,
+                    "depth": 13,
+                    "height": 3,
+                    "rooftop": "shaded"
+                  }
+                ],
+                "rooftop": "railed",
+                "facades": [
+                  {
+                    "edges": [
+                      0
+                    ],
+                    "treatment": "loggia",
+                    "material": "limestone",
+                    "terraceEdge": "glass"
+                  },
+                  {
+                    "edges": [
+                      1
+                    ],
+                    "treatment": "screen",
+                    "material": "limestone",
+                    "terraceEdge": "solid"
+                  },
+                  {
+                    "edges": [
+                      2
+                    ],
+                    "treatment": "entrance",
+                    "material": "warm-stone",
+                    "terraceEdge": "solid"
+                  },
+                  {
+                    "edges": [
+                      3
+                    ],
+                    "treatment": "solid",
+                    "material": "limestone",
+                    "terraceEdge": "solid"
+                  }
+                ],
+                "material": "limestone",
+                "openings": "rhythm"
+              }
+            }
+          ]
+        },
+        "summary": "Reduce floor heights to residential proportions, reduce repeated glazing, and recess the opposite base facade.",
+        "unsupported": []
+      }
+    },
+    {
+      "improvement": "Compose a broad inhabited base, a paired middle body, and a smaller offset crown; concentrate setbacks into usable terraces.",
+      "scope": [
+        "forms.0.stack.0.x",
+        "forms.0.stack.0.z",
+        "forms.0.stack.0.width",
+        "forms.0.stack.0.depth",
+        "forms.0.stack.1.x",
+        "forms.0.stack.1.z",
+        "forms.0.stack.1.width",
+        "forms.0.stack.1.depth",
+        "forms.0.stack.2.z",
+        "forms.0.stack.2.width",
+        "forms.0.stack.2.depth"
+      ],
+      "output": {
+        "changes": {
+          "forms": [
+            {
+              "type": "put",
+              "form": {
+                "id": "main-residence",
+                "builder": "footprint-building@1",
+                "x": 0,
+                "z": 0,
+                "orientation": 0,
+                "points": [
+                  {
+                    "x": -15,
+                    "z": -10
+                  },
+                  {
+                    "x": 15,
+                    "z": -10
+                  },
+                  {
+                    "x": 15,
+                    "z": 10
+                  },
+                  {
+                    "x": -15,
+                    "z": 10
+                  }
+                ],
+                "height": 3.6,
+                "stack": [
+                  {
+                    "id": "level-two",
+                    "parentId": "base",
+                    "x": -2,
+                    "z": -2,
+                    "width": 26,
+                    "depth": 14,
+                    "height": 3.3,
+                    "rooftop": "lounge"
+                  },
+                  {
+                    "id": "level-three",
+                    "parentId": "level-two",
+                    "x": -6,
+                    "z": -2,
+                    "width": 18,
+                    "depth": 14,
+                    "height": 3.2,
+                    "rooftop": "railed"
+                  },
+                  {
+                    "id": "sky-pavilion",
+                    "parentId": "level-three",
+                    "x": -1,
+                    "z": -2,
+                    "width": 12,
+                    "depth": 10,
+                    "height": 3,
+                    "rooftop": "shaded"
+                  }
+                ],
+                "rooftop": "railed",
+                "facades": [
+                  {
+                    "edges": [
+                      0
+                    ],
+                    "treatment": "loggia",
+                    "material": "limestone",
+                    "terraceEdge": "glass"
+                  },
+                  {
+                    "edges": [
+                      1
+                    ],
+                    "treatment": "screen",
+                    "material": "limestone",
+                    "terraceEdge": "solid"
+                  },
+                  {
+                    "edges": [
+                      2
+                    ],
+                    "treatment": "entrance",
+                    "material": "warm-stone",
+                    "terraceEdge": "solid"
+                  },
+                  {
+                    "edges": [
+                      3
+                    ],
+                    "treatment": "solid",
+                    "material": "limestone",
+                    "terraceEdge": "solid"
+                  }
+                ],
+                "material": "limestone",
+                "openings": "rhythm"
+              }
+            }
+          ]
+        },
+        "summary": "Compose a broad inhabited base, a paired middle body, and a smaller offset crown; concentrate setbacks into usable terraces.",
+        "unsupported": []
+      }
+    }
+  ],
+  "changes": [
+    {
+      "path": "forms.0.height",
+      "before": 4.4,
+      "after": 3.6
+    },
+    {
+      "path": "forms.0.stack.0.x",
+      "before": -1,
+      "after": -2
+    },
+    {
+      "path": "forms.0.stack.0.z",
+      "before": -1,
+      "after": -2
+    },
+    {
+      "path": "forms.0.stack.0.width",
+      "before": 28,
+      "after": 26
+    },
+    {
+      "path": "forms.0.stack.0.depth",
+      "before": 18,
+      "after": 14
+    },
+    {
+      "path": "forms.0.stack.0.height",
+      "before": 4.1,
+      "after": 3.3
+    },
+    {
+      "path": "forms.0.stack.1.x",
+      "before": 1,
+      "after": -6
+    },
+    {
+      "path": "forms.0.stack.1.z",
+      "before": -0.5,
+      "after": -2
+    },
+    {
+      "path": "forms.0.stack.1.width",
+      "before": 25,
+      "after": 18
+    },
+    {
+      "path": "forms.0.stack.1.depth",
+      "before": 16,
+      "after": 14
+    },
+    {
+      "path": "forms.0.stack.1.height",
+      "before": 3.8,
+      "after": 3.2
+    },
+    {
+      "path": "forms.0.stack.2.z",
+      "before": 0,
+      "after": -2
+    },
+    {
+      "path": "forms.0.stack.2.width",
+      "before": 21,
+      "after": 12
+    },
+    {
+      "path": "forms.0.stack.2.depth",
+      "before": 13,
+      "after": 10
+    },
+    {
+      "path": "forms.0.stack.2.height",
+      "before": 3.6,
+      "after": 3
+    },
+    {
+      "path": "forms.0.facades.0.treatment",
+      "before": "glass",
+      "after": "loggia"
+    },
+    {
+      "path": "forms.0.openings",
+      "before": "panoramic",
+      "after": "rhythm"
+    }
+  ],
+  "metrics": {
+    "original": {
+      "height": 16.94,
+      "levels": [
+        {
+          "id": "base",
+          "footprint": 600,
+          "terraceCells": [
+            {
+              "x": 14,
+              "z": 0,
+              "width": 2,
+              "depth": 20
+            },
+            {
+              "x": -1,
+              "z": 9,
+              "width": 28,
+              "depth": 2
+            }
+          ]
+        },
+        {
+          "id": "level-two",
+          "footprint": 504,
+          "terraceCells": [
+            {
+              "x": -13.25,
+              "z": -1,
+              "width": 3.5,
+              "depth": 18
+            },
+            {
+              "x": 0.75,
+              "z": -9.25,
+              "width": 24.5,
+              "depth": 1.5
+            },
+            {
+              "x": 0.75,
+              "z": 7.75,
+              "width": 24.5,
+              "depth": 0.5
+            }
+          ]
+        },
+        {
+          "id": "level-three",
+          "footprint": 400,
+          "terraceCells": [
+            {
+              "x": 11.5,
+              "z": -0.5,
+              "width": 4,
+              "depth": 16
+            },
+            {
+              "x": -1,
+              "z": -7.5,
+              "width": 21,
+              "depth": 2
+            },
+            {
+              "x": -1,
+              "z": 7,
+              "width": 21,
+              "depth": 1
+            }
+          ]
+        },
+        {
+          "id": "sky-pavilion",
+          "footprint": 273,
+          "terraceCells": [
+            {
+              "id": "sky-pavilion",
+              "parentId": "level-three",
+              "x": -1,
+              "z": 0,
+              "width": 21,
+              "depth": 13,
+              "height": 3.6,
+              "rooftop": "shaded",
+              "bottom": 13.08,
+              "level": 3
+            }
+          ]
+        }
+      ]
+    },
+    "revised": {
+      "height": 14.14,
+      "levels": [
+        {
+          "id": "base",
+          "footprint": 600,
+          "terraceCells": [
+            {
+              "x": 13,
+              "z": 0,
+              "width": 4,
+              "depth": 20
+            },
+            {
+              "x": -2,
+              "z": -9.5,
+              "width": 26,
+              "depth": 1
+            },
+            {
+              "x": -2,
+              "z": 7.5,
+              "width": 26,
+              "depth": 5
+            }
+          ]
+        },
+        {
+          "id": "level-two",
+          "footprint": 364,
+          "terraceCells": [
+            {
+              "x": 7,
+              "z": -2,
+              "width": 8,
+              "depth": 14
+            }
+          ]
+        },
+        {
+          "id": "level-three",
+          "footprint": 252,
+          "terraceCells": [
+            {
+              "x": -11,
+              "z": -2,
+              "width": 8,
+              "depth": 14
+            },
+            {
+              "x": -2,
+              "z": -8,
+              "width": 10,
+              "depth": 2
+            },
+            {
+              "x": -2,
+              "z": 4,
+              "width": 10,
+              "depth": 2
+            }
+          ]
+        },
+        {
+          "id": "sky-pavilion",
+          "footprint": 120,
+          "terraceCells": [
+            {
+              "id": "sky-pavilion",
+              "parentId": "level-three",
+              "x": -1,
+              "z": -2,
+              "width": 12,
+              "depth": 10,
+              "height": 3,
+              "rooftop": "shaded",
+              "bottom": 10.88,
+              "level": 3
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

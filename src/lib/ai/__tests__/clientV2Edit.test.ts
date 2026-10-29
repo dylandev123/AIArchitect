@@ -62,7 +62,7 @@ async function viaRealHandler() {
 describe("requestHouseEdit V2 commit boundary", () => {
   it("rejects a legacy-only rooftop-deck response rather than claiming the active V2 architecture changed", async () => {
     const { useProjectStore, requestHouseEdit, V2_EDIT_UNCHANGED_MESSAGE } = await load();
-    const project = useProjectStore.getState().createProject("Luxury V2");
+    const project = useProjectStore.getState().createProject("Luxury V2", "house", "v2-architectural");
     const base = jsonFor();
     useProjectStore.getState().updateHouseConfig(project.id, base);
     const legacyOnly = JSON.stringify({ ...JSON.parse(base), decks: [{ id: "legacy-deck", x: 0, z: 8, width: 9, depth: 6, shape: "rounded" }] });
@@ -78,7 +78,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
 
   it("treats an evidence-backed V2 no-op as success without saving a new version", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("Luxury V2");
+    const project = useProjectStore.getState().createProject("Luxury V2", "house", "v2-architectural");
     const base = jsonFor();
     useProjectStore.getState().updateHouseConfig(project.id, base);
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, headers: new Headers(), json: async () => ({ summary: "The requested condition already exists.", outcome: "already-satisfied", json: base }) }));
@@ -93,7 +93,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
 
   it("commits a deterministic V2 mass move and resize through the same follow-up client path", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("Luxury V2");
+    const project = useProjectStore.getState().createProject("Luxury V2", "house", "v2-architectural");
     const base = jsonFor();
     useProjectStore.getState().updateHouseConfig(project.id, base);
     const original = ARCHITECTURE_FIXTURES.luxuryTropicalCourtyardVillaV2;
@@ -118,7 +118,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
 
   it("commits a mocked V2 Site Plan-only outdoor-bar addition without changing the architectural document", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("Luxury V2");
+    const project = useProjectStore.getState().createProject("Luxury V2", "house", "v2-architectural");
     const base = jsonFor();
     const parsed = JSON.parse(base);
     // The client boundary only needs a valid V2 root; the route's deterministic placement is covered separately.
@@ -135,7 +135,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
 
   it("sends the workspace V2 request shape through the real handler and commits its addV2Placement response", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("V2 workspace project");
+    const project = useProjectStore.getState().createProject("V2 workspace project", "house", "v2-architectural");
     // The persisted workspace shape after V2 generation: architecture, the rendered legacy deck and the canonical Site Plan.
     const base = JSON.stringify({ ...JSON.parse(jsonFor()), sitePlan: { poolDeck: { x: 0, z: 16, width: 12, depth: 8 } } });
     useProjectStore.getState().updateHouseConfig(project.id, base);
@@ -159,7 +159,7 @@ describe("requestHouseEdit V2 commit boundary", () => {
 
   it("refuses an additive edit on a legacy V2 project without a persisted Site Plan and commits nothing", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("Legacy V2 workspace project");
+    const project = useProjectStore.getState().createProject("Legacy V2 workspace project", "house", "v2-architectural");
     // Pre-Site Plan persistence shape: V2 architecture plus the rendered legacy deck, but no `sitePlan` key.
     // The deck is deliberately not reconstructed into an anchor (see v2SitePlanOf).
     const base = jsonFor();

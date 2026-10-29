@@ -100,3 +100,71 @@
 .compositionBar { max-width: calc(100% - 80px); overflow-x: auto; white-space: nowrap; }
 .compositionBar button, .compositionBar > span { flex-shrink: 0; }
 @media (max-width: 650px) { .compositionBar { max-width: calc(100% - 36px); } }
+
+/* Exploration chrome stays at the edges; panels are opt-in. */
+.playground { height: 100dvh; min-height: 0; }
+.playground::after { display: none; }
+.header { padding: 16px 20px; }
+.header .dev, .caption, .hints, .credit { display: none; }
+.intro.collectionIntro { top: 64px; left: 20px; max-width: min(360px, calc(100% - 40px)); pointer-events: auto; }
+.collectionIntro h1 { font-size: 19px; letter-spacing: -.5px; margin: 0 0 6px; }
+.intro details { font-size: 11px; }
+.intro summary { cursor: pointer; width: fit-content; padding: 6px 10px; background: #ffffffe8; border-radius: 12px; }
+.intro details[open] { padding: 12px; border-radius: 14px; background: #fffffff2; max-height: 45dvh; overflow: auto; }
+.intro details p { line-height: 1.6; }
+.description { display: block; margin: 8px 0; }
+.eyebrow { margin: 12px 0; }
+.development { position: absolute; z-index: 5; right: 20px; top: 64px; font-size: 11px; }
+.development > summary { cursor: pointer; padding: 9px 13px; background: #ffffffe8; border-radius: 20px; }
+.development[open] { width: min(420px, calc(100% - 40px)); padding: 12px; background: #fffffff2; border-radius: 16px; max-height: 60dvh; overflow: auto; }
+.development[open]:has(.reviewPanel[open]) { width: min(1320px, calc(100% - 40px)); }
+.toolPanel, .reviewPanel { margin-top: 12px; }
+.toolPanel > summary { cursor: pointer; font-weight: 600; }
+.development .styleBar, .development .compositionBar { position: static; display: flex; flex-wrap: wrap; max-width: none; white-space: normal; border: 0; background: transparent; border-radius: 0; padding: 8px 0; }
+.moods { top: 108px; right: 20px; bottom: auto; }
+.moods button { padding: 8px 10px; font-size: 10px; }
+.customizeToggle { right: 20px; top: 160px; }
+.customizer { right: 20px; top: 205px; bottom: 160px; width: min(310px, calc(100% - 80px)); }
+.terraToggle, .exploreToggle { position: absolute; z-index: 4; border-radius: 22px; background: #ffffffe8 !important; padding: 11px 16px; font-size: 11px; }
+.terraToggle { bottom: 80px; left: 20px; }
+.exploreToggle { right: 20px; top: 14px; }
+.terraDock { bottom: 126px; width: min(620px, calc(100% - 40px)); }
+.terraDock[hidden] { display: none; }
+.terraResult { position: absolute; z-index: 6; left: 20px; bottom: 126px; width: min(440px, calc(100% - 72px)); max-height: 45dvh; margin: 0; }
+.statusDock { position: absolute; z-index: 4; left: 130px; bottom: 80px; display: flex; border-radius: 22px; background: #ffffffe8; }
+.statusDock button { padding: 11px 13px; font-size: 11px; border-radius: 22px; }
+.footer { bottom: 16px; left: 12px; right: 12px; justify-content: center; }
+.cameraBar { max-width: 100%; overflow-x: auto; }
+.cameraBar button { flex-shrink: 0; }
+.exploring .header, .exploring .intro, .exploring .development, .exploring .moods, .exploring .customizeToggle, .exploring .customizer, .exploring .terraDock, .exploring .terraToggle, .exploring .statusDock, .exploring .terraResult { display: none; }
+@media(max-width:650px) {
+  .brand span { display: none; }
+  .intro.collectionIntro { top: 62px; max-width: calc(100% - 190px); }
+  .collectionIntro h1 { font-size: 16px; }
+  .development { right: 12px; }
+  .moods { top: 108px; right: 12px; }
+  .moods button { font-size: 0; padding: 8px; }
+  .customizeToggle { top: 156px; right: 12px; }
+  .customizer { top: 200px; bottom: 140px; }
+  .cameraBar button { padding: 0 10px; min-height: 40px; }
+  .terraDock { bottom: 126px; }
+  .terraResult { font-size: 11px; }
+}
+.terraResult ul { padding-left: 18px; }
+.terraResult li { margin: 8px 0; overflow-wrap: anywhere; }
+@media (max-height: 600px) { .customizer { top: 64px; bottom: 130px; } .terraDock { max-height: calc(100dvh - 150px); overflow: auto; } }
+/* Leave the framework's development badge clear of the scrollable camera controls. */
+@media (max-width: 650px) { .footer { left: 56px; } }
+
+.reviewPanel { color: #24332e; }
+.reviewPanel summary { cursor: pointer; font-weight: 600; }
+.reviewPanel p, .reviewPanel pre { margin: 12px 0; }
+.reviewPanel label { display: block; margin: 12px 0; }
+.reviewPanel textarea { display: block; width: 100%; min-height: 60px; border: 1px solid #abb9af; padding: 8px; }
+.reviewPanel button, .reviewPanel select { border: 1px solid #9cac9e; border-radius: 6px; padding: 8px 12px; margin: 4px; cursor: pointer; background: #edf4ef; }
+.reviewPanel button:disabled { opacity: .45; cursor: default; }
+.reviewPanel pre { white-space: pre-wrap; font-size: 12px; }
+.reviewPanel h3 { margin: 12px 0; }
+.reviewComparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.reviewComparison section { min-width: 0; }
+@media (max-width: 700px) { .reviewComparison { grid-template-columns: 1fr; } }

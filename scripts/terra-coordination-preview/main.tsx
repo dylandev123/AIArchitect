@@ -1,0 +1,11 @@
+import React,{Suspense} from 'react';
+import {createRoot} from 'react-dom/client';
+import {Canvas} from '@react-three/fiber';
+import {VillaScene} from '../../src/app/dev/villa-playground/scene';
+import {OperationScene} from '../../src/components/scene/OperationScene';
+import {SceneTerrain} from '../../src/components/scene/SceneTerrain';
+import before from '../../docs/architecture/terra-coordination-experiment/before.json';
+import after from '../../docs/architecture/terra-coordination-experiment/after.UNAPPROVED.json';
+import type {ArchitecturalScene} from '../../src/lib/villa/scene/model';
+const scene=(location.search.includes('after')?after:before) as ArchitecturalScene;
+createRoot(document.getElementById('root')!).render(<Canvas shadows camera={{position:[33,18,43],fov:40}} gl={{preserveDrawingBuffer:true}}><Suspense fallback={null}><VillaScene frameArchitectureOnly grounds={<SceneTerrain terrain={scene.terrain??{width:120,depth:120,elevation:0,grade:0,fall:'z'}}/>} replaceArchitecture mood="Daylight" view="Poolside" reset={0} tour={false}><OperationScene scene={scene} onSelect={()=>{}}/></VillaScene></Suspense></Canvas>);

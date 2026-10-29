@@ -1,0 +1,190 @@
+{
+  "retainedSources": {
+    "request.json": "04cd1264d6fb5c61b7a33834ccb6c0d122b6a0b8f3a68de7e12ab04e7751e966",
+    "settings.json": "cd8a9487d7b9d74a54b3cec901a43146bec448e7fb5c5e28f8da9b34e5ae4366",
+    "knowledge.json": "b1fb6201053b5f4e8f6a73b1fe67fc42a32e6a7f719a834a79735fe4493a5d92",
+    "provider-response.raw.json": "e3821728ffd44fdbf4d19e039fc0eb3ab93120ed5dee4f4ab0725afe9e32c8c3",
+    "response.json": "589e51014da32617048a0b1527145c1dcc051ac831f53b734523e9f44421470c",
+    "operations.json": "c3f7cb9226e1f9ad8a7f94b4fc044b32d63436697277d35410333bcd1efed64a",
+    "before.json": "9905981b1d14799312f71a29d94cedf2359598231941b0a41b7eec36204b0a05",
+    "after.json": "96a8f63c8dae45782d84862fb4c466d17481ff5698fd465f52f41b868dbfbd1d"
+  },
+  "exactPrompt": "ARCHITECTURAL DEVELOPMENT PASS: Improve the retained $25m contemporary tropical waterfront residence. Review actual composition, proportions, primary/secondary volumes, entrance hierarchy, suite privacy, facade glazing/material balance, roof setbacks, shade and connected indoor-outdoor spaces. Prioritize meaningful massing improvements when needed, rather than decorating. Select only justified amenities. Do not inflate counts. Resolve access/enclosure with existing operations where possible; disclose remaining unsupported features. No invented market or construction-cost claims.\nDevelop this existing composition using targeted atomic scene operations. Coordinate entrances, facade bay proportions, openings, roof edges, shade, balconies and material depth with the existing spatial hierarchy. Preserve unrelated elements, terrain and stable IDs. Repair related supports together. Retrieve scoped lightweight knowledge for these areas. Do not replace the house or add repetitive decoration. Disclose unresolved circulation/enclosure; Massing revision is authorized: prioritize meaningful primary/secondary volume and programme improvement; coordinate all dependent geometry and explain the change. Preserve the existing residence rather than generating a replacement.",
+  "provider": {
+    "model": "gpt-5.6-terra",
+    "status": "completed",
+    "error": null,
+    "incompleteDetails": null,
+    "finishReason": "stop",
+    "maxOutputTokens": 30000,
+    "usage": {
+      "input_tokens": 12681,
+      "input_tokens_details": {
+        "cache_write_tokens": 12678,
+        "cached_tokens": 0
+      },
+      "output_tokens": 4358,
+      "output_tokens_details": {
+        "reasoning_tokens": 2588
+      },
+      "total_tokens": 17039
+    },
+    "nonReasoningOutputTokens": 1770
+  },
+  "visibleOperationsUnchangedFromProvider": true,
+  "operationTypes": [
+    "replace",
+    "add",
+    "add",
+    "move",
+    "resize",
+    "add",
+    "add",
+    "add",
+    "add"
+  ],
+  "targets": [
+    "salon-view-center",
+    "salon-ocean-door",
+    "west-upper-terrace-deck",
+    "west-upper-terrace-rail",
+    "west-upper-terrace-rail",
+    "west-upper-terrace-rail-west",
+    "west-upper-terrace-rail-east",
+    "terrace-screen-west",
+    "terrace-screen-east"
+  ],
+  "knowledgeSelected": [
+    {
+      "id": "facade-materials",
+      "version": 1,
+      "category": "materials",
+      "score": 18,
+      "reasons": [
+        "brief matches facade",
+        "brief matches roof",
+        "adds materials coverage"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "category": "composition",
+      "score": 15,
+      "reasons": [
+        "brief matches waterfront",
+        "adds composition coverage"
+      ]
+    },
+    {
+      "id": "roof-main-secondary",
+      "version": 1,
+      "category": "roof-outdoor",
+      "score": 14.3,
+      "reasons": [
+        "brief matches roof",
+        "brief matches secondary",
+        "adds roof-outdoor coverage"
+      ]
+    },
+    {
+      "id": "waterfront-estate",
+      "version": 1,
+      "category": "climate-site",
+      "score": 13,
+      "reasons": [
+        "brief matches waterfront",
+        "adds climate-site coverage"
+      ]
+    }
+  ],
+  "knowledgeBudget": {
+    "entries": 4,
+    "chars": 6500,
+    "tier": "scoped"
+  },
+  "propertyValueContext": {
+    "amount": 25000000,
+    "profileId": "property-value-25m-50m",
+    "referenceOnly": true
+  },
+  "propertyValueProfileRetrieved": false,
+  "modelSummary": "Targeted development pass preserving the residence: the central salon now has a real ocean-terrace door, the elevated west suite gains a supported guarded terrace, and the covered ocean terrace gains paired bronze privacy/shade screens. Existing primary massing, roofs, pool court, pavilion, terrain state, and stable IDs are retained.",
+  "modelDecisions": [
+    {
+      "disposition": "constructed",
+      "knowledgeId": "facade-materials",
+      "decision": "Reinforced a restrained palette and facade depth through the existing ivory/limestone/timber composition, a bronze salon door, and lateral bronze terrace screens.",
+      "elementIds": [
+        "salon-view-center",
+        "salon-ocean-door",
+        "terrace-screen-west",
+        "terrace-screen-east",
+        "terrace-canopy"
+      ],
+      "limitation": "No solar, weathering, or material-performance simulation is represented."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "estate-composition",
+      "decision": "Retained the central salon as the primary communal volume and made the pre-existing upper west suite a more useful secondary private volume through an actual guarded terrace rather than adding more programme.",
+      "elementIds": [
+        "salon-floor",
+        "west-upper-floor",
+        "west-upper-terrace-deck",
+        "west-upper-terrace-rail",
+        "west-upper-terrace-rail-west",
+        "west-upper-terrace-rail-east"
+      ],
+      "limitation": "Upper-suite internal programme and vertical access are not geometrically modelled."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "roof-main-secondary",
+      "decision": "Kept the salon roof dominant and the west upper roof subordinate; the new terrace projects beyond the recessed upper roof as an intentionally open, guarded outdoor room.",
+      "elementIds": [
+        "salon-roof",
+        "west-upper-roof",
+        "west-upper-terrace-deck",
+        "west-upper-terrace-rail"
+      ],
+      "limitation": "The open upper terrace is not roof-sheltered; waterproofing, drainage, guard compliance, and engineering are not verified."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "waterfront-estate",
+      "decision": "Prioritized direct communal movement from the salon to the covered view terrace and screened its lateral edges while retaining the existing axial pool and pavilion sequence.",
+      "elementIds": [
+        "salon-view-center",
+        "salon-ocean-door",
+        "ocean-terrace",
+        "terrace-screen-west",
+        "terrace-screen-east",
+        "pool-water",
+        "ocean-pavilion"
+      ],
+      "limitation": "Ocean orientation, shoreline location, flood elevation, legal setbacks, and marine conditions remain unverified assumptions."
+    }
+  ],
+  "limitations": [
+    "No readable reasoning content is retained; encrypted reasoning cannot establish internal causation.",
+    "No isolated exact input token attribution to knowledge, schema or scene is retained.",
+    "Offline authored geometry proves contract/executor capacity, not independent model design quality."
+  ],
+  "exactProviderOperationContract": {
+    "maxOperations": 800,
+    "operations": [
+      "set-terrain",
+      "add",
+      "replace",
+      "remove",
+      "move",
+      "rotate",
+      "resize",
+      "finish",
+      "place-on",
+      "attach"
+    ],
+    "truncation": "disabled"
+  }
+}

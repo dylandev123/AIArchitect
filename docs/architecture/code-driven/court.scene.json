@@ -1,0 +1,998 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Sheltered court · developer study",
+  "elements": [
+    {
+      "id": "north",
+      "label": "north floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -9
+      ],
+      "rotation": 0,
+      "size": [
+        22,
+        0.2,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-rear",
+      "label": "north rear",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        0,
+        1.9000000000000001,
+        -3.35
+      ],
+      "rotation": 0,
+      "size": [
+        22,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-west",
+      "label": "north west",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        -10.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-east",
+      "label": "north east",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        10.85,
+        1.9000000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-bay-0",
+      "label": "north bay-0",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        -8.8,
+        1.9000000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.95,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "north-glass-0",
+      "label": "north glass-0",
+      "kind": "glazing",
+      "parent": "north-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.95,
+        3.2,
+        0.04
+      ],
+      "material": "limestone",
+      "panels": 2
+    },
+    {
+      "id": "north-reveal-0",
+      "label": "north reveal-0",
+      "kind": "volume",
+      "parent": "north",
+      "at": [
+        -8.8,
+        3.62,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-bay-1",
+      "label": "north bay-1",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        -4.3999999999999995,
+        1.9000000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.95,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "north-glass-1",
+      "label": "north glass-1",
+      "kind": "glazing",
+      "parent": "north-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.95,
+        3.2,
+        0.04
+      ],
+      "material": "limestone",
+      "panels": 2
+    },
+    {
+      "id": "north-reveal-1",
+      "label": "north reveal-1",
+      "kind": "volume",
+      "parent": "north",
+      "at": [
+        -4.3999999999999995,
+        3.62,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-bay-2",
+      "label": "north bay-2",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        0,
+        1.9000000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.95,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "north-glass-2",
+      "label": "north glass-2",
+      "kind": "glazing",
+      "parent": "north-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.95,
+        3.2,
+        0.04
+      ],
+      "material": "limestone",
+      "panels": 2
+    },
+    {
+      "id": "north-reveal-2",
+      "label": "north reveal-2",
+      "kind": "volume",
+      "parent": "north",
+      "at": [
+        0,
+        3.62,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-bay-3",
+      "label": "north bay-3",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        4.400000000000002,
+        1.9000000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.95,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "north-glass-3",
+      "label": "north glass-3",
+      "kind": "glazing",
+      "parent": "north-bay-3",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.95,
+        3.2,
+        0.04
+      ],
+      "material": "limestone",
+      "panels": 2
+    },
+    {
+      "id": "north-reveal-3",
+      "label": "north reveal-3",
+      "kind": "volume",
+      "parent": "north",
+      "at": [
+        4.400000000000002,
+        3.62,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-bay-4",
+      "label": "north bay-4",
+      "kind": "wall",
+      "parent": "north",
+      "at": [
+        8.8,
+        1.9000000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        3.6,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.95,
+        "height": 3.2,
+        "glazed": false
+      }
+    },
+    {
+      "id": "north-glass-4",
+      "label": "north glass-4",
+      "kind": "glazing",
+      "parent": "north-bay-4",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.95,
+        3.2,
+        0.04
+      ],
+      "material": "limestone",
+      "panels": 2
+    },
+    {
+      "id": "north-reveal-4",
+      "label": "north reveal-4",
+      "kind": "volume",
+      "parent": "north",
+      "at": [
+        8.8,
+        3.62,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4.4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "north-roof",
+      "label": "north roof",
+      "kind": "roof",
+      "parent": "north",
+      "at": [
+        0,
+        4.5,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        22,
+        1.6,
+        7
+      ],
+      "material": "limestone",
+      "roofForm": "hip",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "west",
+      "label": "west floor",
+      "kind": "plate",
+      "at": [
+        -9,
+        0.1,
+        0.5
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        12,
+        0.2,
+        7
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-rear",
+      "label": "west rear",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        0,
+        1.6500000000000001,
+        -3.35
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-west",
+      "label": "west west",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        -5.85,
+        1.6500000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-east",
+      "label": "west east",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        5.85,
+        1.6500000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "west-bay-0",
+      "label": "west bay-0",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        -4,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-glass-0",
+      "label": "west glass-0",
+      "kind": "glazing",
+      "parent": "west-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "west-reveal-0",
+      "label": "west reveal-0",
+      "kind": "volume",
+      "parent": "west",
+      "at": [
+        -4,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-bay-1",
+      "label": "west bay-1",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        0,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-glass-1",
+      "label": "west glass-1",
+      "kind": "glazing",
+      "parent": "west-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "west-reveal-1",
+      "label": "west reveal-1",
+      "kind": "volume",
+      "parent": "west",
+      "at": [
+        0,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-bay-2",
+      "label": "west bay-2",
+      "kind": "wall",
+      "parent": "west",
+      "at": [
+        4,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "west-glass-2",
+      "label": "west glass-2",
+      "kind": "glazing",
+      "parent": "west-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "west-reveal-2",
+      "label": "west reveal-2",
+      "kind": "volume",
+      "parent": "west",
+      "at": [
+        4,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "west-roof",
+      "label": "west roof",
+      "kind": "roof",
+      "parent": "west",
+      "at": [
+        0,
+        4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        1.6,
+        7
+      ],
+      "material": "ivory",
+      "roofForm": "gable",
+      "overhang": 0.8,
+      "panels": 4
+    },
+    {
+      "id": "east",
+      "label": "east floor",
+      "kind": "plate",
+      "at": [
+        9,
+        0.1,
+        0.5
+      ],
+      "rotation": -1.5707963267948966,
+      "size": [
+        12,
+        0.2,
+        7
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "east-rear",
+      "label": "east rear",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        0,
+        1.6500000000000001,
+        -3.35
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "east-west",
+      "label": "east west",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        -5.85,
+        1.6500000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "east-east",
+      "label": "east east",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        5.85,
+        1.6500000000000001,
+        0
+      ],
+      "rotation": 1.5707963267948966,
+      "size": [
+        6.4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "east-bay-0",
+      "label": "east bay-0",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        -4,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-glass-0",
+      "label": "east glass-0",
+      "kind": "glazing",
+      "parent": "east-bay-0",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "east-reveal-0",
+      "label": "east reveal-0",
+      "kind": "volume",
+      "parent": "east",
+      "at": [
+        -4,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-bay-1",
+      "label": "east bay-1",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        0,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-glass-1",
+      "label": "east glass-1",
+      "kind": "glazing",
+      "parent": "east-bay-1",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "east-reveal-1",
+      "label": "east reveal-1",
+      "kind": "volume",
+      "parent": "east",
+      "at": [
+        0,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-bay-2",
+      "label": "east bay-2",
+      "kind": "wall",
+      "parent": "east",
+      "at": [
+        4,
+        1.6500000000000001,
+        3.35
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        3.1,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.15,
+        "width": 3.55,
+        "height": 2.7,
+        "glazed": false
+      }
+    },
+    {
+      "id": "east-glass-2",
+      "label": "east glass-2",
+      "kind": "glazing",
+      "parent": "east-bay-2",
+      "at": [
+        0,
+        -0.05,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.55,
+        2.7,
+        0.04
+      ],
+      "material": "ivory",
+      "panels": 2
+    },
+    {
+      "id": "east-reveal-2",
+      "label": "east reveal-2",
+      "kind": "volume",
+      "parent": "east",
+      "at": [
+        4,
+        3.12,
+        3.56
+      ],
+      "rotation": 0,
+      "size": [
+        4,
+        0.16,
+        0.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "east-roof",
+      "label": "east roof",
+      "kind": "roof",
+      "parent": "east",
+      "at": [
+        0,
+        4,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        1.6,
+        7
+      ],
+      "material": "ivory",
+      "roofForm": "gable",
+      "overhang": 0.8,
+      "panels": 4
+    }
+  ]
+}

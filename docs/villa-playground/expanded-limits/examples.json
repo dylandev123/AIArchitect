@@ -1,0 +1,2986 @@
+[
+  {
+    "version": 1,
+    "id": "estate-palmhaven-large",
+    "name": "Palmhaven Estate Large",
+    "character": "A winding palm avenue. A formal island arrival.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "limestone",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "great-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -10,
+        "width": 48,
+        "depth": 20,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.3,
+        "veranda": 5,
+        "balcony": 1.7
+      },
+      {
+        "id": "sunset-salon",
+        "role": "living",
+        "parentId": "great-house",
+        "detached": false,
+        "x": -42,
+        "z": -4,
+        "width": 24,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 4.4,
+        "balcony": 0
+      },
+      {
+        "id": "garden-suites",
+        "role": "guest",
+        "parentId": "great-house",
+        "detached": true,
+        "x": 44,
+        "z": 0,
+        "width": 24,
+        "depth": 16,
+        "orientation": 270,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 4.2,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "breeze-link",
+        "from": "great-house",
+        "to": "sunset-salon",
+        "width": 5.2
+      }
+    ],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -21.8,
+        "width": 9,
+        "depth": 3.6,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 10,
+        "width": 52,
+        "depth": 12,
+        "id": "great-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 20.6,
+        "width": 36,
+        "depth": 9.2,
+        "id": "pool-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 34,
+        "z": 8,
+        "width": 6,
+        "depth": 16,
+        "id": "suite-garden",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -42,
+        "z": 10,
+        "width": 28,
+        "depth": 10,
+        "id": "salon-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": -24,
+        "z": 32,
+        "width": 12,
+        "depth": 20,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 24,
+        "z": 32,
+        "width": 12,
+        "depth": 20,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 44,
+        "width": 60,
+        "depth": 4,
+        "id": "pool-end",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 32,
+      "width": 32,
+      "depth": 12
+    },
+    "garden": {
+      "x": -6.01195806569978,
+      "z": -35.650000000000006,
+      "width": 210.57608386860045,
+      "depth": 223.3
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 30,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "palm-avenue",
+          "kind": "drive",
+          "width": 9.6,
+          "points": [
+            {
+              "x": -70,
+              "z": -106
+            },
+            {
+              "x": -58,
+              "z": -86
+            },
+            {
+              "x": -68,
+              "z": -66
+            },
+            {
+              "x": -46,
+              "z": -46
+            },
+            {
+              "x": -18,
+              "z": -50
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "front-door-walk",
+          "kind": "walk",
+          "width": 4.8,
+          "points": [
+            {
+              "x": 0,
+              "z": -34
+            },
+            {
+              "x": 0,
+              "z": -28
+            },
+            {
+              "x": 0,
+              "z": -22.8
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-garden-walk",
+          "kind": "walk",
+          "width": 3.4,
+          "points": [
+            {
+              "x": -18,
+              "z": -40
+            },
+            {
+              "x": -56,
+              "z": -34
+            },
+            {
+              "x": -62,
+              "z": -14
+            },
+            {
+              "x": -60,
+              "z": 12
+            },
+            {
+              "x": -48,
+              "z": 16
+            },
+            {
+              "x": -32,
+              "z": 18
+            },
+            {
+              "x": -24,
+              "z": 20.8
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-garden-walk",
+          "kind": "walk",
+          "width": 3.4,
+          "points": [
+            {
+              "x": 18,
+              "z": -40
+            },
+            {
+              "x": 40,
+              "z": -30
+            },
+            {
+              "x": 62,
+              "z": -20
+            },
+            {
+              "x": 64,
+              "z": 12
+            },
+            {
+              "x": 54,
+              "z": 18
+            },
+            {
+              "x": 34,
+              "z": 17.2
+            },
+            {
+              "x": 24,
+              "z": 20.8
+            }
+          ],
+          "planting": "border"
+        }
+      ],
+      "court": {
+        "id": "fountain-court",
+        "x": 0,
+        "z": -50,
+        "width": 44,
+        "depth": 36,
+        "island": "fountain",
+        "islandWidth": 12,
+        "islandDepth": 10
+      },
+      "beds": []
+    }
+  },
+  {
+    "version": 1,
+    "id": "estate-splay-large",
+    "name": "Splay House Large",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "sky-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -16,
+        "width": 28,
+        "depth": 18,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.1,
+        "veranda": 3.2,
+        "balcony": 1.8
+      },
+      {
+        "id": "west-salon",
+        "role": "living",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": -38,
+        "z": 12,
+        "width": 32,
+        "depth": 14,
+        "orientation": 330,
+        "storeys": 1,
+        "storeyHeight": 4.3,
+        "veranda": 4.4,
+        "balcony": 0
+      },
+      {
+        "id": "east-retreat",
+        "role": "guest",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": 38,
+        "z": 12,
+        "width": 24,
+        "depth": 14,
+        "orientation": 30,
+        "storeys": 1,
+        "storeyHeight": 3.6,
+        "veranda": 3.6,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -26.2,
+        "width": 7,
+        "depth": 2.4,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 4.4,
+        "width": 24,
+        "depth": 16.4,
+        "id": "central-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -44,
+        "z": 24,
+        "width": 16,
+        "depth": 6,
+        "id": "salon-garden-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 44,
+        "z": 24,
+        "width": 14,
+        "depth": 6,
+        "id": "retreat-garden-deck",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 30,
+        "width": 30,
+        "depth": 2.8,
+        "id": "water-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 20.6,
+        "width": 8,
+        "depth": 16,
+        "id": "water-axis",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -20,
+        "z": 38,
+        "width": 10,
+        "depth": 18,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 20,
+        "z": 38,
+        "width": 10,
+        "depth": 18,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 48,
+        "width": 52,
+        "depth": 4,
+        "id": "pool-end",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 38,
+      "width": 24,
+      "depth": 12
+    },
+    "garden": {
+      "x": -3.1706892185830213,
+      "z": -12.350000000000001,
+      "width": 197.39696694125087,
+      "depth": 184.7
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 30,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "sculpture-drive",
+          "kind": "drive",
+          "width": 8.4,
+          "points": [
+            {
+              "x": -52,
+              "z": -64
+            },
+            {
+              "x": -32,
+              "z": -58
+            },
+            {
+              "x": -20,
+              "z": -44
+            },
+            {
+              "x": 0,
+              "z": -40
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "entry-walk",
+          "kind": "walk",
+          "width": 3.6,
+          "points": [
+            {
+              "x": 0,
+              "z": -40
+            },
+            {
+              "x": 0,
+              "z": -34
+            },
+            {
+              "x": 0,
+              "z": -27.2
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-link",
+          "kind": "walk",
+          "width": 3,
+          "points": [
+            {
+              "x": 0,
+              "z": -36
+            },
+            {
+              "x": -24,
+              "z": -30
+            },
+            {
+              "x": -58,
+              "z": -18
+            },
+            {
+              "x": -68,
+              "z": 2
+            },
+            {
+              "x": -66,
+              "z": 24
+            },
+            {
+              "x": -48,
+              "z": 34
+            },
+            {
+              "x": -30,
+              "z": 30
+            },
+            {
+              "x": -20,
+              "z": 28
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-link",
+          "kind": "walk",
+          "width": 3,
+          "points": [
+            {
+              "x": 0,
+              "z": -36
+            },
+            {
+              "x": 26,
+              "z": -30
+            },
+            {
+              "x": 56,
+              "z": -20
+            },
+            {
+              "x": 62,
+              "z": 6
+            },
+            {
+              "x": 60,
+              "z": 26
+            },
+            {
+              "x": 40,
+              "z": 32
+            },
+            {
+              "x": 23,
+              "z": 29
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "salon-approach",
+          "kind": "walk",
+          "width": 2.8,
+          "points": [
+            {
+              "x": -48,
+              "z": 34
+            },
+            {
+              "x": -46,
+              "z": 28.2
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "retreat-approach",
+          "kind": "walk",
+          "width": 2.8,
+          "points": [
+            {
+              "x": 40,
+              "z": 32
+            },
+            {
+              "x": 44,
+              "z": 27
+            }
+          ],
+          "planting": "none"
+        }
+      ],
+      "beds": []
+    }
+  },
+  {
+    "version": 1,
+    "id": "estate-cortile-large",
+    "name": "Cortile degli Ulivi Large",
+    "character": "An oval forecourt. An olive cloister. A water axis.",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "gable",
+      "exterior": "warm-stone",
+      "glazing": "divided",
+      "landscape": "mediterranean"
+    },
+    "wings": [
+      {
+        "id": "casa",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -20,
+        "width": 44,
+        "depth": 18,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.2,
+        "veranda": 3.4,
+        "balcony": 1.4
+      },
+      {
+        "id": "west-loggia",
+        "role": "living",
+        "parentId": "casa",
+        "detached": false,
+        "x": -24,
+        "z": 12,
+        "width": 32,
+        "depth": 14,
+        "orientation": 90,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 3.2,
+        "balcony": 0
+      },
+      {
+        "id": "east-loggia",
+        "role": "guest",
+        "parentId": "casa",
+        "detached": false,
+        "x": 24,
+        "z": 12,
+        "width": 32,
+        "depth": 14,
+        "orientation": 270,
+        "storeys": 1,
+        "storeyHeight": 4,
+        "veranda": 3.2,
+        "balcony": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "west-passage",
+        "from": "casa",
+        "to": "west-loggia",
+        "width": 4.6
+      },
+      {
+        "id": "east-passage",
+        "from": "casa",
+        "to": "east-loggia",
+        "width": 4.6
+      }
+    ],
+    "terraces": [
+      {
+        "x": -1.6,
+        "z": -30.4,
+        "width": 10,
+        "depth": 2.8,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 10,
+        "width": 26,
+        "depth": 3.6,
+        "id": "court-cross-walk",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 30,
+        "width": 46,
+        "depth": 8,
+        "id": "pool-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -22,
+        "z": 44,
+        "width": 10,
+        "depth": 16,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 22,
+        "z": 44,
+        "width": 10,
+        "depth": 16,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 54,
+        "width": 56,
+        "depth": 4,
+        "id": "belvedere",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 44,
+      "width": 28,
+      "depth": 12
+    },
+    "garden": {
+      "x": 12.27181356354312,
+      "z": -23.5,
+      "width": 181.45637287291376,
+      "depth": 219
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 30,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "cypress-approach",
+          "kind": "drive",
+          "width": 9,
+          "points": [
+            {
+              "x": 62,
+              "z": -92
+            },
+            {
+              "x": 46,
+              "z": -86
+            },
+            {
+              "x": 38,
+              "z": -70
+            },
+            {
+              "x": 20,
+              "z": -58
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "door-axis",
+          "kind": "walk",
+          "width": 4,
+          "points": [
+            {
+              "x": 0,
+              "z": -43
+            },
+            {
+              "x": 0,
+              "z": -37
+            },
+            {
+              "x": 0,
+              "z": -31.6
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "cloister-axis",
+          "kind": "walk",
+          "width": 3.6,
+          "points": [
+            {
+              "x": 0,
+              "z": -8.8
+            },
+            {
+              "x": 0,
+              "z": 4
+            },
+            {
+              "x": 0,
+              "z": 18
+            },
+            {
+              "x": 0,
+              "z": 30
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-procession",
+          "kind": "walk",
+          "width": 3.2,
+          "points": [
+            {
+              "x": -20,
+              "z": -50
+            },
+            {
+              "x": -42,
+              "z": -40
+            },
+            {
+              "x": -44,
+              "z": -10
+            },
+            {
+              "x": -44,
+              "z": 20
+            },
+            {
+              "x": -34,
+              "z": 30
+            },
+            {
+              "x": -22,
+              "z": 32
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-procession",
+          "kind": "walk",
+          "width": 3.2,
+          "points": [
+            {
+              "x": 20,
+              "z": -50
+            },
+            {
+              "x": 42,
+              "z": -40
+            },
+            {
+              "x": 44,
+              "z": -10
+            },
+            {
+              "x": 44,
+              "z": 20
+            },
+            {
+              "x": 34,
+              "z": 30
+            },
+            {
+              "x": 22,
+              "z": 32
+            }
+          ],
+          "planting": "border"
+        }
+      ],
+      "court": {
+        "id": "olive-forecourt",
+        "x": 0,
+        "z": -58,
+        "width": 48,
+        "depth": 34,
+        "island": "planted",
+        "islandWidth": 16,
+        "islandDepth": 8
+      },
+      "beds": [
+        {
+          "id": "northwest-parterre",
+          "x": -8.2,
+          "z": 0.8,
+          "width": 9,
+          "depth": 9
+        },
+        {
+          "id": "northeast-parterre",
+          "x": 8.2,
+          "z": 0.8,
+          "width": 9,
+          "depth": 9
+        },
+        {
+          "id": "southwest-parterre",
+          "x": -8.2,
+          "z": 19,
+          "width": 9,
+          "depth": 9
+        },
+        {
+          "id": "southeast-parterre",
+          "x": 8.2,
+          "z": 19,
+          "width": 9,
+          "depth": 9
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-modern",
+    "name": "Large modern estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "wing-0",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": -128,
+        "z": -128,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-1",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -128,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-2",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -128,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-3",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 127,
+        "z": -128,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-4",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -128,
+        "z": -43,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-5",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -43,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-6",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -43,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-7",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 127,
+        "z": -43,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-8",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -128,
+        "z": 42,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-9",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": 42,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-10",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": 42,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-11",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 127,
+        "z": 42,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-12",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -128,
+        "z": 127,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-13",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": 127,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-14",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": 127,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      },
+      {
+        "id": "wing-15",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 127,
+        "z": 127,
+        "width": 32,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 49.75,
+      "width": 645,
+      "depth": 744.5
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "wide-walk",
+          "kind": "walk",
+          "width": 6,
+          "points": [
+            {
+              "x": -250,
+              "z": 100
+            },
+            {
+              "x": -250,
+              "z": 200
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "wide-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": -250,
+              "z": -250
+            },
+            {
+              "x": 250,
+              "z": -250
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "large-parterre",
+          "x": 0,
+          "z": 330,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-caribbean",
+    "name": "Large caribbean estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "wing-0",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": -128,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-1",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-2",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 49.75,
+      "width": 645,
+      "depth": 744.5
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "wide-walk",
+          "kind": "walk",
+          "width": 6,
+          "points": [
+            {
+              "x": -250,
+              "z": 100
+            },
+            {
+              "x": -250,
+              "z": 200
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "wide-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": -250,
+              "z": -250
+            },
+            {
+              "x": 250,
+              "z": -250
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "large-parterre",
+          "x": 0,
+          "z": 330,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-spanish",
+    "name": "Large spanish estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "spanish",
+      "roof": "gable",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "wing-0",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": -128,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-1",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-2",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 49.75,
+      "width": 645,
+      "depth": 744.5
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "wide-walk",
+          "kind": "walk",
+          "width": 6,
+          "points": [
+            {
+              "x": -250,
+              "z": 100
+            },
+            {
+              "x": -250,
+              "z": 200
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "wide-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": -250,
+              "z": -250
+            },
+            {
+              "x": 250,
+              "z": -250
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "large-parterre",
+          "x": 0,
+          "z": 330,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-tuscan",
+    "name": "Large tuscan estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "tuscan",
+      "roof": "gable",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "wing-0",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": -128,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-1",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-2",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 49.75,
+      "width": 645,
+      "depth": 744.5
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "wide-walk",
+          "kind": "walk",
+          "width": 6,
+          "points": [
+            {
+              "x": -250,
+              "z": 100
+            },
+            {
+              "x": -250,
+              "z": 200
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "wide-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": -250,
+              "z": -250
+            },
+            {
+              "x": 250,
+              "z": -250
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "large-parterre",
+          "x": 0,
+          "z": 330,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-gallery",
+    "name": "Large caribbean estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "main",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -100,
+        "width": 64,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 0,
+        "balcony": 2.4
+      },
+      {
+        "id": "guest",
+        "role": "guest",
+        "parentId": "main",
+        "detached": false,
+        "x": 0,
+        "z": -20,
+        "width": 64,
+        "depth": 16,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 0,
+        "balcony": 2.4
+      }
+    ],
+    "connections": [
+      {
+        "id": "long-gallery",
+        "from": "main",
+        "to": "guest",
+        "width": 10
+      }
+    ],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 49.75,
+      "width": 645,
+      "depth": 744.5
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "wide-walk",
+          "kind": "walk",
+          "width": 6,
+          "points": [
+            {
+              "x": -250,
+              "z": 100
+            },
+            {
+              "x": -250,
+              "z": 200
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "wide-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": -250,
+              "z": -250
+            },
+            {
+              "x": 250,
+              "z": -250
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "large-parterre",
+          "x": 0,
+          "z": 330,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "large-fixed-grounds",
+    "name": "Large caribbean estate",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "wing-0",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": -128,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-1",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": -43,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      },
+      {
+        "id": "wing-2",
+        "role": "guest",
+        "parentId": "wing-0",
+        "detached": true,
+        "x": 42,
+        "z": -128,
+        "width": 64,
+        "depth": 64,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.5,
+        "veranda": 6,
+        "balcony": 2.4
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 270,
+        "width": 512,
+        "depth": 40,
+        "id": "large-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 220,
+      "width": 64,
+      "depth": 24
+    },
+    "garden": {
+      "x": 0,
+      "z": 0,
+      "width": 2048,
+      "depth": 2048
+    },
+    "siteMode": "fixed",
+    "landscapeMargin": 60,
+    "components": [
+      {
+        "id": "pavilion-0",
+        "builder": "curved-pavilion@1",
+        "x": -140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-1",
+        "builder": "curved-pavilion@1",
+        "x": -100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-2",
+        "builder": "curved-pavilion@1",
+        "x": -60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-3",
+        "builder": "curved-pavilion@1",
+        "x": -20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-4",
+        "builder": "curved-pavilion@1",
+        "x": 20,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-5",
+        "builder": "curved-pavilion@1",
+        "x": 60,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-6",
+        "builder": "curved-pavilion@1",
+        "x": 100,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      },
+      {
+        "id": "pavilion-7",
+        "builder": "curved-pavilion@1",
+        "x": 140,
+        "z": 180,
+        "orientation": 0,
+        "width": 20,
+        "depth": 16,
+        "height": 6,
+        "material": "ivory"
+      }
+    ],
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "court": {
+        "id": "grand-court",
+        "x": 0,
+        "z": -340,
+        "width": 56,
+        "depth": 56,
+        "island": "fountain",
+        "islandWidth": 24,
+        "islandDepth": 24
+      },
+      "routes": [
+        {
+          "id": "grand-drive",
+          "kind": "drive",
+          "width": 12,
+          "points": [
+            {
+              "x": 0,
+              "z": -500
+            },
+            {
+              "x": 0,
+              "z": -368
+            }
+          ],
+          "planting": "avenue"
+        }
+      ],
+      "beds": [
+        {
+          "id": "bed-0-0",
+          "x": -400,
+          "z": -400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-0-1",
+          "x": -400,
+          "z": -240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-0-2",
+          "x": -400,
+          "z": -80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-0-3",
+          "x": -400,
+          "z": 80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-0-4",
+          "x": -400,
+          "z": 240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-0-5",
+          "x": -400,
+          "z": 400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-0",
+          "x": -240,
+          "z": -400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-1",
+          "x": -240,
+          "z": -240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-2",
+          "x": -240,
+          "z": -80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-3",
+          "x": -240,
+          "z": 80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-4",
+          "x": -240,
+          "z": 240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-1-5",
+          "x": -240,
+          "z": 400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-0",
+          "x": 240,
+          "z": -400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-1",
+          "x": 240,
+          "z": -240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-2",
+          "x": 240,
+          "z": -80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-3",
+          "x": 240,
+          "z": 80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-4",
+          "x": 240,
+          "z": 240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-2-5",
+          "x": 240,
+          "z": 400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-0",
+          "x": 400,
+          "z": -400,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-1",
+          "x": 400,
+          "z": -240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-2",
+          "x": 400,
+          "z": -80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-3",
+          "x": 400,
+          "z": 80,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-4",
+          "x": 400,
+          "z": 240,
+          "width": 64,
+          "depth": 64
+        },
+        {
+          "id": "bed-3-5",
+          "x": 400,
+          "z": 400,
+          "width": 64,
+          "depth": 64
+        }
+      ]
+    }
+  },
+  {
+    "version": 1,
+    "id": "estate-splay",
+    "name": "Splay House",
+    "character": "Three directions. Floating roofs. A garden between.",
+    "appearance": {
+      "style": "modern",
+      "roof": "flat",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "sky-house",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -8,
+        "width": 14,
+        "depth": 9,
+        "orientation": 0,
+        "storeys": 2,
+        "storeyHeight": 4.1,
+        "veranda": 1.6,
+        "balcony": 1.8
+      },
+      {
+        "id": "west-salon",
+        "role": "living",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": -19,
+        "z": 6,
+        "width": 16,
+        "depth": 7,
+        "orientation": 330,
+        "storeys": 1,
+        "storeyHeight": 4.3,
+        "veranda": 2.2,
+        "balcony": 0
+      },
+      {
+        "id": "east-retreat",
+        "role": "guest",
+        "parentId": "sky-house",
+        "detached": true,
+        "x": 19,
+        "z": 6,
+        "width": 12,
+        "depth": 7,
+        "orientation": 30,
+        "storeys": 1,
+        "storeyHeight": 3.6,
+        "veranda": 1.8,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": -13.1,
+        "width": 3.5,
+        "depth": 1.2,
+        "id": "arrival-threshold",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 2.2,
+        "width": 12,
+        "depth": 8.2,
+        "id": "central-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -22,
+        "z": 12,
+        "width": 8,
+        "depth": 3,
+        "id": "salon-garden-deck",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 22,
+        "z": 12,
+        "width": 7,
+        "depth": 3,
+        "id": "retreat-garden-deck",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 15,
+        "width": 15,
+        "depth": 1.4,
+        "id": "water-promenade",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 10.3,
+        "width": 4,
+        "depth": 8,
+        "id": "water-axis",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": -10,
+        "z": 19,
+        "width": 5,
+        "depth": 9,
+        "id": "pool-west",
+        "kind": "terrace",
+        "timber": true
+      },
+      {
+        "x": 10,
+        "z": 19,
+        "width": 5,
+        "depth": 9,
+        "id": "pool-east",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 0,
+        "z": 24,
+        "width": 26,
+        "depth": 2,
+        "id": "pool-end",
+        "kind": "terrace",
+        "timber": false
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 19,
+      "width": 12,
+      "depth": 6
+    },
+    "garden": {
+      "x": -1.585505539951086,
+      "z": -7.800000000000001,
+      "width": 78.19880533194458,
+      "depth": 73.6
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 4,
+    "estateLandscape": {
+      "builder": "estate-landscape@1",
+      "routes": [
+        {
+          "id": "sculpture-drive",
+          "kind": "drive",
+          "width": 4.2,
+          "points": [
+            {
+              "x": -26,
+              "z": -32
+            },
+            {
+              "x": -16,
+              "z": -29
+            },
+            {
+              "x": -10,
+              "z": -22
+            },
+            {
+              "x": 0,
+              "z": -20
+            }
+          ],
+          "planting": "avenue"
+        },
+        {
+          "id": "entry-walk",
+          "kind": "walk",
+          "width": 1.8,
+          "points": [
+            {
+              "x": 0,
+              "z": -20
+            },
+            {
+              "x": 0,
+              "z": -17
+            },
+            {
+              "x": 0,
+              "z": -13.6
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "west-link",
+          "kind": "walk",
+          "width": 1.5,
+          "points": [
+            {
+              "x": 0,
+              "z": -18
+            },
+            {
+              "x": -12,
+              "z": -15
+            },
+            {
+              "x": -29,
+              "z": -9
+            },
+            {
+              "x": -34,
+              "z": 1
+            },
+            {
+              "x": -33,
+              "z": 12
+            },
+            {
+              "x": -24,
+              "z": 17
+            },
+            {
+              "x": -15,
+              "z": 15
+            },
+            {
+              "x": -10,
+              "z": 14
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "east-link",
+          "kind": "walk",
+          "width": 1.5,
+          "points": [
+            {
+              "x": 0,
+              "z": -18
+            },
+            {
+              "x": 13,
+              "z": -15
+            },
+            {
+              "x": 28,
+              "z": -10
+            },
+            {
+              "x": 31,
+              "z": 3
+            },
+            {
+              "x": 30,
+              "z": 13
+            },
+            {
+              "x": 20,
+              "z": 16
+            },
+            {
+              "x": 11.5,
+              "z": 14.5
+            }
+          ],
+          "planting": "border"
+        },
+        {
+          "id": "salon-approach",
+          "kind": "walk",
+          "width": 1.4,
+          "points": [
+            {
+              "x": -24,
+              "z": 17
+            },
+            {
+              "x": -23,
+              "z": 14.1
+            }
+          ],
+          "planting": "none"
+        },
+        {
+          "id": "retreat-approach",
+          "kind": "walk",
+          "width": 1.4,
+          "points": [
+            {
+              "x": 20,
+              "z": 16
+            },
+            {
+              "x": 22,
+              "z": 13.5
+            }
+          ],
+          "planting": "none"
+        }
+      ],
+      "beds": []
+    }
+  },
+  {
+    "version": 1,
+    "id": "family-breeze",
+    "name": "Breeze Family Villa",
+    "character": "A veranda, a garden, a place to grow.",
+    "appearance": {
+      "style": "caribbean",
+      "roof": "hip",
+      "exterior": "ivory",
+      "glazing": "panoramic",
+      "landscape": "tropical"
+    },
+    "wings": [
+      {
+        "id": "family-home",
+        "role": "main",
+        "parentId": null,
+        "detached": false,
+        "x": 0,
+        "z": -4,
+        "width": 13,
+        "depth": 8,
+        "orientation": 0,
+        "storeys": 1,
+        "storeyHeight": 3.8,
+        "veranda": 2,
+        "balcony": 0
+      }
+    ],
+    "connections": [],
+    "terraces": [
+      {
+        "x": 0,
+        "z": 3.5,
+        "width": 15,
+        "depth": 5,
+        "id": "family-terrace",
+        "kind": "terrace",
+        "timber": false
+      },
+      {
+        "x": 7,
+        "z": 10,
+        "width": 3,
+        "depth": 7,
+        "id": "pool-deck",
+        "kind": "terrace",
+        "timber": true
+      }
+    ],
+    "pool": {
+      "x": 0,
+      "z": 10,
+      "width": 8,
+      "depth": 4
+    },
+    "garden": {
+      "x": 0.4249999999999998,
+      "z": 2.5249999999999995,
+      "width": 22.15,
+      "depth": 29.35
+    },
+    "siteMode": "derived",
+    "landscapeMargin": 3
+  }
+]

@@ -34,7 +34,7 @@ const post=(extra:Record<string,unknown>={})=>{
   return POST(new NextRequest('http://localhost/api/ai/plan',{method:'POST',body:JSON.stringify({baseRevision:revisionOf(body.currentHouseJson),...body})}));
 };
 let directory:string;
-beforeEach(async()=>{directory=await mkdtemp(path.join(os.tmpdir(),'plan-route-'));vi.spyOn(process,'cwd').mockReturnValue(directory);vi.stubEnv('AI_V3_PLAN_EVALUATION','1');vi.stubGlobal('fetch',vi.fn(()=>{throw Error('External network forbidden');}));useProjectStore.setState({projects:[]});mocks.model.mockReset();});
+beforeEach(async()=>{directory=await mkdtemp(path.join(os.tmpdir(),'plan-route-'));vi.spyOn(process,'cwd').mockReturnValue(directory);vi.stubEnv('AI_V3_PLAN_EVALUATION','1');vi.stubGlobal('fetch',vi.fn(()=>{throw Error('External network forbidden');}));const data=new Map<string,string>();vi.stubGlobal('window',{localStorage:{getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>data.set(key,value),removeItem:(key:string)=>data.delete(key)}});useProjectStore.setState({projects:[]});mocks.model.mockReset();});
 afterEach(async()=>{expect(fetch).not.toHaveBeenCalled();vi.restoreAllMocks();vi.unstubAllGlobals();vi.unstubAllEnvs();await rm(directory,{recursive:true,force:true});});
 
 describe('2D evaluation with real SDK parsing and offline provider responses',()=>{

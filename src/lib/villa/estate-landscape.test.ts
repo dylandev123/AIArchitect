@@ -1,6 +1,6 @@
 import { describe,it,expect } from 'vitest';
 import { ESTATE_EXAMPLES,estateExamples } from './estate-examples';
-import { buildComposition,executeCompositionPatch,validateComposition,wingEnvelope } from './composition';
+import { buildComposition,executeCompositionPatch,validateComposition,landscapeAcceptance,wingEnvelope } from './composition';
 import { circulationPlanting,distanceToBounds,estateLandscapeSchema,landscapeBounds,routeDistance,routeSamples,routeVertices } from './estate-landscape';
 import { wingBounds } from '@/app/dev/villa-playground/wing-composition';
 import { creativeExamples } from './creative-examples';
@@ -43,7 +43,7 @@ describe('estate landscape composition',()=>{
  it('atomically replaces/removes only the requested landscape and preserves failed edits',()=>{
   const c=estateExamples()[0],before=structuredClone(c),l=structuredClone(c.estateLandscape!);l.court!.island='planted';
   const next=executeCompositionPatch(c,{estateLandscape:l});expect(next.wings).toEqual(c.wings);expect(next.pool).toEqual(c.pool);expect(next.estateLandscape!.court!.island).toBe('planted');
-  l.routes[0].points=[{x:0,z:-25},{x:0,z:-5}];expect(()=>executeCompositionPatch(c,{estateLandscape:l})).toThrow();expect(c).toEqual(before);
+  l.routes[0].points=[{x:0,z:-25},{x:0,z:-5}];expect(landscapeAcceptance(executeCompositionPatch(c,{estateLandscape:l})).accessWarning).toBe(true);expect(c).toEqual(before);
   expect(executeCompositionPatch(c,{estateLandscape:null}).estateLandscape).toBeUndefined();
  });
  it('produces finite upward-facing smooth ribbons passing through the authored endpoints',()=>{
@@ -82,14 +82,14 @@ describe('rotated detached wings',()=>{
   c=copy(1);c.wings[1].orientation=31;expect(()=>validateComposition(c)).toThrow();
   c=copy(1);c.wings[0].orientation=15;expect(()=>validateComposition(c)).toThrow(/secondary/);
  });
- it('keeps local approved capabilities separate from the currently advertised Terra placement contract',()=>{
-  expect(ARCHITECTURAL_COMPONENTS.find(c=>c.id==='estate-landscape')?.availability).toBe('local');
-  expect(terraComponents().map(c=>c.id)).toEqual(['curved-pavilion']);
+ it('exposes approved estate capabilities through the Terra contract',()=>{
+  expect(ARCHITECTURAL_COMPONENTS.find(c=>c.id==='estate-landscape')?.availability).not.toBe('local');
+  expect(terraComponents().map(c=>c.id)).toEqual(['curved-pavilion','estate-landscape','rotated-detached-wing','footprint-building']);
   const generate=villaProviderOutputSchema({mode:'generate',prompt:'offline estate'});
-  expect(generate.safeParse({changes:estateExamples()[0],summary:'offline',unsupported:[]}).success).toBe(false);
+  expect(generate.safeParse({changes:estateExamples()[0],summary:'offline',unsupported:[]}).success).toBe(true);
   const rotated=estateExamples()[1];delete rotated.estateLandscape;
-  expect(generate.safeParse({changes:rotated,summary:'offline',unsupported:[]}).success).toBe(false);
+  expect(generate.safeParse({changes:rotated,summary:'offline',unsupported:[]}).success).toBe(true);
   const edit=villaProviderOutputSchema({mode:'edit',prompt:'offline edit',current:estateExamples()[0]});
-  expect(edit.safeParse({changes:{estateLandscape:ESTATE_EXAMPLES[0].estateLandscape},summary:'offline',unsupported:[]}).success).toBe(false);
+  expect(edit.safeParse({changes:{estateLandscape:ESTATE_EXAMPLES[0].estateLandscape},summary:'offline',unsupported:[]}).success).toBe(true);
  });
 });

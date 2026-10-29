@@ -1,0 +1,44 @@
+
+> ai-architect@0.1.0 test
+> vitest run src/lib/villa/scene src/app/api/ai/scene src/app/api/ai/villa/scene src/lib/villa/design-learning.test.ts src/lib/villa/visual-review.test.ts src/store/__tests__/directScenePersistence.test.ts
+
+
+ RUN  v3.2.7 /Users/dylandevaux/Desktop/AIArchitect
+
+ ✓ src/lib/villa/scene/model.test.ts (4 tests) 6ms
+ ✓ src/lib/villa/scene/roofs.test.ts (3 tests) 4ms
+ ✓ src/lib/villa/scene/terra.test.ts (5 tests) 15ms
+ ✓ src/lib/villa/scene/integration.test.ts (4 tests) 15ms
+ ✓ src/lib/villa/design-learning.test.ts (3 tests) 17ms
+ ✓ src/app/api/ai/villa/scene/route.test.ts (4 tests) 28ms
+ ✓ src/app/api/ai/scene/route.test.ts (4 tests) 27ms
+ ✓ src/lib/villa/visual-review.test.ts (10 tests) 112ms
+stdout | src/store/__tests__/directScenePersistence.test.ts > direct scenes in normal project history > creates, edits one roof, undoes, redoes and serializes without format conversion
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '87e571b8-6b7d-4352-8245-b1611c6597b5'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '87e571b8-6b7d-4352-8245-b1611c6597b5'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '87e571b8-6b7d-4352-8245-b1611c6597b5'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '87e571b8-6b7d-4352-8245-b1611c6597b5'
+}
+
+ ✓ src/store/__tests__/directScenePersistence.test.ts (1 test) 9ms
+
+ Test Files  9 passed (9)
+      Tests  38 passed (38)
+   Start at  20:52:44
+   Duration  924ms (transform 739ms, setup 0ms, collect 2.09s, tests 234ms, environment 1ms, prepare 449ms)
+

@@ -1,0 +1,3745 @@
+{
+  "providerCalls": 0,
+  "feedbackOrigin": "deterministic simulated feedback",
+  "approvedLessonsWrittenToRealBrain": 0,
+  "results": [
+    {
+      "id": "25m",
+      "source": "docs/villa-playground/redesign-strict-live/after.UNAPPROVED.json",
+      "sha256": "6207f1ca11e28d6dcc8723cb4c101b35e09f7bc98431a3c9c48acb31e2f49cbd",
+      "provenance": "Retained unapproved Terra redesign; diagnostic correction developer-authored, not an autonomous visual success.",
+      "comparison": {
+        "changedElementIds": [
+          "gallery-salon-door",
+          "salon-guest-door",
+          "salon-dining-door"
+        ],
+        "resolved": [],
+        "introduced": [],
+        "beforeWarnings": 0,
+        "afterWarnings": 0,
+        "resolvedAuditWarnings": [
+          "gallery-salon-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+          "gallery-salon-door: door sill does not align with salon-north-wall-new's opening sill; review vertical placement.",
+          "gallery-salon-door: attached panel centre does not align with salon-north-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+          "salon-guest-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+          "salon-guest-door: door sill does not align with salon-west-wall-new's opening sill; review vertical placement.",
+          "salon-guest-door: attached panel centre does not align with salon-west-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+          "salon-dining-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+          "salon-dining-door: door sill does not align with salon-east-wall-new's opening sill; review vertical placement.",
+          "salon-dining-door: attached panel centre does not align with salon-east-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+        ],
+        "introducedAuditWarnings": [],
+        "beforeAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction.",
+            "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+            "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+            "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction.",
+            "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+            "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+            "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete.",
+            "gallery-salon-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+            "gallery-salon-door: door sill does not align with salon-north-wall-new's opening sill; review vertical placement.",
+            "gallery-salon-door: attached panel centre does not align with salon-north-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+            "salon-guest-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+            "salon-guest-door: door sill does not align with salon-west-wall-new's opening sill; review vertical placement.",
+            "salon-guest-door: attached panel centre does not align with salon-west-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+            "salon-dining-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified.",
+            "salon-dining-door: door sill does not align with salon-east-wall-new's opening sill; review vertical placement.",
+            "salon-dining-door: attached panel centre does not align with salon-east-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved.",
+            "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review.",
+            "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically.",
+            "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage.",
+            "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage.",
+            "pool-water: water plane Y=0.200, basin top Y=0.040; depth 0.160 m. May be a reflecting/wading pool; intended swimming use requires a design decision.",
+            "pool-water: perimeter samples 1:-0.4, 1:0, 1:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review."
+          ],
+          "findings": [
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "pool-evidence-missing",
+              "elementIds": [
+                "pool-water"
+              ],
+              "message": "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "gallery-salon-door"
+              ],
+              "message": "gallery-salon-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-north-wall-new",
+                "gallery-salon-door"
+              ],
+              "message": "gallery-salon-door: door sill does not align with salon-north-wall-new's opening sill; review vertical placement."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-north-wall-new",
+                "gallery-salon-door"
+              ],
+              "message": "gallery-salon-door: attached panel centre does not align with salon-north-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-guest-door"
+              ],
+              "message": "salon-guest-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-west-wall-new",
+                "salon-guest-door"
+              ],
+              "message": "salon-guest-door: door sill does not align with salon-west-wall-new's opening sill; review vertical placement."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-west-wall-new",
+                "salon-guest-door"
+              ],
+              "message": "salon-guest-door: attached panel centre does not align with salon-west-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-dining-door"
+              ],
+              "message": "salon-dining-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-east-wall-new",
+                "salon-dining-door"
+              ],
+              "message": "salon-dining-door: door sill does not align with salon-east-wall-new's opening sill; review vertical placement."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "architectural-review",
+              "elementIds": [
+                "salon-east-wall-new",
+                "salon-dining-door"
+              ],
+              "message": "salon-dining-door: attached panel centre does not align with salon-east-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "vertical-route-missing",
+              "elementIds": [
+                "owner-floor",
+                "guest-floor"
+              ],
+              "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "upper-floor-gap",
+              "elementIds": [
+                "owner-floor",
+                "guest-floor"
+              ],
+              "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "shared-boundary-blocked",
+              "elementIds": [
+                "kitchen-floor",
+                "salon-floor",
+                "kitchen-west-wall-new"
+              ],
+              "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "shared-boundary-blocked",
+              "elementIds": [
+                "kitchen-floor",
+                "dining-floor",
+                "dining-north-wall-new"
+              ],
+              "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+            },
+            {
+              "code": "pool-shallow-basin",
+              "elementIds": [
+                "pool-water",
+                "pool-basin"
+              ],
+              "message": "pool-water: water plane Y=0.200, basin top Y=0.040; depth 0.160 m. May be a reflecting/wading pool; intended swimming use requires a design decision.",
+              "category": "likely-architectural-incompleteness"
+            },
+            {
+              "code": "pool-wall-bottom-gap",
+              "elementIds": [
+                "pool-water",
+                "pool-basin"
+              ],
+              "message": "pool-water: perimeter samples 1:-0.4, 1:0, 1:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review.",
+              "category": "likely-architectural-incompleteness"
+            }
+          ],
+          "designDecisions": [
+            {
+              "disposition": "constructed",
+              "knowledgeId": "property-value-25m-50m",
+              "decision": "Used the ambition reference to create a clear estate-scale hierarchy: bespoke arrival, dominant shared living volume, protected private suites and sheltered ocean entertaining, without making a value or cost claim.",
+              "elementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "limitation": "No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+              "existingElementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [
+                "wall"
+              ],
+              "detachedElementIds": [],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "facade-materials",
+              "decision": "Applied a restrained limestone, ivory, timber and bronze palette with recessed openings, deep roof shelter and a timber ocean screen around the rebuilt residence.",
+              "elementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "limitation": "Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+              "existingElementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "roof-main-secondary",
+              "decision": "Established a high primary roof over the salon and reduced roofs over arrival, guest, dining, kitchen and loggia volumes.",
+              "elementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "limitation": "Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+              "existingElementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [
+                "plate"
+              ],
+              "detachedElementIds": [],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [
+            {
+              "id": "property-value-25m-50m",
+              "version": 2,
+              "status": "partial-construction",
+              "elementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "verifiedComplete": false
+            },
+            {
+              "id": "facade-materials",
+              "version": 1,
+              "status": "construction-evidence",
+              "elementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "verifiedComplete": false
+            },
+            {
+              "id": "roof-main-secondary",
+              "version": 1,
+              "status": "partial-construction",
+              "elementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "verifiedComplete": false
+            }
+          ],
+          "geometry": {
+            "kindCounts": {
+              "plate": 12,
+              "wall": 27,
+              "water": 1,
+              "volume": 6,
+              "entrance": 4,
+              "roof": 6,
+              "screen": 1
+            },
+            "surfaces": [
+              {
+                "id": "salon-floor",
+                "kind": "plate",
+                "areaM2": 216,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "lounge-floor",
+                "kind": "plate",
+                "areaM2": 32,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "dining-floor",
+                "kind": "plate",
+                "areaM2": 32,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "gallery-floor",
+                "kind": "plate",
+                "areaM2": 40,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "kitchen-floor",
+                "kind": "plate",
+                "areaM2": 24,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "loggia-deck",
+                "kind": "plate",
+                "areaM2": 72,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "owner-floor",
+                "kind": "plate",
+                "areaM2": 64,
+                "walkingDatum": 3.6
+              },
+              {
+                "id": "guest-floor",
+                "kind": "plate",
+                "areaM2": 30,
+                "walkingDatum": 3.6
+              },
+              {
+                "id": "pool-basin",
+                "kind": "plate",
+                "areaM2": 72,
+                "walkingDatum": 0.04
+              },
+              {
+                "id": "pool-coping-south",
+                "kind": "plate",
+                "areaM2": 8.4,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-coping-west",
+                "kind": "plate",
+                "areaM2": 3.5999999999999996,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-coping-east",
+                "kind": "plate",
+                "areaM2": 3.5999999999999996,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-water",
+                "kind": "water",
+                "areaM2": 72,
+                "walkingDatum": 0.2
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2,
+              3.6,
+              0.04
+            ],
+            "plateSurfaceAreaM2": 597.6,
+            "waterSurfaceAreaM2": 72
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        },
+        "afterAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction.",
+            "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+            "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+            "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction.",
+            "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+            "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+            "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete.",
+            "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review.",
+            "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically.",
+            "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage.",
+            "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage.",
+            "pool-water: water plane Y=0.200, basin top Y=0.040; depth 0.160 m. May be a reflecting/wading pool; intended swimming use requires a design decision.",
+            "pool-water: perimeter samples 1:-0.4, 1:0, 1:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review."
+          ],
+          "findings": [
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "pool-evidence-missing",
+              "elementIds": [
+                "pool-water"
+              ],
+              "message": "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "vertical-route-missing",
+              "elementIds": [
+                "owner-floor",
+                "guest-floor"
+              ],
+              "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "upper-floor-gap",
+              "elementIds": [
+                "owner-floor",
+                "guest-floor"
+              ],
+              "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "shared-boundary-blocked",
+              "elementIds": [
+                "kitchen-floor",
+                "salon-floor",
+                "kitchen-west-wall-new"
+              ],
+              "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "shared-boundary-blocked",
+              "elementIds": [
+                "kitchen-floor",
+                "dining-floor",
+                "dining-north-wall-new"
+              ],
+              "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+            },
+            {
+              "code": "pool-shallow-basin",
+              "elementIds": [
+                "pool-water",
+                "pool-basin"
+              ],
+              "message": "pool-water: water plane Y=0.200, basin top Y=0.040; depth 0.160 m. May be a reflecting/wading pool; intended swimming use requires a design decision.",
+              "category": "likely-architectural-incompleteness"
+            },
+            {
+              "code": "pool-wall-bottom-gap",
+              "elementIds": [
+                "pool-water",
+                "pool-basin"
+              ],
+              "message": "pool-water: perimeter samples 1:-0.4, 1:0, 1:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review.",
+              "category": "likely-architectural-incompleteness"
+            }
+          ],
+          "designDecisions": [
+            {
+              "disposition": "constructed",
+              "knowledgeId": "property-value-25m-50m",
+              "decision": "Used the ambition reference to create a clear estate-scale hierarchy: bespoke arrival, dominant shared living volume, protected private suites and sheltered ocean entertaining, without making a value or cost claim.",
+              "elementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "limitation": "No construction-cost, property-value, luxury certification, service or amenity claim is represented.",
+              "existingElementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [
+                "wall"
+              ],
+              "detachedElementIds": [],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "facade-materials",
+              "decision": "Applied a restrained limestone, ivory, timber and bronze palette with recessed openings, deep roof shelter and a timber ocean screen around the rebuilt residence.",
+              "elementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "limitation": "Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented.",
+              "existingElementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "roof-main-secondary",
+              "decision": "Established a high primary roof over the salon and reduced roofs over arrival, guest, dining, kitchen and loggia volumes.",
+              "elementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "limitation": "Roof waterproofing, drainage, loading and guard-code compliance are not represented.",
+              "existingElementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [
+                "plate"
+              ],
+              "detachedElementIds": [],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [
+            {
+              "id": "property-value-25m-50m",
+              "version": 2,
+              "status": "partial-construction",
+              "elementIds": [
+                "salon-floor",
+                "gallery-floor",
+                "salon-roof",
+                "ocean-loggia-roof",
+                "owner-floor",
+                "guest-floor"
+              ],
+              "verifiedComplete": false
+            },
+            {
+              "id": "facade-materials",
+              "version": 1,
+              "status": "construction-evidence",
+              "elementIds": [
+                "salon-south-wall-new",
+                "arrival-north-wall-new",
+                "salon-roof",
+                "ocean-screen-new",
+                "main-entrance-new"
+              ],
+              "verifiedComplete": false
+            },
+            {
+              "id": "roof-main-secondary",
+              "version": 1,
+              "status": "partial-construction",
+              "elementIds": [
+                "salon-roof",
+                "gallery-roof-new",
+                "guest-lounge-roof-new",
+                "dining-roof-new",
+                "kitchen-roof-new",
+                "ocean-loggia-roof"
+              ],
+              "verifiedComplete": false
+            }
+          ],
+          "geometry": {
+            "kindCounts": {
+              "plate": 12,
+              "wall": 27,
+              "water": 1,
+              "volume": 6,
+              "entrance": 4,
+              "roof": 6,
+              "screen": 1
+            },
+            "surfaces": [
+              {
+                "id": "salon-floor",
+                "kind": "plate",
+                "areaM2": 216,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "lounge-floor",
+                "kind": "plate",
+                "areaM2": 32,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "dining-floor",
+                "kind": "plate",
+                "areaM2": 32,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "gallery-floor",
+                "kind": "plate",
+                "areaM2": 40,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "kitchen-floor",
+                "kind": "plate",
+                "areaM2": 24,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "loggia-deck",
+                "kind": "plate",
+                "areaM2": 72,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "owner-floor",
+                "kind": "plate",
+                "areaM2": 64,
+                "walkingDatum": 3.6
+              },
+              {
+                "id": "guest-floor",
+                "kind": "plate",
+                "areaM2": 30,
+                "walkingDatum": 3.6
+              },
+              {
+                "id": "pool-basin",
+                "kind": "plate",
+                "areaM2": 72,
+                "walkingDatum": 0.04
+              },
+              {
+                "id": "pool-coping-south",
+                "kind": "plate",
+                "areaM2": 8.4,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-coping-west",
+                "kind": "plate",
+                "areaM2": 3.5999999999999996,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-coping-east",
+                "kind": "plate",
+                "areaM2": 3.5999999999999996,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-water",
+                "kind": "water",
+                "areaM2": 72,
+                "walkingDatum": 0.2
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2,
+              3.6,
+              0.04
+            ],
+            "plateSurfaceAreaM2": 597.6,
+            "waterSurfaceAreaM2": 72
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        },
+        "architecturalQuality": "Requires human comparison; warning reduction is not proof of better composition."
+      },
+      "assessment": {
+        "briefResemblance": "Unscored: exact original brief incompletely retained",
+        "composition": "Not established by geometric correction",
+        "roofFacade": "No improvement demonstrated; roof composition unchanged",
+        "siteCoordination": "Pool relationships not changed",
+        "constructionCoherence": "0 relationship issues resolved; 0 introduced",
+        "futureFirstPass": "Approved principle reaches Generate prompt in isolated integration test; model compliance and reduced repeat rate untested"
+      }
+    },
+    {
+      "id": "10m",
+      "source": "docs/architecture/spatial-root-cause/7702f28d-6098-4bf4-b08a-b12fc68ae93b.scene.json",
+      "sha256": "51fac839bf40c3189b4d899616865811551f4143b96847586c5deb6eb9bbd796",
+      "provenance": "Retained Terra Caribbean house; correction developer-authored. Original input redacted; exact brief resemblance cannot be scored.",
+      "comparison": {
+        "changedElementIds": [
+          "pool-terrace"
+        ],
+        "resolved": [
+          {
+            "id": "pool-water",
+            "relatedIds": [
+              "pool-terrace"
+            ],
+            "rule": "water-obstruction",
+            "message": "pool-water: solid pool-terrace crosses the interior water plane; split the floor/deck around the pool reservation or explicitly redesign the water. Geometry was not moved."
+          }
+        ],
+        "introduced": [],
+        "beforeWarnings": 1,
+        "afterWarnings": 0,
+        "resolvedAuditWarnings": [
+          "pool-terrace crosses pool-water's open interior water plane at Y=0.02 m."
+        ],
+        "introducedAuditWarnings": [],
+        "beforeAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision tropical-envelope: Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled.",
+            "Knowledge decision outdoor-entertaining: Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented.",
+            "Knowledge decision estate-composition: The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms.",
+            "Knowledge decision covered-threshold: Vehicle drive and drop-off geometry are not modeled.",
+            "Knowledge decision facade-materials: Materials are scene-material representations, not product specifications or workmanship certification.",
+            "Knowledge decision hip-shelter: Roof flashing, drainage, uplift resistance, and structural design require separate engineering.",
+            "Knowledge decision tropical-contemporary: Landscape, planting, and climate-performance simulation are not available.",
+            "Knowledge decision composition-hierarchy: Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled.",
+            "Knowledge decision veranda-edge: The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented.",
+            "Requested space: Covered north arrival threshold and approach. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Primary living / dining hall. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: West private bedroom-suite wing shell. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: East service / kitchen-support wing shell. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: South shaded pool terrace. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Outdoor kitchen and bar counter zone. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Rectangular pool with explicit floor and perimeter walls. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Detached open elliptical lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+            "pool-terrace crosses pool-water's open interior water plane at Y=0.02 m."
+          ],
+          "findings": [
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision tropical-envelope: Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision outdoor-entertaining: Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision estate-composition: The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision covered-threshold: Vehicle drive and drop-off geometry are not modeled."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision facade-materials: Materials are scene-material representations, not product specifications or workmanship certification."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision hip-shelter: Roof flashing, drainage, uplift resistance, and structural design require separate engineering."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision tropical-contemporary: Landscape, planting, and climate-performance simulation are not available."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision composition-hierarchy: Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision veranda-edge: The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Covered north arrival threshold and approach. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Primary living / dining hall. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: West private bedroom-suite wing shell. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: East service / kitchen-support wing shell. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: South shaded pool terrace. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Outdoor kitchen and bar counter zone. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Rectangular pool with explicit floor and perimeter walls. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Detached open elliptical lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            },
+            {
+              "category": "confirmed-technical-defect",
+              "code": "water-obstruction",
+              "elementIds": [
+                "pool-water",
+                "pool-terrace"
+              ],
+              "message": "pool-terrace crosses pool-water's open interior water plane at Y=0.02 m."
+            }
+          ],
+          "designDecisions": [
+            {
+              "disposition": "guidance",
+              "knowledgeId": "property-value-10m-25m",
+              "decision": "Used the value label only as a prompt for a signature arrival, substantial central hall, purposeful secondary volumes, and entertaining terrace; it did not determine a cost or fixed area.",
+              "elementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "arrival-approach",
+                "pool-terrace"
+              ],
+              "limitation": "No valuation, construction-cost estimate, luxury certification, or detailed interior fit-out is represented.",
+              "existingElementIds": [],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "guidance",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "tropical-envelope",
+              "decision": "Created shaded glazed southern openings, deep roof overhangs, a protected entry, and sheltered outdoor living appropriate to an assumed hot-humid Caribbean climate.",
+              "elementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "entry-canopy",
+                "terrace-pergola"
+              ],
+              "limitation": "Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled.",
+              "existingElementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "entry-canopy",
+                "terrace-pergola"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "outdoor-entertaining",
+              "decision": "Constructed a covered terrace-end kitchen/bar counter zone with seating and direct adjacency to the indoor service wing.",
+              "elementIds": [
+                "pool-terrace",
+                "outdoor-counter",
+                "outdoor-bar",
+                "terrace-pergola",
+                "terrace-sofa"
+              ],
+              "limitation": "Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented.",
+              "existingElementIds": [
+                "pool-terrace",
+                "outdoor-counter",
+                "outdoor-bar",
+                "terrace-pergola",
+                "terrace-sofa"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "guidance",
+              "knowledgeId": "waterfront-estate",
+              "decision": "Assumed a south-facing water view and located living, terrace, pool, and lounge toward it while keeping entry on the north side.",
+              "elementIds": [
+                "living-floor",
+                "pool-terrace",
+                "pool-water",
+                "beach-lounge-pavilion"
+              ],
+              "limitation": "No surveyed shoreline, flood elevation, setbacks, terrain, coastal access, or marine engineering is represented.",
+              "existingElementIds": [],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "guidance",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "estate-composition",
+              "decision": "Established a legible sequence from arrival to living hall to sheltered terrace and separated private and service volumes from the central entertaining space.",
+              "elementIds": [
+                "arrival-approach",
+                "entry-door",
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "pool-terrace"
+              ],
+              "limitation": "The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms.",
+              "existingElementIds": [
+                "arrival-approach",
+                "entry-door",
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "pool-terrace"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "covered-threshold",
+              "decision": "Built a genuine recessed door opening, solid door, approach plate, posts, and canopy at the north entry.",
+              "elementIds": [
+                "entry-wall",
+                "entry-door",
+                "arrival-approach",
+                "entry-post-west",
+                "entry-post-east",
+                "entry-canopy"
+              ],
+              "limitation": "Vehicle drive and drop-off geometry are not modeled.",
+              "existingElementIds": [
+                "entry-wall",
+                "entry-door",
+                "arrival-approach",
+                "entry-post-west",
+                "entry-post-east",
+                "entry-canopy"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "facade-materials",
+              "decision": "Applied coordinated ivory, limestone, bronze, and timber elements with deep roof edges and an articulated entrance.",
+              "elementIds": [
+                "main-roof",
+                "private-hip-roof",
+                "service-roof",
+                "entry-canopy",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "limitation": "Materials are scene-material representations, not product specifications or workmanship certification.",
+              "existingElementIds": [
+                "main-roof",
+                "private-hip-roof",
+                "service-roof",
+                "entry-canopy",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "hip-shelter",
+              "decision": "Used a subordinate hip roof over the private wing while retaining flat roofs over the principal hall and service wing.",
+              "elementIds": [
+                "private-hip-roof",
+                "main-roof",
+                "service-roof"
+              ],
+              "limitation": "Roof flashing, drainage, uplift resistance, and structural design require separate engineering.",
+              "existingElementIds": [
+                "private-hip-roof",
+                "main-roof",
+                "service-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "tropical-contemporary",
+              "decision": "Avoided a generic glass box by combining substantial walls, deep roofs, shaded glazing, a pool terrace, and an open lounge pavilion.",
+              "elementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "pool-terrace",
+                "beach-lounge-pavilion"
+              ],
+              "limitation": "Landscape, planting, and climate-performance simulation are not available.",
+              "existingElementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "pool-terrace",
+                "beach-lounge-pavilion"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "composition-hierarchy",
+              "decision": "Made the living hall the largest and most open volume, stepping the private and service volumes down around it.",
+              "elementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "main-roof",
+                "private-hip-roof",
+                "service-roof"
+              ],
+              "limitation": "Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled.",
+              "existingElementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "main-roof",
+                "private-hip-roof",
+                "service-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "veranda-edge",
+              "decision": "Created a broad occupied terrace with a continuous dry route, posts, canopy, direct glazed access, and a pool-facing lounge edge.",
+              "elementIds": [
+                "pool-terrace",
+                "terrace-pergola",
+                "pergola-post-west",
+                "pergola-post-east",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "limitation": "The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented.",
+              "existingElementIds": [
+                "pool-terrace",
+                "terrace-pergola",
+                "pergola-post-west",
+                "pergola-post-east",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [],
+          "geometry": {
+            "kindCounts": {
+              "plate": 6,
+              "wall": 18,
+              "entrance": 3,
+              "roof": 5,
+              "volume": 6,
+              "sofa": 2,
+              "water": 1,
+              "pavilion": 1
+            },
+            "surfaces": [
+              {
+                "id": "living-floor",
+                "kind": "plate",
+                "areaM2": 140,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "private-floor",
+                "kind": "plate",
+                "areaM2": 80,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "service-floor",
+                "kind": "plate",
+                "areaM2": 36,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "arrival-approach",
+                "kind": "plate",
+                "areaM2": 20,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-terrace",
+                "kind": "plate",
+                "areaM2": 144,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-bottom",
+                "kind": "plate",
+                "areaM2": 60,
+                "walkingDatum": -0.8
+              },
+              {
+                "id": "pool-water",
+                "kind": "water",
+                "areaM2": 60,
+                "walkingDatum": 0.02
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2,
+              -0.8
+            ],
+            "plateSurfaceAreaM2": 480,
+            "waterSurfaceAreaM2": 60
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        },
+        "afterAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision tropical-envelope: Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled.",
+            "Knowledge decision outdoor-entertaining: Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented.",
+            "Knowledge decision estate-composition: The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms.",
+            "Knowledge decision covered-threshold: Vehicle drive and drop-off geometry are not modeled.",
+            "Knowledge decision facade-materials: Materials are scene-material representations, not product specifications or workmanship certification.",
+            "Knowledge decision hip-shelter: Roof flashing, drainage, uplift resistance, and structural design require separate engineering.",
+            "Knowledge decision tropical-contemporary: Landscape, planting, and climate-performance simulation are not available.",
+            "Knowledge decision composition-hierarchy: Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled.",
+            "Knowledge decision veranda-edge: The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented.",
+            "Requested space: Covered north arrival threshold and approach. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Primary living / dining hall. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: West private bedroom-suite wing shell. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: East service / kitchen-support wing shell. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: South shaded pool terrace. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Outdoor kitchen and bar counter zone. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Rectangular pool with explicit floor and perimeter walls. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: Detached open elliptical lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+          ],
+          "findings": [
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision tropical-envelope: Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision outdoor-entertaining: Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision estate-composition: The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision covered-threshold: Vehicle drive and drop-off geometry are not modeled."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision facade-materials: Materials are scene-material representations, not product specifications or workmanship certification."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision hip-shelter: Roof flashing, drainage, uplift resistance, and structural design require separate engineering."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision tropical-contemporary: Landscape, planting, and climate-performance simulation are not available."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision composition-hierarchy: Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled."
+            },
+            {
+              "category": "unsupported-capability",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision veranda-edge: The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Covered north arrival threshold and approach. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Primary living / dining hall. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: West private bedroom-suite wing shell. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: East service / kitchen-support wing shell. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: South shaded pool terrace. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Outdoor kitchen and bar counter zone. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Rectangular pool with explicit floor and perimeter walls. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: Detached open elliptical lounge pavilion. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            }
+          ],
+          "designDecisions": [
+            {
+              "disposition": "guidance",
+              "knowledgeId": "property-value-10m-25m",
+              "decision": "Used the value label only as a prompt for a signature arrival, substantial central hall, purposeful secondary volumes, and entertaining terrace; it did not determine a cost or fixed area.",
+              "elementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "arrival-approach",
+                "pool-terrace"
+              ],
+              "limitation": "No valuation, construction-cost estimate, luxury certification, or detailed interior fit-out is represented.",
+              "existingElementIds": [],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "guidance",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "tropical-envelope",
+              "decision": "Created shaded glazed southern openings, deep roof overhangs, a protected entry, and sheltered outdoor living appropriate to an assumed hot-humid Caribbean climate.",
+              "elementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "entry-canopy",
+                "terrace-pergola"
+              ],
+              "limitation": "Wind, corrosion, thermal, drainage, hurricane, and weather-performance certification are not modeled.",
+              "existingElementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "entry-canopy",
+                "terrace-pergola"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "outdoor-entertaining",
+              "decision": "Constructed a covered terrace-end kitchen/bar counter zone with seating and direct adjacency to the indoor service wing.",
+              "elementIds": [
+                "pool-terrace",
+                "outdoor-counter",
+                "outdoor-bar",
+                "terrace-pergola",
+                "terrace-sofa"
+              ],
+              "limitation": "Appliances, plumbing, extraction, smoke control, and food-service equipment are not implemented.",
+              "existingElementIds": [
+                "pool-terrace",
+                "outdoor-counter",
+                "outdoor-bar",
+                "terrace-pergola",
+                "terrace-sofa"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "guidance",
+              "knowledgeId": "waterfront-estate",
+              "decision": "Assumed a south-facing water view and located living, terrace, pool, and lounge toward it while keeping entry on the north side.",
+              "elementIds": [
+                "living-floor",
+                "pool-terrace",
+                "pool-water",
+                "beach-lounge-pavilion"
+              ],
+              "limitation": "No surveyed shoreline, flood elevation, setbacks, terrain, coastal access, or marine engineering is represented.",
+              "existingElementIds": [],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "guidance",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "estate-composition",
+              "decision": "Established a legible sequence from arrival to living hall to sheltered terrace and separated private and service volumes from the central entertaining space.",
+              "elementIds": [
+                "arrival-approach",
+                "entry-door",
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "pool-terrace"
+              ],
+              "limitation": "The wing shells are not subdivided into verified individual bedrooms, baths, pantry, or utility rooms.",
+              "existingElementIds": [
+                "arrival-approach",
+                "entry-door",
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "pool-terrace"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "covered-threshold",
+              "decision": "Built a genuine recessed door opening, solid door, approach plate, posts, and canopy at the north entry.",
+              "elementIds": [
+                "entry-wall",
+                "entry-door",
+                "arrival-approach",
+                "entry-post-west",
+                "entry-post-east",
+                "entry-canopy"
+              ],
+              "limitation": "Vehicle drive and drop-off geometry are not modeled.",
+              "existingElementIds": [
+                "entry-wall",
+                "entry-door",
+                "arrival-approach",
+                "entry-post-west",
+                "entry-post-east",
+                "entry-canopy"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "facade-materials",
+              "decision": "Applied coordinated ivory, limestone, bronze, and timber elements with deep roof edges and an articulated entrance.",
+              "elementIds": [
+                "main-roof",
+                "private-hip-roof",
+                "service-roof",
+                "entry-canopy",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "limitation": "Materials are scene-material representations, not product specifications or workmanship certification.",
+              "existingElementIds": [
+                "main-roof",
+                "private-hip-roof",
+                "service-roof",
+                "entry-canopy",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "hip-shelter",
+              "decision": "Used a subordinate hip roof over the private wing while retaining flat roofs over the principal hall and service wing.",
+              "elementIds": [
+                "private-hip-roof",
+                "main-roof",
+                "service-roof"
+              ],
+              "limitation": "Roof flashing, drainage, uplift resistance, and structural design require separate engineering.",
+              "existingElementIds": [
+                "private-hip-roof",
+                "main-roof",
+                "service-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "tropical-contemporary",
+              "decision": "Avoided a generic glass box by combining substantial walls, deep roofs, shaded glazing, a pool terrace, and an open lounge pavilion.",
+              "elementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "pool-terrace",
+                "beach-lounge-pavilion"
+              ],
+              "limitation": "Landscape, planting, and climate-performance simulation are not available.",
+              "existingElementIds": [
+                "main-roof",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east",
+                "pool-terrace",
+                "beach-lounge-pavilion"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "composition-hierarchy",
+              "decision": "Made the living hall the largest and most open volume, stepping the private and service volumes down around it.",
+              "elementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "main-roof",
+                "private-hip-roof",
+                "service-roof"
+              ],
+              "limitation": "Interior room partitions and furnishings beyond the outdoor lounge/bar elements are not modeled.",
+              "existingElementIds": [
+                "living-floor",
+                "private-floor",
+                "service-floor",
+                "main-roof",
+                "private-hip-roof",
+                "service-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "disposition": "constructed",
+              "knowledgeId": "veranda-edge",
+              "decision": "Created a broad occupied terrace with a continuous dry route, posts, canopy, direct glazed access, and a pool-facing lounge edge.",
+              "elementIds": [
+                "pool-terrace",
+                "terrace-pergola",
+                "pergola-post-west",
+                "pergola-post-east",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "limitation": "The terrace guard condition is intentionally omitted because it is at ground-level; detailed slip resistance and structural review are not represented.",
+              "existingElementIds": [
+                "pool-terrace",
+                "terrace-pergola",
+                "pergola-post-west",
+                "pergola-post-east",
+                "living-south-west",
+                "living-south-centre",
+                "living-south-east"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [],
+          "geometry": {
+            "kindCounts": {
+              "plate": 6,
+              "wall": 18,
+              "entrance": 3,
+              "roof": 5,
+              "volume": 6,
+              "sofa": 2,
+              "water": 1,
+              "pavilion": 1
+            },
+            "surfaces": [
+              {
+                "id": "living-floor",
+                "kind": "plate",
+                "areaM2": 140,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "private-floor",
+                "kind": "plate",
+                "areaM2": 80,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "service-floor",
+                "kind": "plate",
+                "areaM2": 36,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "arrival-approach",
+                "kind": "plate",
+                "areaM2": 20,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-terrace",
+                "kind": "plate",
+                "areaM2": 81,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "pool-bottom",
+                "kind": "plate",
+                "areaM2": 60,
+                "walkingDatum": -0.8
+              },
+              {
+                "id": "pool-water",
+                "kind": "water",
+                "areaM2": 60,
+                "walkingDatum": 0.02
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2,
+              -0.8
+            ],
+            "plateSurfaceAreaM2": 417,
+            "waterSurfaceAreaM2": 60
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        },
+        "architecturalQuality": "Requires human comparison; warning reduction is not proof of better composition."
+      },
+      "assessment": {
+        "briefResemblance": "Unscored: exact original brief incompletely retained",
+        "composition": "Not established by geometric correction",
+        "roofFacade": "No improvement demonstrated; roof composition unchanged",
+        "siteCoordination": "Terrace/water obstruction removed; access, pool depth and coping unresolved",
+        "constructionCoherence": "1 relationship issues resolved; 0 introduced",
+        "futureFirstPass": "Approved principle reaches Generate prompt in isolated integration test; model compliance and reduced repeat rate untested"
+      }
+    }
+  ],
+  "contrastingStudies": [
+    {
+      "id": "compact",
+      "source": "docs/architecture/knowledge-construction/compact.scene.json",
+      "provenance": "Developer-authored offline study; construction evidence, not independent Terra success",
+      "evidence": {
+        "intended": {
+          "scaleRationale": "Hand-authored offline capability study sized for compact",
+          "arrivalAndCirculation": "Doors face connected outdoor routes; internal navigation remains unverified.",
+          "volumeHierarchy": "Living primary; sleeping and service rooms subordinate.",
+          "relationshipsAndViews": "Terrace connects the occupied volumes; orientation assumed.",
+          "roofFacadeAndMaterials": "Coordinated roof sections, real openings and limestone/timber.",
+          "intendedSpaces": [
+            "living-kitchen-dining",
+            "bedroom-one",
+            "bedroom-two",
+            "bedroom-three",
+            "bathroom",
+            "laundry-entry"
+          ],
+          "designDecisions": [
+            {
+              "knowledgeId": "compact-family",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "bedroom-one-floor",
+                "bedroom-two-floor",
+                "bedroom-three-floor",
+                "living-kitchen-dining-floor"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "knowledgeId": "short-circulation",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "knowledgeId": "facade-materials",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            }
+          ]
+        },
+        "selectedKnowledge": [],
+        "constructed": [
+          {
+            "id": "living-kitchen-dining-floor",
+            "kind": "plate",
+            "at": [
+              0,
+              0.1,
+              0
+            ],
+            "size": [
+              12,
+              0.2,
+              5
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-kitchen-dining-front",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              2.5
+            ],
+            "size": [
+              12,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-kitchen-dining-door",
+            "kind": "entrance",
+            "parent": "living-kitchen-dining-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-kitchen-dining-back",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              -2.5
+            ],
+            "size": [
+              12,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-kitchen-dining-left",
+            "kind": "wall",
+            "at": [
+              -6,
+              1.8,
+              0
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "living-kitchen-dining-right",
+            "kind": "wall",
+            "at": [
+              6,
+              1.8,
+              0
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "living-kitchen-dining-roof",
+            "kind": "roof",
+            "at": [
+              0,
+              3.55,
+              0
+            ],
+            "size": [
+              12.8,
+              0.3,
+              5.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-one-floor",
+            "kind": "plate",
+            "at": [
+              -4,
+              0.1,
+              -5
+            ],
+            "size": [
+              4,
+              0.2,
+              5
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-one-front",
+            "kind": "wall",
+            "at": [
+              -4,
+              1.8,
+              -2.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-one-door",
+            "kind": "entrance",
+            "parent": "bedroom-one-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-one-back",
+            "kind": "wall",
+            "at": [
+              -4,
+              1.8,
+              -7.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-one-left",
+            "kind": "wall",
+            "at": [
+              -6,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-one-right",
+            "kind": "wall",
+            "at": [
+              -2,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-one-roof",
+            "kind": "roof",
+            "at": [
+              -4,
+              3.55,
+              -5
+            ],
+            "size": [
+              4.8,
+              0.3,
+              5.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-two-floor",
+            "kind": "plate",
+            "at": [
+              0,
+              0.1,
+              -5
+            ],
+            "size": [
+              4,
+              0.2,
+              5
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-two-front",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              -2.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-two-door",
+            "kind": "entrance",
+            "parent": "bedroom-two-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-two-back",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              -7.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-two-left",
+            "kind": "wall",
+            "at": [
+              -2,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-two-right",
+            "kind": "wall",
+            "at": [
+              2,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-two-roof",
+            "kind": "roof",
+            "at": [
+              0,
+              3.55,
+              -5
+            ],
+            "size": [
+              4.8,
+              0.3,
+              5.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-three-floor",
+            "kind": "plate",
+            "at": [
+              4,
+              0.1,
+              -5
+            ],
+            "size": [
+              4,
+              0.2,
+              5
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-three-front",
+            "kind": "wall",
+            "at": [
+              4,
+              1.8,
+              -2.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-three-door",
+            "kind": "entrance",
+            "parent": "bedroom-three-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-three-back",
+            "kind": "wall",
+            "at": [
+              4,
+              1.8,
+              -7.5
+            ],
+            "size": [
+              4,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bedroom-three-left",
+            "kind": "wall",
+            "at": [
+              2,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-three-right",
+            "kind": "wall",
+            "at": [
+              6,
+              1.8,
+              -5
+            ],
+            "size": [
+              5,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bedroom-three-roof",
+            "kind": "roof",
+            "at": [
+              4,
+              3.55,
+              -5
+            ],
+            "size": [
+              4.8,
+              0.3,
+              5.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bathroom-floor",
+            "kind": "plate",
+            "at": [
+              -3,
+              0.1,
+              4
+            ],
+            "size": [
+              6,
+              0.2,
+              3
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bathroom-front",
+            "kind": "wall",
+            "at": [
+              -3,
+              1.8,
+              5.5
+            ],
+            "size": [
+              6,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bathroom-door",
+            "kind": "entrance",
+            "parent": "bathroom-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bathroom-back",
+            "kind": "wall",
+            "at": [
+              -3,
+              1.8,
+              2.5
+            ],
+            "size": [
+              6,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "bathroom-left",
+            "kind": "wall",
+            "at": [
+              -6,
+              1.8,
+              4
+            ],
+            "size": [
+              3,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bathroom-right",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              4
+            ],
+            "size": [
+              3,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "bathroom-roof",
+            "kind": "roof",
+            "at": [
+              -3,
+              3.55,
+              4
+            ],
+            "size": [
+              6.8,
+              0.3,
+              3.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "laundry-entry-floor",
+            "kind": "plate",
+            "at": [
+              3,
+              0.1,
+              4
+            ],
+            "size": [
+              6,
+              0.2,
+              3
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "laundry-entry-front",
+            "kind": "wall",
+            "at": [
+              3,
+              1.8,
+              5.5
+            ],
+            "size": [
+              6,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "laundry-entry-door",
+            "kind": "entrance",
+            "parent": "laundry-entry-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "laundry-entry-back",
+            "kind": "wall",
+            "at": [
+              3,
+              1.8,
+              2.5
+            ],
+            "size": [
+              6,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "laundry-entry-left",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              4
+            ],
+            "size": [
+              3,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "laundry-entry-right",
+            "kind": "wall",
+            "at": [
+              6,
+              1.8,
+              4
+            ],
+            "size": [
+              3,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "laundry-entry-roof",
+            "kind": "roof",
+            "at": [
+              3,
+              3.55,
+              4
+            ],
+            "size": [
+              6.8,
+              0.3,
+              3.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "connected-terrace",
+            "kind": "plate",
+            "at": [
+              0,
+              0.1,
+              6.5
+            ],
+            "size": [
+              12,
+              0.2,
+              2
+            ],
+            "rotation": 0
+          }
+        ],
+        "geometryWarnings": [],
+        "architecturalAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision compact-family: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Knowledge decision short-circulation: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified.",
+            "Knowledge decision short-circulation: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Knowledge decision facade-materials: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified.",
+            "Knowledge decision facade-materials: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Requested space: living-kitchen-dining. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: bedroom-one. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: bedroom-two. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: bedroom-three. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: bathroom. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: laundry-entry. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+          ],
+          "findings": [
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision compact-family: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [
+                "bedroom-one-roof"
+              ],
+              "message": "Knowledge decision short-circulation: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision short-circulation: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [
+                "bedroom-one-roof"
+              ],
+              "message": "Knowledge decision facade-materials: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision facade-materials: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: living-kitchen-dining. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: bedroom-one. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: bedroom-two. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: bedroom-three. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: bathroom. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: laundry-entry. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            }
+          ],
+          "designDecisions": [
+            {
+              "knowledgeId": "compact-family",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "bedroom-one-floor",
+                "bedroom-two-floor",
+                "bedroom-three-floor",
+                "living-kitchen-dining-floor"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "bedroom-one-floor",
+                "bedroom-two-floor",
+                "bedroom-three-floor",
+                "living-kitchen-dining-floor"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "knowledgeId": "short-circulation",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [
+                "bedroom-one-roof"
+              ],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            },
+            {
+              "knowledgeId": "facade-materials",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "connected-terrace",
+                "living-kitchen-dining-roof",
+                "bedroom-one-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [
+                "bedroom-one-roof"
+              ],
+              "status": "missing-evidence",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [],
+          "geometry": {
+            "kindCounts": {
+              "plate": 7,
+              "wall": 24,
+              "entrance": 6,
+              "roof": 6
+            },
+            "surfaces": [
+              {
+                "id": "living-kitchen-dining-floor",
+                "kind": "plate",
+                "areaM2": 60,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "bedroom-one-floor",
+                "kind": "plate",
+                "areaM2": 20,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "bedroom-two-floor",
+                "kind": "plate",
+                "areaM2": 20,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "bedroom-three-floor",
+                "kind": "plate",
+                "areaM2": 20,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "bathroom-floor",
+                "kind": "plate",
+                "areaM2": 18,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "laundry-entry-floor",
+                "kind": "plate",
+                "areaM2": 18,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "connected-terrace",
+                "kind": "plate",
+                "areaM2": 24,
+                "walkingDatum": 0.2
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2
+            ],
+            "plateSurfaceAreaM2": 180,
+            "waterSurfaceAreaM2": 0
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        }
+      }
+    },
+    {
+      "id": "mediterranean",
+      "source": "docs/architecture/knowledge-construction/mediterranean.scene.json",
+      "provenance": "Developer-authored offline study; construction evidence, not independent Terra success",
+      "evidence": {
+        "intended": {
+          "scaleRationale": "Hand-authored offline capability study sized for mediterranean",
+          "arrivalAndCirculation": "Doors face connected outdoor routes; internal navigation remains unverified.",
+          "volumeHierarchy": "Living primary; sleeping and service rooms subordinate.",
+          "relationshipsAndViews": "Terrace connects the occupied volumes; orientation assumed.",
+          "roofFacadeAndMaterials": "Coordinated roof sections, real openings and limestone/timber.",
+          "intendedSpaces": [
+            "living",
+            "dining-kitchen",
+            "family-suites",
+            "guest-suites",
+            "service"
+          ],
+          "designDecisions": [
+            {
+              "knowledgeId": "mediterranean-courtyard",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "knowledgeId": "guest-house",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "guest-suites-floor",
+                "guest-suites-door",
+                "guest-suites-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "knowledgeId": "courtyard-proportion",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            }
+          ]
+        },
+        "selectedKnowledge": [],
+        "constructed": [
+          {
+            "id": "living-floor",
+            "kind": "plate",
+            "at": [
+              0,
+              0.1,
+              -12
+            ],
+            "size": [
+              16,
+              0.2,
+              10
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-front",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              -7
+            ],
+            "size": [
+              16,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-door",
+            "kind": "entrance",
+            "parent": "living-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-back",
+            "kind": "wall",
+            "at": [
+              0,
+              1.8,
+              -17
+            ],
+            "size": [
+              16,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "living-left",
+            "kind": "wall",
+            "at": [
+              -8,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "living-right",
+            "kind": "wall",
+            "at": [
+              8,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "living-roof",
+            "kind": "roof",
+            "at": [
+              0,
+              4.3,
+              -12
+            ],
+            "size": [
+              16.8,
+              1.8,
+              10.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "dining-kitchen-floor",
+            "kind": "plate",
+            "at": [
+              -13,
+              0.1,
+              -12
+            ],
+            "size": [
+              10,
+              0.2,
+              10
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "dining-kitchen-front",
+            "kind": "wall",
+            "at": [
+              -13,
+              1.8,
+              -7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "dining-kitchen-door",
+            "kind": "entrance",
+            "parent": "dining-kitchen-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "dining-kitchen-back",
+            "kind": "wall",
+            "at": [
+              -13,
+              1.8,
+              -17
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "dining-kitchen-left",
+            "kind": "wall",
+            "at": [
+              -18,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "dining-kitchen-right",
+            "kind": "wall",
+            "at": [
+              -8,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "dining-kitchen-roof",
+            "kind": "roof",
+            "at": [
+              -13,
+              4.3,
+              -12
+            ],
+            "size": [
+              10.8,
+              1.8,
+              10.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "family-suites-floor",
+            "kind": "plate",
+            "at": [
+              -13,
+              0.1,
+              0
+            ],
+            "size": [
+              10,
+              0.2,
+              14
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "family-suites-front",
+            "kind": "wall",
+            "at": [
+              -13,
+              1.8,
+              7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "family-suites-door",
+            "kind": "entrance",
+            "parent": "family-suites-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "family-suites-back",
+            "kind": "wall",
+            "at": [
+              -13,
+              1.8,
+              -7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "family-suites-left",
+            "kind": "wall",
+            "at": [
+              -18,
+              1.8,
+              0
+            ],
+            "size": [
+              14,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "family-suites-right",
+            "kind": "wall",
+            "at": [
+              -8,
+              1.8,
+              0
+            ],
+            "size": [
+              14,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "family-suites-roof",
+            "kind": "roof",
+            "at": [
+              -13,
+              4.3,
+              0
+            ],
+            "size": [
+              10.8,
+              1.8,
+              14.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "guest-suites-floor",
+            "kind": "plate",
+            "at": [
+              13,
+              0.1,
+              0
+            ],
+            "size": [
+              10,
+              0.2,
+              14
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "guest-suites-front",
+            "kind": "wall",
+            "at": [
+              13,
+              1.8,
+              7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "guest-suites-door",
+            "kind": "entrance",
+            "parent": "guest-suites-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "guest-suites-back",
+            "kind": "wall",
+            "at": [
+              13,
+              1.8,
+              -7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "guest-suites-left",
+            "kind": "wall",
+            "at": [
+              8,
+              1.8,
+              0
+            ],
+            "size": [
+              14,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "guest-suites-right",
+            "kind": "wall",
+            "at": [
+              18,
+              1.8,
+              0
+            ],
+            "size": [
+              14,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "guest-suites-roof",
+            "kind": "roof",
+            "at": [
+              13,
+              4.3,
+              0
+            ],
+            "size": [
+              10.8,
+              1.8,
+              14.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "service-floor",
+            "kind": "plate",
+            "at": [
+              13,
+              0.1,
+              -12
+            ],
+            "size": [
+              10,
+              0.2,
+              10
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "service-front",
+            "kind": "wall",
+            "at": [
+              13,
+              1.8,
+              -7
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "service-door",
+            "kind": "entrance",
+            "parent": "service-front",
+            "at": [
+              0,
+              -0.35,
+              0
+            ],
+            "size": [
+              1.45,
+              2.5,
+              0.12
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "service-back",
+            "kind": "wall",
+            "at": [
+              13,
+              1.8,
+              -17
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "service-left",
+            "kind": "wall",
+            "at": [
+              8,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "service-right",
+            "kind": "wall",
+            "at": [
+              18,
+              1.8,
+              -12
+            ],
+            "size": [
+              10,
+              3.2,
+              0.2
+            ],
+            "rotation": 1.5707963267948966
+          },
+          {
+            "id": "service-roof",
+            "kind": "roof",
+            "at": [
+              13,
+              4.3,
+              -12
+            ],
+            "size": [
+              10.8,
+              1.8,
+              10.8
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "connected-terrace",
+            "kind": "plate",
+            "at": [
+              0,
+              0.1,
+              0
+            ],
+            "size": [
+              16,
+              0.2,
+              14
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "terrace-canopy",
+            "kind": "roof",
+            "at": [
+              0,
+              3.55,
+              0
+            ],
+            "size": [
+              16,
+              0.3,
+              14
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "canopy-post-left",
+            "kind": "volume",
+            "at": [
+              -7.7,
+              1.8,
+              6.7
+            ],
+            "size": [
+              0.3,
+              3.2,
+              0.3
+            ],
+            "rotation": 0
+          },
+          {
+            "id": "canopy-post-right",
+            "kind": "volume",
+            "at": [
+              7.7,
+              1.8,
+              6.7
+            ],
+            "size": [
+              0.3,
+              3.2,
+              0.3
+            ],
+            "rotation": 0
+          }
+        ],
+        "geometryWarnings": [],
+        "architecturalAudit": {
+          "status": "incomplete",
+          "issues": [
+            "Knowledge decision mediterranean-courtyard: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Knowledge decision guest-house: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Knowledge decision courtyard-proportion: Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+            "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: dining-kitchen. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: family-suites. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: guest-suites. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review.",
+            "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+            "dining-kitchen-floor / living-floor: entire shared floor boundary is blocked by living-left with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+          ],
+          "findings": [
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision mediterranean-courtyard: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision guest-house: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "feature-evidence",
+              "elementIds": [],
+              "message": "Knowledge decision courtyard-proportion: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: dining-kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: family-suites. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: guest-suites. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "architectural-review",
+              "elementIds": [],
+              "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+            },
+            {
+              "category": "likely-architectural-incompleteness",
+              "code": "shared-boundary-blocked",
+              "elementIds": [
+                "dining-kitchen-floor",
+                "living-floor",
+                "living-left"
+              ],
+              "message": "dining-kitchen-floor / living-floor: entire shared floor boundary is blocked by living-left with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+            }
+          ],
+          "designDecisions": [
+            {
+              "knowledgeId": "mediterranean-courtyard",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "knowledgeId": "guest-house",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "guest-suites-floor",
+                "guest-suites-door",
+                "guest-suites-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "guest-suites-floor",
+                "guest-suites-door",
+                "guest-suites-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            },
+            {
+              "knowledgeId": "courtyard-proportion",
+              "decision": "Offline representation of relevant massing, enclosure and sheltered outdoor relationships.",
+              "elementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "limitation": "Hand-authored demonstration; room servicing, navigation and architectural quality require review.",
+              "existingElementIds": [
+                "connected-terrace",
+                "living-roof",
+                "dining-kitchen-roof"
+              ],
+              "missingElementIds": [],
+              "missingKinds": [],
+              "detachedElementIds": [],
+              "status": "referenced-geometry",
+              "verifiedComplete": false
+            }
+          ],
+          "knowledgeUse": [],
+          "geometry": {
+            "kindCounts": {
+              "plate": 6,
+              "wall": 20,
+              "entrance": 5,
+              "roof": 6,
+              "volume": 2
+            },
+            "surfaces": [
+              {
+                "id": "living-floor",
+                "kind": "plate",
+                "areaM2": 160,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "dining-kitchen-floor",
+                "kind": "plate",
+                "areaM2": 100,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "family-suites-floor",
+                "kind": "plate",
+                "areaM2": 140,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "guest-suites-floor",
+                "kind": "plate",
+                "areaM2": 140,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "service-floor",
+                "kind": "plate",
+                "areaM2": 100,
+                "walkingDatum": 0.2
+              },
+              {
+                "id": "connected-terrace",
+                "kind": "plate",
+                "areaM2": 224,
+                "walkingDatum": 0.2
+              }
+            ],
+            "overlaps": [],
+            "walkingDatums": [
+              0.2
+            ],
+            "plateSurfaceAreaM2": 864,
+            "waterSurfaceAreaM2": 0
+          },
+          "limitations": [
+            "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+          ]
+        }
+      }
+    }
+  ]
+}

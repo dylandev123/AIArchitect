@@ -117,6 +117,11 @@ export function validateV3Scene(scene: unknown, options: V3ValidationOptions = {
   // generic rendering. Keep fallback warnings for every other object; estate
   // audits and construction receipts still independently verify these ribbons.
   const estateSurfaceIds = new Set(issues.some(i => i.code === 'INVALID_ESTATE_PLAN') ? [] : s.estatePlan?.circulation.filter(r => estateRouteSupported(s, r)).flatMap(r => r.via) ?? []);
+  // An authored corridor that cannot be compiled falls back to its owner's
+  // generic path geometry. Known path capabilities alone must not hide that loss.
+  const unresolvedRouteOwners = new Set((s.estatePlan?.circulation ?? []).filter(r => r.spatial && !r.via.some(id => estateSurfaceIds.has(id))).flatMap(r => r.via));
+  for (const object of s.objects) if (["path", "driveway"].includes(object.type) && unresolvedRouteOwners.has(object.id))
+    add("advisory", "FALLBACK_RENDER_USED", object.id, `${object.label} cannot render its authored estate corridor; only generic owner geometry is available.`);
   for (const warning of v3RenderWarnings(s.objects.filter(o => !(["path", "driveway"].includes(o.type) && estateSurfaceIds.has(o.id))))) add("advisory", warning.code, warning.targetId, warning.message);
   // Persisted hierarchy is mandatory for new V3 output, but older saved scenes remain readable and can be
   // re-rendered through the deterministic legacy adapter without another model request.

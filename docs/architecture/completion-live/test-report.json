@@ -1,0 +1,62 @@
+{
+  "status": "transport-failed-before-provider-response",
+  "transportAttempts": 1,
+  "providerResponses": 0,
+  "paidCompletionConfirmed": false,
+  "retries": 0,
+  "operationsProposed": null,
+  "operationsExecuted": 0,
+  "added": [],
+  "modified": [],
+  "removed": [],
+  "resolvedDefects": [],
+  "remainingDefects": [
+    "Missing vertical circulation to owner and guest floors",
+    "Disconnected upper floors",
+    "Blocked kitchen\u2013dining and kitchen\u2013salon boundaries",
+    "Incomplete pool basin construction"
+  ],
+  "doorFit": "Three repaired door elements preserved; no scene operations executed",
+  "assumptionsConstructed": [],
+  "usage": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "reasoningTokens": null,
+    "totalTokens": null,
+    "reason": "No provider response received; unavailable, not reported as zero"
+  },
+  "screenshots": "No resulting scene to capture; stopped after failed attempt",
+  "meaningfullyMoreComplete": false,
+  "optionalWebsiteAction": "Not established by this test; a successful live execution and geometry review remain necessary",
+  "preservation": [
+    {
+      "path": "docs/villa-playground/25m-mansion-recovery/original.scene.json",
+      "sha256": "429b5da93a705c881b6943fc8877a56499845dd14405faea42ef2157710b9219",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-strict-live/after.UNAPPROVED.json",
+      "sha256": "6207f1ca11e28d6dcc8723cb4c101b35e09f7bc98431a3c9c48acb31e2f49cbd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-technical-review/repaired.UNAPPROVED.json",
+      "sha256": "4928660aa9e8a2bd1b1fdc2859dc401032f8340ae03c1da7cb5aa5a78c7f2cef",
+      "unchanged": true
+    },
+    {
+      "path": "docs/villa-playground/redesign-technical-review/preserved-versions.UNAPPROVED.json",
+      "sha256": "468dddf52ff96e75c6ceb54d0295efbc7b53a75a64c90a5960e7c5e51e3bd6ab",
+      "unchanged": true
+    }
+  ],
+  "offlineTests": {
+    "passed": 30,
+    "failed": 0
+  },
+  "error": {
+    "message": "Cannot connect to API: getaddrinfo ENOTFOUND api.openai.com",
+    "providerCalls": 1,
+    "retry": false
+  }
+}

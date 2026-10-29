@@ -12,7 +12,7 @@ const LEGACY = {
   structural: ["building-mass", "volume", "slab", "surface", "terrace", "courtyard", "roof", "roof-form", "canopy", "path", "wall", "beam", "column"],
   edgeHosted: ["railing", "fence"],
   verticalConnector: ["stair", "ramp"],
-  deterministic: ["building-mass", "roof-form", "balcony", "canopy", "pool", "water-surface", "landscape-zone", "planter"],
+  deterministic: ["building-mass", "roof-form", "balcony", "canopy", "pool", "fountain", "water-surface", "landscape-zone", "planter"],
   auditExempt: ["terrain-region", "light", "opening", "glass-panel", "roof", "canopy", "wall", "column", "beam"],
   occupiable: ["slab", "surface", "path", "stair", "ramp", "pool"],
   walkingSurface: ["slab", "surface", "stair", "ramp", "roof"],

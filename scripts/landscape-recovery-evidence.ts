@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolveVillaResult} from '../src/lib/villa/terra';
+import {buildComposition,landscapeAcceptance} from '../src/lib/villa/composition';
+const file='docs/villa-playground/landscape-recovery/original.response.json';
+const raw=readFileSync(file,'utf8');
+const {config}=resolveVillaResult({mode:'generate',prompt:'Offline recovery'},JSON.parse(raw));
+if(!('version' in config))throw Error('Expected authored villa');
+const a=landscapeAcceptance(config),built=buildComposition(config);
+writeFileSync('docs/villa-playground/landscape-recovery/assessment.json',JSON.stringify({providerCalls:0,originalSha256:createHash('sha256').update(raw).digest('hex'),essentialArchitecture:'accepted',status:'preview',forms:built.forms?.map(f=>f.id),components:built.components?.map(f=>f.id),terraces:built.terraces.map(t=>t.id),pool:built.pool,unresolved:a.unresolved,accessWarning:a.accessWarning},null,2)+'\n');
+console.log(JSON.stringify(a.unresolved,null,2));

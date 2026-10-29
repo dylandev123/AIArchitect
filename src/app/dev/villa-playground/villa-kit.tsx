@@ -40,12 +40,12 @@ export function Arch({ width, height, config }: { width: number; height: number;
 }
 
 /** Closed hip or gable roof with coordinated eaves, soffit, fascia and textured slope planes. */
-export function PitchedRoof({ width, depth, config, low = false }: { width: number; depth: number; config: VillaConfig; low?: boolean }) {
+export function PitchedRoof({ width, depth, config, low = false, eave, roofRise }: { width: number; depth: number; config: VillaConfig; low?: boolean; eave?:number;roofRise?:number }) {
   const rotate = depth > width;
   const w = Math.max(width, depth), d = Math.min(width, depth);
-  const overhang = config.style === 'caribbean' ? 1.05 : .55;
+  const overhang = eave ?? (config.style === 'caribbean' ? 1.05 : .55);
   const W = w + overhang * 2, D = d + overhang * 2;
-  const rise = D * (low ? .13 : config.style === 'caribbean' ? .26 : .22);
+  const rise = roofRise ?? D * (low ? .13 : config.style === 'caribbean' ? .26 : .22);
   const hip = config.roof === 'hip', ridge = hip ? (W - D) / 2 : W / 2;
   const geometry = useMemo(() => {
     const a = [-W / 2, 0, -D / 2], b = [W / 2, 0, -D / 2], c = [W / 2, 0, D / 2], d = [-W / 2, 0, D / 2];

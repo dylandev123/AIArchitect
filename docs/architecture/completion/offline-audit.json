@@ -1,0 +1,1071 @@
+{
+  "providerCalls": 0,
+  "preparation": [
+    {
+      "source": "docs/villa-playground/redesign-strict-live/after.UNAPPROVED.json",
+      "editIntent": "complete",
+      "fullSceneContext": true,
+      "allFindingsIncluded": true,
+      "requiresPlanAndConstruction": true,
+      "promptChars": 7575
+    },
+    {
+      "source": "docs/villa-playground/redesign-technical-review/repaired.UNAPPROVED.json",
+      "editIntent": "complete",
+      "fullSceneContext": true,
+      "allFindingsIncluded": true,
+      "requiresPlanAndConstruction": true,
+      "promptChars": 5848
+    }
+  ],
+  "reports": [
+    {
+      "source": "docs/villa-playground/redesign-strict-live/after.UNAPPROVED.json",
+      "sha256": "6207f1ca11e28d6dcc8723cb4c101b35e09f7bc98431a3c9c48acb31e2f49cbd",
+      "elements": 57,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "pool-evidence-missing",
+          "elementIds": [
+            "pool-water"
+          ],
+          "message": "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "gallery-salon-door"
+          ],
+          "message": "gallery-salon-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "salon-north-wall-new",
+            "gallery-salon-door"
+          ],
+          "message": "gallery-salon-door: attached panel centre does not align with salon-north-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "salon-guest-door"
+          ],
+          "message": "salon-guest-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "salon-west-wall-new",
+            "salon-guest-door"
+          ],
+          "message": "salon-guest-door: attached panel centre does not align with salon-west-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "salon-dining-door"
+          ],
+          "message": "salon-dining-door: attached door does not fit an unglazed host opening in the rendered wall plane; access is unverified."
+        },
+        {
+          "category": "confirmed-technical-defect",
+          "code": "architectural-review",
+          "elementIds": [
+            "salon-east-wall-new",
+            "salon-dining-door"
+          ],
+          "message": "salon-dining-door: attached panel centre does not align with salon-east-wall-new's opening (expected local Y -1.700, actual -0.1). Review centre versus sill coordinates; geometry was preserved."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "vertical-route-missing",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "upper-floor-gap",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "salon-floor",
+            "kitchen-west-wall-new"
+          ],
+          "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-north-wall-new"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "vertical-route-missing",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "upper-floor-gap",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "salon-floor",
+            "kitchen-west-wall-new"
+          ],
+          "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-north-wall-new"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    },
+    {
+      "source": "docs/villa-playground/redesign-technical-review/repaired.UNAPPROVED.json",
+      "sha256": "4928660aa9e8a2bd1b1fdc2859dc401032f8340ae03c1da7cb5aa5a78c7f2cef",
+      "elements": 57,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision property-value-25m-50m: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision property-value-25m-50m: No construction-cost, property-value, luxury certification, service or amenity claim is represented."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision facade-materials: Material selections are editable scene materials only; no specialist finish, weathering or craftsmanship certification is represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision roof-main-secondary: referenced geometry lacks required kinds plate; descriptions are not construction."
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision roof-main-secondary: Roof waterproofing, drainage, loading and guard-code compliance are not represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: North arrival gallery with recessed main entrance. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Double-height ocean salon. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: West guest lounge. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: East dining room. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Northeast kitchen/service room. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Sheltered ocean loggia. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Separated upper owner suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Separated upper guest suite enclosure. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: Retained pool precinct, not redesigned in this pass. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "pool-evidence-missing",
+          "elementIds": [
+            "pool-water"
+          ],
+          "message": "pool-water: water perimeter lacks local basin wall evidence; pool construction is incomplete."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "vertical-route-missing",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "upper-floor-gap",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "salon-floor",
+            "kitchen-west-wall-new"
+          ],
+          "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-north-wall-new"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "vertical-route-missing",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors have no spatially connected plate/solid step-and-landing sequence from the lowest room floor; vertical circulation is not evidenced. Deliberate lifts, ramps and alternative circulation require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "upper-floor-gap",
+          "elementIds": [
+            "owner-floor",
+            "guest-floor"
+          ],
+          "message": "Upper room floors form separate surface groups without a same-level slab connection. Review landings/corridors or intended independent access; do not fill deliberate voids automatically."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "salon-floor",
+            "kitchen-west-wall-new"
+          ],
+          "message": "kitchen-floor / salon-floor: entire shared floor boundary is blocked by kitchen-west-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-north-wall-new"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-north-wall-new with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    },
+    {
+      "source": "docs/architecture/knowledge-construction/compact.scene.json",
+      "sha256": "b86091b55edad7098f2cca004e99aed0b32ba60bebce1746c78c9fd85097a98a",
+      "elements": 43,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision compact-family: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [
+            "bedroom-one-roof"
+          ],
+          "message": "Knowledge decision short-circulation: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision short-circulation: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [
+            "bedroom-one-roof"
+          ],
+          "message": "Knowledge decision facade-materials: evidence bedroom-one-roof is remote from referenced floors; feature relationship unverified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision facade-materials: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: living-kitchen-dining. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: bedroom-one. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: bedroom-two. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: bedroom-three. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: bathroom. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: laundry-entry. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        }
+      ],
+      "circulation": []
+    },
+    {
+      "source": "docs/architecture/knowledge-construction/caribbean.scene.json",
+      "sha256": "151c6ff19f073af4741617d5d19a0a9dafd385d86af92141c0a26c99af8129ab",
+      "elements": 52,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision infinity-pool: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision estate-composition: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision tropical-envelope: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    },
+    {
+      "source": "docs/architecture/knowledge-construction/mediterranean.scene.json",
+      "sha256": "49c8f4551ca172186594752d6ba2f6a0b499b793c29dce69a8e8fa4a8132b569",
+      "elements": 39,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision mediterranean-courtyard: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision guest-house: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision courtyard-proportion: Hand-authored demonstration; room servicing, navigation and architectural quality require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: dining-kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: family-suites. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: guest-suites. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-kitchen-floor",
+            "living-floor",
+            "living-left"
+          ],
+          "message": "dining-kitchen-floor / living-floor: entire shared floor boundary is blocked by living-left with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-kitchen-floor",
+            "living-floor",
+            "living-left"
+          ],
+          "message": "dining-kitchen-floor / living-floor: entire shared floor boundary is blocked by living-left with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    },
+    {
+      "source": "docs/architecture/composable-knowledge/family-pool.scene.json",
+      "sha256": "8888e9d22b4b7bd4547b7d9a6453eef74c5d2594f7d5035a71d8a4588b74403a",
+      "elements": 53,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pool-sun-shelf: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision compact-family: referenced geometry lacks required kinds roof, entrance; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision compact-family: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pergola-shade: referenced geometry lacks required kinds volume; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pergola-shade: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [
+            "pool-bottom"
+          ],
+          "message": "Knowledge decision build-pool-bottom-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision climate-shaded-west: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision climate-shaded-west: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    },
+    {
+      "source": "docs/architecture/composable-knowledge/spa-pool.scene.json",
+      "sha256": "33134bd7bf27e13ae212992b19c00c0bc8dffbed32baee5dc54da6541cf90275",
+      "elements": 59,
+      "status": "incomplete",
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision estate-composition: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision estate-composition: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pool-deck-width: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision waterfront-estate: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision waterfront-estate: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision wellness-suite: referenced geometry lacks required kinds roof, entrance; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision wellness-suite: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [
+            "pool-bottom"
+          ],
+          "message": "Knowledge decision build-pool-bottom-order: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision infinity-pool: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision material-continuous-deck: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision material-continuous-deck: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision living-view: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision living-view: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision spa-court: referenced geometry lacks required kinds roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision spa-court: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pool-rectangular-lap: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision covered-threshold: referenced geometry lacks required kinds entrance, roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision covered-threshold: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision window-rhythm: Fixture references are intentionally audited; unrelated kinds cannot prove a complete feature."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: living. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: dining. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-one. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: suite-two. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: kitchen. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Requested space: service. Geometry inventory is available; enclosure, allocation and completeness require review."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ],
+      "circulation": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "dining-floor",
+            "living-floor",
+            "living-right"
+          ],
+          "message": "dining-floor / living-floor: entire shared floor boundary is blocked by living-right with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "shared-boundary-blocked",
+          "elementIds": [
+            "kitchen-floor",
+            "dining-floor",
+            "dining-back"
+          ],
+          "message": "kitchen-floor / dining-floor: entire shared floor boundary is blocked by dining-back with no usable unglazed opening. Review intended direct access or an alternative route; a window does not establish passage."
+        }
+      ]
+    }
+  ]
+}

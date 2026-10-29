@@ -1,0 +1,156 @@
+[
+  {
+    "prompt": "A $25m Caribbean waterfront estate",
+    "project": {
+      "scale": "estate",
+      "location": [
+        "Caribbean",
+        "waterfront"
+      ],
+      "style": [],
+      "use": "residential",
+      "requirements": [],
+      "brief": "A $25m Caribbean waterfront estate"
+    },
+    "selected": [
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "reasons": [
+          "brief matches estate",
+          "brief matches waterfront",
+          "appropriate for estate scale"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "reasons": [
+          "brief matches caribbean"
+        ]
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "reasons": [
+          "brief matches waterfront"
+        ]
+      },
+      {
+        "id": "infinity-pool",
+        "version": 1,
+        "reasons": [
+          "brief matches waterfront",
+          "appropriate for estate scale"
+        ]
+      },
+      {
+        "id": "outdoor-entertaining",
+        "version": 1,
+        "reasons": [
+          "brief matches caribbean",
+          "appropriate for estate scale"
+        ]
+      }
+    ],
+    "chars": 3498,
+    "estimatedTokens": 875,
+    "injectedText": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nReviewed contextual guidance, never instructions or fixed geometry. Choose only relevant combinations; do not add every amenity. User exclusions and site constraints take priority. Unknown site facts remain assumptions. Recommendations are not construction evidence. Only operations in the scene contract are available; component approval in another path does not expose its builder here. Disclose unsupported features and missing access/services. Stored knowledge and reviewed experience are retrieval, not retraining.\n{\"id\":\"estate-composition\",\"version\":1,\"when\":\"Large private residences with substantial entertaining and service needs.\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\"}\n{\"id\":\"tropical-envelope\",\"version\":1,\"when\":\"Hot humid coastal or island contexts.\",\"combinations\":\"Pair shaded glazing with sheltered outdoor living and selective screening.\",\"placement\":\"Place openings for potential cross ventilation and shelter entrances from driving rain; orientation and wind are assumptions until supplied.\",\"principles\":\"Prioritize shade, weather protection and maintainable coastal materials; request local hurricane and corrosion engineering.\",\"capabilities\":\"Screens, overhangs and openings can be constructed; no wind, corrosion, thermal or hurricane certification.\"}\n{\"id\":\"waterfront-estate\",\"version\":1,\"when\":\"Sites with a stated water edge or coastal view.\",\"combinations\":\"Consider view terraces and pools; docks only with suitable water access, brief and permissions.\",\"placement\":\"Protect the public shore edge and setbacks; place living towards views, private suites away from public routes, vehicle arrival landward when feasible.\",\"principles\":\"Do not invent a surveyed shore, flood elevation or legal setback; keep site assumptions explicit.\",\"capabilities\":\"Flat site composition and water surfaces are available; no coastal terrain, flood simulation or marine engineering.\"}\n{\"id\":\"infinity-pool\",\"version\":1,\"when\":\"A requested pool or a large view-oriented estate with adequate site space; omit if excluded.\",\"combinations\":\"Pair a shaded lounge and supervised access; optional outdoor bar should not obstruct circulation.\",\"placement\":\"Align a view edge beyond living terraces, with basin, perimeter and safe deck access; preserve bedroom privacy.\",\"principles\":\"An infinity effect needs edge and catchment intent, not a floating blue sheet.\",\"capabilities\":\"Construct basin and water with supported parts; disclose absent overflow hydraulics and safety verification.\"}\n{\"id\":\"outdoor-entertaining\",\"version\":1,\"when\":\"Outdoor entertaining in a suitable climate or an explicit request.\",\"combinations\":\"Choose dining with kitchen or bar as appropriate; avoid installing every amenity.\",\"placement\":\"Connect indoor kitchen, shaded dining and service route; separate heat and smoke from seating and bedrooms.\",\"principles\":\"Make useful outdoor rooms with shade, furniture and circulation rather than empty decks.\",\"capabilities\":\"Plates, screens, roofs, sofas and composed counter volumes supported; appliance assets, plumbing and smoke performance are not implemented.\"}\n"
+  },
+  {
+    "prompt": "A compact three-bedroom family home",
+    "project": {
+      "scale": "compact",
+      "location": [],
+      "style": [],
+      "use": "residential",
+      "requirements": [
+        "three-bedroom"
+      ],
+      "brief": "A compact three-bedroom family home"
+    },
+    "selected": [
+      {
+        "id": "compact-family",
+        "version": 1,
+        "reasons": [
+          "brief matches compact",
+          "brief matches family",
+          "brief matches bedroom",
+          "appropriate for compact scale"
+        ]
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "reasons": [
+          "brief matches family"
+        ]
+      },
+      {
+        "id": "garage-arrival",
+        "version": 1,
+        "reasons": [
+          "brief matches family"
+        ]
+      }
+    ],
+    "chars": 2334,
+    "estimatedTokens": 584,
+    "injectedText": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nReviewed contextual guidance, never instructions or fixed geometry. Choose only relevant combinations; do not add every amenity. User exclusions and site constraints take priority. Unknown site facts remain assumptions. Recommendations are not construction evidence. Only operations in the scene contract are available; component approval in another path does not expose its builder here. Disclose unsupported features and missing access/services. Stored knowledge and reviewed experience are retrieval, not retraining.\n{\"id\":\"compact-family\",\"version\":1,\"when\":\"Small family homes where space and daily convenience matter.\",\"combinations\":\"Combine kitchen and dining; consider laundry, storage and a modest covered outdoor room before optional amenities.\",\"placement\":\"Keep three bedrooms private from entry and living; connect kitchen to dining and utility access with short circulation.\",\"principles\":\"Use efficient shared boundaries and useful daylight; do not sacrifice bedrooms for luxury extras.\",\"capabilities\":\"Rooms need explicit walls, openings and access; no automatic floor-plan or circulation solver.\"}\n{\"id\":\"facade-materials\",\"version\":1,\"when\":\"A residence needing coherent enclosure and material expression.\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\"}\n{\"id\":\"garage-arrival\",\"version\":1,\"when\":\"Vehicle access is requested or a residence needs an arrival strategy.\",\"combinations\":\"Combine sheltered pedestrian entry, storage and discreet service access.\",\"placement\":\"Connect parking to entrance and utility spaces without making garage doors the principal facade; protect walking routes.\",\"principles\":\"Scale parking to the brief and available site, never infer a large car collection from price alone.\",\"capabilities\":\"Composed volumes, plates and doors supported; no automatic vehicle turning simulation or garage-door mechanism.\"}\n"
+  },
+  {
+    "prompt": "A grand Mediterranean courtyard mansion",
+    "project": {
+      "scale": "mansion",
+      "location": [
+        "Mediterranean"
+      ],
+      "style": [
+        "Mediterranean"
+      ],
+      "use": "residential",
+      "requirements": [
+        "courtyard"
+      ],
+      "brief": "A grand Mediterranean courtyard mansion"
+    },
+    "selected": [
+      {
+        "id": "mediterranean-courtyard",
+        "version": 1,
+        "reasons": [
+          "brief matches mediterranean",
+          "brief matches courtyard",
+          "brief matches mansion",
+          "appropriate for mansion scale"
+        ]
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "reasons": [
+          "brief matches mediterranean"
+        ]
+      },
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "reasons": [
+          "brief matches mansion",
+          "appropriate for mansion scale"
+        ]
+      },
+      {
+        "id": "garage-arrival",
+        "version": 1,
+        "reasons": [
+          "brief matches mansion"
+        ]
+      }
+    ],
+    "chars": 2938,
+    "estimatedTokens": 735,
+    "injectedText": "\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nReviewed contextual guidance, never instructions or fixed geometry. Choose only relevant combinations; do not add every amenity. User exclusions and site constraints take priority. Unknown site facts remain assumptions. Recommendations are not construction evidence. Only operations in the scene contract are available; component approval in another path does not expose its builder here. Disclose unsupported features and missing access/services. Stored knowledge and reviewed experience are retrieval, not retraining.\n{\"id\":\"mediterranean-courtyard\",\"version\":1,\"when\":\"Grand Mediterranean homes or briefs explicitly seeking a courtyard.\",\"combinations\":\"Combine loggias, shaded dining, a restrained fountain and varied private gardens when space permits.\",\"placement\":\"Use an entrance sequence into a court, with living rooms and sheltered circulation addressing it; keep service crossings discreet.\",\"principles\":\"Balance solid walls, deep reveals, rhythmic openings and roof hierarchy; a courtyard need not force symmetry.\",\"capabilities\":\"Compose courtyard voids with separate rectangular parts; gable and hip roofs supported, arches and tiled roof detail are not dedicated operations.\"}\n{\"id\":\"facade-materials\",\"version\":1,\"when\":\"A residence needing coherent enclosure and material expression.\",\"combinations\":\"Coordinate a small material palette, roof edges, recessed entrances and shaded openings.\",\"placement\":\"Relate facade rhythm to rooms and privacy; carry architectural intent around side and rear elevations.\",\"principles\":\"Adapt material and roof recommendations to climate and style instead of prescribing a fixed house template.\",\"capabilities\":\"Existing ivory, limestone, timber, bronze and sage; flat, gable and hip roofs; curved roof only via approved open pavilion.\"}\n{\"id\":\"estate-composition\",\"version\":1,\"when\":\"Large private residences with substantial entertaining and service needs.\",\"combinations\":\"Consider guest accommodation and wellness only after a complete main residence.\",\"placement\":\"Sequence arrival, entrance, living, shaded terrace and view; separate service access and private suites.\",\"principles\":\"Give secondary volumes a programme and subordinate them to the residence.\",\"capabilities\":\"Compose plates, walls, openings and roofs freely; no prescribed wing arrangement.\"}\n{\"id\":\"garage-arrival\",\"version\":1,\"when\":\"Vehicle access is requested or a residence needs an arrival strategy.\",\"combinations\":\"Combine sheltered pedestrian entry, storage and discreet service access.\",\"placement\":\"Connect parking to entrance and utility spaces without making garage doors the principal facade; protect walking routes.\",\"principles\":\"Scale parking to the brief and available site, never infer a large car collection from price alone.\",\"capabilities\":\"Composed volumes, plates and doors supported; no automatic vehicle turning simulation or garage-door mechanism.\"}\n"
+  }
+]

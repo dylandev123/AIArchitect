@@ -1,0 +1,2950 @@
+{
+  "version": 3,
+  "generationMode": "v3-scene",
+  "v3Scene": {
+    "version": 3,
+    "site": {
+      "width": 90,
+      "depth": 100,
+      "groundMaterial": {
+        "id": "ground",
+        "color": "#58724f",
+        "surface": "grass"
+      },
+      "baseElevation": 0,
+      "naturalGround": {
+        "elevation": 0,
+        "grade": 0
+      }
+    },
+    "estatePlan": {
+      "version": 1,
+      "concept": "A Caribbean belvedere is composed as a deeply cut, two-storey stone-and-concrete promontory: arrival is deliberately compressed through a shaded north entry court, then released through a central dining hall to a long, sheltered south living frontage and sea terrace. The house is articulated rather than stacked: a west social-and-guest wing and east service-and-family wing brace a tall central spine, while the upper floor becomes a quieter suite level under a single low mono-pitch roof rising away from the ocean. Assumption: the site falls conceptually toward the sea to the south; all levels are nonetheless authored at a flat datum for this schematic plan.",
+      "character": "Magazine-quality modern tropical residence: substantial pale local stone plinths, warm timber soffits and screens, board-formed architectural concrete, dark bronze detailing and carefully framed sea glazing. The architecture prioritizes deep shade, cross-ventilated perimeter rooms, protected outdoor living and a composed arrival-to-horizon sequence rather than an indiscriminate glass facade.",
+      "siteAccess": [
+        {
+          "id": "north-gate",
+          "boundary": "north",
+          "point": [
+            0,
+            0,
+            -50
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "id": "luxury-brief",
+          "source": "user",
+          "statement": "Create an extraordinary modern tropical mansion overlooking the Caribbean Sea in Saint Lucia, with a genuinely residential and cohesive architectural composition.",
+          "metric": "style",
+          "objectIds": [
+            "main-house"
+          ],
+          "value": "modern tropical Caribbean residence"
+        },
+        {
+          "id": "budget-ambition",
+          "source": "user",
+          "statement": "The design ambition is commensurate with a $20 million luxury residence; this is a design guide and not a verified construction estimate.",
+          "metric": "budget",
+          "objectIds": [
+            "main-house",
+            "sea-terrace",
+            "infinity-pool"
+          ],
+          "value": "$20 million design ambition"
+        },
+        {
+          "id": "ocean-living",
+          "source": "user",
+          "statement": "Prioritize expansive ocean-facing living spaces, luxurious suites, balconies and terraces.",
+          "metric": "feature",
+          "objectIds": [
+            "main-house",
+            "sea-terrace",
+            "infinity-pool"
+          ],
+          "value": "south-facing ocean living frontage"
+        }
+      ],
+      "program": [
+        {
+          "id": "residence-program",
+          "role": "Primary luxury residence with social, guest, family and private suite accommodation",
+          "kind": "residence",
+          "objectIds": [
+            "main-house"
+          ],
+          "source": "user",
+          "access": "required"
+        },
+        {
+          "id": "ocean-amenities",
+          "role": "Sheltered entertaining terrace and infinity-edge pool composition",
+          "kind": "amenity",
+          "objectIds": [
+            "sea-terrace",
+            "infinity-pool"
+          ],
+          "source": "design",
+          "access": "inferred"
+        },
+        {
+          "id": "arrival-program",
+          "role": "Formal motor arrival and pedestrian approach",
+          "kind": "landscape",
+          "objectIds": [
+            "arrival-court"
+          ],
+          "source": "design",
+          "access": "required"
+        }
+      ],
+      "zones": [],
+      "architecture": [
+        {
+          "id": "articulated-belvedere",
+          "objectIds": [
+            "main-house"
+          ],
+          "form": "joined",
+          "intent": "A central spine is recessed at arrival and projected toward the sea, giving the residence a legible hierarchy of wings, shaded recesses and a singular horizon-facing living frontage."
+        }
+      ],
+      "relationships": [
+        {
+          "id": "arrival-sequence",
+          "intent": "The north gate, motor court, entry recess, foyer and central dining hall form a compressed-to-expansive arrival sequence.",
+          "from": "north-gate",
+          "to": "main-house",
+          "kind": "connects"
+        },
+        {
+          "id": "ocean-axis",
+          "intent": "The central dining hall and southern living rooms extend directly to the sea terrace and pool.",
+          "from": "main-house",
+          "to": "sea-terrace",
+          "kind": "connects"
+        },
+        {
+          "id": "terrace-pool",
+          "intent": "The pool is set within the broad southern terrace as the horizon amenity of the residence.",
+          "from": "sea-terrace",
+          "to": "infinity-pool",
+          "kind": "hosts"
+        }
+      ],
+      "considerations": [
+        {
+          "id": "south-view",
+          "intent": "Principal living rooms, family lounge and primary bedroom receive the protected southern sea frontage; service rooms occupy the more sheltered north-east edge.",
+          "objectIds": [
+            "main-house",
+            "sea-terrace"
+          ],
+          "kind": "view"
+        },
+        {
+          "id": "suite-privacy",
+          "intent": "Guest accommodation is buffered in the west wing and all upper bedrooms are reached from the central landing rather than through another suite.",
+          "objectIds": [
+            "main-house"
+          ],
+          "kind": "privacy"
+        }
+      ],
+      "circulation": [
+        {
+          "id": "arrival-drive",
+          "purpose": "Curving vehicle approach from the northern gate to the recessed main entry.",
+          "from": "north-gate",
+          "to": "main-house",
+          "via": [
+            "arrival-drive-surface"
+          ],
+          "spatial": {
+            "from": {},
+            "to": {
+              "entranceId": "main-entry",
+              "approachDistance": 3
+            },
+            "use": "vehicle",
+            "width": 5.8,
+            "waypoints": [
+              [
+                -16,
+                0,
+                -32
+              ],
+              [
+                -16,
+                0,
+                -15
+              ]
+            ]
+          }
+        }
+      ],
+      "blueprint": {
+        "version": 1,
+        "buildings": [
+          {
+            "id": "bp-main-house",
+            "objectId": "main-house",
+            "role": "primary residence"
+          }
+        ],
+        "entrances": [
+          {
+            "id": "main-entry",
+            "objectId": "main-house",
+            "openingId": "main-door",
+            "level": 0
+          }
+        ],
+        "roofObjectIds": [
+          "main-roof"
+        ],
+        "outdoorObjectIds": [
+          "arrival-court",
+          "sea-terrace",
+          "infinity-pool",
+          "south-lawn"
+        ],
+        "routeIds": [
+          "arrival-drive"
+        ],
+        "verticalCirculationIds": [
+          "central-stair"
+        ],
+        "allocations": [
+          {
+            "id": "bp-ocean-living",
+            "requirementId": "ocean-living",
+            "objectIds": [
+              "main-house",
+              "sea-terrace",
+              "infinity-pool"
+            ],
+            "roomIds": []
+          }
+        ]
+      }
+    },
+    "objects": [
+      {
+        "id": "main-house",
+        "type": "building-mass",
+        "semanticRole": "primary residence",
+        "label": "Caribbean Belvedere",
+        "geometryKind": "box",
+        "architecture": {
+          "x": 0,
+          "z": 10,
+          "baseElevation": 0,
+          "width": 32,
+          "depth": 24,
+          "height": 8,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            4,
+            10
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          32,
+          8,
+          24
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "solid",
+        "composition": {
+          "footprint": {
+            "kind": "articulated",
+            "operations": [
+              {
+                "id": "north-entry-cut",
+                "floors": "all",
+                "type": "entry-recess",
+                "facade": "north",
+                "width": 8,
+                "depth": 3
+              },
+              {
+                "id": "south-salon-project",
+                "floors": "all",
+                "facade": "south",
+                "start": 0.28,
+                "end": 0.72,
+                "depth": 2.4,
+                "type": "projection"
+              },
+              {
+                "id": "west-court-recess",
+                "floors": "all",
+                "facade": "west",
+                "start": 0.08,
+                "end": 0.38,
+                "depth": 2.2,
+                "type": "recess"
+              },
+              {
+                "id": "east-service-recess",
+                "floors": "all",
+                "facade": "east",
+                "start": 0.06,
+                "end": 0.27,
+                "depth": 1.8,
+                "type": "recess"
+              }
+            ]
+          },
+          "openings": [
+            {
+              "id": "main-door",
+              "facade": "north",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.39,
+              "end": 0.61,
+              "height": 3.2,
+              "operation": "sliding",
+              "reveal": 0.35,
+              "serves": "foyer"
+            },
+            {
+              "id": "living-sea-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.14,
+              "end": 0.47,
+              "height": 3.5,
+              "operation": "sliding",
+              "reveal": 0.2,
+              "serves": "living-room"
+            },
+            {
+              "id": "family-sea-door",
+              "facade": "south",
+              "floors": "ground",
+              "type": "glazed-door",
+              "start": 0.69,
+              "end": 0.88,
+              "height": 3.2,
+              "operation": "sliding",
+              "reveal": 0.2,
+              "serves": "family-lounge"
+            }
+          ]
+        },
+        "levels": 2
+      },
+      {
+        "id": "arrival-court",
+        "type": "terrace",
+        "semanticRole": "formal arrival",
+        "label": "Stone Motor Court",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": -12,
+          "baseElevation": 0,
+          "width": 30,
+          "depth": 14,
+          "height": 0.16,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.08,
+            -12
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          30,
+          0.16,
+          14
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "sea-terrace",
+        "type": "terrace",
+        "semanticRole": "outdoor entertaining",
+        "label": "Ocean Living Terrace",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 29,
+          "baseElevation": 0,
+          "width": 34,
+          "depth": 14,
+          "height": 0.16,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.08,
+            29
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          34,
+          0.16,
+          14
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        },
+        "collision": "walkable"
+      },
+      {
+        "id": "infinity-pool",
+        "type": "pool",
+        "semanticRole": "ocean amenity",
+        "label": "Caribbean Infinity Pool",
+        "geometryKind": "water",
+        "architecture": {
+          "x": 0,
+          "z": 33,
+          "baseElevation": -0.18,
+          "width": 18,
+          "depth": 4.8,
+          "height": 0.18,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            -0.09,
+            33
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          18,
+          0.18,
+          4.8
+        ],
+        "material": {
+          "id": "plan-water",
+          "color": "#528e9a",
+          "surface": "water"
+        },
+        "collision": "water"
+      },
+      {
+        "id": "south-lawn",
+        "type": "landscape-zone",
+        "semanticRole": "open garden",
+        "label": "Sea Lawn",
+        "geometryKind": "slab",
+        "architecture": {
+          "x": 0,
+          "z": 43,
+          "baseElevation": 0,
+          "width": 42,
+          "depth": 10,
+          "height": 0.12,
+          "rotationY": 0
+        },
+        "transform": {
+          "position": [
+            0,
+            0.06,
+            43
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          42,
+          0.12,
+          10
+        ],
+        "material": {
+          "id": "plan-grass",
+          "color": "#61754b",
+          "roughness": 0.9,
+          "surface": "grass"
+        },
+        "collision": "none"
+      },
+      {
+        "id": "arrival-drive-surface",
+        "type": "driveway",
+        "semanticRole": "Curving vehicle approach from the northern gate to the recessed main entry.",
+        "label": "Curving vehicle approach from the northern gate to the recessed main entry.",
+        "geometryKind": "path",
+        "transform": {
+          "position": [
+            -7.999999999999999,
+            0.05,
+            -24.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "dimensions": [
+          21.799999999999997,
+          0.01,
+          51
+        ],
+        "material": {
+          "id": "plan-stone",
+          "color": "#d6d2c8",
+          "roughness": 0.8,
+          "surface": "stone"
+        }
+      }
+    ],
+    "interior": {
+      "storeys": [
+        {
+          "id": "ground-level",
+          "label": "Ground floor",
+          "semanticRole": "arrival and entertaining",
+          "hostMassId": "main-house",
+          "index": 0,
+          "elevation": 0.26,
+          "height": 4.2
+        },
+        {
+          "id": "upper-level",
+          "label": "Upper floor",
+          "semanticRole": "private suites",
+          "hostMassId": "main-house",
+          "index": 1,
+          "elevation": 4.46,
+          "height": 3.8
+        }
+      ],
+      "rooms": [],
+      "partitions": [],
+      "doors": [],
+      "circulation": [
+        {
+          "id": "central-stair",
+          "type": "stair",
+          "hostMassId": "main-house",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "footprint": {
+            "x": 0,
+            "z": -2.5,
+            "width": 3.2,
+            "depth": 4
+          },
+          "stairType": "u-shaped",
+          "direction": "south",
+          "turn": "left",
+          "label": "Central sculptural stair",
+          "semanticRole": "principal vertical circulation"
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "from": "north-gate",
+        "to": "main-house",
+        "kind": "connects"
+      },
+      {
+        "from": "main-house",
+        "to": "sea-terrace",
+        "kind": "connects"
+      },
+      {
+        "from": "sea-terrace",
+        "to": "infinity-pool",
+        "kind": "hosts"
+      }
+    ],
+    "metadata": {
+      "planDeferredFeatureHeights": [],
+      "planUnresolved": [
+        {
+          "kind": "adjacency",
+          "id": "foyer|stair-hall",
+          "raw": {
+            "from": "foyer",
+            "to": "stair-hall"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "foyer|stair-hall",
+                "foyer",
+                "stair-hall"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "stair-hall|dining-hall",
+          "raw": {
+            "from": "stair-hall",
+            "to": "dining-hall"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "stair-hall|dining-hall",
+                "stair-hall",
+                "dining-hall"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "dining-hall|living-room",
+          "raw": {
+            "from": "dining-hall",
+            "to": "living-room"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "dining-hall|living-room",
+                "dining-hall",
+                "living-room"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "dining-hall|kitchen",
+          "raw": {
+            "from": "dining-hall",
+            "to": "kitchen"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "dining-hall|kitchen",
+                "dining-hall",
+                "kitchen"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "living-room|family-lounge",
+          "raw": {
+            "from": "living-room",
+            "to": "family-lounge"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "living-room|family-lounge",
+                "living-room",
+                "family-lounge"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "gallery|guest-bedroom",
+          "raw": {
+            "from": "gallery",
+            "to": "guest-bedroom"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "gallery|guest-bedroom",
+                "gallery",
+                "guest-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "guest-bedroom|guest-dressing",
+          "raw": {
+            "from": "guest-bedroom",
+            "to": "guest-dressing"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "guest-bedroom|guest-dressing",
+                "guest-bedroom",
+                "guest-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "guest-dressing|guest-bath",
+          "raw": {
+            "from": "guest-dressing",
+            "to": "guest-bath"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "guest-dressing|guest-bath",
+                "guest-dressing",
+                "guest-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "kitchen|pantry",
+          "raw": {
+            "from": "kitchen",
+            "to": "pantry"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "kitchen|pantry",
+                "kitchen",
+                "pantry"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "kitchen|family-lounge",
+          "raw": {
+            "from": "kitchen",
+            "to": "family-lounge"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "kitchen|family-lounge",
+                "kitchen",
+                "family-lounge"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "upper-landing|upper-gallery",
+          "raw": {
+            "from": "upper-landing",
+            "to": "upper-gallery"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|upper-gallery",
+                "upper-landing",
+                "upper-gallery"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "upper-landing|suite-one-bedroom",
+          "raw": {
+            "from": "upper-landing",
+            "to": "suite-one-bedroom"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|suite-one-bedroom",
+                "upper-landing",
+                "suite-one-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "upper-landing|primary-bedroom",
+          "raw": {
+            "from": "upper-landing",
+            "to": "primary-bedroom"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|primary-bedroom",
+                "upper-landing",
+                "primary-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "upper-gallery|suite-two-bedroom",
+          "raw": {
+            "from": "upper-gallery",
+            "to": "suite-two-bedroom"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-gallery|suite-two-bedroom",
+                "upper-gallery",
+                "suite-two-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "suite-one-bedroom|suite-one-dressing",
+          "raw": {
+            "from": "suite-one-bedroom",
+            "to": "suite-one-dressing"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-one-bedroom|suite-one-dressing",
+                "suite-one-bedroom",
+                "suite-one-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "suite-one-dressing|suite-one-bath",
+          "raw": {
+            "from": "suite-one-dressing",
+            "to": "suite-one-bath"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-one-dressing|suite-one-bath",
+                "suite-one-dressing",
+                "suite-one-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "suite-two-bedroom|suite-two-dressing",
+          "raw": {
+            "from": "suite-two-bedroom",
+            "to": "suite-two-dressing"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-two-bedroom|suite-two-dressing",
+                "suite-two-bedroom",
+                "suite-two-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "suite-two-dressing|suite-two-bath",
+          "raw": {
+            "from": "suite-two-dressing",
+            "to": "suite-two-bath"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-two-dressing|suite-two-bath",
+                "suite-two-dressing",
+                "suite-two-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "primary-bedroom|primary-dressing",
+          "raw": {
+            "from": "primary-bedroom",
+            "to": "primary-dressing"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "primary-bedroom|primary-dressing",
+                "primary-bedroom",
+                "primary-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "adjacency",
+          "id": "primary-dressing|primary-bath",
+          "raw": {
+            "from": "primary-dressing",
+            "to": "primary-bath"
+          },
+          "findings": [
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "primary-dressing|primary-bath",
+                "primary-dressing",
+                "primary-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            }
+          ]
+        },
+        {
+          "kind": "connection",
+          "id": "terrace-walk",
+          "raw": {
+            "id": "terrace-walk",
+            "surfaceId": "terrace-walk-surface",
+            "purpose": "Broad pedestrian continuation from the principal entry through the residence toward the ocean terrace.",
+            "from": {
+              "kind": "entrance",
+              "entranceId": "main-entry",
+              "approachDistance": 2.5
+            },
+            "to": {
+              "kind": "surface",
+              "objectId": "sea-terrace",
+              "local": [
+                0,
+                -6.5
+              ]
+            },
+            "use": "pedestrian",
+            "width": 2,
+            "waypoints": [
+              [
+                0,
+                0,
+                18
+              ]
+            ]
+          },
+          "findings": [
+            {
+              "code": "ESTATE_ROUTE_BLOCKED",
+              "severity": "fatal",
+              "targetIds": [
+                "terrace-walk",
+                "terrace-walk-surface",
+                "main-house"
+              ],
+              "message": "terrace-walk: route width intersects main-house; an authored detour or explicit supported bridge is required."
+            }
+          ]
+        }
+      ],
+      "designPipeline": {
+        "format": "v3-plan-first-1",
+        "stage": "plan",
+        "authority": "v3-semantic-plan"
+      },
+      "planQualityReview": {
+        "version": 1,
+        "objective": {
+          "scope": "Conceptual room access and existing geometry audits; potential adjacency is not a built doorway or a walkability certificate.",
+          "passageWidth": 0.8,
+          "circulationWidth": 0.9,
+          "roomCount": 0,
+          "potentialAccessRoomIds": [],
+          "findings": [
+            {
+              "code": "ESTATE_ACCESS_MISSING",
+              "severity": "fatal",
+              "targetIds": [
+                "sea-terrace"
+              ],
+              "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+            },
+            {
+              "code": "ESTATE_ACCESS_MISSING",
+              "severity": "fatal",
+              "targetIds": [
+                "infinity-pool"
+              ],
+              "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+            },
+            {
+              "code": "ESTATE_ROUTE_BLOCKED",
+              "severity": "fatal",
+              "targetIds": [
+                "arrival-drive-surface",
+                "main-house"
+              ],
+              "message": "arrival-drive: route width intersects main-house; an authored detour or explicit supported bridge is required."
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "foyer|stair-hall",
+                "foyer",
+                "stair-hall"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "stair-hall|dining-hall",
+                "stair-hall",
+                "dining-hall"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "dining-hall|living-room",
+                "dining-hall",
+                "living-room"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "dining-hall|kitchen",
+                "dining-hall",
+                "kitchen"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "living-room|family-lounge",
+                "living-room",
+                "family-lounge"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "gallery|guest-bedroom",
+                "gallery",
+                "guest-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "guest-bedroom|guest-dressing",
+                "guest-bedroom",
+                "guest-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "guest-dressing|guest-bath",
+                "guest-dressing",
+                "guest-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "kitchen|pantry",
+                "kitchen",
+                "pantry"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "kitchen|family-lounge",
+                "kitchen",
+                "family-lounge"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|upper-gallery",
+                "upper-landing",
+                "upper-gallery"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|suite-one-bedroom",
+                "upper-landing",
+                "suite-one-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-landing|primary-bedroom",
+                "upper-landing",
+                "primary-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "upper-gallery|suite-two-bedroom",
+                "upper-gallery",
+                "suite-two-bedroom"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-one-bedroom|suite-one-dressing",
+                "suite-one-bedroom",
+                "suite-one-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-one-dressing|suite-one-bath",
+                "suite-one-dressing",
+                "suite-one-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-two-bedroom|suite-two-dressing",
+                "suite-two-bedroom",
+                "suite-two-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "suite-two-dressing|suite-two-bath",
+                "suite-two-dressing",
+                "suite-two-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "primary-bedroom|primary-dressing",
+                "primary-bedroom",
+                "primary-dressing"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "PLAN_ADJACENCY",
+              "targetIds": [
+                "primary-dressing|primary-bath",
+                "primary-dressing",
+                "primary-bath"
+              ],
+              "message": "Adjacent rooms must occupy the same planned storey.",
+              "severity": "fatal"
+            },
+            {
+              "code": "ESTATE_ROUTE_BLOCKED",
+              "severity": "fatal",
+              "targetIds": [
+                "terrace-walk",
+                "terrace-walk-surface",
+                "main-house"
+              ],
+              "message": "terrace-walk: route width intersects main-house; an authored detour or explicit supported bridge is required."
+            },
+            {
+              "code": "PLAN_ENTRY_ROOM_GAP",
+              "targetIds": [
+                "main-entry",
+                "main-house"
+              ],
+              "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_STAIR_LANDING_ZONE",
+              "targetIds": [
+                "central-stair",
+                "ground-level"
+              ],
+              "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+              "severity": "advisory"
+            },
+            {
+              "code": "PLAN_STAIR_LANDING_ZONE",
+              "targetIds": [
+                "central-stair",
+                "upper-level"
+              ],
+              "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+              "severity": "advisory"
+            }
+          ]
+        },
+        "architecturalJudgment": {
+          "status": "requires-design-review",
+          "questions": [
+            "Does the built form and the space between volumes express a coherent architectural idea and convincing proportions?",
+            "Does the arrival sequence lead clearly to a considered entrance?",
+            "Are room proportions, public/private/service relationships and everyday circulation believable?",
+            "Do privacy, views, climate and indoor-outdoor connections shape the drawing rather than only its description?",
+            "Are the storeys and stair landings coherent, and does the design fulfill the brief’s style and ambition?"
+          ],
+          "limitation": "No aesthetic score or claim of excellence. A valid rectangle can be appropriate; generic composition and exceptional architecture require review of the actual drawing against the brief."
+        },
+        "findings": [
+          {
+            "code": "PLAN_ENTRY_ROOM_GAP",
+            "targetIds": [
+              "main-entry",
+              "main-house"
+            ],
+            "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_STAIR_LANDING_ZONE",
+            "targetIds": [
+              "central-stair",
+              "ground-level"
+            ],
+            "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+            "severity": "advisory"
+          },
+          {
+            "code": "PLAN_STAIR_LANDING_ZONE",
+            "targetIds": [
+              "central-stair",
+              "upper-level"
+            ],
+            "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "planEvaluation": true,
+      "planDiagnostics": [
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level"
+          ],
+          "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level"
+          ],
+          "message": "This storey has no resolved room geometry. Its architectural layout needs an explicit edit before construction."
+        },
+        {
+          "code": "ESTATE_RELATIONSHIP_MISSING",
+          "severity": "fatal",
+          "targetIds": [
+            "north-gate",
+            "main-house"
+          ],
+          "message": "arrival-sequence: missing authored connects relationship."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-house"
+          ],
+          "message": "luxury-brief: style is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-house",
+            "sea-terrace",
+            "infinity-pool"
+          ],
+          "message": "budget-ambition: budget is retained as intent; no deterministic verification is available."
+        },
+        {
+          "code": "ESTATE_FORM_UNBUILT",
+          "severity": "fatal",
+          "targetIds": [
+            "main-house"
+          ],
+          "message": "articulated-belvedere: declared connected composition lacks touching authored objects."
+        },
+        {
+          "code": "ESTATE_REQUIREMENT_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "main-house"
+          ],
+          "message": "articulated-belvedere: composition connectivity checked; exact joined silhouette and roof intersections require review."
+        },
+        {
+          "code": "ESTATE_ACCESS_MISSING",
+          "severity": "fatal",
+          "targetIds": [
+            "sea-terrace"
+          ],
+          "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+        },
+        {
+          "code": "ESTATE_ACCESS_MISSING",
+          "severity": "fatal",
+          "targetIds": [
+            "infinity-pool"
+          ],
+          "message": "ocean-amenities: planned destination has no authored route or proven architectural passage/dry approach."
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "severity": "fatal",
+          "targetIds": [
+            "arrival-drive-surface",
+            "main-house"
+          ],
+          "message": "arrival-drive: route width intersects main-house; an authored detour or explicit supported bridge is required."
+        },
+        {
+          "code": "BLUEPRINT_RELATIONSHIP_UNVERIFIED",
+          "severity": "advisory",
+          "targetIds": [
+            "terrace-pool",
+            "sea-terrace",
+            "infinity-pool"
+          ],
+          "message": "Relationship references agree; its architectural axis or physical support needs a more specific authored/constructed contract."
+        },
+        {
+          "code": "BLUEPRINT_REFERENCE",
+          "severity": "advisory",
+          "targetIds": [
+            "blueprint.roofObjectIds",
+            "main-roof"
+          ],
+          "message": "Reserved roof identity will be resolved during exterior elaboration. blueprint.roofObjectIds needs roof-form main-roof."
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "foyer|stair-hall",
+            "foyer",
+            "stair-hall"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "stair-hall|dining-hall",
+            "stair-hall",
+            "dining-hall"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "dining-hall|living-room",
+            "dining-hall",
+            "living-room"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "dining-hall|kitchen",
+            "dining-hall",
+            "kitchen"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "living-room|family-lounge",
+            "living-room",
+            "family-lounge"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "gallery|guest-bedroom",
+            "gallery",
+            "guest-bedroom"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "guest-bedroom|guest-dressing",
+            "guest-bedroom",
+            "guest-dressing"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "guest-dressing|guest-bath",
+            "guest-dressing",
+            "guest-bath"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "kitchen|pantry",
+            "kitchen",
+            "pantry"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "kitchen|family-lounge",
+            "kitchen",
+            "family-lounge"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "upper-landing|upper-gallery",
+            "upper-landing",
+            "upper-gallery"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "upper-landing|suite-one-bedroom",
+            "upper-landing",
+            "suite-one-bedroom"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "upper-landing|primary-bedroom",
+            "upper-landing",
+            "primary-bedroom"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "upper-gallery|suite-two-bedroom",
+            "upper-gallery",
+            "suite-two-bedroom"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "suite-one-bedroom|suite-one-dressing",
+            "suite-one-bedroom",
+            "suite-one-dressing"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "suite-one-dressing|suite-one-bath",
+            "suite-one-dressing",
+            "suite-one-bath"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "suite-two-bedroom|suite-two-dressing",
+            "suite-two-bedroom",
+            "suite-two-dressing"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "suite-two-dressing|suite-two-bath",
+            "suite-two-dressing",
+            "suite-two-bath"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "primary-bedroom|primary-dressing",
+            "primary-bedroom",
+            "primary-dressing"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "PLAN_ADJACENCY",
+          "targetIds": [
+            "primary-dressing|primary-bath",
+            "primary-dressing",
+            "primary-bath"
+          ],
+          "message": "Adjacent rooms must occupy the same planned storey.",
+          "severity": "fatal"
+        },
+        {
+          "code": "ESTATE_ROUTE_BLOCKED",
+          "severity": "fatal",
+          "targetIds": [
+            "terrace-walk",
+            "terrace-walk-surface",
+            "main-house"
+          ],
+          "message": "terrace-walk: route width intersects main-house; an authored detour or explicit supported bridge is required."
+        },
+        {
+          "code": "PLAN_ENTRY_ROOM_GAP",
+          "targetIds": [
+            "main-entry",
+            "main-house"
+          ],
+          "message": "The entrance contact does not meet a room-zone edge with a usable schematic span. Draw the entrance hall/vestibule to the actual shell; any unallocated circulation remains unverified.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_STAIR_LANDING_ZONE",
+          "targetIds": [
+            "central-stair",
+            "ground-level"
+          ],
+          "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+          "severity": "advisory"
+        },
+        {
+          "code": "PLAN_STAIR_LANDING_ZONE",
+          "targetIds": [
+            "central-stair",
+            "upper-level"
+          ],
+          "message": "No room zone contains the complete vertical-circulation reservation on this floor. Draw an aligned stair/landing hall; overlap alone cannot establish access.",
+          "severity": "advisory"
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "ground-west"
+          ],
+          "message": "Functional region leaves the actual host storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "ground-east"
+          ],
+          "message": "Functional region leaves the actual host storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "gallery"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "guest-bedroom"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "guest-dressing"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "guest-bath"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "living-room"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "powder-room"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "powder-room"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "pantry"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "family-lounge"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "ground-level",
+            "living-room",
+            "family-lounge"
+          ],
+          "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "upper-west"
+          ],
+          "message": "Functional region leaves the actual host storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "upper-east"
+          ],
+          "message": "Functional region leaves the actual host storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-one-bedroom"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-one-dressing"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-one-bath"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-two-bedroom"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-two-dressing"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-two-dressing"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "suite-two-bath"
+          ],
+          "message": "Chosen zone proportions cannot satisfy this room size intention."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "primary-bedroom"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "primary-bath"
+          ],
+          "message": "Developed room leaves the actual storey footprint."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "upper-landing",
+            "suite-one-bedroom"
+          ],
+          "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "upper-landing",
+            "primary-bedroom"
+          ],
+          "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "upper-gallery",
+            "suite-two-bedroom"
+          ],
+          "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+        },
+        {
+          "code": "ROOM_LAYOUT_UNRESOLVED",
+          "severity": "advisory",
+          "targetIds": [
+            "upper-level",
+            "central-stair"
+          ],
+          "message": "An aligned stair/lift hall must contain the fixed reservation on every connected storey."
+        }
+      ],
+      "roomLayoutDrafts": [
+        {
+          "storeyId": "ground-level",
+          "layout": {
+            "regions": [
+              {
+                "root": "ground-central",
+                "bounds": {
+                  "x": 0,
+                  "z": 1.5,
+                  "width": 8,
+                  "depth": 21
+                }
+              },
+              {
+                "root": "ground-west",
+                "bounds": {
+                  "x": -10,
+                  "z": 0,
+                  "width": 12,
+                  "depth": 24
+                }
+              },
+              {
+                "root": "ground-east",
+                "bounds": {
+                  "x": 10,
+                  "z": 0,
+                  "width": 12,
+                  "depth": 24
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "ground-central",
+                "kind": "split",
+                "zone": "arrival spine",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "foyer-node",
+                    "weight": 4
+                  },
+                  {
+                    "node": "stair-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "dining-node",
+                    "weight": 12
+                  }
+                ]
+              },
+              {
+                "id": "foyer-node",
+                "kind": "room",
+                "roomId": "foyer"
+              },
+              {
+                "id": "stair-node",
+                "kind": "room",
+                "roomId": "stair-hall"
+              },
+              {
+                "id": "dining-node",
+                "kind": "room",
+                "roomId": "dining-hall"
+              },
+              {
+                "id": "ground-west",
+                "kind": "split",
+                "zone": "social and guest wing",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "gallery-node",
+                    "weight": 4
+                  },
+                  {
+                    "node": "guest-suite-zone",
+                    "weight": 8
+                  },
+                  {
+                    "node": "living-node",
+                    "weight": 12
+                  }
+                ]
+              },
+              {
+                "id": "gallery-node",
+                "kind": "room",
+                "roomId": "gallery"
+              },
+              {
+                "id": "guest-suite-zone",
+                "kind": "split",
+                "zone": "guest suite",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "guest-bedroom-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "guest-dressing-node",
+                    "weight": 2
+                  },
+                  {
+                    "node": "guest-bath-node",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "guest-bedroom-node",
+                "kind": "room",
+                "roomId": "guest-bedroom"
+              },
+              {
+                "id": "guest-dressing-node",
+                "kind": "room",
+                "roomId": "guest-dressing"
+              },
+              {
+                "id": "guest-bath-node",
+                "kind": "room",
+                "roomId": "guest-bath"
+              },
+              {
+                "id": "living-node",
+                "kind": "room",
+                "roomId": "living-room"
+              },
+              {
+                "id": "ground-east",
+                "kind": "split",
+                "zone": "service and family wing",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "service-zone",
+                    "weight": 8
+                  },
+                  {
+                    "node": "kitchen-zone",
+                    "weight": 8
+                  },
+                  {
+                    "node": "family-node",
+                    "weight": 8
+                  }
+                ]
+              },
+              {
+                "id": "service-zone",
+                "kind": "split",
+                "zone": "back of house",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "service-hall-node",
+                    "weight": 3
+                  },
+                  {
+                    "node": "staff-node",
+                    "weight": 3
+                  },
+                  {
+                    "node": "powder-node",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "service-hall-node",
+                "kind": "room",
+                "roomId": "service-hall"
+              },
+              {
+                "id": "staff-node",
+                "kind": "room",
+                "roomId": "staff-room"
+              },
+              {
+                "id": "powder-node",
+                "kind": "room",
+                "roomId": "powder-room"
+              },
+              {
+                "id": "kitchen-zone",
+                "kind": "split",
+                "zone": "culinary",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "kitchen-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "pantry-node",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "kitchen-node",
+                "kind": "room",
+                "roomId": "kitchen"
+              },
+              {
+                "id": "pantry-node",
+                "kind": "room",
+                "roomId": "pantry"
+              },
+              {
+                "id": "family-node",
+                "kind": "room",
+                "roomId": "family-lounge"
+              }
+            ]
+          },
+          "spaces": [
+            {
+              "id": "foyer",
+              "label": "Arrival Foyer",
+              "role": "arrival",
+              "program": "foyer",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 3,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "stair-hall",
+              "label": "Stair Hall",
+              "role": "circulation",
+              "program": "stair hall",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 4,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "dining-hall",
+              "label": "Ocean Dining Hall",
+              "role": "public",
+              "program": "dining",
+              "size": {
+                "minWidth": 6,
+                "minDepth": 6,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "gallery",
+              "label": "West Gallery",
+              "role": "circulation",
+              "program": "gallery",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 3,
+                "maxAspect": 3
+              }
+            },
+            {
+              "id": "guest-bedroom",
+              "label": "Guest Suite Bedroom",
+              "role": "guest",
+              "program": "bedroom",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 4,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "guest-dressing",
+              "label": "Guest Dressing",
+              "role": "guest",
+              "program": "dressing",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "guest-bath",
+              "label": "Guest Bath",
+              "role": "guest",
+              "program": "bathroom",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "living-room",
+              "label": "Great Living Room",
+              "role": "public",
+              "program": "living",
+              "size": {
+                "minWidth": 7,
+                "minDepth": 6,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "service-hall",
+              "label": "Service Hall",
+              "role": "service",
+              "program": "service circulation",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "staff-room",
+              "label": "Staff Room",
+              "role": "service",
+              "program": "staff room",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 3,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "powder-room",
+              "label": "Powder Room",
+              "role": "service",
+              "program": "powder room",
+              "size": {
+                "minWidth": 1.8,
+                "minDepth": 2,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "kitchen",
+              "label": "Chef Kitchen",
+              "role": "service",
+              "program": "kitchen",
+              "size": {
+                "minWidth": 5,
+                "minDepth": 4,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "pantry",
+              "label": "Walk-in Pantry",
+              "role": "service",
+              "program": "pantry",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "family-lounge",
+              "label": "Family Lounge",
+              "role": "public",
+              "program": "family lounge",
+              "size": {
+                "minWidth": 5,
+                "minDepth": 4,
+                "maxAspect": 2.5
+              }
+            }
+          ],
+          "findings": [
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "ground-west"
+              ],
+              "message": "Functional region leaves the actual host storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "ground-east"
+              ],
+              "message": "Functional region leaves the actual host storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "gallery"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "guest-bedroom"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "guest-dressing"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "guest-bath"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "living-room"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "powder-room"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "powder-room"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "pantry"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "family-lounge"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "ground-level",
+                "living-room",
+                "family-lounge"
+              ],
+              "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+            }
+          ]
+        },
+        {
+          "storeyId": "upper-level",
+          "layout": {
+            "regions": [
+              {
+                "root": "upper-central",
+                "bounds": {
+                  "x": 0,
+                  "z": 1.5,
+                  "width": 8,
+                  "depth": 21
+                }
+              },
+              {
+                "root": "upper-west",
+                "bounds": {
+                  "x": -10,
+                  "z": 0,
+                  "width": 12,
+                  "depth": 24
+                }
+              },
+              {
+                "root": "upper-east",
+                "bounds": {
+                  "x": 10,
+                  "z": 0,
+                  "width": 12,
+                  "depth": 24
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "upper-central",
+                "kind": "split",
+                "zone": "private circulation spine",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "landing-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "upper-gallery-node",
+                    "weight": 16
+                  }
+                ]
+              },
+              {
+                "id": "landing-node",
+                "kind": "room",
+                "roomId": "upper-landing"
+              },
+              {
+                "id": "upper-gallery-node",
+                "kind": "room",
+                "roomId": "upper-gallery"
+              },
+              {
+                "id": "upper-west",
+                "kind": "split",
+                "zone": "western bedroom wing",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "suite-one-zone",
+                    "weight": 12
+                  },
+                  {
+                    "node": "suite-two-zone",
+                    "weight": 12
+                  }
+                ]
+              },
+              {
+                "id": "suite-one-zone",
+                "kind": "split",
+                "zone": "suite one",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "suite-one-bed-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "suite-one-dress-node",
+                    "weight": 2
+                  },
+                  {
+                    "node": "suite-one-bath-node",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "suite-one-bed-node",
+                "kind": "room",
+                "roomId": "suite-one-bedroom"
+              },
+              {
+                "id": "suite-one-dress-node",
+                "kind": "room",
+                "roomId": "suite-one-dressing"
+              },
+              {
+                "id": "suite-one-bath-node",
+                "kind": "room",
+                "roomId": "suite-one-bath"
+              },
+              {
+                "id": "suite-two-zone",
+                "kind": "split",
+                "zone": "suite two",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "suite-two-bed-node",
+                    "weight": 5
+                  },
+                  {
+                    "node": "suite-two-dress-node",
+                    "weight": 2
+                  },
+                  {
+                    "node": "suite-two-bath-node",
+                    "weight": 2
+                  }
+                ]
+              },
+              {
+                "id": "suite-two-bed-node",
+                "kind": "room",
+                "roomId": "suite-two-bedroom"
+              },
+              {
+                "id": "suite-two-dress-node",
+                "kind": "room",
+                "roomId": "suite-two-dressing"
+              },
+              {
+                "id": "suite-two-bath-node",
+                "kind": "room",
+                "roomId": "suite-two-bath"
+              },
+              {
+                "id": "upper-east",
+                "kind": "split",
+                "zone": "primary suite wing",
+                "axis": "z",
+                "children": [
+                  {
+                    "node": "primary-wet-zone",
+                    "weight": 10
+                  },
+                  {
+                    "node": "primary-bed-node",
+                    "weight": 14
+                  }
+                ]
+              },
+              {
+                "id": "primary-wet-zone",
+                "kind": "split",
+                "zone": "primary dressing and bath",
+                "axis": "x",
+                "children": [
+                  {
+                    "node": "primary-dress-node",
+                    "weight": 3
+                  },
+                  {
+                    "node": "primary-bath-node",
+                    "weight": 4
+                  }
+                ]
+              },
+              {
+                "id": "primary-dress-node",
+                "kind": "room",
+                "roomId": "primary-dressing"
+              },
+              {
+                "id": "primary-bath-node",
+                "kind": "room",
+                "roomId": "primary-bath"
+              },
+              {
+                "id": "primary-bed-node",
+                "kind": "room",
+                "roomId": "primary-bedroom"
+              }
+            ]
+          },
+          "spaces": [
+            {
+              "id": "upper-landing",
+              "label": "Upper Stair Landing",
+              "role": "circulation",
+              "program": "stair landing",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 4,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "upper-gallery",
+              "label": "Upper Gallery",
+              "role": "circulation",
+              "program": "gallery",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 5,
+                "maxAspect": 4
+              }
+            },
+            {
+              "id": "suite-one-bedroom",
+              "label": "Suite One Bedroom",
+              "role": "private",
+              "program": "bedroom",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 4,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "suite-one-dressing",
+              "label": "Suite One Dressing",
+              "role": "private",
+              "program": "dressing",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "suite-one-bath",
+              "label": "Suite One Bath",
+              "role": "private",
+              "program": "bathroom",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "suite-two-bedroom",
+              "label": "Suite Two Bedroom",
+              "role": "private",
+              "program": "bedroom",
+              "size": {
+                "minWidth": 4,
+                "minDepth": 4,
+                "maxAspect": 2
+              }
+            },
+            {
+              "id": "suite-two-dressing",
+              "label": "Suite Two Dressing",
+              "role": "private",
+              "program": "dressing",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "suite-two-bath",
+              "label": "Suite Two Bath",
+              "role": "private",
+              "program": "bathroom",
+              "size": {
+                "minWidth": 2,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "primary-bedroom",
+              "label": "Primary Sea Bedroom",
+              "role": "private",
+              "program": "primary bedroom",
+              "size": {
+                "minWidth": 6,
+                "minDepth": 5,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "primary-dressing",
+              "label": "Primary Dressing Room",
+              "role": "private",
+              "program": "primary dressing",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            },
+            {
+              "id": "primary-bath",
+              "label": "Primary Bath",
+              "role": "private",
+              "program": "primary bathroom",
+              "size": {
+                "minWidth": 3,
+                "minDepth": 3,
+                "maxAspect": 2.5
+              }
+            }
+          ],
+          "findings": [
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "upper-west"
+              ],
+              "message": "Functional region leaves the actual host storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "upper-east"
+              ],
+              "message": "Functional region leaves the actual host storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-one-bedroom"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-one-dressing"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-one-bath"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-two-bedroom"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-two-dressing"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-two-dressing"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "suite-two-bath"
+              ],
+              "message": "Chosen zone proportions cannot satisfy this room size intention."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "primary-bedroom"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "primary-bath"
+              ],
+              "message": "Developed room leaves the actual storey footprint."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "upper-landing",
+                "suite-one-bedroom"
+              ],
+              "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "upper-landing",
+                "primary-bedroom"
+              ],
+              "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "upper-gallery",
+                "suite-two-bedroom"
+              ],
+              "message": "Required adjacency has less than 0.8m of shared boundary; revise the architectural subdivision."
+            },
+            {
+              "code": "ROOM_LAYOUT_UNRESOLVED",
+              "severity": "advisory",
+              "targetIds": [
+                "upper-level",
+                "central-stair"
+              ],
+              "message": "An aligned stair/lift hall must contain the fixed reservation on every connected storey."
+            }
+          ]
+        }
+      ],
+      "roomLayoutDevelopment": {
+        "version": 1,
+        "storeyIds": []
+      }
+    }
+  }
+}

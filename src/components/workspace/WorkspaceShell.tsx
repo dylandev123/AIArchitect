@@ -1,5 +1,7 @@
 "use client";
 
+import { OperationStudio } from "@/components/scene/OperationStudio";
+import { resolveProjectGenerationMode } from "@/lib/v3/projectMode";
 import type { Project } from "@/types/project";
 import { TopBar } from "./TopBar";
 import { LeftSidebar } from "./LeftSidebar";
@@ -11,6 +13,8 @@ import { useUndoRedoShortcuts } from "@/lib/useUndoRedoShortcuts";
 
 export function WorkspaceShell({ project }: { project: Project }) {
   useUndoRedoShortcuts(project.id);
+
+  if (resolveProjectGenerationMode(project) === "direct-scene") return <OperationStudio key={project.id} project={project} />;
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-neutral-950 text-neutral-100">

@@ -1,0 +1,243 @@
+{
+  "providerCalls": 0,
+  "developerAuthored": true,
+  "approved": false,
+  "retained": [
+    {
+      "path": "docs/architecture/distinct-houses/A/provider-response.raw.json",
+      "sha256": "e4f2adce583accaf648fd5fee442fbafbdf741b6609bd770b59c2b6a01f4e31b"
+    },
+    {
+      "path": "docs/architecture/distinct-houses/A/scene.UNAPPROVED.json",
+      "sha256": "a65492541da665e7881554c49ea631b219c2c519d7ff8e300df6cf0a18efaf6a"
+    },
+    {
+      "path": "docs/architecture/distinct-houses/B/provider-response.raw.json",
+      "sha256": "cc84c9b9fcbf797250fbbab282bcbbff02026ff7fcb2276a09924e32eee06feb"
+    },
+    {
+      "path": "docs/architecture/distinct-houses/B/scene.UNAPPROVED.json",
+      "sha256": "aa1bfc33733ebf258569223c5e0741de4ab8ebb08e13fd344265c024857c851e"
+    }
+  ],
+  "retainedFindings": {
+    "A": [
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-04",
+          "main-roof"
+        ],
+        "message": "stair-tread-04: centreline overhead solid main-roof underside Y=3.200, tread Y=1.600, clearance 1.600 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-04",
+          "upper-suite-floor"
+        ],
+        "message": "stair-tread-04: centreline overhead solid upper-suite-floor underside Y=3.200, tread Y=1.600, clearance 1.600 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-05",
+          "main-roof"
+        ],
+        "message": "stair-tread-05: centreline overhead solid main-roof underside Y=3.200, tread Y=2.000, clearance 1.200 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-05",
+          "upper-suite-floor"
+        ],
+        "message": "stair-tread-05: centreline overhead solid upper-suite-floor underside Y=3.200, tread Y=2.000, clearance 1.200 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-06",
+          "main-roof"
+        ],
+        "message": "stair-tread-06: centreline overhead solid main-roof underside Y=3.200, tread Y=2.400, clearance 0.800 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-06",
+          "upper-suite-floor"
+        ],
+        "message": "stair-tread-06: centreline overhead solid upper-suite-floor underside Y=3.200, tread Y=2.400, clearance 0.800 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-07",
+          "main-roof"
+        ],
+        "message": "stair-tread-07: centreline overhead solid main-roof underside Y=3.200, tread Y=2.800, clearance 0.400 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-07",
+          "upper-suite-floor"
+        ],
+        "message": "stair-tread-07: centreline overhead solid upper-suite-floor underside Y=3.200, tread Y=2.800, clearance 0.400 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-08",
+          "main-roof"
+        ],
+        "message": "stair-tread-08: centreline overhead solid main-roof underside Y=3.200, tread Y=3.200, clearance 0.000 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "confirmed-technical-defect"
+      },
+      {
+        "code": "stair-headroom-obstructed",
+        "elementIds": [
+          "stair-tread-08",
+          "upper-suite-floor"
+        ],
+        "message": "stair-tread-08: centreline overhead solid upper-suite-floor underside Y=3.200, tread Y=3.200, clearance -0.000 m. Review a slab void or route redesign. The 2 m probe is a review heuristic, not a mandatory dimension or code test.",
+        "category": "confirmed-technical-defect"
+      },
+      {
+        "code": "upper-access-obstructed",
+        "elementIds": [
+          "upper-suite-floor",
+          "upper-terrace-floor",
+          "upper-view-wall"
+        ],
+        "message": "upper-suite-floor / upper-terrace-floor: shared-edge centre (5.000, 3.400, 5.500) lacks an aligned 0.8 m × 1.9 m clear wall passage. Other paths require review.",
+        "category": "likely-architectural-incompleteness"
+      },
+      {
+        "code": "pool-wall-bottom-gap",
+        "elementIds": [
+          "pool-water",
+          "pool-basin-bottom"
+        ],
+        "message": "pool-water: perimeter samples 0:-0.4, 0:0, 0:0.4, 1:-0.4, 1:0, 1:0.4, 2:-0.4, 2:0, 2:0.4, 3:-0.4, 3:0, 3:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review.",
+        "category": "likely-architectural-incompleteness"
+      }
+    ],
+    "B": []
+  },
+  "retainedRoofEnvelopeOverlaps": {
+    "A": [
+      {
+        "ids": [
+          "main-roof",
+          "west-wing-roof"
+        ],
+        "planPenetrationMetres": 1,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "main-roof",
+          "entry-canopy-roof"
+        ],
+        "planPenetrationMetres": 0.7,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "main-roof",
+          "loggia-roof"
+        ],
+        "planPenetrationMetres": 0.9000000000000008,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "main-roof",
+          "upper-roof"
+        ],
+        "planPenetrationMetres": 9.05,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      }
+    ],
+    "B": [
+      {
+        "ids": [
+          "living-roof",
+          "west-roof"
+        ],
+        "planPenetrationMetres": 5.199999999999999,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "living-roof",
+          "east-roof"
+        ],
+        "planPenetrationMetres": 5.199999999999999,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "living-roof",
+          "entry-canopy"
+        ],
+        "planPenetrationMetres": 1.4000000000000004,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "west-roof",
+          "north-roof"
+        ],
+        "planPenetrationMetres": 5.199999999999999,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      },
+      {
+        "ids": [
+          "east-roof",
+          "north-roof"
+        ],
+        "planPenetrationMetres": 5.199999999999999,
+        "note": "Plan envelope overlap; not a mesh intersection/engineering certificate"
+      }
+    ]
+  },
+  "studies": {
+    "tropical": {
+      "elements": 56,
+      "roots": [
+        "salon",
+        "studio",
+        "guest",
+        "pool"
+      ],
+      "relationshipIssues": [],
+      "focusedFindings": []
+    },
+    "mediterranean": {
+      "elements": 42,
+      "roots": [
+        "north",
+        "west",
+        "east"
+      ],
+      "relationshipIssues": [],
+      "focusedFindings": []
+    }
+  },
+  "limitations": [
+    "Exterior composition proofs, not complete homes",
+    "No automatic rooms, stairs, arcades or shared junctions",
+    "No Terra quality claim; original scenes remain untouched"
+  ]
+}

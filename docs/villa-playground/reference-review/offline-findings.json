@@ -1,0 +1,37 @@
+{
+  "provenance": "Manual offline fallback after DNS failure; no Terra proposal exists",
+  "providerCalls": 0,
+  "approved": false,
+  "learning": false,
+  "changes": [
+    {
+      "path": "siteMode",
+      "before": "derived",
+      "after": "fixed"
+    },
+    {
+      "path": "terraces.0.width",
+      "before": 7,
+      "after": 12
+    },
+    {
+      "path": "terraces.0.x",
+      "before": -14,
+      "after": -4.5
+    },
+    {
+      "path": "terraces.0.z",
+      "before": 1.5,
+      "after": 8
+    }
+  ],
+  "reason": "Reference shows paving beside the long facade. Existing terrace is beside short end and overlaps house by 1m. Candidate adjoins z=5 long facade, extends to z=11, and remains separate from pool (2.5m gap on x). Dimensions/orientation remain inferred.",
+  "policy": "siteMode fixed retains original garden bounds and all site geometry; explicit policy change rather than silently changing planting/boundary envelope",
+  "preservation": "All recorded source SHA256 hashes match; original config untouched",
+  "limitations": [
+    "No provider review or raw response received",
+    "No calibrated camera, surveyed dimensions or confirmed terrace orientation",
+    "Wing window placement, shutters, trim and roof pitch unchanged",
+    "Manual candidate only, never accepted or sent to design learning"
+  ]
+}
