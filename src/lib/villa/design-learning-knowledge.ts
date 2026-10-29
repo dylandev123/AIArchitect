@@ -16,7 +16,7 @@ export function designLessonKnowledge(lesson: DesignLesson, recordId: string) {
     when:t.context,combinations:t.exceptions,placement:t.correction,
     principles:`${lesson.verdict==='rejected'?'Rejected correction; avoid treating it as a success.':'Human-reviewed improvement; transfer remains subject to knowledge review.'} Problem: ${t.problem}`,
     capabilities:`${t.rationale} Root cause: ${t.rootCause || 'Not established'}. Confidence: ${t.confidence}.`,
-    sources:[{reference:`.data/villa-design-lessons/${recordId}.json`,kind:'reviewed-design',verified:true,
+    sources:[{reference:`library_docs:designLesson:${recordId}`,kind:'reviewed-design',verified:true,
       note:`Human ${lesson.verdict}; scene elements/operations and same-camera captures retained. ${comparison.resolved.length} geometric warnings resolved; ${comparison.introduced.length} introduced. Visual judgment is not structural certification.`}],
     status:'proposed',supersedes:[],review:'Pending authorized knowledge review; inspect evidence, applicability, contradictions and exceptions before approval.',
   });

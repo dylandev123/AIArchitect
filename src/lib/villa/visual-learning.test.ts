@@ -58,6 +58,11 @@ it('persists in the existing brain and applies approvals, conflicts and superses
   const payload={version:1,brief:'$10m Caribbean beachfront house with pool terrace',verdict:'improved',feedback:'SIMULATED approval in temporary offline store; never real human approval.',before,after,beforeCaptures:captures,afterCaptures:captures,origin:'terra',correction:{operations,weaknesses:[transferable.problem],scope},transferable};
   const saved=await saveDesignLesson(payload);
   expect(saved.knowledge?.status).toBe('proposed');
+  const {createFileBackend}=await import('@/lib/library/store');
+  const fresh=await createFileBackend(path.join(root,'library.json')).read();
+  expect(fresh.designLessons?.find(r=>r.id===saved.id)?.lesson.correction?.operations).toEqual(operations);
+  const {listDesignLessonSummaries}=await import('./design-learning-store');
+  expect(await listDesignLessonSummaries()).toHaveLength(1);
   expect(JSON.parse(await readFile(path.join(root,'.data/villa-design-lessons',saved.id+'.json'),'utf8')).lesson.correction.operations).toEqual(operations);
   const query={mode:'generate' as const,prompt:payload.brief};
   expect((await architecturalRequestContext(query)).system).not.toContain(transferable.title);

@@ -12,6 +12,7 @@ const bytes=readFileSync(`${source}/terminal.json`),terminal=JSON.parse(bytes.to
 const text=terminal.output.flatMap((o:any)=>o.content??[]).filter((c:any)=>c.type==='output_text').map((c:any)=>c.text).join('');
 const input=JSON.parse(readFileSync('docs/architecture/sol-high-once/attempt.json','utf8')).input;
 const schema=await sceneResponseFormatSchema(input),parsed=await schema.validate!(JSON.parse(text));
+if(typeof parsed === 'boolean') throw Error('Offline audit requires a parsed validation result.');
 if(!parsed.success)throw parsed.error;
 const output=parsed.value as any,ops=output.operations;
 assert.deepEqual(output,JSON.parse(readFileSync(`${source}/validated-output.json`,'utf8')));
@@ -33,7 +34,9 @@ for(let i=0;i<ops.length;i++){
  }else{try{scene=stageSceneOperations(scene,[op]);}catch(error){errors.push({authoredIndex:i,error:String(error)});throw error;}}
 }
 validateScene(scene);assert.equal(scene.elements.length,0);assert.equal(live.size,0);assert.equal(errors.length,0);
-let rejection='';try{resolveSceneResult(input,output);}catch(error){rejection=String(error);}assert(rejection.includes('Expanded assembly operation budget exceeded'));
+let rejection='';try{resolveSceneResult(input,output);}catch(error){rejection=String(error);}assert(rejection.includes('Generation construction loop'));
+// Keep the original executor-budget failure independently reproducible.
+assert.throws(()=>stageSceneOperations({version:'architectural-scene-1',name:'empty',elements:[]},ops.filter((op:any)=>op.op!=='set-terrain')),/Expanded assembly operation budget exceeded/);
 // A single intact assembly is evidence of the first transient shell only, never a recovered house.
 const shell=stageSceneOperations({version:'architectural-scene-1',name:'DIAGNOSTIC ONLY · first transient Sol shell',elements:[]},[ops[0]]);
 writeFileSync(`${dest}/first-transient-shell.DIAGNOSTIC.json`,JSON.stringify(shell,null,2));

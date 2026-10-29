@@ -1,4 +1,5 @@
 import {sceneTestSettingsSchema} from '@/lib/ai/sceneTesting';
+import { assertGenerateConstruction } from './generationSafety';
 import {incompleteReplacement} from './replacementSafety';
 import { z } from 'zod';
 import { constructionCapabilityReference } from './capabilityReference';
@@ -72,7 +73,7 @@ export async function sceneResponseFormatSchema(input: SceneRequest) {
 }
 /** Explicit edit intent changes architectural permission, never the executor or safety checks. */
 export function sceneSystemPrompt(input: SceneRequest) {
-    return SCENE_SYSTEM_PROMPT + (input.mode === 'generate' ? "\nGENERATE RESPONSE FORMAT: Optional operation/element/intent properties must be explicit null when unused in the strict response schema. Return programme construction commitments for the selected accommodation.\n" : "\n") + SCENE_ASSEMBLY_INSTRUCTIONS + constructionCapabilityReference() + (input.mode !== 'edit' ? '' : input.editIntent === 'complete' ? ARCHITECTURE_COMPLETION_INSTRUCTIONS : input.editIntent === 'redesign'
+    return SCENE_SYSTEM_PROMPT + (input.mode === 'generate' ? "\nGENERATE CONSTRUCTION CONTRACT: Start from an empty scene. Operations are the persistent selected design, never a scratchpad for design experiments. Consider alternatives briefly in architecturalPlan; select one before constructing. Retain assembly components unless a genuine architectural change requires removal; do not repeatedly build and erase identical candidates. Legitimate coordinated removals and replacements remain supported. Map programme and constructed decisions to surviving editable IDs, disclose incomplete parts, and prioritize safe retained construction over planning prose. Both authored AND expanded primitive operations must fit 800; residential wings cost 5 + 3*bays, rectangular pools cost 16.\nGENERATE RESPONSE FORMAT: Optional operation/element/intent properties must be explicit null when unused in the strict response schema. Return programme construction commitments for the selected accommodation.\n" : "\n") + SCENE_ASSEMBLY_INSTRUCTIONS + constructionCapabilityReference() + (input.mode !== 'edit' ? '' : input.editIntent === 'complete' ? ARCHITECTURE_COMPLETION_INSTRUCTIONS : input.editIntent === 'redesign'
         ? `\nREDESIGN MODE: The user explicitly authorizes substantial architectural change within the requested scope. Conservative targeted-edit and existing-composition preservation instructions above do not apply to that architecture. You may replace, remove, reorganize, move or resize existing floors, walls, roofs, entrances, facades and architectural volumes, including their dependents. Reconsider inadequate primary/secondary massing and spatial hierarchy before details. Return all coordinated changes in one transaction, preserving valid support, openings and attachments. Retain IDs for elements that keep their identity; new elements get new IDs. Preserve unrelated site elements, terrain and project data. Explain the resulting architectural change and remaining limitations; decorative additions alone do not satisfy a requested compositional redesign. The caller saves a separate version and retains the original. All operation and geometry safety budgets still apply. Evaluate the existing architecture, establish the improved composition, then translate it into supported operations in this same response. A concept is supporting information, never the deliverable. Include architecturalPlan, name, summary, unsupported and a nonempty operations array. Budget concise prose first so the construction fits the output limit; never stop after architecturalPlan. Optional operation/element properties must be explicit null when unused in the strict response schema. If construction is unsupported, report it honestly; an empty transaction cannot become a successful Redesign.`
         : `\nREFINE MODE: Preserve the existing composition. Apply only the requested targeted changes and necessary dependent repairs; preserve unrelated geometry, terrain and stable IDs. If substantial recomposition is needed, explain it for an explicit Redesign request.`);
 }
@@ -92,6 +93,7 @@ export function resolveSceneResult(input: SceneRequest, output: unknown, knowled
         validateScene(input.current);
     if (input.mode === 'generate' && !result.operations.some(op => op.op === 'add' || op.op === 'assemble'))
         throw Error('Generation must construct scene elements; current design preserved.');
+    if (input.mode === 'generate') assertGenerateConstruction(result.operations);
     const base: ArchitecturalScene = input.mode === 'edit' ? input.current! : { version: 'architectural-scene-1', name: result.name, elements: [] };
     // New generation alone receives flat staging. Loading and scoped edits stay lossless.
     const operations = input.mode === 'generate'
@@ -102,6 +104,8 @@ export function resolveSceneResult(input: SceneRequest, output: unknown, knowled
         // Attach intent to the staged geometry before the existing relationship gate.
         // Staging checks schema/parents only and never commits a partial scene.
         const candidate = stageSceneOperations(base, operations);
+        if (input.mode === 'generate' && !candidate.elements.length)
+            throw Error('Generation retained no editable construction: all constructed elements were removed.');
         if (result.architecturalPlan) candidate.architecturalPlan = result.architecturalPlan;
         assertSceneRelationships(candidate, base);
         if(input.mode==='edit'){
