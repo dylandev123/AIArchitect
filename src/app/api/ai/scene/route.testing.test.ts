@@ -1,7 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {expect,it,vi,beforeEach,afterEach} from 'vitest';
 import {laderaScene} from '@/lib/villa/scene/example';
-import {laderaPlan} from '@/lib/villa/scene/planning.fixture';
 const mocks=vi.hoisted(()=>({generate:vi.fn(),writeFile:vi.fn(),model:vi.fn((_capture?:unknown,_model?:string)=> {void _capture;void _model;return 'mock-model';}),context:vi.fn(async()=>({system:'unchanged knowledge',trace:{selected:['approved']},evidence:[]}))}));
 vi.mock('node:fs/promises',async original=>({...await original<typeof import('node:fs/promises')>(),mkdir:vi.fn(),writeFile:mocks.writeFile}));
 vi.mock('ai',async original=>({...await original<typeof import('ai')>(),generateText:mocks.generate}));
@@ -11,7 +10,7 @@ vi.mock('@/lib/villa/scene/knowledgeContext',()=>({architecturalRequestContext:m
 import {GET,POST} from './route';
 beforeEach(()=>{vi.stubEnv('NODE_ENV','development');mocks.generate.mockReset();mocks.context.mockClear();mocks.writeFile.mockClear();mocks.model.mockClear();});
 afterEach(()=>vi.unstubAllEnvs());
-const output={name:laderaScene.name,summary:'Roof changed',unsupported:[],architecturalPlan:laderaPlan,operations:[{op:'resize',id:'bridge-roof',size:[17,.3,10]}]};
+const output={name:laderaScene.name,summary:'Roof changed',unsupported:[],operations:[{op:'resize',id:'bridge-roof',size:[17,.3,10]}]};
 const call=(input:unknown)=>POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify(input)}));
 it('hides development catalogue in production and rejects overrides before provider use',async()=>{
  vi.stubEnv('NODE_ENV','production');expect((await GET(new Request('http://localhost/api/ai/scene'))).status).toBe(404);
@@ -19,7 +18,7 @@ it('hides development catalogue in production and rejects overrides before provi
 });
 it('uses the same route, records selection/usage/audit and preserves normal defaults',async()=>{
  mocks.generate.mockResolvedValue({output,finishReason:'stop',totalUsage:{inputTokens:20,outputTokens:10}});
- const input={mode:'edit',current:laderaScene,prompt:'Edit roof'};
+ const input={mode:'edit',current:laderaScene,prompt:'Resize bridge-roof'};
  const normal=await call(input);expect(normal.status).toBe(200);const normalArgs=mocks.generate.mock.calls[0][0];
  const response=await call({...input,testing:{model:'gpt-6.1-sol',reasoningEffort:'high'}});expect(response.status).toBe(200);const body=await response.json();
  expect(mocks.generate.mock.calls[1][0].system).toBe(normalArgs.system);expect(mocks.generate.mock.calls[1][0].messages).toEqual(normalArgs.messages);

@@ -25,7 +25,8 @@ it('provides 310 unique valid entries, eleven categories and constructibility fo
 it('covers complementary categories and explicitly requested amenities within the complex budget',()=>{
  const r=retrieve(entries,'A luxury estate with a grand entrance, private bedroom wing, rooftop terrace, pool, gym and garage');
  expect(r.budget).toEqual({entries:12,chars:18000,tier:'complex'});
- for(const category of ['composition','programme','arrival','envelope','roof-outdoor'])expect(r.metrics.categories).toContain(category);
+ expect(r.selected.some(e=>e.id==='window-rhythm')).toBe(false); // No default facade-pattern recipe without a relevant request.
+ for(const category of ['composition','programme','arrival','roof-outdoor'])expect(r.metrics.categories).toContain(category);
  expect(r.selected.some(e=>/gym|fitness/.test(e.id))).toBe(true);
  expect(r.selected.some(e=>/pool/.test(e.id))).toBe(true);
  expect(r.selected.some(e=>/garage/.test(e.id))).toBe(true);

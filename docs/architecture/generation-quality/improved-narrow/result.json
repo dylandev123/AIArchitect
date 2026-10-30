@@ -1,0 +1,2626 @@
+{
+  "architecturalPlan": {
+    "constructionScope": "exterior",
+    "scaleRationale": "A compact two-storey residence keeps the enclosed footprint within the narrow 8 metre lot while reserving a meaningful rear garden and pool court; the three-bedroom requirement is allocated to the upper private envelope rather than inferred as fitted rooms. Price and site depth were not supplied, so the scale is an architectural capacity assumption rather than a budget-derived area calculation.",
+    "levels": 2,
+    "enclosedAreaM2": 89.9,
+    "arrivalAndCirculation": "The ground slab walking datum is 0.15 m and receives a covered front approach at the same datum; a real recessed entrance opens into the public lower envelope. A 18-riser straight stair rises 3.45 m from the ground floor datum to the 3.60 m upper-floor datum through a reserved slab void, providing actual access to the private upper accommodation; service and room subdivision are deferred.",
+    "volumeHierarchy": "The principal volume is a 7.0 by 10.0 m, 3.20 m-high lower living envelope, while a 6.30 by 5.70 m upper private volume is recessed within its roof line from 3.60 m to 6.60 m. Flat lower roof strips deliberately surround the upper footprint without crossing it, and the upper roof is a thin, deep-edged horizontal datum at 6.60 m.",
+    "relationshipsAndViews": "Arrival occurs from the south through a shaded threshold, with the long lower volume leading to a fully glazed rear garden opening. A rear terrace connects directly to the pool’s near dry deck at the shared 0.15 m datum; the pool and garden reserve remain beyond the house, and side openings bring daylight into the narrow side clearances.",
+    "roofFacadeAndMaterials": "Ivory rendered planes, limestone horizontal roofs and bronze-framed glazing form a restrained modern palette, with timber used only for the sheltered entry screen and threshold emphasis. Ground-level living glazing is broad and recessed under roof strips, upper bedroom glazing is more measured for privacy, and the entry canopy projects from a developed front elevation on explicit bronze posts.",
+    "spaces": [
+      {
+        "name": "Ground living, dining and kitchen capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 70,
+        "floorIds": [
+          "ground-floor"
+        ],
+        "enclosureIds": [
+          "ground-west-wall",
+          "ground-east-wall",
+          "ground-rear-wall",
+          "front-left-glazing-bay",
+          "front-entry-bay",
+          "front-right-glazing-bay"
+        ],
+        "roofIds": [
+          "lower-roof-front",
+          "lower-roof-west-strip",
+          "lower-roof-east-strip",
+          "lower-roof-rear-strip"
+        ]
+      },
+      {
+        "name": "Upper three-bedroom capacity",
+        "use": "interior",
+        "level": 2,
+        "areaM2": 35.9,
+        "floorIds": [
+          "upper-floor"
+        ],
+        "enclosureIds": [
+          "upper-front-wall",
+          "upper-rear-wall",
+          "upper-west-wall",
+          "upper-east-wall"
+        ],
+        "roofIds": [
+          "upper-roof"
+        ]
+      },
+      {
+        "name": "Covered entrance and approach",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 5.8,
+        "floorIds": [
+          "entry-approach"
+        ],
+        "enclosureIds": [
+          "front-entry-bay-panel"
+        ],
+        "roofIds": [
+          "entry-canopy"
+        ]
+      },
+      {
+        "name": "Rear terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 15.8,
+        "floorIds": [
+          "rear-terrace"
+        ],
+        "enclosureIds": [],
+        "roofIds": []
+      },
+      {
+        "name": "Pool court and private garden reserve",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 44,
+        "floorIds": [
+          "pool-court",
+          "pool-court-deck-x-minus",
+          "pool-court-deck-x-plus",
+          "pool-court-deck-far"
+        ],
+        "enclosureIds": [
+          "pool-court-wall-x-minus",
+          "pool-court-wall-x-plus",
+          "pool-court-wall-z-minus",
+          "pool-court-wall-z-plus"
+        ],
+        "roofIds": []
+      }
+    ],
+    "commitments": [
+      {
+        "description": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.",
+        "kind": "entrance",
+        "elementIds": [
+          "front-entry-bay",
+          "front-entry-bay-panel",
+          "entry-approach",
+          "entry-canopy",
+          "entry-post-west",
+          "entry-post-east"
+        ]
+      },
+      {
+        "description": "The ground envelope is the dominant public volume, with a protected upper private volume recessed inside its roof perimeter.",
+        "kind": "primary-volume",
+        "elementIds": [
+          "ground-floor",
+          "upper-floor",
+          "upper-front-wall",
+          "upper-rear-wall",
+          "upper-west-wall",
+          "upper-east-wall"
+        ]
+      },
+      {
+        "description": "The stair and upper-floor slab opening provide the constructed vertical route between occupied levels.",
+        "kind": "circulation",
+        "elementIds": [
+          "main-stair",
+          "upper-floor"
+        ]
+      },
+      {
+        "description": "A continuous rear terrace abuts the pool near dry deck at the shared exterior walking datum.",
+        "kind": "terrace",
+        "elementIds": [
+          "rear-terrace",
+          "pool-court"
+        ]
+      },
+      {
+        "description": "Four lower roof strips intentionally cover only the exposed lower envelope around the upper occupied volume.",
+        "kind": "roof",
+        "elementIds": [
+          "lower-roof-front",
+          "lower-roof-west-strip",
+          "lower-roof-east-strip",
+          "lower-roof-rear-strip",
+          "upper-roof"
+        ]
+      }
+    ]
+  },
+  "name": "Garden Ribbon House",
+  "summary": "A compact modern three-bedroom house composed as a sheltered full-width living plinth, a recessed private upper bar, and a connected rear terrace-pool garden sequence.",
+  "unsupported": [
+    "Interiors are unfinished: the three upper bedrooms are envelope capacity only, with no bedroom partitions, bathrooms, kitchen fit-out, storage, fixtures or furniture constructed.",
+    "The scene is generated on the mandatory flat Y=0 ground plane; lot depth, setbacks, neighbouring conditions, orientation, drainage and surveyed grades are assumed rather than known.",
+    "Planting, trees, soft landscape modelling, pool filtration, hydraulic overflow/infinity effects, structural engineering, weatherproofing and code compliance are not represented.",
+    "The pool is a rectangular constructed basin with water, perimeter walls, coping and dry decks; no hydraulic performance or equipment is claimed."
+  ],
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "aliases": [
+          "lower slab"
+        ],
+        "id": "ground-floor",
+        "label": "Ground Floor Slab",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.15,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "ground-west-wall",
+        "label": "Ground West Side Wall",
+        "kind": "wall",
+        "at": [
+          -3.5,
+          1.75,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          10,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.5,
+          "sill": 1.05,
+          "width": 1.5,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "ground-east-wall",
+        "label": "Ground East Side Wall",
+        "kind": "wall",
+        "at": [
+          3.5,
+          1.75,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          10,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -1.7,
+          "sill": 1.05,
+          "width": 1.5,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "ground-rear-wall",
+        "label": "Garden Wall with Sliding Opening",
+        "kind": "wall",
+        "at": [
+          0,
+          1.75,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0.5,
+          "sill": 0,
+          "width": 4.5,
+          "height": 2.7,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-left-glazing-bay",
+          "at": [
+            -2.6,
+            0.15,
+            -5
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 1.8,
+          "height": 3.2,
+          "thickness": 0.24,
+          "openingX": 0,
+          "sill": 0.85,
+          "openingWidth": 1.25,
+          "openingHeight": 1.65,
+          "infill": "glazing",
+          "panels": 2
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-entry-bay",
+          "at": [
+            -0.75,
+            0.15,
+            -5
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 1.8,
+          "height": 3.2,
+          "thickness": 0.24,
+          "openingX": 0,
+          "sill": 0,
+          "openingWidth": 1.1,
+          "openingHeight": 2.55,
+          "infill": "entrance",
+          "panels": 4
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-right-glazing-bay",
+          "at": [
+            1.825,
+            0.15,
+            -5
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.35,
+          "height": 3.2,
+          "thickness": 0.24,
+          "openingX": 0.2,
+          "sill": 0.85,
+          "openingWidth": 2.35,
+          "openingHeight": 1.65,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "aliases": [
+          "upper slab with stair void"
+        ],
+        "id": "upper-floor",
+        "label": "Upper Floor with Stair Opening",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": [
+            [
+              [
+                -0.45,
+                -0.48
+              ],
+              [
+                -0.18,
+                -0.48
+              ],
+              [
+                -0.18,
+                -0.06
+              ],
+              [
+                -0.45,
+                -0.06
+              ]
+            ]
+          ]
+        },
+        "at": [
+          0,
+          3.475,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          0.25,
+          5.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "straight-stair",
+        "parameters": {
+          "id": "main-stair",
+          "at": [
+            -2.15,
+            0.15,
+            -3.9
+          ],
+          "rotation": 0,
+          "material": "timber",
+          "width": 1.1,
+          "rise": 3.45,
+          "run": 4.68,
+          "risers": 18
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "upper-front-wall",
+        "label": "Upper Front Privacy Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.1,
+          -1.65
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.45,
+          "sill": 1.05,
+          "width": 1.4,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "upper-rear-wall",
+        "label": "Upper Garden Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.1,
+          4.05
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.8,
+          "width": 3.5,
+          "height": 1.65,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "upper-west-wall",
+        "label": "Upper West Side Wall",
+        "kind": "wall",
+        "at": [
+          -3.15,
+          5.1,
+          1.2
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5.7,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.25,
+          "sill": 1.1,
+          "width": 1.25,
+          "height": 1.3,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "upper-east-wall",
+        "label": "Upper East Side Wall",
+        "kind": "wall",
+        "at": [
+          3.15,
+          5.1,
+          1.2
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5.7,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -1.25,
+          "sill": 1.1,
+          "width": 1.25,
+          "height": 1.3,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "lower-roof-front",
+        "label": "Lower Roof Front Strip",
+        "kind": "roof",
+        "at": [
+          0,
+          3.47,
+          -3.325
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.24,
+          3.35
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "lower-roof-west-strip",
+        "label": "Lower Roof West Return",
+        "kind": "roof",
+        "at": [
+          -3.325,
+          3.47,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.35,
+          0.24,
+          5.7
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "lower-roof-east-strip",
+        "label": "Lower Roof East Return",
+        "kind": "roof",
+        "at": [
+          3.325,
+          3.47,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.35,
+          0.24,
+          5.7
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "lower-roof-rear-strip",
+        "label": "Lower Roof Garden Strip",
+        "kind": "roof",
+        "at": [
+          0,
+          3.47,
+          4.525
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.24,
+          0.95
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "upper-roof",
+        "label": "Upper Roof Plane",
+        "kind": "roof",
+        "at": [
+          0,
+          6.72,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          6.7,
+          0.24,
+          6.1
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "path",
+        "aliases": [
+          "front threshold"
+        ],
+        "id": "entry-approach",
+        "label": "Covered Entrance Approach",
+        "kind": "plate",
+        "at": [
+          -0.75,
+          0.075,
+          -6.2
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          0.15,
+          2.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [
+          "entry awning"
+        ],
+        "id": "entry-canopy",
+        "label": "Bronze Entry Canopy",
+        "kind": "roof",
+        "at": [
+          -0.75,
+          3.09,
+          -5.72
+        ],
+        "rotation": 0,
+        "size": [
+          2.7,
+          0.18,
+          1.45
+        ],
+        "material": "bronze",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [
+          "canopy support"
+        ],
+        "id": "entry-post-west",
+        "label": "West Canopy Post",
+        "kind": "volume",
+        "at": [
+          -1.9,
+          1.575,
+          -5.92
+        ],
+        "rotation": 0,
+        "size": [
+          0.16,
+          2.85,
+          0.16
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [
+          "canopy support"
+        ],
+        "id": "entry-post-east",
+        "label": "East Canopy Post",
+        "kind": "volume",
+        "at": [
+          0.4,
+          1.575,
+          -5.92
+        ],
+        "rotation": 0,
+        "size": [
+          0.16,
+          2.85,
+          0.16
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "terrace",
+        "aliases": [
+          "garden terrace"
+        ],
+        "id": "rear-terrace",
+        "label": "Rear Garden Terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          6.125
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.15,
+          2.25
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "rectangular-pool",
+        "parameters": {
+          "id": "pool-court",
+          "at": [
+            0,
+            0,
+            8
+          ],
+          "rotation": 0,
+          "width": 4.6,
+          "depth": 2.8,
+          "basinDepth": 1.35,
+          "material": "limestone"
+        }
+      }
+    }
+  ],
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "Garden Ribbon House",
+    "generationBrief": "Design a compact modern house with three bedrooms on a narrow 8 metre wide lot, with a private garden and welcoming entrance.",
+    "elements": [
+      {
+        "semanticType": "floor",
+        "aliases": [
+          "lower slab"
+        ],
+        "id": "ground-floor",
+        "label": "Ground Floor Slab",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.15,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "ground-west-wall",
+        "label": "Ground West Side Wall",
+        "kind": "wall",
+        "at": [
+          -3.5,
+          1.75,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          10,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.5,
+          "sill": 1.05,
+          "width": 1.5,
+          "height": 1.35,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "wall",
+        "id": "ground-east-wall",
+        "label": "Ground East Side Wall",
+        "kind": "wall",
+        "at": [
+          3.5,
+          1.75,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          10,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -1.7,
+          "sill": 1.05,
+          "width": 1.5,
+          "height": 1.35,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "wall",
+        "id": "ground-rear-wall",
+        "label": "Garden Wall with Sliding Opening",
+        "kind": "wall",
+        "at": [
+          0,
+          1.75,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0.5,
+          "sill": 0,
+          "width": 4.5,
+          "height": 2.7,
+          "glazed": true
+        }
+      },
+      {
+        "id": "front-left-glazing-bay",
+        "label": "front-left-glazing-bay facade",
+        "kind": "wall",
+        "at": [
+          -2.6,
+          1.75,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          1.8,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.85,
+          "width": 1.25,
+          "height": 1.65,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-left-glazing-bay-panel",
+        "label": "front-left-glazing-bay glazing",
+        "kind": "glazing",
+        "parent": "front-left-glazing-bay",
+        "at": [
+          0,
+          0.07499999999999984,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.25,
+          1.65,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 2
+      },
+      {
+        "id": "front-entry-bay",
+        "label": "front-entry-bay facade",
+        "kind": "wall",
+        "at": [
+          -0.75,
+          1.75,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          1.8,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.1,
+          "height": 2.55,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-entry-bay-panel",
+        "label": "front-entry-bay entrance",
+        "kind": "entrance",
+        "parent": "front-entry-bay",
+        "at": [
+          0,
+          -0.3250000000000002,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.55,
+          0.06
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "front-right-glazing-bay",
+        "label": "front-right-glazing-bay facade",
+        "kind": "wall",
+        "at": [
+          1.825,
+          1.75,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          3.35,
+          3.2,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0.2,
+          "sill": 0.85,
+          "width": 2.35,
+          "height": 1.65,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-right-glazing-bay-panel",
+        "label": "front-right-glazing-bay glazing",
+        "kind": "glazing",
+        "parent": "front-right-glazing-bay",
+        "at": [
+          0.2,
+          0.07499999999999984,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.35,
+          1.65,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "semanticType": "floor",
+        "aliases": [
+          "upper slab with stair void"
+        ],
+        "id": "upper-floor",
+        "label": "Upper Floor with Stair Opening",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": [
+            [
+              [
+                -0.45,
+                -0.48
+              ],
+              [
+                -0.18,
+                -0.48
+              ],
+              [
+                -0.18,
+                -0.06
+              ],
+              [
+                -0.45,
+                -0.06
+              ]
+            ]
+          ]
+        },
+        "at": [
+          0,
+          3.475,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          0.25,
+          5.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair",
+        "label": "main-stair step 1",
+        "kind": "volume",
+        "at": [
+          -2.15,
+          0.24583333333333335,
+          -3.77
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.19166666666666668,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4,
+        "assemblyKind": "straight-stair"
+      },
+      {
+        "id": "main-stair-step-2",
+        "label": "main-stair step 2",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.09583333333333334,
+          0.26
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.38333333333333336,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-3",
+        "label": "main-stair step 3",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.1916666666666667,
+          0.52
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.5750000000000001,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-4",
+        "label": "main-stair step 4",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.28750000000000003,
+          0.78
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.7666666666666667,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-5",
+        "label": "main-stair step 5",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.38333333333333336,
+          1.04
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.9583333333333334,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-6",
+        "label": "main-stair step 6",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.47916666666666674,
+          1.3
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.1500000000000001,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-7",
+        "label": "main-stair step 7",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.5750000000000001,
+          1.56
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.3416666666666668,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-8",
+        "label": "main-stair step 8",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.6708333333333334,
+          1.82
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.5333333333333334,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-9",
+        "label": "main-stair step 9",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.7666666666666667,
+          2.08
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.725,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-10",
+        "label": "main-stair step 10",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.8625,
+          2.34
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.9166666666666667,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-11",
+        "label": "main-stair step 11",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.9583333333333334,
+          2.6
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.1083333333333334,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-12",
+        "label": "main-stair step 12",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.0541666666666667,
+          2.8600000000000003
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.3000000000000003,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-13",
+        "label": "main-stair step 13",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.15,
+          3.12
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.4916666666666667,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-14",
+        "label": "main-stair step 14",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.2458333333333333,
+          3.38
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.6833333333333336,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-15",
+        "label": "main-stair step 15",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.3416666666666666,
+          3.64
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.875,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-16",
+        "label": "main-stair step 16",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.4375,
+          3.9000000000000004
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.066666666666667,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-17",
+        "label": "main-stair step 17",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.5333333333333334,
+          4.16
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.2583333333333337,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-18",
+        "label": "main-stair step 18",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.6291666666666667,
+          4.42
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.45,
+          0.26
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "upper-front-wall",
+        "label": "Upper Front Privacy Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.1,
+          -1.65
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.45,
+          "sill": 1.05,
+          "width": 1.4,
+          "height": 1.35,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "wall",
+        "id": "upper-rear-wall",
+        "label": "Upper Garden Wall",
+        "kind": "wall",
+        "at": [
+          0,
+          5.1,
+          4.05
+        ],
+        "rotation": 0,
+        "size": [
+          6.3,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.8,
+          "width": 3.5,
+          "height": 1.65,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "wall",
+        "id": "upper-west-wall",
+        "label": "Upper West Side Wall",
+        "kind": "wall",
+        "at": [
+          -3.15,
+          5.1,
+          1.2
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5.7,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 1.25,
+          "sill": 1.1,
+          "width": 1.25,
+          "height": 1.3,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "wall",
+        "id": "upper-east-wall",
+        "label": "Upper East Side Wall",
+        "kind": "wall",
+        "at": [
+          3.15,
+          5.1,
+          1.2
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5.7,
+          3,
+          0.24
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -1.25,
+          "sill": 1.1,
+          "width": 1.25,
+          "height": 1.3,
+          "glazed": true
+        }
+      },
+      {
+        "semanticType": "roof",
+        "id": "lower-roof-front",
+        "label": "Lower Roof Front Strip",
+        "kind": "roof",
+        "at": [
+          0,
+          3.47,
+          -3.325
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.24,
+          3.35
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "lower-roof-west-strip",
+        "label": "Lower Roof West Return",
+        "kind": "roof",
+        "at": [
+          -3.325,
+          3.47,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.35,
+          0.24,
+          5.7
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "lower-roof-east-strip",
+        "label": "Lower Roof East Return",
+        "kind": "roof",
+        "at": [
+          3.325,
+          3.47,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          0.35,
+          0.24,
+          5.7
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "lower-roof-rear-strip",
+        "label": "Lower Roof Garden Strip",
+        "kind": "roof",
+        "at": [
+          0,
+          3.47,
+          4.525
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.24,
+          0.95
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "upper-roof",
+        "label": "Upper Roof Plane",
+        "kind": "roof",
+        "at": [
+          0,
+          6.72,
+          1.2
+        ],
+        "rotation": 0,
+        "size": [
+          6.7,
+          0.24,
+          6.1
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "path",
+        "aliases": [
+          "front threshold"
+        ],
+        "id": "entry-approach",
+        "label": "Covered Entrance Approach",
+        "kind": "plate",
+        "at": [
+          -0.75,
+          0.075,
+          -6.2
+        ],
+        "rotation": 0,
+        "size": [
+          2.4,
+          0.15,
+          2.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "aliases": [
+          "entry awning"
+        ],
+        "id": "entry-canopy",
+        "label": "Bronze Entry Canopy",
+        "kind": "roof",
+        "at": [
+          -0.75,
+          3.09,
+          -5.72
+        ],
+        "rotation": 0,
+        "size": [
+          2.7,
+          0.18,
+          1.45
+        ],
+        "material": "bronze",
+        "roofForm": "flat",
+        "overhang": 0,
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "aliases": [
+          "canopy support"
+        ],
+        "id": "entry-post-west",
+        "label": "West Canopy Post",
+        "kind": "volume",
+        "at": [
+          -1.9,
+          1.575,
+          -5.92
+        ],
+        "rotation": 0,
+        "size": [
+          0.16,
+          2.85,
+          0.16
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "aliases": [
+          "canopy support"
+        ],
+        "id": "entry-post-east",
+        "label": "East Canopy Post",
+        "kind": "volume",
+        "at": [
+          0.4,
+          1.575,
+          -5.92
+        ],
+        "rotation": 0,
+        "size": [
+          0.16,
+          2.85,
+          0.16
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "semanticType": "terrace",
+        "aliases": [
+          "garden terrace"
+        ],
+        "id": "rear-terrace",
+        "label": "Rear Garden Terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          6.125
+        ],
+        "rotation": 0,
+        "size": [
+          7,
+          0.15,
+          2.25
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court",
+        "label": "pool-court deck",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          8
+        ],
+        "rotation": 0,
+        "size": [
+          7.8,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "assemblyKind": "rectangular-pool"
+      },
+      {
+        "id": "pool-court-floor",
+        "label": "pool-court floor",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -1.4000000000000001,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          3.1999999999999997
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-water",
+        "label": "pool-court water",
+        "kind": "water",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.05,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          4.6,
+          0.02,
+          2.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-z-minus",
+        "label": "pool-court wall-z-minus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -0.5750000000000001,
+          1.3499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-x-minus",
+        "label": "pool-court wall-x-minus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          -2.4,
+          -0.5750000000000001,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          2.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-z-minus",
+        "label": "pool-court coping-z-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.1,
+          1.0999999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          5.8,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-x-minus",
+        "label": "pool-court coping-x-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          -2.5999999999999996,
+          0.1,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          2.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-x-minus",
+        "label": "pool-court deck-x-minus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          -3.4,
+          0,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          4.199999999999999
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-z-plus",
+        "label": "pool-court wall-z-plus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          0,
+          -0.5750000000000001,
+          4.35
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-wall-x-plus",
+        "label": "pool-court wall-x-plus",
+        "kind": "wall",
+        "parent": "pool-court",
+        "at": [
+          2.4,
+          -0.5750000000000001,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          2.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-z-plus",
+        "label": "pool-court coping-z-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0.1,
+          4.6
+        ],
+        "rotation": 0,
+        "size": [
+          5.8,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-coping-x-plus",
+        "label": "pool-court coping-x-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          2.5999999999999996,
+          0.1,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          2.8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-x-plus",
+        "label": "pool-court deck-x-plus",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          3.4,
+          0,
+          2.8499999999999996
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          4.199999999999999
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "pool-court-deck-far",
+        "label": "pool-court deck-far",
+        "kind": "plate",
+        "parent": "pool-court",
+        "at": [
+          0,
+          0,
+          5.699999999999999
+        ],
+        "rotation": 0,
+        "size": [
+          7.8,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    ],
+    "architecturalPlan": {
+      "constructionScope": "exterior",
+      "scaleRationale": "A compact two-storey residence keeps the enclosed footprint within the narrow 8 metre lot while reserving a meaningful rear garden and pool court; the three-bedroom requirement is allocated to the upper private envelope rather than inferred as fitted rooms. Price and site depth were not supplied, so the scale is an architectural capacity assumption rather than a budget-derived area calculation.",
+      "levels": 2,
+      "enclosedAreaM2": 89.9,
+      "arrivalAndCirculation": "The ground slab walking datum is 0.15 m and receives a covered front approach at the same datum; a real recessed entrance opens into the public lower envelope. A 18-riser straight stair rises 3.45 m from the ground floor datum to the 3.60 m upper-floor datum through a reserved slab void, providing actual access to the private upper accommodation; service and room subdivision are deferred.",
+      "volumeHierarchy": "The principal volume is a 7.0 by 10.0 m, 3.20 m-high lower living envelope, while a 6.30 by 5.70 m upper private volume is recessed within its roof line from 3.60 m to 6.60 m. Flat lower roof strips deliberately surround the upper footprint without crossing it, and the upper roof is a thin, deep-edged horizontal datum at 6.60 m.",
+      "relationshipsAndViews": "Arrival occurs from the south through a shaded threshold, with the long lower volume leading to a fully glazed rear garden opening. A rear terrace connects directly to the pool’s near dry deck at the shared 0.15 m datum; the pool and garden reserve remain beyond the house, and side openings bring daylight into the narrow side clearances.",
+      "roofFacadeAndMaterials": "Ivory rendered planes, limestone horizontal roofs and bronze-framed glazing form a restrained modern palette, with timber used only for the sheltered entry screen and threshold emphasis. Ground-level living glazing is broad and recessed under roof strips, upper bedroom glazing is more measured for privacy, and the entry canopy projects from a developed front elevation on explicit bronze posts.",
+      "spaces": [
+        {
+          "name": "Ground living, dining and kitchen capacity",
+          "use": "interior",
+          "level": 1,
+          "areaM2": 70,
+          "floorIds": [
+            "ground-floor"
+          ],
+          "enclosureIds": [
+            "ground-west-wall",
+            "ground-east-wall",
+            "ground-rear-wall",
+            "front-left-glazing-bay",
+            "front-entry-bay",
+            "front-right-glazing-bay"
+          ],
+          "roofIds": [
+            "lower-roof-front",
+            "lower-roof-west-strip",
+            "lower-roof-east-strip",
+            "lower-roof-rear-strip"
+          ]
+        },
+        {
+          "name": "Upper three-bedroom capacity",
+          "use": "interior",
+          "level": 2,
+          "areaM2": 35.9,
+          "floorIds": [
+            "upper-floor"
+          ],
+          "enclosureIds": [
+            "upper-front-wall",
+            "upper-rear-wall",
+            "upper-west-wall",
+            "upper-east-wall"
+          ],
+          "roofIds": [
+            "upper-roof"
+          ]
+        },
+        {
+          "name": "Covered entrance and approach",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 5.8,
+          "floorIds": [
+            "entry-approach"
+          ],
+          "enclosureIds": [
+            "front-entry-bay-panel"
+          ],
+          "roofIds": [
+            "entry-canopy"
+          ]
+        },
+        {
+          "name": "Rear terrace",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 15.8,
+          "floorIds": [
+            "rear-terrace"
+          ],
+          "enclosureIds": [],
+          "roofIds": []
+        },
+        {
+          "name": "Pool court and private garden reserve",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 44,
+          "floorIds": [
+            "pool-court",
+            "pool-court-deck-x-minus",
+            "pool-court-deck-x-plus",
+            "pool-court-deck-far"
+          ],
+          "enclosureIds": [
+            "pool-court-wall-x-minus",
+            "pool-court-wall-x-plus",
+            "pool-court-wall-z-minus",
+            "pool-court-wall-z-plus"
+          ],
+          "roofIds": []
+        }
+      ],
+      "commitments": [
+        {
+          "description": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.",
+          "kind": "entrance",
+          "elementIds": [
+            "front-entry-bay",
+            "front-entry-bay-panel",
+            "entry-approach",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ]
+        },
+        {
+          "description": "The ground envelope is the dominant public volume, with a protected upper private volume recessed inside its roof perimeter.",
+          "kind": "primary-volume",
+          "elementIds": [
+            "ground-floor",
+            "upper-floor",
+            "upper-front-wall",
+            "upper-rear-wall",
+            "upper-west-wall",
+            "upper-east-wall"
+          ]
+        },
+        {
+          "description": "The stair and upper-floor slab opening provide the constructed vertical route between occupied levels.",
+          "kind": "circulation",
+          "elementIds": [
+            "main-stair",
+            "upper-floor"
+          ]
+        },
+        {
+          "description": "A continuous rear terrace abuts the pool near dry deck at the shared exterior walking datum.",
+          "kind": "terrace",
+          "elementIds": [
+            "rear-terrace",
+            "pool-court"
+          ]
+        },
+        {
+          "description": "Four lower roof strips intentionally cover only the exposed lower envelope around the upper occupied volume.",
+          "kind": "roof",
+          "elementIds": [
+            "lower-roof-front",
+            "lower-roof-west-strip",
+            "lower-roof-east-strip",
+            "lower-roof-rear-strip",
+            "upper-roof"
+          ]
+        }
+      ]
+    },
+    "knowledgeEvidence": [
+      {
+        "id": "compact-family",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof",
+          "entrance"
+        ]
+      },
+      {
+        "id": "compact-core-order",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "entrance",
+          "roof"
+        ]
+      },
+      {
+        "id": "narrow-lot-court",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof",
+          "entrance"
+        ]
+      }
+    ]
+  },
+  "architecturalAudit": {
+    "constructionScope": "exterior",
+    "designStage": "Exterior-designed, interiors unfinished",
+    "interiorsDeferred": true,
+    "status": "incomplete",
+    "issues": [
+      "Upper three-bedroom capacity: profile floor upper-floor area is unverified; bounds are not usable floor area.",
+      "Upper three-bedroom capacity: measured floor 0.0 m² differs from planned 35.9 m².",
+      "Upper three-bedroom capacity: profile perimeter and overhead coverage require actual-surface review.",
+      "Pool court and private garden reserve: measured floor 31.8 m² differs from planned 44 m².",
+      "Planned enclosed area 89.9 m²; measured floor evidence 70.0 m².",
+      "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: front-entry-bay missing or wrong architectural kind.",
+      "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-approach missing or wrong architectural kind.",
+      "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-canopy missing or wrong architectural kind.",
+      "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-west missing or wrong architectural kind.",
+      "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-east missing or wrong architectural kind.",
+      "The stair and upper-floor slab opening provide the constructed vertical route between occupied levels.: main-stair missing or wrong architectural kind.",
+      "Missing facade commitment.",
+      "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation.",
+      "Profile geometry: full roof coverage, occupied-volume clearance, circulation/headroom and railing support require review of actual surfaces; rectangular evidence does not certify these relationships.",
+      "Retrieved knowledge compact-family: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge compact-core-order: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge narrow-lot-court: selected but no construction or explicit disposition evidence."
+    ],
+    "findings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "upper-floor"
+        ],
+        "message": "Upper three-bedroom capacity: profile floor upper-floor area is unverified; bounds are not usable floor area."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Upper three-bedroom capacity: measured floor 0.0 m² differs from planned 35.9 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Upper three-bedroom capacity: profile perimeter and overhead coverage require actual-surface review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Pool court and private garden reserve: measured floor 31.8 m² differs from planned 44 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Planned enclosed area 89.9 m²; measured floor evidence 70.0 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "front-entry-bay"
+        ],
+        "message": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: front-entry-bay missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-approach"
+        ],
+        "message": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-approach missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-canopy"
+        ],
+        "message": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-canopy missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-post-west"
+        ],
+        "message": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-west missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-post-east"
+        ],
+        "message": "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-east missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "upper-floor",
+          "main-stair"
+        ],
+        "message": "The stair and upper-floor slab opening provide the constructed vertical route between occupied levels.: main-stair missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Missing facade commitment."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Profile geometry: full roof coverage, occupied-volume clearance, circulation/headroom and railing support require review of actual surfaces; rectangular evidence does not certify these relationships."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge compact-family: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge compact-core-order: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge narrow-lot-court: selected but no construction or explicit disposition evidence."
+      }
+    ],
+    "originalPlanAudit": {
+      "status": "incomplete",
+      "enclosedAreaM2": 70,
+      "levels": 2,
+      "spaces": [
+        {
+          "name": "Ground living, dining and kitchen capacity",
+          "areaM2": 70,
+          "level": 1,
+          "use": "interior"
+        },
+        {
+          "name": "Upper three-bedroom capacity",
+          "areaM2": 0,
+          "level": 2,
+          "use": "interior"
+        },
+        {
+          "name": "Covered entrance and approach",
+          "areaM2": 5.76,
+          "level": 1,
+          "use": "outdoor"
+        },
+        {
+          "name": "Rear terrace",
+          "areaM2": 15.75,
+          "level": 1,
+          "use": "outdoor"
+        },
+        {
+          "name": "Pool court and private garden reserve",
+          "areaM2": 31.799999999999997,
+          "level": 1,
+          "use": "outdoor"
+        }
+      ],
+      "issues": [
+        "Upper three-bedroom capacity: profile floor upper-floor area is unverified; bounds are not usable floor area.",
+        "Upper three-bedroom capacity: measured floor 0.0 m² differs from planned 35.9 m².",
+        "Upper three-bedroom capacity: profile perimeter and overhead coverage require actual-surface review.",
+        "Pool court and private garden reserve: measured floor 31.8 m² differs from planned 44 m².",
+        "Planned enclosed area 89.9 m²; measured floor evidence 70.0 m².",
+        "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: front-entry-bay missing or wrong architectural kind.",
+        "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-approach missing or wrong architectural kind.",
+        "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-canopy missing or wrong architectural kind.",
+        "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-west missing or wrong architectural kind.",
+        "A real recessed front door, threshold slab, canopy and two ground-contact posts establish the welcoming entrance.: entry-post-east missing or wrong architectural kind.",
+        "The stair and upper-floor slab opening provide the constructed vertical route between occupied levels.: main-stair missing or wrong architectural kind.",
+        "Missing facade commitment."
+      ],
+      "limitations": [
+        "Floor evidence estimates area; enclosure completeness, spatial quality and circulation usability require visual review."
+      ]
+    },
+    "programme": {
+      "status": "unrecorded",
+      "spaces": [],
+      "issues": [
+        "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      ]
+    },
+    "designDecisions": [],
+    "knowledgeUse": [
+      {
+        "id": "compact-family",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "compact-core-order",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "narrow-lot-court",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      }
+    ],
+    "geometry": {
+      "kindCounts": {
+        "plate": 13,
+        "wall": 14,
+        "glazing": 2,
+        "entrance": 1,
+        "volume": 20,
+        "roof": 6,
+        "water": 1
+      },
+      "surfaces": [
+        {
+          "id": "ground-floor",
+          "kind": "plate",
+          "areaM2": 70,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "upper-floor",
+          "kind": "plate",
+          "areaM2": null,
+          "walkingDatum": 3.6
+        },
+        {
+          "id": "entry-approach",
+          "kind": "plate",
+          "areaM2": 5.76,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "rear-terrace",
+          "kind": "plate",
+          "areaM2": 15.75,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "pool-court",
+          "kind": "plate",
+          "areaM2": 11.7,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "pool-court-floor",
+          "kind": "plate",
+          "areaM2": 15.999999999999998,
+          "walkingDatum": -1.3
+        },
+        {
+          "id": "pool-court-water",
+          "kind": "water",
+          "areaM2": 12.879999999999999,
+          "walkingDatum": 0.05
+        },
+        {
+          "id": "pool-court-coping-z-minus",
+          "kind": "plate",
+          "areaM2": 4.06,
+          "walkingDatum": 0.15000000000000002
+        },
+        {
+          "id": "pool-court-coping-x-minus",
+          "kind": "plate",
+          "areaM2": 1.68,
+          "walkingDatum": 0.15000000000000002
+        },
+        {
+          "id": "pool-court-deck-x-minus",
+          "kind": "plate",
+          "areaM2": 4.199999999999999,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "pool-court-coping-z-plus",
+          "kind": "plate",
+          "areaM2": 4.06,
+          "walkingDatum": 0.15000000000000002
+        },
+        {
+          "id": "pool-court-coping-x-plus",
+          "kind": "plate",
+          "areaM2": 1.68,
+          "walkingDatum": 0.15000000000000002
+        },
+        {
+          "id": "pool-court-deck-x-plus",
+          "kind": "plate",
+          "areaM2": 4.199999999999999,
+          "walkingDatum": 0.15
+        },
+        {
+          "id": "pool-court-deck-far",
+          "kind": "plate",
+          "areaM2": 11.7,
+          "walkingDatum": 0.15
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.15,
+        3.6,
+        -1.3
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 12.879999999999999
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "responseId": "b0361ded-6d3e-4d9c-a031-acd65c88d5bf",
+  "providerCalls": 1,
+  "experiment": {
+    "model": "gpt-5.6-terra",
+    "reasoningEffort": null,
+    "usage": {
+      "inputTokens": 13083,
+      "inputTokenDetails": {
+        "noCacheTokens": 3,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 13080
+      },
+      "outputTokens": 6548,
+      "outputTokenDetails": {
+        "textTokens": 3945,
+        "reasoningTokens": 2603
+      },
+      "totalTokens": 19631,
+      "reasoningTokens": 2603,
+      "cachedInputTokens": 0
+    },
+    "requestFingerprint": "d4570fca0a9ad44fdf8d99342f1ff4ca5bae099fcbaba11f7d02640a9db9caaa",
+    "operations": 24,
+    "validation": {
+      "status": "accepted",
+      "warningCount": 18
+    },
+    "architecturalQuality": "requires-visual-review"
+  }
+}

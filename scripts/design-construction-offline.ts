@@ -1,0 +1,21 @@
+/** Read-only retained inputs. No provider transport, credentials or database access. */
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {validateScene,stageSceneOperations} from '../src/lib/villa/scene/model';
+import {stageGenerationRefinement} from '../src/lib/villa/scene/generationReview';
+import {sceneResultSchema} from '../src/lib/villa/scene/terra';
+import {compareSceneEvidence,refinementConstructionContext} from '../src/lib/villa/scene/visualEvidence';
+import {structuralRefinementMock} from '../src/lib/villa/scene/structuralRefinement.fixture';
+const root='docs/architecture/',dir=root+'design-construction';
+const read=(path:string)=>JSON.parse(readFileSync(root+path,'utf8'));
+const original=validateScene(read('retained-visual-review/original.scene.json'));
+const review=read('retained-visual-review/refine.input.json').review;
+const raw=read('retained-visual-review/raw-candidate.operations.json');
+const diagnostic=sceneResultSchema.parse(read('single-house/diagnostic.operations.json'));
+const replay=(output:unknown)=>{try {const staged=stageGenerationRefinement(original,review,output);return {accepted:true,diff:staged.diff};}catch(e){return {accepted:false,error:String(e)};}};
+const constructed=stageSceneOperations(original,diagnostic.operations);
+const fixture=structuralRefinementMock(),supported=stageGenerationRefinement(fixture.scene,fixture.review,fixture.output);
+const paths=['retained-visual-review/original.scene.json','retained-visual-review/raw-candidate.operations.json','retained-visual-review/refine.provider-response.txt','generation-quality/final-family/scene.json','generation-quality/final-family/provider-request.json','generation-quality/final-family/provider-response.json','single-house/construction.scene.json','single-house/diagnostic.operations.json',...['before','after'].flatMap(stage=>['aerial','arrival','garden','poolside'].map(view=>`single-house/${stage}-${view}.png`))];
+mkdirSync(dir,{recursive:true});
+writeFileSync(dir+'/replay.json',JSON.stringify({providerCalls:0,original:replay(raw),developerDiagnostic:replay(diagnostic),diagnosticDiff:compareSceneEvidence(original,constructed),context:refinementConstructionContext(original,review.refinement.targetIds),supportedDeveloperFixture:{accepted:true,changedIds:supported.diff.changedElementIds,notModelEvidence:true},inputs:paths.map(path=>({path,sha256:createHash('sha256').update(readFileSync(root+path)).digest('hex')}))},null,2));
+console.log('Retained original and diagnostic replayed, supported developer transaction accepted; zero provider calls.');

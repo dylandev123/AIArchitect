@@ -1,0 +1,107 @@
+{
+  "status": "stopped-refinement-validation",
+  "providerCalls": 2,
+  "phases": [
+    "review",
+    "refine"
+  ],
+  "automaticRetries": 0,
+  "comparisonCalls": 0,
+  "accepted": false,
+  "originalSha256": "b76ed99bad6f6bda1c1e6f233ef9d65e9b01b0c1c0687f97e488dc44feadf983",
+  "backupSha256": "b76ed99bad6f6bda1c1e6f233ef9d65e9b01b0c1c0687f97e488dc44feadf983",
+  "retainedSceneEqualsOriginal": true,
+  "operationsAuthored": 17,
+  "operationCounts": {
+    "remove": 4,
+    "add": 7,
+    "move": 5,
+    "resize": 1
+  },
+  "selectedExistingTargets": 10,
+  "inputTokens": 30943,
+  "cachedInputTokens": 0,
+  "outputTokens": 7195,
+  "totalTokens": 38138,
+  "estimatedCostUsd": 0.148226,
+  "costBasis": "Existing configured usage pricing; provider-reported tokens, not an invoice. Cache-write tokens receive ordinary input rate.",
+  "validationFinding": {
+    "stage": "validateScene during staging",
+    "elementId": "rear-loggia-canopy-edge",
+    "semanticType": "material",
+    "kind": "volume",
+    "error": "Semantic type is incompatible with renderer kind"
+  },
+  "laterValidation": "Not reached; no construction-audit success claimed.",
+  "afterCaptures": [],
+  "beforeCameras": [
+    {
+      "view": "Aerial",
+      "width": 640,
+      "height": 360,
+      "camera": {
+        "position": [
+          13.943773039153262,
+          56.78009182817903,
+          11.727707291412724
+        ],
+        "target": [
+          8.169872955932078e-08,
+          1.0049999983608724,
+          -6.200000796743108
+        ]
+      }
+    },
+    {
+      "view": "Arrival",
+      "width": 640,
+      "height": 360,
+      "camera": {
+        "position": [
+          -2.012181386596993e-07,
+          9.835468650724518,
+          29.12187381271148
+        ],
+        "target": [
+          8.169872955932078e-08,
+          1.0049999983608724,
+          -6.200000796743108
+        ]
+      }
+    },
+    {
+      "view": "Garden",
+      "width": 640,
+      "height": 360,
+      "camera": {
+        "position": [
+          -8.48804906735936e-06,
+          11.447238994272217,
+          -41.00746411644654
+        ],
+        "target": [
+          8.169872955932078e-08,
+          1.0049999983608724,
+          -6.200000796743108
+        ]
+      }
+    },
+    {
+      "view": "Poolside",
+      "width": 640,
+      "height": 360,
+      "camera": {
+        "position": [
+          -8.716750731126943e-06,
+          8.15227467039325,
+          -41.93637415690392
+        ],
+        "target": [
+          8.169872955932078e-08,
+          1.0049999983608724,
+          -6.200000796743108
+        ]
+      }
+    }
+  ]
+}

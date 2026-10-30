@@ -1,0 +1,661 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Rose Eave Garden House",
+  "generationBrief": "Design a romantic dream home with three bedrooms, a beautiful garden and terrace.",
+  "elements": [
+    {
+      "semanticType": "floor",
+      "id": "main-floor",
+      "label": "Main residence ground floor",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        11
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "id": "front-left-wall",
+      "label": "Front left window wall",
+      "kind": "wall",
+      "at": [
+        -5.2,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        5.6,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 2.4,
+        "height": 1.8,
+        "glazed": true
+      }
+    },
+    {
+      "id": "front-entry",
+      "label": "front-entry partition",
+      "kind": "wall",
+      "at": [
+        -1.1,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        2.6,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.25,
+        "height": 2.35,
+        "glazed": false
+      },
+      "assemblyKind": "doorway"
+    },
+    {
+      "id": "front-entry-door",
+      "label": "front-entry door",
+      "kind": "entrance",
+      "parent": "front-entry",
+      "at": [
+        0,
+        -0.5249999999999999,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.25,
+        2.35,
+        0.06
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "id": "front-right-wall",
+      "label": "Front right window wall",
+      "kind": "wall",
+      "at": [
+        4.1,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        7.8,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0.8,
+        "sill": 0.8,
+        "width": 2.8,
+        "height": 1.8,
+        "glazed": true
+      }
+    },
+    {
+      "semanticType": "wall",
+      "id": "rear-left-wall",
+      "label": "Garden elevation left return",
+      "kind": "wall",
+      "at": [
+        -6.5,
+        1.9,
+        5.5
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "id": "rear-garden-door",
+      "label": "rear-garden-door partition",
+      "kind": "wall",
+      "at": [
+        -3.9,
+        1.9,
+        5.5
+      ],
+      "rotation": 3.141593,
+      "size": [
+        2.2,
+        3.4,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "assemblyKind": "doorway"
+    },
+    {
+      "id": "rear-garden-door-door",
+      "label": "rear-garden-door door",
+      "kind": "entrance",
+      "parent": "rear-garden-door",
+      "at": [
+        0,
+        -0.5,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.3,
+        2.4,
+        0.06
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "rear-glazed-bay",
+      "label": "rear-glazed-bay facade",
+      "kind": "wall",
+      "at": [
+        0.85,
+        1.9,
+        5.5
+      ],
+      "rotation": 3.141593,
+      "size": [
+        7.3,
+        3.4,
+        0.3
+      ],
+      "material": "bronze",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 6.2,
+        "height": 2.65,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-glazed-bay-panel",
+      "label": "rear-glazed-bay glazing",
+      "kind": "glazing",
+      "parent": "rear-glazed-bay",
+      "at": [
+        0,
+        -0.025000000000000133,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        6.2,
+        2.65,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "id": "rear-right-wall",
+      "label": "Garden elevation right return",
+      "kind": "wall",
+      "at": [
+        6.25,
+        1.9,
+        5.5
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "id": "west-wall",
+      "label": "West private elevation",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        11,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 1.5,
+        "sill": 1.05,
+        "width": 1.5,
+        "height": 1.35,
+        "glazed": true
+      }
+    },
+    {
+      "semanticType": "wall",
+      "id": "east-wall",
+      "label": "East private elevation",
+      "kind": "wall",
+      "at": [
+        8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        11,
+        3.4,
+        0.3
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": -1.6,
+        "sill": 1.05,
+        "width": 1.5,
+        "height": 1.35,
+        "glazed": true
+      }
+    },
+    {
+      "semanticType": "roof",
+      "id": "main-roof",
+      "label": "Romantic gabled roof",
+      "kind": "roof",
+      "at": [
+        0,
+        4.45,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16.8,
+        1.7,
+        11.8
+      ],
+      "material": "ivory",
+      "roofForm": "gable",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "semanticType": "terrace",
+      "id": "garden-terrace",
+      "label": "Limestone garden terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        8.25
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        5.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "roof",
+      "id": "terrace-pergola-roof",
+      "label": "Timber pergola canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.29,
+        7.1
+      ],
+      "rotation": 0,
+      "size": [
+        7.4,
+        0.18,
+        3.2
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "id": "pergola-post-west",
+      "label": "West pergola post",
+      "kind": "volume",
+      "at": [
+        -3.5,
+        1.7,
+        8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.24,
+        3,
+        0.24
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "id": "pergola-post-east",
+      "label": "East pergola post",
+      "kind": "volume",
+      "at": [
+        3.5,
+        1.7,
+        8.5
+      ],
+      "rotation": 0,
+      "size": [
+        0.24,
+        3,
+        0.24
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "id": "terrace-screen-west",
+      "label": "West terrace privacy screen",
+      "kind": "screen",
+      "at": [
+        -6.85,
+        1.45,
+        9.1
+      ],
+      "rotation": 1.570796,
+      "size": [
+        3.2,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 9
+    },
+    {
+      "semanticType": "wall",
+      "id": "terrace-screen-east",
+      "label": "East terrace privacy screen",
+      "kind": "screen",
+      "at": [
+        6.85,
+        1.45,
+        9.1
+      ],
+      "rotation": 1.570796,
+      "size": [
+        3.2,
+        2.5,
+        0.12
+      ],
+      "material": "timber",
+      "panels": 9
+    },
+    {
+      "semanticType": "path",
+      "id": "arrival-path",
+      "label": "Limestone arrival path",
+      "kind": "plate",
+      "at": [
+        -1.1,
+        0.1,
+        -8
+      ],
+      "rotation": 0,
+      "size": [
+        2.4,
+        0.2,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "garden",
+      "id": "garden-west-ground",
+      "label": "West soft garden reserve",
+      "kind": "plate",
+      "at": [
+        -12,
+        0.01,
+        3
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.02,
+        18
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "semanticType": "garden",
+      "id": "garden-east-ground",
+      "label": "East soft garden reserve",
+      "kind": "plate",
+      "at": [
+        12,
+        0.01,
+        3
+      ],
+      "rotation": 0,
+      "size": [
+        8,
+        0.02,
+        18
+      ],
+      "material": "sage",
+      "panels": 4
+    },
+    {
+      "semanticType": "garden",
+      "id": "garden-rear-ground",
+      "label": "Rear soft garden reserve",
+      "kind": "plate",
+      "at": [
+        0,
+        0.01,
+        14
+      ],
+      "rotation": 0,
+      "size": [
+        20,
+        0.02,
+        6
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "constructionScope": "exterior",
+    "scaleRationale": "The three-bedroom requirement is accommodated as capacity within a single 176 m² one-storey envelope, keeping the home intimate and romantic rather than treating price or luxury as a formula for excessive area.",
+    "levels": 1,
+    "enclosedAreaM2": 176,
+    "arrivalAndCirculation": "A limestone arrival path reaches a recessed front door at the ground-floor walking datum of 0.20 m; the public garden terrace is reached through a separate rear garden door, while private bedroom subdivision and service fit-out remain deferred inside the shared envelope.",
+    "volumeHierarchy": "The 16.0 m by 11.0 m primary residence has a 0.20 m floor-top datum, 3.40 m enclosure height, and a gable ridge at 5.30 m; a lower 3.20 m pergola canopy makes the terrace a clearly subordinate garden room.",
+    "relationshipsAndViews": "The arrival path approaches the south-facing entry, while the rear glazed garden elevation and door open directly onto a 14.0 m-wide terrace, pergola shade, and a reserved soft-garden ground plane in the same level frame.",
+    "roofFacadeAndMaterials": "An ivory gabled main roof, limestone paving, bronze-framed glazing and timber pergola create a warm romantic composition, with deep eaves, a sheltered terrace threshold, private side windows, and matching garden-facing facade returns.",
+    "spaces": [
+      {
+        "name": "Three-bedroom accommodation capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 176,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-left-wall",
+          "front-entry",
+          "front-right-wall",
+          "rear-left-wall",
+          "rear-garden-door",
+          "rear-glazed-bay",
+          "rear-right-wall",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Arrival court and path",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 12,
+        "floorIds": [
+          "arrival-path"
+        ],
+        "enclosureIds": [],
+        "roofIds": []
+      },
+      {
+        "name": "Covered garden terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 77,
+        "floorIds": [
+          "garden-terrace"
+        ],
+        "enclosureIds": [
+          "terrace-screen-west",
+          "terrace-screen-east"
+        ],
+        "roofIds": [
+          "terrace-pergola-roof"
+        ]
+      },
+      {
+        "name": "Soft garden reserve",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 280,
+        "floorIds": [
+          "garden-west-ground",
+          "garden-east-ground",
+          "garden-rear-ground"
+        ],
+        "enclosureIds": [],
+        "roofIds": []
+      }
+    ],
+    "commitments": [
+      {
+        "description": "A real recessed front entrance is cut into the south facade and connected to the arrival path.",
+        "kind": "entrance",
+        "elementIds": [
+          "front-entry",
+          "front-entry-door",
+          "arrival-path"
+        ]
+      },
+      {
+        "description": "The primary occupied volume is a fully enclosed single-storey house with ground slab, four developed elevations and gabled roof coverage.",
+        "kind": "primary-volume",
+        "elementIds": [
+          "main-floor",
+          "front-left-wall",
+          "front-entry",
+          "front-right-wall",
+          "rear-left-wall",
+          "rear-garden-door",
+          "rear-glazed-bay",
+          "rear-right-wall",
+          "west-wall",
+          "east-wall",
+          "main-roof"
+        ]
+      },
+      {
+        "description": "The rear terrace is a supported ground-level slab with a direct garden door, pergola cover, posts and side screening.",
+        "kind": "terrace",
+        "elementIds": [
+          "garden-terrace",
+          "rear-garden-door",
+          "rear-garden-door-door",
+          "terrace-pergola-roof",
+          "pergola-post-west",
+          "pergola-post-east",
+          "terrace-screen-west",
+          "terrace-screen-east"
+        ]
+      }
+    ]
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "breakfast-garden-bay",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof",
+        "entrance"
+      ]
+    },
+    {
+      "id": "material-garden-side",
+      "version": 1,
+      "requiredKinds": [
+        "wall",
+        "roof"
+      ]
+    }
+  ]
+}

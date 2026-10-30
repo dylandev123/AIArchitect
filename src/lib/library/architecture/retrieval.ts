@@ -12,7 +12,7 @@ export function projectKnowledgeContext(brief: string) {
  return { scale: propertyValue && propertyValue.amount < 500000 && !/\b(estate|mansion|luxury|large)\b/i.test(brief) ? 'compact' : scale, propertyValue, location: brief.match(/\b(caribbean|mediterranean|tropical|waterfront|coastal|beach|urban|rural)\b/gi) ?? [],
   style: brief.match(/\b(modern|contemporary|mediterranean|tuscan|traditional|minimalist)\b/gi) ?? [],
   use: /\b(rental|hotel|resort)\b/i.test(brief) ? 'hospitality' : 'residential',
-  requirements: brief.match(/\b(?:[a-z0-9]+[- ]bedroom|pool|gym|spa|cinema|garage|dock|courtyard|outdoor kitchen|rooftop lounge)\b/gi) ?? [], brief };
+  requirements: (brief.match(/\b(?:(?:(?:[0-9]+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)[- ])?(?:bedrooms?(?: suites?)?|bathrooms?)|pool|gym|spa|cinema|garage|dock|courtyard|outdoor kitchen|rooftop lounge)\b/gi) ?? []).filter(term=>matchesKnowledgeTerm(brief,term)), brief };
 }
 export function matchesKnowledgeTerm(brief: string, tag: string) {
  const escaped = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -29,7 +29,7 @@ export function knowledgeBudget(brief:string, mode:'generate'|'edit'='generate')
  return {entries:5,chars:6500,tier:'compact' as const};
 }
 const generic=new Set(['estate','mansion','luxury','family','bedroom','house','residential','architecture','planning','programme','rooms','complete','construction','operations','materials','style','composition','amenities','building type','detailing','review','failure','support','circulation','outdoor','climate','site','home','without','elements','geometry','route','room','private','shared','entry','ground','with','from','into','before','after']);
-const baseline:Record<string,number>={'estate-composition':5,'compact-family':5,'composition-hierarchy':3,'base-middle-top':1,'covered-threshold':2,'private-bedroom-wing':2,'room-enclosure':2,'window-rhythm':2,'layered-roofline':2};
+const baseline:Record<string,number>={'composition-hierarchy':3,'covered-threshold':2,'room-enclosure':2};
 function requestedSpecialist(e:KnowledgeRevision,brief:string) {
  // Group-wide amenity tags must never opt in a different unrequested amenity.
  const title=e.title.toLowerCase()+' '+e.id;
@@ -59,7 +59,7 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
   const specific=tags.filter(t=>!generic.has(t) && (!entry.category || ((entry.id+' '+entry.title.toLowerCase()).includes(t) || fragmentDetails[entry.id]?.terms.includes(t))));
   const contextualBoost=!entry.category && specific.length ? (entry.kind==='recipe'?6:1) : 0;
   const category=knowledgeCategory(entry);
-  const residential=/\b(house|home|residence|residential|estate|mansion|villa|family|bedroom)\b/i.test(brief);
+  const residential=/\b(house|home|residence|residential|estate|mansion|villa|family|bedrooms?|compound)\b/i.test(brief);
   const appropriateFamily = entry.id !== 'compact-family' || project.scale === 'compact' || matchesKnowledgeTerm(brief,'family') || !project.propertyValue || project.propertyValue.amount < 1000000;
   const prior=mode==='generate'&&residential&&appropriateFamily?(baseline[entry.id]??0):0;
   if(mode==='edit' && /\bwindow\b/i.test(brief) && !/\b(wing|room|roof|terrace)\b/i.test(brief) && category!=='envelope')return reject(entry,'outside scoped window edit');

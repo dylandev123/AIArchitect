@@ -47,7 +47,7 @@ it('detects the original tuple rejection at any nested schema path', async () =>
  expect(() => audit(format.schema)).toThrow();
 });
 it.each(['generate', 'edit'] as const)('audits the complete %s schema actually serialized by OpenAI SDK with no live calls', async mode => {
- const input = { mode, prompt: 'Construct or edit architecture', ...(mode === 'edit' ? { current: laderaScene } : {}) };
+ const input = { mode, prompt: mode === 'edit' ? 'Change bridge-roof material' : 'Construct architecture', ...(mode === 'edit' ? { current: laderaScene } : {}) };
  const output = { ...(mode === 'generate' ? { architecturalPlan: laderaPlan } : {}), name: laderaScene.name, summary: 'Offline provider response', unsupported: [], operations: mode === 'generate' ? laderaScene.elements.map(element => ({ op: 'add', element })) : [{ op: 'finish', id: 'bridge-roof', material: 'ivory' }] };
  boundary.fetch.mockResolvedValue(new Response(JSON.stringify({
   id: 'resp_offline', object: 'response', created_at: 0, model: 'gpt-5.6-terra', status: 'completed',
@@ -59,6 +59,18 @@ it.each(['generate', 'edit'] as const)('audits the complete %s schema actually s
  expect(response.status).toBe(200);
  expect(boundary.fetch).toHaveBeenCalledOnce();
  const wire = JSON.parse(boundary.fetch.mock.calls[0][1].body);
+ if(mode==='generate'){
+  const sent=JSON.stringify(wire.input);
+  expect(sent).toContain('EXTERIOR FIRST');
+  expect(sent).toContain('interiors unfinished');
+  expect(sent).toContain('Bedroom count drives footprint/wing/level capacity');
+  expect(sent).toContain('FITTED FACADE BAY');
+  expect(sent).toContain('slab TOP datums');
+  expect(sent).toContain('FINAL FOUR-VIEW SELF-CHECK');
+  expect(wire.text.format.schema.properties.architecturalPlan.required).toContain('programme');
+  expect(wire.text.format.schema.properties.architecturalPlan.anyOf).toBeUndefined();
+  expect(sent).not.toContain('Reference built partitions/cabinets and separate bathroom entries');
+ }
  const expected = await Output.object({ schema: await sceneResponseFormatSchema(input) }).responseFormat;
  if (expected?.type !== 'json') throw Error('Expected JSON response format');
  expect(wire.text.format).toEqual({ type: 'json_schema', name: 'response', strict: mode === 'generate', schema: expected.schema });
@@ -167,7 +179,7 @@ it.each(['construction','concept-only','empty','finish-only','no-change','bad-su
 
 it.each(['generate','refine','redesign','complete'] as const)('executes an assembly through the actual %s provider request offline',async mode=>{
  const input=mode==='generate'?{mode:'generate' as const,prompt:'Offline wing'}:{mode:'edit' as const,editIntent:mode,prompt:'Add detached studio',current:laderaScene};
- const output={architecturalPlan:laderaPlan,name:'Assembly proof',summary:'Offline construction',unsupported:[],operations:[{op:'assemble',assembly:{kind:'residential-wing',parameters:{id:'proof-wing',at:[100,.1,0],rotation:0,width:12,depth:8,height:3.4,bays:3,material:'ivory',roofForm:'hip',roofRise:1.2,overhang:.4,entryBay:1}}}]};
+ const output={...(mode==='refine'?{}:{architecturalPlan:laderaPlan}),name:'Assembly proof',summary:'Offline construction',unsupported:[],operations:[{op:'assemble',assembly:{kind:'residential-wing',parameters:{id:'proof-wing',at:[100,.1,0],rotation:0,width:12,depth:8,height:3.4,bays:3,material:'ivory',roofForm:'hip',roofRise:1.2,overhang:.4,entryBay:1}}}]};
  boundary.fetch.mockResolvedValue(new Response(JSON.stringify({id:'resp_offline',object:'response',created_at:0,model:'gpt-5.6-terra',status:'completed',output:[{type:'message',id:'msg_offline',role:'assistant',content:[{type:'output_text',text:JSON.stringify(output),annotations:[]}]}],usage:{input_tokens:1,output_tokens:1,total_tokens:2}}),{status:200,headers:{'content-type':'application/json'}}));
  const response=await POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify(input)}));
  const body=await response.json();expect(body.error).toBeUndefined();expect(response.status).toBe(200);
@@ -175,4 +187,25 @@ it.each(['generate','refine','redesign','complete'] as const)('executes an assem
  const wire=JSON.parse(boundary.fetch.mock.calls[0][1].body);audit(wire.text.format.schema);
  expect(JSON.stringify(wire.text.format.schema)).toContain('residential-wing');
  expect(JSON.stringify(wire.input)).toContain('COORDINATED ASSEMBLIES');
+});
+
+it.each(['angular','flowing','estate'] as const)('runs %s profile construction through the normal route and real SDK transport without simplification',async study=>{
+ const {profileFreedomStudy}=await import('@/lib/villa/scene/profileFreedom.fixture');
+ const {scene,operations}=profileFreedomStudy(study);
+ const intent={scaleRationale:'Offline developer replay, not model design evidence.',arrivalAndCirculation:'Selected entry; complete access unverified.',volumeHierarchy:'Study-specific form.',relationshipsAndViews:'Site assumptions.',roofFacadeAndMaterials:'Profile sections.',intendedSpaces:['Residence'],constructionScope:'exterior',programme:[{name:'Residence',zone:'public',strategy:'enclosed',floorIds:[scene.elements.find(e=>e.kind==='plate')!.id],enclosureIds:scene.elements.filter(e=>e.kind==='wall'||e.kind==='glazing').map(e=>e.id),roofIds:scene.elements.filter(e=>e.kind==='roof').map(e=>e.id),accessIds:scene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Interior fit-out deferred; profile coverage/access unverified.'}]};
+ const nullable=operations.map(op=>{
+  if(op.op!=='add')return op;
+  const element:Record<string,unknown>={...op.element};
+  for(const key of ['geometry','color','parent','roofForm','overhang','opening','assemblyKind'])element[key]??=null;
+  if(element.geometry && (element.geometry as {type:string}).type==='extrusion')element.geometry={...element.geometry as object,holes:(element.geometry as {holes?:unknown}).holes??null};
+  return {...op,element};
+ });
+ respond({name:scene.name,summary:'Offline profile replay',unsupported:['Developer study; no autonomous model design claim.'],architecturalPlan:intent,operations:nullable});
+ const response=await POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify({mode:'generate',prompt:'Offline developer study replay'})}));
+ const body=await response.json();expect(body.error,JSON.stringify(body)).toBeUndefined();expect(response.status).toBe(200);
+ expect(body.scene.elements).toEqual(scene.elements);expect(boundary.fetch).toHaveBeenCalledOnce();
+ const wire=JSON.parse(boundary.fetch.mock.calls[0][1].body);audit(wire.text.format.schema);
+ expect(JSON.stringify(wire.input)).toContain('GENERAL-PURPOSE EDITABLE PROFILES');
+ expect(JSON.stringify(wire.input)).not.toContain('primary salon, subordinate dining pavilion');
+ expect(JSON.stringify(wire.text.format.schema)).toContain('innerRatio');
 });

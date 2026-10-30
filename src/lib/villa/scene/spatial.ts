@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { profileContactTester } from './profileContact';
 import type { ArchitecturalScene, SceneElement } from './model';
 import type { CompletionFinding } from './completion';
 
@@ -23,8 +24,8 @@ export function sceneSpatialGeometry(scene: ArchitecturalScene) {
     }
     // Match documented component origins/extents rather than treating every
     // element as a centre-origin box. These remain bounds, not mesh collision.
-    const top = (e: SceneElement) => world(e)[1]+(e.kind==='pavilion' ? e.size[1]+.29 : e.kind==='water' ? 0 : e.kind==='sofa' ? 1.085 : e.size[1]/2+(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')&&e.material==='ivory'?.05:0));
-    const bottom = (e: SceneElement) => world(e)[1]+(e.kind==='pavilion' ? -.9 : e.kind==='water' ? 0 : e.kind==='sofa' ? .1 : -e.size[1]/2-(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')?.08:0));
+    const top = (e: SceneElement) => world(e)[1]+(e.geometry ? e.size[1]/2 : e.kind==='pavilion' ? e.size[1]+.29 : e.kind==='water' ? 0 : e.kind==='sofa' ? 1.085 : e.size[1]/2+(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')&&e.material==='ivory'?.05:0));
+    const bottom = (e: SceneElement) => world(e)[1]+(e.geometry ? -e.size[1]/2 : e.kind==='pavilion' ? -.9 : e.kind==='water' ? 0 : e.kind==='sofa' ? .1 : -e.size[1]/2-(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')?.08:0));
     const spans = (e: SceneElement) => {
         const extension=e.kind==='pavilion' ? .65 : e.kind==='roof'&&e.roofForm&&e.roofForm!=='flat' ? e.overhang??0 : 0;
         return [e.size[0]+extension*2, e.kind==='sofa' ? 1.08 : e.size[2]+extension*2];
@@ -54,11 +55,12 @@ export function sceneSpatialGeometry(scene: ArchitecturalScene) {
  * bridges above water, basin bottoms, edge walls, pool piers and coping remain legitimate.
  * This does not infer a basin volume from labels or forbid an enclosed pool. */
 export function waterObstructions(scene: ArchitecturalScene) {
-    const g=sceneSpatialGeometry(scene);
+    const g=sceneSpatialGeometry(scene),contact=profileContactTester();
+    const placed=(e:SceneElement)=>({...e,world:g.world(e),yaw:g.world(e)[3]});
     return scene.elements.filter(e=>e.kind==='water').flatMap(water=>scene.elements.filter(solid=>
         solid.kind==='plate' &&
         g.bottom(solid)<g.world(water)[1]+.001 && g.top(solid)>g.world(water)[1]-.001 &&
-        g.separation(solid,water,Math.min(.1,water.size[0]/4,water.size[2]/4))<-.001
+        g.separation(solid,water,Math.min(.1,water.size[0]/4,water.size[2]/4))<-.001 && contact(placed(solid),placed(water),0)
     ).map(solid=>({water,solid})));
 }
 
@@ -69,9 +71,10 @@ export function spatialCoordinationFindings(scene: ArchitecturalScene): Completi
     if (!parsed.success) return [{category:'likely-architectural-incompleteness',code:'spatial-contract',elementIds:[],message:'Spatial relationships are malformed; retained geometry was not modified.'}];
     const g=sceneSpatialGeometry(scene);
     const obstructions: CompletionFinding[]=waterObstructions(scene).map(({water,solid})=>({category:'confirmed-technical-defect',code:'water-obstruction',elementIds:[water.id,solid.id],message:`${solid.id} crosses ${water.id}'s open interior water plane at Y=${g.world(water)[1]} m.`}));
-    return [...obstructions,...occupiedRoofConflicts(scene),...parsed.data.flatMap(r=>{
+    return [...obstructions,...occupiedRoofConflicts(scene),...parsed.data.flatMap((r):CompletionFinding[]=>{
         const a=g.map.get(r.subject),b=g.map.get(r.target);
         let consistent=false;
+        if(a&&b&&(a.geometry||b.geometry)) return [{category:'unsupported-capability' as const,code:'profile-spatial-review',elementIds:[r.subject,r.target],message:`${r.subject} ${r.relation} ${r.target}: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. ${r.reason}`}];
         if(a&&b&&a!==b) {
             const gap=g.separation(a,b),p=g.world(a),q=g.world(b);
             switch(r.relation) {
@@ -97,6 +100,7 @@ export function occupiedRoofConflicts(scene: ArchitecturalScene): CompletionFind
     const entries = z.array(z.object({name:z.string(), zone:z.string().optional(), use:z.string().optional(), floorIds:z.array(z.string()), enclosureIds:z.array(z.string())})).safeParse(plan?.programme ?? plan?.spaces ?? []);
     if (!entries.success) return [];
     const findings: CompletionFinding[] = [];
+    const contact=profileContactTester();
     const seen = new Set<string>();
     for (const space of entries.data.filter(s=>s.zone==='public'||s.zone==='private'||s.zone==='service'||s.use==='interior')) {
         for (const id of space.floorIds) {
@@ -109,6 +113,13 @@ export function occupiedRoofConflicts(scene: ArchitecturalScene): CompletionFind
                 // A pitched envelope is not its solid mesh; do not certify collision
                 // from a bounding box. Flat rectangular solids give exact evidence.
                 if (roof.roofForm && roof.roofForm!=='flat') continue;
+                if (floor.geometry && (floor.geometry.axis!=='y')) continue; // Occupied height from a vertical section is unverified.
+                if(roof.geometry || floor.geometry){
+                    if(g.bottom(roof)>=ceiling-.1 || g.top(roof)<=datum+.02 || g.separation(roof,floor,.15)>=-.001)continue;
+                    const p=g.world(floor),q=g.world(roof);
+                    const occupied={...floor,id:`occupied-${space.name}-${floor.id}`,kind:'volume' as const,size:[floor.size[0],ceiling-datum,floor.size[2]] as [number,number,number],world:[p[0],(ceiling+datum)/2,p[2]],yaw:p[3]};
+                    if(!contact({...roof,world:q,yaw:q[3]},occupied,0))continue;
+                }
                 if (g.separation(roof,floor,.15)>=-.001 || g.top(roof)<=datum+.02 || g.bottom(roof)>=ceiling-.1) continue;
                 const key=`${roof.id}:${floor.id}`; if(seen.has(key)) continue; seen.add(key);
                 // Near-datum intrusion is strong evidence; higher envelopes can be

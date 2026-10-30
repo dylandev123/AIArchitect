@@ -1,0 +1,2320 @@
+{
+  "architecturalPlan": {
+    "constructionScope": "exterior",
+    "scaleRationale": "The 242 m² single-storey enclosed envelope is sized to hold four bedrooms plus generous shared living capacity without treating the luxury brief or property value as a fixed area formula; exact room partitions remain deferred.",
+    "levels": 1,
+    "enclosedAreaM2": 242,
+    "arrivalAndCirculation": "Arrival approaches the landward south-west face on a ground slab with a +0.20 m walking datum, passes under a supported 3.30 m-high entry canopy, and enters through the real rear threshold; all public, private, and service capacity is intentionally kept at this accessible level.",
+    "volumeHierarchy": "A 22.0 × 11.0 m primary residence rises from floor top +0.20 m to 3.80 m eaves beneath a 1.40 m gable roof, while the lower 3.40 m terrace canopy and entry canopy form subordinate climatic thresholds.",
+    "relationshipsAndViews": "The ocean-facing glazed façade opens directly onto a 5.75 m deep terrace at the same +0.20 m datum, which reaches the pool’s near dry deck without crossing water; the pool and broad view terrace sit beyond the living frontage while the sheltered arrival remains at the opposite façade.",
+    "roofFacadeAndMaterials": "Warm ivory enclosure, limestone pool coping and terrace surfaces, bronze-framed glazing, and timber screens create a restrained Caribbean palette; the deep 0.80 m gable eaves shade the full residence, while low flat canopies and side screens deepen the arrival and outdoor-living façades.",
+    "spaces": [
+      {
+        "name": "Four-bedroom private accommodation capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 121,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "rear-west-wall",
+          "rear-east-wall",
+          "entry-threshold",
+          "ocean-bay-1",
+          "ocean-bay-2",
+          "ocean-bay-3",
+          "ocean-bay-4",
+          "ocean-bay-5",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Living, dining, and kitchen capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 121,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "ocean-bay-1",
+          "ocean-bay-2",
+          "ocean-bay-3",
+          "ocean-bay-4",
+          "ocean-bay-5",
+          "rear-west-wall",
+          "rear-east-wall",
+          "entry-threshold",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Covered ocean terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 57.5,
+        "floorIds": [
+          "ocean-terrace"
+        ],
+        "enclosureIds": [
+          "terrace-screen-west",
+          "terrace-screen-east"
+        ],
+        "roofIds": [
+          "terrace-canopy"
+        ]
+      },
+      {
+        "name": "Arrival forecourt",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 20,
+        "floorIds": [
+          "arrival-path"
+        ],
+        "enclosureIds": [],
+        "roofIds": [
+          "entry-canopy"
+        ]
+      },
+      {
+        "name": "Pool and dry circuit",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 54,
+        "floorIds": [
+          "ocean-pool",
+          "ocean-pool-floor",
+          "ocean-pool-deck-x-minus",
+          "ocean-pool-deck-x-plus",
+          "ocean-pool-deck-far",
+          "ocean-pool-coping-x-minus",
+          "ocean-pool-coping-x-plus",
+          "ocean-pool-coping-z-minus",
+          "ocean-pool-coping-z-plus"
+        ],
+        "enclosureIds": [
+          "ocean-pool-wall-x-minus",
+          "ocean-pool-wall-x-plus",
+          "ocean-pool-wall-z-minus",
+          "ocean-pool-wall-z-plus"
+        ],
+        "roofIds": []
+      }
+    ],
+    "commitments": [
+      {
+        "description": "A developed one-storey principal residence with four-bedroom accommodation capacity is enclosed, roofed, glazed, and accessible through a covered entry.",
+        "kind": "primary-volume",
+        "elementIds": [
+          "main-floor",
+          "main-roof",
+          "rear-west-wall",
+          "rear-east-wall",
+          "entry-threshold",
+          "ocean-bay-1",
+          "ocean-bay-2",
+          "ocean-bay-3",
+          "ocean-bay-4",
+          "ocean-bay-5",
+          "west-wall",
+          "east-wall"
+        ]
+      },
+      {
+        "description": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.",
+        "kind": "terrace",
+        "elementIds": [
+          "ocean-terrace",
+          "terrace-canopy",
+          "terrace-post-west",
+          "terrace-post-east",
+          "terrace-screen-west",
+          "terrace-screen-east",
+          "ocean-pool"
+        ]
+      },
+      {
+        "description": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.",
+        "kind": "entrance",
+        "elementIds": [
+          "arrival-path",
+          "entry-threshold",
+          "entry-canopy",
+          "entry-post-west",
+          "entry-post-east"
+        ]
+      }
+    ]
+  },
+  "name": "Ocean Eave House",
+  "summary": "A single-level Caribbean hillside residence uses a deep-eaved primary gable, a fully connected ocean terrace, and a rectangular pool with complete editable basin and dry perimeter.",
+  "unsupported": [
+    "The requested hillside is represented on the mandatory flat Y=0 generation plane; no surveyed slope, retaining strategy, drainage, flood elevation, or coastal setback has been inferred.",
+    "Exterior-designed, interiors unfinished: the four-bedroom, bathroom, kitchen, service, and living arrangements are capacity allocations within the envelope, not constructed partitions, fixtures, cabinets, or furniture.",
+    "The pool is a rectangular basin with water, coping, walls, floor, and dry circuit; it does not model an infinity edge, overflow catchment, filtration, lighting, pool equipment, or hydraulic performance.",
+    "Planting, trees, marine works, hurricane/corrosion design, structural engineering, code compliance, and thermal or wind performance are not represented or certified."
+  ],
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "id": "main-floor",
+        "label": "Main residence floor slab",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          0.2,
+          11
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "rear-west-wall",
+        "label": "Landward rear enclosure west",
+        "kind": "wall",
+        "at": [
+          -6.5,
+          2,
+          -5.5
+        ],
+        "rotation": 0,
+        "size": [
+          9,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "rear-east-wall",
+        "label": "Landward rear enclosure east",
+        "kind": "wall",
+        "at": [
+          6.5,
+          2,
+          -5.5
+        ],
+        "rotation": 0,
+        "size": [
+          9,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "entry-threshold",
+          "at": [
+            0,
+            0.2,
+            -5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0,
+          "openingWidth": 1.6,
+          "openingHeight": 2.8,
+          "infill": "entrance",
+          "panels": 1
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "ocean-bay-1",
+          "at": [
+            -8.8,
+            0.2,
+            5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4.4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0.35,
+          "openingWidth": 3.4,
+          "openingHeight": 2.75,
+          "infill": "glazing",
+          "panels": 2
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "ocean-bay-2",
+          "at": [
+            -4.4,
+            0.2,
+            5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4.4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0.35,
+          "openingWidth": 3.4,
+          "openingHeight": 2.75,
+          "infill": "glazing",
+          "panels": 2
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "ocean-bay-3",
+          "at": [
+            0,
+            0.2,
+            5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4.4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0.15,
+          "openingWidth": 3.8,
+          "openingHeight": 3,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "ocean-bay-4",
+          "at": [
+            4.4,
+            0.2,
+            5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4.4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0.35,
+          "openingWidth": 3.4,
+          "openingHeight": 2.75,
+          "infill": "glazing",
+          "panels": 2
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "ocean-bay-5",
+          "at": [
+            8.8,
+            0.2,
+            5.5
+          ],
+          "rotation": 0,
+          "material": "bronze",
+          "width": 4.4,
+          "height": 3.6,
+          "thickness": 0.3,
+          "openingX": 0,
+          "sill": 0.35,
+          "openingWidth": 3.4,
+          "openingHeight": 2.75,
+          "infill": "glazing",
+          "panels": 2
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "west-wall",
+        "label": "West return enclosure",
+        "kind": "wall",
+        "at": [
+          -11,
+          2,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          11,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "east-wall",
+        "label": "East return enclosure",
+        "kind": "wall",
+        "at": [
+          11,
+          2,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          11,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "main-roof",
+        "label": "Deep-eaved primary gable roof",
+        "kind": "roof",
+        "at": [
+          0,
+          4.5,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          1.4,
+          11
+        ],
+        "material": "timber",
+        "roofForm": "gable",
+        "overhang": 0.8,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "terrace",
+        "id": "ocean-terrace",
+        "label": "Ocean living terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          8.375
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          0.2,
+          5.75
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "id": "terrace-post-west",
+        "label": "West terrace canopy support",
+        "kind": "volume",
+        "at": [
+          -4.8,
+          1.8,
+          8.9
+        ],
+        "rotation": 0,
+        "size": [
+          0.32,
+          3.2,
+          0.32
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "id": "terrace-post-east",
+        "label": "East terrace canopy support",
+        "kind": "volume",
+        "at": [
+          4.8,
+          1.8,
+          8.9
+        ],
+        "rotation": 0,
+        "size": [
+          0.32,
+          3.2,
+          0.32
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "terrace-canopy",
+        "label": "Covered outdoor living canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.5,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          3.2
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "terrace-screen-west",
+        "label": "West terrace privacy screen",
+        "kind": "screen",
+        "at": [
+          -10.85,
+          1.8,
+          7.8
+        ],
+        "rotation": 1.570796,
+        "size": [
+          3.4,
+          3.2,
+          0.12
+        ],
+        "material": "timber",
+        "panels": 12
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "terrace-screen-east",
+        "label": "East terrace privacy screen",
+        "kind": "screen",
+        "at": [
+          10.85,
+          1.8,
+          7.8
+        ],
+        "rotation": 1.570796,
+        "size": [
+          3.4,
+          3.2,
+          0.12
+        ],
+        "material": "timber",
+        "panels": 12
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "path",
+        "id": "arrival-path",
+        "label": "Covered arrival approach",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -7.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "id": "entry-post-west",
+        "label": "West entry canopy support",
+        "kind": "volume",
+        "at": [
+          -2.2,
+          1.75,
+          -7.25
+        ],
+        "rotation": 0,
+        "size": [
+          0.28,
+          3.1,
+          0.28
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "id": "entry-post-east",
+        "label": "East entry canopy support",
+        "kind": "volume",
+        "at": [
+          2.2,
+          1.75,
+          -7.25
+        ],
+        "rotation": 0,
+        "size": [
+          0.28,
+          3.1,
+          0.28
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "id": "entry-canopy",
+        "label": "Landward entrance canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.4,
+          -6.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          3
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "rectangular-pool",
+        "parameters": {
+          "id": "ocean-pool",
+          "at": [
+            0,
+            0.05,
+            12
+          ],
+          "rotation": 0,
+          "width": 4.5,
+          "depth": 12,
+          "basinDepth": 1.35,
+          "material": "limestone"
+        }
+      }
+    }
+  ],
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "Ocean Eave House",
+    "generationBrief": "Design a luxury Caribbean hillside home with four bedrooms, ocean views, a pool and generous outdoor living.",
+    "elements": [
+      {
+        "semanticType": "floor",
+        "id": "main-floor",
+        "label": "Main residence floor slab",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          0.2,
+          11
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "rear-west-wall",
+        "label": "Landward rear enclosure west",
+        "kind": "wall",
+        "at": [
+          -6.5,
+          2,
+          -5.5
+        ],
+        "rotation": 0,
+        "size": [
+          9,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "rear-east-wall",
+        "label": "Landward rear enclosure east",
+        "kind": "wall",
+        "at": [
+          6.5,
+          2,
+          -5.5
+        ],
+        "rotation": 0,
+        "size": [
+          9,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "entry-threshold",
+        "label": "entry-threshold facade",
+        "kind": "wall",
+        "at": [
+          0,
+          2,
+          -5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.6,
+          "height": 2.8,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "entry-threshold-panel",
+        "label": "entry-threshold entrance",
+        "kind": "entrance",
+        "parent": "entry-threshold",
+        "at": [
+          0,
+          -0.40000000000000013,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          2.8,
+          0.06
+        ],
+        "material": "timber",
+        "panels": 1
+      },
+      {
+        "id": "ocean-bay-1",
+        "label": "ocean-bay-1 facade",
+        "kind": "wall",
+        "at": [
+          -8.8,
+          2,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4.4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.35,
+          "width": 3.4,
+          "height": 2.75,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "ocean-bay-1-panel",
+        "label": "ocean-bay-1 glazing",
+        "kind": "glazing",
+        "parent": "ocean-bay-1",
+        "at": [
+          0,
+          -0.07500000000000018,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.4,
+          2.75,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 2
+      },
+      {
+        "id": "ocean-bay-2",
+        "label": "ocean-bay-2 facade",
+        "kind": "wall",
+        "at": [
+          -4.4,
+          2,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4.4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.35,
+          "width": 3.4,
+          "height": 2.75,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "ocean-bay-2-panel",
+        "label": "ocean-bay-2 glazing",
+        "kind": "glazing",
+        "parent": "ocean-bay-2",
+        "at": [
+          0,
+          -0.07500000000000018,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.4,
+          2.75,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 2
+      },
+      {
+        "id": "ocean-bay-3",
+        "label": "ocean-bay-3 facade",
+        "kind": "wall",
+        "at": [
+          0,
+          2,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4.4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.15,
+          "width": 3.8,
+          "height": 3,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "ocean-bay-3-panel",
+        "label": "ocean-bay-3 glazing",
+        "kind": "glazing",
+        "parent": "ocean-bay-3",
+        "at": [
+          0,
+          -0.15000000000000013,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.8,
+          3,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "ocean-bay-4",
+        "label": "ocean-bay-4 facade",
+        "kind": "wall",
+        "at": [
+          4.4,
+          2,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4.4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.35,
+          "width": 3.4,
+          "height": 2.75,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "ocean-bay-4-panel",
+        "label": "ocean-bay-4 glazing",
+        "kind": "glazing",
+        "parent": "ocean-bay-4",
+        "at": [
+          0,
+          -0.07500000000000018,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.4,
+          2.75,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 2
+      },
+      {
+        "id": "ocean-bay-5",
+        "label": "ocean-bay-5 facade",
+        "kind": "wall",
+        "at": [
+          8.8,
+          2,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          4.4,
+          3.6,
+          0.3
+        ],
+        "material": "bronze",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.35,
+          "width": 3.4,
+          "height": 2.75,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "ocean-bay-5-panel",
+        "label": "ocean-bay-5 glazing",
+        "kind": "glazing",
+        "parent": "ocean-bay-5",
+        "at": [
+          0,
+          -0.07500000000000018,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          3.4,
+          2.75,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 2
+      },
+      {
+        "semanticType": "wall",
+        "id": "west-wall",
+        "label": "West return enclosure",
+        "kind": "wall",
+        "at": [
+          -11,
+          2,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          11,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "east-wall",
+        "label": "East return enclosure",
+        "kind": "wall",
+        "at": [
+          11,
+          2,
+          0
+        ],
+        "rotation": 1.570796,
+        "size": [
+          11,
+          3.6,
+          0.3
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "main-roof",
+        "label": "Deep-eaved primary gable roof",
+        "kind": "roof",
+        "at": [
+          0,
+          4.5,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          1.4,
+          11
+        ],
+        "material": "timber",
+        "roofForm": "gable",
+        "overhang": 0.8,
+        "panels": 4
+      },
+      {
+        "semanticType": "terrace",
+        "id": "ocean-terrace",
+        "label": "Ocean living terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          8.375
+        ],
+        "rotation": 0,
+        "size": [
+          22,
+          0.2,
+          5.75
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "id": "terrace-post-west",
+        "label": "West terrace canopy support",
+        "kind": "volume",
+        "at": [
+          -4.8,
+          1.8,
+          8.9
+        ],
+        "rotation": 0,
+        "size": [
+          0.32,
+          3.2,
+          0.32
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "id": "terrace-post-east",
+        "label": "East terrace canopy support",
+        "kind": "volume",
+        "at": [
+          4.8,
+          1.8,
+          8.9
+        ],
+        "rotation": 0,
+        "size": [
+          0.32,
+          3.2,
+          0.32
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "terrace-canopy",
+        "label": "Covered outdoor living canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.5,
+          7.5
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          3.2
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "panels": 4
+      },
+      {
+        "semanticType": "wall",
+        "id": "terrace-screen-west",
+        "label": "West terrace privacy screen",
+        "kind": "screen",
+        "at": [
+          -10.85,
+          1.8,
+          7.8
+        ],
+        "rotation": 1.570796,
+        "size": [
+          3.4,
+          3.2,
+          0.12
+        ],
+        "material": "timber",
+        "panels": 12
+      },
+      {
+        "semanticType": "wall",
+        "id": "terrace-screen-east",
+        "label": "East terrace privacy screen",
+        "kind": "screen",
+        "at": [
+          10.85,
+          1.8,
+          7.8
+        ],
+        "rotation": 1.570796,
+        "size": [
+          3.4,
+          3.2,
+          0.12
+        ],
+        "material": "timber",
+        "panels": 12
+      },
+      {
+        "semanticType": "path",
+        "id": "arrival-path",
+        "label": "Covered arrival approach",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -7.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "id": "entry-post-west",
+        "label": "West entry canopy support",
+        "kind": "volume",
+        "at": [
+          -2.2,
+          1.75,
+          -7.25
+        ],
+        "rotation": 0,
+        "size": [
+          0.28,
+          3.1,
+          0.28
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "semanticType": "mass",
+        "id": "entry-post-east",
+        "label": "East entry canopy support",
+        "kind": "volume",
+        "at": [
+          2.2,
+          1.75,
+          -7.25
+        ],
+        "rotation": 0,
+        "size": [
+          0.28,
+          3.1,
+          0.28
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "semanticType": "roof",
+        "id": "entry-canopy",
+        "label": "Landward entrance canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.4,
+          -6.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          3
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool",
+        "label": "ocean-pool deck",
+        "kind": "plate",
+        "at": [
+          0,
+          0.05,
+          12
+        ],
+        "rotation": 0,
+        "size": [
+          7.7,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "assemblyKind": "rectangular-pool"
+      },
+      {
+        "id": "ocean-pool-floor",
+        "label": "ocean-pool floor",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          -1.4000000000000001,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          4.9,
+          0.2,
+          12.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-water",
+        "label": "ocean-pool water",
+        "kind": "water",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          0.05,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          0.02,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-wall-z-minus",
+        "label": "ocean-pool wall-z-minus",
+        "kind": "wall",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          -0.5750000000000001,
+          1.3500000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          4.9,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-wall-x-minus",
+        "label": "ocean-pool wall-x-minus",
+        "kind": "wall",
+        "parent": "ocean-pool",
+        "at": [
+          -2.35,
+          -0.5750000000000001,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-coping-z-minus",
+        "label": "ocean-pool coping-z-minus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          0.1,
+          1.1000000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          5.7,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-coping-x-minus",
+        "label": "ocean-pool coping-x-minus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          -2.55,
+          0.1,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-deck-x-minus",
+        "label": "ocean-pool deck-x-minus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          -3.35,
+          0,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          13.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-wall-z-plus",
+        "label": "ocean-pool wall-z-plus",
+        "kind": "wall",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          -0.5750000000000001,
+          13.55
+        ],
+        "rotation": 0,
+        "size": [
+          4.9,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-wall-x-plus",
+        "label": "ocean-pool wall-x-plus",
+        "kind": "wall",
+        "parent": "ocean-pool",
+        "at": [
+          2.35,
+          -0.5750000000000001,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-coping-z-plus",
+        "label": "ocean-pool coping-z-plus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          0.1,
+          13.8
+        ],
+        "rotation": 0,
+        "size": [
+          5.7,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-coping-x-plus",
+        "label": "ocean-pool coping-x-plus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          2.55,
+          0.1,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-deck-x-plus",
+        "label": "ocean-pool deck-x-plus",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          3.35,
+          0,
+          7.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          13.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-pool-deck-far",
+        "label": "ocean-pool deck-far",
+        "kind": "plate",
+        "parent": "ocean-pool",
+        "at": [
+          0,
+          0,
+          14.9
+        ],
+        "rotation": 0,
+        "size": [
+          7.7,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    ],
+    "architecturalPlan": {
+      "constructionScope": "exterior",
+      "scaleRationale": "The 242 m² single-storey enclosed envelope is sized to hold four bedrooms plus generous shared living capacity without treating the luxury brief or property value as a fixed area formula; exact room partitions remain deferred.",
+      "levels": 1,
+      "enclosedAreaM2": 242,
+      "arrivalAndCirculation": "Arrival approaches the landward south-west face on a ground slab with a +0.20 m walking datum, passes under a supported 3.30 m-high entry canopy, and enters through the real rear threshold; all public, private, and service capacity is intentionally kept at this accessible level.",
+      "volumeHierarchy": "A 22.0 × 11.0 m primary residence rises from floor top +0.20 m to 3.80 m eaves beneath a 1.40 m gable roof, while the lower 3.40 m terrace canopy and entry canopy form subordinate climatic thresholds.",
+      "relationshipsAndViews": "The ocean-facing glazed façade opens directly onto a 5.75 m deep terrace at the same +0.20 m datum, which reaches the pool’s near dry deck without crossing water; the pool and broad view terrace sit beyond the living frontage while the sheltered arrival remains at the opposite façade.",
+      "roofFacadeAndMaterials": "Warm ivory enclosure, limestone pool coping and terrace surfaces, bronze-framed glazing, and timber screens create a restrained Caribbean palette; the deep 0.80 m gable eaves shade the full residence, while low flat canopies and side screens deepen the arrival and outdoor-living façades.",
+      "spaces": [
+        {
+          "name": "Four-bedroom private accommodation capacity",
+          "use": "interior",
+          "level": 1,
+          "areaM2": 121,
+          "floorIds": [
+            "main-floor"
+          ],
+          "enclosureIds": [
+            "rear-west-wall",
+            "rear-east-wall",
+            "entry-threshold",
+            "ocean-bay-1",
+            "ocean-bay-2",
+            "ocean-bay-3",
+            "ocean-bay-4",
+            "ocean-bay-5",
+            "west-wall",
+            "east-wall"
+          ],
+          "roofIds": [
+            "main-roof"
+          ]
+        },
+        {
+          "name": "Living, dining, and kitchen capacity",
+          "use": "interior",
+          "level": 1,
+          "areaM2": 121,
+          "floorIds": [
+            "main-floor"
+          ],
+          "enclosureIds": [
+            "ocean-bay-1",
+            "ocean-bay-2",
+            "ocean-bay-3",
+            "ocean-bay-4",
+            "ocean-bay-5",
+            "rear-west-wall",
+            "rear-east-wall",
+            "entry-threshold",
+            "west-wall",
+            "east-wall"
+          ],
+          "roofIds": [
+            "main-roof"
+          ]
+        },
+        {
+          "name": "Covered ocean terrace",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 57.5,
+          "floorIds": [
+            "ocean-terrace"
+          ],
+          "enclosureIds": [
+            "terrace-screen-west",
+            "terrace-screen-east"
+          ],
+          "roofIds": [
+            "terrace-canopy"
+          ]
+        },
+        {
+          "name": "Arrival forecourt",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 20,
+          "floorIds": [
+            "arrival-path"
+          ],
+          "enclosureIds": [],
+          "roofIds": [
+            "entry-canopy"
+          ]
+        },
+        {
+          "name": "Pool and dry circuit",
+          "use": "outdoor",
+          "level": 1,
+          "areaM2": 54,
+          "floorIds": [
+            "ocean-pool",
+            "ocean-pool-floor",
+            "ocean-pool-deck-x-minus",
+            "ocean-pool-deck-x-plus",
+            "ocean-pool-deck-far",
+            "ocean-pool-coping-x-minus",
+            "ocean-pool-coping-x-plus",
+            "ocean-pool-coping-z-minus",
+            "ocean-pool-coping-z-plus"
+          ],
+          "enclosureIds": [
+            "ocean-pool-wall-x-minus",
+            "ocean-pool-wall-x-plus",
+            "ocean-pool-wall-z-minus",
+            "ocean-pool-wall-z-plus"
+          ],
+          "roofIds": []
+        }
+      ],
+      "commitments": [
+        {
+          "description": "A developed one-storey principal residence with four-bedroom accommodation capacity is enclosed, roofed, glazed, and accessible through a covered entry.",
+          "kind": "primary-volume",
+          "elementIds": [
+            "main-floor",
+            "main-roof",
+            "rear-west-wall",
+            "rear-east-wall",
+            "entry-threshold",
+            "ocean-bay-1",
+            "ocean-bay-2",
+            "ocean-bay-3",
+            "ocean-bay-4",
+            "ocean-bay-5",
+            "west-wall",
+            "east-wall"
+          ]
+        },
+        {
+          "description": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.",
+          "kind": "terrace",
+          "elementIds": [
+            "ocean-terrace",
+            "terrace-canopy",
+            "terrace-post-west",
+            "terrace-post-east",
+            "terrace-screen-west",
+            "terrace-screen-east",
+            "ocean-pool"
+          ]
+        },
+        {
+          "description": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.",
+          "kind": "entrance",
+          "elementIds": [
+            "arrival-path",
+            "entry-threshold",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ]
+        }
+      ]
+    },
+    "knowledgeEvidence": [
+      {
+        "id": "outdoor-entertaining",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "requiredKinds": [
+          "wall"
+        ]
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "composition-hierarchy",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "entrance",
+          "roof"
+        ]
+      },
+      {
+        "id": "infinity-pool",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "water"
+        ]
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "requiredKinds": [
+          "wall"
+        ]
+      },
+      {
+        "id": "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+        "version": 1,
+        "requiredKinds": [
+          "plate",
+          "wall",
+          "roof"
+        ]
+      }
+    ]
+  },
+  "architecturalAudit": {
+    "constructionScope": "exterior",
+    "designStage": "Exterior-designed, interiors unfinished",
+    "interiorsDeferred": true,
+    "status": "incomplete",
+    "issues": [
+      "Four-bedroom private accommodation capacity: measured floor 242.0 m² differs from planned 121 m².",
+      "Living, dining, and kitchen capacity: floor main-floor counted more than once; split shared slabs into non-overlapping space plates.",
+      "Living, dining, and kitchen capacity: measured floor 242.0 m² differs from planned 121 m².",
+      "Covered ocean terrace: measured floor 126.5 m² differs from planned 57.5 m².",
+      "Arrival forecourt: measured floor 16.0 m² differs from planned 20 m².",
+      "Pool and dry circuit: measured floor 133.0 m² differs from planned 54 m².",
+      "Planned enclosed area 242 m²; measured floor evidence 484.0 m².",
+      "A developed one-storey principal residence with four-bedroom accommodation capacity is enclosed, roofed, glazed, and accessible through a covered entry.: main-roof missing or wrong architectural kind.",
+      "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-canopy missing or wrong architectural kind.",
+      "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-west missing or wrong architectural kind.",
+      "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-east missing or wrong architectural kind.",
+      "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-west missing or wrong architectural kind.",
+      "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-east missing or wrong architectural kind.",
+      "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: arrival-path missing or wrong architectural kind.",
+      "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-threshold missing or wrong architectural kind.",
+      "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-canopy missing or wrong architectural kind.",
+      "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-west missing or wrong architectural kind.",
+      "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-east missing or wrong architectural kind.",
+      "Missing circulation commitment.",
+      "Missing roof commitment.",
+      "Missing facade commitment.",
+      "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation.",
+      "Retrieved knowledge outdoor-entertaining: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge tropical-envelope: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge waterfront-estate: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge composition-hierarchy: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge infinity-pool: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge facade-materials: selected but no construction or explicit disposition evidence.",
+      "Retrieved knowledge legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1: selected but no construction or explicit disposition evidence.",
+      "entry-canopy at world [0, 3.4, -6.5], size [5, 0.2, 3], rendered Y=[3.2199999999999998, 3.5] crosses Four-bedroom private accommodation capacity above main-floor at walking Y=0.2, enclosure head Y=3.8. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+    ],
+    "findings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Four-bedroom private accommodation capacity: measured floor 242.0 m² differs from planned 121 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "main-floor"
+        ],
+        "message": "Living, dining, and kitchen capacity: floor main-floor counted more than once; split shared slabs into non-overlapping space plates."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Living, dining, and kitchen capacity: measured floor 242.0 m² differs from planned 121 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Covered ocean terrace: measured floor 126.5 m² differs from planned 57.5 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Arrival forecourt: measured floor 16.0 m² differs from planned 20 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Pool and dry circuit: measured floor 133.0 m² differs from planned 54 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Planned enclosed area 242 m²; measured floor evidence 484.0 m²."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "main-roof"
+        ],
+        "message": "A developed one-storey principal residence with four-bedroom accommodation capacity is enclosed, roofed, glazed, and accessible through a covered entry.: main-roof missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "terrace-canopy"
+        ],
+        "message": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-canopy missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "terrace-post-west"
+        ],
+        "message": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-west missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "terrace-post-east"
+        ],
+        "message": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-east missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "terrace-screen-west"
+        ],
+        "message": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-west missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "terrace-screen-east"
+        ],
+        "message": "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-east missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "arrival-path"
+        ],
+        "message": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: arrival-path missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-threshold"
+        ],
+        "message": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-threshold missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-canopy"
+        ],
+        "message": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-canopy missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-post-west"
+        ],
+        "message": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-west missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "entry-post-east"
+        ],
+        "message": "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-east missing or wrong architectural kind."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Missing circulation commitment."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Missing roof commitment."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Missing facade commitment."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge outdoor-entertaining: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge tropical-envelope: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge waterfront-estate: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge composition-hierarchy: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge covered-threshold: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge infinity-pool: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge facade-materials: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "feature-evidence",
+        "elementIds": [],
+        "message": "Retrieved knowledge legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1: selected but no construction or explicit disposition evidence."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "roof-envelope-review",
+        "elementIds": [
+          "entry-canopy",
+          "main-floor",
+          "rear-west-wall",
+          "rear-east-wall",
+          "entry-threshold",
+          "ocean-bay-1",
+          "ocean-bay-2",
+          "ocean-bay-3",
+          "ocean-bay-4",
+          "ocean-bay-5",
+          "west-wall",
+          "east-wall"
+        ],
+        "message": "entry-canopy at world [0, 3.4, -6.5], size [5, 0.2, 3], rendered Y=[3.2199999999999998, 3.5] crosses Four-bedroom private accommodation capacity above main-floor at walking Y=0.2, enclosure head Y=3.8. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+      }
+    ],
+    "originalPlanAudit": {
+      "status": "incomplete",
+      "enclosedAreaM2": 484,
+      "levels": 1,
+      "spaces": [
+        {
+          "name": "Four-bedroom private accommodation capacity",
+          "areaM2": 242,
+          "level": 1,
+          "use": "interior"
+        },
+        {
+          "name": "Living, dining, and kitchen capacity",
+          "areaM2": 242,
+          "level": 1,
+          "use": "interior"
+        },
+        {
+          "name": "Covered ocean terrace",
+          "areaM2": 126.5,
+          "level": 1,
+          "use": "outdoor"
+        },
+        {
+          "name": "Arrival forecourt",
+          "areaM2": 16,
+          "level": 1,
+          "use": "outdoor"
+        },
+        {
+          "name": "Pool and dry circuit",
+          "areaM2": 133.04000000000002,
+          "level": 1,
+          "use": "outdoor"
+        }
+      ],
+      "issues": [
+        "Four-bedroom private accommodation capacity: measured floor 242.0 m² differs from planned 121 m².",
+        "Living, dining, and kitchen capacity: floor main-floor counted more than once; split shared slabs into non-overlapping space plates.",
+        "Living, dining, and kitchen capacity: measured floor 242.0 m² differs from planned 121 m².",
+        "Covered ocean terrace: measured floor 126.5 m² differs from planned 57.5 m².",
+        "Arrival forecourt: measured floor 16.0 m² differs from planned 20 m².",
+        "Pool and dry circuit: measured floor 133.0 m² differs from planned 54 m².",
+        "Planned enclosed area 242 m²; measured floor evidence 484.0 m².",
+        "A developed one-storey principal residence with four-bedroom accommodation capacity is enclosed, roofed, glazed, and accessible through a covered entry.: main-roof missing or wrong architectural kind.",
+        "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-canopy missing or wrong architectural kind.",
+        "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-west missing or wrong architectural kind.",
+        "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-post-east missing or wrong architectural kind.",
+        "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-west missing or wrong architectural kind.",
+        "A connected ocean terrace receives a supported canopy, privacy screens, and dry connection to the pool circuit.: terrace-screen-east missing or wrong architectural kind.",
+        "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: arrival-path missing or wrong architectural kind.",
+        "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-threshold missing or wrong architectural kind.",
+        "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-canopy missing or wrong architectural kind.",
+        "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-west missing or wrong architectural kind.",
+        "The rear arrival has an actual entrance opening, approach slab, and independently supported rain canopy.: entry-post-east missing or wrong architectural kind.",
+        "Missing circulation commitment.",
+        "Missing roof commitment.",
+        "Missing facade commitment."
+      ],
+      "limitations": [
+        "Floor evidence estimates area; enclosure completeness, spatial quality and circulation usability require visual review."
+      ]
+    },
+    "programme": {
+      "status": "unrecorded",
+      "spaces": [],
+      "issues": [
+        "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      ]
+    },
+    "designDecisions": [],
+    "knowledgeUse": [
+      {
+        "id": "outdoor-entertaining",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "legacy-recipe-4436f595-c280-4fdf-91bc-2521a83e26ab",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "composition-hierarchy",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "covered-threshold",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "infinity-pool",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "facade-materials",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      },
+      {
+        "id": "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+        "version": 1,
+        "status": "selected-missing",
+        "elementIds": [],
+        "verifiedComplete": false
+      }
+    ],
+    "geometry": {
+      "kindCounts": {
+        "plate": 12,
+        "wall": 14,
+        "entrance": 1,
+        "glazing": 5,
+        "roof": 3,
+        "volume": 4,
+        "screen": 2,
+        "water": 1
+      },
+      "surfaces": [
+        {
+          "id": "main-floor",
+          "kind": "plate",
+          "areaM2": 242,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-terrace",
+          "kind": "plate",
+          "areaM2": 126.5,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival-path",
+          "kind": "plate",
+          "areaM2": 16,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool",
+          "kind": "plate",
+          "areaM2": 11.55,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-floor",
+          "kind": "plate",
+          "areaM2": 60.760000000000005,
+          "walkingDatum": -1.25
+        },
+        {
+          "id": "ocean-pool-water",
+          "kind": "water",
+          "areaM2": 54,
+          "walkingDatum": 0.1
+        },
+        {
+          "id": "ocean-pool-coping-z-minus",
+          "kind": "plate",
+          "areaM2": 3.9899999999999998,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-coping-x-minus",
+          "kind": "plate",
+          "areaM2": 7.199999999999999,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-deck-x-minus",
+          "kind": "plate",
+          "areaM2": 13.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-coping-z-plus",
+          "kind": "plate",
+          "areaM2": 3.9899999999999998,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-coping-x-plus",
+          "kind": "plate",
+          "areaM2": 7.199999999999999,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-deck-x-plus",
+          "kind": "plate",
+          "areaM2": 13.4,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "ocean-pool-deck-far",
+          "kind": "plate",
+          "areaM2": 11.55,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.2,
+        -1.25
+      ],
+      "plateSurfaceAreaM2": 517.54,
+      "waterSurfaceAreaM2": 54
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "responseId": "03ee0783-29a2-41e3-b39a-401ae5260d30",
+  "providerCalls": 1,
+  "experiment": {
+    "model": "gpt-5.6-terra",
+    "reasoningEffort": null,
+    "usage": {
+      "inputTokens": 15493,
+      "inputTokenDetails": {
+        "noCacheTokens": 3,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 15490
+      },
+      "outputTokens": 6517,
+      "outputTokenDetails": {
+        "textTokens": 3536,
+        "reasoningTokens": 2981
+      },
+      "totalTokens": 22010,
+      "reasoningTokens": 2981,
+      "cachedInputTokens": 0
+    },
+    "requestFingerprint": "3d3c17f05936ec7bfd5635b4941c5588002ae20f7b2bfd6e0ab641d1abe99533",
+    "operations": 23,
+    "validation": {
+      "status": "accepted",
+      "warningCount": 32
+    },
+    "architecturalQuality": "requires-visual-review"
+  }
+}

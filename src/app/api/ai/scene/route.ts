@@ -1,3 +1,4 @@
+import { SemanticEditError } from '@/lib/semantic/vocabulary';
 import {createHash} from 'node:crypto';
 import {SCENE_TEST_MODELS,resolveSceneTestSettings} from '@/lib/ai/sceneTesting';
 import {mansionCoordinationFixture,assertFixtureInput} from '@/lib/villa/scene/controlledFixture';
@@ -125,6 +126,6 @@ export async function POST(request: Request) {
         validation={status:'rejected',error:message};
         if(error instanceof SceneConstructionError)architecturalQuality={status:'unapproved-rejected-draft',audit:reviewSceneArchitecture(error.recoverableDraft)};
         await retain('rejected', message);
-        return json({ error: message, ...(error instanceof SceneConstructionError ? {recoverableDraft:error.recoverableDraft} : {}), responseId, providerCalls,experiment:experiment(raw&&typeof raw==='object'&&'operations' in raw&&Array.isArray(raw.operations)?raw.operations.length:undefined) }, 422);
+        return json({ error: message, ...(error instanceof SemanticEditError ? {code:error.code,candidates:error.candidates}:{}), ...(error instanceof SceneConstructionError ? {recoverableDraft:error.recoverableDraft} : {}), responseId, providerCalls,experiment:experiment(raw&&typeof raw==='object'&&'operations' in raw&&Array.isArray(raw.operations)?raw.operations.length:undefined) }, 422);
     }
 }

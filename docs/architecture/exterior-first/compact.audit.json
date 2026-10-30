@@ -1,0 +1,107 @@
+{
+  "providerCalls": 0,
+  "elements": 21,
+  "authoredOperations": 13,
+  "relationships": [],
+  "review": {
+    "constructionScope": "exterior",
+    "designStage": "Exterior-designed, interiors unfinished",
+    "interiorsDeferred": true,
+    "status": "consistent",
+    "issues": [],
+    "findings": [],
+    "programme": {
+      "status": "recorded",
+      "spaces": [
+        {
+          "name": "Three-bedroom capacity",
+          "zone": "private",
+          "strategy": "Capacity allocated to envelope; room subdivision deferred",
+          "purpose": "bedroom",
+          "floorIds": [
+            "main-floor"
+          ],
+          "enclosureIds": [
+            "front-0",
+            "rear-0"
+          ],
+          "roofIds": [
+            "gable-roof"
+          ],
+          "accessIds": [
+            "front-1-panel"
+          ],
+          "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed.",
+          "floorSurfaceM2": 80,
+          "walkingDatums": [
+            0.2
+          ],
+          "allocation": [
+            {
+              "id": "main-floor",
+              "world": [
+                0,
+                0.1,
+                0,
+                0
+              ],
+              "size": [
+                10,
+                0.2,
+                8
+              ],
+              "walkingDatum": 0.2
+            }
+          ],
+          "issues": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        }
+      ],
+      "deferredInteriors": [
+        "Three-bedroom capacity: interior subdivision and fit-out unverified; Interiors unfinished; no distinct rooms or fit-out claimed."
+      ],
+      "issues": []
+    },
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 3,
+        "wall": 8,
+        "glazing": 6,
+        "entrance": 2,
+        "roof": 2
+      },
+      "surfaces": [
+        {
+          "id": "main-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival",
+          "kind": "plate",
+          "areaM2": 16,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "garden-terrace",
+          "kind": "plate",
+          "areaM2": 30,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.2
+      ],
+      "plateSurfaceAreaM2": 126,
+      "waterSurfaceAreaM2": 0
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  }
+}

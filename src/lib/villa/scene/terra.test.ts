@@ -7,7 +7,7 @@ const request=sceneRequestSchema.parse({prompt:'Build an original house',mode:'g
 describe('Terra independent scene authoring',()=>{
  it('replays the complete Casa Ladera through the provider contract',()=>{
  const result=resolveSceneResult(request,{name:laderaScene.name,summary:'Ladera replay',unsupported:[],operations:laderaScene.elements.map(element=>({op:'add',element}))});
- expect(result.scene).toEqual(laderaScene);
+ expect(result.scene).toEqual({...laderaScene,generationBrief:request.prompt});
  });
  it('exposes a provider-compatible schema without tuples or house families',async()=>{
  const schema=await zodSchema(sceneResultSchema).jsonSchema;
@@ -20,7 +20,7 @@ describe('Terra independent scene authoring',()=>{
  elements.push({id:'core',label:'Grounded supporting core',kind:'volume',at:[4,8.9,0],size:[2,17.8,2],rotation:.37});
  elements.push({id:'bridge',label:'Elevated bridge',kind:'roof',at:[0,18,0],size:[90,.3,4],rotation:.62});
  const first=resolveSceneResult(request,{name:'Five-level lantern',summary:'Split-level composition',unsupported:[],operations:elements.map(element=>({op:'add',element}))}).scene;
- const next=resolveSceneResult({prompt:'Attach a screen and rotate bridge',mode:'edit',current:first},{name:first.name,summary:'Targeted edit',unsupported:[],operations:[{op:'add',element:{id:'screen',label:'Screen',kind:'screen',parent:'bridge',at:[0,1,0],size:[8,2,.15]}},{op:'rotate',id:'bridge',rotation:.9}]}).scene;
+ const next=applySceneOperations(first,[{op:'add',element:{id:'screen',label:'Screen',kind:'screen',parent:'bridge',at:[0,1,0],size:[8,2,.15]}},{op:'rotate',id:'bridge',rotation:.9}]);
  expect(next.elements[0]).toBe(first.elements[0]);expect(next.elements.at(-1)?.parent).toBe('bridge');
  expect(validateScene(JSON.parse(JSON.stringify(next)))).toEqual(next);
  const history=[first];expect(history.pop()).toEqual(first);expect(first.elements.at(-1)?.rotation).toBe(.62);
@@ -42,7 +42,7 @@ it('ignores generated terrain variation but preserves existing terrain on edit a
  const output={name:'Flat house',summary:'Replay',unsupported:[],operations:[{op:'set-terrain',terrain},...laderaScene.elements.map(element=>({op:'add',element}))]};
  const generated=resolveSceneResult(request,output);expect(generated.scene.terrain).toBeUndefined();expect(generated.operations.some(op=>op.op==='set-terrain')).toBe(false);
  const existing={...laderaScene,terrain};const copy=JSON.stringify(existing);
- const edited=resolveSceneResult({mode:'edit',prompt:'Change one finish',current:existing},{name:existing.name,summary:'Finish',unsupported:[],operations:[{op:'finish',id:existing.elements[0].id,material:'timber'}]});
+ const edited=resolveSceneResult({mode:'edit',prompt:'Change material',editContext:{selectedId:existing.elements[0].id},current:existing},{name:existing.name,summary:'Finish',unsupported:[],operations:[{op:'finish',id:existing.elements[0].id,material:'timber'}]});
  expect(edited.scene.terrain).toEqual(terrain);expect(JSON.stringify(existing)).toBe(copy);expect(validateScene(JSON.parse(copy))).toEqual(existing);
 });
 

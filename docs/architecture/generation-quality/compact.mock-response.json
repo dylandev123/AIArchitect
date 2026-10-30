@@ -1,0 +1,944 @@
+{
+  "architecturalPlan": {
+    "constructionScope": "exterior",
+    "scaleRationale": "Developer study of envelope capacity, not value-to-area pricing",
+    "arrivalAndCirculation": "Grounded dry approach, fitted entries; layered study uses external supported stairs",
+    "volumeHierarchy": "Compact single-level gable residence",
+    "relationshipsAndViews": "Garden-facing glazing and connected outdoor surfaces",
+    "roofFacadeAndMaterials": "Independent roof sections, fitted openings, timber and limestone contrast",
+    "intendedSpaces": [
+      "Three-bedroom capacity"
+    ],
+    "programme": [
+      {
+        "name": "Three-bedroom capacity",
+        "zone": "private",
+        "purpose": "bedroom",
+        "strategy": "Capacity allocated to envelope; room subdivision deferred",
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-0",
+          "rear-0"
+        ],
+        "roofIds": [
+          "gable-roof"
+        ],
+        "accessIds": [
+          "front-1-panel"
+        ],
+        "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed."
+      }
+    ]
+  },
+  "name": "DEVELOPER: Compact gable exterior",
+  "summary": "Developer-authored geometry feasibility study, not AI-generated quality evidence. Exterior-designed, interiors unfinished.",
+  "unsupported": [
+    "Interiors, engineering, site survey and code compliance unverified.",
+    "Stair guards and full route/headroom review remain unfinished."
+  ],
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "id": "main-floor",
+        "label": "main floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-0",
+          "at": [
+            -3.333333333333333,
+            0.2,
+            3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.55,
+          "openingWidth": 2.6833333333333336,
+          "openingHeight": 1.9499999999999997,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-1",
+          "at": [
+            0,
+            0.2,
+            3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0,
+          "openingWidth": 1.6,
+          "openingHeight": 2.5,
+          "infill": "entrance",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "front-2",
+          "at": [
+            3.333333333333334,
+            0.2,
+            3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.55,
+          "openingWidth": 2.6833333333333336,
+          "openingHeight": 1.9499999999999997,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "rear-0",
+          "at": [
+            -3.333333333333333,
+            0.2,
+            -3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.55,
+          "openingWidth": 2.6833333333333336,
+          "openingHeight": 1.9499999999999997,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "rear-1",
+          "at": [
+            0,
+            0.2,
+            -3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0,
+          "openingWidth": 1.6,
+          "openingHeight": 2.5,
+          "infill": "entrance",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "rear-2",
+          "at": [
+            3.333333333333334,
+            0.2,
+            -3.875
+          ],
+          "rotation": 0,
+          "material": "ivory",
+          "width": 3.3333333333333335,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.55,
+          "openingWidth": 2.6833333333333336,
+          "openingHeight": 1.9499999999999997,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "west",
+          "at": [
+            -4.875,
+            0.2,
+            0
+          ],
+          "rotation": 1.5707963267948966,
+          "material": "ivory",
+          "width": 7.5,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.7,
+          "openingWidth": 6,
+          "openingHeight": 1.7499999999999998,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "assemble",
+      "assembly": {
+        "kind": "facade-bay",
+        "parameters": {
+          "id": "east",
+          "at": [
+            4.875,
+            0.2,
+            0
+          ],
+          "rotation": 1.5707963267948966,
+          "material": "ivory",
+          "width": 7.5,
+          "height": 2.8,
+          "thickness": 0.25,
+          "openingX": 0,
+          "sill": 0.7,
+          "openingWidth": 6,
+          "openingHeight": 1.7499999999999998,
+          "infill": "glazing",
+          "panels": 3
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival",
+        "label": "arrival",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gable-roof",
+        "label": "gable roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.6,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          1.2,
+          8
+        ],
+        "material": "ivory",
+        "roofForm": "gable",
+        "overhang": 0.65,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "entry-canopy",
+        "label": "entry canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          2.9,
+          -5.1
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          2.5
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "garden-terrace",
+        "label": "garden terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          3
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  ],
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "DEVELOPER: Compact gable exterior",
+    "generationBrief": "Offline developer camera verification",
+    "elements": [
+      {
+        "id": "main-floor",
+        "label": "main floor",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "front-0",
+        "label": "front-0 facade",
+        "kind": "wall",
+        "at": [
+          -3.333333333333333,
+          1.5999999999999999,
+          3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.55,
+          "width": 2.6833333333333336,
+          "height": 1.9499999999999997,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-0-panel",
+        "label": "front-0 glazing",
+        "kind": "glazing",
+        "parent": "front-0",
+        "at": [
+          0,
+          0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.6833333333333336,
+          1.9499999999999997,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "front-1",
+        "label": "front-1 facade",
+        "kind": "wall",
+        "at": [
+          0,
+          1.5999999999999999,
+          3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.6,
+          "height": 2.5,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-1-panel",
+        "label": "front-1 entrance",
+        "kind": "entrance",
+        "parent": "front-1",
+        "at": [
+          0,
+          -0.1499999999999999,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          2.5,
+          0.06
+        ],
+        "material": "timber",
+        "panels": 3
+      },
+      {
+        "id": "front-2",
+        "label": "front-2 facade",
+        "kind": "wall",
+        "at": [
+          3.333333333333334,
+          1.5999999999999999,
+          3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.55,
+          "width": 2.6833333333333336,
+          "height": 1.9499999999999997,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "front-2-panel",
+        "label": "front-2 glazing",
+        "kind": "glazing",
+        "parent": "front-2",
+        "at": [
+          0,
+          0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.6833333333333336,
+          1.9499999999999997,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "rear-0",
+        "label": "rear-0 facade",
+        "kind": "wall",
+        "at": [
+          -3.333333333333333,
+          1.5999999999999999,
+          -3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.55,
+          "width": 2.6833333333333336,
+          "height": 1.9499999999999997,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "rear-0-panel",
+        "label": "rear-0 glazing",
+        "kind": "glazing",
+        "parent": "rear-0",
+        "at": [
+          0,
+          0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.6833333333333336,
+          1.9499999999999997,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "rear-1",
+        "label": "rear-1 facade",
+        "kind": "wall",
+        "at": [
+          0,
+          1.5999999999999999,
+          -3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.6,
+          "height": 2.5,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "rear-1-panel",
+        "label": "rear-1 entrance",
+        "kind": "entrance",
+        "parent": "rear-1",
+        "at": [
+          0,
+          -0.1499999999999999,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          2.5,
+          0.06
+        ],
+        "material": "timber",
+        "panels": 3
+      },
+      {
+        "id": "rear-2",
+        "label": "rear-2 facade",
+        "kind": "wall",
+        "at": [
+          3.333333333333334,
+          1.5999999999999999,
+          -3.875
+        ],
+        "rotation": 0,
+        "size": [
+          3.3333333333333335,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.55,
+          "width": 2.6833333333333336,
+          "height": 1.9499999999999997,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "rear-2-panel",
+        "label": "rear-2 glazing",
+        "kind": "glazing",
+        "parent": "rear-2",
+        "at": [
+          0,
+          0.125,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          2.6833333333333336,
+          1.9499999999999997,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "west",
+        "label": "west facade",
+        "kind": "wall",
+        "at": [
+          -4.875,
+          1.5999999999999999,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7.5,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.7,
+          "width": 6,
+          "height": 1.7499999999999998,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "west-panel",
+        "label": "west glazing",
+        "kind": "glazing",
+        "parent": "west",
+        "at": [
+          0,
+          0.17499999999999993,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          1.7499999999999998,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "east",
+        "label": "east facade",
+        "kind": "wall",
+        "at": [
+          4.875,
+          1.5999999999999999,
+          0
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7.5,
+          2.8,
+          0.25
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.7,
+          "width": 6,
+          "height": 1.7499999999999998,
+          "glazed": false
+        },
+        "assemblyKind": "facade-bay"
+      },
+      {
+        "id": "east-panel",
+        "label": "east glazing",
+        "kind": "glazing",
+        "parent": "east",
+        "at": [
+          0,
+          0.17499999999999993,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          1.7499999999999998,
+          0.04
+        ],
+        "material": "bronze",
+        "panels": 3
+      },
+      {
+        "id": "arrival",
+        "label": "arrival",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "gable-roof",
+        "label": "gable roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.6,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          1.2,
+          8
+        ],
+        "material": "ivory",
+        "roofForm": "gable",
+        "overhang": 0.65,
+        "panels": 4
+      },
+      {
+        "id": "entry-canopy",
+        "label": "entry canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          2.9,
+          -5.1
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          2.5
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "garden-terrace",
+        "label": "garden terrace",
+        "kind": "plate",
+        "at": [
+          0,
+          0.1,
+          5.5
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.2,
+          3
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    ],
+    "architecturalPlan": {
+      "constructionScope": "exterior",
+      "scaleRationale": "Developer study of envelope capacity, not value-to-area pricing",
+      "arrivalAndCirculation": "Grounded dry approach, fitted entries; layered study uses external supported stairs",
+      "volumeHierarchy": "Compact single-level gable residence",
+      "relationshipsAndViews": "Garden-facing glazing and connected outdoor surfaces",
+      "roofFacadeAndMaterials": "Independent roof sections, fitted openings, timber and limestone contrast",
+      "intendedSpaces": [
+        "Three-bedroom capacity"
+      ],
+      "programme": [
+        {
+          "name": "Three-bedroom capacity",
+          "zone": "private",
+          "purpose": "bedroom",
+          "strategy": "Capacity allocated to envelope; room subdivision deferred",
+          "floorIds": [
+            "main-floor"
+          ],
+          "enclosureIds": [
+            "front-0",
+            "rear-0"
+          ],
+          "roofIds": [
+            "gable-roof"
+          ],
+          "accessIds": [
+            "front-1-panel"
+          ],
+          "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed."
+        }
+      ]
+    }
+  },
+  "architecturalAudit": {
+    "constructionScope": "exterior",
+    "designStage": "Exterior-designed, interiors unfinished",
+    "interiorsDeferred": true,
+    "status": "consistent",
+    "issues": [],
+    "findings": [],
+    "programme": {
+      "status": "recorded",
+      "spaces": [
+        {
+          "name": "Three-bedroom capacity",
+          "zone": "private",
+          "strategy": "Capacity allocated to envelope; room subdivision deferred",
+          "purpose": "bedroom",
+          "floorIds": [
+            "main-floor"
+          ],
+          "enclosureIds": [
+            "front-0",
+            "rear-0"
+          ],
+          "roofIds": [
+            "gable-roof"
+          ],
+          "accessIds": [
+            "front-1-panel"
+          ],
+          "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed.",
+          "floorSurfaceM2": 80,
+          "walkingDatums": [
+            0.2
+          ],
+          "allocation": [
+            {
+              "id": "main-floor",
+              "world": [
+                0,
+                0.1,
+                0,
+                0
+              ],
+              "size": [
+                10,
+                0.2,
+                8
+              ],
+              "walkingDatum": 0.2
+            }
+          ],
+          "issues": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        }
+      ],
+      "deferredInteriors": [
+        "Three-bedroom capacity: interior subdivision and fit-out unverified; Interiors unfinished; no distinct rooms or fit-out claimed."
+      ],
+      "issues": []
+    },
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 3,
+        "wall": 8,
+        "glazing": 6,
+        "entrance": 2,
+        "roof": 2
+      },
+      "surfaces": [
+        {
+          "id": "main-floor",
+          "kind": "plate",
+          "areaM2": 80,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "arrival",
+          "kind": "plate",
+          "areaM2": 16,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "garden-terrace",
+          "kind": "plate",
+          "areaM2": 30,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [],
+      "walkingDatums": [
+        0.2
+      ],
+      "plateSurfaceAreaM2": 126,
+      "waterSurfaceAreaM2": 0
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  },
+  "responseId": "00000000-0000-4000-8000-000000000001"
+}

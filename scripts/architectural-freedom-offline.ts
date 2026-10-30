@@ -1,0 +1,18 @@
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {stageSceneOperations} from '../src/lib/villa/scene/model';
+import {createHash} from 'node:crypto';
+import {architecturalFreedomStudy} from '../src/lib/villa/scene/architecturalFreedom.fixture';
+import {sceneRelationshipIssues} from '../src/lib/villa/scene/relationships';
+const dir='docs/architecture/architectural-bottleneck';mkdirSync(dir,{recursive:true});
+const study=architecturalFreedomStudy();
+for(const [name,value] of Object.entries({'ambitious.DEVELOPER':study.scene,'ambitious.operations':study.operations,'ambitious.audit':{providerCalls:0,relationships:sceneRelationshipIssues(study.scene),review:study.architecturalAudit}}))writeFileSync(`${dir}/${name}.json`,JSON.stringify(value,null,2));
+const id='c8d01439-962e-4575-8fd5-f1d47c5ffca1';
+const retained=JSON.parse(readFileSync(`.data/scene-responses/${id}.json`,'utf8'));
+const diagnostics=JSON.parse(readFileSync(`.data/scene-responses/${id}.diagnostics.json`,'utf8'));
+const latest={version:'architectural-scene-1' as const,name:'RETAINED Terra: Water Court Estate',elements:diagnostics.diagnostics.components.map((c:{element:unknown})=>c.element)};
+const replay=stageSceneOperations({version:'architectural-scene-1',name:'Replay',elements:[]},retained.output.operations);
+assert.deepEqual(JSON.parse(JSON.stringify(replay.elements)),latest.elements);
+writeFileSync(`${dir}/latest.RETAINED.json`,JSON.stringify(latest,null,2));
+writeFileSync(`${dir}/latest-evidence.json`,JSON.stringify({id,status:retained.status,brief:diagnostics.diagnostics.brief,knowledge:retained.knowledge,provider:JSON.parse(readFileSync(`.data/scene-responses/${id}.provider.txt`,'utf8')),hashes:Object.fromEntries(['.json','.diagnostics.json','.provider.txt','.wire.json'].map(s=>[s,createHash('sha256').update(readFileSync(`.data/scene-responses/${id}${s}`)).digest('hex')]))},null,2));
+console.log(study.scene.elements.length,sceneRelationshipIssues(study.scene));

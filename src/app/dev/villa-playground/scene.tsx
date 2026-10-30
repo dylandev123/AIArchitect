@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
+import {presentationDistance} from '@/lib/villa/scene/presentation';
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { SunLight } from "@/components/workspace/viewport/SunLight";
@@ -32,7 +33,7 @@ export const VIEWS = {
 export type View = keyof typeof VIEWS;
 export type Mood = "Daylight" | "Golden hour";
 
-function CameraControls({ poolElementId, cameraPose, frameArchitectureOnly = false, interactive = true, view, reset, tour, factor = 1, centerX = 0, centerZ = 0, composition, architecture }: { poolElementId?: string; cameraPose?: CameraPose; frameArchitectureOnly?: boolean; interactive?: boolean; architecture: React.RefObject<THREE.Group | null>; view: View; reset: number; tour: boolean; factor?: number; centerX?: number; centerZ?: number; composition?: WingComposition }) {
+function CameraControls({ entranceElementId, poolElementId, cameraPose, frameArchitectureOnly = false, interactive = true, view, reset, tour, factor = 1, centerX = 0, centerZ = 0, composition, architecture }: { entranceElementId?: string; poolElementId?: string; cameraPose?: CameraPose; frameArchitectureOnly?: boolean; interactive?: boolean; architecture: React.RefObject<THREE.Group | null>; view: View; reset: number; tour: boolean; factor?: number; centerX?: number; centerZ?: number; composition?: WingComposition }) {
   const controls = useRef<OrbitControlsImpl>(null);
   const camera = useThree(state => state.camera);
   const size = useThree(state => state.size);
@@ -73,24 +74,25 @@ function CameraControls({ poolElementId, cameraPose, frameArchitectureOnly = fal
             if (direction.lengthSq() < 1) direction.set(-1, 0, -1);
             direction.y = direction.length()*.4;
           }
-          else direction.set(-1, .45, -1);
+          else direction.set(-1, .25, -1);
         }
         if (view === 'Facade') direction.set(0, .18, 1);
-        if (view === 'Garden') direction.set(1, .65, -1);
+        if (view === 'Garden') direction.set(1, .3, 1);
+        if(entranceElementId&&(view==='Arrival'||(view==='Garden'&&!poolElementId))){
+          const entrance=architecture.current.getObjectByName(`operation:${entranceElementId}`);
+          if(entrance){const p=entrance.getWorldPosition(new THREE.Vector3());direction.set(p.x-target.x,0,p.z-target.z);if(direction.lengthSq()<1)direction.set(0,0,1);if(view==='Garden')direction.negate();direction.y=direction.length()*(view==='Arrival'?.25:.3);}
+        }
         if (view === 'Aerial' || view === 'Above') direction.set(.35, 1.4, .45);
-        if(view==='Poolside' && poolElementId){
+        if((view==='Poolside'||view==='Garden') && poolElementId){
           const water=architecture.current.getObjectByName(`operation:${poolElementId}`);
-          if(water){const p=water.getWorldPosition(new THREE.Vector3());direction.set(p.x-target.x,0,p.z-target.z);if(direction.lengthSq()<1)direction.set(1,0,-1);direction.y=direction.length()*.45;}
+          if(water){const p=water.getWorldPosition(new THREE.Vector3());direction.set(p.x-target.x,0,p.z-target.z);if(direction.lengthSq()<1)direction.set(1,0,-1);direction.y=direction.length()*(view==='Garden'?.3:.2);}
         }
         if (view === 'Poolside' && composition?.pool.enabled !== false && composition) {
           direction.set(composition.pool.x-target.x, 0, composition.pool.z-target.z);
           if (direction.lengthSq() < 1) direction.set(1, 0, 1);
           direction.y = direction.length()*.3;
         }
-        const halfV = THREE.MathUtils.degToRad(camera.fov)/2;
-        const halfH = Math.atan(Math.tan(halfV)*camera.aspect);
-        const radius = bounds.getBoundingSphere(new THREE.Sphere()).radius;
-        position.copy(target).addScaledVector(direction.normalize(), radius/Math.sin(Math.min(halfV,halfH))*1.12);
+        position.copy(target).addScaledVector(direction.normalize(), presentationDistance(bounds,direction,camera.fov,camera.aspect));
       }
     }
     if (cameraPose) { position.set(...cameraPose.position); target.set(...cameraPose.target); }
@@ -102,7 +104,7 @@ function CameraControls({ poolElementId, cameraPose, frameArchitectureOnly = fal
     } else {
       flight.current = { start: camera.position.clone(), target: controls.current.target.clone(), elapsed: 0, position, destination: target };
     }
-  }, [poolElementId, view, reset, camera, factor, centerX, centerZ, composition, size.width, size.height, architecture, cameraPose, frameArchitectureOnly]);
+  }, [entranceElementId, poolElementId, view, reset, camera, factor, centerX, centerZ, composition, size.width, size.height, architecture, cameraPose, frameArchitectureOnly]);
   useFrame((state, delta) => {
     const orbitTarget = controls.current?.target;
     if (orbitTarget && state.scene.fog instanceof THREE.Fog) {
@@ -125,8 +127,8 @@ function CameraControls({ poolElementId, cameraPose, frameArchitectureOnly = fal
     onStart={() => { flight.current = null; }} />;
 }
 
-export function VillaScene({ poolElementId, residenceOnly=false, replaceArchitecture=false, grounds, children, cameraPose, frameArchitectureOnly, interactive, mood, view, reset, tour, config, composition }: {
-  poolElementId?: string; residenceOnly?: boolean; replaceArchitecture?: boolean; grounds?: ReactNode; children?: ReactNode; cameraPose?: CameraPose; frameArchitectureOnly?: boolean; interactive?: boolean; mood: Mood; view: View; reset: number; tour: boolean; config?: VillaConfig; composition?: WingComposition;
+export function VillaScene({ entranceElementId, poolElementId, residenceOnly=false, replaceArchitecture=false, grounds, children, cameraPose, frameArchitectureOnly, interactive, mood, view, reset, tour, config, composition }: {
+  entranceElementId?: string; poolElementId?: string; residenceOnly?: boolean; replaceArchitecture?: boolean; grounds?: ReactNode; children?: ReactNode; cameraPose?: CameraPose; frameArchitectureOnly?: boolean; interactive?: boolean; mood: Mood; view: View; reset: number; tour: boolean; config?: VillaConfig; composition?: WingComposition;
 }) {
   const architecture = useRef<THREE.Group>(null);
   const extent=composition ? Math.max(1,Math.max(composition.garden.width,composition.garden.depth)/40) : 1;
@@ -143,7 +145,7 @@ export function VillaScene({ poolElementId, residenceOnly=false, replaceArchitec
     <directionalLight position={[18, 15, -15]} intensity={.35} color="#dbe8ff" />
     <group ref={architecture} name="Property architecture">{replaceArchitecture ? null : composition ? <ComposedVilla composition={composition} residenceOnly={residenceOnly} /> : config ? <ConfiguredVilla config={config} /> : <TropicalVilla />}{children}</group>
     {grounds ?? (residenceOnly ? <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.4,0]} receiveShadow><planeGeometry args={[2000,2000]}/><meshStandardMaterial color="#b5b1a5" roughness={1}/></mesh> : composition ? <CompositionGrounds composition={composition} /> : config ? <DesignGrounds config={config} /> : <TropicalGrounds />)}
-    <CameraControls poolElementId={poolElementId} frameArchitectureOnly={frameArchitectureOnly || residenceOnly} cameraPose={cameraPose} interactive={interactive} architecture={architecture} view={view} reset={reset} tour={tour} composition={composition} factor={composition ? composition.authored ? Math.max(.92, Math.max(composition.garden.width,composition.garden.depth)/40) : composition.id === "compact-l" ? .92 : 1.18 : 1} centerX={composition?.authored ? composition.garden.x : 0} centerZ={composition?.authored ? composition.garden.z : 0} />
+    <CameraControls entranceElementId={entranceElementId} poolElementId={poolElementId} frameArchitectureOnly={frameArchitectureOnly || residenceOnly} cameraPose={cameraPose} interactive={interactive} architecture={architecture} view={view} reset={reset} tour={tour} composition={composition} factor={composition ? composition.authored ? Math.max(.92, Math.max(composition.garden.width,composition.garden.depth)/40) : composition.id === "compact-l" ? .92 : 1.18 : 1} centerX={composition?.authored ? composition.garden.x : 0} centerZ={composition?.authored ? composition.garden.z : 0} />
     <PostFx exposure={.9} />
   </>;
 }

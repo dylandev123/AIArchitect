@@ -16,7 +16,7 @@ it('retains uncited selections and distinguishes dispositions using actual geome
  expect(result.architecturalAudit.knowledgeUse.map(e=>e.status)).toEqual(['construction-evidence','partial-construction','selected-missing','guidance','considered','unsupported','selected-missing']);
  expect(result.architecturalAudit.knowledgeUse.every(e=>!e.verifiedComplete)).toBe(true);
  const restored=validateScene(JSON.parse(JSON.stringify(result.scene)));
- const edited=resolveSceneResult({mode:'edit',prompt:'Repaint floor',current:restored},{name:'Edited',summary:'Edited',unsupported:[],operations:[{op:'finish',id:plate.id,material:'sage'}]},[]);
+ const edited=resolveSceneResult({mode:'edit',prompt:`Change ${plate.id} material`,current:restored},{name:'Edited',summary:'Edited',unsupported:[],operations:[{op:'finish',id:plate.id,material:'sage'}]},[]);
  expect(edited.scene.knowledgeEvidence).toEqual(evidence);
  const removed=applySceneOperations(edited.scene,[{op:'remove',id:water.id}]);
  expect(reviewSceneArchitecture(removed).knowledgeUse[0].status).toBe('partial-construction');

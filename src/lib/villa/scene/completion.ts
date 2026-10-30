@@ -54,6 +54,7 @@ export function circulationFindings(scene: ArchitecturalScene): CompletionFindin
     // height. Partial walls, rotated pairs and alternative routes are not failures.
     for(let i=0;i<floors.length;i++) for(let j=0;j<i;j++) {
         const a=floors[i],b=floors[j],p=world(a),q=world(b);
+        if(a.geometry||b.geometry) continue;
         if(!/kitchen|dining|living|salon|lounge|gallery/i.test(a.id+' '+a.label) || !/kitchen|dining|living|salon|lounge|gallery/i.test(b.id+' '+b.label)) continue;
         if(Math.abs(top(a)-top(b))>.05 || Math.abs(Math.sin(p[3]-q[3]))>.001) continue;
         const dx=Math.cos(p[3])*(q[0]-p[0])-Math.sin(p[3])*(q[2]-p[2]);
@@ -65,6 +66,7 @@ export function circulationFindings(scene: ArchitecturalScene): CompletionFindin
             if(hi-lo<.8) continue;
             const cross=Math.sign(across)*a.size[axis]/2;
             const wall=scene.elements.find(w=>{
+                if(w.geometry) return false;
                 if(w.kind!=='wall' && w.kind!=='glazing') return false;
                 if(w.opening && !w.opening.glazed && w.opening.sill<=.25 && w.opening.width>=.8 && w.opening.height>=1.9) return false;
                 const r=world(w),yaw=p[3]+(axis===0?Math.PI/2:0);

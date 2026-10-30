@@ -12,8 +12,11 @@ export async function architecturalRequestContext(input: SceneRequest) {
     const broadEdit = input.mode === 'edit' && (input.editIntent === 'redesign' || input.editIntent === 'complete');
     // Refine stays scoped. Broad development also reads retained design intent;
     // scene geometry and the actual user request remain in sceneMessages.
-    const query = broadEdit && input.current?.architecturalPlan
-        ? `${input.prompt}\nRetained design intent: ${JSON.stringify(input.current.architecturalPlan)}`
+    const query = broadEdit
+        ? [input.prompt,
+            ...(input.current?.generationBrief ? [`Original generation brief (historical context; the current edit takes precedence): ${input.current.generationBrief}`] : []),
+            ...(input.current?.architecturalPlan ? [`Retained design intent: ${JSON.stringify(input.current.architecturalPlan)}`] : []),
+        ].join('\n')
         : input.prompt;
     const knowledge = await generationKnowledge(query, broadEdit ? 'generate' : input.mode);
     const lessons = learningContext(await listDesignLessonSummaries(), query);

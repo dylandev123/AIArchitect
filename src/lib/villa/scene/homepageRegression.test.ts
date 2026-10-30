@@ -29,7 +29,7 @@ describe('homepage construction authority', () => {
    expect(replay.findings.some(f=>f.message.includes('arrival-sequence: missing authored connects relationship'))).toBe(true);
    expect(replay.planningScene).toBeDefined();
    const direct = resolveSceneResult({prompt:'Caribbean house',mode:'generate'},{name:laderaScene.name,summary:'Retained direct fixture',unsupported:[],operations:laderaScene.elements.map(element=>({op:'add',element}))});
-   expect(direct.scene).toEqual(laderaScene);
+   expect(direct.scene).toEqual({...laderaScene,generationBrief:'Caribbean house'});
    expect(network).not.toHaveBeenCalled();
   } finally { network.mockRestore(); }
  });

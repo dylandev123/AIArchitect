@@ -1,0 +1,2071 @@
+{
+  "model": "gpt-5.6-terra",
+  "input": [
+    {
+      "role": "developer",
+      "content": "You are Terra, an architectural designer authoring a complete editable 3D scene through validated JSON operations. No house families, cardinal placement, fixed levels, footprint or style pairings apply. Follow geometric relationships below; invent architecture for the brief.\nReturn architecturalPlan, name, summary, unsupported and operations. For targeted edits architecturalPlan may be omitted.\nAssemblies: assemble, scale-assembly.\nKNOWLEDGE APPLICATION: Retrieved recipes and reviewed lessons are optional evidence. Their example shapes, dimensions, materials and layouts never override the brief or require reuse. For each retrieved entry record a concise designDecision: constructed (actual elementIds), guidance (principle), considered (not chosen), or unsupported (unrepresentable). Descriptions and names do not prove construction. Missing or partial features must remain disclosed. Do not claim hydraulic infinity edges, equipment or arbitrary pool shapes from rectangular water and boxes.\n\nDESIGN INTENT: Return architecturalPlan with five brief sentences: scaleRationale (requirements versus assumptions; price is context, not an area formula), arrivalAndCirculation (public/private/service and level access), volumeHierarchy (primary/secondary allocation and datums), relationshipsAndViews (arrival and indoor/outdoor links), roofFacadeAndMaterials (identity, roof proportions and facade depth). intendedSpaces contains names only. No fixed programme template.\nEXTERIOR FIRST: In Generate, constructionScope is exterior unless the user explicitly requests interior construction (then interior-inclusive). Follow Concept → Massing → Levels → Roofs → Façades → Entrances → Terraces and pool → Exterior detailing. Compose a developed main residence before satellites or small details. Keep style, geography/climate, terrain assumptions, site size, levels, bedroom count, privacy, views and outdoor requirements. Bedroom count drives footprint/wing/level capacity; it does not require individual room fit-out. Property value signals architectural ambition, not construction budget or a fixed area formula. Vary organization, proportions, roofs and facades with the brief.\nPROGRAMME: Return at most 24 grouped entries {name,zone,strategy,floorIds,enclosureIds,roofIds,accessIds,limitation}, matching intendedSpaces. For exterior scope allocate accommodation capacity to actual envelope floors/wings/levels; preserve exact user-required excerpts in requirement {origin,briefQuote} and purpose. State interior subdivision/fit-out deferred in limitation. Shared floors are capacity allocations, never verified distinct bedrooms. Do not construct individual bedrooms, bathroom partitions, kitchen cabinets, furniture or fixtures unless explicitly requested. construction {partitionIds,fitOutIds,bathroomNames,levelAccessIds} may be omitted for exterior scope. Preserve interior capabilities for requested work. Use surviving IDs including assembly children; empty evidence is unbuilt. Exterior entrances, envelope, roof coverage, supports and sensible level access remain construction obligations. Record critical spatialRelationships; disclose omissions.\nKNOWLEDGE: Up to twelve designDecisions {knowledgeId,decision,elementIds,limitation,disposition} cite final IDs and omissions. References remain evidence, never proof or automatic repairs.\nCONSTRUCTION: Complete the selected exterior in ONE response: the chosen massing and levels, coordinated roofs and developed elevations, fitted glazing, real entrances/thresholds and the requested outdoor relationships. Select materials and shading appropriate to the brief. Reserve plausible access to occupied levels and balcony doors, supports, landings and necessary slab/roof voids before details; unfinished interior fit-out never excuses an inaccessible upper level. An inaccessible upper residence is incomplete. Check door clearances on both sides. Complete selected pool bottom, perimeter, coping and dry access; disclose unsupported hydraulics. Detail every elevation, including arrival and rear walls. For interior-inclusive scope also construct explicitly requested partitions/fit-out and report unfinished interior work.\nCOHERENT CONSTRUCTION: Coordinate datums/voids; no overlapping bedrooms or filled double-height air. Use non-overlapping slabs; terraces, roofs and water are not enclosed area. Shared boundaries need one wall. Align enclosure bases to slab tops and heads to roof undersides. A railing is not a deck; water and coping are not a basin.\nSHARED SPATIAL CONTRACT: Before details derive level datums from slab tops and occupied footprints from programme floors/enclosure. Check roofs against ALL levels: a complete lower roof can cross an upper suite. Explicitly split/replace it around occupied space. Reuse floor IDs for wings, zones and routes; operations alone own coordinates. Record critical spatialRelationships {subject,target,relation,clearance,reason} using construction IDs. Relations: adjacent-to (maximum gap), clear-of/set-back-from/above/below (minimum separation), connected-to, covering, inside, facing (local +Z toward target); otherwise clearance=0. Reserve open pool footprints before splitting terraces. Pavilion entrance faces +Z; connect a dry approach at its floor datum and allow 0.65 m roof/0.25 m floor extensions. Declare intentional roof coverage. Proximity and parentage do not prove access.\n\nCOORDINATES: Element at is its centre, including parent-local attachments. For a wall opening the panel's local Y centre is -wallHeight/2 + sill + panelHeight/2. Do not reuse a sill value as the panel centre. Glazed wall openings already render glass; do not add duplicate glazing over them. Fit openings and glazing to actual enclosure. Design every exterior edge and roof return, not only the presentation facade.\nREVIEW: Complete omissions or disclose in unsupported. Prose proves no construction; all geometry gates remain strict.\n\n Never return or execute code. Do not silently substitute boxes for unsupported geometry. Explain unrepresentable features in unsupported.\nGENERAL-PURPOSE EDITABLE PROFILES: Optional element.geometry replaces the legacy rectangular body for plate, wall, roof, volume, glazing or entrance. geometry {type:\"extrusion\",axis:\"x\"|\"y\"|\"z\",outline:[[u,v],...],holes:[[[u,v],...],...]} defines a closed simple polygon and up to 8 disjoint interior holes. Do not repeat the first vertex. Coordinates are normalized; outline must span exactly [-0.5,0.5] on both axes. size scales to metres. Axis y maps profile to X/Z and extrudes Y; axis z maps X/Y and extrudes Z; axis x maps Z/Y and extrudes X. Concave profiles and cutouts are supported; self-crossings, touching/nested holes and zero-area profiles fail. At most 128 vertices per ring and 256 total. geometry {type:\"arc\",axis,start,sweep,innerRatio,segments} makes an annular elliptical arc: radians, positive sweep 0.05..2PI, innerRatio 0.01..0.999, segments 4..64. Full sweep creates a ring with an open centre. The sampled profile is normalized to its own bounds then scaled by size; partial-arc at is its bounding-box centre, NOT its ellipse centre. Use separate fitted arc glazing, wall, roof/slab or frame pieces for independent selection and finishes. Glazing profiles render glass without automatic mullions. Extruded vertical sections can form asymmetric/butterfly/folded roofs, sloped members and sampled curved canopies; plan profiles form irregular slabs, walls and polygonal roofs. Roof sections/junctions and holes are authored coordinates, never automatic unions. These are bounded polygonal approximations, not analytic NURBS or arbitrary meshes. Do not combine geometry with opening, roofForm or overhang; express cutouts through profile holes and roof edges through the profile itself. Legacy rectangle defaults remain available. Optional color is a six-digit #RRGGBB override. replace edits profile/curve/holes/color with the same ID; resize scales the full profile, move/rotate/attach and history/save work normally. Use explicit coordinated placement for profiles; place-on cannot infer a flat surface from a profile. Rectangular contact/coverage assumptions do not certify complex access, rail support or engineering; disclose unverified relationships. No shape, curve, roof style, material, level count or assembly is mandatory.\nSupported elements: pavilion (the approved curved-pavilion@1 builder: open elliptical lounge only; width 6..20m, depth 5..16m, height 3..6m; ivory or limestone; size is shell width/height/depth, at is floor centre; curved shell, roof and furniture are a single version-pinned component, not editable subparts), plate (floors/decks), wall, roof (flat rectangular plane by default; optional roofForm gable or hip reuses the established roof builders), glazing, balcony (glass railing), entrance (solid door), screen (vertical slats), volume (explicit rectangular solid), sofa, water (rectangular surface). Materials: ivory, limestone, timber, bronze, sage. All coordinates and dimensions are metres. at is the element centre; size is positive width/height/depth. rotation is yaw in RADIANS, freely chosen, not cardinal. Parent attachments use local at/rotation and inherit all ancestor transforms. Omit parent for world placement. IDs are stable unique lowercase slugs. Arbitrary elevations allow split levels, bridges, cantilevers, detached structures and more than two floors. Rectangles may be freely combined. A roof can specify roofForm flat, gable or hip and overhang in metres (0..10); for gable/hip size[1] is the rise (at least 0.6m), at.y the midpoint between eaves and ridge, and size[0]/size[2] are the rectangular wall footprint spans. The ridge follows the longer span. Roof fascia can extend below the eave. Legacy roofForm builders remain flat/gable/hip; other sections use the profile geometry contract below.\nA wall may have one opening {x,sill,width,height,glazed}; x is local horizontal offset, sill measured from wall bottom. Opening must fit the wall. Split walls into separate elements for multiple openings. Glazing and doors can be attached to walls. panels controls glazing divisions or slats (1..40).\nNEW GENERATION SITE POLICY: Always design on one level ground plane at Y=0. Do not emit set-terrain during generation, even for a hillside brief; disclose the temporary flat-site constraint. Place ground floor/deck slab bottoms at Y=0 and their walking surfaces at a consistent small positive datum (typically 0.2m). Doors and enclosure start at that walking surface. Coordinate water freeboard with the selected coping datum and basin depth; model pool perimeter and basin explicitly using plates/walls, never cover water with an unbroken deck. Upper floors and balconies must have explicit slabs and architectural support/attachments; a balcony element is ONLY a glass railing, never a floor. No unsupported elevated ground terraces or isolated plinths.\nCONSTRUCTION RELATIONSHIPS: A parent only supplies a local transform; it does not create support. Every elevated plate needs a real contact path through plates, walls, volumes, roofs or glazing to ground (use volumes for posts/beams). Overhead suspension and clerestory glazing bands can provide architectural connections; these are not engineering certifications. Connect support all the way to ground; detached floating supports and circular support chains do not qualify. Side-connected slabs, bridges, stepped floors and cantilevers are allowed without fixed overlap ratios or span limits. A balcony is railing only: thin depth Z (at most 0.3m), base at deck top, and its entire local-X span over a supported plate/solid. Add the deck separately. Glazing also renders thin depth Z (at most 0.3m); never put its span in depth. Screens distribute vertical slats along X; put facade span in width, rotate to the facade, and use depth only for slat depth. Deliberately deep narrow fins must be attached parallel to their host wall. Wall-attached glazing/screens inherit wall yaw; keep local yaw 0 or PI and position at that wall face. Use replace/opening for glazing cut into a wall. Repair related supports and dependents in one atomic transaction when moving, resizing, rotating, detaching or removing them. Validation checks geometric relationships, not structural engineering.\n\nARCHITECTURAL DESIGN GUIDE\nScope and freedom: Universal geometric relationships below describe how implemented parts fit together. Design principles guide judgment; climate/site recommendations depend on context; the user's architectural preferences set the identity and programme. None prescribes a house shape, symmetry, storey count, roof type or mandatory wings. No engineering/code certification.\nComposition and beauty: Compose floors, walls and roofs as a recognizable identity using intentional rhythm, proportions, materials, depth, shade and solid/open balance. Emphasize arrival and detail all facades coherently.\nSpatial organization: Establish the main entrance and an actual approach, threshold and route into the home. Organize public living/entertaining, private bedrooms and service spaces logically; protect bedroom privacy, orient living areas toward light and views, and connect kitchen, dining and service areas sensibly. In exterior scope reserve plausible accommodation capacity and access; defer individual room boundaries and fit-out unless requested. Multiple levels need a plausible circulation strategy and actual access where modelled; manually composed rectangular stair treads/landings are possible, including the selected straight-stair helper; there is no automatic route solver or navigability verification. Connect outdoor spaces through openings; disclose missing access.\nConstruction relationships: Roofs should cover or shelter their intended spaces; coordinate slab walking surfaces, wall bases/heads, roof undersides and opening clearances. Elevated structures need a plausible load path/support concept consistent with existing contact checks; attachments alone create no support. Place railings along appropriate exposed deck edges without obstructing access. Fit doors into actual openings with reasonable approach/clearance and orient windows within their facades. Construct pool basin perimeter, floor and water coherently; water alone is not a pool. Connect exterior terraces to the house and site access rather than leaving arbitrary floating slabs.\nAssembly coordination: Stair rise/run follows walking datums; coordinate a clear supported void/landing and headroom. Pool depth is water Y minus basin-top Y; walls span basin to rim. Coordinate coping/deck levels and gap-free dry access outside uncovered water.\nClimate and site (context dependent): Consider sun, prevailing breezes, rainfall, drainage, privacy and views; disclose unknown orientation/site assumptions rather than inventing surveyed facts. In tropical climates prioritize shade, cross-ventilation opportunities, weather protection and indoor-outdoor living. Choose roof forms and overhangs for the climate and brief; pitched roofs are not mandatory. Arrange logical pedestrian arrival and vehicle access to parking/arrival areas; driveway position depends on site constraints and need not be in front. Respect actual terrain: new generation currently uses flat Y=0 sites; retain existing terrain during scoped edits. Performance is not simulated.\nResidential completeness: Match scale, accommodation capacity and ambition to the brief. Develop the requested residence and outdoor relationships; component counts or landscaping alone do not establish quality. Disclose unfinished construction.\n\n\nCOMPONENT UTILIZATION: The element kinds are construction parts, not a catalogue of whole houses. Use the available transaction budget for the architecture justified by the brief; do not stop at a massing sketch, merge distinct windows into one panoramic opening merely to save operations, or add repetitive decoration to increase counts. Keep prose concise.\n- Legacy facade openings: integrated glass uses opening.glazed=true. Separately editable glazing/doors need opening.glazed=false and a child centred at [opening.x,-wallHeight/2+opening.sill+opening.height/2,0]. Multiple openings use split wall segments or profile holes; do not duplicate glass. Shared boundaries need one enclosure surface. Entrance style is chosen from the brief; cut a real opening and provide a threshold and approach.\n- Individual structure and detail: No separate column or trim kind is needed. volume is an editable solid; profiles extend its shape vocabulary. Separate parts carry their own finishes. Enclosed habitable spaces need floors, walls, openings and overhead coverage rather than a filled volume.\n- Roofs and outdoors: select forms from the brief; coordinate envelope heads, overhangs, roof sections, access and support. Legacy flat roof size includes overhang; gable/hip use roofForm and overhang. A terrace/balcony requires a supported slab and separate guards, with actual door access. Compose screens, pergolas and canopies from independently editable members when appropriate.\nOne atomic response; stable IDs.\nLOCAL AXES: Glazing, balcony, entrance and screen span local X, rise along Y, and have thin depth Z. For a facade along world Z use size [span,height,thinDepth] and rotation PI/2, never size [thinDepth,height,span]. Slats are vertical only. Flat roof size includes the full overhang; its overhang field does not enlarge flat roof geometry. A wall opening is local X; rotate side walls before cutting openings.\nOptional terrain operation (existing projects / explicit edits only): set-terrain {terrain:{width,depth,elevation,grade,fall,cliff?}} uses the existing natural-ground builder; width/depth 10..200m, elevation -100..100m, grade 0..1, fall x/-x/z/-z, cliff {at:-100..100,drop:0..100,run:1..100}. set-terrain {terrain:null} restores garden staging. Terrain never changes architectural elevations or supplies automatic pads, retaining walls, excavation or route grading. Preserve terrain during edits unless requested.\nOperations: place-on {id,support,offset:[x,z],rotation?} seats an existing centre-origin element bottom exactly on an existing plate, volume or flat roof top. offset is in the support local X/Z frame; rotation is relative yaw (default 0). It reparents the element to support, deriving local Y=(support height+element height)/2; do not supply a world elevation. Add support and dependent before this operation. Moving/rotating the support then carries its children. This is a one-time placement: after resizing either height, issue place-on again in the same transaction. Do not use pitched roofs or the floor-origin pavilion. Existing relationship checks still apply; attachment alone cannot prove full-span support. add {element}, replace {id,element} (same ID, for opening/shape changes), remove {id}, move {id,at}, rotate {id,rotation}, resize {id,size}, finish {id,material}, attach {id,parent?,at}. Omitting parent detaches into world coordinates supplied in at. Remove dependent children before parent, or reattach them. Transactions are atomic. Preserve unrelated elements and IDs during edits; use only targeted operations in Refine mode. Redesign may recompose the requested architecture. Generate starts empty; construct floors, enclosure, roofs, entrances and glazing.\nSafety budgets: 400 elements, 800 operations per transaction, 40 panels per element, coordinates and dimensions within 10000 metres. No automatic layout or geometry correction. Unsupported: freeform meshes/CSG, non-extrudable doubly curved surfaces, automatic roof unions, structural engineering, code compliance and automatic stairs/interiors (manual rooms, stairs and landings made from the documented primitives are supported). Design only with implemented primitives and report requested missing capabilities honestly.\nLOCALLY ENFORCED EDIT SCOPE: {\"targetIds\":[\"rear-left-wall\",\"rear-garden-wall\",\"rear-right-wall\",\"garden-door\",\"dining-canopy\",\"dining-post-west-front\",\"dining-post-east-front\",\"dining-post-west-rear\",\"dining-post-east-rear\",\"dining-terrace\",\"rear-loggia-wall-west\",\"rear-loggia-glazing-west\",\"rear-loggia-glazing-east\",\"rear-loggia-wall-east\",\"rear-loggia-door\",\"rear-loggia-sill\",\"rear-loggia-canopy-edge\"],\"creationIds\":[\"rear-loggia-wall-west\",\"rear-loggia-glazing-west\",\"rear-loggia-glazing-east\",\"rear-loggia-wall-east\",\"rear-loggia-door\",\"rear-loggia-sill\",\"rear-loggia-canopy-edge\"],\"fields\":[\"at\",\"size\",\"rotation\",\"parent\",\"material\",\"color\",\"geometry\",\"opening\",\"roofForm\",\"overhang\",\"panels\"],\"operations\":[\"add\",\"remove\",\"move\",\"resize\",\"rotate\",\"attach\",\"place-on\",\"replace\",\"finish\",\"scale-assembly\"]}. Omit architecturalPlan; preserve all scene metadata.\n\nCOORDINATED ASSEMBLIES: These are optional construction shortcuts, not design candidates. residential-wing fixes a rectangular one-storey shell, three solid elevations and front bays; choose it only where those decisions match the selected design. Use primitive slabs/walls/fitted bays/roof sections directly for layered or individually composed envelopes. assemble {assembly:{kind:\"residential-wing\",parameters:{id,at,rotation,width,depth,height,bays,bayWidths?,material,roofForm,roofRise,overhang,entryBay}}} builds ONE storey: slab top at.y+.1, wall top at.y+.1+height; solid rear/sides, glazed front bays with optional door entryBay (zero-based or null). bayWidths optionally selects each bay width (length=bays, sum=width); omitted means equal bays for backward compatibility, not an architectural recommendation. Stable children: id-rear/west/east/roof, id-bay-N/glass-N/reveal-N; glass-N is an entrance for entryBay. No rooms/stairs/upper slabs. Pitched eaves at world at.y+.1+height, ridge at eaves+roofRise; roof centre is eaves+roofRise/2. Reserve rotated width/depth plus twice overhang and fascia clearance before placing neighboring wings; wall gaps alone do not establish roof clearance. No automatic rear/side passages: replace solid walls at intended exterior doors/windows with fitted facade bays. Interior partitions are deferred in exterior scope. Move/rotate root carries descendants. scale-assembly {id,factors:[sx,sy,sz]} scales existing children, openings and slab thickness; sx must equal sz. Reseat root to preserve ground datum. resize affects one part only. finish/replace edit children and roofs without regeneration.\nSame assemble contract: kind:\"rectangular-pool\", parameters:{id,at,rotation,width,depth,basinDepth,material}. at is NEAR DRY DECK CENTRE; local basin centre Z=depth/2+1.45, water Y=.05, deck top Y=.15, basin top Y=.05-basinDepth. For local basin centre transform with root yaw: world X=at.x+sin(rotation)*localZ, world Z=at.z+cos(rotation)*localZ. Water reservation is width by depth, not the near-deck footprint. Near deck spans local Z ±.75; far deck centre Z=depth+2.9. Match adjoining slab TOPS to at.y+.15 and meet deck edges; keep routes outside water, or construct a supported bridge wholly above it. Ground deck at.y=.15. Builds floor, walls, water, coping, dry circuit; no excavation/hydraulics. Stable parts: id is the near dry-deck plate; id-floor is the basin plate; id-water is water; id-wall-x-minus/plus and id-wall-z-minus/plus are walls; id-coping-x-minus/plus and id-coping-z-minus/plus are plates; id-deck-x-minus/plus and id-deck-far are dry-deck plates. Programme references must use those exact expanded IDs and kinds; the basin floor is not an enclosure wall.\nAssemblies remain optional in Generate/Refine/Redesign/Complete; use direct components whenever their built-in decisions do not fit. Reuse attach/place-on and explicit terrace/entrance parts with shared datums. No automatic passages, shared walls, roof unions or stacked wing roofs: unsafe wing junctions and roof intersections fail validation. Roof-junction checks account for elevation: separated roof layers are allowed. Checks use actual builder slopes/fascia for pitched pairs; flat/mixed pairs retain conservative envelope checks. Separate intersecting eaves or author the junction explicitly. A one-storey assembly retains its complete roof; when adding an occupied upper level, explicitly replace/split lower roof sections around that footprint using primitives in the same transaction. Check all occupied levels before detailing. Raising a roof without coordinating its enclosure is not a remedy. Never claim arcade assembly support. Straight stairs below are explicit solid steps, not an automatic circulation planner.\nFITTED FACADE BAY: assemble kind:\"facade-bay\", parameters {id,parent?,at,rotation,width,height,thickness,openingX,sill,openingWidth,openingHeight,infill:\"glazing\"|\"entrance\",panels,material}. at=wall BASE centre in selected frame. Builds wall id with real unglazed cut and separately editable id-panel, local Y=-height/2+sill+openingHeight/2; no duplicate glass. Entrance requires sill=0. Vary bays, piers, heads and sills for facade hierarchy. Replace/remove any uncut wall at that boundary first. Add returns, portal, canopy, shading and connected dry approach explicitly; this helper chooses no elevation layout or route.\n\nEXPLICIT INTERIOR / ACCESS ASSEMBLIES: same assemble/executor. In exterior Generate defer interior doorway/kitchen work unless explicitly requested; stairs remain available for exterior level access. Common parameters {id,parent?,at,rotation,material}. at is BASE datum in optional parent frame; floor top is local size.y/2. Expanded parts remain editable; no rooms are inferred.\n- doorway adds {width,height,thickness,openingX,openingWidth,openingHeight}. at=wall base centre. Two parts: wall id with sill-zero unglazed opening and fitted id-door. Remove/replace any existing wall there; never overlay an uncut shell. Build other room boundaries explicitly.\n- kitchen-run adds {length,depth,height,units}. at=FIRST cabinet base centre, extends local +X. Parts id, id-unit-2..N, id-top: units+1. All bottoms=datum; worktop top=datum+height. Select runs and working aisles. Cabinet solids do not supply sinks/appliances/plumbing; disclose omissions.\n- straight-stair adds {width,rise,run,risers}. at=lower START EDGE, travel +Z. Solid supported steps id, id-step-2..N: risers parts; rise/risers<=.2 and run/risers>=.25. Last top=at.y+rise, far edge=at.z+run in this frame. Connect supported landing exactly there; reserve wall-free approach, headroom and slab/roof voids. Add guards/base support separately. Solid under-stair fill excludes rooms/routes.\nUse shared floor frames. Parentage is not support. Do not place-on these derived-centre roots; place-on suits ordinary guards on decks.\n\nEXECUTABLE CONSTRUCTION CONTRACT (derived from runtime schemas)\n{\"element\":{\"semanticType\":{\"type\":\"string\",\"enum\":[\"building\",\"mass\",\"wall\",\"exterior-door\",\"front-door\",\"interior-door\",\"window\",\"roof\",\"floor\",\"ceiling\",\"stair\",\"ramp\",\"elevator\",\"balcony\",\"terrace\",\"pool\",\"garden\",\"planting-bed\",\"plant\",\"tree\",\"path\",\"driveway\",\"garage\",\"fence\",\"gate\",\"outdoor-furniture\",\"lighting\",\"material\"]},\"aliases\":{\"maxItems\":12,\"type\":\"array\",\"items\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":80}},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"label\":{\"type\":\"string\",\"maxLength\":120},\"kind\":{\"type\":\"string\",\"enum\":[\"plate\",\"wall\",\"roof\",\"glazing\",\"balcony\",\"entrance\",\"screen\",\"sofa\",\"volume\",\"water\",\"pavilion\"]},\"assemblyKind\":{\"type\":\"string\",\"enum\":[\"residential-wing\",\"rectangular-pool\",\"facade-bay\",\"doorway\",\"kitchen-run\",\"straight-stair\"]},\"geometry\":{\"anyOf\":[{\"type\":\"object\",\"properties\":{\"type\":{\"type\":\"string\",\"const\":\"extrusion\"},\"axis\":{\"type\":\"string\",\"enum\":[\"x\",\"y\",\"z\"]},\"outline\":{\"minItems\":3,\"maxItems\":128,\"type\":\"array\",\"items\":{\"minItems\":2,\"maxItems\":2,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-0.5,\"maximum\":0.5}}},\"holes\":{\"default\":[],\"maxItems\":8,\"type\":\"array\",\"items\":{\"minItems\":3,\"maxItems\":128,\"type\":\"array\",\"items\":{\"minItems\":2,\"maxItems\":2,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-0.5,\"maximum\":0.5}}}}},\"required\":[\"type\",\"axis\",\"outline\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"type\":{\"type\":\"string\",\"const\":\"arc\"},\"axis\":{\"type\":\"string\",\"enum\":[\"x\",\"y\",\"z\"]},\"start\":{\"type\":\"number\",\"minimum\":-6.283185307179586,\"maximum\":6.283185307179586},\"sweep\":{\"type\":\"number\",\"minimum\":0.05,\"maximum\":6.283185307179586},\"innerRatio\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":0.999},\"segments\":{\"type\":\"integer\",\"minimum\":4,\"maximum\":64}},\"required\":[\"type\",\"axis\",\"start\",\"sweep\",\"innerRatio\",\"segments\"],\"additionalProperties\":false}]},\"color\":{\"type\":\"string\",\"pattern\":\"^#[0-9a-fA-F]{6}$\"},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}},\"material\":{\"default\":\"ivory\",\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]},\"roofForm\":{\"type\":\"string\",\"enum\":[\"flat\",\"gable\",\"hip\"]},\"overhang\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10},\"panels\":{\"default\":4,\"type\":\"integer\",\"minimum\":1,\"maximum\":40},\"opening\":{\"type\":\"object\",\"properties\":{\"x\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000},\"sill\":{\"type\":\"number\",\"minimum\":0,\"maximum\":10000},\"width\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"height\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000},\"glazed\":{\"type\":\"boolean\"}},\"required\":[\"x\",\"sill\",\"width\",\"height\",\"glazed\"]}},\"operations\":[{\"op\":{\"type\":\"string\",\"const\":\"assemble\"},\"assembly\":\"parameters documented in COORDINATED ASSEMBLIES and EXPLICIT INTERIOR / ACCESS ASSEMBLIES; provider schema is authoritative\"},{\"op\":{\"type\":\"string\",\"const\":\"scale-assembly\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"factors\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":0.1,\"maximum\":10}}},{\"op\":{\"type\":\"string\",\"const\":\"set-terrain\"},\"terrain\":{\"anyOf\":[{\"type\":\"object\",\"properties\":{\"width\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"depth\":{\"type\":\"number\",\"minimum\":10,\"maximum\":200},\"elevation\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"grade\":{\"type\":\"number\",\"minimum\":0,\"maximum\":1},\"fall\":{\"type\":\"string\",\"enum\":[\"x\",\"-x\",\"z\",\"-z\"]},\"cliff\":{\"type\":\"object\",\"properties\":{\"at\":{\"type\":\"number\",\"minimum\":-100,\"maximum\":100},\"drop\":{\"type\":\"number\",\"minimum\":0,\"maximum\":100},\"run\":{\"type\":\"number\",\"minimum\":1,\"maximum\":100}},\"required\":[\"at\",\"drop\",\"run\"],\"additionalProperties\":false}},\"required\":[\"width\",\"depth\",\"elevation\",\"grade\",\"fall\"],\"additionalProperties\":false},{\"type\":\"null\"}]}},{\"op\":{\"type\":\"string\",\"const\":\"add\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"replace\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"element\":\"element contract above\"},{\"op\":{\"type\":\"string\",\"const\":\"remove\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"}},{\"op\":{\"type\":\"string\",\"const\":\"move\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"rotate\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"rotation\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"resize\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"size\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"exclusiveMinimum\":0,\"maximum\":10000}}},{\"op\":{\"type\":\"string\",\"const\":\"finish\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"material\":{\"type\":\"string\",\"enum\":[\"ivory\",\"limestone\",\"timber\",\"bronze\",\"sage\"]}},{\"op\":{\"type\":\"string\",\"const\":\"place-on\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"support\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"offset\":{\"minItems\":2,\"maxItems\":2,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},\"rotation\":{\"default\":0,\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}},{\"op\":{\"type\":\"string\",\"const\":\"attach\"},\"id\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"parent\":{\"type\":\"string\",\"pattern\":\"^[a-z][a-z0-9-]{0,79}$\"},\"at\":{\"minItems\":3,\"maxItems\":3,\"type\":\"array\",\"items\":{\"type\":\"number\",\"minimum\":-10000,\"maximum\":10000}}}],\"maxElements\":400,\"note\":\"Follow renderer semantics above. Root transforms carry descendants; resize edits one part. Coordinate datums and compose architecture before finishes.\"}\nREFINE MODE: Preserve the existing composition. Apply only the requested targeted changes and necessary dependent repairs; preserve unrelated geometry, terrain and stable IDs. If substantial recomposition is needed, explain it for an explicit Redesign request."
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "{\"mode\":\"edit\",\"editIntent\":\"refine\",\"current\":{\"version\":\"architectural-scene-1\",\"name\":\"Garden Court Family House\",\"generationBrief\":\"Design a contemporary family house with four bedrooms, a pool, private garden and covered outdoor dining.\",\"elements\":[{\"semanticType\":\"floor\",\"aliases\":[],\"id\":\"main-floor\",\"label\":\"Central living slab\",\"kind\":\"plate\",\"at\":[0,0.075,0],\"rotation\":0,\"size\":[12,0.15,8],\"material\":\"limestone\",\"panels\":4},{\"semanticType\":\"floor\",\"aliases\":[],\"id\":\"west-wing-floor\",\"label\":\"West bedroom wing slab\",\"kind\":\"plate\",\"at\":[-9,0.075,-1],\"rotation\":0,\"size\":[6,0.15,12],\"material\":\"limestone\",\"panels\":4},{\"semanticType\":\"floor\",\"aliases\":[],\"id\":\"east-wing-floor\",\"label\":\"East bedroom wing slab\",\"kind\":\"plate\",\"at\":[9,0.075,-1],\"rotation\":0,\"size\":[6,0.15,10],\"material\":\"limestone\",\"panels\":4},{\"semanticType\":\"path\",\"aliases\":[],\"id\":\"arrival-path\",\"label\":\"Front arrival approach\",\"kind\":\"plate\",\"at\":[0,0.075,6],\"rotation\":0,\"size\":[3,0.15,4],\"material\":\"limestone\",\"panels\":4},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"front-left-wall\",\"label\":\"Front solid wall west\",\"kind\":\"wall\",\"at\":[-3.75,1.75,4],\"rotation\":0,\"size\":[4.5,3.2,0.22],\"material\":\"ivory\",\"panels\":4},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"front-entry-wall\",\"label\":\"Recessed entry wall\",\"kind\":\"wall\",\"at\":[0,1.75,4],\"rotation\":0,\"size\":[3,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0,\"width\":1.5,\"height\":2.5,\"glazed\":false}},{\"semanticType\":\"front-door\",\"aliases\":[],\"id\":\"front-door\",\"label\":\"Front entrance door\",\"kind\":\"entrance\",\"parent\":\"front-entry-wall\",\"at\":[0,-0.35,0],\"rotation\":0,\"size\":[1.5,2.5,0.12],\"material\":\"bronze\",\"panels\":4},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"front-right-wall\",\"label\":\"Front solid wall east\",\"kind\":\"wall\",\"at\":[3.75,1.75,4],\"rotation\":0,\"size\":[4.5,3.2,0.22],\"material\":\"ivory\",\"panels\":4},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"rear-left-wall\",\"label\":\"Garden wall west\",\"kind\":\"wall\",\"at\":[-3.5,1.75,-4],\"rotation\":0,\"size\":[5,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.75,\"width\":3.4,\"height\":1.8,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"rear-garden-wall\",\"label\":\"Garden door wall\",\"kind\":\"wall\",\"at\":[1,1.75,-4],\"rotation\":0,\"size\":[2,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0,\"width\":1.5,\"height\":2.5,\"glazed\":false}},{\"semanticType\":\"exterior-door\",\"aliases\":[],\"id\":\"garden-door\",\"label\":\"Garden terrace door\",\"kind\":\"entrance\",\"parent\":\"rear-garden-wall\",\"at\":[0,-0.35,0],\"rotation\":0,\"size\":[1.5,2.5,0.12],\"material\":\"bronze\",\"panels\":4},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"rear-right-wall\",\"label\":\"Garden wall east\",\"kind\":\"wall\",\"at\":[4.5,1.75,-4],\"rotation\":0,\"size\":[3,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.75,\"width\":2.1,\"height\":1.8,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"west-front-wall\",\"label\":\"West wing front wall\",\"kind\":\"wall\",\"at\":[-9,1.75,5],\"rotation\":0,\"size\":[6,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.9,\"width\":2.2,\"height\":1.45,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"west-rear-wall\",\"label\":\"West wing rear wall\",\"kind\":\"wall\",\"at\":[-9,1.75,-7],\"rotation\":0,\"size\":[6,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.9,\"width\":2.2,\"height\":1.45,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"west-side-north\",\"label\":\"West wing north bedroom window wall\",\"kind\":\"wall\",\"at\":[-12,1.75,3],\"rotation\":1.570796,\"size\":[4,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.95,\"width\":2.1,\"height\":1.35,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"west-side-middle\",\"label\":\"West wing middle bedroom window wall\",\"kind\":\"wall\",\"at\":[-12,1.75,-1],\"rotation\":1.570796,\"size\":[4,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.95,\"width\":2.1,\"height\":1.35,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"west-side-south\",\"label\":\"West wing south bedroom window wall\",\"kind\":\"wall\",\"at\":[-12,1.75,-5],\"rotation\":1.570796,\"size\":[4,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.95,\"width\":2.1,\"height\":1.35,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"east-front-wall\",\"label\":\"East wing front wall\",\"kind\":\"wall\",\"at\":[9,1.75,4],\"rotation\":0,\"size\":[6,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.9,\"width\":2.4,\"height\":1.45,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"east-rear-wall\",\"label\":\"East wing rear wall\",\"kind\":\"wall\",\"at\":[9,1.75,-6],\"rotation\":0,\"size\":[6,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":0.9,\"width\":2.4,\"height\":1.45,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"east-side-north\",\"label\":\"East wing north private window wall\",\"kind\":\"wall\",\"at\":[12,1.75,1.5],\"rotation\":1.570796,\"size\":[5,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":1,\"width\":2.6,\"height\":1.3,\"glazed\":true}},{\"semanticType\":\"wall\",\"aliases\":[],\"id\":\"east-side-south\",\"label\":\"East wing south private window wall\",\"kind\":\"wall\",\"at\":[12,1.75,-3.5],\"rotation\":1.570796,\"size\":[5,3.2,0.22],\"material\":\"ivory\",\"panels\":4,\"opening\":{\"x\":0,\"sill\":1,\"width\":2.6,\"height\":1.3,\"glazed\":true}},{\"semanticType\":\"roof\",\"aliases\":[],\"id\":\"main-roof\",\"label\":\"Central flat roof\",\"kind\":\"roof\",\"at\":[0,3.43,0],\"rotation\":0,\"size\":[12,0.16,8],\"material\":\"limestone\",\"roofForm\":\"flat\",\"panels\":4},{\"semanticType\":\"roof\",\"aliases\":[],\"id\":\"west-wing-roof\",\"label\":\"West wing flat roof\",\"kind\":\"roof\",\"at\":[-9,3.43,-1],\"rotation\":0,\"size\":[6,0.16,12],\"material\":\"limestone\",\"roofForm\":\"flat\",\"panels\":4},{\"semanticType\":\"roof\",\"aliases\":[],\"id\":\"east-wing-roof\",\"label\":\"East wing flat roof\",\"kind\":\"roof\",\"at\":[9,3.43,-1],\"rotation\":0,\"size\":[6,0.16,10],\"material\":\"limestone\",\"roofForm\":\"flat\",\"panels\":4},{\"semanticType\":\"terrace\",\"aliases\":[],\"id\":\"dining-terrace\",\"label\":\"Covered outdoor dining terrace\",\"kind\":\"plate\",\"at\":[-1,0.075,-6],\"rotation\":0,\"size\":[10,0.15,4],\"material\":\"limestone\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"dining-post-west-front\",\"label\":\"Dining canopy west front support\",\"kind\":\"volume\",\"at\":[-4.25,1.65,-4.55],\"rotation\":0,\"size\":[0.22,3.3,0.22],\"material\":\"timber\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"dining-post-east-front\",\"label\":\"Dining canopy east front support\",\"kind\":\"volume\",\"at\":[2.25,1.65,-4.55],\"rotation\":0,\"size\":[0.22,3.3,0.22],\"material\":\"timber\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"dining-post-west-rear\",\"label\":\"Dining canopy west rear support\",\"kind\":\"volume\",\"at\":[-4.25,1.65,-7.75],\"rotation\":0,\"size\":[0.22,3.3,0.22],\"material\":\"timber\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"dining-post-east-rear\",\"label\":\"Dining canopy east rear support\",\"kind\":\"volume\",\"at\":[2.25,1.65,-7.75],\"rotation\":0,\"size\":[0.22,3.3,0.22],\"material\":\"timber\",\"panels\":4},{\"semanticType\":\"roof\",\"aliases\":[],\"id\":\"dining-canopy\",\"label\":\"Covered dining canopy\",\"kind\":\"roof\",\"at\":[-1,3.3,-6.15],\"rotation\":0,\"size\":[6.8,0.18,3.4],\"material\":\"timber\",\"roofForm\":\"flat\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"entry-post-west\",\"label\":\"Entry canopy west support\",\"kind\":\"volume\",\"at\":[-1.35,1.65,5.85],\"rotation\":0,\"size\":[0.2,3.3,0.2],\"material\":\"bronze\",\"panels\":4},{\"semanticType\":\"mass\",\"aliases\":[],\"id\":\"entry-post-east\",\"label\":\"Entry canopy east support\",\"kind\":\"volume\",\"at\":[1.35,1.65,5.85],\"rotation\":0,\"size\":[0.2,3.3,0.2],\"material\":\"bronze\",\"panels\":4},{\"semanticType\":\"roof\",\"aliases\":[],\"id\":\"entry-canopy\",\"label\":\"Covered entrance canopy\",\"kind\":\"roof\",\"at\":[0,3.3,5.35],\"rotation\":0,\"size\":[3,0.18,2.7],\"material\":\"limestone\",\"roofForm\":\"flat\",\"panels\":4},{\"id\":\"family-pool\",\"label\":\"family-pool deck\",\"kind\":\"plate\",\"assemblyKind\":\"rectangular-pool\",\"at\":[0,0,-8.75],\"rotation\":3.141593,\"size\":[9.2,0.3,1.5],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-floor\",\"label\":\"family-pool floor\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[0,-1.4000000000000001,5.45],\"rotation\":0,\"size\":[6.4,0.2,8.4],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-water\",\"label\":\"family-pool water\",\"kind\":\"water\",\"parent\":\"family-pool\",\"at\":[0,0.05,5.45],\"rotation\":0,\"size\":[6,0.02,8],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-wall-z-minus\",\"label\":\"family-pool wall-z-minus\",\"kind\":\"wall\",\"parent\":\"family-pool\",\"at\":[0,-0.5750000000000001,1.3500000000000005],\"rotation\":0,\"size\":[6.4,1.4500000000000002,0.2],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-wall-x-minus\",\"label\":\"family-pool wall-x-minus\",\"kind\":\"wall\",\"parent\":\"family-pool\",\"at\":[-3.1,-0.5750000000000001,5.45],\"rotation\":0,\"size\":[0.2,1.4500000000000002,8],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-coping-z-minus\",\"label\":\"family-pool coping-z-minus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[0,0.1,1.1000000000000005],\"rotation\":0,\"size\":[7.2,0.1,0.7],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-coping-x-minus\",\"label\":\"family-pool coping-x-minus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[-3.3,0.1,5.45],\"rotation\":0,\"size\":[0.6,0.1,8],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-deck-x-minus\",\"label\":\"family-pool deck-x-minus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[-4.1,0,5.45],\"rotation\":0,\"size\":[1,0.3,9.4],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-wall-z-plus\",\"label\":\"family-pool wall-z-plus\",\"kind\":\"wall\",\"parent\":\"family-pool\",\"at\":[0,-0.5750000000000001,9.55],\"rotation\":0,\"size\":[6.4,1.4500000000000002,0.2],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-wall-x-plus\",\"label\":\"family-pool wall-x-plus\",\"kind\":\"wall\",\"parent\":\"family-pool\",\"at\":[3.1,-0.5750000000000001,5.45],\"rotation\":0,\"size\":[0.2,1.4500000000000002,8],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-coping-z-plus\",\"label\":\"family-pool coping-z-plus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[0,0.1,9.8],\"rotation\":0,\"size\":[7.2,0.1,0.7],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-coping-x-plus\",\"label\":\"family-pool coping-x-plus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[3.3,0.1,5.45],\"rotation\":0,\"size\":[0.6,0.1,8],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-deck-x-plus\",\"label\":\"family-pool deck-x-plus\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[4.1,0,5.45],\"rotation\":0,\"size\":[1,0.3,9.4],\"material\":\"limestone\",\"panels\":4},{\"id\":\"family-pool-deck-far\",\"label\":\"family-pool deck-far\",\"kind\":\"plate\",\"parent\":\"family-pool\",\"at\":[0,0,10.9],\"rotation\":0,\"size\":[9.2,0.3,1.5],\"material\":\"limestone\",\"panels\":4}],\"architecturalPlan\":{\"scaleRationale\":\"This is a compact but generous single-level family residence: three connected envelopes reserve capacity for four bedrooms, bathrooms, circulation, storage and living without using property value as an area formula. The approximately 220 m² enclosed footprint is a design choice sized for a contemporary family house, while the pool, covered dining terrace and private garden reserve remain distinct outdoor rooms.\",\"arrivalAndCirculation\":\"A limestone approach plate leads from the +Z arrival side to a recessed, operable front door at the 0.15 m walking datum; all occupied accommodation is on this same accessible ground datum. Public living occupies the central volume, quieter bedroom capacity occupies the two lateral wings, and the rear garden door connects the living zone directly to the covered terrace and pool deck; no upper level or service fit-out is constructed.\",\"volumeHierarchy\":\"The 12 x 8 m central living volume is the primary shared room, with 6 x 12 m and 6 x 10 m lower-profile bedroom wings extending to either side. All slabs top out at 0.15 m, enclosure heads are 3.35 m, and the coordinated 0.16 m roof plates establish a calm 3.51 m overall parapet datum; the dining canopy is subordinate at 3.30 m.\",\"relationshipsAndViews\":\"Arrival is organized on the +Z side, while the house opens toward the -Z terrace, rectangular pool and intentionally unbuilt private-garden reserve beyond. A real rear garden door gives the living room a dry route to the dining terrace, which abuts the pool's near deck without crossing water; side-wing glazing keeps bedroom outlooks more controlled.\",\"roofFacadeAndMaterials\":\"Flat limestone roof plates, ivory walls, bronze framed openings and timber canopy members create a restrained contemporary identity with deep shade at the dining terrace. Living-facing glazing is concentrated at the terrace and pool side, while the bedroom wings use smaller separated side windows and solid end walls for privacy; all elevations are modelled with a coordinated roof edge, though interior subdivisions remain deferred.\",\"constructionScope\":\"exterior\",\"intendedSpaces\":[\"Arrival approach\",\"Entry vestibule\",\"Family living and dining\",\"Kitchen and pantry reserve\",\"Four-bedroom accommodation reserve\",\"Bathroom and laundry reserve\",\"Covered outdoor dining\",\"Pool terrace\",\"Rectangular pool\",\"Private garden reserve\"],\"programme\":[{\"name\":\"Arrival approach\",\"zone\":\"circulation\",\"strategy\":\"A broad limestone plate terminates at the recessed front-door threshold.\",\"purpose\":\"access\",\"floorIds\":[\"arrival-path\",\"main-floor\"],\"enclosureIds\":[\"front-entry-wall\"],\"roofIds\":[\"entry-canopy\"],\"accessIds\":[\"front-door\"],\"limitation\":\"Driveway, gate and vehicle parking are not requested or constructed.\"},{\"name\":\"Entry vestibule\",\"zone\":\"public\",\"strategy\":\"Reserved immediately inside the front threshold within the central envelope.\",\"purpose\":\"access\",\"floorIds\":[\"main-floor\"],\"enclosureIds\":[\"front-left-wall\",\"front-entry-wall\",\"front-right-wall\"],\"roofIds\":[\"main-roof\"],\"accessIds\":[\"front-door\"],\"limitation\":\"Interior partitions, storage and finishes are deferred.\"},{\"name\":\"Family living and dining\",\"zone\":\"public\",\"strategy\":\"The central envelope is reserved as the principal shared living volume with garden access.\",\"purpose\":\"living\",\"floorIds\":[\"main-floor\"],\"enclosureIds\":[\"rear-left-wall\",\"rear-garden-wall\",\"rear-right-wall\"],\"roofIds\":[\"main-roof\"],\"accessIds\":[\"garden-door\"],\"limitation\":\"No interior furniture, kitchen cabinetry or dining fit-out is constructed.\"},{\"name\":\"Kitchen and pantry reserve\",\"zone\":\"service\",\"strategy\":\"Capacity is reserved within the central public envelope beside the dining and terrace connection.\",\"purpose\":\"kitchen\",\"floorIds\":[\"main-floor\"],\"enclosureIds\":[\"front-right-wall\",\"rear-right-wall\"],\"roofIds\":[\"main-roof\"],\"accessIds\":[\"garden-door\"],\"limitation\":\"Kitchen units, pantry partitions and appliances are deferred.\"},{\"name\":\"Four-bedroom accommodation reserve\",\"zone\":\"private\",\"strategy\":\"Three bedroom-capable bays are allocated to the west wing and one larger private suite-capable bay to the east wing, with allowance for bathrooms and circulation.\",\"requirement\":{\"origin\":\"user-required\",\"briefQuote\":\"four bedrooms\"},\"purpose\":\"bedroom\",\"floorIds\":[\"west-wing-floor\",\"east-wing-floor\"],\"enclosureIds\":[\"west-side-north\",\"west-side-middle\",\"west-side-south\",\"east-side-north\",\"east-side-south\",\"west-front-wall\",\"west-rear-wall\",\"east-front-wall\",\"east-rear-wall\"],\"roofIds\":[\"west-wing-roof\",\"east-wing-roof\"],\"accessIds\":[\"front-door\"],\"limitation\":\"Shared envelope floors indicate accommodation capacity only; individual bedrooms, bathrooms, hallways and internal doors are not subdivided in exterior scope.\"},{\"name\":\"Bathroom and laundry reserve\",\"zone\":\"service\",\"strategy\":\"Plumbing-service capacity is reserved within the bedroom-wing envelopes near their shared internal edges.\",\"purpose\":\"bathroom\",\"floorIds\":[\"west-wing-floor\",\"east-wing-floor\"],\"enclosureIds\":[\"west-front-wall\",\"east-front-wall\"],\"roofIds\":[\"west-wing-roof\",\"east-wing-roof\"],\"accessIds\":[\"front-door\"],\"limitation\":\"No bathroom partitions, fixtures, laundry equipment or services are constructed.\"},{\"name\":\"Covered outdoor dining\",\"zone\":\"outdoor\",\"strategy\":\"A covered limestone terrace directly outside the garden door is shaded by a four-post timber-and-limestone canopy.\",\"requirement\":{\"origin\":\"user-required\",\"briefQuote\":\"covered outdoor dining\"},\"purpose\":\"outdoor\",\"floorIds\":[\"dining-terrace\"],\"enclosureIds\":[],\"roofIds\":[\"dining-canopy\"],\"accessIds\":[\"garden-door\"],\"limitation\":\"Dining furniture and exterior kitchen equipment are not constructed.\"},{\"name\":\"Pool terrace\",\"zone\":\"outdoor\",\"strategy\":\"The terrace meets the near dry deck of the completed rectangular-pool assembly at the same 0.15 m walking datum.\",\"requirement\":{\"origin\":\"user-required\",\"briefQuote\":\"a pool\"},\"purpose\":\"outdoor\",\"floorIds\":[\"dining-terrace\",\"family-pool\",\"family-pool-deck-x-minus\",\"family-pool-deck-x-plus\",\"family-pool-deck-far\"],\"enclosureIds\":[\"family-pool-wall-x-minus\",\"family-pool-wall-x-plus\",\"family-pool-wall-z-minus\",\"family-pool-wall-z-plus\"],\"roofIds\":[],\"accessIds\":[\"garden-door\"],\"limitation\":\"Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.\"},{\"name\":\"Rectangular pool\",\"zone\":\"outdoor\",\"strategy\":\"A dedicated rectangular basin has an explicit floor, four perimeter walls, coping, water surface and continuous dry deck circuit.\",\"requirement\":{\"origin\":\"user-required\",\"briefQuote\":\"a pool\"},\"purpose\":\"outdoor\",\"floorIds\":[\"family-pool-floor\",\"family-pool-coping-x-minus\",\"family-pool-coping-x-plus\",\"family-pool-coping-z-minus\",\"family-pool-coping-z-plus\"],\"enclosureIds\":[\"family-pool-wall-x-minus\",\"family-pool-wall-x-plus\",\"family-pool-wall-z-minus\",\"family-pool-wall-z-plus\"],\"roofIds\":[],\"accessIds\":[],\"limitation\":\"The rectangular water primitive does not model an infinity edge, equipment or water treatment.\"},{\"name\":\"Private garden reserve\",\"zone\":\"outdoor\",\"strategy\":\"The open ground beyond the far pool deck is reserved as the private planted garden outlook.\",\"requirement\":{\"origin\":\"user-required\",\"briefQuote\":\"private garden\"},\"purpose\":\"outdoor\",\"floorIds\":[\"family-pool-deck-far\"],\"enclosureIds\":[],\"roofIds\":[],\"accessIds\":[],\"limitation\":\"Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable.\"}],\"spatialRelationships\":[{\"subject\":\"dining-terrace\",\"target\":\"main-floor\",\"relation\":\"adjacent-to\",\"clearance\":0,\"reason\":\"The terrace abuts the rear edge of the central living slab at the shared walking datum.\"},{\"subject\":\"garden-door\",\"target\":\"dining-terrace\",\"relation\":\"connected-to\",\"clearance\":0,\"reason\":\"The sill-zero rear door is the modelled passage to outdoor dining.\"},{\"subject\":\"dining-terrace\",\"target\":\"family-pool\",\"relation\":\"adjacent-to\",\"clearance\":0,\"reason\":\"The terrace meets the pool assembly's near dry deck, not its water footprint.\"},{\"subject\":\"family-pool-water\",\"target\":\"family-pool-floor\",\"relation\":\"above\",\"clearance\":1.35,\"reason\":\"The basin floor is explicitly below the water surface by the selected basin depth.\"},{\"subject\":\"dining-canopy\",\"target\":\"dining-terrace\",\"relation\":\"covering\",\"clearance\":3.06,\"reason\":\"The canopy is supported by four posts and shelters the dining plate.\"},{\"subject\":\"family-pool\",\"target\":\"private-garden-reserve\",\"relation\":\"facing\",\"clearance\":0,\"reason\":\"The far pool deck and reserved garden occupy the rearward -Z outlook.\"}],\"designDecisions\":[{\"disposition\":\"constructed\",\"knowledgeId\":\"pool-garden-view\",\"decision\":\"Constructed a rectangular pool with explicit basin floor, perimeter walls, coping and a dry circulation deck, oriented toward the garden reserve.\",\"elementIds\":[\"family-pool\",\"family-pool-floor\",\"family-pool-water\",\"family-pool-wall-x-minus\",\"family-pool-wall-x-plus\",\"family-pool-wall-z-minus\",\"family-pool-wall-z-plus\"],\"limitation\":\"Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"dining-transition\",\"decision\":\"Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.\",\"elementIds\":[\"dining-terrace\",\"garden-door\",\"dining-canopy\"],\"limitation\":\"Dining furniture and kitchen fit-out are deferred.\"},{\"disposition\":\"considered\",\"knowledgeId\":\"outdoor-reading-nook\",\"decision\":\"A separate reading pavilion was not selected so the garden remains open and the dining canopy stays the sole outdoor shelter.\",\"elementIds\":[],\"limitation\":\"No separate reading nook is constructed.\"},{\"disposition\":\"unsupported\",\"knowledgeId\":\"legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec\",\"decision\":\"A planted private garden is reserved beyond the pool but layered tropical planting cannot be represented with the available direct-scene primitives.\",\"elementIds\":[],\"limitation\":\"No editable planting, trees, irrigation or lighting are available in this output.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"asymmetric-balance\",\"decision\":\"Balanced the dominant central living volume with unequal bedroom wings while holding a shared roof datum and terrace edge.\",\"elementIds\":[\"main-floor\",\"west-wing-floor\",\"east-wing-floor\",\"main-roof\",\"west-wing-roof\",\"east-wing-roof\"],\"limitation\":\"Visual balance is an authored composition, not solver-verified.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"covered-threshold\",\"decision\":\"Built an actual front-door opening, threshold approach and post-supported entrance canopy.\",\"elementIds\":[\"arrival-path\",\"front-entry-wall\",\"front-door\",\"entry-canopy\",\"entry-post-west\",\"entry-post-east\"],\"limitation\":\"Weather performance and code clearances are not certified.\"},{\"disposition\":\"constructed\",\"knowledgeId\":\"solid-glass-balance\",\"decision\":\"Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.\",\"elementIds\":[\"rear-garden-wall\",\"west-side-north\",\"west-side-middle\",\"west-side-south\",\"east-side-north\",\"east-side-south\"],\"limitation\":\"Thermal, acoustic and operability performance are not simulated.\"}]},\"knowledgeEvidence\":[{\"id\":\"pool-garden-view\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"water\"]},{\"id\":\"dining-transition\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]},{\"id\":\"outdoor-reading-nook\",\"version\":1,\"requiredKinds\":[\"plate\",\"roof\",\"volume\"]},{\"id\":\"legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]},{\"id\":\"asymmetric-balance\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]},{\"id\":\"covered-threshold\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"entrance\",\"roof\"]},{\"id\":\"solid-glass-balance\",\"version\":1,\"requiredKinds\":[\"plate\",\"wall\",\"roof\"]}]},\"prompt\":\"Replace the three existing rear wall segments and the affected garden-door child with a single composed rear living facade set back 0.9 m from the current rear wall line: retain solid wall ends, create two broad bronze-framed glazed wall fields between them, and center the new operable rear-loggia-door in the composition. Add rear-loggia-sill flush with the existing dining-terrace walking datum. Resize and center the existing dining-canopy over this new opening and the central portion of dining-terrace, retain its four existing posts, and reposition those posts to its four corners; add only rear-loggia-canopy-edge as the aligned front edge. Keep all pool elements, wing roofs, wing walls, main-floor footprint, terrain and unrelated elements unchanged. The work removes four existing elements including the garden-door descendant, adds seven declared elements, and remains within the existing rear facade and terrace bounds.\\nExisting target IDs: [\\\"rear-left-wall\\\",\\\"rear-garden-wall\\\",\\\"rear-right-wall\\\",\\\"garden-door\\\",\\\"dining-canopy\\\",\\\"dining-post-west-front\\\",\\\"dining-post-east-front\\\",\\\"dining-post-west-rear\\\",\\\"dining-post-east-rear\\\",\\\"dining-terrace\\\"]. Declared new IDs: [\\\"rear-loggia-wall-west\\\",\\\"rear-loggia-glazing-west\\\",\\\"rear-loggia-glazing-east\\\",\\\"rear-loggia-wall-east\\\",\\\"rear-loggia-door\\\",\\\"rear-loggia-sill\\\",\\\"rear-loggia-canopy-edge\\\"]. Limits: {\\\"existing\\\":24,\\\"additions\\\":32,\\\"removals\\\":8,\\\"operations\\\":80,\\\"extentMarginMetres\\\":6}; remove at most 20% of the original elements (rounded down). Preserve all unrelated geometry, scene metadata and architectural plan. Use targeted additions, removals, replacements and modifications. No assemblies, terrain changes or whole-house regeneration. Retain IDs for retained identities; never recycle deleted IDs. Use primitive editable operations for coordinated facade layers, supported entrance structures, roof sections, accessible balconies and details. Include necessary dependents within scope.\"}"
+        }
+      ]
+    }
+  ],
+  "max_output_tokens": 12000,
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "strict": false,
+      "name": "response",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "architecturalPlan": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "scaleRationale": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200,
+                    "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+                  },
+                  "arrivalAndCirculation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "volumeHierarchy": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "relationshipsAndViews": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "roofFacadeAndMaterials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "constructionScope": {
+                    "type": "string",
+                    "enum": [
+                      "exterior",
+                      "interior-inclusive"
+                    ]
+                  },
+                  "intendedSpaces": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1200
+                    }
+                  },
+                  "programme": {
+                    "minItems": 1,
+                    "maxItems": 24,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "zone": {
+                          "type": "string",
+                          "enum": [
+                            "public",
+                            "private",
+                            "service",
+                            "circulation",
+                            "outdoor"
+                          ]
+                        },
+                        "strategy": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 180
+                        },
+                        "requirement": {
+                          "type": "object",
+                          "properties": {
+                            "origin": {
+                              "type": "string",
+                              "enum": [
+                                "user-required",
+                                "design-choice"
+                              ]
+                            },
+                            "briefQuote": {
+                              "type": "string",
+                              "maxLength": 300
+                            }
+                          },
+                          "required": [
+                            "origin",
+                            "briefQuote"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "purpose": {
+                          "type": "string",
+                          "enum": [
+                            "bedroom",
+                            "bathroom",
+                            "kitchen",
+                            "living",
+                            "access",
+                            "outdoor",
+                            "other"
+                          ]
+                        },
+                        "construction": {
+                          "type": "object",
+                          "properties": {
+                            "partitionIds": {
+                              "maxItems": 12,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              }
+                            },
+                            "fitOutIds": {
+                              "maxItems": 16,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              }
+                            },
+                            "bathroomNames": {
+                              "maxItems": 8,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              }
+                            },
+                            "levelAccessIds": {
+                              "maxItems": 40,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              }
+                            }
+                          },
+                          "required": [
+                            "partitionIds",
+                            "fitOutIds",
+                            "bathroomNames",
+                            "levelAccessIds"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "floorIds": {
+                          "maxItems": 64,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          }
+                        },
+                        "enclosureIds": {
+                          "maxItems": 128,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          }
+                        },
+                        "roofIds": {
+                          "maxItems": 64,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          }
+                        },
+                        "accessIds": {
+                          "maxItems": 64,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          },
+                          "description": "Existing entrance IDs at actual passages, or supported stair/landing route IDs. Fixed glazing is not a door; never cite glazing IDs as access."
+                        },
+                        "limitation": {
+                          "type": "string",
+                          "maxLength": 180
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "zone",
+                        "strategy",
+                        "floorIds",
+                        "enclosureIds",
+                        "roofIds",
+                        "accessIds",
+                        "limitation"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "description": "Return for every new Generate: selected accommodation mapped to final construction IDs; omit only for legacy compatibility."
+                  },
+                  "spatialRelationships": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "subject": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "target": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "relation": {
+                          "type": "string",
+                          "enum": [
+                            "adjacent-to",
+                            "connected-to",
+                            "above",
+                            "below",
+                            "facing",
+                            "set-back-from",
+                            "covering",
+                            "clear-of",
+                            "inside"
+                          ]
+                        },
+                        "clearance": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10000
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        }
+                      },
+                      "required": [
+                        "subject",
+                        "target",
+                        "relation",
+                        "clearance",
+                        "reason"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "designDecisions": {
+                    "maxItems": 12,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "disposition": {
+                          "type": "string",
+                          "enum": [
+                            "constructed",
+                            "guidance",
+                            "considered",
+                            "unsupported"
+                          ]
+                        },
+                        "knowledgeId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 80
+                        },
+                        "decision": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 300
+                        },
+                        "elementIds": {
+                          "maxItems": 12,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 120
+                          }
+                        },
+                        "limitation": {
+                          "type": "string",
+                          "maxLength": 300
+                        }
+                      },
+                      "required": [
+                        "knowledgeId",
+                        "decision",
+                        "elementIds",
+                        "limitation"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "scaleRationale",
+                  "arrivalAndCirculation",
+                  "volumeHierarchy",
+                  "relationshipsAndViews",
+                  "roofFacadeAndMaterials",
+                  "intendedSpaces"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "constructionScope": {
+                    "type": "string",
+                    "enum": [
+                      "exterior",
+                      "interior-inclusive"
+                    ]
+                  },
+                  "scaleRationale": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200,
+                    "description": "Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence."
+                  },
+                  "levels": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "enclosedAreaM2": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "arrivalAndCirculation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "volumeHierarchy": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "relationshipsAndViews": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "roofFacadeAndMaterials": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1200
+                  },
+                  "spaces": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1200
+                        },
+                        "use": {
+                          "type": "string",
+                          "enum": [
+                            "interior",
+                            "outdoor"
+                          ]
+                        },
+                        "level": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "areaM2": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        "floorIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "enclosureIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "roofIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "use",
+                        "level",
+                        "areaM2",
+                        "floorIds",
+                        "enclosureIds",
+                        "roofIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "commitments": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1200
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "entrance",
+                            "circulation",
+                            "primary-volume",
+                            "secondary-volume",
+                            "roof",
+                            "facade",
+                            "terrace"
+                          ]
+                        },
+                        "elementIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "required": [
+                        "description",
+                        "kind",
+                        "elementIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "scaleRationale",
+                  "levels",
+                  "enclosedAreaM2",
+                  "arrivalAndCirculation",
+                  "volumeHierarchy",
+                  "relationshipsAndViews",
+                  "roofFacadeAndMaterials",
+                  "spaces",
+                  "commitments"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "unsupported": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "operations": {
+            "maxItems": 800,
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "assemble"
+                    },
+                    "assembly": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "residential-wing"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number",
+                                  "minimum": -10000,
+                                  "maximum": 10000
+                                },
+                                "width": {
+                                  "type": "number",
+                                  "minimum": 4,
+                                  "maximum": 40
+                                },
+                                "depth": {
+                                  "type": "number",
+                                  "minimum": 4,
+                                  "maximum": 30
+                                },
+                                "height": {
+                                  "type": "number",
+                                  "minimum": 2.4,
+                                  "maximum": 12
+                                },
+                                "bays": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 8
+                                },
+                                "bayWidths": {
+                                  "minItems": 1,
+                                  "maxItems": 8,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": 0.91,
+                                    "maximum": 40
+                                  }
+                                },
+                                "material": {
+                                  "default": "ivory",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                },
+                                "roofForm": {
+                                  "type": "string",
+                                  "enum": [
+                                    "flat",
+                                    "gable",
+                                    "hip"
+                                  ]
+                                },
+                                "roofRise": {
+                                  "type": "number",
+                                  "minimum": 0.6,
+                                  "maximum": 5
+                                },
+                                "overhang": {
+                                  "type": "number",
+                                  "minimum": 0,
+                                  "maximum": 3
+                                },
+                                "entryBay": {
+                                  "default": null,
+                                  "anyOf": [
+                                    {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 7
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "width",
+                                "depth",
+                                "height",
+                                "bays",
+                                "roofForm",
+                                "roofRise",
+                                "overhang"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "rectangular-pool"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number"
+                                },
+                                "width": {
+                                  "type": "number",
+                                  "minimum": 2,
+                                  "maximum": 30
+                                },
+                                "depth": {
+                                  "type": "number",
+                                  "minimum": 2,
+                                  "maximum": 30
+                                },
+                                "basinDepth": {
+                                  "type": "number",
+                                  "minimum": 0.5,
+                                  "maximum": 3
+                                },
+                                "material": {
+                                  "default": "limestone",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "width",
+                                "depth",
+                                "basinDepth"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "facade-bay"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "parent": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number"
+                                },
+                                "material": {
+                                  "default": "ivory",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                },
+                                "width": {
+                                  "type": "number",
+                                  "minimum": 0.8,
+                                  "maximum": 40
+                                },
+                                "height": {
+                                  "type": "number",
+                                  "minimum": 2,
+                                  "maximum": 12
+                                },
+                                "thickness": {
+                                  "type": "number",
+                                  "minimum": 0.08,
+                                  "maximum": 0.6
+                                },
+                                "openingX": {
+                                  "type": "number"
+                                },
+                                "sill": {
+                                  "type": "number",
+                                  "minimum": 0,
+                                  "maximum": 10
+                                },
+                                "openingWidth": {
+                                  "type": "number",
+                                  "minimum": 0.6,
+                                  "maximum": 20
+                                },
+                                "openingHeight": {
+                                  "type": "number",
+                                  "minimum": 0.4,
+                                  "maximum": 10
+                                },
+                                "infill": {
+                                  "type": "string",
+                                  "enum": [
+                                    "glazing",
+                                    "entrance"
+                                  ]
+                                },
+                                "panels": {
+                                  "default": 4,
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 40
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "width",
+                                "height",
+                                "thickness",
+                                "openingX",
+                                "sill",
+                                "openingWidth",
+                                "openingHeight",
+                                "infill"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "doorway"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "parent": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number"
+                                },
+                                "material": {
+                                  "default": "ivory",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                },
+                                "width": {
+                                  "type": "number",
+                                  "minimum": 0.8,
+                                  "maximum": 40
+                                },
+                                "height": {
+                                  "type": "number",
+                                  "minimum": 2,
+                                  "maximum": 12
+                                },
+                                "thickness": {
+                                  "type": "number",
+                                  "minimum": 0.08,
+                                  "maximum": 0.6
+                                },
+                                "openingX": {
+                                  "type": "number"
+                                },
+                                "openingWidth": {
+                                  "type": "number",
+                                  "minimum": 0.6,
+                                  "maximum": 5
+                                },
+                                "openingHeight": {
+                                  "type": "number",
+                                  "minimum": 1.8,
+                                  "maximum": 5
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "width",
+                                "height",
+                                "thickness",
+                                "openingX",
+                                "openingWidth",
+                                "openingHeight"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "kitchen-run"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "parent": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number"
+                                },
+                                "material": {
+                                  "default": "ivory",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                },
+                                "length": {
+                                  "type": "number",
+                                  "minimum": 0.6,
+                                  "maximum": 12
+                                },
+                                "depth": {
+                                  "type": "number",
+                                  "minimum": 0.4,
+                                  "maximum": 1.2
+                                },
+                                "height": {
+                                  "type": "number",
+                                  "minimum": 0.7,
+                                  "maximum": 1.1
+                                },
+                                "units": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 12
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "length",
+                                "depth",
+                                "height",
+                                "units"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "straight-stair"
+                            },
+                            "parameters": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "at": {
+                                  "minItems": 3,
+                                  "maxItems": 3,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number",
+                                    "minimum": -10000,
+                                    "maximum": 10000
+                                  }
+                                },
+                                "parent": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9-]{0,49}$"
+                                },
+                                "rotation": {
+                                  "default": 0,
+                                  "type": "number"
+                                },
+                                "material": {
+                                  "default": "ivory",
+                                  "type": "string",
+                                  "enum": [
+                                    "ivory",
+                                    "limestone",
+                                    "timber",
+                                    "bronze",
+                                    "sage"
+                                  ]
+                                },
+                                "width": {
+                                  "type": "number",
+                                  "minimum": 0.8,
+                                  "maximum": 4
+                                },
+                                "rise": {
+                                  "type": "number",
+                                  "minimum": 0.1,
+                                  "maximum": 6
+                                },
+                                "run": {
+                                  "type": "number",
+                                  "minimum": 0.3,
+                                  "maximum": 20
+                                },
+                                "risers": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 40
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "at",
+                                "width",
+                                "rise",
+                                "run",
+                                "risers"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "parameters"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "assembly"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "scale-assembly"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "factors": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 10
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "factors"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "set-terrain"
+                    },
+                    "terrain": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "width": {
+                              "type": "number",
+                              "minimum": 10,
+                              "maximum": 200
+                            },
+                            "depth": {
+                              "type": "number",
+                              "minimum": 10,
+                              "maximum": 200
+                            },
+                            "elevation": {
+                              "type": "number",
+                              "minimum": -100,
+                              "maximum": 100
+                            },
+                            "grade": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            },
+                            "fall": {
+                              "type": "string",
+                              "enum": [
+                                "x",
+                                "-x",
+                                "z",
+                                "-z"
+                              ]
+                            },
+                            "cliff": {
+                              "type": "object",
+                              "properties": {
+                                "at": {
+                                  "type": "number",
+                                  "minimum": -100,
+                                  "maximum": 100
+                                },
+                                "drop": {
+                                  "type": "number",
+                                  "minimum": 0,
+                                  "maximum": 100
+                                },
+                                "run": {
+                                  "type": "number",
+                                  "minimum": 1,
+                                  "maximum": 100
+                                }
+                              },
+                              "required": [
+                                "at",
+                                "drop",
+                                "run"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "width",
+                            "depth",
+                            "elevation",
+                            "grade",
+                            "fall"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "terrain"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "add"
+                    },
+                    "element": {
+                      "type": "object",
+                      "properties": {
+                        "semanticType": {
+                          "type": "string",
+                          "enum": [
+                            "building",
+                            "mass",
+                            "wall",
+                            "exterior-door",
+                            "front-door",
+                            "interior-door",
+                            "window",
+                            "roof",
+                            "floor",
+                            "ceiling",
+                            "stair",
+                            "ramp",
+                            "elevator",
+                            "balcony",
+                            "terrace",
+                            "pool",
+                            "garden",
+                            "planting-bed",
+                            "plant",
+                            "tree",
+                            "path",
+                            "driveway",
+                            "garage",
+                            "fence",
+                            "gate",
+                            "outdoor-furniture",
+                            "lighting",
+                            "material"
+                          ]
+                        },
+                        "aliases": {
+                          "maxItems": 12,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 80
+                          }
+                        },
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 120
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "plate",
+                            "wall",
+                            "roof",
+                            "glazing",
+                            "balcony",
+                            "entrance",
+                            "screen",
+                            "sofa",
+                            "volume",
+                            "water",
+                            "pavilion"
+                          ]
+                        },
+                        "assemblyKind": {
+                          "type": "string",
+                          "enum": [
+                            "residential-wing",
+                            "rectangular-pool",
+                            "facade-bay",
+                            "doorway",
+                            "kitchen-run",
+                            "straight-stair"
+                          ]
+                        },
+                        "geometry": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "extrusion"
+                                },
+                                "axis": {
+                                  "type": "string",
+                                  "enum": [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ]
+                                },
+                                "outline": {
+                                  "minItems": 3,
+                                  "maxItems": 128,
+                                  "type": "array",
+                                  "items": {
+                                    "minItems": 2,
+                                    "maxItems": 2,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number",
+                                      "minimum": -0.5,
+                                      "maximum": 0.5
+                                    }
+                                  }
+                                },
+                                "holes": {
+                                  "default": [],
+                                  "maxItems": 8,
+                                  "type": "array",
+                                  "items": {
+                                    "minItems": 3,
+                                    "maxItems": 128,
+                                    "type": "array",
+                                    "items": {
+                                      "minItems": 2,
+                                      "maxItems": 2,
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "minimum": -0.5,
+                                        "maximum": 0.5
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "axis",
+                                "outline"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "arc"
+                                },
+                                "axis": {
+                                  "type": "string",
+                                  "enum": [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "number",
+                                  "minimum": -6.283185307179586,
+                                  "maximum": 6.283185307179586
+                                },
+                                "sweep": {
+                                  "type": "number",
+                                  "minimum": 0.05,
+                                  "maximum": 6.283185307179586
+                                },
+                                "innerRatio": {
+                                  "type": "number",
+                                  "minimum": 0.01,
+                                  "maximum": 0.999
+                                },
+                                "segments": {
+                                  "type": "integer",
+                                  "minimum": 4,
+                                  "maximum": 64
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "axis",
+                                "start",
+                                "sweep",
+                                "innerRatio",
+                                "segments"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "color": {
+                          "type": "string",
+                          "pattern": "^#[0-9a-fA-F]{6}$"
+                        },
+                        "parent": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "at": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "minimum": -10000,
+                            "maximum": 10000
+                          }
+                        },
+                        "rotation": {
+                          "default": 0,
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "size": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "maximum": 10000
+                          }
+                        },
+                        "material": {
+                          "default": "ivory",
+                          "type": "string",
+                          "enum": [
+                            "ivory",
+                            "limestone",
+                            "timber",
+                            "bronze",
+                            "sage"
+                          ]
+                        },
+                        "roofForm": {
+                          "type": "string",
+                          "enum": [
+                            "flat",
+                            "gable",
+                            "hip"
+                          ]
+                        },
+                        "overhang": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "panels": {
+                          "default": 4,
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 40
+                        },
+                        "opening": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "number",
+                              "minimum": -10000,
+                              "maximum": 10000
+                            },
+                            "sill": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 10000
+                            },
+                            "width": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "height": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "glazed": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "sill",
+                            "width",
+                            "height",
+                            "glazed"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "label",
+                        "kind",
+                        "at",
+                        "size"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "element"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "replace"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "element": {
+                      "type": "object",
+                      "properties": {
+                        "semanticType": {
+                          "type": "string",
+                          "enum": [
+                            "building",
+                            "mass",
+                            "wall",
+                            "exterior-door",
+                            "front-door",
+                            "interior-door",
+                            "window",
+                            "roof",
+                            "floor",
+                            "ceiling",
+                            "stair",
+                            "ramp",
+                            "elevator",
+                            "balcony",
+                            "terrace",
+                            "pool",
+                            "garden",
+                            "planting-bed",
+                            "plant",
+                            "tree",
+                            "path",
+                            "driveway",
+                            "garage",
+                            "fence",
+                            "gate",
+                            "outdoor-furniture",
+                            "lighting",
+                            "material"
+                          ]
+                        },
+                        "aliases": {
+                          "maxItems": 12,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 80
+                          }
+                        },
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 120
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "plate",
+                            "wall",
+                            "roof",
+                            "glazing",
+                            "balcony",
+                            "entrance",
+                            "screen",
+                            "sofa",
+                            "volume",
+                            "water",
+                            "pavilion"
+                          ]
+                        },
+                        "assemblyKind": {
+                          "type": "string",
+                          "enum": [
+                            "residential-wing",
+                            "rectangular-pool",
+                            "facade-bay",
+                            "doorway",
+                            "kitchen-run",
+                            "straight-stair"
+                          ]
+                        },
+                        "geometry": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "extrusion"
+                                },
+                                "axis": {
+                                  "type": "string",
+                                  "enum": [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ]
+                                },
+                                "outline": {
+                                  "minItems": 3,
+                                  "maxItems": 128,
+                                  "type": "array",
+                                  "items": {
+                                    "minItems": 2,
+                                    "maxItems": 2,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number",
+                                      "minimum": -0.5,
+                                      "maximum": 0.5
+                                    }
+                                  }
+                                },
+                                "holes": {
+                                  "default": [],
+                                  "maxItems": 8,
+                                  "type": "array",
+                                  "items": {
+                                    "minItems": 3,
+                                    "maxItems": 128,
+                                    "type": "array",
+                                    "items": {
+                                      "minItems": 2,
+                                      "maxItems": 2,
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "minimum": -0.5,
+                                        "maximum": 0.5
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "axis",
+                                "outline"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "arc"
+                                },
+                                "axis": {
+                                  "type": "string",
+                                  "enum": [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "number",
+                                  "minimum": -6.283185307179586,
+                                  "maximum": 6.283185307179586
+                                },
+                                "sweep": {
+                                  "type": "number",
+                                  "minimum": 0.05,
+                                  "maximum": 6.283185307179586
+                                },
+                                "innerRatio": {
+                                  "type": "number",
+                                  "minimum": 0.01,
+                                  "maximum": 0.999
+                                },
+                                "segments": {
+                                  "type": "integer",
+                                  "minimum": 4,
+                                  "maximum": 64
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "axis",
+                                "start",
+                                "sweep",
+                                "innerRatio",
+                                "segments"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "color": {
+                          "type": "string",
+                          "pattern": "^#[0-9a-fA-F]{6}$"
+                        },
+                        "parent": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                        },
+                        "at": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "minimum": -10000,
+                            "maximum": 10000
+                          }
+                        },
+                        "rotation": {
+                          "default": 0,
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        "size": {
+                          "minItems": 3,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "maximum": 10000
+                          }
+                        },
+                        "material": {
+                          "default": "ivory",
+                          "type": "string",
+                          "enum": [
+                            "ivory",
+                            "limestone",
+                            "timber",
+                            "bronze",
+                            "sage"
+                          ]
+                        },
+                        "roofForm": {
+                          "type": "string",
+                          "enum": [
+                            "flat",
+                            "gable",
+                            "hip"
+                          ]
+                        },
+                        "overhang": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "panels": {
+                          "default": 4,
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 40
+                        },
+                        "opening": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "number",
+                              "minimum": -10000,
+                              "maximum": 10000
+                            },
+                            "sill": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 10000
+                            },
+                            "width": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "height": {
+                              "type": "number",
+                              "exclusiveMinimum": 0,
+                              "maximum": 10000
+                            },
+                            "glazed": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "sill",
+                            "width",
+                            "height",
+                            "glazed"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "label",
+                        "kind",
+                        "at",
+                        "size"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "element"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "remove"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "move"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "rotate"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "rotation": {
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "rotation"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "resize"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "size": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "finish"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "material": {
+                      "type": "string",
+                      "enum": [
+                        "ivory",
+                        "limestone",
+                        "timber",
+                        "bronze",
+                        "sage"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "material"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "place-on"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "support": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "offset": {
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    },
+                    "rotation": {
+                      "default": 0,
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "support",
+                    "offset"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "const": "attach"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "parent": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+                    },
+                    "at": {
+                      "minItems": 3,
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    }
+                  },
+                  "required": [
+                    "op",
+                    "id",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "summary",
+          "unsupported",
+          "operations"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

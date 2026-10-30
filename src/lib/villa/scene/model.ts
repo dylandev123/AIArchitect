@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { DIRECT_SCENE_KINDS, OBJECT_TYPES } from '@/lib/semantic/vocabulary';
+import { profileGeometrySchema, validateProfile } from './profileGeometry';
 import {assemblySchema} from './assemblyContract';
 import {assemblyOperations} from './assemblies';
 import { assertSceneRelationships } from './relationships';
@@ -16,15 +18,24 @@ const size = z.array(z.number().finite().positive().max(10000)).length(3).transf
     number
 ]);
 const id = z.string().regex(/^[a-z][a-z0-9-]{0,79}$/);
-export const elementSchema = z.object({
+export const elementFieldsSchema = z.object({
+    semanticType: z.enum(OBJECT_TYPES).optional(), aliases: z.array(z.string().min(1).max(80)).max(12).optional(),
     id, label: z.string().max(120), kind: z.enum(['plate', 'wall', 'roof', 'glazing', 'balcony', 'entrance', 'screen', 'sofa', 'volume', 'water', 'pavilion']),
-    assemblyKind:z.enum(['residential-wing','rectangular-pool']).optional(),
+    assemblyKind:z.enum(['residential-wing','rectangular-pool','facade-bay','doorway','kitchen-run','straight-stair']).optional(),
+    geometry: profileGeometrySchema.optional(),
+    color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
     parent: id.optional(), at: vector, rotation: scalar.default(0), size,
     material: z.enum(['ivory', 'limestone', 'timber', 'bronze', 'sage']).default('ivory'),
     roofForm: z.enum(['flat', 'gable', 'hip']).optional(), overhang: z.number().finite().min(0).max(10).optional(),
     panels: z.number().int().min(1).max(40).default(4),
     opening: z.object({ x: scalar, sill: z.number().finite().min(0).max(10000), width: z.number().finite().positive().max(10000), height: z.number().finite().positive().max(10000), glazed: z.boolean() }).strict().optional(),
 }).strict();
+/** Geometry-bearing semantic types are constrained per renderer, from the shared
+ * support map. `material` remains an editing resource, never an element type. */
+export const elementSchema = z.union(elementFieldsSchema.shape.kind.options.map(kind => {
+    const supported = OBJECT_TYPES.filter(type => DIRECT_SCENE_KINDS[type]?.includes(kind));
+    return elementFieldsSchema.extend({kind: z.literal(kind), semanticType: z.enum(supported, {error: issue => `Semantic type ${String(issue.input)} is incompatible with renderer kind ${kind}; supported: ${supported.join(', ')}`}).optional()});
+}));
 export type SceneElement = z.infer<typeof elementSchema>;
 // Optional site intent uses the existing V3 terrain compiler, independently of building validation.
 export const sceneTerrainSchema = z.object({
@@ -33,13 +44,19 @@ export const sceneTerrainSchema = z.object({
     grade: z.number().finite().min(0).max(1), fall: z.enum(['x', '-x', 'z', '-z']),
     cliff: z.object({at: z.number().finite().min(-100).max(100), drop: z.number().finite().min(0).max(100), run: z.number().finite().min(1).max(100)}).strict().optional(),
 }).strict();
-export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(400), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
+export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationBrief: z.string().max(12000).optional(), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(400), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementFieldsSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
 export type ArchitecturalScene = z.infer<typeof sceneSchema>;
 export function validateScene(input: unknown): ArchitecturalScene {
     const scene = sceneSchema.parse(input), map = new Map(scene.elements.map(e => [e.id, e]));
     if (map.size !== scene.elements.length)
         throw Error('Duplicate element ID');
     for (const e of scene.elements) {
+        if (e.semanticType && !DIRECT_SCENE_KINDS[e.semanticType]?.includes(e.kind)) throw Error(`Element ${e.id}: semantic type ${e.semanticType} is incompatible with renderer kind ${e.kind}`);
+        if (e.geometry) {
+            if (!['plate','wall','roof','volume','glazing','entrance'].includes(e.kind)) throw Error('Custom profile requires plate, wall, roof, volume, glazing or entrance');
+            if (e.opening || e.roofForm || e.overhang !== undefined) throw Error('Profile geometry cannot combine with legacy opening/roof parameters; use profile holes or separate pieces');
+            validateProfile(e.geometry);
+        }
         if (e.kind === 'pavilion') scenePavilionPlacement(e);
         if ((e.roofForm !== undefined || e.overhang !== undefined) && e.kind !== 'roof')
             throw Error('Roof parameters require a roof element');
@@ -75,7 +92,7 @@ export const operationSchema = z.union([
     z.object({ op: z.literal('move'), id, at: vector }).strict(),
     z.object({ op: z.literal('rotate'), id, rotation: scalar }).strict(),
     z.object({ op: z.literal('resize'), id, size }).strict(),
-    z.object({ op: z.literal('finish'), id, material: elementSchema.shape.material }).strict(),
+    z.object({ op: z.literal('finish'), id, material: elementFieldsSchema.shape.material.removeDefault() }).strict(),
     // Homogeneous fixed-length arrays avoid draft-7 tuple items: [schema, schema].
     z.object({ op: z.literal('place-on'), id, support: id, offset: z.array(scalar).length(2).transform(v => v as [number, number]), rotation: scalar.default(0) }).strict(),
     z.object({ op: z.literal('attach'), id, parent: id.optional(), at: vector }).strict(),
@@ -125,6 +142,7 @@ export function stageSceneOperations(scene: ArchitecturalScene, input: unknown, 
                     case 'place-on': {
                         const support = elements.find(item => item.id === op.support);
                         if (!support || !['plate', 'volume', 'roof'].includes(support.kind) ||
+                            support.geometry ||
                             (support.kind === 'roof' && support.roofForm && support.roofForm !== 'flat'))
                             throw Error('place-on requires an existing horizontal plate, volume or flat roof');
                         if (e.kind === 'pavilion') throw Error('place-on requires a centre-origin element');

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "suite-one-roof",
+    "relatedIds": [
+      "suite-two-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-one-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-one-roof",
+        "authoredIndex": 1,
+        "expandedIndex": 30
+      },
+      {
+        "id": "suite-two-roof",
+        "authoredIndex": 2,
+        "expandedIndex": 41
+      }
+    ]
+  },
+  {
+    "id": "suite-two-roof",
+    "relatedIds": [
+      "suite-one-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-two-roof: roof geometry intersects suite-one-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-two-roof",
+        "authoredIndex": 2,
+        "expandedIndex": 41
+      },
+      {
+        "id": "suite-one-roof",
+        "authoredIndex": 1,
+        "expandedIndex": 30
+      }
+    ]
+  },
+  {
+    "id": "suite-two-roof",
+    "relatedIds": [
+      "suite-three-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-two-roof: roof geometry intersects suite-three-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-two-roof",
+        "authoredIndex": 2,
+        "expandedIndex": 41
+      },
+      {
+        "id": "suite-three-roof",
+        "authoredIndex": 3,
+        "expandedIndex": 52
+      }
+    ]
+  },
+  {
+    "id": "suite-three-roof",
+    "relatedIds": [
+      "suite-two-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-three-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-three-roof",
+        "authoredIndex": 3,
+        "expandedIndex": 52
+      },
+      {
+        "id": "suite-two-roof",
+        "authoredIndex": 2,
+        "expandedIndex": 41
+      }
+    ]
+  },
+  {
+    "id": "suite-four-roof",
+    "relatedIds": [
+      "suite-five-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-four-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-four-roof",
+        "authoredIndex": 4,
+        "expandedIndex": 63
+      },
+      {
+        "id": "suite-five-roof",
+        "authoredIndex": 5,
+        "expandedIndex": 74
+      }
+    ]
+  },
+  {
+    "id": "suite-five-roof",
+    "relatedIds": [
+      "suite-four-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-five-roof: roof geometry intersects suite-four-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-five-roof",
+        "authoredIndex": 5,
+        "expandedIndex": 74
+      },
+      {
+        "id": "suite-four-roof",
+        "authoredIndex": 4,
+        "expandedIndex": 63
+      }
+    ]
+  },
+  {
+    "id": "suite-five-roof",
+    "relatedIds": [
+      "suite-six-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-five-roof: roof geometry intersects suite-six-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-five-roof",
+        "authoredIndex": 5,
+        "expandedIndex": 74
+      },
+      {
+        "id": "suite-six-roof",
+        "authoredIndex": 6,
+        "expandedIndex": 85
+      }
+    ]
+  },
+  {
+    "id": "suite-six-roof",
+    "relatedIds": [
+      "suite-five-roof"
+    ],
+    "rule": "assembly-roof-junction",
+    "message": "suite-six-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly.",
+    "provenance": [
+      {
+        "id": "suite-six-roof",
+        "authoredIndex": 6,
+        "expandedIndex": 85
+      },
+      {
+        "id": "suite-five-roof",
+        "authoredIndex": 5,
+        "expandedIndex": 74
+      }
+    ]
+  },
+  {
+    "id": "pool-water",
+    "relatedIds": [
+      "ocean-link"
+    ],
+    "rule": "water-obstruction",
+    "message": "pool-water: solid ocean-link crosses the interior water plane; split the floor/deck around the pool reservation or explicitly redesign the water. Geometry was not moved.",
+    "provenance": [
+      {
+        "id": "pool-water",
+        "authoredIndex": 7,
+        "expandedIndex": 88
+      },
+      {
+        "id": "ocean-link",
+        "authoredIndex": 15,
+        "expandedIndex": 107
+      }
+    ]
+  },
+  {
+    "id": "belvedere-rail-front",
+    "rule": "railing-deck",
+    "message": "belvedere-rail-front: Railing base and full rendered span need a supporting deck at the walking surface.",
+    "provenance": [
+      {
+        "id": "belvedere-rail-front",
+        "authoredIndex": 26,
+        "expandedIndex": 118
+      }
+    ]
+  },
+  {
+    "id": "stair-02",
+    "rule": "support",
+    "message": "stair-02: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support.",
+    "provenance": [
+      {
+        "id": "stair-02",
+        "authoredIndex": 29,
+        "expandedIndex": 121
+      }
+    ]
+  },
+  {
+    "id": "stair-03",
+    "rule": "support",
+    "message": "stair-03: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support.",
+    "provenance": [
+      {
+        "id": "stair-03",
+        "authoredIndex": 30,
+        "expandedIndex": 122
+      }
+    ]
+  },
+  {
+    "id": "stair-04",
+    "rule": "support",
+    "message": "stair-04: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support.",
+    "provenance": [
+      {
+        "id": "stair-04",
+        "authoredIndex": 31,
+        "expandedIndex": 123
+      }
+    ]
+  },
+  {
+    "id": "stair-05",
+    "rule": "support",
+    "message": "stair-05: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support.",
+    "provenance": [
+      {
+        "id": "stair-05",
+        "authoredIndex": 32,
+        "expandedIndex": 124
+      }
+    ]
+  }
+]

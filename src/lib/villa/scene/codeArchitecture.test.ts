@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import { constructionCapabilityReference } from './capabilityReference';
 import { codeArchitectureStudies } from './codeArchitectureProof';
-import { applySceneOperations, elementSchema, operationSchema, validateScene } from './model';
+import { applySceneOperations, elementFieldsSchema, operationSchema, validateScene } from './model';
 import { sceneSpatialGeometry } from './spatial';
 import { sceneRelationshipIssues } from './relationships';
 import { sceneSystemPrompt } from './terra';
@@ -9,7 +9,7 @@ import { useProjectStore } from '@/store/useProjectStore';
 
 it('derives all executable fields and tags for all generation/edit modes',()=>{
  const reference=constructionCapabilityReference();
- for(const field of Object.keys(elementSchema.shape))expect(reference).toContain(`"${field}"`);
+ for(const field of Object.keys(elementFieldsSchema.shape))expect(reference).toContain(`"${field}"`);
  for(const schema of operationSchema.options)expect(reference).toContain(schema.shape.op.value);
  for(const editIntent of ['refine','redesign','complete'] as const)
   expect(sceneSystemPrompt({mode:'edit',editIntent,prompt:'Improve architecture',current:codeArchitectureStudies().solana})).toContain(reference);

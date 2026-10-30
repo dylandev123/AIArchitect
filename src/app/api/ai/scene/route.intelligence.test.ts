@@ -25,8 +25,8 @@ it('sends concept, scale, approved knowledge and capabilities through the real h
   const response=await POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify(input)}));
   expect(response.status).toBe(200);
   const system=captured.generate.mock.calls[0][0].system;
-  expect(system).toContain('PLAYGROUND PRINCIPLES, NOT TEMPLATES');
-  expect(system).toContain('CONCEPT SELECTION WITHIN THIS RESPONSE');
+  expect(system).toContain('Neither assemblies, stored recipes nor previous projects prescribe these choices');
+  expect(system).toContain('Record the selected design and its constructed relationships');
   expect(system).toContain('Never equate a $25m property with $25m of building work');
   expect(system).toContain(constructionCapabilityReference());
   expect(system).toContain('RETRIEVED ARCHITECTURAL KNOWLEDGE');

@@ -1,0 +1,479 @@
+{
+  "scaleRationale": "The explicit US$25 million value is treated as a USD ambition reference rather than a construction budget, valuation, or formula for floor area. The selected estate is intentionally extensive enough for six independent bedroom suites, a substantial shared salon, outdoor entertaining, and a pool court, while retaining human-scale suite pavilions. A flat Y=0 construction plane is used despite the gently sloping waterfront brief; no surveyed slope, shoreline, setback, or flood datum has been invented. The architecture prioritizes a crafted Caribbean resort sequence and differentiated indoor-outdoor rooms rather than a maximized mansion footprint. Local costs, market value, engineering, code, coastal resilience, and service systems require separate professional verification.",
+  "arrivalAndCirculation": "Arrival is from the landward -Z side onto a limestone forecourt, then along a sheltered side walk to the principal glazed salon threshold facing the pool court. The public route continues through the main salon to the pool terrace and curved ocean lounge, while six private suite entries are reached from separate east and west garden walks. Service is grouped within the salon’s landward rear zone and has a direct exterior-side path, although kitchen equipment and back-of-house fit-out are not modeled. An exterior stair rises from the arrival court to a constructed belvedere deck with guardrails and canopy, making the elevated viewing level accessible.",
+  "volumeHierarchy": "Two alternatives were considered: a single stacked oceanfront bar and a court-led pavilion estate. The selected concept, \"Tidal Court Estate,\" uses a dominant 18 m salon pavilion as the social datum, six smaller suite pavilions as deliberately spaced private satellites, and a curved open lounge as the ocean-facing terminus; this avoids a generic enlarged box while keeping circulation legible. Low hip roofs unify the enclosed pavilions, while the raised belvedere and entry canopy create a second, lighter datum. The pool’s long basin is held beyond the primary terrace so water, dry deck, and covered living read as one sequence.",
+  "relationshipsAndViews": "The main salon’s glazed +Z façade opens onto the primary limestone terrace, which reaches the pool’s near dry deck and then the ocean-facing pavilion. East and west suite walks maintain private external routes, with each suite pavilion having its own constructed front entry. The belvedere sits above the arrival court rather than above an occupied roof, preserving the salon roof as a complete independent envelope. Waterfront orientation, sun, wind, ocean edge, and privacy conditions are assumed from the brief and have not been surveyed or simulated.",
+  "roofFacadeAndMaterials": "Ivory enclosure planes, limestone floors and pool coping, bronze-framed glazing, timber soffits, and selective sage screens produce a restrained coastal palette with facade depth rather than applied decoration. Hip roofs are proportioned as low, broad protective forms over every enclosed pavilion, with explicit overhangs and no unsupported mono-pitch geometry. The pavilion builder supplies the only curved roof/shell element, as an open lounge rather than an enclosed room. Deep overhangs, screens, and shaded terraces express climate intent but do not certify ventilation, hurricane resistance, corrosion performance, drainage, or thermal behavior.",
+  "intendedSpaces": [
+    "Landward arrival court",
+    "Main salon and dining",
+    "Open kitchen and service zone",
+    "Suite One",
+    "Suite Two",
+    "Suite Three",
+    "Suite Four",
+    "Suite Five",
+    "Suite Six",
+    "Primary pool terrace",
+    "Rectangular pool basin",
+    "Curved ocean lounge",
+    "Upper arrival belvedere",
+    "Exterior circulation walks"
+  ],
+  "programme": [
+    {
+      "name": "Landward arrival court",
+      "zone": "outdoor",
+      "strategy": "Ground-level limestone forecourt at the landward edge, connected to the protected west-side route and the belvedere stair.",
+      "floorIds": [
+        "arrival-court",
+        "arrival-walk"
+      ],
+      "enclosureIds": [],
+      "roofIds": [
+        "arrival-canopy"
+      ],
+      "accessIds": [
+        "main-salon-glass-2"
+      ],
+      "limitation": "Vehicle turning, gate, paving permeability, planting, and lighting are not modeled."
+    },
+    {
+      "name": "Main salon and dining",
+      "zone": "public",
+      "strategy": "The central main-salon assembly is the shared living and dining volume, between arrival circulation and the pool terrace.",
+      "floorIds": [
+        "main-salon"
+      ],
+      "enclosureIds": [
+        "main-salon-rear",
+        "main-salon-west",
+        "main-salon-east",
+        "main-salon-bay-0",
+        "main-salon-bay-1",
+        "main-salon-bay-2",
+        "main-salon-bay-3",
+        "main-salon-bay-4"
+      ],
+      "roofIds": [
+        "main-salon-roof"
+      ],
+      "accessIds": [
+        "main-salon-glass-2"
+      ],
+      "limitation": "Living, dining, and furniture zones are an open-plan allocation within one enclosed shell; internal furnishings beyond the exterior lounge sofa are not modeled."
+    },
+    {
+      "name": "Open kitchen and service zone",
+      "zone": "service",
+      "strategy": "A landward portion of the main salon is allocated beside the arrival-side route for direct service access and adjacency to dining.",
+      "floorIds": [
+        "main-salon"
+      ],
+      "enclosureIds": [
+        "main-salon-rear",
+        "main-salon-west"
+      ],
+      "roofIds": [
+        "main-salon-roof"
+      ],
+      "accessIds": [
+        "main-salon-glass-2"
+      ],
+      "limitation": "Cabinetry, appliances, storage partitions, plumbing, and a separate service door are not represented."
+    },
+    {
+      "name": "Suite One",
+      "zone": "private",
+      "strategy": "North-west private pavilion reached from the west suite walk; its dedicated assembly creates an independent bedroom-suite shell.",
+      "floorIds": [
+        "suite-one"
+      ],
+      "enclosureIds": [
+        "suite-one-rear",
+        "suite-one-west",
+        "suite-one-east",
+        "suite-one-bay-0",
+        "suite-one-bay-1"
+      ],
+      "roofIds": [
+        "suite-one-roof"
+      ],
+      "accessIds": [
+        "suite-one-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Suite Two",
+      "zone": "private",
+      "strategy": "Central-west private pavilion reached from the continuous west suite walk.",
+      "floorIds": [
+        "suite-two"
+      ],
+      "enclosureIds": [
+        "suite-two-rear",
+        "suite-two-west",
+        "suite-two-east",
+        "suite-two-bay-0",
+        "suite-two-bay-1"
+      ],
+      "roofIds": [
+        "suite-two-roof"
+      ],
+      "accessIds": [
+        "suite-two-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Suite Three",
+      "zone": "private",
+      "strategy": "South-west private pavilion closest to the salon terrace, reached from the west suite walk.",
+      "floorIds": [
+        "suite-three"
+      ],
+      "enclosureIds": [
+        "suite-three-rear",
+        "suite-three-west",
+        "suite-three-east",
+        "suite-three-bay-0",
+        "suite-three-bay-1"
+      ],
+      "roofIds": [
+        "suite-three-roof"
+      ],
+      "accessIds": [
+        "suite-three-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Suite Four",
+      "zone": "private",
+      "strategy": "North-east private pavilion reached from the east suite walk; paired in scale with but spatially separated from the west suites.",
+      "floorIds": [
+        "suite-four"
+      ],
+      "enclosureIds": [
+        "suite-four-rear",
+        "suite-four-west",
+        "suite-four-east",
+        "suite-four-bay-0",
+        "suite-four-bay-1"
+      ],
+      "roofIds": [
+        "suite-four-roof"
+      ],
+      "accessIds": [
+        "suite-four-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Suite Five",
+      "zone": "private",
+      "strategy": "Central-east private pavilion reached from the continuous east suite walk.",
+      "floorIds": [
+        "suite-five"
+      ],
+      "enclosureIds": [
+        "suite-five-rear",
+        "suite-five-west",
+        "suite-five-east",
+        "suite-five-bay-0",
+        "suite-five-bay-1"
+      ],
+      "roofIds": [
+        "suite-five-roof"
+      ],
+      "accessIds": [
+        "suite-five-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Suite Six",
+      "zone": "private",
+      "strategy": "South-east private pavilion closest to the salon terrace, reached from the east suite walk.",
+      "floorIds": [
+        "suite-six"
+      ],
+      "enclosureIds": [
+        "suite-six-rear",
+        "suite-six-west",
+        "suite-six-east",
+        "suite-six-bay-0",
+        "suite-six-bay-1"
+      ],
+      "roofIds": [
+        "suite-six-roof"
+      ],
+      "accessIds": [
+        "suite-six-glass-0"
+      ],
+      "limitation": "Bathroom, wardrobe, and bedroom subrooms are not partitioned within the suite shell."
+    },
+    {
+      "name": "Primary pool terrace",
+      "zone": "outdoor",
+      "strategy": "A dry limestone terrace directly outside the salon is held clear of the separately constructed pool basin and joins the pool near deck.",
+      "floorIds": [
+        "salon-terrace",
+        "pool"
+      ],
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "main-salon-glass-2"
+      ],
+      "limitation": "The terrace is open to weather; pool safety compliance is not verified."
+    },
+    {
+      "name": "Rectangular pool basin",
+      "zone": "outdoor",
+      "strategy": "The rectangular-pool assembly provides a floor, four basin walls, water, coping, and dry perimeter beyond the salon terrace.",
+      "floorIds": [
+        "pool-floor",
+        "pool-deck-x-minus",
+        "pool-deck-x-plus",
+        "pool-deck-far"
+      ],
+      "enclosureIds": [
+        "pool-wall-x-minus",
+        "pool-wall-x-plus",
+        "pool-wall-z-minus",
+        "pool-wall-z-plus"
+      ],
+      "roofIds": [],
+      "accessIds": [],
+      "limitation": "This is a rectangular water basin with constructed perimeter and dry deck, not a hydraulic infinity-edge or overflow system."
+    },
+    {
+      "name": "Curved ocean lounge",
+      "zone": "outdoor",
+      "strategy": "The approved open pavilion is beyond the pool and reached by the far pool deck and bridge plate, creating a sheltered destination rather than another enclosed building.",
+      "floorIds": [
+        "ocean-link"
+      ],
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [],
+      "limitation": "The pavilion is an open elliptical lounge component; it is not a bedroom, enclosed bar, or weatherproof interior."
+    },
+    {
+      "name": "Upper arrival belvedere",
+      "zone": "outdoor",
+      "strategy": "A supported upper deck above the arrival court is reached by individually modeled exterior treads and landing, with a slim protective canopy.",
+      "floorIds": [
+        "belvedere-deck",
+        "stair-01",
+        "stair-02",
+        "stair-03",
+        "stair-04",
+        "stair-05",
+        "stair-06",
+        "stair-07"
+      ],
+      "enclosureIds": [
+        "belvedere-post-west",
+        "belvedere-post-east"
+      ],
+      "roofIds": [
+        "belvedere-canopy"
+      ],
+      "accessIds": [],
+      "limitation": "The belvedere is exterior-only; no internal upper residence is claimed."
+    },
+    {
+      "name": "Exterior circulation walks",
+      "zone": "circulation",
+      "strategy": "West and east ground-level limestone walks connect suite thresholds to the public terrace and arrival route without crossing the pool basin.",
+      "floorIds": [
+        "west-suite-walk",
+        "east-suite-walk",
+        "west-connector",
+        "east-connector",
+        "arrival-walk"
+      ],
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "suite-one-glass-0",
+        "suite-two-glass-0",
+        "suite-three-glass-0",
+        "suite-four-glass-0",
+        "suite-five-glass-0",
+        "suite-six-glass-0"
+      ],
+      "limitation": "Routes are open-air and do not model landscape grading, covered links, or accessibility-code analysis."
+    }
+  ],
+  "spatialRelationships": [
+    {
+      "subject": "main-salon",
+      "target": "salon-terrace",
+      "relation": "adjacent-to",
+      "clearance": 0,
+      "reason": "The social pavilion opens directly onto the primary dry terrace."
+    },
+    {
+      "subject": "salon-terrace",
+      "target": "pool",
+      "relation": "adjacent-to",
+      "clearance": 0.3,
+      "reason": "A deliberate dry threshold separates the salon terrace from the pool assembly’s near deck."
+    },
+    {
+      "subject": "pool-water",
+      "target": "ocean-lounge",
+      "relation": "facing",
+      "clearance": 0,
+      "reason": "The pool’s long axis and far deck lead toward the open ocean lounge."
+    },
+    {
+      "subject": "ocean-link",
+      "target": "pool-deck-far",
+      "relation": "connected-to",
+      "clearance": 0,
+      "reason": "The link plate makes dry pedestrian contact between the far pool deck and pavilion zone."
+    },
+    {
+      "subject": "west-suite-walk",
+      "target": "suite-one",
+      "relation": "adjacent-to",
+      "clearance": 0,
+      "reason": "Suite One has a dedicated outdoor approach."
+    },
+    {
+      "subject": "east-suite-walk",
+      "target": "suite-four",
+      "relation": "adjacent-to",
+      "clearance": 0,
+      "reason": "Suite Four has a dedicated outdoor approach."
+    },
+    {
+      "subject": "belvedere-deck",
+      "target": "arrival-court",
+      "relation": "above",
+      "clearance": 3.2,
+      "reason": "The viewing deck creates the estate’s elevated arrival datum while remaining structurally supported by posts."
+    },
+    {
+      "subject": "main-salon-roof",
+      "target": "belvedere-deck",
+      "relation": "clear-of",
+      "clearance": 2.4,
+      "reason": "The elevated deck is placed over the forecourt rather than intersecting the complete salon roof."
+    }
+  ],
+  "designDecisions": [
+    {
+      "disposition": "constructed",
+      "knowledgeId": "property-value-25m-50m",
+      "decision": "Used the value label only as a cue for a carefully layered estate sequence with shared living, private suites, roof hierarchy, and outdoor entertaining.",
+      "elementIds": [
+        "main-salon",
+        "suite-one",
+        "suite-two",
+        "suite-three",
+        "suite-four",
+        "suite-five",
+        "suite-six",
+        "pool",
+        "ocean-lounge"
+      ],
+      "limitation": "No cost estimate, appraisal, or luxury certification is asserted."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "estate-composition",
+      "decision": "Constructed a strong central residence, subordinate suite pavilions, differentiated arrival, and pool-oriented social court.",
+      "elementIds": [
+        "main-salon",
+        "arrival-court",
+        "west-suite-walk",
+        "east-suite-walk",
+        "pool"
+      ],
+      "limitation": "Service circulation is an open exterior path rather than a fully enclosed service wing."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "infinity-pool",
+      "decision": "Constructed a substantial rectangular basin with explicit floor, walls, coping, water, and dry circuit beyond the shared terrace.",
+      "elementIds": [
+        "pool",
+        "pool-floor",
+        "pool-water",
+        "pool-wall-x-minus",
+        "pool-wall-x-plus",
+        "pool-wall-z-minus",
+        "pool-wall-z-plus"
+      ],
+      "limitation": "No infinity edge, catch basin, hydraulics, filtration, or safety certification is represented."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "tropical-envelope",
+      "decision": "Applied deep hip-roof overhangs, shaded glazing, and screening to form a maintainable coastal-envelope intent.",
+      "elementIds": [
+        "main-salon-roof",
+        "suite-one-roof",
+        "suite-four-roof",
+        "west-screen",
+        "east-screen"
+      ],
+      "limitation": "Orientation, wind, hurricane, corrosion, ventilation, and thermal performance are not simulated or certified."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "waterfront-estate",
+      "decision": "Directed the public salon, terrace, pool, and open lounge toward the assumed +Z ocean side while keeping suite entries on separate side walks.",
+      "elementIds": [
+        "main-salon",
+        "salon-terrace",
+        "pool",
+        "ocean-lounge",
+        "west-suite-walk",
+        "east-suite-walk"
+      ],
+      "limitation": "The shoreline, water access, setbacks, flood elevation, and legal conditions are unknown and not modeled."
+    },
+    {
+      "disposition": "constructed",
+      "knowledgeId": "outdoor-entertaining",
+      "decision": "Made the pool terrace and curved pavilion actual furnished outdoor destinations connected to the salon and pool deck.",
+      "elementIds": [
+        "salon-terrace",
+        "ocean-link",
+        "ocean-lounge",
+        "ocean-sofa"
+      ],
+      "limitation": "No outdoor kitchen appliances, plumbing, bar equipment, or smoke control is represented."
+    },
+    {
+      "disposition": "considered",
+      "knowledgeId": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+      "decision": "Considered the ventilated mono-pitch roof character but selected low hip roofs and the approved curved pavilion roof instead.",
+      "elementIds": [
+        "main-salon-roof",
+        "suite-one-roof",
+        "ocean-lounge"
+      ],
+      "limitation": "Mono-pitch roofs, standing-seam finish, ridge ventilation, gutters, downpipes, and rainwater systems are not represented by the selected construction."
+    },
+    {
+      "disposition": "guidance",
+      "knowledgeId": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+      "decision": "Used the principle of a framed protected pedestrian threshold through a constructed forecourt, canopy, and separate pool-side route.",
+      "elementIds": [
+        "arrival-court",
+        "arrival-walk",
+        "arrival-canopy",
+        "main-salon"
+      ],
+      "limitation": "No driveway, gate, turning geometry, planting, lighting, or vehicle-clearance validation is constructed."
+    }
+  ]
+}

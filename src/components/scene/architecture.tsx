@@ -51,8 +51,8 @@ export function Slats({ at, count, spacing, size, axis = "x", color = teak }: {
 }
 
 /** Glazing fills real openings. Thin reflective glass lets the furnished rooms read through it. */
-export function Glazing({ at, width, height, side = false, panels = 4, railing = false }: {
-  at: Vector; width: number; height: number; side?: boolean; panels?: number; railing?: boolean;
+export function Glazing({ at, width, height, side = false, panels = 4, railing = false, frameColor }: {
+  at: Vector; width: number; height: number; side?: boolean; panels?: number; railing?: boolean; frameColor?: string;
 }) {
   return <group position={at} rotation={[0, side ? Math.PI / 2 : 0, 0]} name={railing ? "Frameless balcony glass" : "Floor-to-ceiling glazing"}>
     <mesh>
@@ -60,15 +60,15 @@ export function Glazing({ at, width, height, side = false, panels = 4, railing =
       <meshPhysicalMaterial color="#8daf9d" transparent opacity={railing ? .13 : .21} roughness={.07}
         metalness={.2} envMapIntensity={1.8} clearcoat={1} clearcoatRoughness={.05} depthWrite={false} />
     </mesh>
-    {[-1, 1].map(s => <Box key={s} at={[0, s * height / 2, 0]} size={[width + .06, railing ? .025 : .075, .075]} />)}
-    {!railing && Array.from({ length: panels + 1 }, (_, i) => <Box key={i} at={[-width / 2 + i * width / panels, 0, 0]} size={[.055, height, .085]} />)}
-    {railing && [-1, 1].map(s => <Box key={s} at={[s * (width / 2 - .12), -.44 * height, 0]} size={[.07, .13, .08]} />)}
+    {[-1, 1].map(s => <Box key={s} color={frameColor} at={[0, s * height / 2, 0]} size={[width + .06, railing ? .025 : .075, .075]} />)}
+    {!railing && Array.from({ length: panels + 1 }, (_, i) => <Box key={i} color={frameColor} at={[-width / 2 + i * width / panels, 0, 0]} size={[.055, height, .085]} />)}
+    {railing && [-1, 1].map(s => <Box key={s} color={frameColor} at={[s * (width / 2 - .12), -.44 * height, 0]} size={[.07, .13, .08]} />)}
   </group>;
 }
 
-export function Roof({ at, size }: { at: Vector; size: Vector }) {
+export function Roof({ at, size, color }: { at: Vector; size: Vector; color?: string }) {
   return <group name="Floating limestone roof with teak soffit">
-    <FinishBox name={`roof-${at.join("-")}`} at={at} size={size} surface="render" />
+    <FinishBox name={`roof-${at.join("-")}`} at={at} size={size} color={color} surface="render" />
     <Box at={[at[0], at[1] - size[1] / 2 - .045, at[2]]} size={[size[0] - .16, .07, size[2] - .16]} color={teak} />
     <Box at={[at[0], at[1] + size[1] / 2 + .025, at[2]]} size={[size[0] - .42, .05, size[2] - .42]} color="#b5b2a4" />
   </group>;

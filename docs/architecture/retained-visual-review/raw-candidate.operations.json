@@ -1,0 +1,231 @@
+{
+  "name": "Garden Court Family House",
+  "summary": "Refined the rear living elevation into a recessed, symmetrical loggia facade at Z=-3.1, with solid end piers, two broad bronze glazed fields and a centered operable rear door. The dining canopy is resized and centered over the new threshold and central terrace, with its existing four posts reset to the canopy corners and a new aligned front fascia edge. Pool, wings, roofs, terrace slab, terrain and all unrelated elements remain unchanged.",
+  "unsupported": [],
+  "operations": [
+    {
+      "op": "remove",
+      "id": "garden-door"
+    },
+    {
+      "op": "remove",
+      "id": "rear-left-wall"
+    },
+    {
+      "op": "remove",
+      "id": "rear-garden-wall"
+    },
+    {
+      "op": "remove",
+      "id": "rear-right-wall"
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "rear-loggia-wall-west",
+        "label": "Recessed rear loggia west solid end",
+        "kind": "wall",
+        "at": [
+          -5.2,
+          1.75,
+          -3.1
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "window",
+        "id": "rear-loggia-glazing-west",
+        "label": "Rear loggia west bronze glazed field",
+        "kind": "glazing",
+        "at": [
+          -2.6,
+          1.75,
+          -3.1
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.2,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "window",
+        "id": "rear-loggia-glazing-east",
+        "label": "Rear loggia east bronze glazed field",
+        "kind": "glazing",
+        "at": [
+          2.6,
+          1.75,
+          -3.1
+        ],
+        "rotation": 0,
+        "size": [
+          3.6,
+          3.2,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "id": "rear-loggia-wall-east",
+        "label": "Recessed rear loggia east solid end",
+        "kind": "wall",
+        "at": [
+          5.2,
+          1.75,
+          -3.1
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "exterior-door",
+        "id": "rear-loggia-door",
+        "label": "Centered operable rear loggia door",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.75,
+          -3.1
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          3.2,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "id": "rear-loggia-sill",
+        "label": "Flush rear loggia threshold sill",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          -3.55
+        ],
+        "rotation": 0,
+        "size": [
+          1.6,
+          0.15,
+          0.9
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "move",
+      "id": "dining-canopy",
+      "at": [
+        0,
+        3.3,
+        -5.35
+      ]
+    },
+    {
+      "op": "resize",
+      "id": "dining-canopy",
+      "size": [
+        7.4,
+        0.18,
+        4
+      ]
+    },
+    {
+      "op": "move",
+      "id": "dining-post-west-front",
+      "at": [
+        -3.7,
+        1.65,
+        -3.35
+      ]
+    },
+    {
+      "op": "move",
+      "id": "dining-post-east-front",
+      "at": [
+        3.7,
+        1.65,
+        -3.35
+      ]
+    },
+    {
+      "op": "move",
+      "id": "dining-post-west-rear",
+      "at": [
+        -3.7,
+        1.65,
+        -7.35
+      ]
+    },
+    {
+      "op": "move",
+      "id": "dining-post-east-rear",
+      "at": [
+        3.7,
+        1.65,
+        -7.35
+      ]
+    },
+    {
+      "op": "add",
+      "element": {
+        "semanticType": "material",
+        "id": "rear-loggia-canopy-edge",
+        "label": "Rear loggia canopy front fascia edge",
+        "kind": "volume",
+        "at": [
+          0,
+          3.21,
+          -3.35
+        ],
+        "rotation": 0,
+        "size": [
+          7.4,
+          0.24,
+          0.12
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+
+ RUN  v3.2.7 /Users/dylandevaux/Desktop/AIArchitect
+
+ ✓ src/lib/villa/scene/retainedEstateDiagnosis.test.ts (4 tests) 270ms
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+ ✓ src/lib/villa/scene/planningBoundary.test.ts (5 tests) 250ms
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+ ✓ src/lib/villa/scene/terra.test.ts (7 tests) 385ms
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+stdout | src/lib/library/architecture/expansion.test.ts > round-trips every expanded entry through the existing atomic 100-entry bulk importer
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-expansion-6KFo8I/library.json
+
+ ✓ src/lib/library/architecture/expansion.test.ts (6 tests) 411ms
+ ✓ src/lib/villa/scene/replacementSafety.test.ts (7 tests) 417ms
+ ✓ src/lib/villa/visual-review.test.ts (10 tests) 472ms
+stdout | src/lib/villa/scene/assemblyIntegration.test.ts > uses normal project history for assembly child edits and whole-wing resizing
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '8ce25bab-4ab6-4580-832d-5be5fa6e80fc'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '8ce25bab-4ab6-4580-832d-5be5fa6e80fc'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '8ce25bab-4ab6-4580-832d-5be5fa6e80fc'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '8ce25bab-4ab6-4580-832d-5be5fa6e80fc'
+}
+
+ ✓ src/lib/villa/scene/assemblyIntegration.test.ts (7 tests) 772ms
+   ✓ uses normal project history for assembly child edits and whole-wing resizing  698ms
+stdout | src/lib/villa/scene/generationReview.test.ts > constructs a scoped structural mock through the normal transaction and preserves unrelated elements
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '862d206c-88f2-4064-8633-35deaf836770'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '862d206c-88f2-4064-8633-35deaf836770'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '862d206c-88f2-4064-8633-35deaf836770'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '862d206c-88f2-4064-8633-35deaf836770'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes relocated-suite, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '8d706e24-12c9-4549-8df4-65006ab9ca8c'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '8d706e24-12c9-4549-8df4-65006ab9ca8c'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'storage-rehydrate',
+  projectId: '8d706e24-12c9-4549-8df4-65006ab9ca8c'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes relocated-suite, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'undo',
+  projectId: '8d706e24-12c9-4549-8df4-65006ab9ca8c'
+}
+[DIRECT SCENE] {
+  revision: 5,
+  source: 'redo',
+  projectId: '8d706e24-12c9-4549-8df4-65006ab9ca8c'
+}
+
+stdout | src/lib/villa/scene/exteriorFirst.test.ts > keeps facade edits and deferred scope through actual project history, Undo/Redo and JSON reload
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: 'fbe63791-a986-4d59-91e8-d8b8061ce507'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: 'fbe63791-a986-4d59-91e8-d8b8061ce507'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: 'fbe63791-a986-4d59-91e8-d8b8061ce507'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: 'fbe63791-a986-4d59-91e8-d8b8061ce507'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 6,
+  source: 'appendVersion',
+  projectId: '6b70b292-804a-40b2-a16b-7de12635e5cc'
+}
+[DIRECT SCENE] {
+  revision: 7,
+  source: 'appendVersion',
+  projectId: '6b70b292-804a-40b2-a16b-7de12635e5cc'
+}
+[DIRECT SCENE] {
+  revision: 8,
+  source: 'storage-rehydrate',
+  projectId: '6b70b292-804a-40b2-a16b-7de12635e5cc'
+}
+
+ ✓ src/lib/villa/scene/exteriorFirst.test.ts (13 tests) 344ms
+ ✓ src/lib/villa/scene/generationReview.test.ts (20 tests) 811ms
+   ✓ constructs a scoped structural mock through the normal transaction and preserves unrelated elements  357ms
+stdout | src/lib/villa/scene/redesign.test.ts > executes study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 9,
+  source: 'undo',
+  projectId: '6b70b292-804a-40b2-a16b-7de12635e5cc'
+}
+[DIRECT SCENE] {
+  revision: 10,
+  source: 'redo',
+  projectId: '6b70b292-804a-40b2-a16b-7de12635e5cc'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes developed-study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 11,
+  source: 'appendVersion',
+  projectId: '14f68ce3-1abd-4a97-801d-757268b3a64a'
+}
+[DIRECT SCENE] {
+  revision: 12,
+  source: 'appendVersion',
+  projectId: '14f68ce3-1abd-4a97-801d-757268b3a64a'
+}
+[DIRECT SCENE] {
+  revision: 13,
+  source: 'storage-rehydrate',
+  projectId: '14f68ce3-1abd-4a97-801d-757268b3a64a'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes developed-study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 14,
+  source: 'undo',
+  projectId: '14f68ce3-1abd-4a97-801d-757268b3a64a'
+}
+[DIRECT SCENE] {
+  revision: 15,
+  source: 'redo',
+  projectId: '14f68ce3-1abd-4a97-801d-757268b3a64a'
+}
+
+ ✓ src/lib/villa/scene/redesign.test.ts (4 tests) 514ms
+stdout | src/lib/villa/scene/profileFreedom.test.ts > preserves nested transforms, actual support, curve edits, history and saved JSON
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: 'a956ed02-434d-4ca0-81fb-de38e858f4dd'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: 'a956ed02-434d-4ca0-81fb-de38e858f4dd'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: 'a956ed02-434d-4ca0-81fb-de38e858f4dd'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: 'a956ed02-434d-4ca0-81fb-de38e858f4dd'
+}
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+ ✓ src/lib/library/architecture/propertyValue.test.ts (4 tests) 230ms
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+stdout | src/lib/library/architecture/research.test.ts > keeps findings proposed through the real shared store; only reviewed revisions enter Generate with citations
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-research-u5Mc5r/library.json
+
+ ✓ src/lib/library/architecture/research.test.ts (3 tests) 151ms
+ ✓ src/lib/villa/scene/generationSafety.test.ts (4 tests) 195ms
+ ✓ src/lib/villa/scene/profileFreedom.test.ts (15 tests) 890ms
+ ✓ src/lib/villa/scene/integration.test.ts (4 tests) 128ms
+ ✓ src/lib/library/architecture/composable.test.ts (2 tests) 334ms
+stdout | src/lib/villa/scene/codeArchitecture.test.ts > constructs two distinct editable compositions and preserves localized changes through history and reload
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: 'f0a9c9e1-e6af-416e-9a56-ee0de4c65c9c'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: 'f0a9c9e1-e6af-416e-9a56-ee0de4c65c9c'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'appendVersion',
+  projectId: 'f0a9c9e1-e6af-416e-9a56-ee0de4c65c9c'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'undo',
+  projectId: 'f0a9c9e1-e6af-416e-9a56-ee0de4c65c9c'
+}
+[DIRECT SCENE] {
+  revision: 5,
+  source: 'redo',
+  projectId: 'f0a9c9e1-e6af-416e-9a56-ee0de4c65c9c'
+}
+
+ ✓ src/lib/villa/scene/homepageRegression.test.ts (2 tests) 435ms
+   ✓ homepage construction authority > reproduces the retained arrival failure offline while a direct scene bypasses blueprint planning  343ms
+ ✓ src/lib/villa/scene/codeArchitecture.test.ts (3 tests) 404ms
+ ✓ src/lib/villa/scene/architecturalFreedom.test.ts (3 tests) 293ms
+ ✓ src/lib/library/architecture/requestPipeline.test.ts (5 tests) 93ms
+ ✓ src/lib/villa/scene/relationships.test.ts (10 tests) 80ms
+ ✓ src/lib/villa/scene/programmeCoordination.test.ts (4 tests) 76ms
+ ✓ src/app/api/ai/scene/visual-review/route.test.ts (7 tests) 130ms
+ ✓ src/lib/villa/scene/focusedConstruction.test.ts (6 tests) 157ms
+ ✓ src/lib/villa/scene/completion.test.ts (5 tests) 131ms
+ ✓ src/lib/villa/scene/technicalReview.test.ts (3 tests) 30ms
+ ✓ src/lib/villa/scene/generationDiagnostics.test.ts (2 tests) 102ms
+stdout | src/lib/villa/scene/briefPersistence.test.ts > retains the exact brief through generation, JSON reload, targeted edits, project history and Undo/Redo
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '653974be-8d64-4059-b257-48adf792f732'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '653974be-8d64-4059-b257-48adf792f732'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '653974be-8d64-4059-b257-48adf792f732'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '653974be-8d64-4059-b257-48adf792f732'
+}
+
+ ✓ src/lib/villa/scene/briefPersistence.test.ts (3 tests) 109ms
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+ ✓ src/lib/villa/scene/semanticEditing.test.ts (11 tests) 82ms
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] write /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stderr | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[storage] library write failed: Error: Version conflict: estate-composition
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stderr | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[storage] library write failed: Error: Duplicate title; correct the existing entry or explicitly supersede it
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+stderr | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[storage] library write failed: Error: Version conflict: compact-family
+
+stdout | src/lib/library/architecture/architecture.test.ts > persists edits, optimistic revisions, atomic bulk imports and old library data without migration
+[library-store] read /var/folders/z5/j6tjcfkn3hbf7j436vxh3_000000gn/T/terra-knowledge-AWz21Y/library.json
+
+ ✓ src/lib/villa/scene/estateConcepts.test.ts (2 tests) 73ms
+ ✓ src/lib/library/architecture/architecture.test.ts (5 tests) 178ms
+ ✓ src/lib/villa/scene/generationQuality.test.ts (6 tests) 49ms
+ ✓ src/lib/villa/scene/model.test.ts (4 tests) 46ms
+ ✓ src/lib/villa/scene/planning.test.ts (7 tests) 75ms
+ ✓ src/lib/villa/scene/generateStrict.test.ts (2 tests) 39ms
+stdout | src/lib/villa/scene/interiorConstruction.test.ts > uses the normal Generate resolver, provider adapter and project history without a parallel construction engine
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '271af99d-cd72-418f-917e-765365800684'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '271af99d-cd72-418f-917e-765365800684'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '271af99d-cd72-418f-917e-765365800684'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '271af99d-cd72-418f-917e-765365800684'
+}
+
+ ✓ src/lib/villa/scene/interiorConstruction.test.ts (8 tests) 34ms
+ ✓ src/lib/villa/scene/presentation.test.ts (3 tests) 25ms
+ ✓ src/lib/villa/scene/mansionRecovery.test.ts (3 tests) 40ms
+ ✓ src/lib/villa/scene/assemblyEvidence.test.ts (2 tests) 16ms
+ ✓ src/lib/villa/scene/programme.test.ts (2 tests) 7ms
+ ✓ src/lib/villa/scene/coordination.test.ts (3 tests) 46ms
+ ✓ src/lib/villa/scene/spatial.test.ts (5 tests) 24ms
+ ✓ src/lib/villa/scene/roofs.test.ts (3 tests) 6ms
+ ✓ src/lib/villa/scene/designGuide.test.ts (1 test) 3ms
+
+ Test Files  44 passed (44)
+      Tests  235 passed (235)
+   Start at  09:30:04
+   Duration  5.19s (transform 2.26s, setup 0ms, collect 26.28s, tests 9.36s, environment 5ms, prepare 3.05s)
+

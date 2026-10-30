@@ -1,0 +1,47 @@
+[
+  {
+    label: 'Immutable original',
+    outcome: '[\n' +
+      '  {\n' +
+      '    "code": "invalid_union",\n' +
+      '    "errors": [\n' +
+      '      [\n' +
+      '        {\n' +
+      '          "code": "invalid_value",\n' +
+      '          "values": [\n' +
+      '            "assemble"\n' +
+      '          ]'
+  },
+  {
+    label: 'Diagnostic semantic label only (developer choice, not recovered intent)',
+    outcome: 'SemanticEditError: New collision between dining-post-west-front and main-floor.'
+  },
+  {
+    label: 'Seat dining-post-west-front between slab and canopy',
+    outcome: 'SemanticEditError: New collision between dining-post-east-front and main-floor.'
+  },
+  {
+    label: 'Seat dining-post-east-front between slab and canopy',
+    outcome: 'SemanticEditError: New collision between rear-loggia-sill and main-floor.'
+  },
+  {
+    label: 'Seat dining-post-west-rear between slab and canopy',
+    outcome: 'SemanticEditError: New collision between rear-loggia-sill and main-floor.'
+  },
+  {
+    label: 'Seat dining-post-east-rear between slab and canopy',
+    outcome: 'SemanticEditError: New collision between rear-loggia-sill and main-floor.'
+  },
+  {
+    label: 'Omit redundant sill contained in unchanged main slab',
+    outcome: 'SemanticEditError: New collision between rear-loggia-canopy-edge and main-roof.'
+  },
+  {
+    label: 'Trim fascia top to main roof underside 3.27',
+    outcome: 'Error: Refinement introduced construction findings.'
+  },
+  {
+    label: 'Final diagnostic replay',
+    outcome: 'Error: Refinement introduced construction findings.'
+  }
+]

@@ -1,10 +1,12 @@
+import {emptySnapshot} from '@/lib/library/store';
+vi.mock('@/lib/library/store',async original=>({...await original<typeof import('@/lib/library/store')>(),readLibrary:async()=>emptySnapshot()}));
 import {beforeEach,describe,it,expect,vi} from 'vitest';
 import { laderaPlan } from '@/lib/villa/scene/planning.fixture';
 import { laderaScene } from '@/lib/villa/scene/example';
 const mock=vi.hoisted(()=>({generate:vi.fn()}));
 vi.mock('node:fs/promises',()=>({mkdir:vi.fn(),writeFile:vi.fn()}));
 vi.mock('@/lib/villa/design-learning-store',()=>({listDesignLessonSummaries:async()=>[]}));
-vi.mock('ai',()=>({generateText:mock.generate,Output:{object:(x:unknown)=>x},NoObjectGeneratedError:{isInstance:()=>false}}));
+vi.mock('ai',async original=>({...await original<typeof import('ai')>(),generateText:mock.generate}));
 vi.mock('@/lib/ai/model',()=>({isAiConfigured:()=>true,getAiModel:()=>({}),getAiModelId:()=> 'offline-mock',AI_PROVIDER_OPTIONS:{}}));
 vi.mock('@/lib/ai/usage/track',()=>({withUsageLogging:(_meta:unknown,fn:()=>unknown)=>fn()}));
 import { POST } from './route';
@@ -13,7 +15,7 @@ describe('direct scene route (no live provider)',()=>{
  beforeEach(()=>{vi.stubEnv('NODE_ENV','development');mock.generate.mockReset();});
  it('replays Casa Ladera without a legacy configuration validator',async()=>{
  mock.generate.mockResolvedValue({finishReason:'stop',output:{architecturalPlan:laderaPlan,name:laderaScene.name,summary:'Replay',unsupported:[],operations:laderaScene.elements.map(element=>({op:'add',element}))}});
- const response=await POST(req({prompt:'Casa Ladera',mode:'generate'}));expect(response.status).toBe(200);expect((await response.json()).scene).toEqual({...laderaScene,architecturalPlan:laderaPlan});expect(mock.generate).toHaveBeenCalledOnce();
+ const response=await POST(req({prompt:'Casa Ladera',mode:'generate'}));expect(await response.clone().json()).not.toHaveProperty('error');expect(response.status).toBe(200);expect((await response.json()).scene).toEqual({...laderaScene,generationBrief:'Casa Ladera',architecturalPlan:laderaPlan});expect(mock.generate).toHaveBeenCalledOnce();
  });
  it('exposes the same primary construction handler in production',async()=>{
  vi.stubEnv('NODE_ENV','production');

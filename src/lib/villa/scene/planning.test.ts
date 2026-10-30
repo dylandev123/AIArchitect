@@ -21,7 +21,7 @@ it('accepts inconsistent planning with visible warnings while preserving legacy 
  const output={name:laderaScene.name,summary:'Complete',unsupported:[],operations:laderaScene.elements.map(element=>({op:'add',element}))};
  expect(sceneProviderOutputSchema({mode:'generate',prompt:'House'}).safeParse(output).success).toBe(false);
  expect(resolveSceneResult({mode:'generate',prompt:'House'},{...output,architecturalPlan:{...laderaPlan,levels:3}}).architecturalAudit.issues.join(' ')).toContain('Planned 3 levels');
- expect(resolveSceneResult({mode:'generate',prompt:'Replay'},output).scene).toEqual(laderaScene);
+ expect(resolveSceneResult({mode:'generate',prompt:'Replay'},output).scene).toEqual({...laderaScene,generationBrief:'Replay'});
 });
 it('does not count an open deck with a remote wall as an enclosed room',()=>{
  const scene={...laderaScene,elements:laderaScene.elements.filter(e=>!['salon-front','salon-west','salon-east'].includes(e.id))};

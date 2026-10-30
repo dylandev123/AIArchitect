@@ -1,0 +1,1195 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Courtyard Ribbon Family House",
+  "generationBrief": "Design a contemporary family house with four bedrooms, a pool, private garden and covered outdoor dining.",
+  "elements": [
+    {
+      "semanticType": "floor",
+      "aliases": [
+        "principal slab"
+      ],
+      "id": "main-floor",
+      "label": "Main Residence Floor Slab",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        11
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "aliases": [
+        "front west enclosure"
+      ],
+      "id": "front-west-wall",
+      "label": "Front West Solid Wall",
+      "kind": "wall",
+      "at": [
+        -5.25,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        5.5,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "wall",
+      "aliases": [
+        "front east enclosure"
+      ],
+      "id": "front-east-wall",
+      "label": "Front East Solid Wall",
+      "kind": "wall",
+      "at": [
+        5.25,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        5.5,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "entry-portal",
+      "label": "entry-portal facade",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        -5.5
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "entry-portal-panel",
+      "label": "entry-portal entrance",
+      "kind": "entrance",
+      "parent": "entry-portal",
+      "at": [
+        0,
+        -0.44999999999999996,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.5,
+        2.5,
+        0.06
+      ],
+      "material": "timber",
+      "panels": 1
+    },
+    {
+      "semanticType": "wall",
+      "aliases": [
+        "west private facade"
+      ],
+      "id": "west-wall",
+      "label": "West Privacy Wall with Window",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        11,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": 0.8,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.5,
+        "glazed": true
+      }
+    },
+    {
+      "semanticType": "wall",
+      "aliases": [
+        "east private facade"
+      ],
+      "id": "east-wall",
+      "label": "East Privacy Wall with Window",
+      "kind": "wall",
+      "at": [
+        8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        11,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "opening": {
+        "x": -0.8,
+        "sill": 1,
+        "width": 2.4,
+        "height": 1.5,
+        "glazed": true
+      }
+    },
+    {
+      "id": "rear-glass-west",
+      "label": "rear-glass-west facade",
+      "kind": "wall",
+      "at": [
+        -4.5,
+        1.9,
+        5.5
+      ],
+      "rotation": 0,
+      "size": [
+        7,
+        3.4,
+        0.3
+      ],
+      "material": "bronze",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.2,
+        "width": 5.8,
+        "height": 2.7,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-glass-west-panel",
+      "label": "rear-glass-west glazing",
+      "kind": "glazing",
+      "parent": "rear-glass-west",
+      "at": [
+        0,
+        -0.1499999999999999,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.8,
+        2.7,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 3
+    },
+    {
+      "semanticType": "wall",
+      "aliases": [
+        "garden pier"
+      ],
+      "id": "rear-center-pier",
+      "label": "Rear Center Limestone Pier",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        5.5
+      ],
+      "rotation": 0,
+      "size": [
+        2,
+        3.4,
+        0.3
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "rear-glass-east",
+      "label": "rear-glass-east facade",
+      "kind": "wall",
+      "at": [
+        4.5,
+        1.9,
+        5.5
+      ],
+      "rotation": 0,
+      "size": [
+        7,
+        3.4,
+        0.3
+      ],
+      "material": "bronze",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.2,
+        "width": 5.8,
+        "height": 2.7,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-glass-east-panel",
+      "label": "rear-glass-east glazing",
+      "kind": "glazing",
+      "parent": "rear-glass-east",
+      "at": [
+        0,
+        -0.1499999999999999,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5.8,
+        2.7,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 3
+    },
+    {
+      "semanticType": "roof",
+      "aliases": [
+        "primary roof plane"
+      ],
+      "id": "main-roof",
+      "label": "Main Residence Flat Roof",
+      "kind": "roof",
+      "at": [
+        0,
+        3.72,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16.8,
+        0.24,
+        11.8
+      ],
+      "material": "bronze",
+      "roofForm": "flat",
+      "overhang": 0.4,
+      "panels": 4
+    },
+    {
+      "semanticType": "terrace",
+      "aliases": [
+        "garden terrace"
+      ],
+      "id": "rear-terrace",
+      "label": "Rear Limestone Terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        6.5
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "roof",
+      "aliases": [
+        "outdoor dining shade"
+      ],
+      "id": "dining-canopy",
+      "label": "Covered Outdoor Dining Canopy",
+      "kind": "roof",
+      "at": [
+        -5,
+        3.32,
+        6.4
+      ],
+      "rotation": 0,
+      "size": [
+        6.4,
+        0.24,
+        2.4
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0,
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "aliases": [
+        "dining canopy support"
+      ],
+      "id": "dining-post-west",
+      "label": "Outdoor Dining West Support",
+      "kind": "volume",
+      "at": [
+        -7.7,
+        1.6,
+        7.4
+      ],
+      "rotation": 0,
+      "size": [
+        0.28,
+        3.2,
+        0.28
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "aliases": [
+        "dining canopy support"
+      ],
+      "id": "dining-post-east",
+      "label": "Outdoor Dining East Support",
+      "kind": "volume",
+      "at": [
+        -2.3,
+        1.6,
+        7.4
+      ],
+      "rotation": 0,
+      "size": [
+        0.28,
+        3.2,
+        0.28
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "semanticType": "floor",
+      "aliases": [
+        "entry threshold"
+      ],
+      "id": "entry-porch",
+      "label": "Covered Entry Porch",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -6
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        0.2,
+        1
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "roof",
+      "aliases": [
+        "arrival canopy"
+      ],
+      "id": "entry-canopy",
+      "label": "Front Entrance Canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.22,
+        -6.05
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        0.24,
+        1.35
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0,
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "aliases": [
+        "entry canopy support"
+      ],
+      "id": "entry-post-west",
+      "label": "Entry Canopy West Support",
+      "kind": "volume",
+      "at": [
+        -2.25,
+        1.55,
+        -6.55
+      ],
+      "rotation": 0,
+      "size": [
+        0.24,
+        3.1,
+        0.24
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "aliases": [
+        "entry canopy support"
+      ],
+      "id": "entry-post-east",
+      "label": "Entry Canopy East Support",
+      "kind": "volume",
+      "at": [
+        2.25,
+        1.55,
+        -6.55
+      ],
+      "rotation": 0,
+      "size": [
+        0.24,
+        3.1,
+        0.24
+      ],
+      "material": "ivory",
+      "panels": 4
+    },
+    {
+      "semanticType": "path",
+      "aliases": [
+        "pedestrian arrival"
+      ],
+      "id": "arrival-path",
+      "label": "Limestone Arrival Path",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -7.75
+      ],
+      "rotation": 0,
+      "size": [
+        2.4,
+        0.2,
+        2.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool",
+      "label": "family-pool deck",
+      "kind": "plate",
+      "at": [
+        0,
+        0,
+        8.25
+      ],
+      "rotation": 0,
+      "size": [
+        12.2,
+        0.3,
+        1.5
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "assemblyKind": "rectangular-pool"
+    },
+    {
+      "id": "family-pool-floor",
+      "label": "family-pool floor",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        0,
+        -1.45,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        9.4,
+        0.2,
+        7.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-water",
+      "label": "family-pool water",
+      "kind": "water",
+      "parent": "family-pool",
+      "at": [
+        0,
+        0.05,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        9,
+        0.02,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-wall-z-minus",
+      "label": "family-pool wall-z-minus",
+      "kind": "wall",
+      "parent": "family-pool",
+      "at": [
+        0,
+        -0.6,
+        1.35
+      ],
+      "rotation": 0,
+      "size": [
+        9.4,
+        1.5,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-wall-x-minus",
+      "label": "family-pool wall-x-minus",
+      "kind": "wall",
+      "parent": "family-pool",
+      "at": [
+        -4.6,
+        -0.6,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        0.2,
+        1.5,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-coping-z-minus",
+      "label": "family-pool coping-z-minus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        0,
+        0.1,
+        1.1
+      ],
+      "rotation": 0,
+      "size": [
+        10.2,
+        0.1,
+        0.7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-coping-x-minus",
+      "label": "family-pool coping-x-minus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        -4.8,
+        0.1,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        0.6,
+        0.1,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-deck-x-minus",
+      "label": "family-pool deck-x-minus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        -5.6,
+        0,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        1,
+        0.3,
+        8.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-wall-z-plus",
+      "label": "family-pool wall-z-plus",
+      "kind": "wall",
+      "parent": "family-pool",
+      "at": [
+        0,
+        -0.6,
+        8.55
+      ],
+      "rotation": 0,
+      "size": [
+        9.4,
+        1.5,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-wall-x-plus",
+      "label": "family-pool wall-x-plus",
+      "kind": "wall",
+      "parent": "family-pool",
+      "at": [
+        4.6,
+        -0.6,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        0.2,
+        1.5,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-coping-z-plus",
+      "label": "family-pool coping-z-plus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        0,
+        0.1,
+        8.8
+      ],
+      "rotation": 0,
+      "size": [
+        10.2,
+        0.1,
+        0.7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-coping-x-plus",
+      "label": "family-pool coping-x-plus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        4.8,
+        0.1,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        0.6,
+        0.1,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-deck-x-plus",
+      "label": "family-pool deck-x-plus",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        5.6,
+        0,
+        4.95
+      ],
+      "rotation": 0,
+      "size": [
+        1,
+        0.3,
+        8.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "family-pool-deck-far",
+      "label": "family-pool deck-far",
+      "kind": "plate",
+      "parent": "family-pool",
+      "at": [
+        0,
+        0,
+        9.9
+      ],
+      "rotation": 0,
+      "size": [
+        12.2,
+        0.3,
+        1.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "scaleRationale": "A compact single-storey 16 m by 11 m family envelope is sized to reserve four-bedroom capacity while retaining a generous shared living edge, pool terrace and private garden rather than deriving area from an assumed budget.",
+    "arrivalAndCirculation": "The public arrival path reaches a recessed front portal at slab top 0.20 m, with living, dining and garden doors opening directly to the rear terrace at the same datum; private bedroom accommodation and service planning are reserved within the envelope, while all constructed exterior circulation remains ground-level.",
+    "volumeHierarchy": "The 3.40 m primary residence is a single calm limestone datum capped by a 0.24 m flat roof at 3.72 m, with lower 3.20 m covered dining and entry canopies acting as subordinate outdoor volumes.",
+    "relationshipsAndViews": "A central arrival faces the solid street elevation, while broad rear glazing connects the family living zone to a 16 m terrace, covered outdoor dining, rectangular pool and an intentionally unbuilt private-garden reserve beyond.",
+    "roofFacadeAndMaterials": "Limestone enclosure walls, bronze-framed glazing and timber-toned shaded thresholds establish a contemporary, warm palette, with deep roof edges and independent canopy planes giving the long glazed garden facade shade and visual depth.",
+    "constructionScope": "exterior",
+    "intendedSpaces": [
+      "Family living and dining",
+      "Four-bedroom accommodation reserve",
+      "Arrival foyer reserve",
+      "Service and storage reserve",
+      "Covered outdoor dining",
+      "Pool terrace",
+      "Rectangular pool",
+      "Private garden reserve"
+    ],
+    "programme": [
+      {
+        "name": "Family living and dining",
+        "zone": "public",
+        "strategy": "Reserve the broad rear half of the main weatherproof envelope behind two fitted garden-facing glazed bays.",
+        "requirement": {
+          "origin": "design-choice",
+          "briefQuote": "Family living and dining is grouped along the garden-facing facade."
+        },
+        "purpose": "living",
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "rear-glass-west",
+          "rear-glass-east",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ],
+        "accessIds": [
+          "rear-glass-west-panel",
+          "rear-glass-east-panel"
+        ],
+        "limitation": "Exterior-designed, interiors unfinished; dining furniture, kitchen and internal subdivision are deferred."
+      },
+      {
+        "name": "Four-bedroom accommodation reserve",
+        "zone": "private",
+        "strategy": "Allocate the enclosed main floor capacity for four bedrooms around the quieter front and side portions of the house, screened from the pool-facing living edge.",
+        "requirement": {
+          "origin": "user-required",
+          "briefQuote": "four bedrooms"
+        },
+        "purpose": "bedroom",
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-west-wall",
+          "front-east-wall",
+          "entry-portal",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ],
+        "accessIds": [
+          "entry-portal-panel"
+        ],
+        "limitation": "Shared exterior envelope capacity only; four distinct bedrooms, bathrooms, wardrobes, partitions and interior doors are not constructed."
+      },
+      {
+        "name": "Arrival foyer reserve",
+        "zone": "circulation",
+        "strategy": "Place the future foyer immediately inside the fitted front portal and beneath the protected threshold.",
+        "requirement": {
+          "origin": "design-choice",
+          "briefQuote": "A legible covered arrival is provided."
+        },
+        "purpose": "access",
+        "floorIds": [
+          "main-floor",
+          "entry-porch"
+        ],
+        "enclosureIds": [
+          "entry-portal"
+        ],
+        "roofIds": [
+          "entry-canopy"
+        ],
+        "accessIds": [
+          "entry-portal-panel"
+        ],
+        "limitation": "Internal foyer fit-out and circulation partitions are deferred."
+      },
+      {
+        "name": "Service and storage reserve",
+        "zone": "service",
+        "strategy": "Retain an adaptable solid-sided portion of the main envelope away from garden glazing for future laundry, pantry and storage planning.",
+        "requirement": {
+          "origin": "design-choice",
+          "briefQuote": "Service space is retained within the principal envelope."
+        },
+        "purpose": "other",
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-west-wall",
+          "front-east-wall",
+          "west-wall",
+          "east-wall"
+        ],
+        "roofIds": [
+          "main-roof"
+        ],
+        "accessIds": [
+          "entry-portal-panel"
+        ],
+        "limitation": "No service-room subdivision, equipment or cabinetry is built."
+      },
+      {
+        "name": "Covered outdoor dining",
+        "zone": "outdoor",
+        "strategy": "A directly connected terrace bay is sheltered by a lower roof plane on the western side of the garden facade.",
+        "requirement": {
+          "origin": "user-required",
+          "briefQuote": "covered outdoor dining"
+        },
+        "purpose": "outdoor",
+        "floorIds": [
+          "rear-terrace"
+        ],
+        "enclosureIds": [
+          "dining-post-west",
+          "dining-post-east"
+        ],
+        "roofIds": [
+          "dining-canopy"
+        ],
+        "accessIds": [
+          "rear-glass-west-panel"
+        ],
+        "limitation": "Outdoor table, seating, lighting and weather-performance verification are not constructed."
+      },
+      {
+        "name": "Pool terrace",
+        "zone": "outdoor",
+        "strategy": "The full-width terrace meets the pool assembly's near dry deck, providing a continuous dry route outside the basin.",
+        "requirement": {
+          "origin": "design-choice",
+          "briefQuote": "A dry terrace connects the house to the pool."
+        },
+        "purpose": "outdoor",
+        "floorIds": [
+          "rear-terrace",
+          "family-pool",
+          "family-pool-deck-x-minus",
+          "family-pool-deck-x-plus",
+          "family-pool-deck-far"
+        ],
+        "enclosureIds": [],
+        "roofIds": [],
+        "accessIds": [
+          "rear-glass-west-panel",
+          "rear-glass-east-panel"
+        ],
+        "limitation": "Loose outdoor furniture and drainage design are deferred."
+      },
+      {
+        "name": "Rectangular pool",
+        "zone": "outdoor",
+        "strategy": "A centered 9 m by 7 m rectangular basin is fully formed with bottom, perimeter walls, coping and dry deck circuit.",
+        "requirement": {
+          "origin": "user-required",
+          "briefQuote": "a pool"
+        },
+        "purpose": "outdoor",
+        "floorIds": [
+          "family-pool-floor",
+          "family-pool-coping-x-minus",
+          "family-pool-coping-x-plus",
+          "family-pool-coping-z-minus",
+          "family-pool-coping-z-plus"
+        ],
+        "enclosureIds": [
+          "family-pool-wall-x-minus",
+          "family-pool-wall-x-plus",
+          "family-pool-wall-z-minus",
+          "family-pool-wall-z-plus"
+        ],
+        "roofIds": [],
+        "accessIds": [
+          "rear-glass-east-panel"
+        ],
+        "limitation": "The model does not represent filtration, waterproofing, pool equipment, heating, drainage or hydraulic infinity effects."
+      },
+      {
+        "name": "Private garden reserve",
+        "zone": "outdoor",
+        "strategy": "Keep the far side of the pool as permeable, unbuilt garden reserve visible from the house and dining canopy.",
+        "requirement": {
+          "origin": "user-required",
+          "briefQuote": "private garden"
+        },
+        "purpose": "outdoor",
+        "floorIds": [],
+        "enclosureIds": [],
+        "roofIds": [],
+        "accessIds": [],
+        "limitation": "Planting, fencing, gates and landscape irrigation are intentionally unbuilt because direct-scene planting is unavailable."
+      }
+    ],
+    "spatialRelationships": [
+      {
+        "subject": "main-roof",
+        "target": "main-floor",
+        "relation": "covering",
+        "clearance": 0,
+        "reason": "The principal flat roof covers the complete single-storey occupied envelope."
+      },
+      {
+        "subject": "dining-canopy",
+        "target": "rear-terrace",
+        "relation": "covering",
+        "clearance": 0,
+        "reason": "The lower canopy shelters the western outdoor-dining portion of the terrace."
+      },
+      {
+        "subject": "rear-terrace",
+        "target": "family-pool",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The rear terrace meets the pool assembly's near dry deck without crossing water."
+      },
+      {
+        "subject": "family-pool-water",
+        "target": "rear-terrace",
+        "relation": "clear-of",
+        "clearance": 5.75,
+        "reason": "The terrace terminates at the dry near-deck edge and remains outside the reserved water footprint."
+      },
+      {
+        "subject": "entry-porch",
+        "target": "arrival-path",
+        "relation": "adjacent-to",
+        "clearance": 0,
+        "reason": "The approach slab abuts the sheltered front threshold."
+      },
+      {
+        "subject": "dining-post-west",
+        "target": "dining-canopy",
+        "relation": "connected-to",
+        "clearance": 0,
+        "reason": "The western post contacts and supports the canopy edge."
+      },
+      {
+        "subject": "dining-post-east",
+        "target": "dining-canopy",
+        "relation": "connected-to",
+        "clearance": 0,
+        "reason": "The eastern post contacts and supports the canopy edge."
+      }
+    ],
+    "designDecisions": [
+      {
+        "disposition": "constructed",
+        "knowledgeId": "pool-garden-view",
+        "decision": "Constructed a rectangular water basin with explicit bottom, four perimeter walls, coping and dry deck circuit aligned with the terrace.",
+        "elementIds": [
+          "family-pool",
+          "family-pool-floor",
+          "family-pool-water",
+          "family-pool-wall-x-minus",
+          "family-pool-wall-x-plus",
+          "family-pool-wall-z-minus",
+          "family-pool-wall-z-plus"
+        ],
+        "limitation": "Pool services and planted garden outlook are not represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "dining-transition",
+        "decision": "Located the covered outdoor-dining terrace directly beside the rear glazed family-living facade.",
+        "elementIds": [
+          "rear-terrace",
+          "dining-canopy",
+          "rear-glass-west",
+          "rear-glass-west-panel"
+        ],
+        "limitation": "Furniture circulation and kitchen fit-out remain unverified and unbuilt."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "covered-threshold",
+        "decision": "Used a real fitted entrance opening, porch and independently supported canopy for a protected arrival.",
+        "elementIds": [
+          "entry-portal",
+          "entry-portal-panel",
+          "entry-porch",
+          "entry-canopy",
+          "entry-post-west",
+          "entry-post-east",
+          "arrival-path"
+        ],
+        "limitation": "Door hardware and weatherproofing are not represented."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "solid-glass-balance",
+        "decision": "Concentrated broad glazing toward the private pool terrace and retained mostly solid front and side enclosure for privacy.",
+        "elementIds": [
+          "rear-glass-west",
+          "rear-glass-east",
+          "front-west-wall",
+          "front-east-wall",
+          "west-wall",
+          "east-wall"
+        ],
+        "limitation": "Thermal, acoustic and solar performance are not simulated."
+      },
+      {
+        "disposition": "constructed",
+        "knowledgeId": "asymmetric-balance",
+        "decision": "Balanced the long primary residence datum with a lower, offset covered-dining canopy rather than adding a detached pavilion.",
+        "elementIds": [
+          "main-roof",
+          "dining-canopy",
+          "rear-terrace"
+        ],
+        "limitation": "Visual balance is a design intention, not solver-verified."
+      },
+      {
+        "disposition": "considered",
+        "knowledgeId": "outdoor-reading-nook",
+        "decision": "A separate reading pavilion was considered but omitted to preserve a compact family-garden composition and prioritize the requested dining canopy.",
+        "elementIds": [],
+        "limitation": "No dedicated reading nook is constructed."
+      },
+      {
+        "disposition": "unsupported",
+        "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+        "decision": "Layered tropical planting was not constructed because direct-scene plant and tree output is unavailable.",
+        "elementIds": [],
+        "limitation": "The private garden remains an unbuilt landscape reserve."
+      }
+    ]
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "pool-garden-view",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "water"
+      ]
+    },
+    {
+      "id": "dining-transition",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "outdoor-reading-nook",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "roof",
+        "volume"
+      ]
+    },
+    {
+      "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "asymmetric-balance",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "covered-threshold",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "entrance",
+        "roof"
+      ]
+    },
+    {
+      "id": "solid-glass-balance",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    }
+  ]
+}

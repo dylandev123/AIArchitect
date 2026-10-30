@@ -1,0 +1,433 @@
+{
+  "label": "Developer-authored supported semantic transaction; not Terra output",
+  "review": {
+    "assessments": [
+      {
+        "category": "massing hierarchy",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "arrival facade",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "facade depth",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "roof composition",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "door and window quality",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "material coordination",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "pool and terrace relationship",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "garden/landscape completeness",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "camera composition",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      },
+      {
+        "category": "unfinished or disconnected elements",
+        "observation": "OFFLINE MOCK: basic exterior study."
+      }
+    ],
+    "findings": [
+      {
+        "severity": "major",
+        "category": "arrival facade",
+        "targetIds": [
+          "entry-canopy",
+          "gable-roof"
+        ],
+        "observation": "OFFLINE MOCK: shallow entrance and undifferentiated roof.",
+        "suggestedChange": "Construct a deeper supported entrance and facade layers; reprofile the roof."
+      }
+    ],
+    "refinement": {
+      "findingIndex": 0,
+      "targetIds": [
+        "entry-canopy",
+        "gable-roof"
+      ],
+      "newIds": [
+        "entry-roof",
+        "entry-west-pier",
+        "entry-east-pier",
+        "arrival-west-screen",
+        "arrival-east-screen"
+      ],
+      "instruction": "OFFLINE MOCK: replace the canopy with a supported deeper portal, introduce paired timber facade screens and change the main roof to hip."
+    }
+  },
+  "output": {
+    "name": "DEVELOPER: Compact gable exterior",
+    "summary": "Offline structural refinement mock; no AI calls.",
+    "unsupported": [],
+    "operations": [
+      {
+        "op": "remove",
+        "id": "entry-canopy"
+      },
+      {
+        "op": "replace",
+        "id": "gable-roof",
+        "element": {
+          "id": "gable-roof",
+          "label": "gable roof",
+          "kind": "roof",
+          "at": [
+            0,
+            3.6,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            1.2,
+            8
+          ],
+          "material": "ivory",
+          "roofForm": "hip",
+          "overhang": 0.65,
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "label": "entry-roof",
+          "id": "entry-roof",
+          "kind": "roof",
+          "at": [
+            0,
+            3.2,
+            -5.3
+          ],
+          "size": [
+            5,
+            0.25,
+            3.1
+          ],
+          "material": "limestone",
+          "semanticType": "roof"
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "label": "entry-west-pier",
+          "id": "entry-west-pier",
+          "kind": "volume",
+          "at": [
+            -2.15,
+            1.6,
+            -6.3
+          ],
+          "size": [
+            0.3,
+            2.8,
+            0.3
+          ],
+          "material": "limestone",
+          "semanticType": "mass"
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "label": "entry-east-pier",
+          "id": "entry-east-pier",
+          "kind": "volume",
+          "at": [
+            2.15,
+            1.6,
+            -6.3
+          ],
+          "size": [
+            0.3,
+            2.8,
+            0.3
+          ],
+          "material": "limestone",
+          "semanticType": "mass"
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "label": "arrival-west-screen",
+          "id": "arrival-west-screen",
+          "kind": "screen",
+          "at": [
+            -3.3,
+            1.65,
+            -4.35
+          ],
+          "size": [
+            2,
+            2.9,
+            0.2
+          ],
+          "material": "timber",
+          "panels": 8,
+          "semanticType": "wall"
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "label": "arrival-east-screen",
+          "id": "arrival-east-screen",
+          "kind": "screen",
+          "at": [
+            3.3,
+            1.65,
+            -4.35
+          ],
+          "size": [
+            2,
+            2.9,
+            0.2
+          ],
+          "material": "timber",
+          "panels": 8,
+          "semanticType": "wall"
+        }
+      }
+    ]
+  },
+  "diff": {
+    "changedElementIds": [
+      "gable-roof",
+      "entry-canopy",
+      "entry-roof",
+      "entry-west-pier",
+      "entry-east-pier",
+      "arrival-west-screen",
+      "arrival-east-screen"
+    ],
+    "resolved": [],
+    "introduced": [],
+    "beforeWarnings": 0,
+    "afterWarnings": 0,
+    "resolvedAuditWarnings": [],
+    "introducedAuditWarnings": [],
+    "beforeAudit": {
+      "constructionScope": "exterior",
+      "designStage": "Exterior-designed, interiors unfinished",
+      "interiorsDeferred": true,
+      "status": "consistent",
+      "issues": [],
+      "findings": [],
+      "programme": {
+        "status": "recorded",
+        "spaces": [
+          {
+            "name": "Three-bedroom capacity",
+            "zone": "private",
+            "strategy": "Capacity allocated to envelope; room subdivision deferred",
+            "purpose": "bedroom",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-0",
+              "rear-0"
+            ],
+            "roofIds": [
+              "gable-roof"
+            ],
+            "accessIds": [
+              "front-1-panel"
+            ],
+            "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed.",
+            "floorSurfaceM2": 80,
+            "walkingDatums": [
+              0.2
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.1,
+                  0,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.2,
+                  8
+                ],
+                "walkingDatum": 0.2
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          }
+        ],
+        "deferredInteriors": [
+          "Three-bedroom capacity: interior subdivision and fit-out unverified; Interiors unfinished; no distinct rooms or fit-out claimed."
+        ],
+        "issues": []
+      },
+      "designDecisions": [],
+      "knowledgeUse": [],
+      "geometry": {
+        "kindCounts": {
+          "plate": 3,
+          "wall": 8,
+          "glazing": 6,
+          "entrance": 2,
+          "roof": 2
+        },
+        "surfaces": [
+          {
+            "id": "main-floor",
+            "kind": "plate",
+            "areaM2": 80,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "arrival",
+            "kind": "plate",
+            "areaM2": 16,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "garden-terrace",
+            "kind": "plate",
+            "areaM2": 30,
+            "walkingDatum": 0.2
+          }
+        ],
+        "overlaps": [],
+        "walkingDatums": [
+          0.2
+        ],
+        "plateSurfaceAreaM2": 126,
+        "waterSurfaceAreaM2": 0
+      },
+      "limitations": [
+        "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+      ]
+    },
+    "afterAudit": {
+      "constructionScope": "exterior",
+      "designStage": "Exterior-designed, interiors unfinished",
+      "interiorsDeferred": true,
+      "status": "consistent",
+      "issues": [],
+      "findings": [],
+      "programme": {
+        "status": "recorded",
+        "spaces": [
+          {
+            "name": "Three-bedroom capacity",
+            "zone": "private",
+            "strategy": "Capacity allocated to envelope; room subdivision deferred",
+            "purpose": "bedroom",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-0",
+              "rear-0"
+            ],
+            "roofIds": [
+              "gable-roof"
+            ],
+            "accessIds": [
+              "front-1-panel"
+            ],
+            "limitation": "Interiors unfinished; no distinct rooms or fit-out claimed.",
+            "floorSurfaceM2": 80,
+            "walkingDatums": [
+              0.2
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.1,
+                  0,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.2,
+                  8
+                ],
+                "walkingDatum": 0.2
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          }
+        ],
+        "deferredInteriors": [
+          "Three-bedroom capacity: interior subdivision and fit-out unverified; Interiors unfinished; no distinct rooms or fit-out claimed."
+        ],
+        "issues": []
+      },
+      "designDecisions": [],
+      "knowledgeUse": [],
+      "geometry": {
+        "kindCounts": {
+          "plate": 3,
+          "wall": 8,
+          "glazing": 6,
+          "entrance": 2,
+          "roof": 2,
+          "volume": 2,
+          "screen": 2
+        },
+        "surfaces": [
+          {
+            "id": "main-floor",
+            "kind": "plate",
+            "areaM2": 80,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "arrival",
+            "kind": "plate",
+            "areaM2": 16,
+            "walkingDatum": 0.2
+          },
+          {
+            "id": "garden-terrace",
+            "kind": "plate",
+            "areaM2": 30,
+            "walkingDatum": 0.2
+          }
+        ],
+        "overlaps": [],
+        "walkingDatums": [
+          0.2
+        ],
+        "plateSurfaceAreaM2": 126,
+        "waterSurfaceAreaM2": 0
+      },
+      "limitations": [
+        "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+      ]
+    },
+    "architecturalQuality": "Requires human comparison; warning reduction is not proof of better composition."
+  }
+}

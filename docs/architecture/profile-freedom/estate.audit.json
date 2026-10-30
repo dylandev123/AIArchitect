@@ -1,0 +1,217 @@
+{
+  "providerCalls": 0,
+  "constructionMs": 31.558500000000095,
+  "elements": 68,
+  "profileTriangles": 1576,
+  "unsupported": [
+    "Developer-authored capability study, not Terra output or a completed residence.",
+    "Interior fit-out, full roof/access/headroom and guard provision remain unverified; no engineering/code certification.",
+    "Curves are bounded polygonal approximations; no freeform meshes, CSG or automatic roof junctions."
+  ],
+  "relationships": [],
+  "review": {
+    "designStage": "Historical design scope unrecorded",
+    "interiorsDeferred": false,
+    "status": "incomplete",
+    "issues": [
+      "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation.",
+      "Profile geometry: full roof coverage, occupied-volume clearance, circulation/headroom and railing support require review of actual surfaces; rectangular evidence does not certify these relationships.",
+      "Profile floor bounds upper-landing and upper-floor overlap; actual surface overlap and usable area require review.",
+      "Profile floor bounds garden-gallery and ground-floor overlap; actual surface overlap and usable area require review.",
+      "Profile floor bounds garden-gallery and salon-floor overlap; actual surface overlap and usable area require review.",
+      "Floor surfaces pool-far-deck and pool-deck-l overlap at the same datum; summed usable area is withheld.",
+      "Floor surfaces pool-far-deck and pool-deck-r overlap at the same datum; summed usable area is withheld.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available.",
+      "pool-water: perimeter samples 0:-0.4, 0:0, 0:0.4, 1:-0.4, 1:0, 1:0.4, 2:-0.4, 2:0, 2:0.4, 3:-0.4, 3:0, 3:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review."
+    ],
+    "findings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Profile geometry: full roof coverage, occupied-volume clearance, circulation/headroom and railing support require review of actual surfaces; rectangular evidence does not certify these relationships."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "upper-floor",
+          "upper-landing"
+        ],
+        "message": "Profile floor bounds upper-landing and upper-floor overlap; actual surface overlap and usable area require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "ground-floor",
+          "garden-gallery"
+        ],
+        "message": "Profile floor bounds garden-gallery and ground-floor overlap; actual surface overlap and usable area require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "salon-floor",
+          "garden-gallery"
+        ],
+        "message": "Profile floor bounds garden-gallery and salon-floor overlap; actual surface overlap and usable area require review."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "pool-deck-l",
+          "pool-far-deck"
+        ],
+        "message": "Floor surfaces pool-far-deck and pool-deck-l overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "pool-deck-r",
+          "pool-far-deck"
+        ],
+        "message": "Floor surfaces pool-far-deck and pool-deck-r overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+      },
+      {
+        "code": "pool-wall-bottom-gap",
+        "elementIds": [
+          "pool-water",
+          "pool-bottom"
+        ],
+        "message": "pool-water: perimeter samples 0:-0.4, 0:0, 0:0.4, 1:-0.4, 1:0, 1:0.4, 2:-0.4, 2:0, 2:0.4, 3:-0.4, 3:0, 3:0.4 lack walls spanning basin top to water plane. Infinity edges and special details require review.",
+        "category": "likely-architectural-incompleteness"
+      }
+    ],
+    "programme": {
+      "status": "unrecorded",
+      "spaces": [],
+      "issues": [
+        "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      ]
+    },
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 11,
+        "wall": 9,
+        "glazing": 8,
+        "entrance": 2,
+        "volume": 33,
+        "roof": 4,
+        "water": 1
+      },
+      "surfaces": [
+        {
+          "id": "ground-floor",
+          "kind": "plate",
+          "areaM2": null,
+          "walkingDatum": 0.24
+        },
+        {
+          "id": "arrival-path",
+          "kind": "plate",
+          "areaM2": 15,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "upper-floor",
+          "kind": "plate",
+          "areaM2": null,
+          "walkingDatum": 4.300000000000001
+        },
+        {
+          "id": "upper-landing",
+          "kind": "plate",
+          "areaM2": 6.8,
+          "walkingDatum": 4.300000000000001
+        },
+        {
+          "id": "salon-floor",
+          "kind": "plate",
+          "areaM2": null,
+          "walkingDatum": 0.24
+        },
+        {
+          "id": "garden-gallery",
+          "kind": "plate",
+          "areaM2": 21,
+          "walkingDatum": 0.24
+        },
+        {
+          "id": "garden-deck",
+          "kind": "plate",
+          "areaM2": 104,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-bottom",
+          "kind": "plate",
+          "areaM2": 112,
+          "walkingDatum": -1.3499999999999999
+        },
+        {
+          "id": "pool-water",
+          "kind": "water",
+          "areaM2": 100.75,
+          "walkingDatum": 0.05
+        },
+        {
+          "id": "pool-deck-l",
+          "kind": "plate",
+          "areaM2": 11.475000000000001,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-deck-r",
+          "kind": "plate",
+          "areaM2": 11.475000000000001,
+          "walkingDatum": 0.2
+        },
+        {
+          "id": "pool-far-deck",
+          "kind": "plate",
+          "areaM2": 22.8,
+          "walkingDatum": 0.2
+        }
+      ],
+      "overlaps": [
+        [
+          "pool-far-deck",
+          "pool-deck-l"
+        ],
+        [
+          "pool-far-deck",
+          "pool-deck-r"
+        ]
+      ],
+      "walkingDatums": [
+        0.24,
+        0.2,
+        4.3,
+        -1.35
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 100.75
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  }
+}

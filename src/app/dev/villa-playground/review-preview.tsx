@@ -3,7 +3,7 @@ import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNo
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import * as THREE from 'three';
-import { LaderaGrounds } from '@/components/scene/LaderaGrounds';
+import { SceneTerrain } from '@/components/scene/SceneTerrain';
 import { OperationScene } from '@/components/scene/OperationScene';
 import type { ArchitecturalScene } from '@/lib/villa/scene/model';
 import { buildComposition } from '@/lib/villa/composition';
@@ -27,7 +27,7 @@ function ContextLoss({onLost}:{onLost:()=>void}) {
   },[gl,onLost]);
   return null;
 }
-function Capture({ view, ready, onError }: { view: View; ready?: (image: SceneCapture) => void; onError?: (message: string) => void }) {
+function Capture({ expectedScene, view, ready, onError }: { expectedScene?: ArchitecturalScene; view: View; ready?: (image: SceneCapture) => void; onError?: (message: string) => void }) {
   const started = useRef<number | null>(null), sent = useRef(false);
   useFrame(({ gl, scene, camera, controls }) => {
     if (!ready || sent.current) return;
@@ -40,6 +40,14 @@ function Capture({ view, ready, onError }: { view: View; ready?: (image: SceneCa
         const canvas = gl.domElement;
         const architecture = scene.getObjectByName('Property architecture');
         if (!architecture) throw new Error('Architecture unavailable for camera framing.');
+        if (expectedScene) {
+          const rendered: THREE.Object3D[] = [];
+          architecture.traverse(object => { if (object.name.startsWith('operation:')) rendered.push(object); });
+          if (rendered.length !== expectedScene.elements.length || expectedScene.elements.some(element => {
+            const object = rendered.find(o => o.name === `operation:${element.id}`);
+            return !object || object.rotation.y !== element.rotation || object.position.toArray().some((v, i) => v !== element.at[i]);
+          })) throw new Error('Rendered element identities or transforms do not match the scene snapshot.');
+        }
         const bounds = new THREE.Box3().setFromObject(architecture);
         const center = bounds.getCenter(new THREE.Vector3()).project(camera);
         if (bounds.isEmpty() || !Number.isFinite(center.x) || Math.abs(center.x) > .9 || Math.abs(center.y) > .9 || Math.abs(center.z) > 1) throw new Error('Architecture is outside the capture camera.');
@@ -73,8 +81,8 @@ export function ReviewPreview({ captureRevision = 0, children, config, view, cam
   const composition = useMemo(() => 'version' in config && config.version === 1 ? buildComposition(config) : undefined, [config]);
   if (failure) return <p role="alert">{failure} Original preserved.</p>;
   return <div style={responsive ? { width: '100%', aspectRatio: '16 / 9' } : { width: 640, height: 360, flexShrink: 0 }}>
-    <PreviewBoundary onError={onError}><Canvas dpr={1} shadows="soft" gl={{ preserveDrawingBuffer: true, toneMapping: THREE.NeutralToneMapping, logarithmicDepthBuffer: true }} camera={{ position: [33, 28, 43], fov: 39, near: .1, far: 4000 }} fallback={<p role="alert">WebGL unavailable. No capture was made.</p>}>
-      <ContextLoss onLost={()=>{setFailure('WebGL context lost.');onError?.('WebGL context lost.');}}/><Suspense fallback={null}><VillaScene poolElementId={direct?.elements.find(e=>e.kind==='water')?.id} grounds={direct ? <LaderaGrounds /> : undefined} replaceArchitecture={!!direct} frameArchitectureOnly interactive={false} cameraPose={cameraPose} mood="Daylight" view={view} reset={captureRevision} tour={false} {...(direct ? {} : composition ? { composition } : { config: config as Exclude<ReviewConfig, { version: number }> })}>{direct && <OperationScene scene={direct} onSelect={() => {}} />}{children}</VillaScene><Capture key={captureRevision} view={view} ready={ready} onError={onError} /></Suspense>
+    <PreviewBoundary onError={onError}><Canvas dpr={1} shadows="soft" gl={direct ? { preserveDrawingBuffer: true } : { preserveDrawingBuffer: true, toneMapping: THREE.NeutralToneMapping, logarithmicDepthBuffer: true }} camera={{ position: [33, 28, 43], fov: direct ? 40 : 39, near: .1, far: 4000 }} fallback={<p role="alert">WebGL unavailable. No capture was made.</p>}>
+      <ContextLoss onLost={()=>{setFailure('WebGL context lost.');onError?.('WebGL context lost.');}}/><Suspense fallback={null}><VillaScene entranceElementId={direct?.elements.find(e=>e.kind==='entrance')?.id} poolElementId={direct?.elements.find(e=>e.kind==='water')?.id} grounds={direct ? <SceneTerrain terrain={direct.terrain ?? {width:120,depth:120,elevation:0,grade:0,fall:'z'}} /> : undefined} replaceArchitecture={!!direct} frameArchitectureOnly interactive={false} cameraPose={cameraPose} mood="Daylight" view={view} reset={captureRevision} tour={false} {...(direct ? {} : composition ? { composition } : { config: config as Exclude<ReviewConfig, { version: number }> })}>{direct && <OperationScene scene={direct} onSelect={() => {}} />}{children}</VillaScene><Capture expectedScene={direct} key={captureRevision} view={view} ready={ready} onError={onError} /></Suspense>
     </Canvas></PreviewBoundary>
   </div>;
 }

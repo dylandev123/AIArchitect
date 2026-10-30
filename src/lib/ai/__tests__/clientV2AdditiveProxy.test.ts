@@ -41,7 +41,7 @@ afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.restoreAllMocks(
 describe("rooftop gazebo proxy through the real follow-up edit path", { timeout: 30_000 }, () => {
   it("commits as ai-followup-edit, leaves the architecture untouched, and reloads with the same proxy placement", async () => {
     const { useProjectStore, requestHouseEdit } = await load();
-    const project = useProjectStore.getState().createProject("V2 pavilion house");
+    const project = useProjectStore.getState().createProject("V2 pavilion house", "house", "v2-architectural");
     const base = JSON.stringify({ architecturalDesignDocument: ARCHITECTURE_FIXTURES.modernTropicalPavilionHouse, sitePlan: { poolDeck: { x: 0, z: 16, width: 12, depth: 8 } } });
     useProjectStore.getState().appendVersion(project.id, "Generated V2 pavilion house", base, "generation-complete");
 

@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {sceneResponseFormatSchema} from '../src/lib/villa/scene/terra';
+const dir='docs/architecture/terra-controlled-estate-2026-10-29',read=(n:string)=>JSON.parse(readFileSync(`${dir}/${n}`,'utf8'));
+globalThis.fetch=async()=>{throw Error('Verification is offline');};
+const provider=read('provider-response.exact.json'),wire=read('provider-request.exact.json'),input=read('request.json');
+const text=provider.output.flatMap((o:any)=>o.content??[]).filter((c:any)=>c.type==='output_text').map((c:any)=>c.text).join('');
+const checked:any=await (await sceneResponseFormatSchema(input)).validate!(JSON.parse(text));assert(checked.success);assert.deepEqual(checked.value,read('normalized-output.json'));assert.deepEqual(checked.value,read('retained.json').output);
+assert.equal(read('call-result.json').providerCalls,1);assert.equal(provider.status,'completed');assert.equal(wire.model,'gpt-5.6-terra');assert.equal(JSON.parse(wire.input.find((i:any)=>i.role==='user').content[0].text).prompt,input.prompt);
+assert.equal(read('architecture-audit.json').findings.length,90);assert.equal(read('construction-analysis.json').expanded,128);assert.deepEqual(read('draft.REJECTED.json').elements,read('staged.DIAGNOSTIC.json').elements);
+for(const n of readdirSync(dir))assert(!/\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}/.test(readFileSync(`${dir}/${n}`,'utf8')),'Secret-like data');
+for(const [n,hash]of Object.entries(read('sha256.json')))assert.equal(createHash('sha256').update(readFileSync(`${dir}/${n}`)).digest('hex'),hash);
+const result={providerCalls:1,exactProviderOutputReparsed:true,normalizedOutputMatchesRouteOutput:true,promptMatchesExactWire:true,draftMatchesExecutorReplay:true,hashesVerified:true,secretLikeData:false,productionSourceChanges:0};
+writeFileSync(`${dir}/final-verification.json`,JSON.stringify(result,null,2),{flag:'wx'});console.log(JSON.stringify(result));

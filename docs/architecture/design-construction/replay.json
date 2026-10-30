@@ -1,0 +1,3303 @@
+{
+  "providerCalls": 0,
+  "original": {
+    "accepted": false,
+    "error": "[\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"assemble\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"assemble\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"assembly\"\n          ],\n          \"message\": \"Invalid input\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"scale-assembly\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"scale-assembly\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"array\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"factors\"\n          ],\n          \"message\": \"Invalid input: expected array, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"set-terrain\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"set-terrain\\\"\"\n        },\n        {\n          \"expected\": \"object\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"terrain\"\n          ],\n          \"message\": \"Invalid input: expected object, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\",\n                  \"floor\",\n                  \"ceiling\",\n                  \"stair\",\n                  \"ramp\",\n                  \"balcony\",\n                  \"terrace\",\n                  \"pool\",\n                  \"garden\",\n                  \"planting-bed\",\n                  \"path\",\n                  \"driveway\",\n                  \"garage\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind plate; supported: building, floor, ceiling, stair, ramp, balcony, terrace, pool, garden, planting-bed, path, driveway, garage\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"plate\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"plate\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\",\n                  \"fence\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind wall; supported: wall, fence\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"wall\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"roof\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind roof; supported: roof\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"roof\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"roof\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"window\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind glazing; supported: window\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"glazing\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"glazing\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"balcony\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind balcony; supported: balcony\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"balcony\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"balcony\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"exterior-door\",\n                  \"front-door\",\n                  \"interior-door\",\n                  \"gate\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind entrance; supported: exterior-door, front-door, interior-door, gate\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"entrance\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"entrance\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\",\n                  \"fence\",\n                  \"gate\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind screen; supported: wall, fence, gate\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"screen\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"screen\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"outdoor-furniture\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind sofa; supported: outdoor-furniture\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"sofa\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"sofa\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\",\n                  \"mass\",\n                  \"stair\",\n                  \"ramp\",\n                  \"elevator\",\n                  \"planting-bed\",\n                  \"plant\",\n                  \"tree\",\n                  \"garage\",\n                  \"outdoor-furniture\",\n                  \"lighting\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind volume; supported: building, mass, stair, ramp, elevator, planting-bed, plant, tree, garage, outdoor-furniture, lighting\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"pool\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind water; supported: pool\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"water\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"water\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind pavilion; supported: building\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"pavilion\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"pavilion\\\"\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"element\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"replace\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"replace\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\",\n                  \"floor\",\n                  \"ceiling\",\n                  \"stair\",\n                  \"ramp\",\n                  \"balcony\",\n                  \"terrace\",\n                  \"pool\",\n                  \"garden\",\n                  \"planting-bed\",\n                  \"path\",\n                  \"driveway\",\n                  \"garage\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind plate; supported: building, floor, ceiling, stair, ramp, balcony, terrace, pool, garden, planting-bed, path, driveway, garage\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"plate\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"plate\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\",\n                  \"fence\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind wall; supported: wall, fence\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"wall\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"roof\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind roof; supported: roof\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"roof\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"roof\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"window\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind glazing; supported: window\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"glazing\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"glazing\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"balcony\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind balcony; supported: balcony\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"balcony\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"balcony\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"exterior-door\",\n                  \"front-door\",\n                  \"interior-door\",\n                  \"gate\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind entrance; supported: exterior-door, front-door, interior-door, gate\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"entrance\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"entrance\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"wall\",\n                  \"fence\",\n                  \"gate\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind screen; supported: wall, fence, gate\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"screen\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"screen\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"outdoor-furniture\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind sofa; supported: outdoor-furniture\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"sofa\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"sofa\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\",\n                  \"mass\",\n                  \"stair\",\n                  \"ramp\",\n                  \"elevator\",\n                  \"planting-bed\",\n                  \"plant\",\n                  \"tree\",\n                  \"garage\",\n                  \"outdoor-furniture\",\n                  \"lighting\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind volume; supported: building, mass, stair, ramp, elevator, planting-bed, plant, tree, garage, outdoor-furniture, lighting\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"pool\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind water; supported: pool\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"water\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"water\\\"\"\n              }\n            ],\n            [\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"building\"\n                ],\n                \"path\": [\n                  \"semanticType\"\n                ],\n                \"message\": \"Semantic type material is incompatible with renderer kind pavilion; supported: building\"\n              },\n              {\n                \"code\": \"invalid_value\",\n                \"values\": [\n                  \"pavilion\"\n                ],\n                \"path\": [\n                  \"kind\"\n                ],\n                \"message\": \"Invalid input: expected \\\"pavilion\\\"\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"element\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"remove\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"remove\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"move\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"move\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"array\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"at\"\n          ],\n          \"message\": \"Invalid input: expected array, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"rotate\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"rotate\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"number\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"rotation\"\n          ],\n          \"message\": \"Invalid input: expected number, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resize\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resize\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"array\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"size\"\n          ],\n          \"message\": \"Invalid input: expected array, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"finish\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"finish\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"ivory\",\n            \"limestone\",\n            \"timber\",\n            \"bronze\",\n            \"sage\"\n          ],\n          \"path\": [\n            \"material\"\n          ],\n          \"message\": \"Invalid option: expected one of \\\"ivory\\\"|\\\"limestone\\\"|\\\"timber\\\"|\\\"bronze\\\"|\\\"sage\\\"\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"place-on\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"place-on\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"support\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"array\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"offset\"\n          ],\n          \"message\": \"Invalid input: expected array, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"attach\"\n          ],\n          \"path\": [\n            \"op\"\n          ],\n          \"message\": \"Invalid input: expected \\\"attach\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"id\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"array\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"at\"\n          ],\n          \"message\": \"Invalid input: expected array, received undefined\"\n        },\n        {\n          \"code\": \"unrecognized_keys\",\n          \"keys\": [\n            \"element\"\n          ],\n          \"path\": [],\n          \"message\": \"Unrecognized key: \\\"element\\\"\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"operations\",\n      16\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+  },
+  "developerDiagnostic": {
+    "accepted": false,
+    "error": "Error: Refinement introduced construction findings."
+  },
+  "diagnosticDiff": {
+    "changedElementIds": [
+      "rear-left-wall",
+      "rear-garden-wall",
+      "garden-door",
+      "rear-right-wall",
+      "dining-post-west-front",
+      "dining-post-east-front",
+      "dining-post-west-rear",
+      "dining-post-east-rear",
+      "dining-canopy",
+      "rear-loggia-wall-west",
+      "rear-loggia-glazing-west",
+      "rear-loggia-glazing-east",
+      "rear-loggia-wall-east",
+      "rear-loggia-door",
+      "rear-loggia-canopy-edge"
+    ],
+    "resolved": [],
+    "introduced": [],
+    "beforeWarnings": 0,
+    "afterWarnings": 0,
+    "resolvedAuditWarnings": [],
+    "introducedAuditWarnings": [
+      "Programme Family living and dining: enclosure: rear-left-wall missing or wrong kind",
+      "Programme Family living and dining: enclosure: rear-garden-wall missing or wrong kind",
+      "Programme Family living and dining: enclosure: rear-right-wall missing or wrong kind",
+      "Programme Family living and dining: access: garden-door missing or wrong kind",
+      "Programme Family living and dining: no access construction evidence",
+      "Programme Family living and dining: interior enclosure or overhead evidence missing",
+      "Programme Family living and dining: main-floor: local enclosure evidence missing",
+      "Programme Family living and dining: main-floor: local access at walking datum unverified",
+      "Programme Kitchen and pantry reserve: enclosure: rear-right-wall missing or wrong kind",
+      "Programme Kitchen and pantry reserve: access: garden-door missing or wrong kind",
+      "Programme Kitchen and pantry reserve: no access construction evidence",
+      "Programme Kitchen and pantry reserve: main-floor: local access at walking datum unverified",
+      "Programme Covered outdoor dining: access: garden-door missing or wrong kind",
+      "Programme Covered outdoor dining: no access construction evidence",
+      "Programme Covered outdoor dining: dining-terrace: local access at walking datum unverified",
+      "Programme Pool terrace: access: garden-door missing or wrong kind",
+      "Programme Pool terrace: no access construction evidence",
+      "Programme Pool terrace: dining-terrace: local access at walking datum unverified",
+      "Knowledge decision dining-transition: Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.; missing elements garden-door.",
+      "Knowledge decision solid-glass-balance: Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.; missing elements rear-garden-wall.",
+      "dining-canopy at world [0, 3.3, -5.35], size [7.4, 0.18, 4], rendered Y=[3.13, 3.3899999999999997] crosses Entry vestibule above main-floor at walking Y=0.15, enclosure head Y=3.35. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved.",
+      "garden-door connected-to dining-terrace: geometry does not evidence the declared relationship (clearance 0 m). The sill-zero rear door is the modelled passage to outdoor dining. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "main-roof and dining-canopy: flat roof primary solids overlap vertically by 0.04 m with intersecting plan footprints. Author a separated or explicitly detailed junction; trim, drainage and weatherproofing remain unverified. No automatic union or repair was applied."
+    ],
+    "beforeAudit": {
+      "constructionScope": "exterior",
+      "designStage": "Exterior-designed, interiors unfinished",
+      "interiorsDeferred": true,
+      "status": "incomplete",
+      "issues": [
+        "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed.",
+        "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified",
+        "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified",
+        "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified",
+        "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified",
+        "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed.",
+        "Programme Pool terrace: family-pool: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified",
+        "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+        "Programme Rectangular pool: no access construction evidence",
+        "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified",
+        "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+        "Programme Private garden reserve: no access construction evidence",
+        "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified",
+        "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable.",
+        "Knowledge decision pool-garden-view: Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled.",
+        "Knowledge decision dining-transition: referenced geometry lacks required kinds wall; descriptions are not construction.",
+        "Knowledge decision dining-transition: Dining furniture and kitchen fit-out are deferred.",
+        "Knowledge decision asymmetric-balance: referenced geometry lacks required kinds wall; descriptions are not construction.",
+        "Knowledge decision asymmetric-balance: Visual balance is an authored composition, not solver-verified.",
+        "Knowledge decision covered-threshold: Weather performance and code clearances are not certified.",
+        "Knowledge decision solid-glass-balance: referenced geometry lacks required kinds plate, roof; descriptions are not construction.",
+        "Knowledge decision solid-glass-balance: Thermal, acoustic and operability performance are not simulated.",
+        "dining-canopy covering dining-terrace: geometry does not evidence the declared relationship (clearance 3.06 m). The canopy is supported by four posts and shelters the dining plate. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+        "family-pool facing private-garden-reserve: geometry does not evidence the declared relationship (clearance 0 m). The far pool deck and reserved garden occupy the rearward -Z outlook. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      ],
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "west-wing-floor"
+          ],
+          "message": "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "east-wing-floor"
+          ],
+          "message": "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "west-wing-floor"
+          ],
+          "message": "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "east-wing-floor"
+          ],
+          "message": "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool"
+          ],
+          "message": "Programme Pool terrace: family-pool: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-x-minus"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-x-plus"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-far"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified"
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Rectangular pool: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor"
+          ],
+          "message": "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-x-minus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-x-plus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-z-minus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-z-plus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Private garden reserve: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-far"
+          ],
+          "message": "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pool-garden-view: Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision dining-transition: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision dining-transition: Dining furniture and kitchen fit-out are deferred."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision asymmetric-balance: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision asymmetric-balance: Visual balance is an authored composition, not solver-verified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision covered-threshold: Weather performance and code clearances are not certified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision solid-glass-balance: referenced geometry lacks required kinds plate, roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision solid-glass-balance: Thermal, acoustic and operability performance are not simulated."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "spatial-intent-mismatch",
+          "elementIds": [
+            "dining-canopy",
+            "dining-terrace"
+          ],
+          "message": "dining-canopy covering dining-terrace: geometry does not evidence the declared relationship (clearance 3.06 m). The canopy is supported by four posts and shelters the dining plate. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "spatial-intent-mismatch",
+          "elementIds": [
+            "family-pool",
+            "private-garden-reserve"
+          ],
+          "message": "family-pool facing private-garden-reserve: geometry does not evidence the declared relationship (clearance 0 m). The far pool deck and reserved garden occupy the rearward -Z outlook. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+        }
+      ],
+      "programme": {
+        "status": "recorded",
+        "spaces": [
+          {
+            "name": "Arrival approach",
+            "zone": "circulation",
+            "strategy": "A broad limestone plate terminates at the recessed front-door threshold.",
+            "purpose": "access",
+            "floorIds": [
+              "arrival-path",
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-entry-wall"
+            ],
+            "roofIds": [
+              "entry-canopy"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Driveway, gate and vehicle parking are not requested or constructed.",
+            "floorSurfaceM2": 108,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "arrival-path",
+                "world": [
+                  0,
+                  0.075,
+                  6,
+                  0
+                ],
+                "size": [
+                  3,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "Driveway, gate and vehicle parking are not requested or constructed."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Entry vestibule",
+            "zone": "public",
+            "strategy": "Reserved immediately inside the front threshold within the central envelope.",
+            "purpose": "access",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-left-wall",
+              "front-entry-wall",
+              "front-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Interior partitions, storage and finishes are deferred.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Family living and dining",
+            "zone": "public",
+            "strategy": "The central envelope is reserved as the principal shared living volume with garden access.",
+            "purpose": "living",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "rear-left-wall",
+              "rear-garden-wall",
+              "rear-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "No interior furniture, kitchen cabinetry or dining fit-out is constructed.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Kitchen and pantry reserve",
+            "zone": "service",
+            "strategy": "Capacity is reserved within the central public envelope beside the dining and terrace connection.",
+            "purpose": "kitchen",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-right-wall",
+              "rear-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Kitchen units, pantry partitions and appliances are deferred.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Four-bedroom accommodation reserve",
+            "zone": "private",
+            "strategy": "Three bedroom-capable bays are allocated to the west wing and one larger private suite-capable bay to the east wing, with allowance for bathrooms and circulation.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "four bedrooms"
+            },
+            "purpose": "bedroom",
+            "floorIds": [
+              "west-wing-floor",
+              "east-wing-floor"
+            ],
+            "enclosureIds": [
+              "west-side-north",
+              "west-side-middle",
+              "west-side-south",
+              "east-side-north",
+              "east-side-south",
+              "west-front-wall",
+              "west-rear-wall",
+              "east-front-wall",
+              "east-rear-wall"
+            ],
+            "roofIds": [
+              "west-wing-roof",
+              "east-wing-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Shared envelope floors indicate accommodation capacity only; individual bedrooms, bathrooms, hallways and internal doors are not subdivided in exterior scope.",
+            "floorSurfaceM2": 132,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "west-wing-floor",
+                "world": [
+                  -9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  12
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "east-wing-floor",
+                "world": [
+                  9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  10
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "west-wing-floor: local access at walking datum unverified",
+              "east-wing-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Bathroom and laundry reserve",
+            "zone": "service",
+            "strategy": "Plumbing-service capacity is reserved within the bedroom-wing envelopes near their shared internal edges.",
+            "purpose": "bathroom",
+            "floorIds": [
+              "west-wing-floor",
+              "east-wing-floor"
+            ],
+            "enclosureIds": [
+              "west-front-wall",
+              "east-front-wall"
+            ],
+            "roofIds": [
+              "west-wing-roof",
+              "east-wing-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "No bathroom partitions, fixtures, laundry equipment or services are constructed.",
+            "floorSurfaceM2": 132,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "west-wing-floor",
+                "world": [
+                  -9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  12
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "east-wing-floor",
+                "world": [
+                  9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  10
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "west-wing-floor: local access at walking datum unverified",
+              "east-wing-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Covered outdoor dining",
+            "zone": "outdoor",
+            "strategy": "A covered limestone terrace directly outside the garden door is shaded by a four-post timber-and-limestone canopy.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "covered outdoor dining"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "dining-terrace"
+            ],
+            "enclosureIds": [],
+            "roofIds": [
+              "dining-canopy"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Dining furniture and exterior kitchen equipment are not constructed.",
+            "floorSurfaceM2": 40,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "dining-terrace",
+                "world": [
+                  -1,
+                  0.075,
+                  -6,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "Dining furniture and exterior kitchen equipment are not constructed."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Pool terrace",
+            "zone": "outdoor",
+            "strategy": "The terrace meets the near dry deck of the completed rectangular-pool assembly at the same 0.15 m walking datum.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "a pool"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "dining-terrace",
+              "family-pool",
+              "family-pool-deck-x-minus",
+              "family-pool-deck-x-plus",
+              "family-pool-deck-far"
+            ],
+            "enclosureIds": [
+              "family-pool-wall-x-minus",
+              "family-pool-wall-x-plus",
+              "family-pool-wall-z-minus",
+              "family-pool-wall-z-plus"
+            ],
+            "roofIds": [],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+            "floorSurfaceM2": 86.39999999999999,
+            "walkingDatums": [
+              0.15,
+              0.15,
+              0.15,
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "dining-terrace",
+                "world": [
+                  -1,
+                  0.075,
+                  -6,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool",
+                "world": [
+                  0,
+                  0,
+                  -8.75,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-x-minus",
+                "world": [
+                  4.099998112064127,
+                  0,
+                  -14.20000142028152,
+                  3.141593
+                ],
+                "size": [
+                  1,
+                  0.3,
+                  9.4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-x-plus",
+                "world": [
+                  -4.10000188793538,
+                  0,
+                  -14.199998579717825,
+                  3.141593
+                ],
+                "size": [
+                  1,
+                  0.3,
+                  9.4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-far",
+                "world": [
+                  -0.000003775871252151389,
+                  0,
+                  -19.649999999999345,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "family-pool: local access at walking datum unverified",
+              "family-pool-deck-x-minus: local access at walking datum unverified",
+              "family-pool-deck-x-plus: local access at walking datum unverified",
+              "family-pool-deck-far: local access at walking datum unverified",
+              "Pool hydraulics, filtration, waterproofing, heating and engineering are not represented."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Rectangular pool",
+            "zone": "outdoor",
+            "strategy": "A dedicated rectangular basin has an explicit floor, four perimeter walls, coping, water surface and continuous dry deck circuit.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "a pool"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "family-pool-floor",
+              "family-pool-coping-x-minus",
+              "family-pool-coping-x-plus",
+              "family-pool-coping-z-minus",
+              "family-pool-coping-z-plus"
+            ],
+            "enclosureIds": [
+              "family-pool-wall-x-minus",
+              "family-pool-wall-x-plus",
+              "family-pool-wall-z-minus",
+              "family-pool-wall-z-plus"
+            ],
+            "roofIds": [],
+            "accessIds": [],
+            "limitation": "The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+            "floorSurfaceM2": 73.44000000000001,
+            "walkingDatums": [
+              -1.3,
+              0.15000000000000002,
+              0.15000000000000002,
+              0.15000000000000002,
+              0.15000000000000002
+            ],
+            "allocation": [
+              {
+                "id": "family-pool-floor",
+                "world": [
+                  -0.0000018879356260756945,
+                  -1.4000000000000001,
+                  -14.199999999999672,
+                  3.141593
+                ],
+                "size": [
+                  6.4,
+                  0.2,
+                  8.4
+                ],
+                "walkingDatum": -1.3
+              },
+              {
+                "id": "family-pool-coping-x-minus",
+                "world": [
+                  3.299998112064176,
+                  0.1,
+                  -14.200001143153354,
+                  3.141593
+                ],
+                "size": [
+                  0.6,
+                  0.1,
+                  8
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-x-plus",
+                "world": [
+                  -3.3000018879354283,
+                  0.1,
+                  -14.19999885684599,
+                  3.141593
+                ],
+                "size": [
+                  0.6,
+                  0.1,
+                  8
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-z-minus",
+                "world": [
+                  -3.81051227281333e-7,
+                  0.1,
+                  -9.849999999999934,
+                  3.141593
+                ],
+                "size": [
+                  7.2,
+                  0.1,
+                  0.7
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-z-plus",
+                "world": [
+                  -0.0000033948200248700565,
+                  0.1,
+                  -18.549999999999415,
+                  3.141593
+                ],
+                "size": [
+                  7.2,
+                  0.1,
+                  0.7
+                ],
+                "walkingDatum": 0.15000000000000002
+              }
+            ],
+            "issues": [
+              "no access construction evidence",
+              "family-pool-floor: local access at walking datum unverified",
+              "family-pool-coping-x-minus: local access at walking datum unverified",
+              "family-pool-coping-x-plus: local access at walking datum unverified",
+              "family-pool-coping-z-minus: local access at walking datum unverified",
+              "family-pool-coping-z-plus: local access at walking datum unverified",
+              "The rectangular water primitive does not model an infinity edge, equipment or water treatment."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Private garden reserve",
+            "zone": "outdoor",
+            "strategy": "The open ground beyond the far pool deck is reserved as the private planted garden outlook.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "private garden"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "family-pool-deck-far"
+            ],
+            "enclosureIds": [],
+            "roofIds": [],
+            "accessIds": [],
+            "limitation": "Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable.",
+            "floorSurfaceM2": 13.799999999999999,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "family-pool-deck-far",
+                "world": [
+                  -0.000003775871252151389,
+                  0,
+                  -19.649999999999345,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "no access construction evidence",
+              "family-pool-deck-far: local access at walking datum unverified",
+              "Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "deferredInteriors": [
+          "Entry vestibule: interior subdivision and fit-out unverified; Interior partitions, storage and finishes are deferred.",
+          "Family living and dining: interior subdivision and fit-out unverified; No interior furniture, kitchen cabinetry or dining fit-out is constructed.",
+          "Kitchen and pantry reserve: interior subdivision and fit-out unverified; Kitchen units, pantry partitions and appliances are deferred.",
+          "Four-bedroom accommodation reserve: interior subdivision and fit-out unverified; Shared envelope floors indicate accommodation capacity only; individual bedrooms, bathrooms, hallways and internal doors are not subdivided in exterior scope.",
+          "Bathroom and laundry reserve: interior subdivision and fit-out unverified; No bathroom partitions, fixtures, laundry equipment or services are constructed."
+        ],
+        "issues": [
+          "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed.",
+          "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified",
+          "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified",
+          "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified",
+          "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified",
+          "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed.",
+          "Programme Pool terrace: family-pool: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified",
+          "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+          "Programme Rectangular pool: no access construction evidence",
+          "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified",
+          "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+          "Programme Private garden reserve: no access construction evidence",
+          "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified",
+          "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+        ]
+      },
+      "designDecisions": [
+        {
+          "disposition": "constructed",
+          "knowledgeId": "pool-garden-view",
+          "decision": "Constructed a rectangular pool with explicit basin floor, perimeter walls, coping and a dry circulation deck, oriented toward the garden reserve.",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "limitation": "Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled.",
+          "existingElementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "dining-transition",
+          "decision": "Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.",
+          "elementIds": [
+            "dining-terrace",
+            "garden-door",
+            "dining-canopy"
+          ],
+          "limitation": "Dining furniture and kitchen fit-out are deferred.",
+          "existingElementIds": [
+            "dining-terrace",
+            "garden-door",
+            "dining-canopy"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [
+            "wall"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "considered",
+          "knowledgeId": "outdoor-reading-nook",
+          "decision": "A separate reading pavilion was not selected so the garden remains open and the dining canopy stays the sole outdoor shelter.",
+          "elementIds": [],
+          "limitation": "No separate reading nook is constructed.",
+          "existingElementIds": [],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "considered",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "unsupported",
+          "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "decision": "A planted private garden is reserved beyond the pool but layered tropical planting cannot be represented with the available direct-scene primitives.",
+          "elementIds": [],
+          "limitation": "No editable planting, trees, irrigation or lighting are available in this output.",
+          "existingElementIds": [],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "unsupported",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "asymmetric-balance",
+          "decision": "Balanced the dominant central living volume with unequal bedroom wings while holding a shared roof datum and terrace edge.",
+          "elementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "limitation": "Visual balance is an authored composition, not solver-verified.",
+          "existingElementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [
+            "wall"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "covered-threshold",
+          "decision": "Built an actual front-door opening, threshold approach and post-supported entrance canopy.",
+          "elementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "limitation": "Weather performance and code clearances are not certified.",
+          "existingElementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "solid-glass-balance",
+          "decision": "Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.",
+          "elementIds": [
+            "rear-garden-wall",
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "limitation": "Thermal, acoustic and operability performance are not simulated.",
+          "existingElementIds": [
+            "rear-garden-wall",
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [
+            "plate",
+            "roof"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        }
+      ],
+      "knowledgeUse": [
+        {
+          "id": "pool-garden-view",
+          "version": 1,
+          "status": "construction-evidence",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "dining-transition",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "dining-terrace",
+            "garden-door",
+            "dining-canopy"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "outdoor-reading-nook",
+          "version": 1,
+          "status": "considered",
+          "elementIds": [],
+          "verifiedComplete": false
+        },
+        {
+          "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "version": 1,
+          "status": "unsupported",
+          "elementIds": [],
+          "verifiedComplete": false
+        },
+        {
+          "id": "asymmetric-balance",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "status": "construction-evidence",
+          "elementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "solid-glass-balance",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "rear-garden-wall",
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "verifiedComplete": false
+        }
+      ],
+      "geometry": {
+        "kindCounts": {
+          "plate": 14,
+          "wall": 19,
+          "entrance": 2,
+          "roof": 5,
+          "volume": 6,
+          "water": 1
+        },
+        "surfaces": [
+          {
+            "id": "main-floor",
+            "kind": "plate",
+            "areaM2": 96,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "west-wing-floor",
+            "kind": "plate",
+            "areaM2": 72,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "east-wing-floor",
+            "kind": "plate",
+            "areaM2": 60,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "arrival-path",
+            "kind": "plate",
+            "areaM2": 12,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "dining-terrace",
+            "kind": "plate",
+            "areaM2": 40,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool",
+            "kind": "plate",
+            "areaM2": 13.799999999999999,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-floor",
+            "kind": "plate",
+            "areaM2": 53.760000000000005,
+            "walkingDatum": -1.3
+          },
+          {
+            "id": "family-pool-water",
+            "kind": "water",
+            "areaM2": 48,
+            "walkingDatum": 0.05
+          },
+          {
+            "id": "family-pool-coping-z-minus",
+            "kind": "plate",
+            "areaM2": 5.04,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-coping-x-minus",
+            "kind": "plate",
+            "areaM2": 4.8,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-deck-x-minus",
+            "kind": "plate",
+            "areaM2": 9.4,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-coping-z-plus",
+            "kind": "plate",
+            "areaM2": 5.04,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-coping-x-plus",
+            "kind": "plate",
+            "areaM2": 4.8,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-deck-x-plus",
+            "kind": "plate",
+            "areaM2": 9.4,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-deck-far",
+            "kind": "plate",
+            "areaM2": 13.799999999999999,
+            "walkingDatum": 0.15
+          }
+        ],
+        "overlaps": [],
+        "walkingDatums": [
+          0.15,
+          -1.3
+        ],
+        "plateSurfaceAreaM2": 399.84000000000003,
+        "waterSurfaceAreaM2": 48
+      },
+      "limitations": [
+        "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+      ]
+    },
+    "afterAudit": {
+      "constructionScope": "exterior",
+      "designStage": "Exterior-designed, interiors unfinished",
+      "interiorsDeferred": true,
+      "status": "incomplete",
+      "issues": [
+        "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed.",
+        "Programme Family living and dining: enclosure: rear-left-wall missing or wrong kind",
+        "Programme Family living and dining: enclosure: rear-garden-wall missing or wrong kind",
+        "Programme Family living and dining: enclosure: rear-right-wall missing or wrong kind",
+        "Programme Family living and dining: access: garden-door missing or wrong kind",
+        "Programme Family living and dining: no access construction evidence",
+        "Programme Family living and dining: interior enclosure or overhead evidence missing",
+        "Programme Family living and dining: main-floor: local enclosure evidence missing",
+        "Programme Family living and dining: main-floor: local access at walking datum unverified",
+        "Programme Kitchen and pantry reserve: enclosure: rear-right-wall missing or wrong kind",
+        "Programme Kitchen and pantry reserve: access: garden-door missing or wrong kind",
+        "Programme Kitchen and pantry reserve: no access construction evidence",
+        "Programme Kitchen and pantry reserve: main-floor: local access at walking datum unverified",
+        "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified",
+        "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified",
+        "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified",
+        "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified",
+        "Programme Covered outdoor dining: access: garden-door missing or wrong kind",
+        "Programme Covered outdoor dining: no access construction evidence",
+        "Programme Covered outdoor dining: dining-terrace: local access at walking datum unverified",
+        "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed.",
+        "Programme Pool terrace: access: garden-door missing or wrong kind",
+        "Programme Pool terrace: no access construction evidence",
+        "Programme Pool terrace: dining-terrace: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified",
+        "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified",
+        "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+        "Programme Rectangular pool: no access construction evidence",
+        "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified",
+        "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified",
+        "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+        "Programme Private garden reserve: no access construction evidence",
+        "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified",
+        "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable.",
+        "Knowledge decision pool-garden-view: Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled.",
+        "Knowledge decision dining-transition: Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.; missing elements garden-door.",
+        "Knowledge decision dining-transition: referenced geometry lacks required kinds wall; descriptions are not construction.",
+        "Knowledge decision dining-transition: Dining furniture and kitchen fit-out are deferred.",
+        "Knowledge decision asymmetric-balance: referenced geometry lacks required kinds wall; descriptions are not construction.",
+        "Knowledge decision asymmetric-balance: Visual balance is an authored composition, not solver-verified.",
+        "Knowledge decision covered-threshold: Weather performance and code clearances are not certified.",
+        "Knowledge decision solid-glass-balance: Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.; missing elements rear-garden-wall.",
+        "Knowledge decision solid-glass-balance: referenced geometry lacks required kinds plate, roof; descriptions are not construction.",
+        "Knowledge decision solid-glass-balance: Thermal, acoustic and operability performance are not simulated.",
+        "dining-canopy at world [0, 3.3, -5.35], size [7.4, 0.18, 4], rendered Y=[3.13, 3.3899999999999997] crosses Entry vestibule above main-floor at walking Y=0.15, enclosure head Y=3.35. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved.",
+        "garden-door connected-to dining-terrace: geometry does not evidence the declared relationship (clearance 0 m). The sill-zero rear door is the modelled passage to outdoor dining. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+        "dining-canopy covering dining-terrace: geometry does not evidence the declared relationship (clearance 3.06 m). The canopy is supported by four posts and shelters the dining plate. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+        "family-pool facing private-garden-reserve: geometry does not evidence the declared relationship (clearance 0 m). The far pool deck and reserved garden occupy the rearward -Z outlook. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+        "main-roof and dining-canopy: flat roof primary solids overlap vertically by 0.04 m with intersecting plan footprints. Author a separated or explicitly detailed junction; trim, drainage and weatherproofing remain unverified. No automatic union or repair was applied."
+      ],
+      "findings": [
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: enclosure: rear-left-wall missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: enclosure: rear-garden-wall missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: enclosure: rear-right-wall missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: access: garden-door missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Family living and dining: interior enclosure or overhead evidence missing"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "main-floor"
+          ],
+          "message": "Programme Family living and dining: main-floor: local enclosure evidence missing"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "main-floor"
+          ],
+          "message": "Programme Family living and dining: main-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Kitchen and pantry reserve: enclosure: rear-right-wall missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Kitchen and pantry reserve: access: garden-door missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Kitchen and pantry reserve: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "main-floor"
+          ],
+          "message": "Programme Kitchen and pantry reserve: main-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "west-wing-floor"
+          ],
+          "message": "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "east-wing-floor"
+          ],
+          "message": "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "west-wing-floor"
+          ],
+          "message": "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "east-wing-floor"
+          ],
+          "message": "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Covered outdoor dining: access: garden-door missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Covered outdoor dining: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "dining-terrace"
+          ],
+          "message": "Programme Covered outdoor dining: dining-terrace: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Pool terrace: access: garden-door missing or wrong kind"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Pool terrace: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "dining-terrace"
+          ],
+          "message": "Programme Pool terrace: dining-terrace: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool"
+          ],
+          "message": "Programme Pool terrace: family-pool: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-x-minus"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-x-plus"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-far"
+          ],
+          "message": "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified"
+        },
+        {
+          "category": "unsupported-capability",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Rectangular pool: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor"
+          ],
+          "message": "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-x-minus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-x-plus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-z-minus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-coping-z-plus"
+          ],
+          "message": "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Private garden reserve: no access construction evidence"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [
+            "family-pool",
+            "family-pool-deck-far"
+          ],
+          "message": "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified"
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "architectural-review",
+          "elementIds": [],
+          "message": "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision pool-garden-view: Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision dining-transition: Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.; missing elements garden-door."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision dining-transition: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision dining-transition: Dining furniture and kitchen fit-out are deferred."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision asymmetric-balance: referenced geometry lacks required kinds wall; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision asymmetric-balance: Visual balance is an authored composition, not solver-verified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision covered-threshold: Weather performance and code clearances are not certified."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision solid-glass-balance: Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.; missing elements rear-garden-wall."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision solid-glass-balance: referenced geometry lacks required kinds plate, roof; descriptions are not construction."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "feature-evidence",
+          "elementIds": [],
+          "message": "Knowledge decision solid-glass-balance: Thermal, acoustic and operability performance are not simulated."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "roof-envelope-review",
+          "elementIds": [
+            "dining-canopy",
+            "main-floor",
+            "front-left-wall",
+            "front-entry-wall",
+            "front-right-wall"
+          ],
+          "message": "dining-canopy at world [0, 3.3, -5.35], size [7.4, 0.18, 4], rendered Y=[3.13, 3.3899999999999997] crosses Entry vestibule above main-floor at walking Y=0.15, enclosure head Y=3.35. Coordinate lower roof sections around this occupied footprint or explicitly redesign the level/roof relationship; no elements were moved."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "spatial-intent-mismatch",
+          "elementIds": [
+            "garden-door",
+            "dining-terrace"
+          ],
+          "message": "garden-door connected-to dining-terrace: geometry does not evidence the declared relationship (clearance 0 m). The sill-zero rear door is the modelled passage to outdoor dining. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "spatial-intent-mismatch",
+          "elementIds": [
+            "dining-canopy",
+            "dining-terrace"
+          ],
+          "message": "dining-canopy covering dining-terrace: geometry does not evidence the declared relationship (clearance 3.06 m). The canopy is supported by four posts and shelters the dining plate. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+        },
+        {
+          "category": "likely-architectural-incompleteness",
+          "code": "spatial-intent-mismatch",
+          "elementIds": [
+            "family-pool",
+            "private-garden-reserve"
+          ],
+          "message": "family-pool facing private-garden-reserve: geometry does not evidence the declared relationship (clearance 0 m). The far pool deck and reserved garden occupy the rearward -Z outlook. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+        },
+        {
+          "code": "flat-roof-junction-review",
+          "category": "likely-architectural-incompleteness",
+          "elementIds": [
+            "main-roof",
+            "dining-canopy"
+          ],
+          "message": "main-roof and dining-canopy: flat roof primary solids overlap vertically by 0.04 m with intersecting plan footprints. Author a separated or explicitly detailed junction; trim, drainage and weatherproofing remain unverified. No automatic union or repair was applied."
+        }
+      ],
+      "programme": {
+        "status": "recorded",
+        "spaces": [
+          {
+            "name": "Arrival approach",
+            "zone": "circulation",
+            "strategy": "A broad limestone plate terminates at the recessed front-door threshold.",
+            "purpose": "access",
+            "floorIds": [
+              "arrival-path",
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-entry-wall"
+            ],
+            "roofIds": [
+              "entry-canopy"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Driveway, gate and vehicle parking are not requested or constructed.",
+            "floorSurfaceM2": 108,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "arrival-path",
+                "world": [
+                  0,
+                  0.075,
+                  6,
+                  0
+                ],
+                "size": [
+                  3,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "Driveway, gate and vehicle parking are not requested or constructed."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Entry vestibule",
+            "zone": "public",
+            "strategy": "Reserved immediately inside the front threshold within the central envelope.",
+            "purpose": "access",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-left-wall",
+              "front-entry-wall",
+              "front-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Interior partitions, storage and finishes are deferred.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [],
+            "status": "referenced-geometry",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Family living and dining",
+            "zone": "public",
+            "strategy": "The central envelope is reserved as the principal shared living volume with garden access.",
+            "purpose": "living",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "rear-left-wall",
+              "rear-garden-wall",
+              "rear-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "No interior furniture, kitchen cabinetry or dining fit-out is constructed.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "enclosure: rear-left-wall missing or wrong kind",
+              "enclosure: rear-garden-wall missing or wrong kind",
+              "enclosure: rear-right-wall missing or wrong kind",
+              "access: garden-door missing or wrong kind",
+              "no access construction evidence",
+              "interior enclosure or overhead evidence missing",
+              "main-floor: local enclosure evidence missing",
+              "main-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Kitchen and pantry reserve",
+            "zone": "service",
+            "strategy": "Capacity is reserved within the central public envelope beside the dining and terrace connection.",
+            "purpose": "kitchen",
+            "floorIds": [
+              "main-floor"
+            ],
+            "enclosureIds": [
+              "front-right-wall",
+              "rear-right-wall"
+            ],
+            "roofIds": [
+              "main-roof"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Kitchen units, pantry partitions and appliances are deferred.",
+            "floorSurfaceM2": 96,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "main-floor",
+                "world": [
+                  0,
+                  0.075,
+                  0,
+                  0
+                ],
+                "size": [
+                  12,
+                  0.15,
+                  8
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "enclosure: rear-right-wall missing or wrong kind",
+              "access: garden-door missing or wrong kind",
+              "no access construction evidence",
+              "main-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Four-bedroom accommodation reserve",
+            "zone": "private",
+            "strategy": "Three bedroom-capable bays are allocated to the west wing and one larger private suite-capable bay to the east wing, with allowance for bathrooms and circulation.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "four bedrooms"
+            },
+            "purpose": "bedroom",
+            "floorIds": [
+              "west-wing-floor",
+              "east-wing-floor"
+            ],
+            "enclosureIds": [
+              "west-side-north",
+              "west-side-middle",
+              "west-side-south",
+              "east-side-north",
+              "east-side-south",
+              "west-front-wall",
+              "west-rear-wall",
+              "east-front-wall",
+              "east-rear-wall"
+            ],
+            "roofIds": [
+              "west-wing-roof",
+              "east-wing-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "Shared envelope floors indicate accommodation capacity only; individual bedrooms, bathrooms, hallways and internal doors are not subdivided in exterior scope.",
+            "floorSurfaceM2": 132,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "west-wing-floor",
+                "world": [
+                  -9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  12
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "east-wing-floor",
+                "world": [
+                  9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  10
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "west-wing-floor: local access at walking datum unverified",
+              "east-wing-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Bathroom and laundry reserve",
+            "zone": "service",
+            "strategy": "Plumbing-service capacity is reserved within the bedroom-wing envelopes near their shared internal edges.",
+            "purpose": "bathroom",
+            "floorIds": [
+              "west-wing-floor",
+              "east-wing-floor"
+            ],
+            "enclosureIds": [
+              "west-front-wall",
+              "east-front-wall"
+            ],
+            "roofIds": [
+              "west-wing-roof",
+              "east-wing-roof"
+            ],
+            "accessIds": [
+              "front-door"
+            ],
+            "limitation": "No bathroom partitions, fixtures, laundry equipment or services are constructed.",
+            "floorSurfaceM2": 132,
+            "walkingDatums": [
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "west-wing-floor",
+                "world": [
+                  -9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  12
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "east-wing-floor",
+                "world": [
+                  9,
+                  0.075,
+                  -1,
+                  0
+                ],
+                "size": [
+                  6,
+                  0.15,
+                  10
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "west-wing-floor: local access at walking datum unverified",
+              "east-wing-floor: local access at walking datum unverified"
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Covered outdoor dining",
+            "zone": "outdoor",
+            "strategy": "A covered limestone terrace directly outside the garden door is shaded by a four-post timber-and-limestone canopy.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "covered outdoor dining"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "dining-terrace"
+            ],
+            "enclosureIds": [],
+            "roofIds": [
+              "dining-canopy"
+            ],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Dining furniture and exterior kitchen equipment are not constructed.",
+            "floorSurfaceM2": 40,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "dining-terrace",
+                "world": [
+                  -1,
+                  0.075,
+                  -6,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "access: garden-door missing or wrong kind",
+              "no access construction evidence",
+              "dining-terrace: local access at walking datum unverified",
+              "Dining furniture and exterior kitchen equipment are not constructed."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Pool terrace",
+            "zone": "outdoor",
+            "strategy": "The terrace meets the near dry deck of the completed rectangular-pool assembly at the same 0.15 m walking datum.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "a pool"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "dining-terrace",
+              "family-pool",
+              "family-pool-deck-x-minus",
+              "family-pool-deck-x-plus",
+              "family-pool-deck-far"
+            ],
+            "enclosureIds": [
+              "family-pool-wall-x-minus",
+              "family-pool-wall-x-plus",
+              "family-pool-wall-z-minus",
+              "family-pool-wall-z-plus"
+            ],
+            "roofIds": [],
+            "accessIds": [
+              "garden-door"
+            ],
+            "limitation": "Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+            "floorSurfaceM2": 86.39999999999999,
+            "walkingDatums": [
+              0.15,
+              0.15,
+              0.15,
+              0.15,
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "dining-terrace",
+                "world": [
+                  -1,
+                  0.075,
+                  -6,
+                  0
+                ],
+                "size": [
+                  10,
+                  0.15,
+                  4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool",
+                "world": [
+                  0,
+                  0,
+                  -8.75,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-x-minus",
+                "world": [
+                  4.099998112064127,
+                  0,
+                  -14.20000142028152,
+                  3.141593
+                ],
+                "size": [
+                  1,
+                  0.3,
+                  9.4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-x-plus",
+                "world": [
+                  -4.10000188793538,
+                  0,
+                  -14.199998579717825,
+                  3.141593
+                ],
+                "size": [
+                  1,
+                  0.3,
+                  9.4
+                ],
+                "walkingDatum": 0.15
+              },
+              {
+                "id": "family-pool-deck-far",
+                "world": [
+                  -0.000003775871252151389,
+                  0,
+                  -19.649999999999345,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "access: garden-door missing or wrong kind",
+              "no access construction evidence",
+              "dining-terrace: local access at walking datum unverified",
+              "family-pool: local access at walking datum unverified",
+              "family-pool-deck-x-minus: local access at walking datum unverified",
+              "family-pool-deck-x-plus: local access at walking datum unverified",
+              "family-pool-deck-far: local access at walking datum unverified",
+              "Pool hydraulics, filtration, waterproofing, heating and engineering are not represented."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Rectangular pool",
+            "zone": "outdoor",
+            "strategy": "A dedicated rectangular basin has an explicit floor, four perimeter walls, coping, water surface and continuous dry deck circuit.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "a pool"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "family-pool-floor",
+              "family-pool-coping-x-minus",
+              "family-pool-coping-x-plus",
+              "family-pool-coping-z-minus",
+              "family-pool-coping-z-plus"
+            ],
+            "enclosureIds": [
+              "family-pool-wall-x-minus",
+              "family-pool-wall-x-plus",
+              "family-pool-wall-z-minus",
+              "family-pool-wall-z-plus"
+            ],
+            "roofIds": [],
+            "accessIds": [],
+            "limitation": "The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+            "floorSurfaceM2": 73.44000000000001,
+            "walkingDatums": [
+              -1.3,
+              0.15000000000000002,
+              0.15000000000000002,
+              0.15000000000000002,
+              0.15000000000000002
+            ],
+            "allocation": [
+              {
+                "id": "family-pool-floor",
+                "world": [
+                  -0.0000018879356260756945,
+                  -1.4000000000000001,
+                  -14.199999999999672,
+                  3.141593
+                ],
+                "size": [
+                  6.4,
+                  0.2,
+                  8.4
+                ],
+                "walkingDatum": -1.3
+              },
+              {
+                "id": "family-pool-coping-x-minus",
+                "world": [
+                  3.299998112064176,
+                  0.1,
+                  -14.200001143153354,
+                  3.141593
+                ],
+                "size": [
+                  0.6,
+                  0.1,
+                  8
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-x-plus",
+                "world": [
+                  -3.3000018879354283,
+                  0.1,
+                  -14.19999885684599,
+                  3.141593
+                ],
+                "size": [
+                  0.6,
+                  0.1,
+                  8
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-z-minus",
+                "world": [
+                  -3.81051227281333e-7,
+                  0.1,
+                  -9.849999999999934,
+                  3.141593
+                ],
+                "size": [
+                  7.2,
+                  0.1,
+                  0.7
+                ],
+                "walkingDatum": 0.15000000000000002
+              },
+              {
+                "id": "family-pool-coping-z-plus",
+                "world": [
+                  -0.0000033948200248700565,
+                  0.1,
+                  -18.549999999999415,
+                  3.141593
+                ],
+                "size": [
+                  7.2,
+                  0.1,
+                  0.7
+                ],
+                "walkingDatum": 0.15000000000000002
+              }
+            ],
+            "issues": [
+              "no access construction evidence",
+              "family-pool-floor: local access at walking datum unverified",
+              "family-pool-coping-x-minus: local access at walking datum unverified",
+              "family-pool-coping-x-plus: local access at walking datum unverified",
+              "family-pool-coping-z-minus: local access at walking datum unverified",
+              "family-pool-coping-z-plus: local access at walking datum unverified",
+              "The rectangular water primitive does not model an infinity edge, equipment or water treatment."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          },
+          {
+            "name": "Private garden reserve",
+            "zone": "outdoor",
+            "strategy": "The open ground beyond the far pool deck is reserved as the private planted garden outlook.",
+            "requirement": {
+              "origin": "user-required",
+              "briefQuote": "private garden"
+            },
+            "purpose": "outdoor",
+            "floorIds": [
+              "family-pool-deck-far"
+            ],
+            "enclosureIds": [],
+            "roofIds": [],
+            "accessIds": [],
+            "limitation": "Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable.",
+            "floorSurfaceM2": 13.799999999999999,
+            "walkingDatums": [
+              0.15
+            ],
+            "allocation": [
+              {
+                "id": "family-pool-deck-far",
+                "world": [
+                  -0.000003775871252151389,
+                  0,
+                  -19.649999999999345,
+                  3.141593
+                ],
+                "size": [
+                  9.2,
+                  0.3,
+                  1.5
+                ],
+                "walkingDatum": 0.15
+              }
+            ],
+            "issues": [
+              "no access construction evidence",
+              "family-pool-deck-far: local access at walking datum unverified",
+              "Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+            ],
+            "status": "missing-evidence",
+            "verifiedComplete": false
+          }
+        ],
+        "deferredInteriors": [
+          "Entry vestibule: interior subdivision and fit-out unverified; Interior partitions, storage and finishes are deferred.",
+          "Family living and dining: interior subdivision and fit-out unverified; No interior furniture, kitchen cabinetry or dining fit-out is constructed.",
+          "Kitchen and pantry reserve: interior subdivision and fit-out unverified; Kitchen units, pantry partitions and appliances are deferred.",
+          "Four-bedroom accommodation reserve: interior subdivision and fit-out unverified; Shared envelope floors indicate accommodation capacity only; individual bedrooms, bathrooms, hallways and internal doors are not subdivided in exterior scope.",
+          "Bathroom and laundry reserve: interior subdivision and fit-out unverified; No bathroom partitions, fixtures, laundry equipment or services are constructed."
+        ],
+        "issues": [
+          "Programme Arrival approach: Driveway, gate and vehicle parking are not requested or constructed.",
+          "Programme Family living and dining: enclosure: rear-left-wall missing or wrong kind",
+          "Programme Family living and dining: enclosure: rear-garden-wall missing or wrong kind",
+          "Programme Family living and dining: enclosure: rear-right-wall missing or wrong kind",
+          "Programme Family living and dining: access: garden-door missing or wrong kind",
+          "Programme Family living and dining: no access construction evidence",
+          "Programme Family living and dining: interior enclosure or overhead evidence missing",
+          "Programme Family living and dining: main-floor: local enclosure evidence missing",
+          "Programme Family living and dining: main-floor: local access at walking datum unverified",
+          "Programme Kitchen and pantry reserve: enclosure: rear-right-wall missing or wrong kind",
+          "Programme Kitchen and pantry reserve: access: garden-door missing or wrong kind",
+          "Programme Kitchen and pantry reserve: no access construction evidence",
+          "Programme Kitchen and pantry reserve: main-floor: local access at walking datum unverified",
+          "Programme Four-bedroom accommodation reserve: west-wing-floor: local access at walking datum unverified",
+          "Programme Four-bedroom accommodation reserve: east-wing-floor: local access at walking datum unverified",
+          "Programme Bathroom and laundry reserve: west-wing-floor: local access at walking datum unverified",
+          "Programme Bathroom and laundry reserve: east-wing-floor: local access at walking datum unverified",
+          "Programme Covered outdoor dining: access: garden-door missing or wrong kind",
+          "Programme Covered outdoor dining: no access construction evidence",
+          "Programme Covered outdoor dining: dining-terrace: local access at walking datum unverified",
+          "Programme Covered outdoor dining: Dining furniture and exterior kitchen equipment are not constructed.",
+          "Programme Pool terrace: access: garden-door missing or wrong kind",
+          "Programme Pool terrace: no access construction evidence",
+          "Programme Pool terrace: dining-terrace: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-x-minus: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-x-plus: local access at walking datum unverified",
+          "Programme Pool terrace: family-pool-deck-far: local access at walking datum unverified",
+          "Programme Pool terrace: Pool hydraulics, filtration, waterproofing, heating and engineering are not represented.",
+          "Programme Rectangular pool: no access construction evidence",
+          "Programme Rectangular pool: family-pool-floor: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-x-minus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-x-plus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-z-minus: local access at walking datum unverified",
+          "Programme Rectangular pool: family-pool-coping-z-plus: local access at walking datum unverified",
+          "Programme Rectangular pool: The rectangular water primitive does not model an infinity edge, equipment or water treatment.",
+          "Programme Private garden reserve: no access construction evidence",
+          "Programme Private garden reserve: family-pool-deck-far: local access at walking datum unverified",
+          "Programme Private garden reserve: Planting, trees, irrigation, fencing and garden lighting are intentionally unbuilt because direct-scene planting primitives are unavailable."
+        ]
+      },
+      "designDecisions": [
+        {
+          "disposition": "constructed",
+          "knowledgeId": "pool-garden-view",
+          "decision": "Constructed a rectangular pool with explicit basin floor, perimeter walls, coping and a dry circulation deck, oriented toward the garden reserve.",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "limitation": "Hydraulics, filtration, waterproofing and any infinity-edge effect are not modelled.",
+          "existingElementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "dining-transition",
+          "decision": "Placed the covered dining terrace directly at the central living/garden threshold rather than using it as a circulation obstruction.",
+          "elementIds": [
+            "dining-terrace",
+            "garden-door",
+            "dining-canopy"
+          ],
+          "limitation": "Dining furniture and kitchen fit-out are deferred.",
+          "existingElementIds": [
+            "dining-terrace",
+            "dining-canopy"
+          ],
+          "missingElementIds": [
+            "garden-door"
+          ],
+          "missingKinds": [
+            "wall"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "considered",
+          "knowledgeId": "outdoor-reading-nook",
+          "decision": "A separate reading pavilion was not selected so the garden remains open and the dining canopy stays the sole outdoor shelter.",
+          "elementIds": [],
+          "limitation": "No separate reading nook is constructed.",
+          "existingElementIds": [],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "considered",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "unsupported",
+          "knowledgeId": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "decision": "A planted private garden is reserved beyond the pool but layered tropical planting cannot be represented with the available direct-scene primitives.",
+          "elementIds": [],
+          "limitation": "No editable planting, trees, irrigation or lighting are available in this output.",
+          "existingElementIds": [],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "unsupported",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "asymmetric-balance",
+          "decision": "Balanced the dominant central living volume with unequal bedroom wings while holding a shared roof datum and terrace edge.",
+          "elementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "limitation": "Visual balance is an authored composition, not solver-verified.",
+          "existingElementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [
+            "wall"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "covered-threshold",
+          "decision": "Built an actual front-door opening, threshold approach and post-supported entrance canopy.",
+          "elementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "limitation": "Weather performance and code clearances are not certified.",
+          "existingElementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "missingElementIds": [],
+          "missingKinds": [],
+          "detachedElementIds": [],
+          "status": "referenced-geometry",
+          "verifiedComplete": false
+        },
+        {
+          "disposition": "constructed",
+          "knowledgeId": "solid-glass-balance",
+          "decision": "Concentrated the large garden opening at shared living while separating smaller private wing windows with solid wall fields.",
+          "elementIds": [
+            "rear-garden-wall",
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "limitation": "Thermal, acoustic and operability performance are not simulated.",
+          "existingElementIds": [
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "missingElementIds": [
+            "rear-garden-wall"
+          ],
+          "missingKinds": [
+            "plate",
+            "roof"
+          ],
+          "detachedElementIds": [],
+          "status": "missing-evidence",
+          "verifiedComplete": false
+        }
+      ],
+      "knowledgeUse": [
+        {
+          "id": "pool-garden-view",
+          "version": 1,
+          "status": "construction-evidence",
+          "elementIds": [
+            "family-pool",
+            "family-pool-floor",
+            "family-pool-water",
+            "family-pool-wall-x-minus",
+            "family-pool-wall-x-plus",
+            "family-pool-wall-z-minus",
+            "family-pool-wall-z-plus"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "dining-transition",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "dining-terrace",
+            "dining-canopy"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "outdoor-reading-nook",
+          "version": 1,
+          "status": "considered",
+          "elementIds": [],
+          "verifiedComplete": false
+        },
+        {
+          "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+          "version": 1,
+          "status": "unsupported",
+          "elementIds": [],
+          "verifiedComplete": false
+        },
+        {
+          "id": "asymmetric-balance",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "main-floor",
+            "west-wing-floor",
+            "east-wing-floor",
+            "main-roof",
+            "west-wing-roof",
+            "east-wing-roof"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "covered-threshold",
+          "version": 1,
+          "status": "construction-evidence",
+          "elementIds": [
+            "arrival-path",
+            "front-entry-wall",
+            "front-door",
+            "entry-canopy",
+            "entry-post-west",
+            "entry-post-east"
+          ],
+          "verifiedComplete": false
+        },
+        {
+          "id": "solid-glass-balance",
+          "version": 1,
+          "status": "partial-construction",
+          "elementIds": [
+            "west-side-north",
+            "west-side-middle",
+            "west-side-south",
+            "east-side-north",
+            "east-side-south"
+          ],
+          "verifiedComplete": false
+        }
+      ],
+      "geometry": {
+        "kindCounts": {
+          "plate": 14,
+          "wall": 18,
+          "entrance": 2,
+          "roof": 5,
+          "volume": 7,
+          "water": 1,
+          "glazing": 2
+        },
+        "surfaces": [
+          {
+            "id": "main-floor",
+            "kind": "plate",
+            "areaM2": 96,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "west-wing-floor",
+            "kind": "plate",
+            "areaM2": 72,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "east-wing-floor",
+            "kind": "plate",
+            "areaM2": 60,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "arrival-path",
+            "kind": "plate",
+            "areaM2": 12,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "dining-terrace",
+            "kind": "plate",
+            "areaM2": 40,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool",
+            "kind": "plate",
+            "areaM2": 13.799999999999999,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-floor",
+            "kind": "plate",
+            "areaM2": 53.760000000000005,
+            "walkingDatum": -1.3
+          },
+          {
+            "id": "family-pool-water",
+            "kind": "water",
+            "areaM2": 48,
+            "walkingDatum": 0.05
+          },
+          {
+            "id": "family-pool-coping-z-minus",
+            "kind": "plate",
+            "areaM2": 5.04,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-coping-x-minus",
+            "kind": "plate",
+            "areaM2": 4.8,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-deck-x-minus",
+            "kind": "plate",
+            "areaM2": 9.4,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-coping-z-plus",
+            "kind": "plate",
+            "areaM2": 5.04,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-coping-x-plus",
+            "kind": "plate",
+            "areaM2": 4.8,
+            "walkingDatum": 0.15000000000000002
+          },
+          {
+            "id": "family-pool-deck-x-plus",
+            "kind": "plate",
+            "areaM2": 9.4,
+            "walkingDatum": 0.15
+          },
+          {
+            "id": "family-pool-deck-far",
+            "kind": "plate",
+            "areaM2": 13.799999999999999,
+            "walkingDatum": 0.15
+          }
+        ],
+        "overlaps": [],
+        "walkingDatums": [
+          0.15,
+          -1.3
+        ],
+        "plateSurfaceAreaM2": 399.84000000000003,
+        "waterSurfaceAreaM2": 48
+      },
+      "limitations": [
+        "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+      ]
+    },
+    "architecturalQuality": "Requires human comparison; warning reduction is not proof of better composition."
+  },
+  "context": {
+    "targets": [
+      {
+        "id": "rear-left-wall",
+        "world": [
+          -3.5,
+          1.75,
+          -4,
+          0
+        ],
+        "renderedBottom": 0.1499999999999999,
+        "renderedTop": 3.35,
+        "size": [
+          5,
+          3.2,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "rear-garden-wall",
+        "world": [
+          1,
+          1.75,
+          -4,
+          0
+        ],
+        "renderedBottom": 0.1499999999999999,
+        "renderedTop": 3.35,
+        "size": [
+          2,
+          3.2,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "garden-door",
+        "world": [
+          1,
+          1.4,
+          -4,
+          0
+        ],
+        "renderedBottom": 0.1499999999999999,
+        "renderedTop": 2.65,
+        "size": [
+          1.5,
+          2.5,
+          0.12
+        ],
+        "profiled": false
+      },
+      {
+        "id": "rear-right-wall",
+        "world": [
+          4.5,
+          1.75,
+          -4,
+          0
+        ],
+        "renderedBottom": 0.1499999999999999,
+        "renderedTop": 3.35,
+        "size": [
+          3,
+          3.2,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-terrace",
+        "world": [
+          -1,
+          0.075,
+          -6,
+          0
+        ],
+        "renderedBottom": 0,
+        "renderedTop": 0.15,
+        "size": [
+          10,
+          0.15,
+          4
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-post-west-front",
+        "world": [
+          -4.25,
+          1.65,
+          -4.55,
+          0
+        ],
+        "renderedBottom": 0,
+        "renderedTop": 3.3,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-post-east-front",
+        "world": [
+          2.25,
+          1.65,
+          -4.55,
+          0
+        ],
+        "renderedBottom": 0,
+        "renderedTop": 3.3,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-post-west-rear",
+        "world": [
+          -4.25,
+          1.65,
+          -7.75,
+          0
+        ],
+        "renderedBottom": 0,
+        "renderedTop": 3.3,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-post-east-rear",
+        "world": [
+          2.25,
+          1.65,
+          -7.75,
+          0
+        ],
+        "renderedBottom": 0,
+        "renderedTop": 3.3,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "profiled": false
+      },
+      {
+        "id": "dining-canopy",
+        "world": [
+          -1,
+          3.3,
+          -6.15,
+          0
+        ],
+        "renderedBottom": 3.13,
+        "renderedTop": 3.3899999999999997,
+        "size": [
+          6.8,
+          0.18,
+          3.4
+        ],
+        "profiled": false
+      }
+    ],
+    "preservedReferences": [
+      {
+        "elementId": "rear-left-wall",
+        "path": "architecturalPlan.programme[2].enclosureIds[0]"
+      },
+      {
+        "elementId": "rear-garden-wall",
+        "path": "architecturalPlan.programme[2].enclosureIds[1]"
+      },
+      {
+        "elementId": "rear-right-wall",
+        "path": "architecturalPlan.programme[2].enclosureIds[2]"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.programme[2].accessIds[0]"
+      },
+      {
+        "elementId": "rear-right-wall",
+        "path": "architecturalPlan.programme[3].enclosureIds[1]"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.programme[3].accessIds[0]"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.programme[6].floorIds[0]"
+      },
+      {
+        "elementId": "dining-canopy",
+        "path": "architecturalPlan.programme[6].roofIds[0]"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.programme[6].accessIds[0]"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.programme[7].floorIds[0]"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.programme[7].accessIds[0]"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.spatialRelationships[0].subject"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.spatialRelationships[1].subject"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.spatialRelationships[1].target"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.spatialRelationships[2].subject"
+      },
+      {
+        "elementId": "dining-canopy",
+        "path": "architecturalPlan.spatialRelationships[4].subject"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.spatialRelationships[4].target"
+      },
+      {
+        "elementId": "dining-terrace",
+        "path": "architecturalPlan.designDecisions[1].elementIds[0]"
+      },
+      {
+        "elementId": "garden-door",
+        "path": "architecturalPlan.designDecisions[1].elementIds[1]"
+      },
+      {
+        "elementId": "dining-canopy",
+        "path": "architecturalPlan.designDecisions[1].elementIds[2]"
+      },
+      {
+        "elementId": "rear-garden-wall",
+        "path": "architecturalPlan.designDecisions[6].elementIds[0]"
+      }
+    ],
+    "contract": "Retain referenced identities only when the same component survives (replace can retain its ID). Removing a referenced component leaves stale evidence: there is no authorized evidence-remapping operation. Do not invent replacements or preserve an ID for a different meaning. If coordination requires changing programme boundaries or splitting referenced identities, disclose the unsupported transaction rather than claiming completion. Bounds of profiles and pitched roofs do not certify solid contact."
+  },
+  "supportedDeveloperFixture": {
+    "accepted": true,
+    "changedIds": [
+      "gable-roof",
+      "entry-canopy",
+      "entry-roof",
+      "entry-west-pier",
+      "entry-east-pier",
+      "arrival-west-screen",
+      "arrival-east-screen"
+    ],
+    "notModelEvidence": true
+  },
+  "inputs": [
+    {
+      "path": "retained-visual-review/original.scene.json",
+      "sha256": "b76ed99bad6f6bda1c1e6f233ef9d65e9b01b0c1c0687f97e488dc44feadf983"
+    },
+    {
+      "path": "retained-visual-review/raw-candidate.operations.json",
+      "sha256": "60042ff1abfdb84255c52da2a13d6a3411178f354eb9683fd8eb048be51a95bc"
+    },
+    {
+      "path": "retained-visual-review/refine.provider-response.txt",
+      "sha256": "e92f322776e7fef43c37c9ff5fdf8214c6fb3fc762b93a48dfc5e4d194dfa1c8"
+    },
+    {
+      "path": "generation-quality/final-family/scene.json",
+      "sha256": "b76ed99bad6f6bda1c1e6f233ef9d65e9b01b0c1c0687f97e488dc44feadf983"
+    },
+    {
+      "path": "generation-quality/final-family/provider-request.json",
+      "sha256": "9f75b8f602bfc2ab102e227951952bc09c10f6c9381ab043f84bf1fd368a32d4"
+    },
+    {
+      "path": "generation-quality/final-family/provider-response.json",
+      "sha256": "d9f64fccc9f4833bdef11cee31d2adf32fb1a7d337baa46da720c8ebf1c4e7c3"
+    },
+    {
+      "path": "single-house/construction.scene.json",
+      "sha256": "94eb5a4a7f594449c86b652861a8f8172fc898795e1ade132ed45ce385c94d2b"
+    },
+    {
+      "path": "single-house/diagnostic.operations.json",
+      "sha256": "0dbee2fbf709eb8a3b81443de2c3a599d4c262f91d2e7cc7c8647c08c6086914"
+    },
+    {
+      "path": "single-house/before-aerial.png",
+      "sha256": "a69f11afa2a98ed807177ce427630f904c15415025076d329341d63e6931bb71"
+    },
+    {
+      "path": "single-house/before-arrival.png",
+      "sha256": "c82e07b4bfb241ce8a8f9497070876f86b59a38e06f11d6ed69c6e7a28767819"
+    },
+    {
+      "path": "single-house/before-garden.png",
+      "sha256": "8b374da142552f69bd603c589f2b3c2738d9a1432fec5544c108f7034eac9dd4"
+    },
+    {
+      "path": "single-house/before-poolside.png",
+      "sha256": "8e52df5a3835aec26f86c6adb9f2bcd7860952e03bbae4b5105195c5fd2c4e66"
+    },
+    {
+      "path": "single-house/after-aerial.png",
+      "sha256": "a336dfca2a2750239fcd1fc161f1e30a9446036efe45016b4aab9fa737c7b5a5"
+    },
+    {
+      "path": "single-house/after-arrival.png",
+      "sha256": "01cc61a370e21688f049b1481e327e33da540744e8ca633ec28d7e578c8592fb"
+    },
+    {
+      "path": "single-house/after-garden.png",
+      "sha256": "341f286bf44ed5ce604b72ae97b5a5dc361855c78462e3082503f1417451e9ba"
+    },
+    {
+      "path": "single-house/after-poolside.png",
+      "sha256": "1b388685ae49a26843f4b0ca6523afe2a8d81ca05a83a1ce4217e36337c9b68f"
+    }
+  ]
+}

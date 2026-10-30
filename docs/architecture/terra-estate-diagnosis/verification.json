@@ -1,0 +1,284 @@
+{
+  "providerCallsThisInvestigation": 0,
+  "originalHashesVerified": true,
+  "exactProviderOutputReparsed": true,
+  "replayMatches128OriginalElements": true,
+  "wholeOriginalStillRejected": true,
+  "originalIssueCount": 26,
+  "currentIssueCount": 14,
+  "originalRoofDirectionalFindings": 20,
+  "currentRoofDirectionalFindings": 8,
+  "examples": [
+    {
+      "name": "railing",
+      "remainingFindings": [
+        {
+          "id": "suite-one-roof",
+          "relatedIds": [
+            "suite-two-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-one-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-two-roof",
+          "relatedIds": [
+            "suite-one-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-two-roof: roof geometry intersects suite-one-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-two-roof",
+          "relatedIds": [
+            "suite-three-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-two-roof: roof geometry intersects suite-three-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-three-roof",
+          "relatedIds": [
+            "suite-two-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-three-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-four-roof",
+          "relatedIds": [
+            "suite-five-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-four-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-five-roof",
+          "relatedIds": [
+            "suite-four-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-five-roof: roof geometry intersects suite-four-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-five-roof",
+          "relatedIds": [
+            "suite-six-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-five-roof: roof geometry intersects suite-six-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-six-roof",
+          "relatedIds": [
+            "suite-five-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-six-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "pool-water",
+          "relatedIds": [
+            "ocean-link"
+          ],
+          "rule": "water-obstruction",
+          "message": "pool-water: solid ocean-link crosses the interior water plane; split the floor/deck around the pool reservation or explicitly redesign the water. Geometry was not moved."
+        },
+        {
+          "id": "stair-02",
+          "rule": "support",
+          "message": "stair-02: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-03",
+          "rule": "support",
+          "message": "stair-03: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-04",
+          "rule": "support",
+          "message": "stair-04: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-05",
+          "rule": "support",
+          "message": "stair-05: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        }
+      ]
+    },
+    {
+      "name": "pool-link",
+      "remainingFindings": [
+        {
+          "id": "suite-one-roof",
+          "relatedIds": [
+            "suite-two-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-one-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-two-roof",
+          "relatedIds": [
+            "suite-one-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-two-roof: roof geometry intersects suite-one-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-two-roof",
+          "relatedIds": [
+            "suite-three-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-two-roof: roof geometry intersects suite-three-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-three-roof",
+          "relatedIds": [
+            "suite-two-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-three-roof: roof geometry intersects suite-two-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-four-roof",
+          "relatedIds": [
+            "suite-five-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-four-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-five-roof",
+          "relatedIds": [
+            "suite-four-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-five-roof: roof geometry intersects suite-four-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-five-roof",
+          "relatedIds": [
+            "suite-six-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-five-roof: roof geometry intersects suite-six-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "suite-six-roof",
+          "relatedIds": [
+            "suite-five-roof"
+          ],
+          "rule": "assembly-roof-junction",
+          "message": "suite-six-roof: roof geometry intersects suite-five-roof (pitched pairs use builder surfaces/fascia; other pairs use envelopes); automatic roof unions are unsupported. Separate eaves or author the junction explicitly."
+        },
+        {
+          "id": "belvedere-rail-front",
+          "rule": "railing-deck",
+          "message": "belvedere-rail-front: Railing base and full rendered span need a supporting deck at the walking surface."
+        },
+        {
+          "id": "stair-02",
+          "rule": "support",
+          "message": "stair-02: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-03",
+          "rule": "support",
+          "message": "stair-03: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-04",
+          "rule": "support",
+          "message": "stair-04: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-05",
+          "rule": "support",
+          "message": "stair-05: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        }
+      ]
+    },
+    {
+      "name": "suite-eaves",
+      "remainingFindings": [
+        {
+          "id": "pool-water",
+          "relatedIds": [
+            "ocean-link"
+          ],
+          "rule": "water-obstruction",
+          "message": "pool-water: solid ocean-link crosses the interior water plane; split the floor/deck around the pool reservation or explicitly redesign the water. Geometry was not moved."
+        },
+        {
+          "id": "belvedere-rail-front",
+          "rule": "railing-deck",
+          "message": "belvedere-rail-front: Railing base and full rendered span need a supporting deck at the walking surface."
+        },
+        {
+          "id": "stair-02",
+          "rule": "support",
+          "message": "stair-02: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-03",
+          "rule": "support",
+          "message": "stair-03: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-04",
+          "rule": "support",
+          "message": "stair-04: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        },
+        {
+          "id": "stair-05",
+          "rule": "support",
+          "message": "stair-05: Elevated floor/deck needs contact with a ground-connected slab, wall, glazing, roof, pier or beam (volume); attachment alone is not support."
+        }
+      ]
+    }
+  ],
+  "stairExample": {
+    "risers": 19,
+    "rise": 0.18026315789473682,
+    "lowerDatum": 0.2,
+    "upperDatum": 3.625,
+    "relationshipFindings": 0,
+    "scope": "Isolated supported stair/landing feasibility, not full house repair; no guards or approach certification."
+  },
+  "sourceHashes": {
+    "REPORT.md": "6600b7661401e578d5e04afd4e8cabf7076bfb04792b963c514541d8d97b0680",
+    "architectural-plan.json": "0a72e7854864a60c51a60295b6c380fa0ae5ab46c2f3ac6e78c99d0d3eebd53a",
+    "architecture-audit.json": "e49c28a9c162a84af6e0376d108b86231b01d57b5e9abd378b413a93a950afb2",
+    "assembly-provenance.json": "67f36caec27dd497a347c0c5177302d7da20054e4eb9a02603ad5c74f37ceb2e",
+    "authored-operations.json": "55325c4a34628c699b425704c31e6f33d3fbfbc7be01ab9d4b2943dcedd26b70",
+    "call-result.json": "351a9c190837f9b45763b73296e66003ff5c85afc2696498f746df7cbbd175d4",
+    "call-started.json": "b29a3ef4f41096d612e59cb71f6f1fbd2cb9f70a469e8fb766b2629fd9613393",
+    "construction-analysis.json": "40a15be1c50d9bb257e7dfa528bbbd8bcbbc824ad6f53e5795ddbfebf45b5c00",
+    "draft.REJECTED.json": "c5b5738a7692291142c2a17f4c38f470631a5d6b542aae6d662da20f4eda7183",
+    "expanded-indexed.json": "339828974806d2a1ebb68970c7a172c47667b5ae836c894c3677a1eb199167f8",
+    "final-verification.json": "0bb410e0234e6a61863916250f71089fd2b6d1bd7a334af2442011efc69024ed",
+    "measurements.json": "1a328727943c59f4df3054f8386f494f8a6aff0d821059fad2a1bba7a155c22e",
+    "normalized-output.json": "a73d7f1e0f21392d156e0051701ed92979331f8667c80a2f62f9e234648e3782",
+    "preflight-result.json": "3bc2085d0655180a39ebdac143c1f06dd1eeea681c938108664eefcfc616079e",
+    "preflight-retained.diagnostics.json": "b8eae26807e1315e471b16be957f8de977267ef25f8786cfe0f4394d36c412d2",
+    "preflight-retained.json": "6d1f5611917a717a83e102649d5b976f569823635a52e6d6fc9b26cec9b4b166",
+    "preflight-route-response.json": "256fb3e34bb1551da7ad9c72ee03319b5eb86880bc9fa9b03fb87163700e31ea",
+    "preflight-usage-log-values.json": "b70206210645f27d1f75e49a51d12622e5b5fb392374f365fa201d1d7a51b29f",
+    "preflight.json": "0d6b3f467ea649640a1b896fde3ac6febdbd1d76ee86e937bf0f6cfc8f4b996d",
+    "provider-http.json": "eb84d3a387347ad50186f4501e957e5860143a7e1ee87f7991e57091591e91f3",
+    "provider-request.exact.json": "7b614ef061c2b8ea4e098587259177c68ee746e0f6757fdbec96804d155051dd",
+    "provider-response.exact.json": "69e03a5568379962175bd2aff66cf4690cc06f911eb25bd70dc2d98f409bed6d",
+    "relationship-findings.json": "815f3c6f2425ded1ea31a9d151fff56fd2901f8300487f968eab04d40ca02671",
+    "request.json": "852057d959ad94ed7c06df8e61227a1e580b8fac47fc72a308ac8e59035b29aa",
+    "retained.diagnostics.json": "da115a12db1f2c1783fdd5a79c73aaaaac7ea4873ec30d6f4cf4ad48818410e7",
+    "retained.json": "4b19924d58bb7e94abf9bce99763ab23d1a5364be30fada471ac397d9ddc72d5",
+    "retained.provider.txt": "4901d0f4fce3147e522310f9ba36fb97a500b63f6900ebb18aa855c171964495",
+    "retained.wire.json": "ac228b8df1a8c04eef997ec9046a256e112210c73d750390e75a8adc38604d85",
+    "route-response.json": "8a75d12f032155ba79040d2931f40e50689e7f38ad64ac89ff3d62a723d04b4e",
+    "staged.DIAGNOSTIC.json": "c5b5738a7692291142c2a17f4c38f470631a5d6b542aae6d662da20f4eda7183",
+    "usage-log-values.json": "1e9ff6ea37305a7a9d704ae5eb8e93496ced4d274f03d03ddbd2a4796480234d",
+    "verification.json": "d6aa1fdac1eaa5686c416b8fd30c357467c50966df98c7c8b2ccc6db6ccbdda5"
+  }
+}

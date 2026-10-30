@@ -27,10 +27,10 @@ it('missing, malformed and wrong classifications never veto valid geometry',()=>
 });
 it('invalid support fails atomically and retains a schema-valid recoverable draft',()=>{
  const base=resolveSceneResult(retained.input,retained.output).scene,before=JSON.stringify(base);
- const operations=[{op:'move',id:'salon-floor',at:[100,30,100]}];
+ const operations=[{op:'move',id:'terrace-south',at:[100,30,100]}];
  expect(()=>applySceneOperations(base,operations)).toThrow('needs contact');
- try {resolveSceneResult({mode:'edit',prompt:'Invalid',current:base},{name:base.name,summary:'Invalid',unsupported:[],operations});throw Error('Expected rejection');}
- catch(error){expect(error).toBeInstanceOf(SceneConstructionError);expect(validateScene((error as SceneConstructionError).recoverableDraft).elements.find(e=>e.id==='salon-floor')?.at).toEqual([100,30,100]);}
+ try {resolveSceneResult({mode:'edit',prompt:'Move terrace-south',current:base},{name:base.name,summary:'Invalid',unsupported:[],operations});throw Error('Expected rejection');}
+ catch(error){expect(error).toBeInstanceOf(SceneConstructionError);expect(validateScene((error as SceneConstructionError).recoverableDraft).elements.find(e=>e.id==='terrace-south')?.at).toEqual([100,30,100]);}
  expect(JSON.stringify(base)).toBe(before);
 });
 it('overlapping physical floors withhold summed usable area independent of intent',()=>{

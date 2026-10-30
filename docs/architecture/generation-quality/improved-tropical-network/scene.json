@@ -1,0 +1,1015 @@
+{
+  "version": "architectural-scene-1",
+  "name": "Palm Court Tropical Villa",
+  "generationBrief": "Design a beautiful modern tropical villa with three bedrooms, a pool, shaded terrace and welcoming entrance.",
+  "elements": [
+    {
+      "semanticType": "floor",
+      "id": "main-floor",
+      "label": "Primary residence floor slab",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        16,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "front-west-glazing",
+      "label": "front-west-glazing facade",
+      "kind": "wall",
+      "at": [
+        -5.5,
+        1.9,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 3.9,
+        "height": 2.5,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "front-west-glazing-panel",
+      "label": "front-west-glazing glazing",
+      "kind": "glazing",
+      "parent": "front-west-glazing",
+      "at": [
+        0,
+        0,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.9,
+        2.5,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 3
+    },
+    {
+      "id": "front-entry",
+      "label": "front-entry facade",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.65,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "front-entry-panel",
+      "label": "front-entry entrance",
+      "kind": "entrance",
+      "parent": "front-entry",
+      "at": [
+        0,
+        -0.375,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        1.5,
+        2.65,
+        0.06
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "id": "front-east-glazing",
+      "label": "front-east-glazing facade",
+      "kind": "wall",
+      "at": [
+        5.5,
+        1.9,
+        5
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 2.7,
+        "height": 2.15,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "front-east-glazing-panel",
+      "label": "front-east-glazing glazing",
+      "kind": "glazing",
+      "parent": "front-east-glazing",
+      "at": [
+        0,
+        0.17500000000000004,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.7,
+        2.15,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 2
+    },
+    {
+      "id": "rear-west-glazing",
+      "label": "rear-west-glazing facade",
+      "kind": "wall",
+      "at": [
+        -5.5,
+        1.9,
+        -5
+      ],
+      "rotation": 3.141593,
+      "size": [
+        5,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.35,
+        "width": 4.1,
+        "height": 2.65,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-west-glazing-panel",
+      "label": "rear-west-glazing glazing",
+      "kind": "glazing",
+      "parent": "rear-west-glazing",
+      "at": [
+        0,
+        -0.025000000000000133,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        4.1,
+        2.65,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 3
+    },
+    {
+      "id": "rear-center-glazing",
+      "label": "rear-center-glazing facade",
+      "kind": "wall",
+      "at": [
+        0,
+        1.9,
+        -5
+      ],
+      "rotation": 3.141593,
+      "size": [
+        6,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5,
+        "height": 2.75,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-center-glazing-panel",
+      "label": "rear-center-glazing glazing",
+      "kind": "glazing",
+      "parent": "rear-center-glazing",
+      "at": [
+        0,
+        -0.32499999999999996,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        5,
+        2.75,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 4
+    },
+    {
+      "id": "rear-east-glazing",
+      "label": "rear-east-glazing facade",
+      "kind": "wall",
+      "at": [
+        5.5,
+        1.9,
+        -5
+      ],
+      "rotation": 3.141593,
+      "size": [
+        5,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 0,
+        "sill": 0.7,
+        "width": 2.9,
+        "height": 2.2,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "rear-east-glazing-panel",
+      "label": "rear-east-glazing glazing",
+      "kind": "glazing",
+      "parent": "rear-east-glazing",
+      "at": [
+        0,
+        0.10000000000000009,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        2.9,
+        2.2,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 2
+    },
+    {
+      "id": "side-west-glazing",
+      "label": "side-west-glazing facade",
+      "kind": "wall",
+      "at": [
+        -8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": 1.4,
+        "sill": 1,
+        "width": 3.3,
+        "height": 1.8,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "side-west-glazing-panel",
+      "label": "side-west-glazing glazing",
+      "kind": "glazing",
+      "parent": "side-west-glazing",
+      "at": [
+        1.4,
+        0.20000000000000007,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.3,
+        1.8,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 2
+    },
+    {
+      "id": "side-east-glazing",
+      "label": "side-east-glazing facade",
+      "kind": "wall",
+      "at": [
+        8,
+        1.9,
+        0
+      ],
+      "rotation": 1.570796,
+      "size": [
+        10,
+        3.4,
+        0.25
+      ],
+      "material": "ivory",
+      "panels": 4,
+      "opening": {
+        "x": -1.5,
+        "sill": 1,
+        "width": 3.4,
+        "height": 1.8,
+        "glazed": false
+      },
+      "assemblyKind": "facade-bay"
+    },
+    {
+      "id": "side-east-glazing-panel",
+      "label": "side-east-glazing glazing",
+      "kind": "glazing",
+      "parent": "side-east-glazing",
+      "at": [
+        -1.5,
+        0.20000000000000007,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        3.4,
+        1.8,
+        0.04
+      ],
+      "material": "bronze",
+      "panels": 2
+    },
+    {
+      "semanticType": "roof",
+      "id": "main-roof",
+      "label": "Deep-edged primary flat roof",
+      "kind": "roof",
+      "at": [
+        0,
+        3.72,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        17,
+        0.24,
+        11
+      ],
+      "material": "bronze",
+      "roofForm": "flat",
+      "overhang": 0,
+      "panels": 4
+    },
+    {
+      "semanticType": "terrace",
+      "id": "terrace-floor",
+      "label": "Covered garden terrace slab",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -7.5
+      ],
+      "rotation": 0,
+      "size": [
+        12,
+        0.2,
+        5
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "roof",
+      "id": "terrace-canopy",
+      "label": "Shaded terrace canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.3,
+        -7.4
+      ],
+      "rotation": 0,
+      "size": [
+        12.4,
+        0.2,
+        4.8
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "overhang": 0,
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "id": "terrace-post-west",
+      "label": "West timber terrace support",
+      "kind": "volume",
+      "at": [
+        -5.7,
+        1.7,
+        -9.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "semanticType": "mass",
+      "id": "terrace-post-east",
+      "label": "East timber terrace support",
+      "kind": "volume",
+      "at": [
+        5.7,
+        1.7,
+        -9.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.3,
+        3,
+        0.3
+      ],
+      "material": "timber",
+      "panels": 4
+    },
+    {
+      "semanticType": "path",
+      "id": "arrival-path",
+      "label": "Welcoming limestone arrival path",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        9
+      ],
+      "rotation": 0,
+      "size": [
+        2.4,
+        0.2,
+        7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "semanticType": "terrace",
+      "id": "entry-threshold",
+      "label": "Covered entry threshold",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        5.75
+      ],
+      "rotation": 0,
+      "size": [
+        3.2,
+        0.2,
+        1.1
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck",
+      "label": "pool-deck deck",
+      "kind": "plate",
+      "at": [
+        0,
+        0.15,
+        -10.75
+      ],
+      "rotation": 3.141593,
+      "size": [
+        9.2,
+        0.3,
+        1.5
+      ],
+      "material": "limestone",
+      "panels": 4,
+      "assemblyKind": "rectangular-pool"
+    },
+    {
+      "id": "pool-deck-floor",
+      "label": "pool-deck floor",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        -1.4000000000000001,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        6.4,
+        0.2,
+        8.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-water",
+      "label": "pool-deck water",
+      "kind": "water",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        0.05,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        6,
+        0.02,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-wall-z-minus",
+      "label": "pool-deck wall-z-minus",
+      "kind": "wall",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        -0.5750000000000001,
+        1.3500000000000005
+      ],
+      "rotation": 0,
+      "size": [
+        6.4,
+        1.4500000000000002,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-wall-x-minus",
+      "label": "pool-deck wall-x-minus",
+      "kind": "wall",
+      "parent": "pool-deck",
+      "at": [
+        -3.1,
+        -0.5750000000000001,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.2,
+        1.4500000000000002,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-coping-z-minus",
+      "label": "pool-deck coping-z-minus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        0.1,
+        1.1000000000000005
+      ],
+      "rotation": 0,
+      "size": [
+        7.2,
+        0.1,
+        0.7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-coping-x-minus",
+      "label": "pool-deck coping-x-minus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        -3.3,
+        0.1,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.6,
+        0.1,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-deck-x-minus",
+      "label": "pool-deck deck-x-minus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        -4.1,
+        0,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        1,
+        0.3,
+        9.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-wall-z-plus",
+      "label": "pool-deck wall-z-plus",
+      "kind": "wall",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        -0.5750000000000001,
+        9.55
+      ],
+      "rotation": 0,
+      "size": [
+        6.4,
+        1.4500000000000002,
+        0.2
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-wall-x-plus",
+      "label": "pool-deck wall-x-plus",
+      "kind": "wall",
+      "parent": "pool-deck",
+      "at": [
+        3.1,
+        -0.5750000000000001,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.2,
+        1.4500000000000002,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-coping-z-plus",
+      "label": "pool-deck coping-z-plus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        0.1,
+        9.8
+      ],
+      "rotation": 0,
+      "size": [
+        7.2,
+        0.1,
+        0.7
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-coping-x-plus",
+      "label": "pool-deck coping-x-plus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        3.3,
+        0.1,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        0.6,
+        0.1,
+        8
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-deck-x-plus",
+      "label": "pool-deck deck-x-plus",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        4.1,
+        0,
+        5.45
+      ],
+      "rotation": 0,
+      "size": [
+        1,
+        0.3,
+        9.4
+      ],
+      "material": "limestone",
+      "panels": 4
+    },
+    {
+      "id": "pool-deck-deck-far",
+      "label": "pool-deck deck-far",
+      "kind": "plate",
+      "parent": "pool-deck",
+      "at": [
+        0,
+        0,
+        10.9
+      ],
+      "rotation": 0,
+      "size": [
+        9.2,
+        0.3,
+        1.5
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  ],
+  "architecturalPlan": {
+    "constructionScope": "exterior",
+    "scaleRationale": "A 160 m² enclosed single-level villa is selected to give credible exterior envelope capacity for three bedrooms while keeping the tropical residence compact, calm and landscape-oriented; no budget or site dimensions were provided, so this is a design assumption rather than an area formula.",
+    "levels": 1,
+    "enclosedAreaM2": 160,
+    "arrivalAndCirculation": "The public approach runs from the front arrival path to a recessed central entrance at the ground-floor walking datum of Y=0.20 m, while the private three-bedroom capacity is reserved behind the same protected envelope and service fit-out is deferred.",
+    "volumeHierarchy": "A 16.0 × 10.0 m primary living-and-bedroom volume has a floor-top datum of Y=0.20 m, 3.40 m enclosure height and a thin flat roof at Y=3.72 m; the lower 12.0 × 5.0 m terrace canopy is deliberately subordinate at a 3.20 m underside datum.",
+    "relationshipsAndViews": "The entrance faces the arrival court on the positive-Z side, broad garden-facing openings and the shaded terrace face the pool on the negative-Z side, and a continuous dry terrace-to-pool-deck route is held outside the water footprint.",
+    "roofFacadeAndMaterials": "Warm ivory enclosure walls, bronze-framed glazed bays, timber shade posts and limestone pool paving establish a modern tropical palette, with deep flat roof edges, a freestanding terrace canopy, more open garden elevations and smaller side openings for shade and privacy.",
+    "spaces": [
+      {
+        "name": "Welcoming entrance",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 10,
+        "floorIds": [
+          "arrival-path",
+          "entry-threshold",
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-entry",
+          "front-entry-panel"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Living, dining and kitchen capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 62,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-west-glazing",
+          "rear-center-glazing",
+          "side-east-glazing"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Primary bedroom capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 38,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "rear-west-glazing",
+          "side-west-glazing"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Bedroom two capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 30,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-east-glazing",
+          "rear-east-glazing"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Bedroom three capacity",
+        "use": "interior",
+        "level": 1,
+        "areaM2": 30,
+        "floorIds": [
+          "main-floor"
+        ],
+        "enclosureIds": [
+          "front-west-glazing",
+          "side-east-glazing"
+        ],
+        "roofIds": [
+          "main-roof"
+        ]
+      },
+      {
+        "name": "Shaded terrace",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 60,
+        "floorIds": [
+          "terrace-floor"
+        ],
+        "enclosureIds": [
+          "terrace-post-west",
+          "terrace-post-east"
+        ],
+        "roofIds": [
+          "terrace-canopy"
+        ]
+      },
+      {
+        "name": "Pool and dry deck",
+        "use": "outdoor",
+        "level": 1,
+        "areaM2": 48,
+        "floorIds": [
+          "pool-floor",
+          "pool-deck",
+          "pool-deck-x-minus",
+          "pool-deck-x-plus",
+          "pool-deck-far"
+        ],
+        "enclosureIds": [
+          "pool-wall-x-minus",
+          "pool-wall-x-plus",
+          "pool-wall-z-minus",
+          "pool-wall-z-plus"
+        ],
+        "roofIds": []
+      }
+    ],
+    "commitments": [
+      {
+        "description": "A real central exterior entrance is cut into the front enclosure and reached by a level path and threshold.",
+        "kind": "entrance",
+        "elementIds": [
+          "arrival-path",
+          "entry-threshold",
+          "front-entry",
+          "front-entry-panel"
+        ]
+      },
+      {
+        "description": "The primary one-storey residential envelope reserves shared exterior capacity for the requested three bedrooms, with detailed internal subdivision deferred.",
+        "kind": "primary-volume",
+        "elementIds": [
+          "main-floor",
+          "front-west-glazing",
+          "front-entry",
+          "front-east-glazing",
+          "rear-west-glazing",
+          "rear-center-glazing",
+          "rear-east-glazing",
+          "side-west-glazing",
+          "side-east-glazing",
+          "main-roof"
+        ]
+      },
+      {
+        "description": "The rear terrace is roofed by an independently supported shallow canopy and connects directly to the pool's near dry deck.",
+        "kind": "terrace",
+        "elementIds": [
+          "terrace-floor",
+          "terrace-canopy",
+          "terrace-post-west",
+          "terrace-post-east",
+          "pool-deck"
+        ]
+      },
+      {
+        "description": "The pool is a rectangular constructed basin with floor, enclosing walls, coping, water and surrounding dry decks.",
+        "kind": "terrace",
+        "elementIds": [
+          "pool-floor",
+          "pool-water",
+          "pool-wall-x-minus",
+          "pool-wall-x-plus",
+          "pool-wall-z-minus",
+          "pool-wall-z-plus",
+          "pool-coping-x-minus",
+          "pool-coping-x-plus",
+          "pool-coping-z-minus",
+          "pool-coping-z-plus",
+          "pool-deck",
+          "pool-deck-x-minus",
+          "pool-deck-x-plus",
+          "pool-deck-far"
+        ]
+      }
+    ]
+  },
+  "knowledgeEvidence": [
+    {
+      "id": "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+      "version": 1,
+      "requiredKinds": [
+        "plate",
+        "wall",
+        "roof"
+      ]
+    },
+    {
+      "id": "tropical-envelope",
+      "version": 1,
+      "requiredKinds": [
+        "wall"
+      ]
+    }
+  ]
+}

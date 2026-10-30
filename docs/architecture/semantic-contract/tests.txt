@@ -1,0 +1,359 @@
+
+ RUN  v3.2.7 /Users/dylandevaux/Desktop/AIArchitect
+
+ ✓ src/lib/villa/scene/estateConcepts.test.ts (2 tests) 103ms
+ ✓ src/lib/villa/scene/planningBoundary.test.ts (5 tests) 195ms
+ ✓ src/lib/villa/scene/focusedConstruction.test.ts (6 tests) 266ms
+ ✓ src/lib/villa/scene/generationSafety.test.ts (4 tests) 129ms
+stdout | src/lib/villa/scene/generationReview.test.ts > constructs a scoped structural mock through the normal transaction and preserves unrelated elements
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '4fbc27cc-62ce-4017-a3d6-df551596a866'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '4fbc27cc-62ce-4017-a3d6-df551596a866'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '4fbc27cc-62ce-4017-a3d6-df551596a866'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '4fbc27cc-62ce-4017-a3d6-df551596a866'
+}
+
+stdout | src/lib/villa/scene/assemblyIntegration.test.ts > uses normal project history for assembly child edits and whole-wing resizing
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '363f48c1-f2d1-403b-b573-4b0f7bb1e41e'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '363f48c1-f2d1-403b-b573-4b0f7bb1e41e'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '363f48c1-f2d1-403b-b573-4b0f7bb1e41e'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '363f48c1-f2d1-403b-b573-4b0f7bb1e41e'
+}
+
+ ✓ src/lib/villa/scene/assemblyIntegration.test.ts (7 tests) 1597ms
+   ✓ uses normal project history for assembly child edits and whole-wing resizing  1503ms
+stdout | src/lib/villa/scene/redesign.test.ts > executes relocated-suite, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: 'db0dd9bf-9d1e-4dab-a087-c0acde49054a'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: 'db0dd9bf-9d1e-4dab-a087-c0acde49054a'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'storage-rehydrate',
+  projectId: 'db0dd9bf-9d1e-4dab-a087-c0acde49054a'
+}
+
+ ✓ src/lib/villa/scene/generationReview.test.ts (20 tests) 799ms
+   ✓ constructs a scoped structural mock through the normal transaction and preserves unrelated elements  464ms
+stdout | src/lib/villa/scene/redesign.test.ts > executes relocated-suite, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'undo',
+  projectId: 'db0dd9bf-9d1e-4dab-a087-c0acde49054a'
+}
+[DIRECT SCENE] {
+  revision: 5,
+  source: 'redo',
+  projectId: 'db0dd9bf-9d1e-4dab-a087-c0acde49054a'
+}
+
+stdout | src/lib/villa/scene/semanticContract.test.ts > commits supported semantic geometry through refinement, reload and Undo/Redo
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '6af04632-f1fd-4eee-bf40-c0766ff73052'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '6af04632-f1fd-4eee-bf40-c0766ff73052'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '6af04632-f1fd-4eee-bf40-c0766ff73052'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '6af04632-f1fd-4eee-bf40-c0766ff73052'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 6,
+  source: 'appendVersion',
+  projectId: '959d23cc-ec7d-4183-a93d-066abd230997'
+}
+[DIRECT SCENE] {
+  revision: 7,
+  source: 'appendVersion',
+  projectId: '959d23cc-ec7d-4183-a93d-066abd230997'
+}
+[DIRECT SCENE] {
+  revision: 8,
+  source: 'storage-rehydrate',
+  projectId: '959d23cc-ec7d-4183-a93d-066abd230997'
+}
+
+ ✓ src/lib/villa/scene/semanticContract.test.ts (5 tests) 346ms
+stdout | src/lib/villa/scene/exteriorFirst.test.ts > keeps facade edits and deferred scope through actual project history, Undo/Redo and JSON reload
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '407f42b4-41f7-4a4d-93b9-3c0c612adeb3'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '407f42b4-41f7-4a4d-93b9-3c0c612adeb3'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '407f42b4-41f7-4a4d-93b9-3c0c612adeb3'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '407f42b4-41f7-4a4d-93b9-3c0c612adeb3'
+}
+
+ ✓ src/lib/villa/scene/exteriorFirst.test.ts (13 tests) 520ms
+stdout | src/lib/villa/scene/redesign.test.ts > executes study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 9,
+  source: 'undo',
+  projectId: '959d23cc-ec7d-4183-a93d-066abd230997'
+}
+[DIRECT SCENE] {
+  revision: 10,
+  source: 'redo',
+  projectId: '959d23cc-ec7d-4183-a93d-066abd230997'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes developed-study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 11,
+  source: 'appendVersion',
+  projectId: '3843ed5d-8c94-4ddd-8f86-3f3bba169c52'
+}
+[DIRECT SCENE] {
+  revision: 12,
+  source: 'appendVersion',
+  projectId: '3843ed5d-8c94-4ddd-8f86-3f3bba169c52'
+}
+[DIRECT SCENE] {
+  revision: 13,
+  source: 'storage-rehydrate',
+  projectId: '3843ed5d-8c94-4ddd-8f86-3f3bba169c52'
+}
+
+ ✓ src/lib/villa/scene/replacementSafety.test.ts (7 tests) 569ms
+ ✓ src/lib/villa/scene/homepageRegression.test.ts (2 tests) 356ms
+stdout | src/lib/villa/scene/profileFreedom.test.ts > preserves nested transforms, actual support, curve edits, history and saved JSON
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '652ea5c9-1019-4627-97d4-28ca1b224d76'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '652ea5c9-1019-4627-97d4-28ca1b224d76'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '652ea5c9-1019-4627-97d4-28ca1b224d76'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '652ea5c9-1019-4627-97d4-28ca1b224d76'
+}
+
+stdout | src/lib/villa/scene/redesign.test.ts > executes developed-study, preserves original and unrelated data, reloads versions, undoes and recovers offline
+[DIRECT SCENE] {
+  revision: 14,
+  source: 'undo',
+  projectId: '3843ed5d-8c94-4ddd-8f86-3f3bba169c52'
+}
+[DIRECT SCENE] {
+  revision: 15,
+  source: 'redo',
+  projectId: '3843ed5d-8c94-4ddd-8f86-3f3bba169c52'
+}
+
+ ✓ src/lib/villa/scene/redesign.test.ts (4 tests) 740ms
+ ✓ src/lib/villa/scene/profileFreedom.test.ts (15 tests) 929ms
+ ✓ src/lib/villa/scene/retainedEstateDiagnosis.test.ts (4 tests) 298ms
+ ✓ src/lib/villa/scene/terra.test.ts (7 tests) 488ms
+ ✓ src/lib/villa/scene/architecturalFreedom.test.ts (3 tests) 403ms
+   ✓ replays an ambitious exterior through normal Generate, reloads, and edits independent facade parts  371ms
+ ✓ src/lib/villa/scene/completion.test.ts (5 tests) 249ms
+ ✓ src/lib/villa/scene/integration.test.ts (4 tests) 203ms
+stdout | src/lib/villa/scene/interiorConstruction.test.ts > uses the normal Generate resolver, provider adapter and project history without a parallel construction engine
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '47d82b1b-711c-417c-a914-9f2b97a4dcbd'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '47d82b1b-711c-417c-a914-9f2b97a4dcbd'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '47d82b1b-711c-417c-a914-9f2b97a4dcbd'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '47d82b1b-711c-417c-a914-9f2b97a4dcbd'
+}
+
+ ✓ src/lib/villa/scene/semanticEditing.test.ts (11 tests) 231ms
+ ✓ src/lib/villa/scene/interiorConstruction.test.ts (8 tests) 167ms
+stdout | src/lib/villa/scene/briefPersistence.test.ts > retains the exact brief through generation, JSON reload, targeted edits, project history and Undo/Redo
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '6bea2688-7ac6-46e3-9556-22e3749c2831'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '6bea2688-7ac6-46e3-9556-22e3749c2831'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '6bea2688-7ac6-46e3-9556-22e3749c2831'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '6bea2688-7ac6-46e3-9556-22e3749c2831'
+}
+
+ ✓ src/lib/villa/scene/generateStrict.test.ts (2 tests) 60ms
+ ✓ src/lib/villa/scene/briefPersistence.test.ts (3 tests) 150ms
+ ✓ src/lib/villa/scene/coordination.test.ts (3 tests) 126ms
+ ✓ src/lib/villa/scene/relationships.test.ts (10 tests) 107ms
+ ✓ src/lib/villa/scene/mansionRecovery.test.ts (3 tests) 80ms
+ ✓ src/lib/villa/scene/technicalReview.test.ts (3 tests) 61ms
+ ✓ src/lib/villa/scene/spatial.test.ts (5 tests) 120ms
+stdout | src/lib/villa/scene/codeArchitecture.test.ts > constructs two distinct editable compositions and preserves localized changes through history and reload
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '64015800-6c6c-400f-bed4-91b259c48cc4'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '64015800-6c6c-400f-bed4-91b259c48cc4'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'appendVersion',
+  projectId: '64015800-6c6c-400f-bed4-91b259c48cc4'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'undo',
+  projectId: '64015800-6c6c-400f-bed4-91b259c48cc4'
+}
+[DIRECT SCENE] {
+  revision: 5,
+  source: 'redo',
+  projectId: '64015800-6c6c-400f-bed4-91b259c48cc4'
+}
+
+ ✓ src/lib/villa/scene/programmeCoordination.test.ts (4 tests) 144ms
+ ✓ src/lib/villa/scene/codeArchitecture.test.ts (3 tests) 280ms
+ ✓ src/lib/villa/scene/generationDiagnostics.test.ts (2 tests) 179ms
+ ✓ src/lib/villa/scene/generationQuality.test.ts (6 tests) 109ms
+ ✓ src/lib/villa/scene/presentation.test.ts (3 tests) 9ms
+ ✓ src/lib/villa/scene/planning.test.ts (7 tests) 96ms
+ ✓ src/lib/villa/scene/model.test.ts (4 tests) 166ms
+stdout | src/store/__tests__/directScenePersistence.test.ts > direct scenes in normal project history > creates, edits one roof, undoes, redoes and serializes without format conversion
+[DIRECT SCENE] {
+  revision: 1,
+  source: 'appendVersion',
+  projectId: '8c50298e-2d12-45ee-b162-98f53abdfb15'
+}
+[DIRECT SCENE] {
+  revision: 2,
+  source: 'appendVersion',
+  projectId: '8c50298e-2d12-45ee-b162-98f53abdfb15'
+}
+[DIRECT SCENE] {
+  revision: 3,
+  source: 'undo',
+  projectId: '8c50298e-2d12-45ee-b162-98f53abdfb15'
+}
+[DIRECT SCENE] {
+  revision: 4,
+  source: 'redo',
+  projectId: '8c50298e-2d12-45ee-b162-98f53abdfb15'
+}
+
+ ✓ src/store/__tests__/directScenePersistence.test.ts (1 test) 28ms
+ ✓ src/lib/villa/scene/assemblyEvidence.test.ts (2 tests) 21ms
+ ✓ src/lib/villa/scene/roofs.test.ts (3 tests) 6ms
+ ✓ src/lib/semantic/v3Editing.test.ts (5 tests) 50ms
+ ✓ src/lib/villa/scene/programme.test.ts (2 tests) 9ms
+ ✓ src/lib/villa/scene/designGuide.test.ts (1 test) 3ms
+ ✓ src/app/api/ai/scene/route.providerSchema.test.ts (32 tests) 8085ms
+   ✓ audits the complete generate schema actually serialized by OpenAI SDK with no live calls  860ms
+   ✓ audits the complete edit schema actually serialized by OpenAI SDK with no live calls  374ms
+   ✓ serializes strict Redesign objects at every depth and requires executable operations  470ms
+   ✓ executes a large coordinated developer study through the real SDK, including strict nullable fields  1780ms
+   ✓ executes an assembly through the actual refine provider request offline  385ms
+   ✓ runs flowing profile construction through the normal route and real SDK transport without simplification  334ms
+   ✓ runs estate profile construction through the normal route and real SDK transport without simplification  394ms
+ ✓ src/app/api/ai/scene/route.test.ts (40 tests) 9861ms
+   ✓ uses scene instructions and executes operations without villa configuration translation  379ms
+   ✓ applies targeted edits on the same scene and rejects invalid transactions atomically  613ms
+   ✓ keeps missing or inaccurate intent as warnings without discarding valid geometry  643ms
+   ✓ retains original provider text for offline replay with planning warnings in test  568ms
+   ✓ retains original provider text for offline replay with planning warnings in production  597ms
+   ✓ retains original provider text for offline replay with planning warnings in development  565ms
+   ✓ explains missing planning fields when SDK structured-output validation rejects first  531ms
+   ✓ generates an elevated terrace and railing with place-on, then edits and reloads project history offline  779ms
+   ✓ preserves the legacy 174-part study at runtime while new provider intents require commitments  974ms
+
+ Test Files  41 passed (41)
+      Tests  276 passed (276)
+   Start at  10:21:10
+   Duration  13.32s (transform 4.11s, setup 0ms, collect 39.98s, tests 28.33s, environment 5ms, prepare 3.45s)
+

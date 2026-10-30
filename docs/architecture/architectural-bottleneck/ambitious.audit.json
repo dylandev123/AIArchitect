@@ -1,0 +1,198 @@
+{
+  "providerCalls": 0,
+  "relationships": [],
+  "review": {
+    "designStage": "Historical design scope unrecorded",
+    "interiorsDeferred": false,
+    "status": "incomplete",
+    "issues": [
+      "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation.",
+      "Floor surfaces stair-landing and west-upper overlap at the same datum; summed usable area is withheld.",
+      "Floor surfaces garden-terrace and east-salon overlap at the same datum; summed usable area is withheld.",
+      "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+    ],
+    "findings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "west-upper",
+          "stair-landing"
+        ],
+        "message": "Floor surfaces stair-landing and west-upper overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [
+          "east-salon",
+          "garden-terrace"
+        ],
+        "message": "Floor surfaces garden-terrace and east-salon overlap at the same datum; summed usable area is withheld."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "architectural-review",
+        "elementIds": [],
+        "message": "Space allocation and requested-space completeness are unverified; no detailed plan evidence is available."
+      }
+    ],
+    "programme": {
+      "status": "unrecorded",
+      "spaces": [],
+      "issues": [
+        "Programme construction commitments are unrecorded; narrative spaces do not establish built accommodation."
+      ]
+    },
+    "designDecisions": [],
+    "knowledgeUse": [],
+    "geometry": {
+      "kindCounts": {
+        "plate": 17,
+        "wall": 45,
+        "glazing": 25,
+        "entrance": 9,
+        "roof": 3,
+        "volume": 88,
+        "balcony": 5,
+        "water": 1
+      },
+      "surfaces": [
+        {
+          "id": "west-ground",
+          "kind": "plate",
+          "areaM2": 252,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "west-upper",
+          "kind": "plate",
+          "areaM2": 252,
+          "walkingDatum": 4.2
+        },
+        {
+          "id": "arrival-hall",
+          "kind": "plate",
+          "areaM2": 74,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "arrival-approach",
+          "kind": "plate",
+          "areaM2": 74,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "east-salon",
+          "kind": "plate",
+          "areaM2": 224,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "stair-base",
+          "kind": "plate",
+          "areaM2": 10.4,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "stair-landing",
+          "kind": "plate",
+          "areaM2": 3.75,
+          "walkingDatum": 4.199999999999999
+        },
+        {
+          "id": "garden-terrace",
+          "kind": "plate",
+          "areaM2": 440,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon",
+          "kind": "plate",
+          "areaM2": 34.8,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-floor",
+          "kind": "plate",
+          "areaM2": 191.76,
+          "walkingDatum": -1.2199999999999998
+        },
+        {
+          "id": "lagoon-water",
+          "kind": "water",
+          "areaM2": 180,
+          "walkingDatum": 0.18
+        },
+        {
+          "id": "lagoon-coping-z-minus",
+          "kind": "plate",
+          "areaM2": 14.839999999999998,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-coping-x-minus",
+          "kind": "plate",
+          "areaM2": 5.3999999999999995,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-deck-x-minus",
+          "kind": "plate",
+          "areaM2": 10.4,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-coping-z-plus",
+          "kind": "plate",
+          "areaM2": 14.839999999999998,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-coping-x-plus",
+          "kind": "plate",
+          "areaM2": 5.3999999999999995,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-deck-x-plus",
+          "kind": "plate",
+          "areaM2": 10.4,
+          "walkingDatum": 0.28
+        },
+        {
+          "id": "lagoon-deck-far",
+          "kind": "plate",
+          "areaM2": 34.8,
+          "walkingDatum": 0.28
+        }
+      ],
+      "overlaps": [
+        [
+          "stair-landing",
+          "west-upper"
+        ],
+        [
+          "garden-terrace",
+          "east-salon"
+        ]
+      ],
+      "walkingDatums": [
+        0.28,
+        4.2,
+        -1.22
+      ],
+      "plateSurfaceAreaM2": null,
+      "waterSurfaceAreaM2": 180
+    },
+    "limitations": [
+      "Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building."
+    ]
+  }
+}

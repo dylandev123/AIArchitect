@@ -345,7 +345,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const { POST } = await import("../route");
     const existing = generationScene();
     generateText.mockResolvedValue({ output: { intent: "Change material", operations: [{ op: "changeMaterial", target: "main-volume", material: { id: "stone", color: "#888888" } }] }, totalUsage: sdkUsage });
-    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "flat", prompt: "Change finish", currentHouseJson: JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: existing }) }) }));
+    const response = await POST(new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "flat", prompt: "Change main-volume material", currentHouseJson: JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: existing }) }) }));
     expect(response.status).toBe(200);
     const edited = JSON.parse((await response.json()).json).v3Scene;
     expect(edited.site).toEqual(existing.site);
@@ -389,7 +389,7 @@ describe("POST /api/ai/house V3 scene mode", () => {
     const { POST } = await import("../route");
     const currentHouseJson = JSON.stringify({ ...BLANK_V3_SCENE, v3Scene: scene() });
     generateText.mockResolvedValue({ output: { intent: "Add unknown semantic object", operations: [{ op: "create", object: { id: "new-semantic", semanticRole: "future detail", architecture: { x: 20, z: 0, baseElevation: 0, width: 2, depth: 2, height: 3 } } }] } });
-    const request = () => new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Add a detail", currentHouseJson }) });
+    const request = () => new NextRequest("http://localhost/api/ai/house", { method: "POST", body: JSON.stringify({ mode: "edit", generationMode: "v3-scene", v3TerrainMode: "advanced", prompt: "Add a mass", currentHouseJson }) });
     const res = await POST(request());
     expect(res.status).toBe(200);
     expect(JSON.parse((await res.json()).json).v3Scene.objects.at(-1).id).toBe("new-semantic");

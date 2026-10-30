@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { sceneSchema, validateScene } from './scene/model';
-import { resolveSceneResult, SCENE_SYSTEM_PROMPT } from './scene/terra';
+import { resolveSceneResult, sceneResultSchema, SCENE_SYSTEM_PROMPT } from './scene/terra';
 import type { CameraPose } from '@/app/dev/villa-playground/scene';
 import { resolveVillaResult, villaRequestSchema, villaSystemPrompt } from './terra';
 
 export type ReviewConfig = NonNullable<z.infer<typeof villaRequestSchema>['current']>;
-export type SceneCapture = { image: string; view: 'Aerial' | 'Arrival' | 'Poolside' | 'Facade'; width: number; height: number; camera: CameraPose };
+export type SceneCapture = { image: string; view: 'Aerial' | 'Arrival' | 'Poolside' | 'Facade' | 'Garden'; width: number; height: number; camera: CameraPose };
 /** Verify PNG signature, IHDR dimensions and bounded encoded size on client and server. */
 export function inspectCapture(image: string) {
   if (!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(image) || image.length > 6000000) throw new Error('Invalid or oversized scene PNG.');
@@ -110,7 +110,13 @@ export async function requestReviewProposal(input: z.infer<typeof visualReviewRe
 /** Review proposes a transaction; approval is a separate, baseline-checked UI action. */
 export function stageSceneReviewEdit(current: unknown, improvement: string, output: unknown, scope: string[], editIntent: 'refine' | 'redesign' = 'refine') {
   const baseline = validateScene(current);
-  const result = resolveSceneResult({mode:'edit',editIntent,prompt:improvement,current:baseline}, output);
+  const parsed = sceneResultSchema.parse(output);
+  if (editIntent === 'refine' && parsed.operations.some(op => ['remove','add','assemble'].includes(op.op))) throw Error('Recomposition requires Redesign.');
+  // Review scopes are application-owned permissions, separate from provider prose.
+  const paths = scope.map(path => /^elements\.(\d+)\.(\w+)$/.exec(path));
+  const ids = scope.flatMap((path,index) => path.startsWith('element:') ? [path.slice(8)] : paths[index] ? [baseline.elements[Number(paths[index]![1])]?.id].filter((id):id is string => !!id) : []);
+  const fields = scope.every(path => path.startsWith('element:')) ? ['at','size','rotation','parent','material','color','geometry','opening','roofForm','overhang','panels'] : paths.flatMap(path => path ? [path[2]] : []);
+  const result = resolveSceneResult({mode:'edit',editIntent,prompt:improvement,current:baseline}, output, undefined, {targetIds:ids,fields,operations:['move','resize','rotate','attach','place-on','replace','finish','scale-assembly']});
   if (scope.every(s => s.startsWith('element:'))) {
     const ids = new Set(scope.map(s => s.slice(8)));
     if (!baseline.elements.some(e => ids.has(e.id))) throw Error('Review scope requires an existing element.');

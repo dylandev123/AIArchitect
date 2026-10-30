@@ -1,4 +1,6 @@
 'use client';
+import { useGenerationReview } from './useGenerationReview';
+import {ProfileEditor} from './ProfileEditor';
 import {SCENE_TEST_MODELS,type SceneTestSettings} from '@/lib/ai/sceneTesting';
 import type {SceneRequest} from '@/lib/villa/scene/terra';
 import { generationDiagnostics } from '@/lib/villa/scene/generationDiagnostics';
@@ -12,7 +14,7 @@ import { sceneReferenceSchema, generationSceneRequest } from '@/lib/villa/scene/
 import './operation-studio.css';
 import { Suspense, useState, useEffect, useRef, useEffectEvent } from 'react';
 import Link from 'next/link';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { VillaScene, type View } from '@/app/dev/villa-playground/scene';
 import { OperationScene } from './OperationScene';
 import { resolveSceneResult } from '@/lib/villa/scene/terra';
@@ -21,6 +23,10 @@ import { applySceneOperations, validateScene, type ArchitecturalScene, type Scen
 import type { Project } from '@/types/project';
 import { useProjectStore } from '@/store/useProjectStore';
 import { useUIStore } from '@/store/useUIStore';
+function EditCameraFrame({frameRef}:{frameRef:{current:[number,number,number]|undefined}}) {
+    useFrame(({camera}) => { const m=camera.matrixWorld.elements; frameRef.current=[m[0],m[1],m[2]]; });
+    return null;
+}
 export function OperationStudio({ project, initialBrief, initialReference, onLegacy }: {
     initialReference?: z.infer<typeof sceneReferenceSchema>;
     initialBrief?: string;
@@ -33,6 +39,15 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const [controlledCase,setControlledCase]=useState<SceneRequest>();
     const [testResult,setTestResult]=useState<unknown>();
     useEffect(()=>{if(process.env.NODE_ENV!=='development')return;void fetch('/api/ai/scene').then(r=>r.json()).then(data=>setCurrentModel(data.currentModel??'configured production default')).catch(()=>{});},[]);
+    const generationReview = useGenerationReview();
+    const localRevision = useRef(0);
+    const projectId = project?.id;
+    useEffect(() => {
+        if (!projectId) return;
+        return useProjectStore.subscribe((state, previous) => {
+            if (state.projects.find(p => p.id === projectId) !== previous.projects.find(p => p.id === projectId)) localRevision.current++;
+        });
+    }, [projectId]);
     const started = useRef(false);
     const [reference, setReference] = useState<z.infer<typeof sceneReferenceSchema> | undefined>(initialReference);
     const sceneFromProject = project ? validateScene(JSON.parse(project.houseConfigJson)) : undefined;
@@ -44,6 +59,8 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     sceneRef.current = scene;
     const [diagnostic, setDiagnostic] = useState<ReturnType<typeof generationDiagnostics>>();
     const [recoverableDraft, setRecoverableDraft] = useState<ArchitecturalScene>();
+    const cameraRight = useRef<[number,number,number] | undefined>(undefined);
+    const [cameraReset, setCameraReset] = useState(0);
     const [brief, setBrief] = useState(''), [busy, setBusy] = useState(false);
     useEffect(() => { if (project)
         return; const frame = requestAnimationFrame(() => { try {
@@ -52,6 +69,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
             const restored = validateScene(JSON.parse(saved));
             sceneRef.current = restored;
             setScene(restored);
+            setCameraReset(n => n + 1);
             setSelected(restored.elements[0]?.id ?? '');
         }
     }
@@ -75,10 +93,10 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     else {
         localStorage.setItem('terra-direct-scene-1', JSON.stringify(next));
         setHistory(h => [...h, previous]);
-    } setScene(next); setSelected(id => next.elements.some(e => e.id === id) ? id : next.elements[0]?.id ?? ''); setSource('ladera'); setError(''); }
+    } sceneRef.current = next; localRevision.current++; setScene(next); setSelected(id => next.elements.some(e => e.id === id) ? id : next.elements[0]?.id ?? ''); setSource('ladera'); setError(''); }
     async function askTerra(mode: 'generate' | 'edit', prompt = brief, editIntent: 'refine' | 'redesign' = 'refine', controlled=false) { const revision = project ? useProjectStore.getState().getProject(project.id)?.houseConfigJson : undefined; setBusy(true); setError(''); try {
         const baseline = JSON.stringify(sceneRef.current);
-        const ordinaryInput = { ...(mode === 'edit' ? developmentRequest(sceneRef.current, prompt, {intent:editIntent}) : generationSceneRequest(prompt)), ...(reference ? { reference } : {}) };
+        const ordinaryInput = { ...(mode === 'edit' ? developmentRequest(sceneRef.current, prompt, {intent:editIntent}) : generationSceneRequest(prompt)), ...(reference ? { reference } : {}), ...(mode === 'edit' && editIntent === 'refine' ? {editContext:{...(/\bselected\b/i.test(prompt) && selected ? {selectedId:selected}:{}),...(/\b(left|right)\b/i.test(prompt) && cameraRight.current ? {cameraRight:cameraRight.current}:{})}} : {}) };
         if(controlled&&!controlledCase)throw Error('Load the retained case first.');
         const testing=process.env.NODE_ENV==='development'&&(controlled||testModel!=='current'||testEffort)
             ?{model:testModel,...(testEffort?{reasoningEffort:testEffort}:{}),...(controlled?{fixture:'mansion-coordination' as const}:{})}:undefined;
@@ -89,15 +107,21 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         setDiagnostic(generationDiagnostics(output.responseId, input, output));
         if (!response.ok) {
             if (output.recoverableDraft) setRecoverableDraft(validateScene(output.recoverableDraft));
-            throw Error(output.error);
+            throw Error(output.error + (Array.isArray(output.candidates) && output.candidates.length ? ` Candidates: ${output.candidates.slice(0,10).join(', ')}. Select one and refer to the selected object.` : ''));
         }
         const result = resolveSceneResult(input, { architecturalPlan: output.architecturalPlan, name: output.name, summary: output.summary, unsupported: output.unsupported, operations: output.operations }, output.scene?.knowledgeEvidence);
         if (project && useProjectStore.getState().getProject(project.id)?.houseConfigJson !== revision)
             throw Error('Project changed while Terra was working; response was not applied.');
         if (JSON.stringify(sceneRef.current) !== baseline) throw Error('Scene changed while Terra was working; response was not applied.');
+        if (mode === 'edit' && !result.operations.length) { setError([result.summary,...result.unsupported].join(' ')); return; }
         result.scene.generationResponseId = output.responseId;
-        commit(result.scene, mode === 'edit' && editIntent === 'redesign' ? 'Architectural redesign' : 'Scene edit');
+        if (mode === 'generate' || editIntent === 'redesign') setCameraReset(n => n + 1);
+        commit(result.scene, mode === 'edit' && editIntent === 'redesign' ? 'Architectural redesign' : mode === 'generate' ? 'Generated exterior' : 'Scene edit');
         setError([result.summary, ...result.unsupported].join(' '));
+        if (mode === 'generate') await generationReview.run(result.scene, () => {
+            const latest = project ? useProjectStore.getState().getProject(project.id) : undefined;
+            return latest ? JSON.stringify([localRevision.current,latest.currentVersionIndex,latest.versions.map(v=>v.id),latest.houseConfigJson]) : String(localRevision.current);
+        }, () => project ? validateScene(JSON.parse(useProjectStore.getState().getProject(project.id)!.houseConfigJson)) : sceneRef.current, commit);
     }
     catch (err) {
         setError(String(err));
@@ -114,9 +138,9 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         setError(String(err));
     } }
     return <main className="operation-studio" style={{ height: '100vh', background: '#ece9df', color: '#26352e', fontFamily: 'sans-serif', display: 'grid', gridTemplateColumns: '310px 1fr' }}>
- <aside style={{ padding: 24, overflow: 'auto' }}><fieldset disabled={busy} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}><Link href="/">← All projects</Link>{onLegacy && <p><button type="button" onClick={onLegacy}>Legacy villas</button></p>}{!project && <p><Link href="/dev/villa-playground?scene=legacy">Villa composition, components and visual review</Link></p>}<p>DIRECT ARCHITECTURAL OPERATIONS</p><h1>{scene.name}</h1><p>Compose individual architectural elements with Terra. Every part has its own editable identity.</p>
+ <aside style={{ padding: 24, overflow: 'auto' }}><fieldset disabled={busy} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}><Link href="/">← All projects</Link>{onLegacy && <p><button type="button" onClick={onLegacy}>Legacy villas</button></p>}{!project && <p><Link href="/dev/villa-playground?scene=legacy">Villa composition, components and visual review</Link></p>}<p>DIRECT ARCHITECTURAL OPERATIONS</p><h1>{scene.name}</h1><p>{architecturalReview.designStage}</p><p>Compose individual architectural elements with Terra. Every part has its own editable identity.</p>
  <details><summary>Generation diagnostics {scene.generationResponseId ?? diagnostic?.responseId ?? '(historical trace unavailable)'}</summary>{scene.generationResponseId && <button type="button" onClick={async()=>{try{const response=await fetch(`/api/dev/scene-diagnostics/${scene.generationResponseId}`);if(!response.ok)throw Error('Saved diagnostics are available locally in development only.');setDiagnostic(await response.json());}catch(error){setError(String(error));}}}>Load retained report</button>}<p>Exact request, provider output and execution records are retained privately under .data/scene-responses using this response ID. Current geometry and warnings below include subsequent edits; the generation snapshot remains unchanged.</p>{diagnostic && <><p>Transaction: {diagnostic.outcome}</p><details><summary>Selected component provenance: {selected}</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify({component:diagnostic.components?.find(c=>c.element.id===selected),operations:diagnostic.operations?.filter(o=>o.changes.some(c=>c.id===selected)),explicitIntent:diagnostic.explicitIntent,currentElement:scene.elements.find(c=>c.id===selected)},null,2)}</pre></details><details><summary>Original ordered operations and execution report</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(diagnostic,null,2)}</pre></details></>}</details>
- <details open={architecturalReview.issues.length > 0 || constructionIssues.length > 0}><summary>Architectural warnings ({architecturalReview.issues.length + constructionIssues.length})</summary><p>Renderable geometry does not certify a complete house.</p><p>{architecturalReview.geometry.waterSurfaceAreaM2.toFixed(1)} m² water surface · {architecturalReview.geometry.surfaces.filter(s=>s.kind==='plate').length} floor/deck plates</p><details><summary>Measured element inventory</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(architecturalReview.geometry,null,2)}</pre></details>{architecturalReview.knowledgeUse.length > 0 && <details><summary>Knowledge application ({architecturalReview.knowledgeUse.length})</summary><p>Evidence checks element references and kinds; architectural completeness still needs review.</p><ul>{architecturalReview.knowledgeUse.map(entry=><li key={entry.id}>{entry.id}: {entry.status}{entry.elementIds.length ? ` (${entry.elementIds.join(', ')})` : ''}</li>)}</ul></details>}<ul>{constructionIssues.map((i,n)=><li key={`construction-${n}`}>Construction draft: {i.message}</li>)}{architecturalReview.issues.map((issue,n)=><li key={n}>{issue}</li>)}</ul>{scene.architecturalPlan !== undefined && <details><summary>Original design intent</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(scene.architecturalPlan,null,2)}</pre></details>}</details>
+ <details open={architecturalReview.issues.length > 0 || constructionIssues.length > 0}><summary>Architectural warnings ({architecturalReview.issues.length + constructionIssues.length})</summary><p>Renderable geometry does not certify a complete house.</p><p>{architecturalReview.geometry.waterSurfaceAreaM2.toFixed(1)} m² water surface · {architecturalReview.geometry.surfaces.filter(s=>s.kind==='plate').length} floor/deck plates</p>{architecturalReview.interiorsDeferred && <details><summary>Deferred interiors</summary><p>Exterior allocations describe capacity, not completed rooms.</p><ul>{architecturalReview.programme.deferredInteriors?.map((item,n)=><li key={n}>{item}</li>)}</ul></details>}<details><summary>Measured element inventory</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(architecturalReview.geometry,null,2)}</pre></details>{architecturalReview.knowledgeUse.length > 0 && <details><summary>Knowledge application ({architecturalReview.knowledgeUse.length})</summary><p>Evidence checks element references and kinds; architectural completeness still needs review.</p><ul>{architecturalReview.knowledgeUse.map(entry=><li key={entry.id}>{entry.id}: {entry.status}{entry.elementIds.length ? ` (${entry.elementIds.join(', ')})` : ''}</li>)}</ul></details>}<ul>{constructionIssues.map((i,n)=><li key={`construction-${n}`}>Construction draft: {i.message}</li>)}{architecturalReview.issues.map((issue,n)=><li key={n}>{issue}</li>)}</ul>{scene.architecturalPlan !== undefined && <details><summary>Original design intent</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(scene.architecturalPlan,null,2)}</pre></details>}</details>
  {process.env.NODE_ENV==='development'&&<details><summary>Development model test</summary>
  <p>One request per click, zero retries. Production default: {currentModel}. Model access is unverified.</p>
  <label>Test model <select aria-label="Test model" value={testModel} onChange={ev=>setTestModel(ev.target.value as SceneTestSettings['model'])}><option value="current">Current configured model ({currentModel})</option>{SCENE_TEST_MODELS.map(m=><option key={m.id} value={m.id}>{m.label} ({m.id})</option>)}</select></label>
@@ -134,17 +158,19 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const image = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = () => reject(Error('Image could not be read.')); reader.readAsDataURL(file); });
     setReference(sceneReferenceSchema.parse({source:file.name,image}));
  } catch (err) { setError(String(err)); } }} /></label>{reference && <><span>{reference.source}</span> <button onClick={() => setReference(undefined)}>Clear reference</button></>}</p>
+ {generationReview.panel}
  {process.env.NODE_ENV === 'development' && <SceneReview scene={scene} reference={reference} brief={brief} commit={next => commit(next)} current={() => sceneRef.current} />}
  {!project && <label>Comparison <select aria-label="Comparison" value={source} onChange={ev => setSource(ev.target.value)}><option value="ladera">Current direct scene</option><option value="solana">Villa Solana</option></select></label>}
  {!project && <p><button onClick={() => commit(laderaScene)}>Load Casa Ladera</button></p>}
  <details><summary>Advanced Terrain &amp; Elevation</summary><p>Optional natural ground. Building elevations stay authored; pads and route grading require explicit design.</p><label><input type="checkbox" aria-label="Enable advanced terrain" checked={!!scene.terrain} onChange={ev => edit([{op:'set-terrain',terrain:ev.target.checked ? {width:120,depth:120,elevation:-.5,grade:.05,fall:'z'} : null}])} /> Enable terrain</label>{scene.terrain && <>{(['elevation','grade'] as const).map(key=><label key={key} style={{display:'block'}}>Terrain {key}<input aria-label={`Terrain ${key}`} type="number" step={key==='grade' ? .01 : .5} value={scene.terrain![key]} onChange={ev=>edit([{op:'set-terrain',terrain:{...scene.terrain!,[key]:Number(ev.target.value)}}])} /></label>)}<label>Fall direction<select aria-label="Terrain fall" value={scene.terrain.fall} onChange={ev=>edit([{op:'set-terrain',terrain:{...scene.terrain!,fall:ev.target.value as 'x'|'-x'|'z'|'-z'}}])}>{['x','-x','z','-z'].map(axis=><option key={axis}>{axis}</option>)}</select></label></>}</details>
  <p>{(['Arrival', 'Poolside', 'Aerial', 'Garden'] as View[]).map(v => <button key={v} onClick={() => setView(v)}>{v}</button>)}</p>
  <label>Element <select aria-label="Element" value={e?.id ?? ''} onChange={ev => setSelected(ev.target.value)} style={{ width: '100%' }}>{scene.elements.map(e => <option key={e.id} value={e.id}>{e.label}</option>)}</select></label>
- {e && <><p>{e.kind} · {e.id}</p>{e.kind === 'roof' && <label>Roof form <select aria-label="Roof form" value={e.roofForm ?? 'flat'} onChange={ev => edit([{ op: 'replace', id: e.id, element: { ...e, roofForm: ev.target.value as 'flat' | 'gable' | 'hip', size: [e.size[0], ev.target.value === 'flat' ? e.size[1] : Math.max(.6, e.size[1]), e.size[2]] } }])}>{['flat', 'gable', 'hip'].map(form => <option key={form}>{form}</option>)}</select></label>}{(['x', 'y', 'z'] as const).map((axis, i) => <label key={axis} style={{ display: 'block' }}>Position {axis} <input aria-label={`Position ${axis}`} type="number" step="0.25" value={e.at[i]} onChange={ev => { const at = [...e.at] as [
+ {e && <><p>{e.kind} · {e.id}</p>{e.geometry && <ProfileEditor key={e.id+JSON.stringify(e.geometry)} element={e} edit={edit}/>}<label>Color <input aria-label="Element color" type="color" value={e.color ?? '#e4dfd1'} onChange={ev=>edit([{op:'replace',id:e.id,element:{...e,color:ev.target.value}}])}/></label>{e.kind === 'roof' && !e.geometry && <label>Roof form <select aria-label="Roof form" value={e.roofForm ?? 'flat'} onChange={ev => edit([{ op: 'replace', id: e.id, element: { ...e, roofForm: ev.target.value as 'flat' | 'gable' | 'hip', size: [e.size[0], ev.target.value === 'flat' ? e.size[1] : Math.max(.6, e.size[1]), e.size[2]] } }])}>{['flat', 'gable', 'hip'].map(form => <option key={form}>{form}</option>)}</select></label>}{(['x', 'y', 'z'] as const).map((axis, i) => <label key={axis} style={{ display: 'block' }}>Position {axis} <input aria-label={`Position ${axis}`} type="number" step="0.25" value={e.at[i]} onChange={ev => { const at = [...e.at] as [
             number,
             number,
             number
         ]; at[i] = Number(ev.target.value); edit([{ op: 'move', id: e.id, at }]); }}/></label>)}
+ <label>Rotation (radians) <input aria-label="Element rotation" type="number" step="0.05" value={e.rotation} onChange={ev=>edit([{op:'rotate',id:e.id,rotation:Number(ev.target.value)}])}/></label>
  {(['Width', 'Height', 'Depth'] as const).map((axis, i) => <label key={axis} style={{ display: 'block' }}>{axis} <input aria-label={axis} type="number" step="0.25" value={e.size[i]} onChange={ev => { const size = [...e.size] as [
             number,
             number,
@@ -156,7 +182,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
  <p><button disabled={busy || (project ? project.currentVersionIndex <= 0 : !history.length)} onClick={() => { if (project) {
         useProjectStore.getState().undo(project.id);
         return;
-    } localStorage.setItem('terra-direct-scene-1', JSON.stringify(history[history.length - 1])); setScene(history[history.length - 1]); setHistory(history.slice(0, -1)); }}>Undo</button> <button disabled={busy || !project || project.currentVersionIndex >= project.versions.length - 1} onClick={() => { if (project)
+    } localRevision.current++; sceneRef.current=history[history.length - 1]; localStorage.setItem('terra-direct-scene-1', JSON.stringify(history[history.length - 1])); setScene(history[history.length - 1]); setHistory(history.slice(0, -1)); }}>Undo</button> <button disabled={busy || !project || project.currentVersionIndex >= project.versions.length - 1} onClick={() => { if (project)
         useProjectStore.getState().redo(project.id); }}>Redo</button></p>
  {recoverableDraft && <p>Construction failed. Current house preserved. <button onClick={()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(recoverableDraft,null,2)],{type:'application/json'}));a.download='recoverable-construction-draft.json';a.click();URL.revokeObjectURL(a.href);}}>Download recoverable draft</button></p>}
  <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(scene, null, 2)], { type: 'application/json' })); a.download = 'architectural.scene.json'; a.click(); URL.revokeObjectURL(a.href); }}>Export scene JSON</button>
@@ -171,7 +197,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     catch (err) {
         setError(String(err));
     } }}/></label></p>
- <p>{project ? `Saved project · ${project.versions.length} versions` : "Playground scene"}</p><p role="status">{(busy ? 'Terra is constructing the scene…' : error) || `${scene.elements.length} elements · ${history.length} edits · scene ready`}</p></fieldset></aside>
- <div style={{ minWidth: 0 }}><Canvas shadows camera={{ position: [33, 18, 43], fov: 40 }} gl={{ preserveDrawingBuffer: true }}><Suspense fallback={null}><VillaScene frameArchitectureOnly={source === 'ladera'} grounds={source === 'ladera' ? <SceneTerrain terrain={scene.terrain ?? {width:120,depth:120,elevation:0,grade:0,fall:'z'}} /> : undefined} replaceArchitecture={source === 'ladera'} mood="Daylight" view={view} reset={source === 'ladera' ? 0 : 1} tour={false}>{source === 'ladera' && <OperationScene scene={scene} onSelect={setSelected}/>}</VillaScene></Suspense></Canvas></div>
+ <p>{project ? `Saved project · ${project.versions.length} versions` : "Playground scene"}</p><p role="status">{(busy ? 'Terra is constructing and reviewing the scene…' : error) || `${scene.elements.length} elements · ${history.length} edits · scene ready`}</p></fieldset></aside>
+ <div style={{ minWidth: 0 }}><Canvas shadows camera={{ position: [33, 18, 43], fov: 40 }} gl={{ preserveDrawingBuffer: true }}><EditCameraFrame frameRef={cameraRight}/><Suspense fallback={null}><VillaScene entranceElementId={scene.elements.find(e => e.kind === 'entrance')?.id} poolElementId={scene.elements.find(e => e.kind === 'water')?.id} frameArchitectureOnly={source === 'ladera'} grounds={source === 'ladera' ? <SceneTerrain terrain={scene.terrain ?? {width:120,depth:120,elevation:0,grade:0,fall:'z'}} /> : undefined} replaceArchitecture={source === 'ladera'} mood="Daylight" view={view} reset={cameraReset * 2 + (source === 'ladera' ? 0 : 1)} tour={false}>{source === 'ladera' && <OperationScene scene={scene} onSelect={setSelected}/>}</VillaScene></Suspense></Canvas></div>
  </main>;
 }

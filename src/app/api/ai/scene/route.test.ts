@@ -22,12 +22,12 @@ it('uses scene instructions and executes operations without villa configuration 
  const output = { architecturalPlan:laderaPlan, name: laderaScene.name, summary: 'Direct scene', unsupported: [], operations: laderaScene.elements.map(element => ({ op: 'add', element })) };
  generate.mockResolvedValue({ output, finishReason: 'stop' });
  const response = await call({ prompt: 'Construct an editable scene', mode: 'generate' });
- expect(response.status).toBe(200); expect((await response.json()).scene).toEqual({...laderaScene,architecturalPlan:laderaPlan});
- expect(generate).toHaveBeenCalledTimes(1); expect(generate.mock.calls[0][0].system.startsWith(sceneSystemPrompt({mode:'generate',prompt:'Construct an editable scene'}))).toBe(true); expect(generate.mock.calls[0][0].system).toContain('CONCEPT SELECTION WITHIN THIS RESPONSE'); expect(generate.mock.calls[0][0].system).toContain(ARCHITECTURAL_DESIGN_GUIDE); expect(generate.mock.calls[0][0].maxRetries).toBe(0);
+ expect(response.status).toBe(200); expect((await response.json()).scene).toEqual({...laderaScene,generationBrief:'Construct an editable scene',architecturalPlan:laderaPlan});
+ expect(generate).toHaveBeenCalledTimes(1); expect(generate.mock.calls[0][0].system.startsWith(sceneSystemPrompt({mode:'generate',prompt:'Construct an editable scene'}))).toBe(true); expect(generate.mock.calls[0][0].system).toContain('DESIGN AUTHORITY:'); expect(generate.mock.calls[0][0].system).toContain(ARCHITECTURAL_DESIGN_GUIDE); expect(generate.mock.calls[0][0].maxRetries).toBe(0);
 });
 it('applies targeted edits on the same scene and rejects invalid transactions atomically', async () => {
  generate.mockResolvedValue({ output: { name: laderaScene.name, summary: 'Roof edit', unsupported: [], operations: [{ op: 'resize', id: 'bridge-roof', size: [17,.3,10] }] }, finishReason: 'stop' });
- const input = { prompt: 'Extend roof', mode: 'edit', current: laderaScene };
+ const input = { prompt: 'Extend bridge-roof', mode: 'edit', current: laderaScene };
  const response = await call(input); expect(response.status).toBe(200);
  const { scene } = await response.json(); expect(scene.elements.filter((e: {id:string}) => e.id !== 'bridge-roof')).toEqual(laderaScene.elements.filter(e => e.id !== 'bridge-roof'));
  generate.mockResolvedValue({ output: { name: 'Invalid', summary: 'Invalid edit', unsupported: [], operations: [{ op: 'remove', id: 'missing' }] }, finishReason: 'stop' });
@@ -39,7 +39,7 @@ it('sends reference pixels through the primary provider call and the same execut
  generate.mockResolvedValue({output,finishReason:'stop'});
  const reference={source:'concept.png',image:'data:image/png;base64,aGVsbG8='};
  const response=await call({prompt:'Reconstruct visible architecture',mode:'generate',reference});
- expect(response.status).toBe(200);expect((await response.json()).scene).toEqual({...laderaScene,architecturalPlan:laderaPlan});
+ expect(response.status).toBe(200);expect((await response.json()).scene).toEqual({...laderaScene,generationBrief:'Reconstruct visible architecture',architecturalPlan:laderaPlan});
  expect(generate.mock.calls[0][0].messages[0].content).toContainEqual({type:'image',image:reference.image});
  expect(generate).toHaveBeenCalledOnce();
 });
@@ -117,7 +117,8 @@ it('generates an elevated terrace and railing with place-on, then edits and relo
   const {POST:compatibility}=await import('../villa/scene/route');
   expect(compatibility).toBe(POST);
   const input={prompt:'House with an elevated terrace and glass railing',mode:'generate' as const};
-  const output={architecturalPlan:laderaPlan,name:laderaScene.name,summary:'Elevated terrace',unsupported:[],operations:[
+  const intent={scaleRationale:laderaPlan.scaleRationale,arrivalAndCirculation:laderaPlan.arrivalAndCirculation,volumeHierarchy:laderaPlan.volumeHierarchy,relationshipsAndViews:laderaPlan.relationshipsAndViews,roofFacadeAndMaterials:laderaPlan.roofFacadeAndMaterials,intendedSpaces:laderaPlan.spaces.map(s=>s.name),programme:laderaPlan.spaces.map(s=>({name:s.name,zone:s.use==='outdoor'?'outdoor':'public',strategy:'Offline construction fixture',floorIds:s.floorIds,enclosureIds:s.enclosureIds,roofIds:s.roofIds,accessIds:laderaScene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Fixture completeness remains unverified.'}))};
+  const output={architecturalPlan:intent,name:laderaScene.name,summary:'Elevated terrace',unsupported:[],operations:[
    ...laderaScene.elements.map(element=>({op:'add',element})),
    {op:'place-on',id:'balcony-deck',support:'bridge-floor',offset:[0,4.35]},
    {op:'place-on',id:'balcony-rail',support:'balcony-deck',offset:[0,1.05]},
@@ -177,7 +178,7 @@ it('generates an elevated terrace and railing with place-on, then edits and relo
 it('returns a recoverable construction draft while keeping invalid edits unapplied',async()=>{
  const current=structuredClone(laderaScene),before=JSON.stringify(current);
  generate.mockResolvedValue({finishReason:'stop',output:{name:current.name,summary:'Invalid construction',unsupported:[],operations:[{op:'move',id:'balcony-deck',at:[100,30,100]}]}});
- const response=await call({mode:'edit',prompt:'Float deck',current}),body=await response.json();
+ const response=await call({mode:'edit',prompt:'Move balcony-deck',current}),body=await response.json();
  expect(response.status).toBe(422);expect(body.error).toContain('needs contact');expect(body.recoverableDraft.elements.find((e:{id:string})=>e.id==='balcony-deck').at).toEqual([100,30,100]);expect(body).not.toHaveProperty('scene');expect(JSON.stringify(current)).toBe(before);
 });
 
@@ -202,8 +203,8 @@ it('preserves the legacy 174-part study at runtime while new provider intents re
   expect(args.system).toContain('No separate column or trim kind is needed');
   const format=await args.output.responseFormat;
   const wire=JSON.stringify(format.schema);
-  const {elementSchema,operationSchema}=await import('@/lib/villa/scene/model');
-  for(const kind of elementSchema.shape.kind.options)expect(wire).toContain(`"${kind}"`);
+  const {elementFieldsSchema,operationSchema}=await import('@/lib/villa/scene/model');
+  for(const kind of elementFieldsSchema.shape.kind.options)expect(wire).toContain(`"${kind}"`);
   for(const op of operationSchema.options)expect(wire).toContain(`"${op.shape.op.value}"`);
   expect(wire).not.toContain('prefixItems');
   expect(generate).toHaveBeenCalledOnce();expect(network).not.toHaveBeenCalled();
@@ -225,8 +226,8 @@ it('keeps every supported operation executable through the mocked edit route',as
   {op:'place-on',id:element.id,support:support.id,offset:[0,0]}, {op:'remove',id:element.id},
  ];
  expect(new Set(operations.map(op=>op.op))).toEqual(new Set(operationSchema.options.map(op=>op.shape.op.value)));
- generate.mockResolvedValue({output:{name:laderaScene.name,summary:'All operations',unsupported:[],operations},finishReason:'stop'});
- const response=await call({mode:'edit',prompt:'Exercise editable details',current:laderaScene});
+ generate.mockResolvedValue({output:{architecturalPlan:laderaPlan,name:laderaScene.name,summary:'All operations',unsupported:[],operations},finishReason:'stop'});
+ const response=await call({mode:'edit',editIntent:'redesign',prompt:'Exercise editable details',current:laderaScene});
  expect(response.status).toBe(200);const scene=(await response.json()).scene;expect(scene.elements.filter((e:{id:string})=>!e.id.startsWith('test-wing'))).toEqual(laderaScene.elements);expect(scene.elements.find((e:{id:string})=>e.id==='test-wing').size[0]).toBeCloseTo(13.2);
 });
 
@@ -242,9 +243,9 @@ it.each([
  ['generate','A $25m Caribbean waterfront mansion with infinity edge pool'],
  ['generate','A compact three-bedroom family villa without pool or gym'],
  ['generate','A Mediterranean courtyard mansion with loggias'],
- ['edit','Add a pool sun shelf'],
+ ['edit','Change bridge-roof material for the pool sun shelf'],
 ])('retains knowledge selections on the canonical %s path for %s even without model citations',async(mode,prompt)=>{
- const operations=mode==='generate'?laderaScene.elements.map(element=>({op:'add',element})):[{op:'finish',id:laderaScene.elements[0].id,material:'sage'}];
+ const operations=mode==='generate'?laderaScene.elements.map(element=>({op:'add',element})):[{op:'finish',id:'bridge-roof',material:'sage'}];
  generate.mockResolvedValue({output:{name:'Offline',summary:'Contract fixture',unsupported:[],operations},finishReason:'stop'});
  const response=await call({mode,prompt,...(mode==='edit'?{current:laderaScene}:{})});
  const body=await response.json();
@@ -257,14 +258,15 @@ it.each([
 });
 
 it.each(['refine','redesign'])('sends explicit %s permission through the canonical route with identical execution safety',async editIntent=>{
- generate.mockResolvedValue({output:{architecturalPlan:laderaPlan,name:laderaScene.name,summary:'Offline edit',unsupported:[],operations:[{op:'resize',id:'bridge-roof',size:[17,.3,10]}]},finishReason:'stop'});
- const response=await call({mode:'edit',editIntent,prompt:'Reconsider house composition',current:laderaScene});
+ generate.mockResolvedValue({output:{...(editIntent==='redesign'?{architecturalPlan:laderaPlan}:{}),name:laderaScene.name,summary:'Offline edit',unsupported:[],operations:[{op:'resize',id:'bridge-roof',size:[17,.3,10]}]},finishReason:'stop'});
+ const response=await call({mode:'edit',editIntent,prompt:'Resize bridge-roof',current:laderaScene});
  expect(response.status).toBe(200);
  expect(generate.mock.calls[0][0].system).toContain(editIntent==='redesign'?'REDESIGN MODE:':'REFINE MODE:');
  expect(generate).toHaveBeenCalledOnce();
  generate.mockResolvedValue({output:{architecturalPlan:laderaPlan,name:'bad',summary:'bad support',unsupported:[],operations:[{op:'move',id:'bridge-floor',at:[100,40,100]}]},finishReason:'stop'});
- const rejected=await call({mode:'edit',editIntent,prompt:'Change the main floor',current:laderaScene});
- expect(rejected.status).toBe(422);expect((await rejected.json()).recoverableDraft).toBeDefined();
+ const rejected=await call({mode:'edit',editIntent,prompt:'Move bridge-floor',current:laderaScene});
+ expect(rejected.status).toBe(422);const rejectedBody=await rejected.json();
+ if(editIntent==='refine'){expect(rejectedBody).not.toHaveProperty('recoverableDraft');expect(rejectedBody.code).toBe('preservation');}else expect(rejectedBody.recoverableDraft).toBeDefined();
 });
 
 it.each([
@@ -295,4 +297,35 @@ it('rejects the retained terrace-through-pool defect on the homepage handler wit
  expect(body.error).toContain('39:add:pool-water');
  expect(body.recoverableDraft.elements).toEqual(artifact.output.operations.map((op:{element:unknown})=>op.element));
  expect(generate).toHaveBeenCalledOnce(); // Mock only: zero network/provider calls.
+});
+
+it.each(['door','window','pool','garden','plant','stair'] as const)('enforces the %s prompt-to-provider-to-edit scope through the real handler offline',async kind=>{
+ const {validateScene,stageSceneOperations}=await import('@/lib/villa/scene/model');
+ let current=validateScene({version:'architectural-scene-1',name:'Scope fixture',elements:[
+  {id:'house',label:'House floor',kind:'plate',at:[0,.1,0],size:[10,.2,8]},
+  {id:'front-door',label:'Front door',kind:'entrance',at:[0,1.3,4],size:[1,2.2,.1]},
+  {id:'side-door',label:'Side door',kind:'entrance',at:[5,1.3,0],size:[1,2.2,.1]},
+  {id:'window',label:'Window',kind:'glazing',at:[-3,1.7,4],size:[1,1,.1]},
+ ]});
+ if(kind==='pool'||kind==='plant')current=stageSceneOperations(current,[{op:'assemble',assembly:{kind:'rectangular-pool',parameters:{id:'pool',at:[20,.15,0],width:4,depth:6,basinDepth:1.2}}}]);
+ if(kind==='stair')current=stageSceneOperations(current,[{op:'assemble',assembly:{kind:'straight-stair',parameters:{id:'stair',at:[-20,0,0],width:1,rise:1,run:2,risers:5}}}]);
+ const snapshot=JSON.stringify(current);
+ const prompt={door:'Change only the front door material',window:'Change only the selected window material',pool:'Resize the pool',garden:'Add a garden behind the house',plant:'Add tropical plants around the garden',stair:'Make the staircase wider'}[kind];
+ const operations=kind==='door'?[{op:'finish',id:'front-door',material:'bronze'}]:kind==='window'?[{op:'finish',id:'window',material:'bronze'}]:kind==='pool'?[{op:'scale-assembly',id:'pool',factors:[1.1,1,1.1]}]:kind==='stair'?current.elements.filter(e=>e.id.startsWith('stair')).map(e=>({op:'resize',id:e.id,size:[1.4,e.size[1],e.size[2]]})):[{op:'add',element:{id:'new-landscape',label:kind,kind:kind==='plant'?'volume':'plate',semanticType:kind,at:[12,kind==='plant'?.5:.025,0],size:kind==='plant'?[.5,1,.5]:[3,.05,4]}}];
+ generate.mockResolvedValue({finishReason:'stop',output:{name:current.name,summary:'Scoped fixture',unsupported:[],operations}});
+ const response=await call({mode:'edit',current,prompt,...(kind==='window'?{editContext:{selectedId:'window'}}:{})});
+ const body=await response.json();expect(body.error).toBeUndefined();expect(response.status).toBe(200);
+ const targeted=new Set(kind==='stair'?current.elements.filter(e=>e.id.startsWith('stair')).map(e=>e.id):kind==='pool'?current.elements.filter(e=>e.id.startsWith('pool')).map(e=>e.id):[kind==='door'?'front-door':kind==='window'?'window':'new-landscape']);
+ expect(body.scene.elements.filter((e:{id:string})=>!targeted.has(e.id))).toEqual(current.elements.filter(e=>!targeted.has(e.id)));
+ expect(JSON.stringify(current)).toBe(snapshot);expect(generate).toHaveBeenCalledOnce();expect(generate.mock.calls[0][0].system).toContain('LOCALLY ENFORCED EDIT SCOPE');
+});
+
+it.each(['ambiguous','invented','roof','malformed','metadata'] as const)('rejects %s provider edits without returning a committable scene or unsafe recovery draft',async kind=>{
+ const current={...laderaScene,elements:[...laderaScene.elements.map(e=>e.id==='pivot-door'?{...e,semanticType:'front-door' as const}:e),{...laderaScene.elements.find(e=>e.id==='pivot-door')!,id:'other-door',label:'Side door',at:[30,2.2,0] as [number,number,number]}]};
+ const snapshot=JSON.stringify(current);
+ const operations=kind==='invented'?[{op:'finish',id:'invented',material:'sage'}]:kind==='roof'?[{op:'finish',id:'pivot-door',material:'sage'},{op:'move',id:'bridge-roof',at:[100,40,100]}]:kind==='malformed'?[{op:'finish',id:'pivot-door'}]:[{op:'finish',id:'pivot-door',material:'sage'}];
+ generate.mockResolvedValue({finishReason:'stop',output:{name:current.name,summary:'Bad fixture',unsupported:[],operations,...(kind==='metadata'?{architecturalPlan:{changed:true}}:{})}});
+ const response=await call({mode:'edit',current,prompt:kind==='ambiguous'?'Change the door material':'Change front door material'}),body=await response.json();
+ expect(response.status).toBe(422);expect(body).not.toHaveProperty('scene');expect(body).not.toHaveProperty('recoverableDraft');expect(JSON.stringify(current)).toBe(snapshot);
+ if(kind==='ambiguous'){expect(body.code).toBe('ambiguous-target');expect(body.candidates).toEqual(expect.arrayContaining(['pivot-door','other-door']));}
 });

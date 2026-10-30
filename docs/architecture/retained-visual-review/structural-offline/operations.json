@@ -1,0 +1,132 @@
+{
+  "name": "DEVELOPER: Compact gable exterior",
+  "summary": "Offline structural refinement mock; no AI calls.",
+  "unsupported": [],
+  "operations": [
+    {
+      "op": "remove",
+      "id": "entry-canopy"
+    },
+    {
+      "op": "replace",
+      "id": "gable-roof",
+      "element": {
+        "id": "gable-roof",
+        "label": "gable roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.6,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          1.2,
+          8
+        ],
+        "material": "ivory",
+        "roofForm": "hip",
+        "overhang": 0.65,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "label": "entry-roof",
+        "id": "entry-roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.2,
+          -5.3
+        ],
+        "size": [
+          5,
+          0.25,
+          3.1
+        ],
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "label": "entry-west-pier",
+        "id": "entry-west-pier",
+        "kind": "volume",
+        "at": [
+          -2.15,
+          1.6,
+          -6.3
+        ],
+        "size": [
+          0.3,
+          2.8,
+          0.3
+        ],
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "label": "entry-east-pier",
+        "id": "entry-east-pier",
+        "kind": "volume",
+        "at": [
+          2.15,
+          1.6,
+          -6.3
+        ],
+        "size": [
+          0.3,
+          2.8,
+          0.3
+        ],
+        "material": "limestone"
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "label": "arrival-west-screen",
+        "id": "arrival-west-screen",
+        "kind": "screen",
+        "at": [
+          -3.3,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          2,
+          2.9,
+          0.2
+        ],
+        "material": "timber",
+        "panels": 8
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "label": "arrival-east-screen",
+        "id": "arrival-east-screen",
+        "kind": "screen",
+        "at": [
+          3.3,
+          1.65,
+          -4.35
+        ],
+        "size": [
+          2,
+          2.9,
+          0.2
+        ],
+        "material": "timber",
+        "panels": 8
+      }
+    }
+  ]
+}

@@ -24,7 +24,7 @@ export function monetaryBriefContext(brief: string) {
   const amount = Number(match[1].replace(/,/g, '')) * (/^(million|m)$/.test(unit ?? '') ? 1e6 : /^(billion|b)$/.test(unit ?? '') ? 1e9 : /^(thousand|k)$/.test(unit ?? '') ? 1e3 : 1);
   if (!Number.isFinite(amount) || amount <= 0) return [];
   const labels = '(construction budget|construction cost|construction|building cost|build budget|build cost|building budget|land value|land cost|land|plot value|lot value|property market value|property value|market value|estate value|home value|property|budget)';
-  const prefixLabel = before.match(new RegExp(labels + '\\s*(?:(?:of|is|around|approximately|about|worth|valued at)\\s*)?[:=]?\\s*$'))?.[1];
+  const prefixLabel = before.match(new RegExp('\\b' + labels + '(?:\\s*(?:of|is|around|approximately|about|worth|valued at|[:=]))*\\s*$'))?.[1];
   const suffixLabel = after.match(new RegExp('^\\s*' + labels + '\\b'))?.[1];
   const label = prefixLabel ?? suffixLabel ?? '';
   const kind = /construction|building|build /.test(label) ? 'construction-budget' as const
