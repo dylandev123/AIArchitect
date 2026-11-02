@@ -1,0 +1,80 @@
+{
+  "at": "2026-11-02T20:46:16.799Z",
+  "pid": 65887,
+  "node": "v26.12.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cwd": "/Users/dylandevaux/Desktop/AIArchitect",
+  "executionContext": "unspecified",
+  "requestSha256": "f16409a5bfea2039428a11a1e7498bf372463db3f0f504effd9f1ea3f8e90dec",
+  "requestBytes": 32422,
+  "model": "gpt-5.6-terra",
+  "maxOutputTokens": 30000,
+  "generationRequests": 0,
+  "retries": 0,
+  "creationPermissionVerified": false,
+  "environment": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "http_proxy": false,
+    "https_proxy": false,
+    "all_proxy": false,
+    "NODE_USE_ENV_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "NODE_OPTIONS": false,
+    "OPENAI_BASE_URL": false
+  },
+  "dns": {
+    "addresses": [
+      {
+        "address": "172.66.0.243",
+        "family": 4
+      },
+      {
+        "address": "162.159.140.245",
+        "family": 4
+      },
+      {
+        "address": "2606:4700:7::f3",
+        "family": 6
+      },
+      {
+        "address": "2a06:98c1:58::f3",
+        "family": 6
+      }
+    ],
+    "ok": true
+  },
+  "tls": [
+    {
+      "family": 4,
+      "ok": true,
+      "protocol": "TLSv1.3"
+    },
+    {
+      "family": 6,
+      "ok": false,
+      "error": {
+        "name": "Error",
+        "code": "EHOSTUNREACH",
+        "syscall": "connect"
+      }
+    }
+  ],
+  "modelAccess": {
+    "status": 200,
+    "requestId": "6e83d735-5c6a-4067-8d46-64997999f778",
+    "model": "gpt-5.6-terra"
+  },
+  "responses": {
+    "status": 401,
+    "requestId": "req_d512797cbe1b4782ab0db802701db569",
+    "code": "missing_scope",
+    "type": "invalid_request_error",
+    "readScopeRestricted": true
+  },
+  "ok": true,
+  "authorizationCaveat": "Model GET authenticates and confirms visibility. Responses GET tests reachability/read permission only; it cannot certify response creation permission, quota or exact payload acceptance."
+}

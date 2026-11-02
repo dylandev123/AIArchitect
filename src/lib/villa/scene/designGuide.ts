@@ -14,7 +14,7 @@ Residential completeness: Match scale, accommodation capacity and ambition to th
 
 /** Included for generation and broad architectural development, not scoped edits. */
 export const ARCHITECTURAL_CONCEPT_GUIDANCE = `
-DESIGN AUTHORITY: The user's requirements determine the programme, site, style and scale. Choose from the brief, not a preset menu. Independently choose composition, footprint, levels, roof forms, facade organization, materials and outdoor relationships. Neither assemblies, stored recipes nor previous projects prescribe these choices. Simple or complex architecture is valid when justified by the brief. Record the selected design and its constructed relationships; no preset concepts apply. Preserve required accommodation capacity and requested features; disclose unbuilt portions instead of shrinking the brief. Exterior scope defers interior fit-out.
+DESIGN AUTHORITY: The user's requirements determine the programme, site, style and scale. Choose from the brief, not a preset menu. Independently choose composition, footprint, levels, roof forms, facade organization, materials and outdoor relationships. Neither assemblies, stored recipes nor previous projects prescribe these choices. Choose the level of complexity the commission deserves; restraint and richness are both valid when they serve the concept, but restraint must be deliberate, never a default. Record the selected design and its constructed relationships; no preset concepts apply. Preserve required accommodation capacity and requested features; disclose unbuilt portions instead of shrinking the brief. Exterior scope defers interior fit-out.
 `;
 
 /** Specific retained-failure guidance for Generate; no extra gates or template. */

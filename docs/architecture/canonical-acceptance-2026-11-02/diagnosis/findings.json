@@ -1,0 +1,78 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "sourceProposalSha256": "b6f55347c5d1fa842d83cfc4c0acc4ebcf08a88c1ad44e57b45d38577c3799d8",
+  "errorCount": 2,
+  "byStage": {
+    "site": 1,
+    "openings": 1
+  },
+  "metrics": {
+    "levels": 1,
+    "spaces": 24,
+    "interiorSpaces": 22,
+    "footprintAreaM2": 1128,
+    "interiorAreaM2": 982,
+    "roofForms": [
+      "flat"
+    ],
+    "roofOverhangs": [
+      0
+    ],
+    "masses": 3,
+    "screens": 1,
+    "bedroomSpaces": 14,
+    "bathroomSpaces": 6,
+    "windowedInteriorRooms": 6,
+    "interiorRoomsWithoutAnyWindow": [
+      "foyer",
+      "gallery",
+      "living-room",
+      "dining-room",
+      "kitchen",
+      "pantry",
+      "laundry",
+      "powder-room",
+      "private-hall",
+      "suite-1-bath",
+      "suite-2-bath",
+      "suite-3-bath",
+      "suite-4-bath",
+      "guest-hall",
+      "suite-5-bath",
+      "suite-6-bath"
+    ]
+  },
+  "findings": [
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "waterfront-lawn-reserve",
+      "message": "waterfront-lawn-reserve (x -10..18, z 39..55) lies 7.75 m outside the 90×70 m site, which is centred on the room cells (building spans x -16..38, z -5..29.5)."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "guest-wing-entry",
+      "message": "guest-hall and dining-room share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "levels",
+      "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "roofs",
+      "message": "every roof is flat with no overhang (23 slabs): no roof-led silhouette or deep eaves for shade."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "daylight",
+      "message": "16 of 22 interior rooms have no window: foyer, gallery, living-room, dining-room, kitchen, pantry, laundry, powder-room, private-hall, suite-1-bath, suite-2-bath, suite-3-bath, suite-4-bath, guest-hall, suite-5-bath, suite-6-bath."
+    }
+  ]
+}
