@@ -1,3 +1,6 @@
+// Legacy construction/edit regressions isolate the new planning stage.
+// route.designFirst.test.ts exercises both actual stages and fidelity failures.
+vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
 import { emptySnapshot } from '@/lib/library/store';
 vi.mock('@/lib/library/store', async original => ({ ...await original<typeof import('@/lib/library/store')>(), readLibrary: async () => emptySnapshot() }));
 import { beforeEach, expect, it, vi } from 'vitest';
@@ -68,6 +71,8 @@ it.each(['generate', 'edit'] as const)('audits the complete %s schema actually s
   expect(sent).toContain('slab TOP datums');
   expect(sent).toContain('FINAL FOUR-VIEW SELF-CHECK');
   expect(wire.text.format.schema.properties.architecturalPlan.required).toContain('programme');
+  expect(wire.text.format.schema.properties.architecturalPlan.required).toContain('physicalProgramme');
+  expect(sent).toContain('PHYSICAL PROGRAMME BEFORE GEOMETRY');
   expect(wire.text.format.schema.properties.architecturalPlan.anyOf).toBeUndefined();
   expect(sent).not.toContain('Reference built partitions/cabinets and separate bathroom entries');
  }
@@ -192,7 +197,7 @@ it.each(['generate','refine','redesign','complete'] as const)('executes an assem
 it.each(['angular','flowing','estate'] as const)('runs %s profile construction through the normal route and real SDK transport without simplification',async study=>{
  const {profileFreedomStudy}=await import('@/lib/villa/scene/profileFreedom.fixture');
  const {scene,operations}=profileFreedomStudy(study);
- const intent={scaleRationale:'Offline developer replay, not model design evidence.',arrivalAndCirculation:'Selected entry; complete access unverified.',volumeHierarchy:'Study-specific form.',relationshipsAndViews:'Site assumptions.',roofFacadeAndMaterials:'Profile sections.',intendedSpaces:['Residence'],constructionScope:'exterior',programme:[{name:'Residence',zone:'public',strategy:'enclosed',floorIds:[scene.elements.find(e=>e.kind==='plate')!.id],enclosureIds:scene.elements.filter(e=>e.kind==='wall'||e.kind==='glazing').map(e=>e.id),roofIds:scene.elements.filter(e=>e.kind==='roof').map(e=>e.id),accessIds:scene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Interior fit-out deferred; profile coverage/access unverified.'}]};
+ const intent={physicalProgramme:{propertyType:'Offline test',basis:'Adapter fixture, capacity unverified.',allocations:[{name:'Home',quantity:1,unitNetAreaM2:50,allowanceM2:10,floorIds:['salon-floor']}]},scaleRationale:'Offline developer replay, not model design evidence.',arrivalAndCirculation:'Selected entry; complete access unverified.',volumeHierarchy:'Study-specific form.',relationshipsAndViews:'Site assumptions.',roofFacadeAndMaterials:'Profile sections.',intendedSpaces:['Residence'],constructionScope:'exterior',programme:[{name:'Residence',zone:'public',strategy:'enclosed',floorIds:[scene.elements.find(e=>e.kind==='plate')!.id],enclosureIds:scene.elements.filter(e=>e.kind==='wall'||e.kind==='glazing').map(e=>e.id),roofIds:scene.elements.filter(e=>e.kind==='roof').map(e=>e.id),accessIds:scene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Interior fit-out deferred; profile coverage/access unverified.'}]};
  const nullable=operations.map(op=>{
   if(op.op!=='add')return op;
   const element:Record<string,unknown>={...op.element};

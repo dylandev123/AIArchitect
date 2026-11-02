@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-30T19:26:50.394Z",
+  "availability": {
+    "httpStatus": 200,
+    "model": "gpt-5.6-sol",
+    "method": "GET /v1/models/gpt-5.6-sol; no generation"
+  },
+  "changedFields": [
+    "model"
+  ],
+  "originalRequestHash": "96e7fc328d215b31aec7e71883d20951e8accab07ac82748bcbe79820bfe1731",
+  "solRequestHash": "96e9437e276cf223a34ffe9f834d37750862fcf97bf9b4c299a8840fb5f7b0ea",
+  "schemaHash": "f99f5d4f98ba5f9d451ea9301cb49ebdaf51c1818b1f02998b153146185ae4e1",
+  "requestBytes": 86243,
+  "compatibility": "Responses and strict structured output supported; identical schema already accepted by Terra; no unsupported sampling, tools, modalities or reasoning overrides.",
+  "ratesUsdPerMillion": {
+    "input": 4,
+    "cachedInput": 0.4,
+    "output": 20,
+    "cacheWriteInput": 5
+  },
+  "expectedAtBaselineTokensUsd": 0.20252,
+  "conservativeUpperBoundUsd": 1,
+  "boundBasis": "Text-only request under 100,000 UTF-8 bytes; conservative 80,000 input tokens at $5/M including cache write + 30,000 output tokens at $20/M = $1. No tool charges; below long-context threshold.",
+  "pricingSource": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+  "maxPaidCalls": 1,
+  "retries": 0,
+  "constructionCalls": 0
+}

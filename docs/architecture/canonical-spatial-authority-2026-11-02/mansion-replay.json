@@ -1,0 +1,142 @@
+{
+  "note": "Offline replay of the unchanged retained Terra proposal. No provider call.",
+  "source": "docs/architecture/canonical-corrected-mansion-2026-11-02/proposal.normalized.json",
+  "retained": {
+    "findings": 12,
+    "classified": [
+      {
+        "finding": "foyer/upper-suite-6",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "foyer/upper-suite-6: occupied volumes overlap (0.60m vertical). foyer (level ground, height 4.2m) rises 0.60m above the upper floor datum under upper-suite-6: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "foyer/upper-bath-6",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "foyer/upper-bath-6: occupied volumes overlap (0.60m vertical). foyer (level ground, height 4.2m) rises 0.60m above the upper floor datum under upper-bath-6: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "gallery/upper-landing",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "gallery/upper-landing: occupied volumes overlap (0.30m vertical). gallery (level ground, height 3.9m) rises 0.30m above the upper floor datum under upper-landing: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "gallery/upper-lounge",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "gallery/upper-lounge: occupied volumes overlap (0.30m vertical). gallery (level ground, height 3.9m) rises 0.30m above the upper floor datum under upper-lounge: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "living/upper-suite-4",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "living/upper-suite-4: occupied volumes overlap (0.60m vertical). living (level ground, height 4.2m) rises 0.60m above the upper floor datum under upper-suite-4: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "living/upper-bath-4",
+        "class": "model-authored contradiction",
+        "cause": "explicit ground-room height exceeds the floor datum of the room stacked above it (redundant restatement of the level rise)",
+        "resolvedByDerivation": true,
+        "text": "living/upper-bath-4: occupied volumes overlap (0.60m vertical). living (level ground, height 4.2m) rises 0.60m above the upper floor datum under upper-bath-4: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above."
+      },
+      {
+        "finding": "foyer",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "foyer: unsupported-capability: roof conflicts with upper occupancy: 75% of its footprint lies under upper-suite-6, upper-bath-6 (upper floor) and 25% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split foyer along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "arrival-court",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "arrival-court: unsupported-capability: roof conflicts with upper occupancy: 38% of its footprint lies under upper-bath-6 (upper floor) and 62% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split arrival-court along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "gallery",
+        "class": "model-authored contradiction",
+        "cause": "roof declared on a space wholly covered by the floor above",
+        "resolvedByDerivation": false,
+        "text": "gallery: roof conflicts with upper occupancy: it is fully covered by upper-landing, upper-lounge (upper floor), which is its cover. Omit this roof."
+      },
+      {
+        "finding": "living",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "living: unsupported-capability: roof conflicts with upper occupancy: 63% of its footprint lies under upper-suite-4, upper-bath-4 (upper floor) and 37% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split living along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "guest-suite-1",
+        "class": "model-authored contradiction",
+        "cause": "roof declared on a space wholly covered by the floor above",
+        "resolvedByDerivation": false,
+        "text": "guest-suite-1: roof conflicts with upper occupancy: it is fully covered by upper-suite-5, upper-bath-5 (upper floor), which is its cover. Omit this roof."
+      },
+      {
+        "finding": "waterfront-veranda",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "waterfront-veranda: unsupported-capability: roof conflicts with upper occupancy: 13% of its footprint lies under upper-bath-4 (upper floor) and 87% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split waterfront-veranda along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      }
+    ]
+  },
+  "alteredCopyDiagnostic": {
+    "label": "ALTERED COPY, NOT A TERRA OUTPUT: heights omitted on ground spaces so the compiler derives them",
+    "omittedHeights": 3,
+    "remainingFindings": 6,
+    "remaining": [
+      {
+        "finding": "foyer",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "foyer: unsupported-capability: roof conflicts with upper occupancy: 75% of its footprint lies under upper-suite-6, upper-bath-6 (upper floor) and 25% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split foyer along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "arrival-court",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "arrival-court: unsupported-capability: roof conflicts with upper occupancy: 38% of its footprint lies under upper-bath-6 (upper floor) and 62% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split arrival-court along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "gallery",
+        "class": "model-authored contradiction",
+        "cause": "roof declared on a space wholly covered by the floor above",
+        "resolvedByDerivation": false,
+        "text": "gallery: roof conflicts with upper occupancy: it is fully covered by upper-landing, upper-lounge (upper floor), which is its cover. Omit this roof."
+      },
+      {
+        "finding": "living",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "living: unsupported-capability: roof conflicts with upper occupancy: 63% of its footprint lies under upper-suite-4, upper-bath-4 (upper floor) and 37% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split living along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      },
+      {
+        "finding": "guest-suite-1",
+        "class": "model-authored contradiction",
+        "cause": "roof declared on a space wholly covered by the floor above",
+        "resolvedByDerivation": false,
+        "text": "guest-suite-1: roof conflicts with upper occupancy: it is fully covered by upper-suite-5, upper-bath-5 (upper floor), which is its cover. Omit this roof."
+      },
+      {
+        "finding": "waterfront-veranda",
+        "class": "representation gap",
+        "cause": "space is only partly under an upper floor; one roof slab cannot follow the exposed remainder",
+        "resolvedByDerivation": false,
+        "text": "waterfront-veranda: unsupported-capability: roof conflicts with upper occupancy: 13% of its footprint lies under upper-bath-4 (upper floor) and 87% is open to the sky. A roof is one slab over a whole space and cannot follow the exposed remainder; split waterfront-veranda along the upper edge into a covered space (no roof) and an exposed space (roof), or place the upper rooms wholly over or wholly clear of it."
+      }
+    ]
+  }
+}

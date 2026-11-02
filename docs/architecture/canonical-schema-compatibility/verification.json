@@ -1,0 +1,577 @@
+{
+  "offline": true,
+  "providerCalls": 0,
+  "originalSha256": "d7e49158aaa400a19b56320f0fe2cb36b349018c70f7768756fd090ea710f89d",
+  "preparedSha256": "30623b205a0dff0f0aba72b636747ac2f7adbb792fb5c1390eeb2fc41a540ee7",
+  "preparedBytes": 35195,
+  "nonSchemaFieldsIdentical": true,
+  "sourceSchemaEqualsRejectedSchema": true,
+  "originalCompatibilityIssues": [
+    "$: root must be an object without anyOf",
+    "$: unsupported oneOf",
+    "$.oneOf[0].properties.plan: every property must be required",
+    "$.oneOf[0].properties.plan.properties.site: every property must be required",
+    "$.oneOf[0].properties.plan.properties.masses.items: every property must be required",
+    "$.oneOf[0].properties.plan.properties.spaces.items: every property must be required",
+    "$.oneOf[0].properties.plan.properties.portals.items: every property must be required",
+    "$.oneOf[0].properties.plan.properties.roofs.items: every property must be required"
+  ],
+  "correctedCompatibilityIssues": [],
+  "rootChange": "required result object envelope; original exclusive alternatives preserved beneath nested anyOf",
+  "changes": [
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/properties/cliff/type",
+      "before": "object"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/properties/cliff/properties",
+      "before": {
+        "at": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 100
+        },
+        "drop": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "run": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/properties/cliff/required",
+      "before": [
+        "at",
+        "drop",
+        "run"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/properties/cliff/additionalProperties",
+      "before": false
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/properties/cliff/anyOf",
+      "after": [
+        {
+          "type": "object",
+          "properties": {
+            "at": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "drop": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "run": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "at",
+            "drop",
+            "run"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/site/required",
+      "before": [
+        "width",
+        "depth",
+        "elevation",
+        "grade",
+        "fall"
+      ],
+      "after": [
+        "width",
+        "depth",
+        "elevation",
+        "grade",
+        "fall",
+        "cliff"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/masses/items/properties/relatesTo/type",
+      "before": "string"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/masses/items/properties/relatesTo/pattern",
+      "before": "^[a-z][a-z0-9-]{0,39}$"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/masses/items/properties/relatesTo/anyOf",
+      "after": [
+        {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,39}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/masses/items/required",
+      "before": [
+        "id",
+        "role"
+      ],
+      "after": [
+        "id",
+        "role",
+        "relatesTo"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/spaces/items/properties/facadeMaterial/type",
+      "before": "string"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/spaces/items/properties/facadeMaterial/enum",
+      "before": [
+        "ivory",
+        "limestone",
+        "timber",
+        "bronze",
+        "sage"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/spaces/items/properties/facadeMaterial/anyOf",
+      "after": [
+        {
+          "type": "string",
+          "enum": [
+            "ivory",
+            "limestone",
+            "timber",
+            "bronze",
+            "sage"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/spaces/items/required",
+      "before": [
+        "id",
+        "mass",
+        "level",
+        "use",
+        "width",
+        "depth",
+        "height",
+        "outdoor",
+        "placement"
+      ],
+      "after": [
+        "id",
+        "mass",
+        "level",
+        "use",
+        "width",
+        "depth",
+        "height",
+        "outdoor",
+        "facadeMaterial",
+        "placement"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/portals/items/properties/sill/type",
+      "before": "number"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/portals/items/properties/sill/minimum",
+      "before": 0
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/portals/items/properties/sill/maximum",
+      "before": 8
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/portals/items/properties/sill/anyOf",
+      "after": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/portals/items/required",
+      "before": [
+        "id",
+        "host",
+        "to",
+        "alignment",
+        "width",
+        "height",
+        "mode"
+      ],
+      "after": [
+        "id",
+        "host",
+        "to",
+        "alignment",
+        "width",
+        "height",
+        "mode",
+        "sill"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/rise/type",
+      "before": "number"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/rise/minimum",
+      "before": 0.18
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/rise/maximum",
+      "before": 8
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/rise/anyOf",
+      "after": [
+        {
+          "type": "number",
+          "minimum": 0.18,
+          "maximum": 8
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/overhang/type",
+      "before": "number"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/overhang/minimum",
+      "before": 0
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/overhang/maximum",
+      "before": 3
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/overhang/anyOf",
+      "after": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/material/type",
+      "before": "string"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/material/enum",
+      "before": [
+        "ivory",
+        "limestone",
+        "timber",
+        "bronze",
+        "sage"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/properties/material/anyOf",
+      "after": [
+        {
+          "type": "string",
+          "enum": [
+            "ivory",
+            "limestone",
+            "timber",
+            "bronze",
+            "sage"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/roofs/items/required",
+      "before": [
+        "space",
+        "form"
+      ],
+      "after": [
+        "space",
+        "form",
+        "rise",
+        "overhang",
+        "material"
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/screens/maxItems",
+      "before": 60
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/screens/type",
+      "before": "array"
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/screens/items",
+      "before": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,39}$"
+          },
+          "space": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,39}$"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "south",
+              "east",
+              "north",
+              "west"
+            ]
+          },
+          "alignment": {
+            "type": "string",
+            "enum": [
+              "start",
+              "centre",
+              "end"
+            ]
+          },
+          "width": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "height": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "sill": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 8
+          },
+          "standOff": {
+            "type": "number",
+            "minimum": 0.15,
+            "maximum": 3
+          },
+          "depth": {
+            "type": "number",
+            "minimum": 0.07,
+            "maximum": 0.5
+          },
+          "panels": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 40
+          },
+          "material": {
+            "type": "string",
+            "enum": [
+              "ivory",
+              "limestone",
+              "timber",
+              "bronze",
+              "sage"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "space",
+          "side",
+          "alignment",
+          "width",
+          "height",
+          "sill",
+          "standOff",
+          "depth",
+          "panels",
+          "material"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/properties/screens/anyOf",
+      "after": [
+        {
+          "maxItems": 60,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,39}$"
+              },
+              "space": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{0,39}$"
+              },
+              "side": {
+                "type": "string",
+                "enum": [
+                  "south",
+                  "east",
+                  "north",
+                  "west"
+                ]
+              },
+              "alignment": {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "centre",
+                  "end"
+                ]
+              },
+              "width": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              },
+              "height": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              },
+              "sill": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 8
+              },
+              "standOff": {
+                "type": "number",
+                "minimum": 0.15,
+                "maximum": 3
+              },
+              "depth": {
+                "type": "number",
+                "minimum": 0.07,
+                "maximum": 0.5
+              },
+              "panels": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 40
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "ivory",
+                  "limestone",
+                  "timber",
+                  "bronze",
+                  "sage"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "space",
+              "side",
+              "alignment",
+              "width",
+              "height",
+              "sill",
+              "standOff",
+              "depth",
+              "panels",
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    {
+      "path": "text/format/schema/properties/result/anyOf/0/properties/plan/required",
+      "before": [
+        "version",
+        "id",
+        "thesis",
+        "orientation",
+        "site",
+        "levels",
+        "masses",
+        "spaces",
+        "portals",
+        "stairs",
+        "arrival",
+        "roofs",
+        "terraces",
+        "pools",
+        "landscape",
+        "materials",
+        "cameraViews"
+      ],
+      "after": [
+        "version",
+        "id",
+        "thesis",
+        "orientation",
+        "site",
+        "levels",
+        "masses",
+        "spaces",
+        "portals",
+        "stairs",
+        "arrival",
+        "roofs",
+        "screens",
+        "terraces",
+        "pools",
+        "landscape",
+        "materials",
+        "cameraViews"
+      ]
+    }
+  ]
+}

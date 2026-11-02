@@ -1,0 +1,28 @@
+{
+  "submitted": false,
+  "authorizationRequired": true,
+  "model": "gpt-5.6-terra",
+  "paidCallsSoFar": 0,
+  "maxPaidCalls": 1,
+  "retries": 0,
+  "constructionCalls": 0,
+  "maxOutputTokens": 30000,
+  "reasoning": "provider-default",
+  "briefSource": "docs/architecture/design-first/experiment.request.json",
+  "requestSha256": "61e103493517a1968246029465fe414eded487d5e6ce4f5c05879ec4aef2a90d",
+  "requestBytes": 17889,
+  "knowledge": "No retrieved knowledge in this prepared request; contract and original brief only. This differs from historical calls and precludes a controlled causal comparison.",
+  "cost": {
+    "currency": "USD",
+    "source": "src/lib/ai/pricing.ts static defaults, NOT verified current provider rates",
+    "inputPerMillion": 2,
+    "outputPerMillion": 12,
+    "scenarioInputTokens": 12000,
+    "scenarioOutputTokens": 15000,
+    "scenarioEstimate": 0.204,
+    "scenarioAtOutputCap": 0.384,
+    "qualification": "Conditional planning estimate; actual input/output/reasoning usage and current rates must be verified before submission. No invoiced-price claim."
+  },
+  "expectedResult": "Either editable supported envelope study OR explicit decision-required. The original brief requests unsupported pool/landscape/terrain and potentially facade/roof features. A refusal is a valid experiment outcome, not a completed mansion.",
+  "execution": "No live runner installed. Explicit user approval required before adding a one-shot transport using existing authorized configuration. Parse response.proposal with constructSemantic; never retry or repair silently."
+}

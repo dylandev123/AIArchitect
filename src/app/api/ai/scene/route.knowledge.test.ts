@@ -1,4 +1,6 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// Retired direct-scene operations author: the planning stage is isolated here (route.designFirst.test.ts covers both stages).
+vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { expect, it, vi } from 'vitest';
 import type { LibrarySnapshot } from '@/lib/library/store';
@@ -51,7 +53,8 @@ it('captures four actual homepage handler requests offline against the stored li
   }
   expect(network).not.toHaveBeenCalled();
   mkdirSync('docs/architecture/code-driven',{recursive:true});
-  writeFileSync('docs/architecture/code-driven/homepage-requests.json',JSON.stringify(examples,null,2));
+  // Historical evidence: never overwritten by a test run.
+  if(!existsSync('docs/architecture/code-driven/homepage-requests.json'))writeFileSync('docs/architecture/code-driven/homepage-requests.json',JSON.stringify(examples,null,2));
  }finally{network.mockRestore();}
 });
 

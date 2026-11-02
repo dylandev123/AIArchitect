@@ -1,3 +1,4 @@
+import { legacyHouseAuthoringEnabled } from '@/lib/villa/canonical/authority';
 import { NextRequest, NextResponse } from "next/server";
 import { getAiModelId, isAiConfigured, AI_NOT_CONFIGURED_MESSAGE } from "@/lib/ai/model";
 import { createTimings } from "@/lib/ai/timing";
@@ -28,6 +29,7 @@ interface ReplayRequestBody {
  * Disabled outside development/preview — see devSessionCache.ts. Never called by production code paths.
  */
 export async function POST(req: NextRequest) {
+  if (!legacyHouseAuthoringEnabled()) return NextResponse.json({error:'Provider replay of retired house authors is disabled. Retained artifacts remain readable offline.',code:'canonical_generation_required',providerCalls:0},{status:409});
   if (process.env.NODE_ENV === "production") {
     return NextResponse.json({ error: "Not available in production." }, { status: 404 });
   }

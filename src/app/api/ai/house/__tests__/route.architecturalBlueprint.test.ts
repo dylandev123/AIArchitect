@@ -291,12 +291,12 @@ describe('actual production route with real SDK parsing and an offline model', (
     mocks.getModel.mockReturnValue(new MockLanguageModelV3({ doGenerate: failed }));
     const res = await post(); expect(res.status).toBeGreaterThanOrEqual(400); noScene(await res.json()); expect(failed).toHaveBeenCalledTimes(1);
   });
-  it('reports flag state without any authoring request or sensitive configuration', async () => {
+  it('reports that the retired authoring flags cannot enable new generation, without any authoring request or sensitive configuration', async () => {
     const { GET } = await import('../route');
-    for (const [flag, enabled] of [['1', true], ['0', false], ['', false], ['true', false]] as const) {
+    for (const [flag, enabled] of [['1', false], ['0', false], ['', false], ['true', false]] as const) {
       vi.stubEnv('AI_V3_ARCHITECTURAL_BLUEPRINT', flag);
       const res = await GET(), body = await res.json();
-      expect(body).toEqual({ architecturalBlueprint: { enabledForNewFlatGenerations: enabled, contract: 'v3-plan-first-1', maxAuthoringAttempts: 2, maxOutputTokens: 10_000 } });
+      expect(body).toEqual({ architecturalBlueprint: { enabledForNewFlatGenerations: enabled, authority: '/api/ai/scene', contract: 'v3-plan-first-1', maxAuthoringAttempts: 2, maxOutputTokens: 10_000 } });
       expect(res.headers.get('cache-control')).toBe('no-store');
     }
     expect(mocks.getModel).not.toHaveBeenCalled(); expect(mocks.usage).not.toHaveBeenCalled();

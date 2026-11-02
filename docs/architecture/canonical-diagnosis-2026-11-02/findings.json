@@ -1,0 +1,405 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "sourceProposalSha256": "792ebf0c8f9b464b6a74b6c2f41c8b51059f9edc1d536990d1441b1b8f311689",
+  "errorCount": 57,
+  "byStage": {
+    "volumes": 3,
+    "site": 1,
+    "openings": 5,
+    "roofs": 44,
+    "screens": 4
+  },
+  "metrics": {
+    "levels": 1,
+    "spaces": 21,
+    "interiorSpaces": 18,
+    "footprintAreaM2": 1316,
+    "interiorAreaM2": 1062,
+    "roofForms": [
+      "flat"
+    ],
+    "roofOverhangs": [
+      0.6,
+      0.8,
+      0.35,
+      0.45,
+      0.65,
+      0.55,
+      0.3,
+      0.4
+    ],
+    "masses": 6,
+    "screens": 8,
+    "bedroomSpaces": 9,
+    "bathroomSpaces": 6,
+    "windowedInteriorRooms": 9,
+    "interiorRoomsWithoutAnyWindow": [
+      "entry-hall",
+      "powder-room",
+      "central-gallery",
+      "kitchen",
+      "pantry",
+      "laundry",
+      "service-store",
+      "east-private-hall",
+      "west-private-hall"
+    ]
+  },
+  "findings": [
+    {
+      "stage": "volumes",
+      "severity": "error",
+      "id": "kitchen/west-suite-1",
+      "message": "occupied volumes overlap by 6×6 m (3.6 m vertical): kitchen spans x -14..-4, z -21..-15, west-suite-1 spans x -10..-3, z -21..-14."
+    },
+    {
+      "stage": "volumes",
+      "severity": "error",
+      "id": "pantry/west-suite-1",
+      "message": "occupied volumes overlap by 1×1 m (3.3 m vertical): pantry spans x -14..-9, z -15..-12, west-suite-1 spans x -10..-3, z -21..-14."
+    },
+    {
+      "stage": "volumes",
+      "severity": "error",
+      "id": "pantry/west-suite-2",
+      "message": "occupied volumes overlap by 1×2 m (3.3 m vertical): pantry spans x -14..-9, z -15..-12, west-suite-2 spans x -10..-3, z -14..-7."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "waterfront-lawn-reserve",
+      "message": "waterfront-lawn-reserve (x -11..19, z -60.7..-46.7) lies 10.7 m outside the 90×75 m site, which is centred on the room cells (building spans x -18..19, z -38..13)."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "kitchen-pantry-door",
+      "message": "opening (0.25..1.25 m) does not fit the shared segment with pantry (5..10 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "kitchen-laundry-door",
+      "message": "opening (4.75..5.75 m) does not fit the shared segment with laundry (0..5 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "west-hall-suite-1-door",
+      "message": "opening (0.25..1.35 m) does not fit the shared segment with west-suite-1 (14..21 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "west-hall-suite-3-door",
+      "message": "opening (19.65..20.75 m) does not fit the shared segment with west-suite-3 (0..7 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "living-east-window",
+      "message": "window faces media-lounge, not the exterior: east edge of living-salon is shared there."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "kitchen/west-suite-1",
+      "message": "roof bounds intersect by 6.9×6.7 m at the same height (overhangs 0.35 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "pantry/laundry",
+      "message": "roof bounds intersect by 0.6×0.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "pantry/service-store",
+      "message": "roof bounds intersect by 0.6×3.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "laundry/service-store",
+      "message": "roof bounds intersect by 4.6×0.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/east-suite-1",
+      "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/east-suite-2",
+      "message": "roof bounds intersect by 0.95×8.1 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/east-suite-3",
+      "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/west-suite-1",
+      "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/west-suite-2",
+      "message": "roof bounds intersect by 0.95×8.1 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/west-suite-3",
+      "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-suite-1/east-suite-2",
+      "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-suite-2/east-suite-3",
+      "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-suite-1/west-suite-2",
+      "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-suite-2/west-suite-3",
+      "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "main-shaded-terrace/dining-terrace",
+      "message": "roof bounds intersect by 1.6×8.6 m at the same height (overhangs 0.8 and 0.8 m): select separated roof sections."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "arrival-forecourt/entry-hall",
+      "message": "roof of arrival-forecourt (with 0.8 m eaves) projects 8×0.8 m into the taller volume of entry-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "powder-room/entry-hall",
+      "message": "roof of powder-room (with 0.35 m eaves) projects 0.35×3.35 m into the taller volume of entry-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "powder-room/east-private-hall",
+      "message": "roof of powder-room (with 0.35 m eaves) projects 3.35×0.35 m into the taller volume of east-private-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "powder-room/east-suite-3",
+      "message": "roof of powder-room (with 0.35 m eaves) projects 0.35×0.35 m into the taller volume of east-suite-3."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "central-gallery/entry-hall",
+      "message": "roof of central-gallery (with 0.45 m eaves) projects 6.9×0.45 m into the taller volume of entry-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "central-gallery/living-salon",
+      "message": "roof of central-gallery (with 0.45 m eaves) projects 6.9×0.45 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "dining-room/living-salon",
+      "message": "roof of dining-room (with 0.55 m eaves) projects 0.55×10 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "kitchen/living-salon",
+      "message": "roof of kitchen (with 0.35 m eaves) projects 0.35×0.35 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "kitchen/dining-room",
+      "message": "roof of kitchen (with 0.35 m eaves) projects 10×0.35 m into the taller volume of dining-room."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "pantry/kitchen",
+      "message": "roof of pantry (with 0.3 m eaves) projects 5.3×0.3 m into the taller volume of kitchen."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "pantry/west-suite-1",
+      "message": "roof of pantry (with 0.3 m eaves) projects 1.3×1.3 m into the taller volume of west-suite-1."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "pantry/west-suite-2",
+      "message": "roof of pantry (with 0.3 m eaves) projects 1.3×2.3 m into the taller volume of west-suite-2."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "laundry/kitchen",
+      "message": "roof of laundry (with 0.3 m eaves) projects 0.3×5.3 m into the taller volume of kitchen."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "service-store/kitchen",
+      "message": "roof of service-store (with 0.3 m eaves) projects 0.3×0.3 m into the taller volume of kitchen."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/entry-hall",
+      "message": "roof of east-private-hall (with 0.4 m eaves) projects 1.4×0.4 m into the taller volume of entry-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/central-gallery",
+      "message": "roof of east-private-hall (with 0.4 m eaves) projects 0.4×21 m into the taller volume of central-gallery."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-private-hall/living-salon",
+      "message": "roof of east-private-hall (with 0.4 m eaves) projects 4.8×0.4 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/entry-hall",
+      "message": "roof of west-private-hall (with 0.4 m eaves) projects 1.4×0.4 m into the taller volume of entry-hall."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/central-gallery",
+      "message": "roof of west-private-hall (with 0.4 m eaves) projects 0.4×21 m into the taller volume of central-gallery."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-private-hall/living-salon",
+      "message": "roof of west-private-hall (with 0.4 m eaves) projects 4.8×0.4 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-suite-1/living-salon",
+      "message": "roof of east-suite-1 (with 0.55 m eaves) projects 1.55×0.55 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-suite-1/media-lounge",
+      "message": "roof of east-suite-1 (with 0.55 m eaves) projects 6.55×0.55 m into the taller volume of media-lounge."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-suite-1/living-salon",
+      "message": "roof of west-suite-1 (with 0.55 m eaves) projects 1.55×0.55 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-suite-1/dining-room",
+      "message": "roof of west-suite-1 (with 0.55 m eaves) projects 6.55×0.55 m into the taller volume of dining-room."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "media-lounge/living-salon",
+      "message": "roof of media-lounge (with 0.55 m eaves) projects 0.55×6.55 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "main-shaded-terrace/living-salon",
+      "message": "roof of main-shaded-terrace (with 0.8 m eaves) projects 16×0.8 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "main-shaded-terrace/dining-room",
+      "message": "roof of main-shaded-terrace (with 0.8 m eaves) projects 0.8×0.8 m into the taller volume of dining-room."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "dining-terrace/living-salon",
+      "message": "roof of dining-terrace (with 0.8 m eaves) projects 0.8×0.8 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "dining-terrace/dining-room",
+      "message": "roof of dining-terrace (with 0.8 m eaves) projects 10×0.8 m into the taller volume of dining-room."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "living-timber-sun-screen",
+      "message": "screen lies on the interior boundary shared with media-lounge."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "living-timber-sun-screen",
+      "message": "screen stands in media-lounge."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "west-suite-1-screen",
+      "message": "screen stands in kitchen."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "west-suite-2-screen",
+      "message": "screen stands in pantry."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "levels",
+      "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "daylight",
+      "message": "9 of 18 interior rooms have no window: entry-hall, powder-room, central-gallery, kitchen, pantry, laundry, service-store, east-private-hall, west-private-hall."
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+// Retired direct-scene operations author: the planning stage is isolated here (route.designFirst.test.ts covers both stages).
+vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
 import {emptySnapshot} from '@/lib/library/store';
 vi.mock('@/lib/library/store',async original=>({...await original<typeof import('@/lib/library/store')>(),readLibrary:async()=>emptySnapshot()}));
 import {beforeEach,describe,it,expect,vi} from 'vitest';

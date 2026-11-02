@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-30T16:10:39.466Z",
+  "pid": 1737,
+  "node": "v26.12.1",
+  "endpoint": "https://api.openai.com/v1/models",
+  "method": "GET",
+  "generationRequests": 0,
+  "retries": 0,
+  "credentialPresent": true,
+  "environment": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "NODE_USE_ENV_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "NODE_OPTIONS": false,
+    "OPENAI_BASE_URL": false
+  },
+  "dns": {
+    "ok": true,
+    "addresses": [
+      {
+        "address": "172.66.0.243",
+        "family": 4
+      },
+      {
+        "address": "162.159.140.245",
+        "family": 4
+      },
+      {
+        "address": "2a06:98c1:58::f3",
+        "family": 6
+      },
+      {
+        "address": "2606:4700:7::f3",
+        "family": 6
+      }
+    ]
+  },
+  "tls": [
+    {
+      "family": 4,
+      "ok": true,
+      "protocol": "TLSv1.3"
+    },
+    {
+      "family": 6,
+      "ok": false,
+      "causes": [
+        {
+          "name": "Error",
+          "code": "EHOSTUNREACH"
+        }
+      ]
+    }
+  ],
+  "http": {
+    "status": 200,
+    "requestId": "30f441d2-6473-4b3a-92b6-89c0751c025d"
+  },
+  "ok": true
+}

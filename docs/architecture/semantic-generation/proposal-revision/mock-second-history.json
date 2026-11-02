@@ -1,0 +1,5507 @@
+{
+  "version": "proposal-revision-1",
+  "brief": "Angled narrow two-level home: independent mock",
+  "original": {
+    "status": "proposed",
+    "intent": {
+      "version": "semantic-pilot-1",
+      "id": "compact",
+      "thesis": "Angled narrow two-level footprint with explicit straight stair, upper void and back terrace. Fit-out and guards deferred.",
+      "frame": {
+        "origin": [
+          19,
+          7
+        ],
+        "yaw": -0.41
+      },
+      "levels": [
+        {
+          "id": "street",
+          "top": 0.2
+        },
+        {
+          "id": "sleep",
+          "top": 3.4
+        }
+      ],
+      "masses": [
+        {
+          "id": "base",
+          "role": "angled ground living and circulation"
+        },
+        {
+          "id": "upper",
+          "role": "upper bedroom and gallery",
+          "relatesTo": "base"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "street-step",
+          "mass": "base",
+          "level": "street",
+          "use": "arrival",
+          "polygon": [
+            [
+              0,
+              -2
+            ],
+            [
+              3,
+              -2
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "height": 3.2,
+          "outdoor": true
+        },
+        {
+          "id": "stair-hall",
+          "mass": "base",
+          "level": "street",
+          "use": "entry and stair",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              0,
+              8
+            ]
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "day-room",
+          "mass": "base",
+          "level": "street",
+          "use": "living",
+          "polygon": [
+            [
+              3,
+              0
+            ],
+            [
+              7,
+              0
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              3,
+              8
+            ]
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "upper-gallery",
+          "mass": "upper",
+          "level": "sleep",
+          "use": "stair landing gallery",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              0,
+              8
+            ]
+          ],
+          "height": 2.8,
+          "roof": true
+        },
+        {
+          "id": "sleep-room",
+          "mass": "upper",
+          "level": "sleep",
+          "use": "bedroom study",
+          "polygon": [
+            [
+              3,
+              0
+            ],
+            [
+              7,
+              0
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              3,
+              8
+            ]
+          ],
+          "height": 2.8,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "rear-deck",
+          "mass": "base",
+          "level": "street",
+          "use": "outdoor dining",
+          "polygon": [
+            [
+              3,
+              8
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              8,
+              11
+            ],
+            [
+              3,
+              11
+            ]
+          ],
+          "height": 3.2,
+          "outdoor": true
+        }
+      ],
+      "portals": [
+        {
+          "id": "street-door",
+          "host": {
+            "space": "stair-hall",
+            "edge": 0
+          },
+          "to": "street-step",
+          "offset": 1.5,
+          "width": 1.1,
+          "height": 2.3,
+          "mode": "door"
+        },
+        {
+          "id": "day-door",
+          "host": {
+            "space": "stair-hall",
+            "edge": 1
+          },
+          "to": "day-room",
+          "offset": 0.8,
+          "width": 1,
+          "height": 2.3,
+          "mode": "open"
+        },
+        {
+          "id": "sleep-door",
+          "host": {
+            "space": "upper-gallery",
+            "edge": 1
+          },
+          "to": "sleep-room",
+          "offset": 6.9,
+          "width": 1,
+          "height": 2.3,
+          "mode": "door"
+        },
+        {
+          "id": "deck-door",
+          "host": {
+            "space": "day-room",
+            "edge": 2
+          },
+          "to": "rear-deck",
+          "offset": 2.5,
+          "width": 2.8,
+          "height": 2.5,
+          "mode": "door"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "ascent",
+          "lower": "stair-hall",
+          "upper": "upper-gallery",
+          "start": [
+            1.5,
+            1.2
+          ],
+          "width": 1.1,
+          "run": 2,
+          "risers": 18,
+          "landing": 1.1,
+          "headroom": 2.1,
+          "bypass": "right"
+        }
+      ],
+      "arrival": "street-step",
+      "requiredAccess": [
+        "street-step",
+        "stair-hall",
+        "day-room",
+        "upper-gallery",
+        "sleep-room",
+        "rear-deck"
+      ]
+    },
+    "limitations": [
+      "Developer-authored angled narrow home; no AI output."
+    ]
+  },
+  "scope": [
+    "ascent"
+  ],
+  "attempts": [
+    {
+      "response": {
+        "status": "proposed",
+        "intent": {
+          "version": "semantic-pilot-1",
+          "id": "compact",
+          "thesis": "Angled narrow two-level footprint with explicit straight stair, upper void and back terrace. Fit-out and guards deferred.",
+          "frame": {
+            "origin": [
+              19,
+              7
+            ],
+            "yaw": -0.41
+          },
+          "levels": [
+            {
+              "id": "street",
+              "top": 0.2
+            },
+            {
+              "id": "sleep",
+              "top": 3.4
+            }
+          ],
+          "masses": [
+            {
+              "id": "base",
+              "role": "angled ground living and circulation"
+            },
+            {
+              "id": "upper",
+              "role": "upper bedroom and gallery",
+              "relatesTo": "base"
+            }
+          ],
+          "spaces": [
+            {
+              "id": "street-step",
+              "mass": "base",
+              "level": "street",
+              "use": "arrival",
+              "polygon": [
+                [
+                  0,
+                  -2
+                ],
+                [
+                  3,
+                  -2
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "height": 3.2,
+              "outdoor": true
+            },
+            {
+              "id": "stair-hall",
+              "mass": "base",
+              "level": "street",
+              "use": "entry and stair",
+              "polygon": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "height": 3.2
+            },
+            {
+              "id": "day-room",
+              "mass": "base",
+              "level": "street",
+              "use": "living",
+              "polygon": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  7,
+                  0
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  3,
+                  8
+                ]
+              ],
+              "height": 3.2
+            },
+            {
+              "id": "upper-gallery",
+              "mass": "upper",
+              "level": "sleep",
+              "use": "stair landing gallery",
+              "polygon": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "height": 2.8,
+              "roof": true
+            },
+            {
+              "id": "sleep-room",
+              "mass": "upper",
+              "level": "sleep",
+              "use": "bedroom study",
+              "polygon": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  7,
+                  0
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  3,
+                  8
+                ]
+              ],
+              "height": 2.8,
+              "roof": true,
+              "material": "timber"
+            },
+            {
+              "id": "rear-deck",
+              "mass": "base",
+              "level": "street",
+              "use": "outdoor dining",
+              "polygon": [
+                [
+                  3,
+                  8
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  8,
+                  11
+                ],
+                [
+                  3,
+                  11
+                ]
+              ],
+              "height": 3.2,
+              "outdoor": true
+            }
+          ],
+          "portals": [
+            {
+              "id": "street-door",
+              "host": {
+                "space": "stair-hall",
+                "edge": 0
+              },
+              "to": "street-step",
+              "offset": 1.5,
+              "width": 1.1,
+              "height": 2.3,
+              "mode": "door"
+            },
+            {
+              "id": "day-door",
+              "host": {
+                "space": "stair-hall",
+                "edge": 1
+              },
+              "to": "day-room",
+              "offset": 0.8,
+              "width": 1,
+              "height": 2.3,
+              "mode": "open"
+            },
+            {
+              "id": "sleep-door",
+              "host": {
+                "space": "upper-gallery",
+                "edge": 1
+              },
+              "to": "sleep-room",
+              "offset": 6.9,
+              "width": 1,
+              "height": 2.3,
+              "mode": "door"
+            },
+            {
+              "id": "deck-door",
+              "host": {
+                "space": "day-room",
+                "edge": 2
+              },
+              "to": "rear-deck",
+              "offset": 2.5,
+              "width": 2.8,
+              "height": 2.5,
+              "mode": "door"
+            }
+          ],
+          "stairs": [
+            {
+              "id": "ascent",
+              "lower": "stair-hall",
+              "upper": "upper-gallery",
+              "start": [
+                1.5,
+                1.2
+              ],
+              "width": 1.1,
+              "run": 4.8,
+              "risers": 18,
+              "landing": 1.1,
+              "headroom": 2.1,
+              "bypass": "right"
+            }
+          ],
+          "arrival": "street-step",
+          "requiredAccess": [
+            "street-step",
+            "stair-hall",
+            "day-room",
+            "upper-gallery",
+            "sleep-room",
+            "rear-deck"
+          ]
+        },
+        "limitations": [
+          "Developer-authored angled narrow home; no AI output."
+        ]
+      },
+      "findings": [],
+      "changed": [
+        "ascent"
+      ]
+    }
+  ],
+  "status": "ready",
+  "session": {
+    "version": "semantic-generation-1",
+    "brief": "Angled narrow two-level home: independent mock",
+    "proposal": {
+      "status": "proposed",
+      "intent": {
+        "version": "semantic-pilot-1",
+        "id": "compact",
+        "thesis": "Angled narrow two-level footprint with explicit straight stair, upper void and back terrace. Fit-out and guards deferred.",
+        "frame": {
+          "origin": [
+            19,
+            7
+          ],
+          "yaw": -0.41
+        },
+        "levels": [
+          {
+            "id": "street",
+            "top": 0.2
+          },
+          {
+            "id": "sleep",
+            "top": 3.4
+          }
+        ],
+        "masses": [
+          {
+            "id": "base",
+            "role": "angled ground living and circulation"
+          },
+          {
+            "id": "upper",
+            "role": "upper bedroom and gallery",
+            "relatesTo": "base"
+          }
+        ],
+        "spaces": [
+          {
+            "id": "street-step",
+            "mass": "base",
+            "level": "street",
+            "use": "arrival",
+            "polygon": [
+              [
+                0,
+                -2
+              ],
+              [
+                3,
+                -2
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "height": 3.2,
+            "outdoor": true
+          },
+          {
+            "id": "stair-hall",
+            "mass": "base",
+            "level": "street",
+            "use": "entry and stair",
+            "polygon": [
+              [
+                0,
+                0
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                8
+              ],
+              [
+                0,
+                8
+              ]
+            ],
+            "height": 3.2
+          },
+          {
+            "id": "day-room",
+            "mass": "base",
+            "level": "street",
+            "use": "living",
+            "polygon": [
+              [
+                3,
+                0
+              ],
+              [
+                7,
+                0
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                3,
+                8
+              ]
+            ],
+            "height": 3.2
+          },
+          {
+            "id": "upper-gallery",
+            "mass": "upper",
+            "level": "sleep",
+            "use": "stair landing gallery",
+            "polygon": [
+              [
+                0,
+                0
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                8
+              ],
+              [
+                0,
+                8
+              ]
+            ],
+            "height": 2.8,
+            "roof": true
+          },
+          {
+            "id": "sleep-room",
+            "mass": "upper",
+            "level": "sleep",
+            "use": "bedroom study",
+            "polygon": [
+              [
+                3,
+                0
+              ],
+              [
+                7,
+                0
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                3,
+                8
+              ]
+            ],
+            "height": 2.8,
+            "roof": true,
+            "material": "timber"
+          },
+          {
+            "id": "rear-deck",
+            "mass": "base",
+            "level": "street",
+            "use": "outdoor dining",
+            "polygon": [
+              [
+                3,
+                8
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                8,
+                11
+              ],
+              [
+                3,
+                11
+              ]
+            ],
+            "height": 3.2,
+            "outdoor": true
+          }
+        ],
+        "portals": [
+          {
+            "id": "street-door",
+            "host": {
+              "space": "stair-hall",
+              "edge": 0
+            },
+            "to": "street-step",
+            "offset": 1.5,
+            "width": 1.1,
+            "height": 2.3,
+            "mode": "door"
+          },
+          {
+            "id": "day-door",
+            "host": {
+              "space": "stair-hall",
+              "edge": 1
+            },
+            "to": "day-room",
+            "offset": 0.8,
+            "width": 1,
+            "height": 2.3,
+            "mode": "open"
+          },
+          {
+            "id": "sleep-door",
+            "host": {
+              "space": "upper-gallery",
+              "edge": 1
+            },
+            "to": "sleep-room",
+            "offset": 6.9,
+            "width": 1,
+            "height": 2.3,
+            "mode": "door"
+          },
+          {
+            "id": "deck-door",
+            "host": {
+              "space": "day-room",
+              "edge": 2
+            },
+            "to": "rear-deck",
+            "offset": 2.5,
+            "width": 2.8,
+            "height": 2.5,
+            "mode": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "id": "ascent",
+            "lower": "stair-hall",
+            "upper": "upper-gallery",
+            "start": [
+              1.5,
+              1.2
+            ],
+            "width": 1.1,
+            "run": 4.8,
+            "risers": 18,
+            "landing": 1.1,
+            "headroom": 2.1,
+            "bypass": "right"
+          }
+        ],
+        "arrival": "street-step",
+        "requiredAccess": [
+          "street-step",
+          "stair-hall",
+          "day-room",
+          "upper-gallery",
+          "sleep-room",
+          "rear-deck"
+        ]
+      },
+      "limitations": [
+        "Developer-authored angled narrow home; no AI output."
+      ]
+    },
+    "compiled": {
+      "compiler": "semantic-pilot-1.0",
+      "intent": {
+        "version": "semantic-pilot-1",
+        "id": "compact",
+        "thesis": "Angled narrow two-level footprint with explicit straight stair, upper void and back terrace. Fit-out and guards deferred.",
+        "frame": {
+          "origin": [
+            19,
+            7
+          ],
+          "yaw": -0.41
+        },
+        "levels": [
+          {
+            "id": "street",
+            "top": 0.2
+          },
+          {
+            "id": "sleep",
+            "top": 3.4
+          }
+        ],
+        "masses": [
+          {
+            "id": "base",
+            "role": "angled ground living and circulation"
+          },
+          {
+            "id": "upper",
+            "role": "upper bedroom and gallery",
+            "relatesTo": "base"
+          }
+        ],
+        "spaces": [
+          {
+            "id": "street-step",
+            "mass": "base",
+            "level": "street",
+            "use": "arrival",
+            "polygon": [
+              [
+                0,
+                -2
+              ],
+              [
+                3,
+                -2
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "height": 3.2,
+            "outdoor": true
+          },
+          {
+            "id": "stair-hall",
+            "mass": "base",
+            "level": "street",
+            "use": "entry and stair",
+            "polygon": [
+              [
+                0,
+                0
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                8
+              ],
+              [
+                0,
+                8
+              ]
+            ],
+            "height": 3.2
+          },
+          {
+            "id": "day-room",
+            "mass": "base",
+            "level": "street",
+            "use": "living",
+            "polygon": [
+              [
+                3,
+                0
+              ],
+              [
+                7,
+                0
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                3,
+                8
+              ]
+            ],
+            "height": 3.2
+          },
+          {
+            "id": "upper-gallery",
+            "mass": "upper",
+            "level": "sleep",
+            "use": "stair landing gallery",
+            "polygon": [
+              [
+                0,
+                0
+              ],
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                8
+              ],
+              [
+                0,
+                8
+              ]
+            ],
+            "height": 2.8,
+            "roof": true
+          },
+          {
+            "id": "sleep-room",
+            "mass": "upper",
+            "level": "sleep",
+            "use": "bedroom study",
+            "polygon": [
+              [
+                3,
+                0
+              ],
+              [
+                7,
+                0
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                3,
+                8
+              ]
+            ],
+            "height": 2.8,
+            "roof": true,
+            "material": "timber"
+          },
+          {
+            "id": "rear-deck",
+            "mass": "base",
+            "level": "street",
+            "use": "outdoor dining",
+            "polygon": [
+              [
+                3,
+                8
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                8,
+                11
+              ],
+              [
+                3,
+                11
+              ]
+            ],
+            "height": 3.2,
+            "outdoor": true
+          }
+        ],
+        "portals": [
+          {
+            "id": "street-door",
+            "host": {
+              "space": "stair-hall",
+              "edge": 0
+            },
+            "to": "street-step",
+            "offset": 1.5,
+            "width": 1.1,
+            "height": 2.3,
+            "mode": "door"
+          },
+          {
+            "id": "day-door",
+            "host": {
+              "space": "stair-hall",
+              "edge": 1
+            },
+            "to": "day-room",
+            "offset": 0.8,
+            "width": 1,
+            "height": 2.3,
+            "mode": "open"
+          },
+          {
+            "id": "sleep-door",
+            "host": {
+              "space": "upper-gallery",
+              "edge": 1
+            },
+            "to": "sleep-room",
+            "offset": 6.9,
+            "width": 1,
+            "height": 2.3,
+            "mode": "door"
+          },
+          {
+            "id": "deck-door",
+            "host": {
+              "space": "day-room",
+              "edge": 2
+            },
+            "to": "rear-deck",
+            "offset": 2.5,
+            "width": 2.8,
+            "height": 2.5,
+            "mode": "door"
+          }
+        ],
+        "stairs": [
+          {
+            "id": "ascent",
+            "lower": "stair-hall",
+            "upper": "upper-gallery",
+            "start": [
+              1.5,
+              1.2
+            ],
+            "width": 1.1,
+            "run": 4.8,
+            "risers": 18,
+            "landing": 1.1,
+            "headroom": 2.1,
+            "bypass": "right"
+          }
+        ],
+        "arrival": "street-step",
+        "requiredAccess": [
+          "street-step",
+          "stair-hall",
+          "day-room",
+          "upper-gallery",
+          "sleep-room",
+          "rear-deck"
+        ]
+      },
+      "scene": {
+        "version": "architectural-scene-1",
+        "name": "compact",
+        "elements": [
+          {
+            "id": "ascent",
+            "label": "ascent step 1",
+            "kind": "volume",
+            "at": [
+              19.844202130245677,
+              0.28888888888888886,
+              8.820741755732108
+            ],
+            "rotation": -0.41,
+            "size": [
+              1.1,
+              0.17777777777777776,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-2",
+            "label": "ascent step 2",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.08888888888888888,
+              0.26666666666666666
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.3555555555555555,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-3",
+            "label": "ascent step 3",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.17777777777777773,
+              0.5333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.5333333333333332,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-4",
+            "label": "ascent step 4",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.2666666666666666,
+              0.8
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.711111111111111,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-5",
+            "label": "ascent step 5",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.3555555555555555,
+              1.0666666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.8888888888888888,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-6",
+            "label": "ascent step 6",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.4444444444444443,
+              1.3333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.0666666666666664,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-7",
+            "label": "ascent step 7",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.5333333333333332,
+              1.6
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.2444444444444442,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-8",
+            "label": "ascent step 8",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.6222222222222221,
+              1.8666666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.422222222222222,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-9",
+            "label": "ascent step 9",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.711111111111111,
+              2.1333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.5999999999999999,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-10",
+            "label": "ascent step 10",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.7999999999999999,
+              2.4
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.7777777777777777,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-11",
+            "label": "ascent step 11",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.8888888888888887,
+              2.6666666666666665
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.9555555555555553,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-12",
+            "label": "ascent step 12",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.9777777777777775,
+              2.933333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.133333333333333,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-13",
+            "label": "ascent step 13",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.0666666666666667,
+              3.2
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.311111111111111,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-14",
+            "label": "ascent step 14",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.1555555555555554,
+              3.466666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.4888888888888885,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-15",
+            "label": "ascent step 15",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.2444444444444445,
+              3.7333333333333334
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.6666666666666665,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-16",
+            "label": "ascent step 16",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.3333333333333333,
+              4
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.844444444444444,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-17",
+            "label": "ascent step 17",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.422222222222222,
+              4.266666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              3.0222222222222217,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "ascent-step-18",
+            "label": "ascent step 18",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.511111111111111,
+              4.533333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              3.1999999999999997,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "street-step-floor",
+            "label": "street-step-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              20.77429056220933,
+              0.1,
+              6.6807931691600295
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              2
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "stair-hall-floor",
+            "label": "stair-hall-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              18.781243922287214,
+              0.1,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "day-room-floor",
+            "label": "day-room-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              0.1,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "upper-gallery-floor",
+            "label": "upper-gallery-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": [
+                [
+                  [
+                    -0.21666666666666667,
+                    -0.36250000000000004
+                  ],
+                  [
+                    0.21666666666666665,
+                    -0.36250000000000004
+                  ],
+                  [
+                    0.21666666666666665,
+                    0.25
+                  ],
+                  [
+                    -0.21666666666666667,
+                    0.25
+                  ]
+                ]
+              ]
+            },
+            "at": [
+              18.781243922287214,
+              3.3,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "upper-gallery-roof",
+            "label": "upper-gallery-roof",
+            "kind": "roof",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              18.781243922287214,
+              6.289999999999999,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.18,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "sleep-room-floor",
+            "label": "sleep-room-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              3.3,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "sleep-room-roof",
+            "label": "sleep-room-roof",
+            "kind": "roof",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              6.289999999999999,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.18,
+              8
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "rear-deck-floor",
+            "label": "rear-deck-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              20.25737590963931,
+              0.1,
+              17.904999120672073
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              3
+            ],
+            "material": "limestone",
+            "panels": 4
+          },
+          {
+            "id": "street-door",
+            "label": "street-door",
+            "kind": "entrance",
+            "at": [
+              20.375681234224906,
+              1.3499999999999999,
+              7.597913991976634
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              1.1,
+              2.3,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          },
+          {
+            "id": "street-step-e2-wall",
+            "label": "street-step-e2",
+            "kind": "wall",
+            "at": [
+              20.375681234224906,
+              1.8,
+              7.597913991976634
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 1.1,
+              "height": 2.3,
+              "glazed": false
+            }
+          },
+          {
+            "id": "stair-hall-e1-wall",
+            "label": "stair-hall-e1",
+            "kind": "wall",
+            "at": [
+              20.156925156512123,
+              1.8,
+              11.86431127521969
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              8,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": -3.2,
+              "sill": 0,
+              "width": 1,
+              "height": 2.3,
+              "glazed": false
+            }
+          },
+          {
+            "id": "stair-hall-e2-wall",
+            "label": "stair-hall-e2",
+            "kind": "wall",
+            "at": [
+              17.186806610349525,
+              1.8,
+              14.934880574509474
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "stair-hall-e3-wall",
+            "label": "stair-hall-e3",
+            "kind": "wall",
+            "at": [
+              17.405562688062307,
+              1.8,
+              10.668483291266421
+            ],
+            "rotation": 1.1607963267948966,
+            "size": [
+              8,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "day-room-e0-wall",
+            "label": "day-room-e0",
+            "kind": "wall",
+            "at": [
+              23.585604114083026,
+              1.8,
+              8.993046639922115
+            ],
+            "rotation": -0.41,
+            "size": [
+              4,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "day-room-e1-wall",
+            "label": "day-room-e1",
+            "kind": "wall",
+            "at": [
+              24.283968859186846,
+              1.8,
+              13.658053251149592
+            ],
+            "rotation": -1.856441332248135,
+            "size": [
+              8.06225774829855,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "deck-door",
+            "label": "deck-door",
+            "kind": "entrance",
+            "at": [
+              20.855289901615947,
+              1.45,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              2.8,
+              2.5,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          },
+          {
+            "id": "day-room-e2-wall",
+            "label": "day-room-e2",
+            "kind": "wall",
+            "at": [
+              20.855289901615947,
+              1.8,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              5,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 2.8,
+              "height": 2.5,
+              "glazed": false
+            }
+          },
+          {
+            "id": "upper-gallery-e0-wall",
+            "label": "upper-gallery-e0",
+            "kind": "wall",
+            "at": [
+              20.375681234224906,
+              4.8,
+              7.597913991976634
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "sleep-door",
+            "label": "sleep-door",
+            "kind": "entrance",
+            "at": [
+              19.0009581053573,
+              4.55,
+              14.523961661387844
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              1,
+              2.3,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          },
+          {
+            "id": "upper-gallery-e1-wall",
+            "label": "upper-gallery-e1",
+            "kind": "wall",
+            "at": [
+              20.156925156512123,
+              4.8,
+              11.86431127521969
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              8,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 2.9000000000000004,
+              "sill": 0,
+              "width": 1,
+              "height": 2.3,
+              "glazed": false
+            }
+          },
+          {
+            "id": "upper-gallery-e2-wall",
+            "label": "upper-gallery-e2",
+            "kind": "wall",
+            "at": [
+              17.186806610349525,
+              4.8,
+              14.934880574509474
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "upper-gallery-e3-wall",
+            "label": "upper-gallery-e3",
+            "kind": "wall",
+            "at": [
+              17.405562688062307,
+              4.8,
+              10.668483291266421
+            ],
+            "rotation": 1.1607963267948966,
+            "size": [
+              8,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          },
+          {
+            "id": "sleep-room-e0-wall",
+            "label": "sleep-room-e0",
+            "kind": "wall",
+            "at": [
+              23.585604114083026,
+              4.8,
+              8.993046639922115
+            ],
+            "rotation": -0.41,
+            "size": [
+              4,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "sleep-room-e1-wall",
+            "label": "sleep-room-e1",
+            "kind": "wall",
+            "at": [
+              24.283968859186846,
+              4.8,
+              13.658053251149592
+            ],
+            "rotation": -1.856441332248135,
+            "size": [
+              8.06225774829855,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "sleep-room-e2-wall",
+            "label": "sleep-room-e2",
+            "kind": "wall",
+            "at": [
+              20.855289901615947,
+              4.8,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              5,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        ]
+      },
+      "operations": [
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent",
+            "label": "ascent step 1",
+            "kind": "volume",
+            "at": [
+              19.844202130245677,
+              0.28888888888888886,
+              8.820741755732108
+            ],
+            "rotation": -0.41,
+            "size": [
+              1.1,
+              0.17777777777777776,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-2",
+            "label": "ascent step 2",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.08888888888888888,
+              0.26666666666666666
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.3555555555555555,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-3",
+            "label": "ascent step 3",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.17777777777777773,
+              0.5333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.5333333333333332,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-4",
+            "label": "ascent step 4",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.2666666666666666,
+              0.8
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.711111111111111,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-5",
+            "label": "ascent step 5",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.3555555555555555,
+              1.0666666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              0.8888888888888888,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-6",
+            "label": "ascent step 6",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.4444444444444443,
+              1.3333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.0666666666666664,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-7",
+            "label": "ascent step 7",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.5333333333333332,
+              1.6
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.2444444444444442,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-8",
+            "label": "ascent step 8",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.6222222222222221,
+              1.8666666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.422222222222222,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-9",
+            "label": "ascent step 9",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.711111111111111,
+              2.1333333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.5999999999999999,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-10",
+            "label": "ascent step 10",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.7999999999999999,
+              2.4
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.7777777777777777,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-11",
+            "label": "ascent step 11",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.8888888888888887,
+              2.6666666666666665
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              1.9555555555555553,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-12",
+            "label": "ascent step 12",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              0.9777777777777775,
+              2.933333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.133333333333333,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-13",
+            "label": "ascent step 13",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.0666666666666667,
+              3.2
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.311111111111111,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-14",
+            "label": "ascent step 14",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.1555555555555554,
+              3.466666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.4888888888888885,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-15",
+            "label": "ascent step 15",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.2444444444444445,
+              3.7333333333333334
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.6666666666666665,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-16",
+            "label": "ascent step 16",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.3333333333333333,
+              4
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              2.844444444444444,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-17",
+            "label": "ascent step 17",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.422222222222222,
+              4.266666666666667
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              3.0222222222222217,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "ascent-step-18",
+            "label": "ascent step 18",
+            "kind": "volume",
+            "parent": "ascent",
+            "at": [
+              0,
+              1.511111111111111,
+              4.533333333333333
+            ],
+            "rotation": 0,
+            "size": [
+              1.1,
+              3.1999999999999997,
+              0.26666666666666666
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "street-step-floor",
+            "label": "street-step-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              20.77429056220933,
+              0.1,
+              6.6807931691600295
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              2
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "stair-hall-floor",
+            "label": "stair-hall-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              18.781243922287214,
+              0.1,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "day-room-floor",
+            "label": "day-room-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              0.1,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-floor",
+            "label": "upper-gallery-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": [
+                [
+                  [
+                    -0.21666666666666667,
+                    -0.36250000000000004
+                  ],
+                  [
+                    0.21666666666666665,
+                    -0.36250000000000004
+                  ],
+                  [
+                    0.21666666666666665,
+                    0.25
+                  ],
+                  [
+                    -0.21666666666666667,
+                    0.25
+                  ]
+                ]
+              ]
+            },
+            "at": [
+              18.781243922287214,
+              3.3,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-roof",
+            "label": "upper-gallery-roof",
+            "kind": "roof",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              18.781243922287214,
+              6.289999999999999,
+              11.266397283243055
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              0.18,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-room-floor",
+            "label": "sleep-room-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              3.3,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              8
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-room-roof",
+            "label": "sleep-room-roof",
+            "kind": "roof",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.3,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              22.449727213553636,
+              6.289999999999999,
+              12.860834595180746
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.18,
+              8
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "rear-deck-floor",
+            "label": "rear-deck-floor",
+            "kind": "plate",
+            "geometry": {
+              "type": "extrusion",
+              "axis": "y",
+              "outline": [
+                [
+                  -0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  -0.5
+                ],
+                [
+                  0.5,
+                  0.5
+                ],
+                [
+                  -0.5,
+                  0.5
+                ]
+              ],
+              "holes": []
+            },
+            "at": [
+              20.25737590963931,
+              0.1,
+              17.904999120672073
+            ],
+            "rotation": -0.41,
+            "size": [
+              5,
+              0.2,
+              3
+            ],
+            "material": "limestone",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "street-door",
+            "label": "street-door",
+            "kind": "entrance",
+            "at": [
+              20.375681234224906,
+              1.3499999999999999,
+              7.597913991976634
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              1.1,
+              2.3,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "street-step-e2-wall",
+            "label": "street-step-e2",
+            "kind": "wall",
+            "at": [
+              20.375681234224906,
+              1.8,
+              7.597913991976634
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 1.1,
+              "height": 2.3,
+              "glazed": false
+            }
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "stair-hall-e1-wall",
+            "label": "stair-hall-e1",
+            "kind": "wall",
+            "at": [
+              20.156925156512123,
+              1.8,
+              11.86431127521969
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              8,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": -3.2,
+              "sill": 0,
+              "width": 1,
+              "height": 2.3,
+              "glazed": false
+            }
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "stair-hall-e2-wall",
+            "label": "stair-hall-e2",
+            "kind": "wall",
+            "at": [
+              17.186806610349525,
+              1.8,
+              14.934880574509474
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "stair-hall-e3-wall",
+            "label": "stair-hall-e3",
+            "kind": "wall",
+            "at": [
+              17.405562688062307,
+              1.8,
+              10.668483291266421
+            ],
+            "rotation": 1.1607963267948966,
+            "size": [
+              8,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "day-room-e0-wall",
+            "label": "day-room-e0",
+            "kind": "wall",
+            "at": [
+              23.585604114083026,
+              1.8,
+              8.993046639922115
+            ],
+            "rotation": -0.41,
+            "size": [
+              4,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "day-room-e1-wall",
+            "label": "day-room-e1",
+            "kind": "wall",
+            "at": [
+              24.283968859186846,
+              1.8,
+              13.658053251149592
+            ],
+            "rotation": -1.856441332248135,
+            "size": [
+              8.06225774829855,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "deck-door",
+            "label": "deck-door",
+            "kind": "entrance",
+            "at": [
+              20.855289901615947,
+              1.45,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              2.8,
+              2.5,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "day-room-e2-wall",
+            "label": "day-room-e2",
+            "kind": "wall",
+            "at": [
+              20.855289901615947,
+              1.8,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              5,
+              3.2,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 2.8,
+              "height": 2.5,
+              "glazed": false
+            }
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-e0-wall",
+            "label": "upper-gallery-e0",
+            "kind": "wall",
+            "at": [
+              20.375681234224906,
+              4.8,
+              7.597913991976634
+            ],
+            "rotation": -0.41,
+            "size": [
+              3,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-door",
+            "label": "sleep-door",
+            "kind": "entrance",
+            "at": [
+              19.0009581053573,
+              4.55,
+              14.523961661387844
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              1,
+              2.3,
+              0.08
+            ],
+            "material": "bronze",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-e1-wall",
+            "label": "upper-gallery-e1",
+            "kind": "wall",
+            "at": [
+              20.156925156512123,
+              4.8,
+              11.86431127521969
+            ],
+            "rotation": -1.9807963267948965,
+            "size": [
+              8,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 2.9000000000000004,
+              "sill": 0,
+              "width": 1,
+              "height": 2.3,
+              "glazed": false
+            }
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-e2-wall",
+            "label": "upper-gallery-e2",
+            "kind": "wall",
+            "at": [
+              17.186806610349525,
+              4.8,
+              14.934880574509474
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              3,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "upper-gallery-e3-wall",
+            "label": "upper-gallery-e3",
+            "kind": "wall",
+            "at": [
+              17.405562688062307,
+              4.8,
+              10.668483291266421
+            ],
+            "rotation": 1.1607963267948966,
+            "size": [
+              8,
+              2.8,
+              0.18
+            ],
+            "material": "ivory",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-room-e0-wall",
+            "label": "sleep-room-e0",
+            "kind": "wall",
+            "at": [
+              23.585604114083026,
+              4.8,
+              8.993046639922115
+            ],
+            "rotation": -0.41,
+            "size": [
+              4,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-room-e1-wall",
+            "label": "sleep-room-e1",
+            "kind": "wall",
+            "at": [
+              24.283968859186846,
+              4.8,
+              13.658053251149592
+            ],
+            "rotation": -1.856441332248135,
+            "size": [
+              8.06225774829855,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        },
+        {
+          "op": "add",
+          "element": {
+            "id": "sleep-room-e2-wall",
+            "label": "sleep-room-e2",
+            "kind": "wall",
+            "at": [
+              20.855289901615947,
+              4.8,
+              16.529317886447167
+            ],
+            "rotation": -3.5515926535897933,
+            "size": [
+              5,
+              2.8,
+              0.18
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        }
+      ],
+      "provenance": {
+        "ascent": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-2": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-3": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-4": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-5": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-6": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-7": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-8": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-9": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-10": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-11": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-12": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-13": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-14": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-15": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-16": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-17": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "ascent-step-18": {
+          "sources": [
+            "ascent",
+            "stair-hall",
+            "upper-gallery",
+            "street",
+            "sleep"
+          ],
+          "rule": "selected flight → existing straight-stair helper"
+        },
+        "street-step-floor": {
+          "sources": [
+            "street-step",
+            "street"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "stair-hall-floor": {
+          "sources": [
+            "stair-hall",
+            "street"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "day-room-floor": {
+          "sources": [
+            "day-room",
+            "street"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "upper-gallery-floor": {
+          "sources": [
+            "upper-gallery",
+            "sleep",
+            "ascent"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "upper-gallery-roof": {
+          "sources": [
+            "upper-gallery",
+            "sleep"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "sleep-room-floor": {
+          "sources": [
+            "sleep-room",
+            "sleep"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "sleep-room-roof": {
+          "sources": [
+            "sleep-room",
+            "sleep"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "rear-deck-floor": {
+          "sources": [
+            "rear-deck",
+            "street"
+          ],
+          "rule": "polygon and level → editable profile slab"
+        },
+        "street-door": {
+          "sources": [
+            "street-door",
+            "street-step-e2",
+            "street"
+          ],
+          "rule": "single host opening → matching door transform"
+        },
+        "street-step-e2-wall": {
+          "sources": [
+            "street-step-e2",
+            "street-step",
+            "stair-hall",
+            "street",
+            "street-door"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "stair-hall-e1-wall": {
+          "sources": [
+            "stair-hall-e1",
+            "stair-hall",
+            "day-room",
+            "street",
+            "day-door"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "stair-hall-e2-wall": {
+          "sources": [
+            "stair-hall-e2",
+            "stair-hall",
+            "street"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "stair-hall-e3-wall": {
+          "sources": [
+            "stair-hall-e3",
+            "stair-hall",
+            "street"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "day-room-e0-wall": {
+          "sources": [
+            "day-room-e0",
+            "day-room",
+            "street"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "day-room-e1-wall": {
+          "sources": [
+            "day-room-e1",
+            "day-room",
+            "street"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "deck-door": {
+          "sources": [
+            "deck-door",
+            "day-room-e2",
+            "street"
+          ],
+          "rule": "single host opening → matching door transform"
+        },
+        "day-room-e2-wall": {
+          "sources": [
+            "day-room-e2",
+            "day-room",
+            "rear-deck",
+            "street",
+            "deck-door"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "upper-gallery-e0-wall": {
+          "sources": [
+            "upper-gallery-e0",
+            "upper-gallery",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "sleep-door": {
+          "sources": [
+            "sleep-door",
+            "upper-gallery-e1",
+            "sleep"
+          ],
+          "rule": "single host opening → matching door transform"
+        },
+        "upper-gallery-e1-wall": {
+          "sources": [
+            "upper-gallery-e1",
+            "upper-gallery",
+            "sleep-room",
+            "sleep",
+            "sleep-door"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "upper-gallery-e2-wall": {
+          "sources": [
+            "upper-gallery-e2",
+            "upper-gallery",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "upper-gallery-e3-wall": {
+          "sources": [
+            "upper-gallery-e3",
+            "upper-gallery",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "sleep-room-e0-wall": {
+          "sources": [
+            "sleep-room-e0",
+            "sleep-room",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "sleep-room-e1-wall": {
+          "sources": [
+            "sleep-room-e1",
+            "sleep-room",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        },
+        "sleep-room-e2-wall": {
+          "sources": [
+            "sleep-room-e2",
+            "sleep-room",
+            "sleep"
+          ],
+          "rule": "one shared boundary → one wall"
+        }
+      },
+      "boundaries": [
+        {
+          "id": "street-step-e0",
+          "a": [
+            0,
+            -2
+          ],
+          "b": [
+            3,
+            -2
+          ],
+          "spaces": [
+            "street-step"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "street-step-e1",
+          "a": [
+            3,
+            -2
+          ],
+          "b": [
+            3,
+            0
+          ],
+          "spaces": [
+            "street-step"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "street-step-e2",
+          "a": [
+            3,
+            0
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "spaces": [
+            "street-step",
+            "stair-hall"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "street-step-e3",
+          "a": [
+            0,
+            0
+          ],
+          "b": [
+            0,
+            -2
+          ],
+          "spaces": [
+            "street-step"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "stair-hall-e1",
+          "a": [
+            3,
+            0
+          ],
+          "b": [
+            3,
+            8
+          ],
+          "spaces": [
+            "stair-hall",
+            "day-room"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "stair-hall-e2",
+          "a": [
+            3,
+            8
+          ],
+          "b": [
+            0,
+            8
+          ],
+          "spaces": [
+            "stair-hall"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "stair-hall-e3",
+          "a": [
+            0,
+            8
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "spaces": [
+            "stair-hall"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "day-room-e0",
+          "a": [
+            3,
+            0
+          ],
+          "b": [
+            7,
+            0
+          ],
+          "spaces": [
+            "day-room"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "day-room-e1",
+          "a": [
+            7,
+            0
+          ],
+          "b": [
+            8,
+            8
+          ],
+          "spaces": [
+            "day-room"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "day-room-e2",
+          "a": [
+            8,
+            8
+          ],
+          "b": [
+            3,
+            8
+          ],
+          "spaces": [
+            "day-room",
+            "rear-deck"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "upper-gallery-e0",
+          "a": [
+            0,
+            0
+          ],
+          "b": [
+            3,
+            0
+          ],
+          "spaces": [
+            "upper-gallery"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "upper-gallery-e1",
+          "a": [
+            3,
+            0
+          ],
+          "b": [
+            3,
+            8
+          ],
+          "spaces": [
+            "upper-gallery",
+            "sleep-room"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "upper-gallery-e2",
+          "a": [
+            3,
+            8
+          ],
+          "b": [
+            0,
+            8
+          ],
+          "spaces": [
+            "upper-gallery"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "upper-gallery-e3",
+          "a": [
+            0,
+            8
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "spaces": [
+            "upper-gallery"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "sleep-room-e0",
+          "a": [
+            3,
+            0
+          ],
+          "b": [
+            7,
+            0
+          ],
+          "spaces": [
+            "sleep-room"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "sleep-room-e1",
+          "a": [
+            7,
+            0
+          ],
+          "b": [
+            8,
+            8
+          ],
+          "spaces": [
+            "sleep-room"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "sleep-room-e2",
+          "a": [
+            8,
+            8
+          ],
+          "b": [
+            3,
+            8
+          ],
+          "spaces": [
+            "sleep-room"
+          ],
+          "level": "sleep"
+        },
+        {
+          "id": "rear-deck-e1",
+          "a": [
+            8,
+            8
+          ],
+          "b": [
+            8,
+            11
+          ],
+          "spaces": [
+            "rear-deck"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "rear-deck-e2",
+          "a": [
+            8,
+            11
+          ],
+          "b": [
+            3,
+            11
+          ],
+          "spaces": [
+            "rear-deck"
+          ],
+          "level": "street"
+        },
+        {
+          "id": "rear-deck-e3",
+          "a": [
+            3,
+            11
+          ],
+          "b": [
+            3,
+            8
+          ],
+          "spaces": [
+            "rear-deck"
+          ],
+          "level": "street"
+        }
+      ],
+      "portalEvidence": [
+        {
+          "id": "street-door",
+          "host": "street-step-e2",
+          "from": "stair-hall",
+          "to": "street-step",
+          "local": [
+            1.5,
+            0
+          ],
+          "world": [
+            20.375681234224906,
+            0.2,
+            7.597913991976634
+          ],
+          "width": 1.1,
+          "height": 2.3,
+          "passable": true,
+          "floorGap": 0,
+          "cutPanelError": 0
+        },
+        {
+          "id": "day-door",
+          "host": "stair-hall-e1",
+          "from": "stair-hall",
+          "to": "day-room",
+          "local": [
+            3,
+            0.7999999999999998
+          ],
+          "world": [
+            21.432475006062276,
+            0.2,
+            8.929524642206552
+          ],
+          "width": 1,
+          "height": 2.3,
+          "passable": true,
+          "floorGap": 0,
+          "cutPanelError": null
+        },
+        {
+          "id": "deck-door",
+          "host": "day-room-e2",
+          "from": "day-room",
+          "to": "rear-deck",
+          "local": [
+            5.5,
+            8
+          ],
+          "world": [
+            20.855289901615947,
+            0.2,
+            16.529317886447167
+          ],
+          "width": 2.8,
+          "height": 2.5,
+          "passable": true,
+          "floorGap": 0,
+          "cutPanelError": 0
+        },
+        {
+          "id": "sleep-door",
+          "host": "upper-gallery-e1",
+          "from": "upper-gallery",
+          "to": "sleep-room",
+          "local": [
+            3,
+            6.9
+          ],
+          "world": [
+            19.0009581053573,
+            3.4,
+            14.523961661387844
+          ],
+          "width": 1,
+          "height": 2.3,
+          "passable": true,
+          "floorGap": 0,
+          "cutPanelError": 1.6011864169946886e-15
+        }
+      ],
+      "stairEvidence": [
+        {
+          "id": "ascent",
+          "rise": 3.1999999999999997,
+          "riser": 0.17777777777777776,
+          "going": 0.26666666666666666,
+          "void": [
+            [
+              0.85,
+              1.0999999999999999
+            ],
+            [
+              2.15,
+              1.0999999999999999
+            ],
+            [
+              2.15,
+              6
+            ],
+            [
+              0.85,
+              6
+            ]
+          ],
+          "lowerLanding": [
+            1.5,
+            0.6499999999999999
+          ],
+          "upperLanding": [
+            1.5,
+            6.55
+          ],
+          "endpoint": 3.4,
+          "minimumHeadroom": 2.6199999999999997,
+          "scope": "entire flight void, flat upper roof, convex landing envelopes; no guards/structure certification"
+        }
+      ],
+      "spaceEvidence": [
+        {
+          "id": "street-step",
+          "floor": "street-step-floor",
+          "floorTop": 0.2,
+          "centreY": 1.8,
+          "envelopeHeight": 3.2,
+          "clearHeight": 3.2,
+          "boundaries": [
+            "street-step-e0",
+            "street-step-e1",
+            "street-step-e2",
+            "street-step-e3"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        },
+        {
+          "id": "stair-hall",
+          "floor": "stair-hall-floor",
+          "floorTop": 0.2,
+          "centreY": 1.6999999999999997,
+          "envelopeHeight": 3.2,
+          "clearHeight": 2.9999999999999996,
+          "boundaries": [
+            "street-step-e2",
+            "stair-hall-e1",
+            "stair-hall-e2",
+            "stair-hall-e3"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        },
+        {
+          "id": "day-room",
+          "floor": "day-room-floor",
+          "floorTop": 0.2,
+          "centreY": 1.6999999999999997,
+          "envelopeHeight": 3.2,
+          "clearHeight": 2.9999999999999996,
+          "boundaries": [
+            "stair-hall-e1",
+            "day-room-e0",
+            "day-room-e1",
+            "day-room-e2"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        },
+        {
+          "id": "upper-gallery",
+          "floor": "upper-gallery-floor",
+          "floorTop": 3.4,
+          "centreY": 4.8,
+          "envelopeHeight": 2.8,
+          "clearHeight": 2.8,
+          "boundaries": [
+            "upper-gallery-e0",
+            "upper-gallery-e1",
+            "upper-gallery-e2",
+            "upper-gallery-e3"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        },
+        {
+          "id": "sleep-room",
+          "floor": "sleep-room-floor",
+          "floorTop": 3.4,
+          "centreY": 4.8,
+          "envelopeHeight": 2.8,
+          "clearHeight": 2.8,
+          "boundaries": [
+            "upper-gallery-e1",
+            "sleep-room-e0",
+            "sleep-room-e1",
+            "sleep-room-e2"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        },
+        {
+          "id": "rear-deck",
+          "floor": "rear-deck-floor",
+          "floorTop": 0.2,
+          "centreY": 1.8,
+          "envelopeHeight": 3.2,
+          "clearHeight": 3.2,
+          "boundaries": [
+            "day-room-e2",
+            "rear-deck-e1",
+            "rear-deck-e2",
+            "rear-deck-e3"
+          ],
+          "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+        }
+      ],
+      "access": {
+        "arrival": "street-step",
+        "reachable": [
+          "street-step",
+          "stair-hall",
+          "upper-gallery",
+          "sleep-room",
+          "day-room",
+          "rear-deck"
+        ],
+        "scope": "convex cells and proven thresholds; stair cell landing routing additionally reviewed; no general free-space navigation"
+      },
+      "completion": {
+        "spatial": "bounded proofs only",
+        "construction": "editable envelope study; guards, services, engineering and fit-out incomplete",
+        "composition": "requires independent visual judgment"
+      }
+    },
+    "scene": {
+      "version": "architectural-scene-1",
+      "name": "compact",
+      "generationBrief": "Angled narrow two-level home: independent mock",
+      "elements": [
+        {
+          "id": "ascent",
+          "label": "ascent step 1",
+          "kind": "volume",
+          "at": [
+            19.844202130245677,
+            0.28888888888888886,
+            8.820741755732108
+          ],
+          "rotation": -0.41,
+          "size": [
+            1.1,
+            0.17777777777777776,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-2",
+          "label": "ascent step 2",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.08888888888888888,
+            0.26666666666666666
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.3555555555555555,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-3",
+          "label": "ascent step 3",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.17777777777777773,
+            0.5333333333333333
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.5333333333333332,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-4",
+          "label": "ascent step 4",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.2666666666666666,
+            0.8
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.711111111111111,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-5",
+          "label": "ascent step 5",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.3555555555555555,
+            1.0666666666666667
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.8888888888888888,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-6",
+          "label": "ascent step 6",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.4444444444444443,
+            1.3333333333333333
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.0666666666666664,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-7",
+          "label": "ascent step 7",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.5333333333333332,
+            1.6
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.2444444444444442,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-8",
+          "label": "ascent step 8",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.6222222222222221,
+            1.8666666666666667
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.422222222222222,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-9",
+          "label": "ascent step 9",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.711111111111111,
+            2.1333333333333333
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.5999999999999999,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-10",
+          "label": "ascent step 10",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.7999999999999999,
+            2.4
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.7777777777777777,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-11",
+          "label": "ascent step 11",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.8888888888888887,
+            2.6666666666666665
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.9555555555555553,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-12",
+          "label": "ascent step 12",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            0.9777777777777775,
+            2.933333333333333
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.133333333333333,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-13",
+          "label": "ascent step 13",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.0666666666666667,
+            3.2
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.311111111111111,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-14",
+          "label": "ascent step 14",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.1555555555555554,
+            3.466666666666667
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.4888888888888885,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-15",
+          "label": "ascent step 15",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.2444444444444445,
+            3.7333333333333334
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.6666666666666665,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-16",
+          "label": "ascent step 16",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.3333333333333333,
+            4
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.844444444444444,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-17",
+          "label": "ascent step 17",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.422222222222222,
+            4.266666666666667
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.0222222222222217,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ascent-step-18",
+          "label": "ascent step 18",
+          "kind": "volume",
+          "parent": "ascent",
+          "at": [
+            0,
+            1.511111111111111,
+            4.533333333333333
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.1999999999999997,
+            0.26666666666666666
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "street-step-floor",
+          "label": "street-step-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            20.77429056220933,
+            0.1,
+            6.6807931691600295
+          ],
+          "rotation": -0.41,
+          "size": [
+            3,
+            0.2,
+            2
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "stair-hall-floor",
+          "label": "stair-hall-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            18.781243922287214,
+            0.1,
+            11.266397283243055
+          ],
+          "rotation": -0.41,
+          "size": [
+            3,
+            0.2,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "day-room-floor",
+          "label": "day-room-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.3,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            22.449727213553636,
+            0.1,
+            12.860834595180746
+          ],
+          "rotation": -0.41,
+          "size": [
+            5,
+            0.2,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-floor",
+          "label": "upper-gallery-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  -0.21666666666666667,
+                  -0.36250000000000004
+                ],
+                [
+                  0.21666666666666665,
+                  -0.36250000000000004
+                ],
+                [
+                  0.21666666666666665,
+                  0.25
+                ],
+                [
+                  -0.21666666666666667,
+                  0.25
+                ]
+              ]
+            ]
+          },
+          "at": [
+            18.781243922287214,
+            3.3,
+            11.266397283243055
+          ],
+          "rotation": -0.41,
+          "size": [
+            3,
+            0.2,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-roof",
+          "label": "upper-gallery-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            18.781243922287214,
+            6.289999999999999,
+            11.266397283243055
+          ],
+          "rotation": -0.41,
+          "size": [
+            3,
+            0.18,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "sleep-room-floor",
+          "label": "sleep-room-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.3,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            22.449727213553636,
+            3.3,
+            12.860834595180746
+          ],
+          "rotation": -0.41,
+          "size": [
+            5,
+            0.2,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "sleep-room-roof",
+          "label": "sleep-room-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.3,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            22.449727213553636,
+            6.289999999999999,
+            12.860834595180746
+          ],
+          "rotation": -0.41,
+          "size": [
+            5,
+            0.18,
+            8
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "rear-deck-floor",
+          "label": "rear-deck-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            20.25737590963931,
+            0.1,
+            17.904999120672073
+          ],
+          "rotation": -0.41,
+          "size": [
+            5,
+            0.2,
+            3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "street-door",
+          "label": "street-door",
+          "kind": "entrance",
+          "at": [
+            20.375681234224906,
+            1.3499999999999999,
+            7.597913991976634
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            1.1,
+            2.3,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "street-step-e2-wall",
+          "label": "street-step-e2",
+          "kind": "wall",
+          "at": [
+            20.375681234224906,
+            1.8,
+            7.597913991976634
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            3,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.1,
+            "height": 2.3,
+            "glazed": false
+          }
+        },
+        {
+          "id": "stair-hall-e1-wall",
+          "label": "stair-hall-e1",
+          "kind": "wall",
+          "at": [
+            20.156925156512123,
+            1.8,
+            11.86431127521969
+          ],
+          "rotation": -1.9807963267948965,
+          "size": [
+            8,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": -3.2,
+            "sill": 0,
+            "width": 1,
+            "height": 2.3,
+            "glazed": false
+          }
+        },
+        {
+          "id": "stair-hall-e2-wall",
+          "label": "stair-hall-e2",
+          "kind": "wall",
+          "at": [
+            17.186806610349525,
+            1.8,
+            14.934880574509474
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            3,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "stair-hall-e3-wall",
+          "label": "stair-hall-e3",
+          "kind": "wall",
+          "at": [
+            17.405562688062307,
+            1.8,
+            10.668483291266421
+          ],
+          "rotation": 1.1607963267948966,
+          "size": [
+            8,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "day-room-e0-wall",
+          "label": "day-room-e0",
+          "kind": "wall",
+          "at": [
+            23.585604114083026,
+            1.8,
+            8.993046639922115
+          ],
+          "rotation": -0.41,
+          "size": [
+            4,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "day-room-e1-wall",
+          "label": "day-room-e1",
+          "kind": "wall",
+          "at": [
+            24.283968859186846,
+            1.8,
+            13.658053251149592
+          ],
+          "rotation": -1.856441332248135,
+          "size": [
+            8.06225774829855,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "deck-door",
+          "label": "deck-door",
+          "kind": "entrance",
+          "at": [
+            20.855289901615947,
+            1.45,
+            16.529317886447167
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            2.8,
+            2.5,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "day-room-e2-wall",
+          "label": "day-room-e2",
+          "kind": "wall",
+          "at": [
+            20.855289901615947,
+            1.8,
+            16.529317886447167
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            5,
+            3.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 2.8,
+            "height": 2.5,
+            "glazed": false
+          }
+        },
+        {
+          "id": "upper-gallery-e0-wall",
+          "label": "upper-gallery-e0",
+          "kind": "wall",
+          "at": [
+            20.375681234224906,
+            4.8,
+            7.597913991976634
+          ],
+          "rotation": -0.41,
+          "size": [
+            3,
+            2.8,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "sleep-door",
+          "label": "sleep-door",
+          "kind": "entrance",
+          "at": [
+            19.0009581053573,
+            4.55,
+            14.523961661387844
+          ],
+          "rotation": -1.9807963267948965,
+          "size": [
+            1,
+            2.3,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-e1-wall",
+          "label": "upper-gallery-e1",
+          "kind": "wall",
+          "at": [
+            20.156925156512123,
+            4.8,
+            11.86431127521969
+          ],
+          "rotation": -1.9807963267948965,
+          "size": [
+            8,
+            2.8,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 2.9000000000000004,
+            "sill": 0,
+            "width": 1,
+            "height": 2.3,
+            "glazed": false
+          }
+        },
+        {
+          "id": "upper-gallery-e2-wall",
+          "label": "upper-gallery-e2",
+          "kind": "wall",
+          "at": [
+            17.186806610349525,
+            4.8,
+            14.934880574509474
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            3,
+            2.8,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-e3-wall",
+          "label": "upper-gallery-e3",
+          "kind": "wall",
+          "at": [
+            17.405562688062307,
+            4.8,
+            10.668483291266421
+          ],
+          "rotation": 1.1607963267948966,
+          "size": [
+            8,
+            2.8,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "sleep-room-e0-wall",
+          "label": "sleep-room-e0",
+          "kind": "wall",
+          "at": [
+            23.585604114083026,
+            4.8,
+            8.993046639922115
+          ],
+          "rotation": -0.41,
+          "size": [
+            4,
+            2.8,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "sleep-room-e1-wall",
+          "label": "sleep-room-e1",
+          "kind": "wall",
+          "at": [
+            24.283968859186846,
+            4.8,
+            13.658053251149592
+          ],
+          "rotation": -1.856441332248135,
+          "size": [
+            8.06225774829855,
+            2.8,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "sleep-room-e2-wall",
+          "label": "sleep-room-e2",
+          "kind": "wall",
+          "at": [
+            20.855289901615947,
+            4.8,
+            16.529317886447167
+          ],
+          "rotation": -3.5515926535897933,
+          "size": [
+            5,
+            2.8,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        }
+      ]
+    },
+    "inputEvidence": {
+      "response": {
+        "status": "proposed",
+        "intent": {
+          "version": "semantic-pilot-1",
+          "id": "compact",
+          "thesis": "Angled narrow two-level footprint with explicit straight stair, upper void and back terrace. Fit-out and guards deferred.",
+          "frame": {
+            "origin": [
+              19,
+              7
+            ],
+            "yaw": -0.41
+          },
+          "levels": [
+            {
+              "id": "street",
+              "top": 0.2
+            },
+            {
+              "id": "sleep",
+              "top": 3.4
+            }
+          ],
+          "masses": [
+            {
+              "id": "base",
+              "role": "angled ground living and circulation"
+            },
+            {
+              "id": "upper",
+              "role": "upper bedroom and gallery",
+              "relatesTo": "base"
+            }
+          ],
+          "spaces": [
+            {
+              "id": "street-step",
+              "mass": "base",
+              "level": "street",
+              "use": "arrival",
+              "polygon": [
+                [
+                  0,
+                  -2
+                ],
+                [
+                  3,
+                  -2
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "height": 3.2,
+              "outdoor": true
+            },
+            {
+              "id": "stair-hall",
+              "mass": "base",
+              "level": "street",
+              "use": "entry and stair",
+              "polygon": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "height": 3.2
+            },
+            {
+              "id": "day-room",
+              "mass": "base",
+              "level": "street",
+              "use": "living",
+              "polygon": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  7,
+                  0
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  3,
+                  8
+                ]
+              ],
+              "height": 3.2
+            },
+            {
+              "id": "upper-gallery",
+              "mass": "upper",
+              "level": "sleep",
+              "use": "stair landing gallery",
+              "polygon": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  8
+                ],
+                [
+                  0,
+                  8
+                ]
+              ],
+              "height": 2.8,
+              "roof": true
+            },
+            {
+              "id": "sleep-room",
+              "mass": "upper",
+              "level": "sleep",
+              "use": "bedroom study",
+              "polygon": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  7,
+                  0
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  3,
+                  8
+                ]
+              ],
+              "height": 2.8,
+              "roof": true,
+              "material": "timber"
+            },
+            {
+              "id": "rear-deck",
+              "mass": "base",
+              "level": "street",
+              "use": "outdoor dining",
+              "polygon": [
+                [
+                  3,
+                  8
+                ],
+                [
+                  8,
+                  8
+                ],
+                [
+                  8,
+                  11
+                ],
+                [
+                  3,
+                  11
+                ]
+              ],
+              "height": 3.2,
+              "outdoor": true
+            }
+          ],
+          "portals": [
+            {
+              "id": "street-door",
+              "host": {
+                "space": "stair-hall",
+                "edge": 0
+              },
+              "to": "street-step",
+              "offset": 1.5,
+              "width": 1.1,
+              "height": 2.3,
+              "mode": "door"
+            },
+            {
+              "id": "day-door",
+              "host": {
+                "space": "stair-hall",
+                "edge": 1
+              },
+              "to": "day-room",
+              "offset": 0.8,
+              "width": 1,
+              "height": 2.3,
+              "mode": "open"
+            },
+            {
+              "id": "sleep-door",
+              "host": {
+                "space": "upper-gallery",
+                "edge": 1
+              },
+              "to": "sleep-room",
+              "offset": 6.9,
+              "width": 1,
+              "height": 2.3,
+              "mode": "door"
+            },
+            {
+              "id": "deck-door",
+              "host": {
+                "space": "day-room",
+                "edge": 2
+              },
+              "to": "rear-deck",
+              "offset": 2.5,
+              "width": 2.8,
+              "height": 2.5,
+              "mode": "door"
+            }
+          ],
+          "stairs": [
+            {
+              "id": "ascent",
+              "lower": "stair-hall",
+              "upper": "upper-gallery",
+              "start": [
+                1.5,
+                1.2
+              ],
+              "width": 1.1,
+              "run": 4.8,
+              "risers": 18,
+              "landing": 1.1,
+              "headroom": 2.1,
+              "bypass": "right"
+            }
+          ],
+          "arrival": "street-step",
+          "requiredAccess": [
+            "street-step",
+            "stair-hall",
+            "day-room",
+            "upper-gallery",
+            "sleep-room",
+            "rear-deck"
+          ]
+        },
+        "limitations": [
+          "Developer-authored angled narrow home; no AI output."
+        ]
+      },
+      "identifierMappings": []
+    }
+  }
+}

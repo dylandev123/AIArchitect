@@ -1,0 +1,53 @@
+{
+  "status": 422,
+  "paidCalls": 0,
+  "mockProviderRequests": 2,
+  "checkpointPassed": true,
+  "environmentFailed": true,
+  "responseId": "d23d14cf-ce66-433e-ab36-98cbf70acd87",
+  "error": "AI_APICallError: Deliberate offline provider failure",
+  "dbEvents": [
+    {
+      "suppressed": "initializer DDL",
+      "sha256": "5b09a599f1054b46c9d15f482a50ca9b62febf6cc3e6dfa39cb94709942ae0c1"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "completed": "callback",
+      "rows": 128
+    },
+    {
+      "completed": "promise",
+      "rows": 128
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "completed": "callback",
+      "rows": 128
+    },
+    {
+      "completed": "promise",
+      "rows": 128
+    },
+    {
+      "suppressed": "initializer DDL",
+      "sha256": "67c010de8b5026cb88418e28182504479c71b92d52a7260c6fdcb2101ae14ee2"
+    },
+    {
+      "redirected": "usage to experiment evidence"
+    },
+    {
+      "redirected": "usage to experiment evidence"
+    }
+  ]
+}

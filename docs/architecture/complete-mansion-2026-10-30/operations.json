@@ -1,0 +1,523 @@
+[
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "residential-wing",
+      "parameters": {
+        "id": "main-living",
+        "at": [
+          0,
+          0.1,
+          7
+        ],
+        "rotation": 0,
+        "width": 28,
+        "depth": 14,
+        "height": 4.2,
+        "bays": 5,
+        "bayWidths": [
+          5,
+          6,
+          6,
+          6,
+          5
+        ],
+        "material": "limestone",
+        "roofForm": "hip",
+        "roofRise": 1.2,
+        "overhang": 1.4,
+        "entryBay": 2
+      }
+    }
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "residential-wing",
+      "parameters": {
+        "id": "suite-west",
+        "at": [
+          -23,
+          0.1,
+          2
+        ],
+        "rotation": 0,
+        "width": 12,
+        "depth": 16,
+        "height": 3.4,
+        "bays": 3,
+        "bayWidths": [
+          4,
+          4,
+          4
+        ],
+        "material": "ivory",
+        "roofForm": "gable",
+        "roofRise": 1,
+        "overhang": 0.9,
+        "entryBay": 1
+      }
+    }
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "residential-wing",
+      "parameters": {
+        "id": "suite-east",
+        "at": [
+          23,
+          0.1,
+          2
+        ],
+        "rotation": 0,
+        "width": 12,
+        "depth": 16,
+        "height": 3.4,
+        "bays": 3,
+        "bayWidths": [
+          4,
+          4,
+          4
+        ],
+        "material": "ivory",
+        "roofForm": "gable",
+        "roofRise": 1,
+        "overhang": 0.9,
+        "entryBay": 1
+      }
+    }
+  },
+  {
+    "op": "remove",
+    "id": "main-living-rear"
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "facade-bay",
+      "parameters": {
+        "id": "main-rear-garden",
+        "at": [
+          0,
+          0.2,
+          0
+        ],
+        "rotation": 3.141593,
+        "material": "limestone",
+        "width": 14,
+        "height": 4.2,
+        "thickness": 0.35,
+        "openingX": 0,
+        "sill": 0,
+        "openingWidth": 5.2,
+        "openingHeight": 3.2,
+        "infill": "entrance",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "wall",
+      "aliases": [
+        "poolside rear pier west"
+      ],
+      "id": "main-living-rear-left",
+      "label": "Main living rear limestone pier west",
+      "kind": "wall",
+      "at": [
+        -10.5,
+        2.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        7,
+        4.2,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "wall",
+      "aliases": [
+        "poolside rear pier east"
+      ],
+      "id": "main-living-rear-right",
+      "label": "Main living rear limestone pier east",
+      "kind": "wall",
+      "at": [
+        10.5,
+        2.3,
+        0
+      ],
+      "rotation": 0,
+      "size": [
+        7,
+        4.2,
+        0.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "remove",
+    "id": "suite-west-rear"
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "facade-bay",
+      "parameters": {
+        "id": "suite-west-rear-view",
+        "at": [
+          -23,
+          0.2,
+          -6
+        ],
+        "rotation": 3.141593,
+        "material": "ivory",
+        "width": 12,
+        "height": 3.4,
+        "thickness": 0.32,
+        "openingX": 0,
+        "sill": 0.8,
+        "openingWidth": 7.6,
+        "openingHeight": 2.1,
+        "infill": "glazing",
+        "panels": 3
+      }
+    }
+  },
+  {
+    "op": "remove",
+    "id": "suite-east-rear"
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "facade-bay",
+      "parameters": {
+        "id": "suite-east-rear-view",
+        "at": [
+          23,
+          0.2,
+          -6
+        ],
+        "rotation": 3.141593,
+        "material": "ivory",
+        "width": 12,
+        "height": 3.4,
+        "thickness": 0.32,
+        "openingX": 0,
+        "sill": 0.8,
+        "openingWidth": 7.6,
+        "openingHeight": 2.1,
+        "infill": "glazing",
+        "panels": 3
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "terrace",
+      "aliases": [
+        "pool threshold terrace"
+      ],
+      "id": "pool-terrace",
+      "label": "Shaded limestone pool terrace",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        -1.175
+      ],
+      "rotation": 0,
+      "size": [
+        28,
+        0.2,
+        2.35
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "assemble",
+    "assembly": {
+      "kind": "rectangular-pool",
+      "parameters": {
+        "id": "infinity-pool",
+        "at": [
+          0,
+          0.05,
+          -3.1
+        ],
+        "rotation": 3.141593,
+        "width": 11,
+        "depth": 15,
+        "basinDepth": 1.55,
+        "material": "limestone"
+      }
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "building",
+      "aliases": [
+        "terrace canopy support"
+      ],
+      "id": "canopy-post-west-front",
+      "label": "Terrace canopy west-front support",
+      "kind": "volume",
+      "at": [
+        -6.2,
+        1.6,
+        -2.15
+      ],
+      "rotation": 0,
+      "size": [
+        0.45,
+        3.2,
+        0.45
+      ],
+      "material": "timber",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "building",
+      "aliases": [
+        "terrace canopy support"
+      ],
+      "id": "canopy-post-east-front",
+      "label": "Terrace canopy east-front support",
+      "kind": "volume",
+      "at": [
+        6.2,
+        1.6,
+        -2.15
+      ],
+      "rotation": 0,
+      "size": [
+        0.45,
+        3.2,
+        0.45
+      ],
+      "material": "timber",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "building",
+      "aliases": [
+        "terrace canopy support"
+      ],
+      "id": "canopy-post-west-rear",
+      "label": "Terrace canopy west-rear support",
+      "kind": "volume",
+      "at": [
+        -6.2,
+        1.6,
+        -0.25
+      ],
+      "rotation": 0,
+      "size": [
+        0.45,
+        3.2,
+        0.45
+      ],
+      "material": "timber",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "building",
+      "aliases": [
+        "terrace canopy support"
+      ],
+      "id": "canopy-post-east-rear",
+      "label": "Terrace canopy east-rear support",
+      "kind": "volume",
+      "at": [
+        6.2,
+        1.6,
+        -0.25
+      ],
+      "rotation": 0,
+      "size": [
+        0.45,
+        3.2,
+        0.45
+      ],
+      "material": "timber",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "roof",
+      "aliases": [
+        "shaded pool threshold"
+      ],
+      "id": "pool-terrace-canopy",
+      "label": "Timber-lined pool terrace canopy",
+      "kind": "roof",
+      "at": [
+        0,
+        3.3,
+        -1.2
+      ],
+      "rotation": 0,
+      "size": [
+        14,
+        0.2,
+        2.4
+      ],
+      "material": "timber",
+      "roofForm": "flat",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "driveway",
+      "aliases": [
+        "arrival court"
+      ],
+      "id": "arrival-drive",
+      "label": "Limestone arrival driveway",
+      "kind": "plate",
+      "at": [
+        0,
+        0.1,
+        19
+      ],
+      "rotation": 0,
+      "size": [
+        6.5,
+        0.2,
+        10
+      ],
+      "material": "limestone",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "planting-bed",
+      "aliases": [
+        "arrival landscape reserve"
+      ],
+      "id": "arrival-bed-west",
+      "label": "West arrival planting bed",
+      "kind": "plate",
+      "at": [
+        -6,
+        0.04,
+        19
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.08,
+        10
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "planting-bed",
+      "aliases": [
+        "arrival landscape reserve"
+      ],
+      "id": "arrival-bed-east",
+      "label": "East arrival planting bed",
+      "kind": "plate",
+      "at": [
+        6,
+        0.04,
+        19
+      ],
+      "rotation": 0,
+      "size": [
+        3.5,
+        0.08,
+        10
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "planting-bed",
+      "aliases": [
+        "pool landscape reserve"
+      ],
+      "id": "pool-bed-west",
+      "label": "West pool planting bed",
+      "kind": "plate",
+      "at": [
+        -10,
+        0.04,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.08,
+        15
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  },
+  {
+    "op": "add",
+    "element": {
+      "semanticType": "planting-bed",
+      "aliases": [
+        "pool landscape reserve"
+      ],
+      "id": "pool-bed-east",
+      "label": "East pool planting bed",
+      "kind": "plate",
+      "at": [
+        10,
+        0.04,
+        -12
+      ],
+      "rotation": 0,
+      "size": [
+        3,
+        0.08,
+        15
+      ],
+      "material": "sage",
+      "panels": 4
+    }
+  }
+]

@@ -14,7 +14,7 @@ it('derives all executable fields and tags for all generation/edit modes',()=>{
  for(const editIntent of ['refine','redesign','complete'] as const)
   expect(sceneSystemPrompt({mode:'edit',editIntent,prompt:'Improve architecture',current:codeArchitectureStudies().solana})).toContain(reference);
  expect(sceneSystemPrompt({mode:'generate',prompt:'A mansion'})).toContain(reference);
- expect(reference.length).toBeLessThan(6000);
+ expect(reference.length).toBeLessThan(6200); // 6000 before the optional roof fascia-edge field (about 100 characters)
 });
 
 it('constructs two distinct editable compositions and preserves localized changes through history and reload',()=>{

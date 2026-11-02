@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": { "incremental": false },
+  "include": [
+    "../../../next-env.d.ts",
+    "../../../src/**/*.ts",
+    "../../../src/**/*.tsx",
+    "../../../.next/types/**/*.ts",
+    "../../../scripts/canonical-expressiveness-offline.ts",
+    "../../../scripts/canonical-expressiveness-drawings.ts"
+  ],
+  "exclude": ["../../../node_modules"]
+}

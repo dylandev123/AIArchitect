@@ -1,0 +1,136 @@
+{
+  "output": {
+    "name": "Garden Court Family House",
+    "summary": "Raised the retained central flat limestone roof to form a 0.55 m high clerestory crown, closed by four shallow ivory perimeter fascia bands between the existing central wall heads and the new roof underside. All unrelated house, wing, terrace, canopy and pool geometry remains unchanged.",
+    "unsupported": [],
+    "operations": [
+      {
+        "op": "move",
+        "id": "main-roof",
+        "at": [
+          0,
+          3.98,
+          0
+        ]
+      },
+      {
+        "op": "add",
+        "element": {
+          "semanticType": "wall",
+          "aliases": [
+            "clerestory fascia"
+          ],
+          "id": "main-clerestory-front-band",
+          "label": "Central clerestory front fascia band",
+          "kind": "wall",
+          "at": [
+            0,
+            3.625,
+            4
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.55,
+            0.22
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "semanticType": "wall",
+          "aliases": [
+            "clerestory fascia"
+          ],
+          "id": "main-clerestory-rear-band",
+          "label": "Central clerestory rear fascia band",
+          "kind": "wall",
+          "at": [
+            0,
+            3.625,
+            -4
+          ],
+          "rotation": 0,
+          "size": [
+            12,
+            0.55,
+            0.22
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "semanticType": "wall",
+          "aliases": [
+            "clerestory fascia"
+          ],
+          "id": "main-clerestory-west-band",
+          "label": "Central clerestory west fascia band",
+          "kind": "wall",
+          "at": [
+            -5.89,
+            3.625,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            0.22,
+            0.55,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "semanticType": "wall",
+          "aliases": [
+            "clerestory fascia"
+          ],
+          "id": "main-clerestory-east-band",
+          "label": "Central clerestory east fascia band",
+          "kind": "wall",
+          "at": [
+            5.89,
+            3.625,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            0.22,
+            0.55,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 25410,
+    "inputTokenDetails": {
+      "noCacheTokens": 3,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 25407
+    },
+    "outputTokens": 528,
+    "outputTokenDetails": {
+      "textTokens": 428,
+      "reasoningTokens": 100
+    },
+    "totalTokens": 25938,
+    "reasoningTokens": 100,
+    "cachedInputTokens": 0
+  },
+  "model": "gpt-5.6-terra",
+  "providerCalls": 1
+}

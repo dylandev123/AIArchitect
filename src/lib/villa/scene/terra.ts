@@ -1,3 +1,5 @@
+import { assertDisjoint, strictWireShape, resolveSchema, strictSchemaIssues, type SchemaNode } from './strictSchema';
+import { physicalProgrammeSchema, PHYSICAL_PROGRAMME_GUIDANCE } from './physicalProgramme';
 import { SemanticEditError } from '@/lib/semantic/vocabulary';
 import { assertSceneEditPreserved, editContextSchema, planSceneEdit, sceneEditContract, validateSceneEditOperations } from './semanticEditing';
 import {sceneTestSettingsSchema} from '@/lib/ai/sceneTesting';
@@ -26,7 +28,7 @@ export function sceneProviderOutputSchema(input: SceneRequest) {
     // New Generate has one concise evidence contract. The legacy detailed plan
     // stays readable at runtime, but must not bypass required programme evidence
     // through an alternative provider-schema branch.
-    return input.mode === 'generate' ? sceneResultSchema.extend({ architecturalPlan: architecturalIntentSchema.extend({programme:programmeSchema,constructionScope:constructionScopeSchema.default('exterior')}) }) : sceneResultSchema.extend({architecturalPlan: providerArchitecturalPlanSchema.optional()});
+    return input.mode === 'generate' ? sceneResultSchema.extend({ architecturalPlan: architecturalIntentSchema.omit({designProposal:true}).extend({physicalProgramme:physicalProgrammeSchema,programme:programmeSchema,constructionScope:constructionScopeSchema.default('exterior')}) }) : sceneResultSchema.extend({architecturalPlan: providerArchitecturalPlanSchema.optional()});
 }
 /** OpenAI strict objects require every property. Optional primitive fields travel as
  * explicit null and are removed only where the original schema allowed omission.
@@ -34,11 +36,21 @@ export function sceneProviderOutputSchema(input: SceneRequest) {
 export async function sceneResponseFormatSchema(input: SceneRequest) {
     const schema = sceneProviderOutputSchema(input);
     if (input.mode !== 'generate' && input.editIntent !== 'redesign' && input.editIntent !== 'complete') return schema;
+    return strictSceneResponseSchema(schema);
+}
+export async function strictSceneResponseSchema<T extends z.ZodType>(schema: T) {
     const original = await zodSchema(schema).jsonSchema;
-    type Node = Record<string, unknown>;
+    type Node = SchemaNode;
+    const root = original as Node;
     function strict(node: Node): Node {
         const next = {...node};
         delete next.default;
+        if (node.oneOf) {
+            assertDisjoint(node.oneOf as Node[], root);
+            delete next.oneOf;
+            next.anyOf = (node.oneOf as Node[]).map(strict);
+        }
+        if (node.$defs) next.$defs = Object.fromEntries(Object.entries(node.$defs as Record<string,Node>).map(([k,v])=>[k,strict(v)]));
         if (node.properties) {
             const required = new Set(node.required as string[] ?? []);
             next.properties = Object.fromEntries(Object.entries(node.properties as Record<string, Node>).map(([key, child]) =>
@@ -51,14 +63,17 @@ export async function sceneResponseFormatSchema(input: SceneRequest) {
         return next;
     }
     function normalize(value: unknown, node: Node): unknown {
+        if (node.$ref) return normalize(value,resolveSchema(node,root));
         if (Array.isArray(value) && node.items) return value.map(v=>normalize(v,node.items as Node));
-        if (node.anyOf) {
+        if (node.anyOf || node.oneOf) {
             // Operation tags identify branches; plans use their distinctive fields.
-            const flatten=(nodes:Node[]):Node[]=>nodes.flatMap(n=>n.anyOf?flatten(n.anyOf as Node[]):[n]);
-            const branches = flatten(node.anyOf as Node[]);
+            const flatten=(nodes:Node[]):Node[]=>nodes.flatMap(raw=>{const n=resolveSchema(raw,root);return n.anyOf||n.oneOf?flatten((n.anyOf??n.oneOf) as Node[]):[n];});
+            const branches = flatten((node.anyOf ?? node.oneOf) as Node[]);
             const branch = branches.find(b=> {
                 const props = b.properties as Record<string, Node> | undefined;
                 if (!props || !value || typeof value !== 'object') return false;
+                const tag = Object.entries(props).find(([k,p])=>'const' in p && (value as Node)[k] === p.const);
+                if(tag) return true;
                 if(props.type?.const) return (value as Node).type===props.type.const;
                 if (props.op) return (value as Node).op === props.op.const;
                 if (props.kind?.const) return (value as Node).kind === props.kind.const;
@@ -68,19 +83,34 @@ export async function sceneResponseFormatSchema(input: SceneRequest) {
         }
         if (value && typeof value === 'object' && node.properties) {
             const props = node.properties as Record<string, Node>, required = new Set(node.required as string[] ?? []);
-            return Object.fromEntries(Object.entries(value).filter(([k,v])=>!(v===null && k in props && !required.has(k)))
+            const acceptsNull=(n:Node):boolean=>n.type==='null'||Array.isArray(n.type)&&n.type.includes('null')||'const'in n&&n.const===null||(n.enum as unknown[]|undefined)?.includes(null)===true||((n.anyOf??n.oneOf??[]) as Node[]).some(acceptsNull);
+            return Object.fromEntries(Object.entries(value).filter(([k,v])=>!(v===null && k in props && !required.has(k) && !acceptsNull(resolveSchema(props[k],root))))
                 .map(([k,v])=>[k,props[k]?normalize(v,props[k]):v]));
         }
         return value;
     }
-    return jsonSchema<z.infer<typeof schema>>(strict(original as Node), {validate: async value=> {
-        const parsed = schema.safeParse(normalize(value,original as Node));
+    let wire = strict(root);
+    const wrapped = !!wire.anyOf || wire.type !== 'object';
+    if (wrapped) {
+        // Keep the architectural union intact below a provider-required object root.
+        const rewrite = (n: Node): Node => Object.fromEntries(Object.entries(n).map(([k,v])=>
+            [k,k==='$ref' && v==='#' ? '#/properties/result' : k==='$ref' && typeof v==='string' && v.startsWith('#/') ? '#/properties/result/'+v.slice(2) :
+                Array.isArray(v) ? v.map(x=>x&&typeof x==='object'?rewrite(x as Node):x) : v&&typeof v==='object'?rewrite(v as Node):v]));
+        const dialect=wire.$schema;delete wire.$schema;
+        wire = {...(dialect?{$schema:dialect}:{}),type:'object',properties:{result:rewrite(wire)},required:['result'],additionalProperties:false};
+    }
+    const issues = strictSchemaIssues(wire);
+    if (issues.length) throw Error(`Unsupported strict response schema: ${issues.join('; ')}`);
+    return jsonSchema<z.infer<typeof schema>>(wire, {validate: async value=> {
+        if (wrapped && !strictWireShape(value,wire,wire))
+            return {success:false,error:new Error('Expected strict result envelope')};
+        const parsed = schema.safeParse(normalize(wrapped ? (value as Node).result : value,root));
         return parsed.success ? {success:true,value:parsed.data} : {success:false,error:parsed.error};
     }});
 }
 /** Explicit edit intent changes architectural permission, never the executor or safety checks. */
 export function sceneSystemPrompt(input: SceneRequest, trustedScope?: ReturnType<typeof planSceneEdit>) {
-    return SCENE_SYSTEM_PROMPT + (input.mode === 'edit' && input.editIntent !== 'redesign' && input.editIntent !== 'complete' ? trustedScope ? `\nLOCALLY ENFORCED EDIT SCOPE: ${JSON.stringify(trustedScope)}. Omit architecturalPlan; preserve all scene metadata.\n` : sceneEditContract(input.current!, input.prompt, input.editContext) : '') + (input.mode === 'generate' ? GENERATE_COORDINATION_GUIDANCE : '') + (input.mode === 'generate' ? "\nGENERATE CONSTRUCTION CONTRACT: Start from an empty scene. Operations are the persistent selected design, never a scratchpad for design experiments. Consider alternatives briefly in architecturalPlan; select one before constructing. Retain assembly components unless a genuine architectural change requires removal; do not repeatedly build and erase identical candidates. Legitimate coordinated removals and replacements remain supported. Map programme and constructed decisions to surviving editable IDs, disclose incomplete parts, and prioritize safe retained construction over planning prose. Both authored AND expanded primitive operations must fit 800; residential wings cost 5 + 3*bays, rectangular pools cost 14.\nGENERATE RESPONSE FORMAT: Optional operation/element/intent properties must be explicit null when unused in the strict response schema. Return constructionScope and programme envelope-capacity commitments. Default exterior: interiors unfinished; only explicitly requested interior work uses interior-inclusive.\n" : "\n") + SCENE_ASSEMBLY_INSTRUCTIONS + FACADE_ASSEMBLY_INSTRUCTIONS + INTERIOR_ASSEMBLY_INSTRUCTIONS + constructionCapabilityReference() + (input.mode !== 'edit' ? '' : input.editIntent === 'complete' ? ARCHITECTURE_COMPLETION_INSTRUCTIONS : input.editIntent === 'redesign'
+    return SCENE_SYSTEM_PROMPT + (input.mode === 'edit' && input.editIntent !== 'redesign' && input.editIntent !== 'complete' ? trustedScope ? `\nLOCALLY ENFORCED EDIT SCOPE: ${JSON.stringify(trustedScope)}. Omit architecturalPlan; preserve all scene metadata.\n` : sceneEditContract(input.current!, input.prompt, input.editContext) : '') + (input.mode === 'generate' ? PHYSICAL_PROGRAMME_GUIDANCE + GENERATE_COORDINATION_GUIDANCE : '') + (input.mode === 'generate' ? "\nGENERATE CONSTRUCTION CONTRACT: Start from an empty scene. Operations are the persistent selected design, never a scratchpad for design experiments. Consider alternatives briefly in architecturalPlan; select one before constructing. Retain assembly components unless a genuine architectural change requires removal; do not repeatedly build and erase identical candidates. Legitimate coordinated removals and replacements remain supported. Map programme and constructed decisions to surviving editable IDs, disclose incomplete parts, and preserve the selected spatial design; disclose unrepresentable commitments instead of simplifying them to pass checks. Both authored AND expanded primitive operations must fit 800; residential wings cost 5 + 3*bays, rectangular pools cost 14.\nGENERATE RESPONSE FORMAT: Optional operation/element/intent properties must be explicit null when unused in the strict response schema. Return constructionScope and programme envelope-capacity commitments. Default exterior: interiors unfinished; only explicitly requested interior work uses interior-inclusive.\n" : "\n") + SCENE_ASSEMBLY_INSTRUCTIONS + FACADE_ASSEMBLY_INSTRUCTIONS + INTERIOR_ASSEMBLY_INSTRUCTIONS + constructionCapabilityReference() + (input.mode !== 'edit' ? '' : input.editIntent === 'complete' ? ARCHITECTURE_COMPLETION_INSTRUCTIONS : input.editIntent === 'redesign'
         ? `\nREDESIGN MODE: The user explicitly authorizes substantial architectural change within the requested scope. Conservative targeted-edit and existing-composition preservation instructions above do not apply to that architecture. You may replace, remove, reorganize, move or resize existing floors, walls, roofs, entrances, facades and architectural volumes, including their dependents. Reconsider inadequate primary/secondary massing and spatial hierarchy before details. Return all coordinated changes in one transaction, preserving valid support, openings and attachments. Retain IDs for elements that keep their identity; new elements get new IDs. Preserve unrelated site elements, terrain and project data. Explain the resulting architectural change and remaining limitations; decorative additions alone do not satisfy a requested compositional redesign. The caller saves a separate version and retains the original. All operation and geometry safety budgets still apply. Evaluate the existing architecture, establish the improved composition, then translate it into supported operations in this same response. Include architecturalPlan, name, summary, unsupported and a nonempty operations array. Budget concise prose first so the construction fits the output limit; never stop after architecturalPlan. Optional operation/element properties must be explicit null when unused in the strict response schema. If construction is unsupported, report it honestly; an empty transaction cannot become a successful Redesign.`
         : `\nREFINE MODE: Preserve the existing composition. Apply only the requested targeted changes and necessary dependent repairs; preserve unrelated geometry, terrain and stable IDs. If substantial recomposition is needed, explain it for an explicit Redesign request.`);
 }
@@ -167,13 +197,13 @@ export const FACADE_ASSEMBLY_INSTRUCTIONS = `
 FITTED FACADE BAY: assemble kind:"facade-bay", parameters {id,parent?,at,rotation,width,height,thickness,openingX,sill,openingWidth,openingHeight,infill:"glazing"|"entrance",panels,material}. at=wall BASE centre in selected frame. Builds wall id with real unglazed cut and separately editable id-panel, local Y=-height/2+sill+openingHeight/2; no duplicate glass. Entrance requires sill=0. Vary bays, piers, heads and sills for facade hierarchy. Replace/remove any uncut wall at that boundary first. Add returns, portal, canopy, shading and connected dry approach explicitly; this helper chooses no elevation layout or route.
 `;
 export const INTERIOR_ASSEMBLY_INSTRUCTIONS = `
-EXPLICIT INTERIOR / ACCESS ASSEMBLIES: same assemble/executor. In exterior Generate defer interior doorway/kitchen work unless explicitly requested; stairs remain available for exterior level access. Common parameters {id,parent?,at,rotation,material}. at is BASE datum in optional parent frame; floor top is local size.y/2. Expanded parts remain editable; no rooms are inferred.
+EXPLICIT INTERIOR / ACCESS ASSEMBLIES: same assemble/executor. Construct selected proposal boundaries/doors; defer unrequested kitchen fit-out; stairs remain available for exterior level access. Common parameters {id,parent?,at,rotation,material}. at is BASE datum in optional parent frame; floor top is local size.y/2. Expanded parts remain editable; no rooms are inferred.
 - doorway adds {width,height,thickness,openingX,openingWidth,openingHeight}. at=wall base centre. Two parts: wall id with sill-zero unglazed opening and fitted id-door. Remove/replace any existing wall there; never overlay an uncut shell. Build other room boundaries explicitly.
 - kitchen-run adds {length,depth,height,units}. at=FIRST cabinet base centre, extends local +X. Parts id, id-unit-2..N, id-top: units+1. All bottoms=datum; worktop top=datum+height. Select runs and working aisles. Cabinet solids do not supply sinks/appliances/plumbing; disclose omissions.
 - straight-stair adds {width,rise,run,risers}. at=lower START EDGE, travel +Z. Solid supported steps id, id-step-2..N: risers parts; rise/risers<=.2 and run/risers>=.25. Last top=at.y+rise, far edge=at.z+run in this frame. Connect supported landing exactly there; reserve wall-free approach, headroom and slab/roof voids. Add guards/base support separately. Solid under-stair fill excludes rooms/routes.
 Use shared floor frames. Parentage is not support. Do not place-on these derived-centre roots; place-on suits ordinary guards on decks.
 `;
-export const SCENE_ASSEMBLY_INSTRUCTIONS = `COORDINATED ASSEMBLIES: These are optional construction shortcuts, not design candidates. residential-wing fixes a rectangular one-storey shell, three solid elevations and front bays; choose it only where those decisions match the selected design. Use primitive slabs/walls/fitted bays/roof sections directly for layered or individually composed envelopes. assemble {assembly:{kind:"residential-wing",parameters:{id,at,rotation,width,depth,height,bays,bayWidths?,material,roofForm,roofRise,overhang,entryBay}}} builds ONE storey: slab top at.y+.1, wall top at.y+.1+height; solid rear/sides, glazed front bays with optional door entryBay (zero-based or null). bayWidths optionally selects each bay width (length=bays, sum=width); omitted means equal bays for backward compatibility, not an architectural recommendation. Stable children: id-rear/west/east/roof, id-bay-N/glass-N/reveal-N; glass-N is an entrance for entryBay. No rooms/stairs/upper slabs. Pitched eaves at world at.y+.1+height, ridge at eaves+roofRise; roof centre is eaves+roofRise/2. Reserve rotated width/depth plus twice overhang and fascia clearance before placing neighboring wings; wall gaps alone do not establish roof clearance. No automatic rear/side passages: replace solid walls at intended exterior doors/windows with fitted facade bays. Interior partitions are deferred in exterior scope. Move/rotate root carries descendants. scale-assembly {id,factors:[sx,sy,sz]} scales existing children, openings and slab thickness; sx must equal sz. Reseat root to preserve ground datum. resize affects one part only. finish/replace edit children and roofs without regeneration.
+export const SCENE_ASSEMBLY_INSTRUCTIONS = `COORDINATED ASSEMBLIES: These are optional construction shortcuts, not design candidates. residential-wing fixes a rectangular one-storey shell, three solid elevations and front bays; choose it only where those decisions match the selected design. Use primitive slabs/walls/fitted bays/roof sections directly for layered or individually composed envelopes. assemble {assembly:{kind:"residential-wing",parameters:{id,at,rotation,width,depth,height,bays,bayWidths?,material,roofForm,roofRise,overhang,entryBay}}} builds ONE storey: slab top at.y+.1, wall top at.y+.1+height; solid rear/sides, glazed front bays with optional door entryBay (zero-based or null). bayWidths optionally selects each bay width (length=bays, sum=width); omitted means equal bays for backward compatibility, not an architectural recommendation. Stable children: id-rear/west/east/roof, id-bay-N/glass-N/reveal-N; glass-N is an entrance for entryBay. No rooms/stairs/upper slabs. Pitched eaves at world at.y+.1+height, ridge at eaves+roofRise; roof centre is eaves+roofRise/2. Reserve rotated width/depth plus twice overhang and fascia clearance before placing neighboring wings; wall gaps alone do not establish roof clearance. No automatic rear/side passages: replace solid walls at intended exterior doors/windows with fitted facade bays. Construct selected proposal boundaries/access; defer exterior-scope fit-out. Move/rotate root carries descendants. scale-assembly {id,factors:[sx,sy,sz]} scales existing children, openings and slab thickness; sx must equal sz. Reseat root to preserve ground datum. resize affects one part only. finish/replace edit children and roofs without regeneration.
 Same assemble contract: kind:"rectangular-pool", parameters:{id,at,rotation,width,depth,basinDepth,material}. at is NEAR DRY DECK CENTRE; local basin centre Z=depth/2+1.45, water Y=.05, deck top Y=.15, basin top Y=.05-basinDepth. For local basin centre transform with root yaw: world X=at.x+sin(rotation)*localZ, world Z=at.z+cos(rotation)*localZ. Water reservation is width by depth, not the near-deck footprint. Near deck spans local Z ±.75; far deck centre Z=depth+2.9. Match adjoining slab TOPS to at.y+.15 and meet deck edges; keep routes outside water, or construct a supported bridge wholly above it. Ground deck at.y=.15. Builds floor, walls, water, coping, dry circuit; no excavation/hydraulics. Stable parts: id is the near dry-deck plate; id-floor is the basin plate; id-water is water; id-wall-x-minus/plus and id-wall-z-minus/plus are walls; id-coping-x-minus/plus and id-coping-z-minus/plus are plates; id-deck-x-minus/plus and id-deck-far are dry-deck plates. Programme references must use those exact expanded IDs and kinds; the basin floor is not an enclosure wall.
 Assemblies remain optional in Generate/Refine/Redesign/Complete; use direct components whenever their built-in decisions do not fit. Reuse attach/place-on and explicit terrace/entrance parts with shared datums. No automatic passages, shared walls, roof unions or stacked wing roofs: unsafe wing junctions and roof intersections fail validation. Roof-junction checks account for elevation: separated roof layers are allowed. Checks use actual builder slopes/fascia for pitched pairs; flat/mixed pairs retain conservative envelope checks. Separate intersecting eaves or author the junction explicitly. A one-storey assembly retains its complete roof; when adding an occupied upper level, explicitly replace/split lower roof sections around that footprint using primitives in the same transaction. Check all occupied levels before detailing. Raising a roof without coordinating its enclosure is not a remedy. Never claim arcade assembly support. Straight stairs below are explicit solid steps, not an automatic circulation planner.`;
 export const SCENE_SYSTEM_PROMPT = `You are Terra, an architectural designer authoring a complete editable 3D scene through validated JSON operations. No house families, cardinal placement, fixed levels, footprint or style pairings apply. Follow geometric relationships below; invent architecture for the brief.

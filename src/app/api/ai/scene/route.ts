@@ -1,3 +1,8 @@
+import { isCanonicalPlan } from '@/lib/villa/canonical/plan';
+import { canonicalGenerationRequired } from '@/lib/villa/canonical/authority';
+import { generateCanonical } from '@/lib/villa/canonical/generate';
+import { reviewDesignFidelity, constructionFromProposal, type DesignProposal } from '@/lib/villa/scene/designProposal';
+import { selectDesignProposal } from '@/lib/villa/scene/designGeneration';
 import { SemanticEditError } from '@/lib/semantic/vocabulary';
 import {createHash} from 'node:crypto';
 import {SCENE_TEST_MODELS,resolveSceneTestSettings} from '@/lib/ai/sceneTesting';
@@ -14,7 +19,7 @@ import { withUsageLogging } from '@/lib/ai/usage/track';
 import { SceneConstructionError, sceneRuntimeOutputSchema, sceneResponseFormatSchema, sceneMessages, sceneRequestSchema, sceneProviderOutputSchema, resolveSceneResult, type SceneRequest } from '@/lib/villa/scene/terra';
 import { architecturalRequestContext } from '@/lib/villa/scene/knowledgeContext';
 import { validateScene } from '@/lib/villa/scene/model';
-export const maxDuration = 180;
+export const maxDuration = 360;
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET(request:Request){
     if(process.env.NODE_ENV!=='development')return json({error:'Not found'},404);
@@ -44,6 +49,8 @@ export async function POST(request: Request) {
         return json({ error: AI_NOT_CONFIGURED_MESSAGE, providerCalls: 0 }, 503);
     if (request.signal.aborted)
         return json({ error: 'Cancelled', providerCalls: 0 }, 499);
+    if (input.current && isCanonicalPlan(input.current.architecturalPlan) && input.mode === 'edit') return json({error:'Compiler-owned houses require a canonical plan revision and recompilation. Scene operation editing is disabled for this format.',providerCalls:0},409);
+    if (canonicalGenerationRequired(input.mode)) return generateCanonical(input, selection, request.signal);
     let knowledgeTrace: unknown;
     let knowledgeEvidence: import('@/lib/villa/scene/model').ArchitecturalScene['knowledgeEvidence'];
     let raw: unknown;
@@ -54,17 +61,31 @@ export async function POST(request: Request) {
     let validation:unknown;
     let architecturalQuality:unknown;
     let requestFingerprint:string|undefined;
-    function experiment(operations?:number){return {model:selection.model,reasoningEffort:selection.reasoningEffort??null,usage:(providerMetadata as {usage?:unknown}|undefined)?.usage,requestFingerprint,operations,validation,architecturalQuality:architecturalQuality?((architecturalQuality as {status:string}).status):'not-evaluated'};}
+    function experiment(operations?:number){return {model:selection.model,reasoningEffort:selection.reasoningEffort??null,usage:(providerMetadata as {usage?:unknown}|undefined)?.usage,usageScope:'construction-stage',stageUsage:{planning:(planningEvidence as {usage?:unknown}|undefined)?.usage??null,construction:(providerMetadata as {usage?:unknown}|undefined)?.usage??null},requestFingerprint,operations,validation,architecturalQuality:architecturalQuality?((architecturalQuality as {status:string}).status):'not-evaluated'};}
     let providerCalls = 0;
     let providerMetadata: unknown;
+    let constructionStarted = false;
+    let proposal: DesignProposal | undefined;
+    let planningEvidence: unknown;
+    let designFidelity: ReturnType<typeof reviewDesignFidelity> | undefined;
     let requestSchema: unknown;
     let wire: {requestBody?: string;responseBody:string;status:number} | undefined;
+    function resolveCandidate(output: Parameters<typeof resolveSceneResult>[1]) {
+        const resolved=resolveSceneResult(input,output,knowledgeEvidence);
+        if(proposal){
+            resolved.scene.architecturalPlan={...(resolved.scene.architecturalPlan as object),designProposal:proposal};
+            designFidelity=reviewDesignFidelity(resolved.scene,proposal);
+            if(designFidelity.issues.length)throw new SceneConstructionError('Construction diverged from selected spatial proposal: '+designFidelity.issues.join(' '),resolved.scene);
+            resolved.architecturalAudit=reviewSceneArchitecture(resolved.scene);
+        }
+        return resolved;
+    }
     async function retain(status: string, error?: string) { try {
         await mkdir('.data/scene-responses', { recursive: true, mode: 0o700 });
-        await writeFile(`.data/scene-responses/${responseId}.json`, redactV3FailureText(JSON.stringify({ responseId, status, input, knowledge: knowledgeTrace, requestSystem, output: raw, rawResponse, error }, null, 2)), { flag: 'wx', mode: 0o600 });
+        await writeFile(`.data/scene-responses/${responseId}.json`, redactV3FailureText(JSON.stringify({ responseId, status, input, knowledge: knowledgeTrace, requestSystem, planningEvidence, proposal, designFidelity, output: raw, rawResponse, error }, null, 2)), { flag: 'wx', mode: 0o600 });
         if (wire) await writeFile(`.data/scene-responses/${responseId}.wire.json`, JSON.stringify(wire), {flag:'wx',mode:0o600});
         if (rawResponse !== undefined) await writeFile(`.data/scene-responses/${responseId}.provider.txt`, rawResponse, { flag: 'wx', mode: 0o600 });
-        await writeFile(`.data/scene-responses/${responseId}.diagnostics.json`, JSON.stringify({responseId, status, providerCalls, providerMetadata, testing:input.testing, requestFingerprint, validation, architecturalQuality, requestSchema, messages, diagnostics: generationDiagnostics(responseId, input, raw, status)}, null, 2), {flag:'wx',mode:0o600});
+        await writeFile(`.data/scene-responses/${responseId}.diagnostics.json`, JSON.stringify({responseId, status, providerCalls, providerMetadata, testing:input.testing, requestFingerprint, planningEvidence, designFidelity, validation, architecturalQuality, requestSchema, messages, diagnostics: generationDiagnostics(responseId, input, raw, status)}, null, 2), {flag:'wx',mode:0o600});
     }
     catch {
         console.error('Scene response retention failed', responseId);
@@ -74,6 +95,16 @@ export async function POST(request: Request) {
         knowledgeEvidence = context.evidence;
         knowledgeTrace = context.trace;
         requestSystem = context.system;
+        // Generate alone selects an immutable design before operations. Edits keep
+        // their existing single-call preservation and execution contracts.
+        if (input.mode === 'generate') {
+            const planning = await selectDesignProposal({input,system:context.system,messages,selection,signal:request.signal,
+                onCall:()=>{providerCalls++;},onEvidence:evidence=>{planningEvidence=evidence;}});
+            proposal=planning;
+            if(request.signal.aborted)throw Error('Cancelled before construction.');
+            if(proposal)requestSystem += constructionFromProposal(proposal);
+        }
+        constructionStarted = true;
         requestSchema = await sceneResponseFormatSchema(input);
         const responseFormat=await Output.object({schema:requestSchema as Awaited<ReturnType<typeof sceneResponseFormatSchema>>}).responseFormat;
         requestFingerprint=createHash('sha256').update(JSON.stringify({system:requestSystem,messages,schema:responseFormat})).digest('hex');
@@ -90,11 +121,11 @@ export async function POST(request: Request) {
         }
         // Validate the mode-specific contract even when the provider adapter is mocked.
         const output = sceneRuntimeOutputSchema(input).parse(result.output);
-        const resolved = resolveSceneResult(input, output, knowledgeEvidence);
+        const resolved = resolveCandidate(output);
         validation={status:'accepted',warningCount:resolved.architecturalAudit.findings.length};
         architecturalQuality={status:'requires-visual-review',audit:resolved.architecturalAudit};
         await retain('accepted');
-        return json({ ...resolved, responseId, providerCalls,experiment:experiment(resolved.operations.length) });
+        return json({ ...resolved, ...(proposal?{designProposal:proposal,designFidelity}:{}), responseId, providerCalls,experiment:experiment(resolved.operations.length) });
     }
     catch (error) {
         let message = String(error);
@@ -108,12 +139,12 @@ export async function POST(request: Request) {
                 // A complete operations response may survive SDK rejection of intent.
                 // Revalidate locally once; no repair, provider call or geometry changes.
                 const candidate = sceneRuntimeOutputSchema(input).safeParse(raw);
-                if (candidate.success && error.finishReason === 'stop') {
-                    const resolved = resolveSceneResult(input, candidate.data, knowledgeEvidence);
+                if (constructionStarted && candidate.success && error.finishReason === 'stop') {
+                    const resolved = resolveCandidate(candidate.data);
                     validation={status:'accepted-with-warnings',warningCount:resolved.architecturalAudit.findings.length};
                     architecturalQuality={status:'requires-visual-review',audit:resolved.architecturalAudit};
                     await retain('accepted-with-warnings');
-                    return json({...resolved, responseId, providerCalls,experiment:experiment(resolved.operations.length)});
+                    return json({...resolved, ...(proposal?{designProposal:proposal,designFidelity}:{}), responseId, providerCalls,experiment:experiment(resolved.operations.length)});
                 }
                 const checked = sceneProviderOutputSchema(input).safeParse(raw);
                 if (!checked.success)
@@ -123,9 +154,13 @@ export async function POST(request: Request) {
                 // Keep SDK diagnostics for malformed/truncated operations.
             }
         }
+        if(proposal && error instanceof SceneConstructionError){
+            error.recoverableDraft.architecturalPlan={...(error.recoverableDraft.architecturalPlan as object),designProposal:proposal};
+            designFidelity=reviewDesignFidelity(error.recoverableDraft,proposal);
+        }
         validation={status:'rejected',error:message};
         if(error instanceof SceneConstructionError)architecturalQuality={status:'unapproved-rejected-draft',audit:reviewSceneArchitecture(error.recoverableDraft)};
         await retain('rejected', message);
-        return json({ error: message, ...(error instanceof SemanticEditError ? {code:error.code,candidates:error.candidates}:{}), ...(error instanceof SceneConstructionError ? {recoverableDraft:error.recoverableDraft} : {}), responseId, providerCalls,experiment:experiment(raw&&typeof raw==='object'&&'operations' in raw&&Array.isArray(raw.operations)?raw.operations.length:undefined) }, 422);
+        return json({ error: message, ...(proposal?{designProposal:proposal,designFidelity}:{}), ...(error instanceof SemanticEditError ? {code:error.code,candidates:error.candidates}:{}), ...(error instanceof SceneConstructionError ? {recoverableDraft:error.recoverableDraft} : {}), responseId, providerCalls,experiment:experiment(raw&&typeof raw==='object'&&'operations' in raw&&Array.isArray(raw.operations)?raw.operations.length:undefined) }, 422);
     }
 }

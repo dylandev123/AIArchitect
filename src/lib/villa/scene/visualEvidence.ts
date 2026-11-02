@@ -12,6 +12,7 @@ export function architecturalReferenceDependencies(scene: ArchitecturalScene) {
     if(!value||typeof value!=='object')return;
     if(Array.isArray(value)){value.forEach((v,i)=>visit(v,`${path}[${i}]`));return;}
     for(const [key,v] of Object.entries(value)) {
+      if(key==='evidenceRevisions') continue; // Historical references are trace records, not current commitments.
       const field=`${path}.${key}`;
       if(arrays.has(key)&&Array.isArray(v))v.forEach((id,i)=>{if(typeof id==='string')references.push({elementId:id,path:`${field}[${i}]`});});
       else if((key==='subject'||key==='target')&&typeof v==='string')references.push({elementId:v,path:field});
@@ -28,18 +29,22 @@ export function refinementConstructionContext(scene: ArchitecturalScene, targetI
   return {
     targets:scene.elements.filter(e=>targets.has(e.id)).map(e=>({id:e.id,world:g.world(e),renderedBottom:g.bottom(e),renderedTop:g.top(e),size:e.size,profiled:!!e.geometry})),
     preservedReferences:architecturalReferenceDependencies(scene).filter(r=>targets.has(r.elementId)),
-    contract:'Retain referenced identities only when the same component survives (replace can retain its ID). Removing a referenced component leaves stale evidence: there is no authorized evidence-remapping operation. Do not invent replacements or preserve an ID for a different meaning. If coordination requires changing programme boundaries or splitting referenced identities, disclose the unsupported transaction rather than claiming completion. Bounds of profiles and pitched roofs do not certify solid contact.',
+    contract:'Retain referenced identities only when the same component survives (replace can retain its ID). Removing a referenced component leaves stale evidence: only explicit bounded programme evidenceRevisions can update affected role references; spatial/knowledge references remain protected. Do not invent replacements or preserve an ID for a different meaning. If coordination requires changing programme boundaries or splitting referenced identities, disclose the unsupported transaction rather than claiming completion. Bounds of profiles and pitched roofs do not certify solid contact.',
   };
 }
 
 /** Measurements describe constructed geometry, never subjective architectural success. */
 export function sceneVisualEvidence(raw: ArchitecturalScene) {
   const scene = validateScene(raw);
+  const geometry = sceneSpatialGeometry(scene);
   return {
     intended: scene.architecturalPlan ?? null,
     selectedKnowledge: scene.knowledgeEvidence ?? [],
     preservedReferenceDependencies: architecturalReferenceDependencies(scene),
-    constructed: scene.elements.map(e => ({ id:e.id, kind:e.kind, parent:e.parent, at:e.at, size:e.size, rotation:e.rotation })),
+    // Selection needs the same authored shape information as execution. A box
+    // summary hides fitted passages, pitched roofs and profiles from the reviewer.
+    constructed: scene.elements.map(e => ({ ...e, world: geometry.world(e), renderedBottom: geometry.bottom(e), renderedTop: geometry.top(e) })),
+    refinementContract: refinementConstructionContext(scene, []).contract,
     geometryWarnings: sceneRelationshipIssues(scene),
     architecturalAudit: reviewSceneArchitecture(scene),
   };

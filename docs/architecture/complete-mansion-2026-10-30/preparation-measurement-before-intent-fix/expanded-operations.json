@@ -1,0 +1,1308 @@
+[
+  {
+    "authoredIndex": 0,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "aliases": [],
+        "id": "main-floor",
+        "label": "Central living slab",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          0.15,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 1,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "aliases": [],
+        "id": "west-wing-floor",
+        "label": "West bedroom wing slab",
+        "kind": "plate",
+        "at": [
+          -9,
+          0.075,
+          -1
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.15,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 2,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "floor",
+        "aliases": [],
+        "id": "east-wing-floor",
+        "label": "East bedroom wing slab",
+        "kind": "plate",
+        "at": [
+          9,
+          0.075,
+          -1
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.15,
+          10
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 3,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "path",
+        "aliases": [],
+        "id": "arrival-path",
+        "label": "Front arrival approach",
+        "kind": "plate",
+        "at": [
+          0,
+          0.075,
+          6
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          0.15,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 4,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "front-left-wall",
+        "label": "Front solid wall west",
+        "kind": "wall",
+        "at": [
+          -3.75,
+          1.75,
+          4
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 5,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "front-entry-wall",
+        "label": "Recessed entry wall",
+        "kind": "wall",
+        "at": [
+          0,
+          1.75,
+          4
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 6,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "front-door",
+        "aliases": [],
+        "id": "front-door",
+        "label": "Front entrance door",
+        "kind": "entrance",
+        "parent": "front-entry-wall",
+        "at": [
+          0,
+          -0.35,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.5,
+          2.5,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 7,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "front-right-wall",
+        "label": "Front solid wall east",
+        "kind": "wall",
+        "at": [
+          3.75,
+          1.75,
+          4
+        ],
+        "rotation": 0,
+        "size": [
+          4.5,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 8,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "rear-left-wall",
+        "label": "Garden wall west",
+        "kind": "wall",
+        "at": [
+          -3.5,
+          1.75,
+          -4
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.75,
+          "width": 3.4,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 9,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "rear-garden-wall",
+        "label": "Garden door wall",
+        "kind": "wall",
+        "at": [
+          1,
+          1.75,
+          -4
+        ],
+        "rotation": 0,
+        "size": [
+          2,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 10,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "exterior-door",
+        "aliases": [],
+        "id": "garden-door",
+        "label": "Garden terrace door",
+        "kind": "entrance",
+        "parent": "rear-garden-wall",
+        "at": [
+          0,
+          -0.35,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          1.5,
+          2.5,
+          0.12
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 11,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "rear-right-wall",
+        "label": "Garden wall east",
+        "kind": "wall",
+        "at": [
+          4.5,
+          1.75,
+          -4
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.75,
+          "width": 2.1,
+          "height": 1.8,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 12,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "west-front-wall",
+        "label": "West wing front wall",
+        "kind": "wall",
+        "at": [
+          -9,
+          1.75,
+          5
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.9,
+          "width": 2.2,
+          "height": 1.45,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 13,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "west-rear-wall",
+        "label": "West wing rear wall",
+        "kind": "wall",
+        "at": [
+          -9,
+          1.75,
+          -7
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.9,
+          "width": 2.2,
+          "height": 1.45,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 14,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "west-side-north",
+        "label": "West wing north bedroom window wall",
+        "kind": "wall",
+        "at": [
+          -12,
+          1.75,
+          3
+        ],
+        "rotation": 1.570796,
+        "size": [
+          4,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.95,
+          "width": 2.1,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 15,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "west-side-middle",
+        "label": "West wing middle bedroom window wall",
+        "kind": "wall",
+        "at": [
+          -12,
+          1.75,
+          -1
+        ],
+        "rotation": 1.570796,
+        "size": [
+          4,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.95,
+          "width": 2.1,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 16,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "west-side-south",
+        "label": "West wing south bedroom window wall",
+        "kind": "wall",
+        "at": [
+          -12,
+          1.75,
+          -5
+        ],
+        "rotation": 1.570796,
+        "size": [
+          4,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.95,
+          "width": 2.1,
+          "height": 1.35,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 17,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "east-front-wall",
+        "label": "East wing front wall",
+        "kind": "wall",
+        "at": [
+          9,
+          1.75,
+          4
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.9,
+          "width": 2.4,
+          "height": 1.45,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 18,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "east-rear-wall",
+        "label": "East wing rear wall",
+        "kind": "wall",
+        "at": [
+          9,
+          1.75,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.9,
+          "width": 2.4,
+          "height": 1.45,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 19,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "east-side-north",
+        "label": "East wing north private window wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.75,
+          1.5
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 1,
+          "width": 2.6,
+          "height": 1.3,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 20,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "wall",
+        "aliases": [],
+        "id": "east-side-south",
+        "label": "East wing south private window wall",
+        "kind": "wall",
+        "at": [
+          12,
+          1.75,
+          -3.5
+        ],
+        "rotation": 1.570796,
+        "size": [
+          5,
+          3.2,
+          0.22
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 1,
+          "width": 2.6,
+          "height": 1.3,
+          "glazed": true
+        }
+      }
+    }
+  },
+  {
+    "authoredIndex": 21,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [],
+        "id": "main-roof",
+        "label": "Central flat roof",
+        "kind": "roof",
+        "at": [
+          0,
+          3.43,
+          0
+        ],
+        "rotation": 0,
+        "size": [
+          12,
+          0.16,
+          8
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 22,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [],
+        "id": "west-wing-roof",
+        "label": "West wing flat roof",
+        "kind": "roof",
+        "at": [
+          -9,
+          3.43,
+          -1
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.16,
+          12
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 23,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [],
+        "id": "east-wing-roof",
+        "label": "East wing flat roof",
+        "kind": "roof",
+        "at": [
+          9,
+          3.43,
+          -1
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.16,
+          10
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 24,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "terrace",
+        "aliases": [],
+        "id": "dining-terrace",
+        "label": "Covered outdoor dining terrace",
+        "kind": "plate",
+        "at": [
+          -1,
+          0.075,
+          -6
+        ],
+        "rotation": 0,
+        "size": [
+          10,
+          0.15,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 25,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "dining-post-west-front",
+        "label": "Dining canopy west front support",
+        "kind": "volume",
+        "at": [
+          -4.25,
+          1.65,
+          -4.55
+        ],
+        "rotation": 0,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 26,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "dining-post-east-front",
+        "label": "Dining canopy east front support",
+        "kind": "volume",
+        "at": [
+          2.25,
+          1.65,
+          -4.55
+        ],
+        "rotation": 0,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 27,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "dining-post-west-rear",
+        "label": "Dining canopy west rear support",
+        "kind": "volume",
+        "at": [
+          -4.25,
+          1.65,
+          -7.75
+        ],
+        "rotation": 0,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 28,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "dining-post-east-rear",
+        "label": "Dining canopy east rear support",
+        "kind": "volume",
+        "at": [
+          2.25,
+          1.65,
+          -7.75
+        ],
+        "rotation": 0,
+        "size": [
+          0.22,
+          3.3,
+          0.22
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 29,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [],
+        "id": "dining-canopy",
+        "label": "Covered dining canopy",
+        "kind": "roof",
+        "at": [
+          -1,
+          3.3,
+          -6.15
+        ],
+        "rotation": 0,
+        "size": [
+          6.8,
+          0.18,
+          3.4
+        ],
+        "material": "timber",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 30,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "entry-post-west",
+        "label": "Entry canopy west support",
+        "kind": "volume",
+        "at": [
+          -1.35,
+          1.65,
+          5.85
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          3.3,
+          0.2
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 31,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "mass",
+        "aliases": [],
+        "id": "entry-post-east",
+        "label": "Entry canopy east support",
+        "kind": "volume",
+        "at": [
+          1.35,
+          1.65,
+          5.85
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          3.3,
+          0.2
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 32,
+    "operation": {
+      "op": "add",
+      "element": {
+        "semanticType": "roof",
+        "aliases": [],
+        "id": "entry-canopy",
+        "label": "Covered entrance canopy",
+        "kind": "roof",
+        "at": [
+          0,
+          3.3,
+          5.35
+        ],
+        "rotation": 0,
+        "size": [
+          3,
+          0.18,
+          2.7
+        ],
+        "material": "limestone",
+        "roofForm": "flat",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool",
+        "label": "family-pool deck",
+        "kind": "plate",
+        "at": [
+          0,
+          0,
+          -8.75
+        ],
+        "rotation": 3.141593,
+        "size": [
+          9.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "assemblyKind": "rectangular-pool"
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-floor",
+        "label": "family-pool floor",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          0,
+          -1.4000000000000001,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          6.4,
+          0.2,
+          8.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-water",
+        "label": "family-pool water",
+        "kind": "water",
+        "parent": "family-pool",
+        "at": [
+          0,
+          0.05,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          6,
+          0.02,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-wall-z-minus",
+        "label": "family-pool wall-z-minus",
+        "kind": "wall",
+        "parent": "family-pool",
+        "at": [
+          0,
+          -0.5750000000000001,
+          1.3500000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          6.4,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-wall-x-minus",
+        "label": "family-pool wall-x-minus",
+        "kind": "wall",
+        "parent": "family-pool",
+        "at": [
+          -3.1,
+          -0.5750000000000001,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-coping-z-minus",
+        "label": "family-pool coping-z-minus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          0,
+          0.1,
+          1.1000000000000005
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-coping-x-minus",
+        "label": "family-pool coping-x-minus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          -3.3,
+          0.1,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-deck-x-minus",
+        "label": "family-pool deck-x-minus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          -4.1,
+          0,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          9.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-wall-z-plus",
+        "label": "family-pool wall-z-plus",
+        "kind": "wall",
+        "parent": "family-pool",
+        "at": [
+          0,
+          -0.5750000000000001,
+          9.55
+        ],
+        "rotation": 0,
+        "size": [
+          6.4,
+          1.4500000000000002,
+          0.2
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-wall-x-plus",
+        "label": "family-pool wall-x-plus",
+        "kind": "wall",
+        "parent": "family-pool",
+        "at": [
+          3.1,
+          -0.5750000000000001,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.2,
+          1.4500000000000002,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-coping-z-plus",
+        "label": "family-pool coping-z-plus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          0,
+          0.1,
+          9.8
+        ],
+        "rotation": 0,
+        "size": [
+          7.2,
+          0.1,
+          0.7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-coping-x-plus",
+        "label": "family-pool coping-x-plus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          3.3,
+          0.1,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          0.6,
+          0.1,
+          8
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-deck-x-plus",
+        "label": "family-pool deck-x-plus",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          4.1,
+          0,
+          5.45
+        ],
+        "rotation": 0,
+        "size": [
+          1,
+          0.3,
+          9.4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  },
+  {
+    "authoredIndex": 33,
+    "operation": {
+      "op": "add",
+      "element": {
+        "id": "family-pool-deck-far",
+        "label": "family-pool deck-far",
+        "kind": "plate",
+        "parent": "family-pool",
+        "at": [
+          0,
+          0,
+          10.9
+        ],
+        "rotation": 0,
+        "size": [
+          9.2,
+          0.3,
+          1.5
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  }
+]

@@ -1,0 +1,11 @@
+import type { ArchitecturalPlan } from './plan';
+/** Hand-authored compiler fixture, not AI or architectural quality evidence. */
+export function canonicalFixture():ArchitecturalPlan{
+ const placement=(relativeTo:string|null,side:ArchitecturalPlan['spaces'][number]['placement']['side'],gap=0)=>({relativeTo,side,alignment:'start' as const,gap});
+ const room=(id:string,width:number,depth:number,level:string,place:ReturnType<typeof placement>,outdoor=false)=>({id,mass:level==='upper'?'upper-mass':'base-mass',level,use:id,width,depth,height:level==='upper'?2.8:3.2,outdoor,placement:place});
+ return {version:'architectural-plan-1',id:'compiler-study',thesis:'Two levels, complete envelope and derived straight stair',orientation:0,site:{width:100,depth:100,elevation:0,grade:0,fall:'z'},
+ levels:[{id:'ground',above:null,rise:.2},{id:'upper',above:'ground',rise:3.2}],masses:[{id:'base-mass',role:'living and circulation'},{id:'upper-mass',role:'sleeping'}],
+ spaces:[room('hall',3,8,'ground',placement(null,'origin')),room('day-room',5,8,'ground',placement('hall','east')),room('arrival',3,2,'ground',placement('hall','south'),true),room('gallery',3,8,'upper',placement('hall','same')),room('sleep-room',5,8,'upper',placement('day-room','same')),room('rear-deck',5,3,'ground',placement('day-room','north'),true)],
+ portals:[{id:'front-door',host:{space:'hall',side:'south'},to:'arrival',alignment:'centre',width:1.1,height:2.3,mode:'door'}, {id:'day-door',host:{space:'hall',side:'east'},to:'day-room',alignment:'start',width:1,height:2.3,mode:'open'}, {id:'sleep-door',host:{space:'gallery',side:'east'},to:'sleep-room',alignment:'end',width:1,height:2.3,mode:'door'}, {id:'deck-door',host:{space:'day-room',side:'north'},to:'rear-deck',alignment:'centre',width:2.8,height:2.5,mode:'door'}],
+ stairs:[{id:'ascent',lower:'hall',upper:'gallery',width:1.1,run:4.8,landing:1.1,headroom:2.1}],arrival:'arrival',roofs:[{space:'gallery',form:'flat'},{space:'sleep-room',form:'flat'}],terraces:['rear-deck'],pools:[{id:'pool',placement:placement('day-room','east',4),width:5,depth:8,waterDepth:1.4,level:'ground'}],landscape:[{id:'lawn',kind:'lawn',placement:placement('hall','west',5),width:4,depth:4}],materials:{floor:'limestone',wall:'ivory',roof:'timber'},cameraViews:['Aerial','Arrival','Garden','Poolside']};
+}

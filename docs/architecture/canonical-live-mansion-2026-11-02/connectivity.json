@@ -1,0 +1,72 @@
+{
+  "at": "2026-11-02T12:56:53.825Z",
+  "pid": 7986,
+  "node": "v26.12.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cwd": "/Users/dylandevaux/Desktop/AIArchitect",
+  "executionContext": "unspecified",
+  "requestSha256": "d7e49158aaa400a19b56320f0fe2cb36b349018c70f7768756fd090ea710f89d",
+  "requestBytes": 34795,
+  "model": "gpt-5.6-terra",
+  "maxOutputTokens": 30000,
+  "generationRequests": 0,
+  "retries": 0,
+  "creationPermissionVerified": false,
+  "environment": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "http_proxy": false,
+    "https_proxy": false,
+    "all_proxy": false,
+    "NODE_USE_ENV_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "NODE_OPTIONS": false,
+    "OPENAI_BASE_URL": false
+  },
+  "dns": {
+    "addresses": [
+      {
+        "address": "172.66.0.243",
+        "family": 4
+      },
+      {
+        "address": "162.159.140.245",
+        "family": 4
+      },
+      {
+        "address": "2a06:98c1:58::f3",
+        "family": 6
+      },
+      {
+        "address": "2606:4700:7::f3",
+        "family": 6
+      }
+    ],
+    "ok": true
+  },
+  "tls": [
+    {
+      "family": 4,
+      "ok": true,
+      "protocol": "TLSv1.3"
+    },
+    {
+      "family": 6,
+      "ok": false,
+      "error": {
+        "name": "Error",
+        "code": "EHOSTUNREACH",
+        "syscall": "connect"
+      }
+    }
+  ],
+  "ok": false,
+  "failureStage": "model-access",
+  "error": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION"
+  }
+}

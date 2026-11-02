@@ -1,0 +1,368 @@
+{
+  "status": "proposed",
+  "intent": {
+    "version": "semantic-pilot-1",
+    "id": "family",
+    "thesis": "Compact two-storey family arrangement: angled living and main bedroom, unequal study and second bedroom wing, shared stair and connected garden.",
+    "frame": {
+      "origin": [
+        14,
+        -8
+      ],
+      "yaw": -0.32
+    },
+    "levels": [
+      {
+        "id": "ground",
+        "top": 0.2
+      },
+      {
+        "id": "upper",
+        "top": 3.4000000000000004
+      }
+    ],
+    "masses": [
+      {
+        "id": "base-mass",
+        "role": "angled family base"
+      },
+      {
+        "id": "upper-mass",
+        "role": "private upper storey"
+      }
+    ],
+    "spaces": [
+      {
+        "id": "arrival",
+        "polygon": [
+          [
+            0,
+            -3
+          ],
+          [
+            3,
+            -3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "mass": "base-mass",
+        "level": "ground",
+        "height": 3.2,
+        "roof": false,
+        "outdoor": true,
+        "material": "ivory",
+        "use": "arrival"
+      },
+      {
+        "id": "entry-gallery",
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            0,
+            8
+          ]
+        ],
+        "mass": "base-mass",
+        "level": "ground",
+        "height": 3.2,
+        "roof": false,
+        "outdoor": false,
+        "material": "ivory",
+        "use": "entry-gallery"
+      },
+      {
+        "id": "upper-gallery",
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            0,
+            8
+          ]
+        ],
+        "mass": "upper-mass",
+        "level": "upper",
+        "height": 2.9,
+        "roof": true,
+        "outdoor": false,
+        "material": "ivory",
+        "use": "upper-gallery"
+      },
+      {
+        "id": "family-living",
+        "polygon": [
+          [
+            3,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            3,
+            8
+          ]
+        ],
+        "mass": "base-mass",
+        "level": "ground",
+        "height": 3.2,
+        "roof": false,
+        "outdoor": false,
+        "material": "ivory",
+        "use": "family living and kitchen"
+      },
+      {
+        "id": "family-sleeping",
+        "polygon": [
+          [
+            3,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            3,
+            8
+          ]
+        ],
+        "mass": "upper-mass",
+        "level": "upper",
+        "height": 2.9,
+        "roof": true,
+        "outdoor": false,
+        "material": "timber",
+        "use": "principal family bedroom; bathroom fit-out deferred"
+      },
+      {
+        "id": "garden",
+        "polygon": [
+          [
+            3,
+            8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            9,
+            11
+          ],
+          [
+            3,
+            11
+          ]
+        ],
+        "mass": "base-mass",
+        "level": "ground",
+        "height": 3.2,
+        "roof": false,
+        "outdoor": true,
+        "material": "ivory",
+        "use": "garden"
+      },
+      {
+        "id": "family-study",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "family study and guest allocation",
+        "polygon": [
+          [
+            -4,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            -4,
+            8
+          ]
+        ],
+        "height": 3.2,
+        "roof": false,
+        "outdoor": false,
+        "material": "ivory"
+      },
+      {
+        "id": "second-bedroom",
+        "mass": "upper-mass",
+        "level": "upper",
+        "use": "second family bedroom",
+        "polygon": [
+          [
+            -4,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            -4,
+            8
+          ]
+        ],
+        "height": 2.9,
+        "roof": true,
+        "outdoor": false,
+        "material": "ivory"
+      }
+    ],
+    "portals": [
+      {
+        "id": "living-link",
+        "host": {
+          "space": "entry-gallery",
+          "edge": 1
+        },
+        "to": "family-living",
+        "offset": 0.85,
+        "width": 1,
+        "height": 2.2,
+        "mode": "open"
+      },
+      {
+        "id": "sleep-door",
+        "host": {
+          "space": "upper-gallery",
+          "edge": 1
+        },
+        "to": "family-sleeping",
+        "offset": 6.9,
+        "width": 1,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "garden-door",
+        "host": {
+          "space": "family-living",
+          "edge": 2
+        },
+        "to": "garden",
+        "offset": 3.0,
+        "width": 2.8,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "front-door",
+        "host": {
+          "space": "entry-gallery",
+          "edge": 0
+        },
+        "to": "arrival",
+        "offset": 1.5,
+        "width": 1.2,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "study-door",
+        "host": {
+          "space": "entry-gallery",
+          "edge": 3
+        },
+        "to": "family-study",
+        "offset": 1.1,
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "second-bedroom-door",
+        "host": {
+          "space": "upper-gallery",
+          "edge": 3
+        },
+        "to": "second-bedroom",
+        "offset": 1.1,
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      }
+    ],
+    "stairs": [
+      {
+        "id": "main-stair",
+        "lower": "entry-gallery",
+        "upper": "upper-gallery",
+        "start": [
+          1.5,
+          1.3
+        ],
+        "width": 1.1,
+        "run": 4.8,
+        "risers": 18,
+        "landing": 1.1,
+        "headroom": 2.1,
+        "bypass": "right"
+      }
+    ],
+    "arrival": "arrival",
+    "requiredAccess": [
+      "arrival",
+      "entry-gallery",
+      "upper-gallery",
+      "family-living",
+      "family-sleeping",
+      "garden",
+      "family-study",
+      "second-bedroom"
+    ]
+  },
+  "limitations": [
+    "Mock planning response, not live AI evidence.",
+    "Envelope/spatial study only: bathrooms, services, guards, facade windows, landscape and fit-out unresolved.",
+    "Architectural sophistication and completed home quality are not established."
+  ]
+}

@@ -1,3 +1,4 @@
+import { canonicalGenerationRequired } from '@/lib/villa/canonical/authority';
 import { listDesignLessonSummaries } from '@/lib/villa/design-learning-store';
 import { learningContext } from '@/lib/villa/design-learning';
 import { randomUUID } from 'node:crypto';
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   try { input = villaRequestSchema.safeParse(await request.json()); }
   catch { return json({ error: 'Invalid JSON request.', providerCalls: 0 }, 400); }
   if (!input.success) return json({ error: 'Enter a brief and a supported villa configuration.', findings: input.error.issues, providerCalls: 0 }, 400);
+  if (canonicalGenerationRequired(input.data.mode)) return json({error:'New houses use /api/ai/scene in the direct-scene workspace.',code:'canonical_generation_required',providerCalls:0},409);
   if (input.data.mode === 'edit' && input.data.current && 'version' in input.data.current) {
     try { validateCompositionPreview(input.data.current); }
     catch(error) { return json({error:'Current composition is invalid. No provider call was made.',findings:compositionFindings(error),providerCalls:0},400); }

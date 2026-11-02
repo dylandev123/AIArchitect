@@ -1,0 +1,49 @@
+/** Explicitly authorized, one-shot frozen request replay through the real Generate handler. */
+import {test,vi,expect} from 'vitest';
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {loadEnvConfig} from '@next/env';
+vi.mock('@/lib/villa/scene/knowledgeContext',async()=>{
+ const {readFileSync}=await import('node:fs');
+ const frozen=JSON.parse(readFileSync('docs/architecture/canonical-live-mansion-2026-11-02/preflight.json','utf8'));
+ return {architecturalRequestContext:async()=>frozen.context};
+});
+vi.mock('@/lib/ai/usage/store',()=>({appendUsageRecord:async(record:unknown)=>{
+ writeFileSync('docs/architecture/canonical-live-mansion-2026-11-02/usage-record.json',JSON.stringify(record,null,2),{flag:'wx',mode:0o600});
+}}));
+test.skipIf(process.env.AUTHORIZED_FROZEN_MANSION!=='1')('authorized single frozen canonical planning call',async()=>{
+ process.env.NODE_ENV='development';
+ loadEnvConfig(process.cwd(),true);
+ const dir='docs/architecture/canonical-live-mansion-2026-11-02';
+ const save=(name:string,value:unknown)=>writeFileSync(`${dir}/${name}`,typeof value==='string'?value:JSON.stringify(value,null,2),{flag:'wx',mode:0o600});
+ expect(existsSync(`${dir}/call-started.json`)).toBe(false);
+ const wire=readFileSync(`${dir}/provider-request.exact.json`,'utf8');
+ expect(createHash('sha256').update(wire).digest('hex')).toBe('d7e49158aaa400a19b56320f0fe2cb36b349018c70f7768756fd090ea710f89d');
+ // @ts-expect-error Existing GET-only helper.
+ const {semanticTransportPreflight}=await import('../../../../scripts/semantic-transport-preflight.mjs');
+ const connectivity=await semanticTransportPreflight(JSON.parse(wire),wire);
+ save('frozen-live-connectivity-2.json',connectivity);expect(connectivity.ok).toBe(true);
+ const nativeFetch=globalThis.fetch;let calls=0;
+ globalThis.fetch=async(url,init)=>{
+  expect(String(url instanceof Request?url.url:url)).toBe('https://api.openai.com/v1/responses');
+  expect(String(init?.body)).toBe(wire);
+  expect(++calls).toBe(1);
+  save('call-started.json',{startedAt:new Date().toISOString(),maxCalls:1,maxRetries:0,frozenContext:true,requestSha256:createHash('sha256').update(wire).digest('hex')});
+  try{
+   const response=await nativeFetch(url,{...init,body:wire,redirect:'error'});
+   save('provider-response.exact.json',await response.clone().text());
+   save('provider-http.json',{status:response.status,requestId:response.headers.get('x-request-id')});
+   return response;
+  }catch(error){save('provider-transport-error.json',{name:error instanceof Error?error.name:'unknown',noResubmission:true});throw error;}
+ };
+ try{
+  const {POST}=await import('@/app/api/ai/scene/route');
+  const input=JSON.parse(readFileSync(`${dir}/request.json`,'utf8'));
+  const response=await POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify(input)}));
+  const result=await response.json();save('route-response.json',result);
+  if(result.scene)save('scene.UNAPPROVED.json',result.scene);
+  if(result.architecturalPlan)save('canonical-plan.json',result.architecturalPlan);
+  save('call-result.json',{status:response.status,providerCalls:calls,error:result.error,dbQueries:0,frozenContext:true});
+  console.log(JSON.stringify({status:response.status,providerCalls:calls,error:result.error,elements:result.scene?.elements.length}));
+ }finally{globalThis.fetch=nativeFetch;}
+},240000);

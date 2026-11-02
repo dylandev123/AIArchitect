@@ -5,6 +5,16 @@ import { resolveSceneResult, SceneConstructionError } from './terra';
 const e=(id:string,kind:string,at:number[],size:number[],extra={})=>elementSchema.parse({id,label:id,kind,at,size,...extra});
 const scene=(elements:ArchitecturalScene['elements']):ArchitecturalScene=>({version:'architectural-scene-1',name:'spatial contract regression',elements});
 describe('shared construction coordinates',()=>{
+ it('reviews the proposal relationship budget without masking a late contradiction',()=>{
+  const s=scene([e('lower','plate',[0,0,0],[4,.2,4]),e('upper','plate',[0,3,0],[4,.2,4])]);
+  const valid={subject:'upper',target:'lower',relation:'above',clearance:2,reason:'selected level separation'};
+  s.architecturalPlan={spatialRelationships:Array.from({length:80},()=>({...valid}))};
+  expect(spatialCoordinationFindings(s)).toEqual([]);
+  (s.architecturalPlan as {spatialRelationships:unknown[]}).spatialRelationships[79]={...valid,clearance:4};
+  expect(spatialCoordinationFindings(s).map(f=>f.code)).toEqual(['spatial-intent-mismatch']);
+  (s.architecturalPlan as {spatialRelationships:unknown[]}).spatialRelationships.push(valid);
+  expect(spatialCoordinationFindings(s).map(f=>f.code)).toEqual(['spatial-contract']);
+ });
  it('rejects a terrace cutting water and identifies both operations, without repairing the candidate',()=>{
   const elements=[e('water','water',[0,.1,0],[10,.05,4]),e('deck','plate',[0,.1,0],[12,.2,6])];
   expect(waterObstructions(scene(elements))).toHaveLength(1);

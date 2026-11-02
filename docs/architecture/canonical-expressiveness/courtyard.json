@@ -1,0 +1,3200 @@
+{
+  "compiler": "architectural-plan-1.1",
+  "intent": {
+    "version": "semantic-pilot-1",
+    "id": "courtyard-study",
+    "thesis": "Developer asymmetric courtyard study: unequal wings around an open garden, separate hip and flat roof sections, shaded veranda.",
+    "frame": {
+      "origin": [
+        -7,
+        -5
+      ],
+      "yaw": 0
+    },
+    "levels": [
+      {
+        "id": "ground",
+        "top": 0.2
+      }
+    ],
+    "masses": [
+      {
+        "id": "base-mass",
+        "role": "living and circulation"
+      },
+      {
+        "id": "upper-mass",
+        "role": "sleeping"
+      }
+    ],
+    "spaces": [
+      {
+        "id": "gallery",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "gallery",
+        "width": 14,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": false,
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "start",
+          "gap": 0
+        },
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            14,
+            4
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "roof": true
+      },
+      {
+        "id": "west-wing",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "west-wing",
+        "width": 4,
+        "depth": 9,
+        "height": 3,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "gallery",
+          "side": "north",
+          "alignment": "start",
+          "gap": 0
+        },
+        "material": "timber",
+        "polygon": [
+          [
+            0,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            13
+          ],
+          [
+            0,
+            13
+          ]
+        ],
+        "roof": true
+      },
+      {
+        "id": "east-wing",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "east-wing",
+        "width": 5,
+        "depth": 7,
+        "height": 3.2,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "gallery",
+          "side": "north",
+          "alignment": "end",
+          "gap": 0
+        },
+        "material": "limestone",
+        "polygon": [
+          [
+            9,
+            4
+          ],
+          [
+            14,
+            4
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            9,
+            11
+          ]
+        ],
+        "roof": true
+      },
+      {
+        "id": "arrival",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "arrival",
+        "width": 4,
+        "depth": 3,
+        "height": 3.2,
+        "outdoor": true,
+        "placement": {
+          "relativeTo": "gallery",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        },
+        "polygon": [
+          [
+            5,
+            -3
+          ],
+          [
+            9,
+            -3
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "roof": false
+      },
+      {
+        "id": "court",
+        "mass": "base-mass",
+        "level": "ground",
+        "use": "court",
+        "width": 5,
+        "depth": 7,
+        "height": 2.7,
+        "outdoor": true,
+        "placement": {
+          "relativeTo": "west-wing",
+          "side": "east",
+          "alignment": "start",
+          "gap": 0
+        },
+        "polygon": [
+          [
+            4,
+            4
+          ],
+          [
+            9,
+            4
+          ],
+          [
+            9,
+            11
+          ],
+          [
+            4,
+            11
+          ]
+        ],
+        "roof": false
+      }
+    ],
+    "portals": [
+      {
+        "id": "court-entry",
+        "host": {
+          "space": "gallery",
+          "edge": 0
+        },
+        "to": "arrival",
+        "alignment": "centre",
+        "width": 2.5,
+        "height": 2.8,
+        "mode": "door",
+        "sill": 0,
+        "offset": 7
+      },
+      {
+        "id": "west-door",
+        "host": {
+          "space": "gallery",
+          "edge": 2
+        },
+        "to": "west-wing",
+        "alignment": "end",
+        "width": 1.2,
+        "height": 2.5,
+        "mode": "door",
+        "sill": 0,
+        "offset": 13.15
+      },
+      {
+        "id": "east-door",
+        "host": {
+          "space": "gallery",
+          "edge": 2
+        },
+        "to": "east-wing",
+        "alignment": "start",
+        "width": 1.5,
+        "height": 2.5,
+        "mode": "door",
+        "sill": 0,
+        "offset": 1
+      },
+      {
+        "id": "west-court",
+        "host": {
+          "space": "west-wing",
+          "edge": 1
+        },
+        "to": "court",
+        "alignment": "centre",
+        "width": 3,
+        "height": 2.5,
+        "mode": "door",
+        "sill": 0,
+        "offset": 4.5
+      },
+      {
+        "id": "east-court",
+        "host": {
+          "space": "east-wing",
+          "edge": 3
+        },
+        "to": "court",
+        "alignment": "centre",
+        "width": 3,
+        "height": 2.5,
+        "mode": "door",
+        "sill": 0,
+        "offset": 3.5
+      },
+      {
+        "id": "gallery-court",
+        "host": {
+          "space": "gallery",
+          "edge": 2
+        },
+        "to": "court",
+        "alignment": "centre",
+        "width": 3,
+        "height": 2.5,
+        "mode": "door",
+        "sill": 0,
+        "offset": 7
+      },
+      {
+        "id": "west-window",
+        "host": {
+          "space": "west-wing",
+          "edge": 3
+        },
+        "to": "exterior",
+        "alignment": "centre",
+        "width": 3,
+        "height": 1.6,
+        "mode": "window",
+        "sill": 0.8,
+        "offset": 4.5
+      }
+    ],
+    "stairs": [],
+    "arrival": "arrival",
+    "requiredAccess": [
+      "gallery",
+      "west-wing",
+      "east-wing"
+    ]
+  },
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "courtyard-study",
+    "elements": [
+      {
+        "id": "gallery-floor",
+        "label": "gallery-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          0,
+          0.1,
+          -3
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "gallery-roof",
+        "label": "gallery-roof",
+        "kind": "roof",
+        "at": [
+          0,
+          4.75,
+          -3
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          1.5,
+          4
+        ],
+        "material": "timber",
+        "roofForm": "hip",
+        "overhang": 0.35,
+        "panels": 4
+      },
+      {
+        "id": "west-wing-floor",
+        "label": "west-wing-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5,
+          0.1,
+          3.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "west-wing-roof",
+        "label": "west-wing-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5,
+          3.3000000000000007,
+          3.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          9
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "east-wing-floor",
+        "label": "east-wing-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          4.5,
+          0.1,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-wing-roof",
+        "label": "east-wing-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          4.5,
+          3.5100000000000007,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.22,
+          7
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "arrival-floor",
+        "label": "arrival-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          0,
+          0.1,
+          -6.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "court-floor",
+        "label": "court-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -0.5,
+          0.1,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          7
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e0-s0-wall",
+        "label": "gallery-e0-s0",
+        "kind": "wall",
+        "at": [
+          -4.5,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "court-entry",
+        "label": "court-entry",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.5999999999999999,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          2.5,
+          2.8,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e0-s1-wall",
+        "label": "gallery-e0-s1",
+        "kind": "wall",
+        "at": [
+          0,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 2.5,
+          "height": 2.8,
+          "glazed": false
+        }
+      },
+      {
+        "id": "gallery-e0-s2-wall",
+        "label": "gallery-e0-s2",
+        "kind": "wall",
+        "at": [
+          4.5,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e1-wall",
+        "label": "gallery-e1",
+        "kind": "wall",
+        "at": [
+          7,
+          2.1,
+          -3
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-door",
+        "label": "east-door",
+        "kind": "entrance",
+        "at": [
+          6,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.5,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e2-s0-wall",
+        "label": "gallery-e2-s0",
+        "kind": "wall",
+        "at": [
+          5.1875,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3.625,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -0.8125,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "gallery-e2-s1-wall",
+        "label": "gallery-e2-s1",
+        "kind": "wall",
+        "at": [
+          2.6875,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.375,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "gallery-court",
+        "label": "gallery-court",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e2-s2-wall",
+        "label": "gallery-e2-s2",
+        "kind": "wall",
+        "at": [
+          -0.5,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -0.5,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "gallery-e2-s3-wall",
+        "label": "gallery-e2-s3",
+        "kind": "wall",
+        "at": [
+          -3.2625,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          0.5250000000000004,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-door",
+        "label": "west-door",
+        "kind": "entrance",
+        "at": [
+          -6.15,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.2,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "gallery-e2-s4-wall",
+        "label": "gallery-e2-s4",
+        "kind": "wall",
+        "at": [
+          -5.2625,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3.4749999999999996,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0.8875000000000002,
+          "sill": 0,
+          "width": 1.2,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "gallery-e3-wall",
+        "label": "gallery-e3",
+        "kind": "wall",
+        "at": [
+          -7,
+          2.1,
+          -3
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-court",
+        "label": "west-court",
+        "kind": "entrance",
+        "at": [
+          -3,
+          1.45,
+          3.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "west-wing-e1-s0-wall",
+        "label": "west-wing-e1-s0",
+        "kind": "wall",
+        "at": [
+          -3,
+          1.7,
+          2.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          7,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 1,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "west-wing-e1-s1-wall",
+        "label": "west-wing-e1-s1",
+        "kind": "wall",
+        "at": [
+          -3,
+          1.7,
+          7
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          2,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "west-wing-e2-wall",
+        "label": "west-wing-e2",
+        "kind": "wall",
+        "at": [
+          -5,
+          1.7,
+          8
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          4,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "west-wing-e3-wall",
+        "label": "west-wing-e3",
+        "kind": "wall",
+        "at": [
+          -7,
+          1.7,
+          3.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          9,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.8,
+          "width": 3,
+          "height": 1.6,
+          "glazed": true
+        }
+      },
+      {
+        "id": "east-wing-e1-wall",
+        "label": "east-wing-e1",
+        "kind": "wall",
+        "at": [
+          7,
+          1.8,
+          2.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          7,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-wing-e2-wall",
+        "label": "east-wing-e2",
+        "kind": "wall",
+        "at": [
+          4.5,
+          1.8,
+          6
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          5,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "east-court",
+        "label": "east-court",
+        "kind": "entrance",
+        "at": [
+          2,
+          1.45,
+          2.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "east-wing-e3-wall",
+        "label": "east-wing-e3",
+        "kind": "wall",
+        "at": [
+          2,
+          1.8,
+          2.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      },
+      {
+        "id": "garden-bed",
+        "label": "garden-bed",
+        "kind": "plate",
+        "at": [
+          -0.5,
+          -0.03,
+          9.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.1,
+          3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    ],
+    "terrain": {
+      "width": 120,
+      "depth": 120,
+      "elevation": 0,
+      "grade": 0,
+      "fall": "z"
+    },
+    "architecturalPlan": {
+      "version": "architectural-plan-1",
+      "id": "courtyard-study",
+      "thesis": "Developer asymmetric courtyard study: unequal wings around an open garden, separate hip and flat roof sections, shaded veranda.",
+      "orientation": 0,
+      "site": {
+        "width": 120,
+        "depth": 120,
+        "elevation": 0,
+        "grade": 0,
+        "fall": "z"
+      },
+      "levels": [
+        {
+          "id": "ground",
+          "above": null,
+          "rise": 0.2
+        }
+      ],
+      "masses": [
+        {
+          "id": "base-mass",
+          "role": "living and circulation"
+        },
+        {
+          "id": "upper-mass",
+          "role": "sleeping"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "gallery",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "gallery",
+          "width": 14,
+          "depth": 4,
+          "height": 3.8,
+          "outdoor": false,
+          "placement": {
+            "relativeTo": null,
+            "side": "origin",
+            "alignment": "start",
+            "gap": 0
+          }
+        },
+        {
+          "id": "west-wing",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "west-wing",
+          "width": 4,
+          "depth": 9,
+          "height": 3,
+          "outdoor": false,
+          "facadeMaterial": "timber",
+          "placement": {
+            "relativeTo": "gallery",
+            "side": "north",
+            "alignment": "start",
+            "gap": 0
+          }
+        },
+        {
+          "id": "east-wing",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "east-wing",
+          "width": 5,
+          "depth": 7,
+          "height": 3.2,
+          "outdoor": false,
+          "facadeMaterial": "limestone",
+          "placement": {
+            "relativeTo": "gallery",
+            "side": "north",
+            "alignment": "end",
+            "gap": 0
+          }
+        },
+        {
+          "id": "arrival",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "arrival",
+          "width": 4,
+          "depth": 3,
+          "height": 3.2,
+          "outdoor": true,
+          "placement": {
+            "relativeTo": "gallery",
+            "side": "south",
+            "alignment": "centre",
+            "gap": 0
+          }
+        },
+        {
+          "id": "court",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "court",
+          "width": 5,
+          "depth": 7,
+          "height": 2.7,
+          "outdoor": true,
+          "placement": {
+            "relativeTo": "west-wing",
+            "side": "east",
+            "alignment": "start",
+            "gap": 0
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "court-entry",
+          "host": {
+            "space": "gallery",
+            "side": "south"
+          },
+          "to": "arrival",
+          "alignment": "centre",
+          "width": 2.5,
+          "height": 2.8,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "west-door",
+          "host": {
+            "space": "gallery",
+            "side": "north"
+          },
+          "to": "west-wing",
+          "alignment": "end",
+          "width": 1.2,
+          "height": 2.5,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "east-door",
+          "host": {
+            "space": "gallery",
+            "side": "north"
+          },
+          "to": "east-wing",
+          "alignment": "start",
+          "width": 1.5,
+          "height": 2.5,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "west-court",
+          "host": {
+            "space": "west-wing",
+            "side": "east"
+          },
+          "to": "court",
+          "alignment": "centre",
+          "width": 3,
+          "height": 2.5,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "east-court",
+          "host": {
+            "space": "east-wing",
+            "side": "west"
+          },
+          "to": "court",
+          "alignment": "centre",
+          "width": 3,
+          "height": 2.5,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "gallery-court",
+          "host": {
+            "space": "gallery",
+            "side": "north"
+          },
+          "to": "court",
+          "alignment": "centre",
+          "width": 3,
+          "height": 2.5,
+          "mode": "door",
+          "sill": 0
+        },
+        {
+          "id": "west-window",
+          "host": {
+            "space": "west-wing",
+            "side": "west"
+          },
+          "to": "exterior",
+          "alignment": "centre",
+          "width": 3,
+          "height": 1.6,
+          "mode": "window",
+          "sill": 0.8
+        }
+      ],
+      "stairs": [],
+      "arrival": "arrival",
+      "roofs": [
+        {
+          "space": "gallery",
+          "form": "hip",
+          "rise": 1.5,
+          "overhang": 0.35
+        },
+        {
+          "space": "west-wing",
+          "form": "flat",
+          "rise": 0.2
+        },
+        {
+          "space": "east-wing",
+          "form": "flat",
+          "rise": 0.22
+        }
+      ],
+      "terraces": [
+        "court"
+      ],
+      "pools": [],
+      "landscape": [
+        {
+          "id": "garden-bed",
+          "kind": "bed",
+          "placement": {
+            "relativeTo": "court",
+            "side": "north",
+            "alignment": "start",
+            "gap": 2
+          },
+          "width": 5,
+          "depth": 3
+        }
+      ],
+      "materials": {
+        "floor": "limestone",
+        "wall": "ivory",
+        "roof": "timber"
+      },
+      "cameraViews": [
+        "Aerial",
+        "Arrival",
+        "Garden",
+        "Poolside"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-floor",
+        "label": "gallery-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          0,
+          0.1,
+          -3
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          0.2,
+          4
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-roof",
+        "label": "gallery-roof",
+        "kind": "roof",
+        "at": [
+          0,
+          4.75,
+          -3
+        ],
+        "rotation": 0,
+        "size": [
+          14,
+          1.5,
+          4
+        ],
+        "material": "timber",
+        "roofForm": "hip",
+        "overhang": 0.35,
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-floor",
+        "label": "west-wing-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5,
+          0.1,
+          3.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          9
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-roof",
+        "label": "west-wing-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5,
+          3.3000000000000007,
+          3.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          9
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-wing-floor",
+        "label": "east-wing-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          4.5,
+          0.1,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-wing-roof",
+        "label": "east-wing-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          4.5,
+          3.5100000000000007,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.22,
+          7
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "arrival-floor",
+        "label": "arrival-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          0,
+          0.1,
+          -6.5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          0.2,
+          3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "court-floor",
+        "label": "court-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -0.5,
+          0.1,
+          2.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.2,
+          7
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e0-s0-wall",
+        "label": "gallery-e0-s0",
+        "kind": "wall",
+        "at": [
+          -4.5,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "court-entry",
+        "label": "court-entry",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.5999999999999999,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          2.5,
+          2.8,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e0-s1-wall",
+        "label": "gallery-e0-s1",
+        "kind": "wall",
+        "at": [
+          0,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 2.5,
+          "height": 2.8,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e0-s2-wall",
+        "label": "gallery-e0-s2",
+        "kind": "wall",
+        "at": [
+          4.5,
+          2.1,
+          -5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e1-wall",
+        "label": "gallery-e1",
+        "kind": "wall",
+        "at": [
+          7,
+          2.1,
+          -3
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-door",
+        "label": "east-door",
+        "kind": "entrance",
+        "at": [
+          6,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.5,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e2-s0-wall",
+        "label": "gallery-e2-s0",
+        "kind": "wall",
+        "at": [
+          5.1875,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3.625,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -0.8125,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e2-s1-wall",
+        "label": "gallery-e2-s1",
+        "kind": "wall",
+        "at": [
+          2.6875,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.375,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-court",
+        "label": "gallery-court",
+        "kind": "entrance",
+        "at": [
+          0,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e2-s2-wall",
+        "label": "gallery-e2-s2",
+        "kind": "wall",
+        "at": [
+          -0.5,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          5,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -0.5,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e2-s3-wall",
+        "label": "gallery-e2-s3",
+        "kind": "wall",
+        "at": [
+          -3.2625,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          0.5250000000000004,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-door",
+        "label": "west-door",
+        "kind": "entrance",
+        "at": [
+          -6.15,
+          1.45,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          1.2,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e2-s4-wall",
+        "label": "gallery-e2-s4",
+        "kind": "wall",
+        "at": [
+          -5.2625,
+          2.1,
+          -1
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          3.4749999999999996,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0.8875000000000002,
+          "sill": 0,
+          "width": 1.2,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "gallery-e3-wall",
+        "label": "gallery-e3",
+        "kind": "wall",
+        "at": [
+          -7,
+          2.1,
+          -3
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          4,
+          3.8,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-court",
+        "label": "west-court",
+        "kind": "entrance",
+        "at": [
+          -3,
+          1.45,
+          3.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-e1-s0-wall",
+        "label": "west-wing-e1-s0",
+        "kind": "wall",
+        "at": [
+          -3,
+          1.7,
+          2.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          7,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 1,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-e1-s1-wall",
+        "label": "west-wing-e1-s1",
+        "kind": "wall",
+        "at": [
+          -3,
+          1.7,
+          7
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          2,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-e2-wall",
+        "label": "west-wing-e2",
+        "kind": "wall",
+        "at": [
+          -5,
+          1.7,
+          8
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          4,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "west-wing-e3-wall",
+        "label": "west-wing-e3",
+        "kind": "wall",
+        "at": [
+          -7,
+          1.7,
+          3.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          9,
+          3,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0.8,
+          "width": 3,
+          "height": 1.6,
+          "glazed": true
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-wing-e1-wall",
+        "label": "east-wing-e1",
+        "kind": "wall",
+        "at": [
+          7,
+          1.8,
+          2.5
+        ],
+        "rotation": -1.5707963267948966,
+        "size": [
+          7,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-wing-e2-wall",
+        "label": "east-wing-e2",
+        "kind": "wall",
+        "at": [
+          4.5,
+          1.8,
+          6
+        ],
+        "rotation": -3.141592653589793,
+        "size": [
+          5,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-court",
+        "label": "east-court",
+        "kind": "entrance",
+        "at": [
+          2,
+          1.45,
+          2.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          3,
+          2.5,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "east-wing-e3-wall",
+        "label": "east-wing-e3",
+        "kind": "wall",
+        "at": [
+          2,
+          1.8,
+          2.5
+        ],
+        "rotation": 1.5707963267948966,
+        "size": [
+          7,
+          3.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 3,
+          "height": 2.5,
+          "glazed": false
+        }
+      }
+    },
+    {
+      "op": "add",
+      "element": {
+        "id": "garden-bed",
+        "label": "garden-bed",
+        "kind": "plate",
+        "at": [
+          -0.5,
+          -0.03,
+          9.5
+        ],
+        "rotation": 0,
+        "size": [
+          5,
+          0.1,
+          3
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    }
+  ],
+  "provenance": {
+    "gallery-floor": {
+      "sources": [
+        "gallery",
+        "ground"
+      ],
+      "rule": "polygon and level → editable profile slab"
+    },
+    "gallery-roof": {
+      "sources": [
+        "gallery",
+        "ground"
+      ],
+      "rule": "selected roof form/rise/overhang → existing editable roof builder; underside at wall top"
+    },
+    "west-wing-floor": {
+      "sources": [
+        "west-wing",
+        "ground"
+      ],
+      "rule": "polygon and level → editable profile slab"
+    },
+    "west-wing-roof": {
+      "sources": [
+        "west-wing",
+        "ground"
+      ],
+      "rule": "selected roof form/rise/overhang → existing editable roof builder; underside at wall top"
+    },
+    "east-wing-floor": {
+      "sources": [
+        "east-wing",
+        "ground"
+      ],
+      "rule": "polygon and level → editable profile slab"
+    },
+    "east-wing-roof": {
+      "sources": [
+        "east-wing",
+        "ground"
+      ],
+      "rule": "selected roof form/rise/overhang → existing editable roof builder; underside at wall top"
+    },
+    "arrival-floor": {
+      "sources": [
+        "arrival",
+        "ground"
+      ],
+      "rule": "polygon and level → editable profile slab"
+    },
+    "court-floor": {
+      "sources": [
+        "court",
+        "ground"
+      ],
+      "rule": "polygon and level → editable profile slab"
+    },
+    "gallery-e0-s0-wall": {
+      "sources": [
+        "gallery-e0-s0",
+        "gallery",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "court-entry": {
+      "sources": [
+        "court-entry",
+        "gallery-e0-s1",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "gallery-e0-s1-wall": {
+      "sources": [
+        "gallery-e0-s1",
+        "gallery",
+        "arrival",
+        "ground",
+        "court-entry"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-e0-s2-wall": {
+      "sources": [
+        "gallery-e0-s2",
+        "gallery",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-e1-wall": {
+      "sources": [
+        "gallery-e1",
+        "gallery",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "east-door": {
+      "sources": [
+        "east-door",
+        "gallery-e2-s0",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "gallery-e2-s0-wall": {
+      "sources": [
+        "gallery-e2-s0",
+        "gallery",
+        "east-wing",
+        "ground",
+        "east-door"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-e2-s1-wall": {
+      "sources": [
+        "gallery-e2-s1",
+        "gallery",
+        "east-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-court": {
+      "sources": [
+        "gallery-court",
+        "gallery-e2-s2",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "gallery-e2-s2-wall": {
+      "sources": [
+        "gallery-e2-s2",
+        "gallery",
+        "court",
+        "ground",
+        "gallery-court"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-e2-s3-wall": {
+      "sources": [
+        "gallery-e2-s3",
+        "gallery",
+        "west-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "west-door": {
+      "sources": [
+        "west-door",
+        "gallery-e2-s4",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "gallery-e2-s4-wall": {
+      "sources": [
+        "gallery-e2-s4",
+        "gallery",
+        "west-wing",
+        "ground",
+        "west-door"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "gallery-e3-wall": {
+      "sources": [
+        "gallery-e3",
+        "gallery",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "west-court": {
+      "sources": [
+        "west-court",
+        "west-wing-e1-s0",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "west-wing-e1-s0-wall": {
+      "sources": [
+        "west-wing-e1-s0",
+        "west-wing",
+        "court",
+        "ground",
+        "west-court"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "west-wing-e1-s1-wall": {
+      "sources": [
+        "west-wing-e1-s1",
+        "west-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "west-wing-e2-wall": {
+      "sources": [
+        "west-wing-e2",
+        "west-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "west-wing-e3-wall": {
+      "sources": [
+        "west-wing-e3",
+        "west-wing",
+        "ground",
+        "west-window"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "east-wing-e1-wall": {
+      "sources": [
+        "east-wing-e1",
+        "east-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "east-wing-e2-wall": {
+      "sources": [
+        "east-wing-e2",
+        "east-wing",
+        "ground"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "east-court": {
+      "sources": [
+        "east-court",
+        "east-wing-e3",
+        "ground"
+      ],
+      "rule": "single host opening → matching door transform"
+    },
+    "east-wing-e3-wall": {
+      "sources": [
+        "east-wing-e3",
+        "east-wing",
+        "court",
+        "ground",
+        "east-court"
+      ],
+      "rule": "one shared boundary → one wall"
+    },
+    "garden-bed": {
+      "sources": [
+        "garden-bed"
+      ],
+      "rule": "site intent → bounded site geometry"
+    }
+  },
+  "boundaries": [
+    {
+      "id": "gallery-e0-s0",
+      "a": [
+        0,
+        0
+      ],
+      "b": [
+        5,
+        0
+      ],
+      "spaces": [
+        "gallery"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e0-s1",
+      "a": [
+        5,
+        0
+      ],
+      "b": [
+        9,
+        0
+      ],
+      "spaces": [
+        "gallery",
+        "arrival"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e0-s2",
+      "a": [
+        9,
+        0
+      ],
+      "b": [
+        14,
+        0
+      ],
+      "spaces": [
+        "gallery"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e1",
+      "a": [
+        14,
+        0
+      ],
+      "b": [
+        14,
+        4
+      ],
+      "spaces": [
+        "gallery"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e2-s0",
+      "a": [
+        14,
+        4
+      ],
+      "b": [
+        10.375,
+        4
+      ],
+      "spaces": [
+        "gallery",
+        "east-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e2-s1",
+      "a": [
+        10.375,
+        4
+      ],
+      "b": [
+        9,
+        4
+      ],
+      "spaces": [
+        "gallery",
+        "east-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e2-s2",
+      "a": [
+        9,
+        4
+      ],
+      "b": [
+        4,
+        4
+      ],
+      "spaces": [
+        "gallery",
+        "court"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e2-s3",
+      "a": [
+        4,
+        4
+      ],
+      "b": [
+        3.4749999999999996,
+        4
+      ],
+      "spaces": [
+        "gallery",
+        "west-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e2-s4",
+      "a": [
+        3.4749999999999996,
+        4
+      ],
+      "b": [
+        0,
+        4
+      ],
+      "spaces": [
+        "gallery",
+        "west-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "gallery-e3",
+      "a": [
+        0,
+        4
+      ],
+      "b": [
+        0,
+        0
+      ],
+      "spaces": [
+        "gallery"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "west-wing-e1-s0",
+      "a": [
+        4,
+        4
+      ],
+      "b": [
+        4,
+        11
+      ],
+      "spaces": [
+        "west-wing",
+        "court"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "west-wing-e1-s1",
+      "a": [
+        4,
+        11
+      ],
+      "b": [
+        4,
+        13
+      ],
+      "spaces": [
+        "west-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "west-wing-e2",
+      "a": [
+        4,
+        13
+      ],
+      "b": [
+        0,
+        13
+      ],
+      "spaces": [
+        "west-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "west-wing-e3",
+      "a": [
+        0,
+        13
+      ],
+      "b": [
+        0,
+        4
+      ],
+      "spaces": [
+        "west-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "east-wing-e1",
+      "a": [
+        14,
+        4
+      ],
+      "b": [
+        14,
+        11
+      ],
+      "spaces": [
+        "east-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "east-wing-e2",
+      "a": [
+        14,
+        11
+      ],
+      "b": [
+        9,
+        11
+      ],
+      "spaces": [
+        "east-wing"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "east-wing-e3",
+      "a": [
+        9,
+        11
+      ],
+      "b": [
+        9,
+        4
+      ],
+      "spaces": [
+        "east-wing",
+        "court"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "arrival-e0",
+      "a": [
+        5,
+        -3
+      ],
+      "b": [
+        9,
+        -3
+      ],
+      "spaces": [
+        "arrival"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "arrival-e1",
+      "a": [
+        9,
+        -3
+      ],
+      "b": [
+        9,
+        0
+      ],
+      "spaces": [
+        "arrival"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "arrival-e3",
+      "a": [
+        5,
+        0
+      ],
+      "b": [
+        5,
+        -3
+      ],
+      "spaces": [
+        "arrival"
+      ],
+      "level": "ground"
+    },
+    {
+      "id": "court-e2",
+      "a": [
+        9,
+        11
+      ],
+      "b": [
+        4,
+        11
+      ],
+      "spaces": [
+        "court"
+      ],
+      "level": "ground"
+    }
+  ],
+  "portalEvidence": [
+    {
+      "id": "court-entry",
+      "host": "gallery-e0-s1",
+      "from": "gallery",
+      "to": "arrival",
+      "local": [
+        7,
+        0
+      ],
+      "world": [
+        0,
+        0.2,
+        -5
+      ],
+      "width": 2.5,
+      "height": 2.8,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 2.220446049250313e-16
+    },
+    {
+      "id": "east-door",
+      "host": "gallery-e2-s0",
+      "from": "gallery",
+      "to": "east-wing",
+      "local": [
+        13,
+        4
+      ],
+      "world": [
+        6,
+        0.2,
+        -1
+      ],
+      "width": 1.5,
+      "height": 2.5,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 2.4331988105484084e-16
+    },
+    {
+      "id": "gallery-court",
+      "host": "gallery-e2-s2",
+      "from": "gallery",
+      "to": "court",
+      "local": [
+        7,
+        4
+      ],
+      "world": [
+        0,
+        0.2,
+        -1
+      ],
+      "width": 3,
+      "height": 2.5,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 2.303328157969851e-16
+    },
+    {
+      "id": "west-door",
+      "host": "gallery-e2-s4",
+      "from": "gallery",
+      "to": "west-wing",
+      "local": [
+        0.8499999999999996,
+        4
+      ],
+      "world": [
+        -6.15,
+        0.2,
+        -1
+      ],
+      "width": 1.2,
+      "height": 2.5,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 2.4721803785208673e-16
+    },
+    {
+      "id": "west-court",
+      "host": "west-wing-e1-s0",
+      "from": "west-wing",
+      "to": "court",
+      "local": [
+        4,
+        8.5
+      ],
+      "world": [
+        -3,
+        0.2,
+        3.5
+      ],
+      "width": 3,
+      "height": 2.5,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 6.123233995736766e-17
+    },
+    {
+      "id": "west-window",
+      "host": "west-wing-e3",
+      "from": "west-wing",
+      "to": "exterior",
+      "local": [
+        0,
+        8.5
+      ],
+      "world": [
+        -7,
+        0.2,
+        3.5
+      ],
+      "width": 3,
+      "height": 1.6,
+      "passable": false,
+      "sill": 0.8,
+      "floorGap": null,
+      "cutPanelError": null
+    },
+    {
+      "id": "east-court",
+      "host": "east-wing-e3",
+      "from": "east-wing",
+      "to": "court",
+      "local": [
+        9,
+        7.5
+      ],
+      "world": [
+        2,
+        0.2,
+        2.5
+      ],
+      "width": 3,
+      "height": 2.5,
+      "passable": true,
+      "sill": 0,
+      "floorGap": 0,
+      "cutPanelError": 0
+    }
+  ],
+  "stairEvidence": [],
+  "spaceEvidence": [
+    {
+      "id": "gallery",
+      "floor": "gallery-floor",
+      "floorTop": 0.2,
+      "centreY": 2.1,
+      "envelopeHeight": 3.8,
+      "clearHeight": 3.8,
+      "boundaries": [
+        "gallery-e0-s0",
+        "gallery-e0-s1",
+        "gallery-e0-s2",
+        "gallery-e1",
+        "gallery-e2-s0",
+        "gallery-e2-s1",
+        "gallery-e2-s2",
+        "gallery-e2-s3",
+        "gallery-e2-s4",
+        "gallery-e3"
+      ],
+      "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+    },
+    {
+      "id": "west-wing",
+      "floor": "west-wing-floor",
+      "floorTop": 0.2,
+      "centreY": 1.7,
+      "envelopeHeight": 3,
+      "clearHeight": 3,
+      "boundaries": [
+        "gallery-e2-s3",
+        "gallery-e2-s4",
+        "west-wing-e1-s0",
+        "west-wing-e1-s1",
+        "west-wing-e2",
+        "west-wing-e3"
+      ],
+      "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+    },
+    {
+      "id": "east-wing",
+      "floor": "east-wing-floor",
+      "floorTop": 0.2,
+      "centreY": 1.8,
+      "envelopeHeight": 3.2,
+      "clearHeight": 3.2,
+      "boundaries": [
+        "gallery-e2-s0",
+        "gallery-e2-s1",
+        "east-wing-e1",
+        "east-wing-e2",
+        "east-wing-e3"
+      ],
+      "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+    },
+    {
+      "id": "arrival",
+      "floor": "arrival-floor",
+      "floorTop": 0.2,
+      "centreY": 1.8,
+      "envelopeHeight": 3.2,
+      "clearHeight": 3.2,
+      "boundaries": [
+        "gallery-e0-s1",
+        "arrival-e0",
+        "arrival-e1",
+        "arrival-e3"
+      ],
+      "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+    },
+    {
+      "id": "court",
+      "floor": "court-floor",
+      "floorTop": 0.2,
+      "centreY": 1.55,
+      "envelopeHeight": 2.7,
+      "clearHeight": 2.7,
+      "boundaries": [
+        "gallery-e2-s2",
+        "west-wing-e1-s0",
+        "east-wing-e3",
+        "court-e2"
+      ],
+      "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+    }
+  ],
+  "access": {
+    "arrival": "arrival",
+    "reachable": [
+      "arrival",
+      "gallery",
+      "east-wing",
+      "court",
+      "west-wing"
+    ],
+    "scope": "convex cells and proven thresholds; stair cell landing routing additionally reviewed; no general free-space navigation"
+  },
+  "completion": {
+    "spatial": "bounded proofs only",
+    "construction": "editable envelope study; guards, services, engineering and fit-out incomplete",
+    "composition": "requires independent visual judgment"
+  },
+  "source": "Developer-authored fixture; not AI quality evidence",
+  "physical": {
+    "checks": [
+      {
+        "id": "court-entry",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "court-entry-route-gallery",
+        "samples": 279,
+        "failures": []
+      },
+      {
+        "id": "court-entry-route-arrival",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "east-door",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "east-door-route-gallery",
+        "samples": 1125,
+        "failures": []
+      },
+      {
+        "id": "east-door-route-east-wing",
+        "samples": 621,
+        "failures": []
+      },
+      {
+        "id": "gallery-court",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "gallery-court-route-gallery",
+        "samples": 279,
+        "failures": []
+      },
+      {
+        "id": "gallery-court-route-court",
+        "samples": 558,
+        "failures": []
+      },
+      {
+        "id": "west-door",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "west-door-route-gallery",
+        "samples": 1152,
+        "failures": []
+      },
+      {
+        "id": "west-door-route-west-wing",
+        "samples": 765,
+        "failures": []
+      },
+      {
+        "id": "west-court",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "west-court-route-west-wing",
+        "samples": 279,
+        "failures": []
+      },
+      {
+        "id": "west-court-route-court",
+        "samples": 414,
+        "failures": []
+      },
+      {
+        "id": "east-court",
+        "samples": 189,
+        "failures": []
+      },
+      {
+        "id": "east-court-route-east-wing",
+        "samples": 369,
+        "failures": []
+      },
+      {
+        "id": "east-court-route-court",
+        "samples": 369,
+        "failures": []
+      }
+    ],
+    "failures": [],
+    "scope": "Sampled actual profile/box surfaces, 0.6m diameter threshold/landing/side-lane probe and 2m vertical clearance; tread centres tested separately. Open door assumption. Not continuous swept-body stair or whole-house navigation proof."
+  },
+  "relationships": []
+}

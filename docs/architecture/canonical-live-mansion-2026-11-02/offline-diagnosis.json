@@ -1,0 +1,93 @@
+{
+  "offline": true,
+  "providerCalls": 0,
+  "exactFrozenSha256": "d7e49158aaa400a19b56320f0fe2cb36b349018c70f7768756fd090ea710f89d",
+  "currentSchemaReproducesRejectedSchema": true,
+  "providerFailure": {
+    "message": "Invalid schema for response_format 'response': In context=(), 'oneOf' is not permitted.",
+    "type": "invalid_request_error",
+    "param": "text.format.schema",
+    "code": "invalid_json_schema"
+  },
+  "findings": [
+    {
+      "path": "$",
+      "issue": "oneOf survives strict adapter"
+    },
+    {
+      "path": "$.oneOf[0].properties.plan",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "screens"
+      ]
+    },
+    {
+      "path": "$.oneOf[0].properties.plan.properties.site",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "cliff"
+      ]
+    },
+    {
+      "path": "$.oneOf[0].properties.plan.properties.masses.items",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "relatesTo"
+      ]
+    },
+    {
+      "path": "$.oneOf[0].properties.plan.properties.spaces.items",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "facadeMaterial"
+      ]
+    },
+    {
+      "path": "$.oneOf[0].properties.plan.properties.portals.items",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "sill"
+      ]
+    },
+    {
+      "path": "$.oneOf[0].properties.plan.properties.roofs.items",
+      "issue": "optional fields not converted to required nullable properties inside untouched union",
+      "fields": [
+        "rise",
+        "overhang",
+        "material"
+      ]
+    }
+  ],
+  "compilerInvoked": false,
+  "canonicalPlan": null,
+  "geometry": null,
+  "usage": {
+    "providerReported": null,
+    "localLogger": {
+      "id": "1957c532-bd1a-4c8a-84d4-00b607723570",
+      "timestamp": "2026-11-02T13:03:55.674Z",
+      "projectId": null,
+      "requestType": "generation",
+      "scope": "world",
+      "model": "gpt-5.6-terra",
+      "stage": "canonical-plan",
+      "maxOutputTokens": 30000,
+      "inputTokens": 0,
+      "cachedInputTokens": 0,
+      "outputTokens": 0,
+      "totalTokens": 0,
+      "latencyMs": 354,
+      "success": false,
+      "errorKind": "provider_400",
+      "costUsd": 0
+    },
+    "interpretation": "HTTP 400 contains no token usage. Local logger defaults missing usage to zero; its $0 is not an invoiced-cost verification."
+  },
+  "outcomes": {
+    "ambition": "Unassessed: no model design",
+    "fidelity": "Unassessed: compiler not reached",
+    "visualQuality": "Unassessed: no construction or renders"
+  },
+  "nextStep": "Offline provider-wire contract correction and tests before a separately authorized request. No correction or resubmission performed."
+}

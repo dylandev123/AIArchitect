@@ -1,0 +1,35 @@
+/** Offline investigation only; never resumes the terminated route or calls a provider. */
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {designProposalSchema,validateDesignProposal,reviewDesignFidelity} from '../src/lib/villa/scene/designProposal';
+import {designProposalHash} from '../src/lib/villa/scene/designCheckpoint';
+import {validateScene} from '../src/lib/villa/scene/model';
+import {sceneSpatialGeometry,spatialCoordinationFindings} from '../src/lib/villa/scene/spatial';
+const root='docs/architecture/design-first/live-after-rehearsal-2026-10-30';
+const read=(p:string)=>JSON.parse(readFileSync(`${root}/${p}`,'utf8'));
+const save=(p:string,v:unknown)=>writeFileSync(`${root}/${p}`,typeof v==='string'?v:JSON.stringify(v,null,2)+'\n',{flag:'wx',mode:0o600});
+globalThis.fetch=async()=>{throw Error('Network forbidden in offline investigation');};
+const wire=read('design.provider-response.exact.json');
+const text=wire.output.flatMap((o:{content?:{type:string;text:string}[]})=>o.content??[]).filter((c:{type:string})=>c.type==='output_text').map((c:{text:string})=>c.text).join('');
+const proposal=designProposalSchema.parse(JSON.parse(text));
+const proposalHash=designProposalHash(proposal);
+save('proposal.provider-output.exact.txt',text);save('proposal.REJECTED.json',proposal);
+save('programme.proposal.json',{source:'Exact Call 1 fields; not a construction-stage programme',spaces:proposal.spaces,routes:proposal.routes,relationships:proposal.relationships,limitations:proposal.limitations});
+const geometry=validateScene({version:'architectural-scene-1',name:'OFFLINE proposal anchor bounds ONLY; not constructed mansion',elements:proposal.anchors.map(a=>({id:a.id,label:a.id,kind:a.kind,at:a.centre,size:a.size,rotation:a.yaw,material:a.material,panels:a.panels,...(a.color?{color:a.color}:{}),...(a.geometry?{geometry:a.geometry}:{}),...(a.opening?{opening:a.opening}:{}),...(a.roofForm?{roofForm:a.roofForm}:{}),...(a.overhang!==null?{overhang:a.overhang}:{})}))});
+const g=sceneSpatialGeometry(geometry);
+let validationError='';try{validateDesignProposal(proposal);}catch(error){validationError=String(error);}
+assert.match(validationError,/inconsistent spatial relationships/);
+const findings=spatialCoordinationFindings({...geometry,architecturalPlan:{spatialRelationships:proposal.relationships}});
+const metrics=proposal.relationships.map(r=>{const a=g.map.get(r.subject)!,b=g.map.get(r.target)!;return {...r,measuredPlanSeparation:g.separation(a,b),subjectTop:g.top(a),targetBottom:g.bottom(b),verticalGap:g.bottom(b)-g.top(a)};});
+const fidelity=reviewDesignFidelity(geometry,proposal);
+const occupiedFloorIds=['living-floor','west-wing-ground-floor','east-wing-ground-floor','west-upper-floor','east-upper-floor'];
+const floorArea=occupiedFloorIds.reduce((s,id)=>{const a=g.map.get(id)!;return s+a.size[0]*a.size[2];},0);
+const missingAccess=proposal.spaces.filter(s=>s.environment==='interior'&&!s.accessIds.length).map(s=>s.id);
+const wrongRoofKinds=proposal.spaces.flatMap(s=>s.roofIds.filter(id=>g.map.get(id)?.kind!=='roof').map(id=>({space:s.id,id,kind:g.map.get(id)?.kind})));
+assert.equal(read('result.json').paidCalls,1);assert.equal(read('result.json').checkpointPassed,false);
+assert.equal(findings.filter(f=>f.code==='spatial-intent-mismatch').length,6);
+assert.equal(missingAccess.length,4);
+save('offline-investigation.json',{proposalHash,schemaAccepted:true,semanticValidationPassed:false,validationError,anchors:proposal.anchors.length,spaces:proposal.spaces.length,routes:proposal.routes.length,relationships:proposal.relationships.length,occupiedFloorIds,grossCommittedSlabAreaM2:floorArea,areaScope:'Sum of disjoint occupied rectangles per level; gross slab bounds only, not net usable area or built area',missingInteriorAccess:missingAccess,nonRoofOverheadReferences:wrongRoofKinds,relationshipMetrics:metrics,findings,anchorBoundsFidelity:fidelity,constructionOperations:0,constructedScene:false,networkCalls:0});
+const before=read('historical-hashes.before.json');assert(Object.entries(before).every(([p,h])=>createHash('sha256').update(readFileSync(p)).digest('hex')===h));
+console.log(JSON.stringify({proposalHash,anchors:proposal.anchors.length,spaces:proposal.spaces.length,routes:proposal.routes.length,relationships:proposal.relationships.length,floorArea,missingAccess,wrongRoofKinds,validationError,fidelityIssues:fidelity.issues},null,2));

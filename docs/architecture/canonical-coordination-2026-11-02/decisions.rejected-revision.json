@@ -1,0 +1,765 @@
+[
+  {
+    "id": "pitched-roof:pitched:living-salon",
+    "kind": "pitched-roof",
+    "title": "Pitched roofs on living-salon, sunset-lounge, east-suite-1, west-suite-1",
+    "relationship": "A pitched roof carries a 0.1 m fascia on all four edges and cannot be trimmed to its exposed edges (gable; hip; hip; hip). It is valid only where every neighbour at that level is lower than the fascia or absent.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [
+        "living-salon",
+        "sunset-lounge",
+        "east-suite-1",
+        "west-suite-1"
+      ],
+      "rooms": [
+        "living-salon",
+        "sunset-lounge",
+        "east-suite-1",
+        "west-suite-1",
+        "dining-room",
+        "media-lounge",
+        "east-private-hall",
+        "west-private-hall",
+        "east-suite-2",
+        "east-bath-1",
+        "east-bath-2",
+        "west-suite-2",
+        "west-bath-1",
+        "west-bath-2"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "roofs",
+        "id": "living-salon/sunset-lounge"
+      },
+      {
+        "stage": "roofs",
+        "id": "living-salon/east-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "living-salon/west-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "dining-room/west-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "sunset-lounge/media-lounge"
+      },
+      {
+        "stage": "roofs",
+        "id": "sunset-lounge/east-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "media-lounge/east-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-private-hall/east-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-private-hall/west-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/east-suite-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/east-bath-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/east-bath-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/west-suite-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/west-bath-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/west-bath-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "sunset-lounge/living-salon"
+      },
+      {
+        "stage": "roofs",
+        "id": "sunset-lounge/media-lounge"
+      },
+      {
+        "stage": "roofs",
+        "id": "sunset-lounge/east-suite-1"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/living-salon"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/sunset-lounge"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/media-lounge"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/east-private-hall"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-1/east-suite-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/living-salon"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/dining-room"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/west-private-hall"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-1/west-suite-2"
+      }
+    ],
+    "introduced": [
+      "living-salon roof changed",
+      "sunset-lounge roof changed",
+      "east-suite-1 roof changed",
+      "west-suite-1 roof changed"
+    ],
+    "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+    "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+  },
+  {
+    "id": "pitched-roof:pitched:east-suite-3",
+    "kind": "pitched-roof",
+    "title": "Pitched roof on east-suite-3",
+    "relationship": "A pitched roof carries a 0.1 m fascia on all four edges and cannot be trimmed to its exposed edges (hip). It is valid only where every neighbour at that level is lower than the fascia or absent.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [
+        "east-suite-3"
+      ],
+      "rooms": [
+        "east-suite-3",
+        "east-suite-2",
+        "east-bath-2",
+        "east-bath-3",
+        "stair-hall",
+        "east-private-hall",
+        "upper-landing",
+        "owner-suite",
+        "upper-east-suite"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "roofs",
+        "id": "east-suite-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-2/east-suite-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/east-bath-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/east-bath-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/stair-hall"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/east-private-hall"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/east-suite-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/upper-landing"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/owner-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "east-suite-3/upper-east-suite"
+      }
+    ],
+    "introduced": [
+      "east-suite-3 roof changed"
+    ],
+    "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+    "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+  },
+  {
+    "id": "pitched-roof:pitched:upper-west-suite",
+    "kind": "pitched-roof",
+    "title": "Pitched roofs on upper-west-suite, upper-east-suite, owner-suite",
+    "relationship": "A pitched roof carries a 0.1 m fascia on all four edges and cannot be trimmed to its exposed edges (hip; hip; gable). It is valid only where every neighbour at that level is lower than the fascia or absent.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [
+        "upper-west-suite",
+        "upper-east-suite",
+        "owner-suite"
+      ],
+      "rooms": [
+        "upper-landing",
+        "upper-west-suite",
+        "upper-east-suite",
+        "owner-suite"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "roofs",
+        "id": "upper-landing/upper-west-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "upper-landing/upper-east-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "owner-suite/upper-west-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "owner-suite/upper-east-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "upper-west-suite/upper-landing"
+      },
+      {
+        "stage": "roofs",
+        "id": "upper-west-suite/owner-suite"
+      },
+      {
+        "stage": "roofs",
+        "id": "upper-east-suite/upper-landing"
+      },
+      {
+        "stage": "roofs",
+        "id": "upper-east-suite/owner-suite"
+      }
+    ],
+    "introduced": [
+      "upper-west-suite roof changed",
+      "upper-east-suite roof changed",
+      "owner-suite roof changed"
+    ],
+    "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+    "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+  },
+  {
+    "id": "pitched-roof:pitched:west-suite-3",
+    "kind": "pitched-roof",
+    "title": "Pitched roof on west-suite-3",
+    "relationship": "A pitched roof carries a 0.1 m fascia on all four edges and cannot be trimmed to its exposed edges (hip). It is valid only where every neighbour at that level is lower than the fascia or absent.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [
+        "west-suite-3"
+      ],
+      "rooms": [
+        "arrival-cloakroom",
+        "west-suite-3",
+        "west-private-hall",
+        "west-suite-2",
+        "west-bath-2",
+        "west-bath-3"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "roofs",
+        "id": "arrival-cloakroom/west-suite-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-private-hall/west-suite-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-2/west-suite-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-3/west-bath-2"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-3/west-bath-3"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-3/west-private-hall"
+      },
+      {
+        "stage": "roofs",
+        "id": "west-suite-3/west-suite-2"
+      }
+    ],
+    "introduced": [
+      "west-suite-3 roof changed"
+    ],
+    "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+    "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+  },
+  {
+    "id": "wall:wall:east-suite-2:east",
+    "kind": "wall",
+    "title": "east wall of east-suite-2 (shared with east-bath-2)",
+    "relationship": "2 opening(s) and 1 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "east-suite-2-window",
+        "east-suite-2-bath-door"
+      ],
+      "screens": [
+        "east-suite-2-timber-screen"
+      ],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "east-suite-2-window"
+      },
+      {
+        "stage": "openings",
+        "id": "east-suite-2-bath-door/east-suite-2-window"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-2-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-2-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-2-timber-screen"
+      }
+    ],
+    "introduced": [
+      "east-bath-2",
+      "east-suite-2-bath-door",
+      "east-suite-2-timber-screen"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:east-suite-3:east",
+    "kind": "wall",
+    "title": "east wall of east-suite-3 (shared with east-bath-3)",
+    "relationship": "2 opening(s) and 1 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "east-suite-3-window",
+        "east-suite-3-bath-door"
+      ],
+      "screens": [
+        "east-suite-3-timber-screen"
+      ],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "east-suite-3-window"
+      },
+      {
+        "stage": "openings",
+        "id": "east-suite-3-bath-door/east-suite-3-window"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-3-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-3-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "east-suite-3-timber-screen"
+      }
+    ],
+    "introduced": [
+      "east-bath-3",
+      "east-suite-3-bath-door",
+      "east-suite-3-timber-screen"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:west-suite-2:west",
+    "kind": "wall",
+    "title": "west wall of west-suite-2 (shared with west-bath-2)",
+    "relationship": "2 opening(s) and 1 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "west-suite-2-window",
+        "west-suite-2-bath-door"
+      ],
+      "screens": [
+        "west-suite-2-timber-screen"
+      ],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "west-suite-2-window"
+      },
+      {
+        "stage": "openings",
+        "id": "west-suite-2-bath-door/west-suite-2-window"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-2-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-2-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-2-timber-screen"
+      }
+    ],
+    "introduced": [
+      "west-bath-2",
+      "west-suite-2-bath-door",
+      "west-suite-2-timber-screen"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:west-suite-3:west",
+    "kind": "wall",
+    "title": "west wall of west-suite-3 (shared with west-bath-3)",
+    "relationship": "2 opening(s) and 1 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "west-suite-3-window",
+        "west-suite-3-bath-door"
+      ],
+      "screens": [
+        "west-suite-3-timber-screen"
+      ],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "west-suite-3-window"
+      },
+      {
+        "stage": "openings",
+        "id": "west-suite-3-bath-door/west-suite-3-window"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-3-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-3-timber-screen"
+      },
+      {
+        "stage": "screens",
+        "id": "west-suite-3-timber-screen"
+      }
+    ],
+    "introduced": [
+      "west-bath-3",
+      "west-suite-3-bath-door",
+      "west-suite-3-timber-screen"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "circulation:access:owner-suite",
+    "kind": "circulation",
+    "title": "owner-suite, upper-west-suite, upper-east-suite are not connected to upper-landing",
+    "relationship": "upper-landing is reachable and shares walls with owner-suite, upper-west-suite, upper-east-suite, but no door or passage is declared between them.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [],
+      "rooms": [
+        "owner-suite",
+        "upper-west-suite",
+        "upper-east-suite"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "access",
+        "id": "owner-suite"
+      },
+      {
+        "stage": "access",
+        "id": "upper-west-suite"
+      },
+      {
+        "stage": "access",
+        "id": "upper-east-suite"
+      }
+    ],
+    "introduced": [
+      "owner-suite",
+      "upper-west-suite",
+      "upper-east-suite"
+    ],
+    "softwareRole": "Lists the neighbours each room shares a wall with. When a door or passage is declared with host side \"shared\", derives its wall and position from the shared segment. It does not declare connections.",
+    "modelDecides": "Which neighbour each room connects through, and the opening mode and width."
+  },
+  {
+    "id": "wall:wall:dining-room:west",
+    "kind": "wall",
+    "title": "west wall of dining-room (shared with kitchen)",
+    "relationship": "2 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "dining-west-window",
+        "dining-kitchen-opening"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "dining-west-window"
+      },
+      {
+        "stage": "openings",
+        "id": "dining-kitchen-opening/dining-west-window"
+      }
+    ],
+    "introduced": [],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:entry-hall:east",
+    "kind": "wall",
+    "title": "east wall of entry-hall (shared with stair-hall)",
+    "relationship": "2 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "entry-stair-door",
+        "entry-east-window"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "entry-stair-door"
+      },
+      {
+        "stage": "openings",
+        "id": "entry-east-window"
+      }
+    ],
+    "introduced": [
+      "stair-hall",
+      "entry-stair-door",
+      "entry-east-window"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "arrangement:volumes:media-lounge/east-suite-1",
+    "kind": "arrangement",
+    "title": "Independently placed rooms meet: media-lounge/east-suite-1",
+    "relationship": "Relative placement chains were authored without seeing where each ended.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [],
+      "rooms": [
+        "media-lounge",
+        "east-suite-1"
+      ]
+    },
+    "findings": [
+      {
+        "stage": "volumes",
+        "id": "media-lounge/east-suite-1"
+      }
+    ],
+    "introduced": [],
+    "softwareRole": "Resolves every relative placement to absolute extents and reports each overlap.",
+    "modelDecides": "Which chain yields or whether the rooms should meet."
+  },
+  {
+    "id": "site:site:east-arrival-bed-reserve",
+    "kind": "site",
+    "title": "Site allocation: east-arrival-bed-reserve",
+    "relationship": "Outdoor allocations must lie inside the site, which is centred on the room cells.",
+    "affects": {
+      "portals": [],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "site",
+        "id": "east-arrival-bed-reserve"
+      }
+    ],
+    "introduced": [
+      "east-arrival-bed-reserve"
+    ],
+    "softwareRole": "Resolves the site frame and reports the overlap or excess.",
+    "modelDecides": "Site size or allocation placement."
+  },
+  {
+    "id": "wall:wall:central-gallery:west",
+    "kind": "wall",
+    "title": "west wall of central-gallery (shared with west-private-hall)",
+    "relationship": "1 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "gallery-west-window"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "gallery-west-window"
+      }
+    ],
+    "introduced": [
+      "gallery-west-window"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:east-suite-1:north",
+    "kind": "wall",
+    "title": "north wall of east-suite-1 (shared with east-suite-2)",
+    "relationship": "1 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "east-suite-1-window"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "east-suite-1-window"
+      }
+    ],
+    "introduced": [],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:media-lounge:east",
+    "kind": "wall",
+    "title": "east wall of media-lounge (shared with east-bath-1)",
+    "relationship": "1 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "media-east-window"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "media-east-window"
+      }
+    ],
+    "introduced": [
+      "east-bath-1"
+    ],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  },
+  {
+    "id": "wall:wall:west-suite-1:north",
+    "kind": "wall",
+    "title": "north wall of west-suite-1 (shared with west-suite-2)",
+    "relationship": "1 opening(s) and 0 screen(s) are authored on a wall whose neighbour decides what can stand there.",
+    "affects": {
+      "portals": [
+        "west-suite-1-window"
+      ],
+      "screens": [],
+      "roofs": [],
+      "rooms": []
+    },
+    "findings": [
+      {
+        "stage": "openings",
+        "id": "west-suite-1-window"
+      }
+    ],
+    "introduced": [],
+    "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+    "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+  }
+]

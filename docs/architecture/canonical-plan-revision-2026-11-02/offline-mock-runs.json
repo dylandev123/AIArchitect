@@ -1,0 +1,410 @@
+{
+  "mansion-coordinate-repair": {
+    "label": "MOCK developer-authored response; not model output and not evidence of model capability",
+    "originalErrors": 57,
+    "originalDisposition": "redesign",
+    "scope": "redesign-permitted",
+    "declaredKind": "repair",
+    "status": "stopped",
+    "stopReasons": [
+      "no-demonstrated-improvement"
+    ],
+    "checks": [
+      {
+        "id": "schema",
+        "ok": true,
+        "detail": "Response and plan satisfy the revision and architectural-plan-1 schemas."
+      },
+      {
+        "id": "changed",
+        "ok": true,
+        "detail": "19% of spaces added, removed, moved, resized or re-levelled."
+      },
+      {
+        "id": "physical-validity",
+        "ok": true,
+        "detail": "No diagnosed errors; the canonical compiler accepts the plan."
+      },
+      {
+        "id": "programme-preserved",
+        "ok": true,
+        "detail": "Programme retained."
+      },
+      {
+        "id": "within-authorized-scope",
+        "ok": true,
+        "detail": "Redesign was authorized."
+      },
+      {
+        "id": "declared-kind-matches-change",
+        "ok": true,
+        "detail": "Declared repair; measured change 19%."
+      },
+      {
+        "id": "improvement-demonstrated",
+        "ok": false,
+        "detail": "Original concept measured as redesign-worthy (4 concept weakness signals; 6 in total). After: 4 (5 in total); composition unchanged, spatial coherence mixed, ambition regressed. Physical validity alone does not demonstrate an architectural improvement: at least half of the concept signals must clear without coherence regressing."
+      }
+    ],
+    "resolvedCauses": [
+      "chain-collision",
+      "site-containment",
+      "opening-geometry",
+      "roof-eaves"
+    ],
+    "remainingCauses": [],
+    "newCauses": [],
+    "dimensions": [
+      {
+        "dimension": "composition",
+        "improvements": [],
+        "regressions": [],
+        "verdict": "unchanged"
+      },
+      {
+        "dimension": "spatialCoherence",
+        "improvements": [
+          "errors: 57 → 0"
+        ],
+        "regressions": [
+          "indoor-outdoor links: 4 → 3"
+        ],
+        "verdict": "mixed"
+      },
+      {
+        "dimension": "ambition",
+        "improvements": [],
+        "regressions": [
+          "climatic/privacy screens: 8 → 7"
+        ],
+        "verdict": "regressed"
+      }
+    ],
+    "changeShare": 0.19,
+    "revisedErrors": 0,
+    "statement": "Stopped. The model-produced plan, diff and measurements are preserved as evidence; nothing was repaired or retried."
+  },
+  "mansion-still-invalid": {
+    "label": "MOCK developer-authored response; not model output and not evidence of model capability",
+    "originalErrors": 57,
+    "originalDisposition": "redesign",
+    "scope": "redesign-permitted",
+    "declaredKind": "repair",
+    "status": "stopped",
+    "stopReasons": [
+      "physically-invalid"
+    ],
+    "checks": [
+      {
+        "id": "schema",
+        "ok": true,
+        "detail": "Response and plan satisfy the revision and architectural-plan-1 schemas."
+      },
+      {
+        "id": "changed",
+        "ok": true,
+        "detail": "0% of spaces added, removed, moved, resized or re-levelled."
+      },
+      {
+        "id": "physical-validity",
+        "ok": false,
+        "detail": "16 diagnosed error(s) in 8 cause group(s); compiler rejection: kitchen/west-suite-1: occupied volumes overlap (3.60m vertical). same-level footprints intersect: kitchen spans x -14..-4, z -21..-15 m, west-suite-1 spans x -10..-3, z -21..-14 m; they share x -10..-4, z -21..-15 m. Rev."
+      },
+      {
+        "id": "programme-preserved",
+        "ok": true,
+        "detail": "Programme retained."
+      },
+      {
+        "id": "within-authorized-scope",
+        "ok": true,
+        "detail": "Redesign was authorized."
+      },
+      {
+        "id": "declared-kind-matches-change",
+        "ok": true,
+        "detail": "Declared repair; measured change 0%."
+      },
+      {
+        "id": "improvement-demonstrated",
+        "ok": false,
+        "detail": "Original concept measured as redesign-worthy (4 concept weakness signals; 6 in total). After: 4 (5 in total); composition unchanged, spatial coherence improved, ambition unchanged. Physical validity alone does not demonstrate an architectural improvement: at least half of the concept signals must clear without coherence regressing."
+      }
+    ],
+    "resolvedCauses": [],
+    "remainingCauses": [
+      "chain-collision",
+      "site-containment",
+      "opening-geometry",
+      "roof-eaves"
+    ],
+    "newCauses": [],
+    "dimensions": [
+      {
+        "dimension": "composition",
+        "improvements": [],
+        "regressions": [],
+        "verdict": "unchanged"
+      },
+      {
+        "dimension": "spatialCoherence",
+        "improvements": [
+          "errors: 57 → 16"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      },
+      {
+        "dimension": "ambition",
+        "improvements": [],
+        "regressions": [],
+        "verdict": "unchanged"
+      }
+    ],
+    "changeShare": 0,
+    "revisedErrors": 16,
+    "statement": "Stopped. The model-produced plan, diff and measurements are preserved as evidence; nothing was repaired or retried."
+  },
+  "weak-row-house-redesign": {
+    "label": "MOCK developer-authored response; not model output and not evidence of model capability",
+    "originalErrors": 0,
+    "originalDisposition": "redesign",
+    "scope": "redesign-permitted",
+    "declaredKind": "redesign",
+    "status": "accepted-for-construction",
+    "stopReasons": [],
+    "checks": [
+      {
+        "id": "schema",
+        "ok": true,
+        "detail": "Response and plan satisfy the revision and architectural-plan-1 schemas."
+      },
+      {
+        "id": "changed",
+        "ok": true,
+        "detail": "100% of spaces added, removed, moved, resized or re-levelled."
+      },
+      {
+        "id": "physical-validity",
+        "ok": true,
+        "detail": "No diagnosed errors; the canonical compiler accepts the plan."
+      },
+      {
+        "id": "programme-preserved",
+        "ok": true,
+        "detail": "Programme retained; additions: terrace 0→1."
+      },
+      {
+        "id": "within-authorized-scope",
+        "ok": true,
+        "detail": "Redesign was authorized."
+      },
+      {
+        "id": "declared-kind-matches-change",
+        "ok": true,
+        "detail": "Declared redesign; measured change 100%."
+      },
+      {
+        "id": "improvement-demonstrated",
+        "ok": true,
+        "detail": "Original concept measured as redesign-worthy (3 concept weakness signals; 5 in total). After: 0 (2 in total); composition improved, spatial coherence improved, ambition improved."
+      }
+    ],
+    "resolvedCauses": [],
+    "remainingCauses": [],
+    "newCauses": [],
+    "dimensions": [
+      {
+        "dimension": "composition",
+        "improvements": [
+          "identical-cell share of interior rooms: 0.67 → 0",
+          "distinct envelope heights: 1 → 8",
+          "distinct roof specifications: 1 → 7"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      },
+      {
+        "dimension": "spatialCoherence",
+        "improvements": [
+          "windowless share of interior area: 0.19 → 0.07"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      },
+      {
+        "dimension": "ambition",
+        "improvements": [
+          "section range (m): 0 → 2.2"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      }
+    ],
+    "changeShare": 1,
+    "revisedErrors": 0,
+    "statement": "Physically valid, programme-preserving and measurably changed. This is NOT a finding of architectural success: it authorizes compilation and rendered review only. Composition, spatial coherence and ambition are reported separately as indicators."
+  },
+  "weak-row-house-redesign-under-repair-only": {
+    "label": "MOCK developer-authored response; not model output and not evidence of model capability",
+    "originalErrors": 0,
+    "originalDisposition": "redesign",
+    "scope": "repair-only",
+    "declaredKind": "redesign",
+    "status": "stopped",
+    "stopReasons": [
+      "concept-exceeds-bounds"
+    ],
+    "checks": [
+      {
+        "id": "schema",
+        "ok": true,
+        "detail": "Response and plan satisfy the revision and architectural-plan-1 schemas."
+      },
+      {
+        "id": "changed",
+        "ok": true,
+        "detail": "100% of spaces added, removed, moved, resized or re-levelled."
+      },
+      {
+        "id": "physical-validity",
+        "ok": true,
+        "detail": "No diagnosed errors; the canonical compiler accepts the plan."
+      },
+      {
+        "id": "programme-preserved",
+        "ok": true,
+        "detail": "Programme retained; additions: terrace 0→1."
+      },
+      {
+        "id": "within-authorized-scope",
+        "ok": false,
+        "detail": "Repair-only authorization, but the response is declared redesign and touches 100% of spaces."
+      },
+      {
+        "id": "declared-kind-matches-change",
+        "ok": true,
+        "detail": "Declared redesign; measured change 100%."
+      },
+      {
+        "id": "improvement-demonstrated",
+        "ok": true,
+        "detail": "Original concept measured as redesign-worthy (3 concept weakness signals; 5 in total). After: 0 (2 in total); composition improved, spatial coherence improved, ambition improved."
+      }
+    ],
+    "resolvedCauses": [],
+    "remainingCauses": [],
+    "newCauses": [],
+    "dimensions": [
+      {
+        "dimension": "composition",
+        "improvements": [
+          "identical-cell share of interior rooms: 0.67 → 0",
+          "distinct envelope heights: 1 → 8",
+          "distinct roof specifications: 1 → 7"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      },
+      {
+        "dimension": "spatialCoherence",
+        "improvements": [
+          "windowless share of interior area: 0.19 → 0.07"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      },
+      {
+        "dimension": "ambition",
+        "improvements": [
+          "section range (m): 0 → 2.2"
+        ],
+        "regressions": [],
+        "verdict": "improved"
+      }
+    ],
+    "changeShare": 1,
+    "revisedErrors": 0,
+    "statement": "Stopped. The model-produced plan, diff and measurements are preserved as evidence; nothing was repaired or retried."
+  },
+  "compact-two-level-repair": {
+    "label": "MOCK developer-authored response; not model output and not evidence of model capability",
+    "originalErrors": 5,
+    "originalDisposition": "repair",
+    "scope": "repair-only",
+    "declaredKind": "repair",
+    "status": "accepted-for-construction",
+    "stopReasons": [],
+    "checks": [
+      {
+        "id": "schema",
+        "ok": true,
+        "detail": "Response and plan satisfy the revision and architectural-plan-1 schemas."
+      },
+      {
+        "id": "changed",
+        "ok": true,
+        "detail": "50% of spaces added, removed, moved, resized or re-levelled."
+      },
+      {
+        "id": "physical-validity",
+        "ok": true,
+        "detail": "No diagnosed errors; the canonical compiler accepts the plan."
+      },
+      {
+        "id": "programme-preserved",
+        "ok": true,
+        "detail": "Programme retained."
+      },
+      {
+        "id": "within-authorized-scope",
+        "ok": true,
+        "detail": "Repair-only scope respected."
+      },
+      {
+        "id": "declared-kind-matches-change",
+        "ok": true,
+        "detail": "Declared repair; measured change 50%."
+      },
+      {
+        "id": "improvement-demonstrated",
+        "ok": true,
+        "detail": "Original measured as repair. Causes resolved: chain-collision, roof-eaves; remaining: none; new: none."
+      }
+    ],
+    "resolvedCauses": [
+      "chain-collision",
+      "roof-eaves"
+    ],
+    "remainingCauses": [],
+    "newCauses": [],
+    "dimensions": [
+      {
+        "dimension": "composition",
+        "improvements": [],
+        "regressions": [],
+        "verdict": "unchanged"
+      },
+      {
+        "dimension": "spatialCoherence",
+        "improvements": [
+          "errors: 5 → 0",
+          "doors/passages that sit on a shared wall (share): 0.5 → 1"
+        ],
+        "regressions": [
+          "windowless share of interior area: 0.81 → 1"
+        ],
+        "verdict": "mixed"
+      },
+      {
+        "dimension": "ambition",
+        "improvements": [],
+        "regressions": [],
+        "verdict": "unchanged"
+      }
+    ],
+    "changeShare": 0.5,
+    "revisedErrors": 0,
+    "statement": "Physically valid, programme-preserving and measurably changed. This is NOT a finding of architectural success: it authorizes compilation and rendered review only. Composition, spatial coherence and ambition are reported separately as indicators."
+  }
+}

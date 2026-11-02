@@ -20,6 +20,7 @@ import { makeScopeForRoom } from "@/lib/ai/targeting";
 import { requestHouseEdit, resolveClientGenerationMode, STALE_PROJECT_MESSAGE } from "@/lib/ai/client";
 import { requestStagedGeneration } from "@/lib/ai/stagedClient";
 import { needsInitialGeneration } from "@/lib/house/blank";
+import { canStartNewDesign, LEGACY_PROJECT_GENERATION_MESSAGE } from "@/lib/v3/projectMode";
 import { messagesAfterSuccessfulEdit, type WorkspaceChatMessage } from "./chatMessageState";
 
 // ── Step generator ──────────────────────────────────────────────────────────
@@ -201,6 +202,11 @@ export function ChatPanel() {
       return;
     }
     const generationMode = modeResolution.mode;
+    if (wasBlank && !canStartNewDesign(project)) {
+      setMessages((prev) => [...prev, { role: "error", content: LEGACY_PROJECT_GENERATION_MESSAGE }]);
+      setGenerationError(LEGACY_PROJECT_GENERATION_MESSAGE);
+      return;
+    }
     // This happens in the generation UI before choosing a transport. V3 can
     // only use the non-SSE V3 route below; it never enters requestStagedGeneration.
     console.info(`[client-generation] resolvedMode: ${generationMode}`);

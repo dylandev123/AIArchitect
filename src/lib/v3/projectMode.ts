@@ -45,3 +45,10 @@ export function projectModeDisagreementMessage(authority: ProjectModeAuthority):
   if (authority.agrees) return undefined;
   return `Generation mode disagreement: persisted root is ${authority.persistedMode}, but the project record is ${authority.recordMode}. Generation was blocked.`;
 }
+
+/** New houses are authored only by the canonical plan pipeline in the direct-scene workspace.
+ * Historical V2/V3 projects stay openable and editable, but a blank one cannot start a new design. */
+export const LEGACY_PROJECT_GENERATION_MESSAGE = "This project uses a retired generation format, so it can't start a new design. Create a new project from the home page to generate a house; your existing designs stay untouched.";
+export function canStartNewDesign(project: { houseConfigJson: string }): boolean {
+  return resolveProjectGenerationMode(project) === "direct-scene";
+}

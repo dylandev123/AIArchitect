@@ -1,0 +1,34 @@
+{
+  "paidRequests": 0,
+  "spatialAndModelSourcesByteIdenticalToTerraRun": true,
+  "method": "Same production wire normalization, spatial/model/fidelity checks on both exact outputs. Null optional profile holes are normalized by the existing SDK schema adapter, not repaired. Current proposal validator adds only previously documented plate-overhead acceptance and schema descriptions; baseline roof-only mismatch list retained separately for both. No repaired geometry.",
+  "results": [
+    {
+      "model": "terra",
+      "anchors": 32,
+      "spaces": 11,
+      "routes": 8,
+      "relationships": 10,
+      "baselineSemanticValidationPassed": false,
+      "spatialMismatches": 6,
+      "missingInteriorAccess": [
+        "suite-02",
+        "suite-03",
+        "suite-05",
+        "suite-06"
+      ],
+      "spaceBoundMismatches": 11
+    },
+    {
+      "model": "sol",
+      "anchors": 62,
+      "spaces": 13,
+      "routes": 10,
+      "relationships": 15,
+      "baselineSemanticValidationPassed": false,
+      "spatialMismatches": 6,
+      "missingInteriorAccess": [],
+      "spaceBoundMismatches": 9
+    }
+  ]
+}

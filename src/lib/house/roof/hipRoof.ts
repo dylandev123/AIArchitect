@@ -3,6 +3,7 @@ import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG } from "../constants";
 import type { ResolvedMaterial } from "../materials";
 import type { RoofShape } from "../architecture/profiles";
+import { withFascia } from "./fascia";
 
 /**
  * Ridge runs along the longer footprint axis with length = longer - shorter
@@ -92,5 +93,5 @@ export function buildHipRoof(
     );
   }
 
-  return primitives;
+  return withFascia(primitives, shape?.fascia);
 }

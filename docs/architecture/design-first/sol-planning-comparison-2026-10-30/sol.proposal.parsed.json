@@ -1,0 +1,2349 @@
+{
+  "version": "spatial-proposal-1",
+  "concept": "Breeze Court Estate: a landward arrival court leads into a tall central great hall framed by two quieter two-level suite wings. The hall opens directly toward a broad ocean terrace and a long water court, while recessed upper galleries, deep roof edges, bronze screens and limestone piers create shade and privacy. Six individually bounded suites occupy the wings: two garden-level ocean suites and four upper suites, including a larger primary allocation. The composition remains low, horizontal and landscape-integrated despite its substantial programme.",
+  "alternatives": [
+    {
+      "concept": "Terraced linear bar with all suites parallel to the shoreline and living spaces in a projecting central pavilion.",
+      "tradeoff": "Maximizes direct ocean frontage but creates a very long circulation spine and a less protected tropical courtyard."
+    },
+    {
+      "concept": "Three detached pavilions linked by covered walkways around a garden court.",
+      "tradeoff": "Offers excellent cross-ventilation and privacy, but weakens the singular estate-scale entrance and increases weather-exposed circulation."
+    }
+  ],
+  "selectionReason": "The selected court-and-wings scheme creates the clearest ceremonial sequence from sheltered arrival to ocean view, gives all six suites credible privacy and daylight, supports a direct indoor-outdoor entertainment axis, and allows the central roof to become a memorable silhouette without making the entire estate unnecessarily tall.",
+  "site": {
+    "assumptions": "A spacious Saint Lucia waterfront parcel is assumed, with vehicle access from the landward local -Z side and ocean views toward local +Z. Generation must use a single flat ground plane at Y=0, so the stated gentle slope, surveyed shoreline, flood elevation, coastal setbacks and legal boundaries remain unresolved. The estate is organized within an assumed buildable zone of approximately 80 by 95 metres, retaining broad planted side margins.",
+    "arrival": [
+      0,
+      0,
+      -42
+    ],
+    "viewDirection": [
+      0,
+      0,
+      1
+    ],
+    "organization": "A central north-south ceremonial axis aligns arrival court, entry portal, double-height hall, garden passage, ocean terrace and pool. Two parallel suite wings flank this axis. Service access is reserved along the east side, separated from the western guest garden. Upper suites are reached by a protected internal stair and bridge gallery at the landward end of the great hall."
+  },
+  "anchors": [
+    {
+      "id": "central-great-hall-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        0,
+        0.1,
+        0
+      ],
+      "size": [
+        20,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Establishes the dominant entertaining volume and the uninterrupted entrance-to-ocean axis at a 0.20 metre walking datum."
+    },
+    {
+      "id": "west-ground-wing-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        -17.5,
+        0.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        22
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Supports the western guest suite, private garden allocation and upper suite wing."
+    },
+    {
+      "id": "east-ground-wing-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        17.5,
+        0.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        22
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Supports the eastern guest suite, service allocation and upper suite wing."
+    },
+    {
+      "id": "west-upper-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        -17.5,
+        4.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        20
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides upper-level capacity for two generous suites at a 4.20 metre walking datum."
+    },
+    {
+      "id": "east-upper-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        17.5,
+        4.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        20
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides upper-level capacity for two generous suites, including the primary suite allocation."
+    },
+    {
+      "id": "upper-bridge-gallery",
+      "role": "circulation",
+      "kind": "plate",
+      "centre": [
+        0,
+        4.1,
+        -3
+      ],
+      "size": [
+        20,
+        0.2,
+        4
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Connects both upper suite wings within the tall central hall while preserving the ocean-facing double-height volume."
+    },
+    {
+      "id": "main-stair-reserve",
+      "role": "circulation",
+      "kind": "volume",
+      "centre": [
+        0,
+        2.2,
+        -7
+      ],
+      "size": [
+        2.6,
+        4,
+        6.5
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Reserves a straight stair rising 4.00 metres from the entrance datum to the upper bridge, with approximately 21 equal risers and a protected landing."
+    },
+    {
+      "id": "arrival-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        0,
+        3.4,
+        -9
+      ],
+      "size": [
+        20,
+        6.4,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 3.2,
+        "height": 3.4,
+        "glazed": false
+      },
+      "designReason": "Forms a monumental but shaded arrival elevation with a genuine sill-zero entrance opening."
+    },
+    {
+      "id": "main-entrance-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        0,
+        1.9,
+        -9
+      ],
+      "size": [
+        3.1,
+        3.4,
+        0.12
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 2,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates the principal threshold on the estate axis and faces the landward approach."
+    },
+    {
+      "id": "entry-canopy",
+      "role": "roof",
+      "kind": "roof",
+      "centre": [
+        0,
+        4,
+        -11.1
+      ],
+      "size": [
+        9,
+        0.25,
+        4.5
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "bronze",
+      "color": null,
+      "panels": 1,
+      "roofForm": "flat",
+      "overhang": 0,
+      "opening": null,
+      "designReason": "Projects beyond the entrance wall to shelter the drop-off threshold from sun and driving rain."
+    },
+    {
+      "id": "entry-west-pier",
+      "role": "facade",
+      "kind": "volume",
+      "centre": [
+        -4,
+        2,
+        -10.2
+      ],
+      "size": [
+        0.7,
+        4,
+        0.7
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Supports and visually frames the deep entrance canopy."
+    },
+    {
+      "id": "entry-east-pier",
+      "role": "facade",
+      "kind": "volume",
+      "centre": [
+        4,
+        2,
+        -10.2
+      ],
+      "size": [
+        0.7,
+        4,
+        0.7
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Completes the supported portal and establishes a symmetrical ceremonial threshold."
+    },
+    {
+      "id": "ocean-facade-west",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -6.5,
+        2.1,
+        9
+      ],
+      "size": [
+        7,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 5.8,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Provides broad shaded living-room views while retaining solid limestone-scale piers at the facade edges."
+    },
+    {
+      "id": "ocean-facade-door-bay",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        0,
+        2.1,
+        9
+      ],
+      "size": [
+        6,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 3.2,
+        "height": 3.2,
+        "glazed": false
+      },
+      "designReason": "Contains the actual garden passage connecting the great hall to the ocean terrace."
+    },
+    {
+      "id": "ocean-garden-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        0,
+        1.8,
+        9
+      ],
+      "size": [
+        3.1,
+        3.2,
+        0.12
+      ],
+      "yaw": 3.141593,
+      "geometry": null,
+      "material": "bronze",
+      "color": null,
+      "panels": 2,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates a real passage between interior entertaining space and the dry terrace circuit."
+    },
+    {
+      "id": "ocean-facade-east",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        6.5,
+        2.1,
+        9
+      ],
+      "size": [
+        7,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 5.8,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Balances the west living opening and frames the pool along the central view axis."
+    },
+    {
+      "id": "great-hall-clerestory",
+      "role": "facade",
+      "kind": "glazing",
+      "centre": [
+        0,
+        5.15,
+        9
+      ],
+      "size": [
+        17.5,
+        1.8,
+        0.12
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "bronze",
+      "color": null,
+      "panels": 9,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Lifts the ocean elevation above the lower doors and glazing, admitting high light beneath the sloped roof."
+    },
+    {
+      "id": "central-folded-roof",
+      "role": "roof",
+      "kind": "roof",
+      "centre": [
+        0,
+        7.2,
+        0
+      ],
+      "size": [
+        22,
+        1.2,
+        20
+      ],
+      "yaw": 0,
+      "geometry": {
+        "type": "extrusion",
+        "axis": "x",
+        "outline": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.25
+          ],
+          [
+            0.5,
+            0.5
+          ],
+          [
+            -0.5,
+            -0.25
+          ]
+        ],
+        "holes": []
+      },
+      "material": "bronze",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "A disciplined rising plane gives the great hall a distinct silhouette, maintains stair headroom and lifts toward the ocean view."
+    },
+    {
+      "id": "west-outer-ground-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -25,
+        2.1,
+        0
+      ],
+      "size": [
+        22,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 5,
+        "sill": 0.8,
+        "width": 4.2,
+        "height": 2.2,
+        "glazed": true
+      },
+      "designReason": "Protects the west wing from arrival views while admitting controlled garden light to the ground suite."
+    },
+    {
+      "id": "west-ground-suite-access-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -10,
+        2.1,
+        6
+      ],
+      "size": [
+        10,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": -2,
+        "sill": 0,
+        "width": 1.4,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the inner boundary and actual private entrance of the western garden-level suite."
+    },
+    {
+      "id": "west-ground-suite-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        -10,
+        1.45,
+        4
+      ],
+      "size": [
+        1.35,
+        2.5,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides a real protected threshold from the great hall side gallery into Suite 1."
+    },
+    {
+      "id": "west-ground-suite-north-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -19,
+        2.1,
+        1
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Separates Suite 1 from quieter landward guest and wellness capacity."
+    },
+    {
+      "id": "west-ground-suite-ocean-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -19,
+        2.1,
+        11
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5.4,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 1 a broad shaded ocean outlook while retaining solid corners for privacy."
+    },
+    {
+      "id": "east-outer-ground-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        25,
+        2.1,
+        0
+      ],
+      "size": [
+        22,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 5,
+        "sill": 0.8,
+        "width": 4.2,
+        "height": 2.2,
+        "glazed": true
+      },
+      "designReason": "Forms a robust coastal edge and provides controlled light to the eastern garden suite."
+    },
+    {
+      "id": "east-ground-suite-access-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        10,
+        2.1,
+        6
+      ],
+      "size": [
+        10,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": -2,
+        "sill": 0,
+        "width": 1.4,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the inner boundary and actual private entrance of the eastern garden-level suite."
+    },
+    {
+      "id": "east-ground-suite-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        10,
+        1.45,
+        4
+      ],
+      "size": [
+        1.35,
+        2.5,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides a protected threshold from the great hall side gallery into Suite 2."
+    },
+    {
+      "id": "east-ground-suite-north-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        19,
+        2.1,
+        1
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Separates Suite 2 from the landward service and support allocation."
+    },
+    {
+      "id": "east-ground-suite-ocean-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        19,
+        2.1,
+        11
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5.4,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 2 direct ocean views and a facade rhythm matching the western wing."
+    },
+    {
+      "id": "west-upper-outer-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -25,
+        5.8,
+        0
+      ],
+      "size": [
+        20,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.75,
+        "width": 7,
+        "height": 2.1,
+        "glazed": true
+      },
+      "designReason": "Unifies the two western upper suites with a controlled side elevation."
+    },
+    {
+      "id": "west-upper-inner-north-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -11.75,
+        5.8,
+        -5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 3 against the upper gallery and contains its private entrance."
+    },
+    {
+      "id": "west-upper-north-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        -11.75,
+        5.4,
+        -5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides Suite 3 with a genuine door from the protected upper gallery."
+    },
+    {
+      "id": "west-upper-inner-south-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -11.75,
+        5.8,
+        5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 4 against the upper gallery and preserves separation from Suite 3."
+    },
+    {
+      "id": "west-upper-south-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        -11.75,
+        5.4,
+        5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides Suite 4 with direct access from the upper gallery."
+    },
+    {
+      "id": "west-upper-divider",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -19.25,
+        5.8,
+        0
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.25
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates distinct northern and southern suite allocations without overlapping floor area."
+    },
+    {
+      "id": "west-upper-landward-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -19.25,
+        5.8,
+        -10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 4.8,
+        "height": 2,
+        "glazed": true
+      },
+      "designReason": "Provides Suite 3 with filtered landward garden light."
+    },
+    {
+      "id": "west-upper-ocean-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        -19.25,
+        5.8,
+        10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.3,
+        "width": 7.5,
+        "height": 2.5,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 4 a broad but deeply shaded ocean elevation."
+    },
+    {
+      "id": "east-upper-outer-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        25,
+        5.8,
+        0
+      ],
+      "size": [
+        20,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.75,
+        "width": 7,
+        "height": 2.1,
+        "glazed": true
+      },
+      "designReason": "Unifies the eastern upper suites and balances the overall elevation."
+    },
+    {
+      "id": "east-upper-inner-north-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        11.75,
+        5.8,
+        -5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 5 and its private threshold along the upper gallery."
+    },
+    {
+      "id": "east-upper-north-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        11.75,
+        5.4,
+        -5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides Suite 5 with direct access from the bridge gallery."
+    },
+    {
+      "id": "east-upper-inner-south-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        11.75,
+        5.8,
+        5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the larger primary suite allocation and its gallery-facing entrance."
+    },
+    {
+      "id": "primary-suite-door",
+      "role": "entrance",
+      "kind": "entrance",
+      "centre": [
+        11.75,
+        5.45,
+        5
+      ],
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates a wider, identifiable threshold for the primary suite."
+    },
+    {
+      "id": "east-upper-divider",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        19.25,
+        5.8,
+        0
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.25
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates distinct Suite 5 and primary-suite allocations."
+    },
+    {
+      "id": "east-upper-landward-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        19.25,
+        5.8,
+        -10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 4.8,
+        "height": 2,
+        "glazed": true
+      },
+      "designReason": "Provides Suite 5 with private landward garden light."
+    },
+    {
+      "id": "primary-ocean-wall",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        19.25,
+        5.8,
+        10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "ivory",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": {
+        "x": 0,
+        "sill": 0.25,
+        "width": 8.2,
+        "height": 2.55,
+        "glazed": true
+      },
+      "designReason": "Gives the primary suite the strongest framed ocean opening while preserving substantial side piers."
+    },
+    {
+      "id": "west-wing-roof",
+      "role": "roof",
+      "kind": "roof",
+      "centre": [
+        -17.5,
+        7.55,
+        0
+      ],
+      "size": [
+        17.4,
+        0.3,
+        22.4
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "bronze",
+      "color": null,
+      "panels": 1,
+      "roofForm": "flat",
+      "overhang": 0,
+      "opening": null,
+      "designReason": "Creates a thin horizontal cap with approximately 1.2 metre protection around the upper suite envelope."
+    },
+    {
+      "id": "east-wing-roof",
+      "role": "roof",
+      "kind": "roof",
+      "centre": [
+        17.5,
+        7.55,
+        0
+      ],
+      "size": [
+        17.4,
+        0.3,
+        22.4
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "bronze",
+      "color": null,
+      "panels": 1,
+      "roofForm": "flat",
+      "overhang": 0,
+      "opening": null,
+      "designReason": "Balances the west roof while deeply shading the primary and eastern guest-suite glazing."
+    },
+    {
+      "id": "west-upper-screen",
+      "role": "facade",
+      "kind": "screen",
+      "centre": [
+        -25.7,
+        5.8,
+        0
+      ],
+      "size": [
+        18,
+        3,
+        0.25
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 18,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Adds solar depth and privacy to the western upper elevation."
+    },
+    {
+      "id": "east-upper-screen",
+      "role": "facade",
+      "kind": "screen",
+      "centre": [
+        25.7,
+        5.8,
+        0
+      ],
+      "size": [
+        18,
+        3,
+        0.25
+      ],
+      "yaw": 1.570796,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 18,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Screens the service-side elevation and gives both wings a coherent tropical rhythm."
+    },
+    {
+      "id": "ocean-terrace",
+      "role": "outdoor",
+      "kind": "plate",
+      "centre": [
+        0,
+        0.1,
+        16
+      ],
+      "size": [
+        50,
+        0.2,
+        10
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Extends from the suite wings and great hall to the pool coping, creating a continuous dry entertaining surface."
+    },
+    {
+      "id": "terrace-pergola-beam",
+      "role": "roof",
+      "kind": "roof",
+      "centre": [
+        0,
+        3.6,
+        13.2
+      ],
+      "size": [
+        20,
+        0.25,
+        5.5
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": "flat",
+      "overhang": 0,
+      "opening": null,
+      "designReason": "Defines a shaded outdoor living room immediately beyond the great hall."
+    },
+    {
+      "id": "pergola-west-support",
+      "role": "facade",
+      "kind": "volume",
+      "centre": [
+        -9,
+        1.8,
+        14.5
+      ],
+      "size": [
+        0.45,
+        3.6,
+        0.45
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides an explicit ground contact for the terrace shade structure."
+    },
+    {
+      "id": "pergola-east-support",
+      "role": "facade",
+      "kind": "volume",
+      "centre": [
+        9,
+        1.8,
+        14.5
+      ],
+      "size": [
+        0.45,
+        3.6,
+        0.45
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "timber",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Completes the supported outdoor-room frame without obstructing the central pool route."
+    },
+    {
+      "id": "pool-coping-ring",
+      "role": "outdoor",
+      "kind": "plate",
+      "centre": [
+        0,
+        0.125,
+        26
+      ],
+      "size": [
+        26,
+        0.15,
+        10
+      ],
+      "yaw": 0,
+      "geometry": {
+        "type": "extrusion",
+        "axis": "y",
+        "outline": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ],
+          [
+            -0.5,
+            0.5
+          ]
+        ],
+        "holes": [
+          [
+            [
+              -0.4615,
+              -0.4
+            ],
+            [
+              0.4615,
+              -0.4
+            ],
+            [
+              0.4615,
+              0.4
+            ],
+            [
+              -0.4615,
+              0.4
+            ]
+          ]
+        ]
+      },
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Forms a continuous dry perimeter around the reserved water opening and abuts the ocean terrace at the near edge."
+    },
+    {
+      "id": "pool-basin-ring",
+      "role": "enclosure",
+      "kind": "wall",
+      "centre": [
+        0,
+        -0.65,
+        26
+      ],
+      "size": [
+        24.5,
+        1.5,
+        8.5
+      ],
+      "yaw": 0,
+      "geometry": {
+        "type": "extrusion",
+        "axis": "y",
+        "outline": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ],
+          [
+            -0.5,
+            0.5
+          ]
+        ],
+        "holes": [
+          [
+            [
+              -0.4796,
+              -0.4706
+            ],
+            [
+              0.4796,
+              -0.4706
+            ],
+            [
+              0.4796,
+              0.4706
+            ],
+            [
+              -0.4796,
+              0.4706
+            ]
+          ]
+        ]
+      },
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Defines the four-sided basin perimeter from coping level to the basin floor."
+    },
+    {
+      "id": "pool-basin-floor",
+      "role": "floor",
+      "kind": "plate",
+      "centre": [
+        0,
+        -1.425,
+        26
+      ],
+      "size": [
+        24,
+        0.15,
+        8
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": "#8AAFA8",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Closes the pool basin at an approximate 1.5 metre depth."
+    },
+    {
+      "id": "pool-water",
+      "role": "outdoor",
+      "kind": "water",
+      "centre": [
+        0,
+        0.075,
+        26
+      ],
+      "size": [
+        24,
+        0.05,
+        8
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "sage",
+      "color": "#55A7B4",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Reserves the long view-oriented swimming surface without claiming unsupported overflow hydraulics."
+    },
+    {
+      "id": "arrival-court",
+      "role": "landscape",
+      "kind": "plate",
+      "centre": [
+        0,
+        0.1,
+        -18
+      ],
+      "size": [
+        24,
+        0.2,
+        12
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Provides a generous drop-off and dry pedestrian approach while remaining separate from the pool route."
+    },
+    {
+      "id": "arrival-spine",
+      "role": "circulation",
+      "kind": "plate",
+      "centre": [
+        0,
+        0.1,
+        -33
+      ],
+      "size": [
+        6,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "limestone",
+      "color": null,
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Connects the assumed landward site entry to the arrival court and frames the entrance rather than the service wing."
+    },
+    {
+      "id": "west-tropical-garden",
+      "role": "landscape",
+      "kind": "plate",
+      "centre": [
+        -34,
+        0.05,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "sage",
+      "color": "#557A4D",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Creates a layered privacy garden beside the guest wing while preserving a generous side setback."
+    },
+    {
+      "id": "east-tropical-garden",
+      "role": "landscape",
+      "kind": "plate",
+      "centre": [
+        34,
+        0.05,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "sage",
+      "color": "#557A4D",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Screens service movement and softens the eastern elevation."
+    },
+    {
+      "id": "arrival-rain-garden-west",
+      "role": "landscape",
+      "kind": "volume",
+      "centre": [
+        -9,
+        0.35,
+        -31
+      ],
+      "size": [
+        8,
+        0.7,
+        18
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "sage",
+      "color": "#6B8658",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Represents a raised tropical planting mass that narrows and frames the long arrival view."
+    },
+    {
+      "id": "arrival-rain-garden-east",
+      "role": "landscape",
+      "kind": "volume",
+      "centre": [
+        9,
+        0.35,
+        -31
+      ],
+      "size": [
+        8,
+        0.7,
+        18
+      ],
+      "yaw": 0,
+      "geometry": null,
+      "material": "sage",
+      "color": "#6B8658",
+      "panels": 1,
+      "roofForm": null,
+      "overhang": null,
+      "opening": null,
+      "designReason": "Balances the western planting mass and separates the pedestrian axis from wider vehicle movement."
+    }
+  ],
+  "spaces": [
+    {
+      "id": "great-hall",
+      "name": "Great Hall, Living and Entertainment",
+      "use": "Double-height living, dining and entertainment allocation with ocean outlook",
+      "environment": "interior",
+      "floorId": "central-great-hall-floor",
+      "centre": [
+        0,
+        2,
+        1
+      ],
+      "size": [
+        18,
+        3.8,
+        14
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "arrival-wall",
+        "ocean-facade-west",
+        "ocean-facade-door-bay",
+        "ocean-facade-east",
+        "great-hall-clerestory"
+      ],
+      "roofIds": [
+        "central-folded-roof"
+      ],
+      "accessIds": [
+        "main-entrance-door",
+        "ocean-garden-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Exterior boundaries and passages are committed; kitchen, bar, furniture, acoustic treatment and interior partitions remain deferred."
+    },
+    {
+      "id": "suite-1",
+      "name": "Garden Ocean Suite 1",
+      "use": "Generous bedroom suite with sleeping, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "west-ground-wing-floor",
+      "centre": [
+        -19,
+        2,
+        6
+      ],
+      "size": [
+        12,
+        3.8,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-outer-ground-wall",
+        "west-ground-suite-access-wall",
+        "west-ground-suite-north-wall",
+        "west-ground-suite-ocean-wall"
+      ],
+      "roofIds": [
+        "west-upper-floor"
+      ],
+      "accessIds": [
+        "west-ground-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are not yet constructed."
+    },
+    {
+      "id": "suite-2",
+      "name": "Garden Ocean Suite 2",
+      "use": "Generous bedroom suite with sleeping, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "east-ground-wing-floor",
+      "centre": [
+        19,
+        2,
+        6
+      ],
+      "size": [
+        12,
+        3.8,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-outer-ground-wall",
+        "east-ground-suite-access-wall",
+        "east-ground-suite-north-wall",
+        "east-ground-suite-ocean-wall"
+      ],
+      "roofIds": [
+        "east-upper-floor"
+      ],
+      "accessIds": [
+        "east-ground-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are deferred."
+    },
+    {
+      "id": "suite-3",
+      "name": "Upper Garden Suite 3",
+      "use": "Private bedroom suite overlooking the landward tropical gardens",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -19.25,
+        5.8,
+        -5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-outer-wall",
+        "west-upper-inner-north-wall",
+        "west-upper-divider",
+        "west-upper-landward-wall"
+      ],
+      "roofIds": [
+        "west-wing-roof"
+      ],
+      "accessIds": [
+        "west-upper-north-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "The bounded suite capacity is preserved; internal bathroom and wardrobe partitions remain unbuilt."
+    },
+    {
+      "id": "suite-4",
+      "name": "Upper Ocean Suite 4",
+      "use": "Private bedroom suite with broad ocean-facing glazing",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -19.25,
+        5.8,
+        5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-outer-wall",
+        "west-upper-inner-south-wall",
+        "west-upper-divider",
+        "west-upper-ocean-wall"
+      ],
+      "roofIds": [
+        "west-wing-roof"
+      ],
+      "accessIds": [
+        "west-upper-south-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Bedroom, dressing and bathroom fit-out are deferred despite the distinct bounded allocation."
+    },
+    {
+      "id": "suite-5",
+      "name": "Upper Garden Suite 5",
+      "use": "Private bedroom suite overlooking the arrival gardens",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        19.25,
+        5.8,
+        -5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-outer-wall",
+        "east-upper-inner-north-wall",
+        "east-upper-divider",
+        "east-upper-landward-wall"
+      ],
+      "roofIds": [
+        "east-wing-roof"
+      ],
+      "accessIds": [
+        "east-upper-north-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Bathroom, dressing and furniture remain deferred; the suite has a distinct floor allocation and entrance."
+    },
+    {
+      "id": "suite-6",
+      "name": "Primary Ocean Suite 6",
+      "use": "Largest bedroom suite with sleeping, lounge, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        19.25,
+        5.8,
+        5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-outer-wall",
+        "east-upper-inner-south-wall",
+        "east-upper-divider",
+        "primary-ocean-wall"
+      ],
+      "roofIds": [
+        "east-wing-roof"
+      ],
+      "accessIds": [
+        "primary-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "The primary allocation and wider entrance are committed, but ensuite, wardrobe and bedroom fit-out remain deferred."
+    },
+    {
+      "id": "upper-gallery",
+      "name": "Upper Bridge Gallery",
+      "use": "Protected circulation connecting stair and all four upper suites",
+      "environment": "interior",
+      "floorId": "upper-bridge-gallery",
+      "centre": [
+        0,
+        4.2,
+        -3
+      ],
+      "size": [
+        20,
+        2.3,
+        4
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "arrival-wall"
+      ],
+      "roofIds": [
+        "central-folded-roof"
+      ],
+      "accessIds": [
+        "main-stair-reserve",
+        "west-upper-north-door",
+        "west-upper-south-door",
+        "east-upper-north-door",
+        "primary-suite-door"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Guard geometry and detailed stair treads are reserved for the construction stage."
+    },
+    {
+      "id": "ocean-terrace-space",
+      "name": "Ocean Entertainment Terrace",
+      "use": "Outdoor dining, lounging and poolside entertainment",
+      "environment": "outdoor",
+      "floorId": "ocean-terrace",
+      "centre": [
+        0,
+        0.2,
+        16
+      ],
+      "size": [
+        50,
+        0.1,
+        10
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "terrace-pergola-beam"
+      ],
+      "accessIds": [
+        "ocean-garden-door"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Outdoor furniture, kitchen equipment, drainage and guard requirements remain unresolved."
+    },
+    {
+      "id": "pool-space",
+      "name": "Ocean-Edge Pool",
+      "use": "Long swimming and view-oriented water court",
+      "environment": "outdoor",
+      "floorId": "pool-basin-floor",
+      "centre": [
+        0,
+        -0.65,
+        26
+      ],
+      "size": [
+        24,
+        1.5,
+        8
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "pool-basin-ring"
+      ],
+      "roofIds": [],
+      "accessIds": [
+        "pool-coping-ring",
+        "ocean-terrace"
+      ],
+      "stage": "constructed-space",
+      "limitation": "The basin, water and dry perimeter are represented; infinity overflow, catch basin, pumps, filtration and safety certification are unsupported."
+    },
+    {
+      "id": "arrival-space",
+      "name": "Ceremonial Arrival Court",
+      "use": "Vehicle drop-off and protected pedestrian approach",
+      "environment": "outdoor",
+      "floorId": "arrival-court",
+      "centre": [
+        0,
+        0.2,
+        -18
+      ],
+      "size": [
+        24,
+        0.1,
+        12
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "entry-canopy"
+      ],
+      "accessIds": [
+        "arrival-spine",
+        "main-entrance-door"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Vehicle turning performance, gates, lighting and permeable paving performance are not simulated."
+    },
+    {
+      "id": "west-garden-space",
+      "name": "West Tropical Privacy Garden",
+      "use": "Layered planting reserve and private outlook for the western suites",
+      "environment": "outdoor",
+      "floorId": "west-tropical-garden",
+      "centre": [
+        -34,
+        0.1,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "ocean-terrace"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Planting beds are spatially reserved, but species, irrigation and mature canopy are not simulated."
+    },
+    {
+      "id": "east-garden-space",
+      "name": "East Tropical Service Garden",
+      "use": "Landscape screening and reserved service-side movement",
+      "environment": "outdoor",
+      "floorId": "east-tropical-garden",
+      "centre": [
+        34,
+        0.1,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "ocean-terrace"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Detailed service paving, waste handling, planting species and irrigation are deferred."
+    }
+  ],
+  "routes": [
+    {
+      "from": "arrival-space",
+      "to": "great-hall",
+      "via": [
+        "arrival-spine",
+        "arrival-court",
+        "entry-canopy",
+        "main-entrance-door"
+      ],
+      "description": "A level, dry ceremonial approach terminates at the sheltered 3.2 metre-wide entrance."
+    },
+    {
+      "from": "great-hall",
+      "to": "ocean-terrace-space",
+      "via": [
+        "ocean-garden-door",
+        "ocean-terrace"
+      ],
+      "description": "The central living volume opens through a true sill-zero garden door onto the terrace at the same 0.20 metre walking datum."
+    },
+    {
+      "from": "ocean-terrace-space",
+      "to": "pool-space",
+      "via": [
+        "ocean-terrace",
+        "pool-coping-ring"
+      ],
+      "description": "The terrace abuts the pool coping at its near edge, preserving a continuous dry route around the water."
+    },
+    {
+      "from": "great-hall",
+      "to": "upper-gallery",
+      "via": [
+        "main-stair-reserve",
+        "upper-bridge-gallery"
+      ],
+      "description": "A protected straight stair rises 4.00 metres to the bridge gallery beneath the elevated central roof."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-3",
+      "via": [
+        "upper-bridge-gallery",
+        "west-upper-north-door"
+      ],
+      "description": "The bridge turns into the western gallery and enters Suite 3 through its dedicated door."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-4",
+      "via": [
+        "upper-bridge-gallery",
+        "west-upper-south-door"
+      ],
+      "description": "The same protected gallery serves Suite 4 without crossing another suite."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-5",
+      "via": [
+        "upper-bridge-gallery",
+        "east-upper-north-door"
+      ],
+      "description": "The eastern gallery branch reaches Suite 5 through a distinct private threshold."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-6",
+      "via": [
+        "upper-bridge-gallery",
+        "primary-suite-door"
+      ],
+      "description": "The primary suite is reached through a wider door at the quieter ocean end of the east gallery."
+    },
+    {
+      "from": "great-hall",
+      "to": "suite-1",
+      "via": [
+        "west-ground-suite-door"
+      ],
+      "description": "Suite 1 is entered from the western internal side gallery rather than directly from the public terrace."
+    },
+    {
+      "from": "great-hall",
+      "to": "suite-2",
+      "via": [
+        "east-ground-suite-door"
+      ],
+      "description": "Suite 2 is entered from the eastern internal side gallery, maintaining privacy from pool circulation."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "central-great-hall-floor",
+      "target": "ocean-terrace",
+      "relation": "connected-to",
+      "clearance": 0,
+      "reason": "Their matching 0.20 metre walking surfaces meet through the ocean garden door."
+    },
+    {
+      "subject": "ocean-terrace",
+      "target": "pool-coping-ring",
+      "relation": "connected-to",
+      "clearance": 0,
+      "reason": "The terrace ocean edge and pool coping near edge meet at Z=21 for continuous dry access."
+    },
+    {
+      "subject": "pool-water",
+      "target": "central-great-hall-floor",
+      "relation": "facing",
+      "clearance": 0,
+      "reason": "The water court is centered on the entrance and great-hall view axis."
+    },
+    {
+      "subject": "pool-basin-floor",
+      "target": "pool-water",
+      "relation": "below",
+      "clearance": 1.4,
+      "reason": "Provides an approximately 1.5 metre basin depth beneath the water surface."
+    },
+    {
+      "subject": "pool-coping-ring",
+      "target": "pool-water",
+      "relation": "clear-of",
+      "clearance": 0.2,
+      "reason": "The coping profile contains a dedicated opening and does not cover the water."
+    },
+    {
+      "subject": "upper-bridge-gallery",
+      "target": "central-folded-roof",
+      "relation": "below",
+      "clearance": 2.3,
+      "reason": "Maintains useful headroom over the upper circulation bridge."
+    },
+    {
+      "subject": "west-upper-floor",
+      "target": "west-ground-wing-floor",
+      "relation": "above",
+      "clearance": 3.8,
+      "reason": "Creates a full ground-storey enclosure and a coordinated upper walking datum."
+    },
+    {
+      "subject": "east-upper-floor",
+      "target": "east-ground-wing-floor",
+      "relation": "above",
+      "clearance": 3.8,
+      "reason": "Creates a full ground-storey enclosure and supports two upper suites."
+    },
+    {
+      "subject": "west-wing-roof",
+      "target": "west-upper-floor",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The roof extends beyond the occupied upper floor on every side."
+    },
+    {
+      "subject": "east-wing-roof",
+      "target": "east-upper-floor",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The roof extends beyond the occupied upper floor on every side."
+    },
+    {
+      "subject": "entry-canopy",
+      "target": "main-entrance-door",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The canopy shelters both the threshold and its exterior approach."
+    },
+    {
+      "subject": "arrival-spine",
+      "target": "pool-water",
+      "relation": "clear-of",
+      "clearance": 48,
+      "reason": "Landward vehicle and arrival circulation remain completely separated from pool access."
+    },
+    {
+      "subject": "suite-1",
+      "target": "ocean-terrace-space",
+      "relation": "adjacent-to",
+      "clearance": 0.5,
+      "reason": "The western garden suite overlooks the terrace but retains private internal access."
+    },
+    {
+      "subject": "suite-2",
+      "target": "ocean-terrace-space",
+      "relation": "adjacent-to",
+      "clearance": 0.5,
+      "reason": "The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis."
+    },
+    {
+      "subject": "terrace-pergola-beam",
+      "target": "ocean-terrace",
+      "relation": "above",
+      "clearance": 3.27,
+      "reason": "Creates a shaded outdoor room with an explicit pair of ground-contact supports."
+    }
+  ],
+  "roofAndSection": "The occupied walking datums are 0.20 metres and 4.20 metres. Ground wing walls run from 0.20 to 4.00 metres, with the upper slabs beginning immediately above. Upper suite walls run from 4.20 to 7.40 metres and receive thin 0.30 metre flat roofs at 7.55 metres. The central hall is intentionally taller: its folded mono-pitch roof occupies approximately Y=6.60–7.80 and rises toward the ocean, leaving more than 2.3 metres over the upper bridge. The side roofs remain visually subordinate and extend about 1.2 metres beyond the suite envelopes.",
+  "facadeAndClimate": "The restrained palette combines pale limestone floors and piers, ivory rendered walls, bronze roof planes and window framing, and warm timber screens. Ocean-facing living openings use 2.9–3.2 metre heads beneath deep roof and pergola shade; bedroom openings are more controlled. The west and east upper elevations receive 0.7 metre-offset vertical timber screens, while the monumental entrance is recessed beneath a 4.5 metre-deep canopy. Openings on opposing garden and ocean elevations provide opportunities for cross-ventilation, but wind, hurricane, corrosion, glare and thermal performance are not simulated.",
+  "landscapeAndOutdoorLiving": "The outdoor sequence is organized as arrival gardens, shaded threshold, great hall, 10 metre-deep limestone terrace, supported timber pergola and a 24 by 8 metre pool aligned with the ocean view. Broad planted side reserves screen guest and service edges rather than paving the full property. Raised arrival planting masses frame the approach, while the west and east tropical gardens give the suite wings private green outlooks. Planting geometry represents layered landscape zones only, not verified Saint Lucian species or mature canopy.",
+  "limitations": [
+    "This is the required spatial proposal only; no construction operations are included at this stage.",
+    "The gentle slope and waterfront terrain cannot be established during new generation, so the proposal uses flat Y=0 ground and does not claim surveyed shoreline, flood elevation or coastal setbacks.",
+    "The pool basin, coping and water are representable, but an infinity overflow edge, catch basin, pumps, filtration and hydraulic performance are not represented.",
+    "Six suites are individually bounded and accessed as allocated capacity; bathrooms, dressing rooms, kitchen, service rooms, furniture and other interior fit-out remain deferred under the exterior-first scope.",
+    "Detailed stair treads, guards, upper gallery balustrades and engineering verification must be resolved during construction.",
+    "Planting masses and beds are editable abstractions; species ecology, irrigation, drainage and mature tropical canopy are not simulated.",
+    "No structural, hurricane, corrosion, accessibility, life-safety or building-code certification is implied.",
+    "The US$25 million figure is treated only as a property-value and design-ambition reference, not as a construction budget, valuation or area formula."
+  ]
+}

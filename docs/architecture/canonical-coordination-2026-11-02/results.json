@@ -1,0 +1,888 @@
+{
+  "note": "Offline. No provider, network, credential, database or commit. Retained Terra files read only.",
+  "retained": {
+    "recordSha256": "5d0f04916413cd7f6884bca81055d6847f22633e36fc5b27b1144d4f3b10a78e",
+    "originalSha256": "792ebf0c8f9b464b6a74b6c2f41c8b51059f9edc1d536990d1441b1b8f311689"
+  },
+  "revision": {
+    "retainedFindingCount": 87,
+    "diagnosisNow": 85,
+    "byStage": {
+      "volumes": 1,
+      "site": 1,
+      "openings": 16,
+      "access": 3,
+      "roofs": 52,
+      "screens": 12
+    },
+    "removedAsNonConflicts": [
+      "central-gallery/owner-suite",
+      "entry-hall/upper-west-suite",
+      "east-private-hall/east-suite-3"
+    ],
+    "addedBecauseCompilerWouldReachThem": [
+      {
+        "id": "entry-stair-door",
+        "message": "opening centre (10, 4) lies left of the stair flight (axis x 13, flight and 0.4 m clearance z 0.9..6.5): a landing-aligned position is required. Host side \"shared\" moves the opening the least distance that clears it."
+      }
+    ],
+    "decisions": [
+      {
+        "id": "pitched-roof:pitched:living-salon",
+        "kind": "pitched-roof",
+        "title": "Pitched roofs on living-salon, sunset-lounge, east-suite-1, west-suite-1",
+        "findings": 27,
+        "portals": [],
+        "screens": [],
+        "roofs": [
+          "living-salon",
+          "sunset-lounge",
+          "east-suite-1",
+          "west-suite-1"
+        ],
+        "rooms": [
+          "living-salon",
+          "sunset-lounge",
+          "east-suite-1",
+          "west-suite-1",
+          "dining-room",
+          "media-lounge",
+          "east-private-hall",
+          "west-private-hall",
+          "east-suite-2",
+          "east-bath-1",
+          "east-bath-2",
+          "west-suite-2",
+          "west-bath-1",
+          "west-bath-2"
+        ],
+        "introduced": [
+          "living-salon roof changed",
+          "sunset-lounge roof changed",
+          "east-suite-1 roof changed",
+          "west-suite-1 roof changed"
+        ],
+        "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+        "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+      },
+      {
+        "id": "pitched-roof:pitched:east-suite-3",
+        "kind": "pitched-roof",
+        "title": "Pitched roof on east-suite-3",
+        "findings": 10,
+        "portals": [],
+        "screens": [],
+        "roofs": [
+          "east-suite-3"
+        ],
+        "rooms": [
+          "east-suite-3",
+          "east-suite-2",
+          "east-bath-2",
+          "east-bath-3",
+          "stair-hall",
+          "east-private-hall",
+          "upper-landing",
+          "owner-suite",
+          "upper-east-suite"
+        ],
+        "introduced": [
+          "east-suite-3 roof changed"
+        ],
+        "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+        "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+      },
+      {
+        "id": "pitched-roof:pitched:upper-west-suite",
+        "kind": "pitched-roof",
+        "title": "Pitched roofs on upper-west-suite, upper-east-suite, owner-suite",
+        "findings": 8,
+        "portals": [],
+        "screens": [],
+        "roofs": [
+          "upper-west-suite",
+          "upper-east-suite",
+          "owner-suite"
+        ],
+        "rooms": [
+          "upper-landing",
+          "upper-west-suite",
+          "upper-east-suite",
+          "owner-suite"
+        ],
+        "introduced": [
+          "upper-west-suite roof changed",
+          "upper-east-suite roof changed",
+          "owner-suite roof changed"
+        ],
+        "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+        "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+      },
+      {
+        "id": "pitched-roof:pitched:west-suite-3",
+        "kind": "pitched-roof",
+        "title": "Pitched roof on west-suite-3",
+        "findings": 7,
+        "portals": [],
+        "screens": [],
+        "roofs": [
+          "west-suite-3"
+        ],
+        "rooms": [
+          "arrival-cloakroom",
+          "west-suite-3",
+          "west-private-hall",
+          "west-suite-2",
+          "west-bath-2",
+          "west-bath-3"
+        ],
+        "introduced": [
+          "west-suite-3 roof changed"
+        ],
+        "softwareRole": "Derives, from adjacency alone, which neighbours each pitched roof meets and along which edges; builds the exposed remainder of a partly covered flat roof itself.",
+        "modelDecides": "Which rooms get a pitched or overhanging roof (a design choice), and the roof strategy for abutting rooms (flat, lower neighbour, or separated by a gap)."
+      },
+      {
+        "id": "wall:wall:east-suite-2:east",
+        "kind": "wall",
+        "title": "east wall of east-suite-2 (shared with east-bath-2)",
+        "findings": 5,
+        "portals": [
+          "east-suite-2-window",
+          "east-suite-2-bath-door"
+        ],
+        "screens": [
+          "east-suite-2-timber-screen"
+        ],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "east-bath-2",
+          "east-suite-2-bath-door",
+          "east-suite-2-timber-screen"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:east-suite-3:east",
+        "kind": "wall",
+        "title": "east wall of east-suite-3 (shared with east-bath-3)",
+        "findings": 5,
+        "portals": [
+          "east-suite-3-window",
+          "east-suite-3-bath-door"
+        ],
+        "screens": [
+          "east-suite-3-timber-screen"
+        ],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "east-bath-3",
+          "east-suite-3-bath-door",
+          "east-suite-3-timber-screen"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:west-suite-2:west",
+        "kind": "wall",
+        "title": "west wall of west-suite-2 (shared with west-bath-2)",
+        "findings": 5,
+        "portals": [
+          "west-suite-2-window",
+          "west-suite-2-bath-door"
+        ],
+        "screens": [
+          "west-suite-2-timber-screen"
+        ],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "west-bath-2",
+          "west-suite-2-bath-door",
+          "west-suite-2-timber-screen"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:west-suite-3:west",
+        "kind": "wall",
+        "title": "west wall of west-suite-3 (shared with west-bath-3)",
+        "findings": 5,
+        "portals": [
+          "west-suite-3-window",
+          "west-suite-3-bath-door"
+        ],
+        "screens": [
+          "west-suite-3-timber-screen"
+        ],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "west-bath-3",
+          "west-suite-3-bath-door",
+          "west-suite-3-timber-screen"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "circulation:access:owner-suite",
+        "kind": "circulation",
+        "title": "owner-suite, upper-west-suite, upper-east-suite are not connected to upper-landing",
+        "findings": 3,
+        "portals": [],
+        "screens": [],
+        "roofs": [],
+        "rooms": [
+          "owner-suite",
+          "upper-west-suite",
+          "upper-east-suite"
+        ],
+        "introduced": [
+          "owner-suite",
+          "upper-west-suite",
+          "upper-east-suite"
+        ],
+        "softwareRole": "Lists the neighbours each room shares a wall with. When a door or passage is declared with host side \"shared\", derives its wall and position from the shared segment. It does not declare connections.",
+        "modelDecides": "Which neighbour each room connects through, and the opening mode and width."
+      },
+      {
+        "id": "wall:wall:dining-room:west",
+        "kind": "wall",
+        "title": "west wall of dining-room (shared with kitchen)",
+        "findings": 2,
+        "portals": [
+          "dining-west-window",
+          "dining-kitchen-opening"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:entry-hall:east",
+        "kind": "wall",
+        "title": "east wall of entry-hall (shared with stair-hall)",
+        "findings": 2,
+        "portals": [
+          "entry-stair-door",
+          "entry-east-window"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "stair-hall",
+          "entry-stair-door",
+          "entry-east-window"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "arrangement:volumes:media-lounge/east-suite-1",
+        "kind": "arrangement",
+        "title": "Independently placed rooms meet: media-lounge/east-suite-1",
+        "findings": 1,
+        "portals": [],
+        "screens": [],
+        "roofs": [],
+        "rooms": [
+          "media-lounge",
+          "east-suite-1"
+        ],
+        "introduced": [],
+        "softwareRole": "Resolves every relative placement to absolute extents and reports each overlap.",
+        "modelDecides": "Which chain yields or whether the rooms should meet."
+      },
+      {
+        "id": "site:site:east-arrival-bed-reserve",
+        "kind": "site",
+        "title": "Site allocation: east-arrival-bed-reserve",
+        "findings": 1,
+        "portals": [],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "east-arrival-bed-reserve"
+        ],
+        "softwareRole": "Resolves the site frame and reports the overlap or excess.",
+        "modelDecides": "Site size or allocation placement."
+      },
+      {
+        "id": "wall:wall:central-gallery:west",
+        "kind": "wall",
+        "title": "west wall of central-gallery (shared with west-private-hall)",
+        "findings": 1,
+        "portals": [
+          "gallery-west-window"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "gallery-west-window"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:east-suite-1:north",
+        "kind": "wall",
+        "title": "north wall of east-suite-1 (shared with east-suite-2)",
+        "findings": 1,
+        "portals": [
+          "east-suite-1-window"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:media-lounge:east",
+        "kind": "wall",
+        "title": "east wall of media-lounge (shared with east-bath-1)",
+        "findings": 1,
+        "portals": [
+          "media-east-window"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [
+          "east-bath-1"
+        ],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      },
+      {
+        "id": "wall:wall:west-suite-1:north",
+        "kind": "wall",
+        "title": "north wall of west-suite-1 (shared with west-suite-2)",
+        "findings": 1,
+        "portals": [
+          "west-suite-1-window"
+        ],
+        "screens": [],
+        "roofs": [],
+        "rooms": [],
+        "introduced": [],
+        "softwareRole": "Derives the wall and position of any door or opening declared with host side \"shared\", and of a window declared \"exposed\" when exactly one exposed run exists; reports the exposed runs of every edge.",
+        "modelDecides": "What this wall is: an interior connection, an exterior window (needs an exposed run) or nothing. A room wrapped on every edge has no exterior window or screen."
+      }
+    ],
+    "decisionCount": 17,
+    "decisionsByKind": {
+      "pitched-roof": {
+        "decisions": 4,
+        "findings": 52
+      },
+      "wall": {
+        "decisions": 10,
+        "findings": 28
+      },
+      "circulation": {
+        "decisions": 1,
+        "findings": 3
+      },
+      "arrangement": {
+        "decisions": 1,
+        "findings": 1
+      },
+      "site": {
+        "decisions": 1,
+        "findings": 1
+      }
+    },
+    "windowsOnSharedWalls": [
+      {
+        "id": "entry-east-window",
+        "room": "entry-hall",
+        "authoredSide": "east",
+        "exposedResolves": true,
+        "derivedSide": "west",
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "west-private-hall",
+              "central-gallery",
+              "east-private-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "stair-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "arrival-forecourt"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "arrival-cloakroom"
+            ],
+            "exposed": [
+              [
+                0,
+                4
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gallery-west-window",
+        "room": "central-gallery",
+        "authoredSide": "west",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "living-salon"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "east-private-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "entry-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "west-private-hall"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "dining-west-window",
+        "room": "dining-room",
+        "authoredSide": "west",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "dining-terrace"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "living-salon"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "west-suite-1",
+              "west-bath-1"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "kitchen"
+            ],
+            "exposed": [
+              [
+                0,
+                1.5
+              ],
+              [
+                9.5,
+                11
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "media-east-window",
+        "room": "media-lounge",
+        "authoredSide": "east",
+        "exposedResolves": true,
+        "derivedSide": "west",
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "sunset-lounge"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "east-bath-1"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "east-suite-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [],
+            "exposed": [
+              [
+                0,
+                6
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "east-suite-1-window",
+        "room": "east-suite-1",
+        "authoredSide": "north",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "living-salon",
+              "sunset-lounge"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "east-bath-1"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "east-suite-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "east-private-hall"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "east-suite-2-window",
+        "room": "east-suite-2",
+        "authoredSide": "east",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "east-suite-1",
+              "media-lounge"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "east-bath-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "east-suite-3"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "east-private-hall"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "east-suite-3-window",
+        "room": "east-suite-3",
+        "authoredSide": "east",
+        "exposedResolves": true,
+        "derivedSide": "north",
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "east-suite-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "east-bath-3"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "stair-hall"
+            ],
+            "exposed": [
+              [
+                0,
+                6
+              ]
+            ]
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "east-private-hall"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "west-suite-1-window",
+        "room": "west-suite-1",
+        "authoredSide": "north",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "dining-room",
+              "living-salon"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "west-private-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "west-suite-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "west-bath-1"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "west-suite-2-window",
+        "room": "west-suite-2",
+        "authoredSide": "west",
+        "exposedResolves": false,
+        "derivedSide": null,
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "west-suite-1"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "west-private-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [
+              "west-suite-3"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "west-bath-2"
+            ],
+            "exposed": []
+          }
+        ]
+      },
+      {
+        "id": "west-suite-3-window",
+        "room": "west-suite-3",
+        "authoredSide": "west",
+        "exposedResolves": true,
+        "derivedSide": "north",
+        "exposure": [
+          {
+            "side": "south",
+            "sharedWith": [
+              "west-suite-2"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "east",
+            "sharedWith": [
+              "west-private-hall"
+            ],
+            "exposed": []
+          },
+          {
+            "side": "north",
+            "sharedWith": [],
+            "exposed": [
+              [
+                0,
+                9
+              ]
+            ]
+          },
+          {
+            "side": "west",
+            "sharedWith": [
+              "west-bath-3"
+            ],
+            "exposed": []
+          }
+        ]
+      }
+    ],
+    "windowsDerivableWithExposed": 4,
+    "windowsImpossibleOnAnyWall": 6,
+    "unreachableRooms": [
+      "owner-suite",
+      "upper-west-suite",
+      "upper-east-suite"
+    ]
+  },
+  "relationshipsOnly": {
+    "note": "Same plans with ONLY door/passage connections re-expressed as host side \"shared\" (host, target, mode, width, alignment unchanged), and, for the revision, the three missing landing connections declared.",
+    "originalMansion": {
+      "explicitOpeningErrors": 5,
+      "afterSharedOpeningErrors": 1,
+      "remaining": [
+        {
+          "id": "living-east-window",
+          "message": "window faces media-lounge, not the exterior: east edge of living-salon is shared there. Exposed wall wide enough for 3.2 m: east 0..4 m."
+        }
+      ],
+      "totalBefore": 57,
+      "totalAfter": 53,
+      "doorsAndPassagesRelocatedByDerivation": 21
+    },
+    "rejectedRevision": {
+      "totalBefore": 85,
+      "totalAfter": 81,
+      "accessBefore": 3,
+      "accessAfter": 0,
+      "decisionsAfter": 16,
+      "decisionKindsAfter": {
+        "pitched-roof": 52,
+        "wall": 27,
+        "arrangement": 1,
+        "site": 1
+      },
+      "hostCoordinatesNoLongerAuthored": 29,
+      "windowsStillTheModelsDecision": 15
+    }
+  },
+  "compactMultilevel": {
+    "note": "Developer composition fixture and developer-authored revision mock (ensuite + study upstairs, guest wing deepened). Not model output.",
+    "base": {
+      "errors": 0,
+      "compiled": true,
+      "elements": 67,
+      "reachable": 7
+    },
+    "revisionMockAsRelationships": {
+      "errors": 0,
+      "byStage": {},
+      "compiled": true,
+      "elements": 81,
+      "reachable": 9,
+      "sharedOrExposedOpenings": 3,
+      "totalOpenings": 15,
+      "decisions": 0
+    },
+    "sameIntentGuessedEdges": {
+      "errors": 2,
+      "byStage": {
+        "openings": 2
+      },
+      "findings": [
+        {
+          "id": "suite-passage",
+          "message": "opening centre (0, 6) lies left of the stair flight (axis x 2.5, flight and 0.4 m clearance z 1..8.1): a landing-aligned position is required. Host side \"shared\" moves the opening the least distance that clears it."
+        },
+        {
+          "id": "master-bath-door",
+          "message": "master-suite and master-bath share no wall on the north edge. They do share the south edge of master-suite; host side \"shared\" derives it."
+        }
+      ],
+      "compiled": false,
+      "firstRejection": "suite-passage: unsupported-capability: left threshold crosses the selected stair flight/void; choose a landing-aligned portal or extend circulation intent."
+    }
+  }
+}

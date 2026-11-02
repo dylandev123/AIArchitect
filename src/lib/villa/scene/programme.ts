@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { ArchitecturalScene } from './model';
 import { sceneSpatialGeometry } from './spatial';
+import { straightWalkingAccess } from './walkingAccess';
 
 export const programmeSpaceSchema = z.object({
     name: z.string().min(1).max(80),
@@ -19,7 +20,7 @@ export const programmeSpaceSchema = z.object({
     floorIds: z.array(z.string().min(1).max(120)).max(64),
     enclosureIds: z.array(z.string().min(1).max(120)).max(128),
     roofIds: z.array(z.string().min(1).max(120)).max(64),
-    accessIds: z.array(z.string().min(1).max(120)).max(64).describe('Existing entrance IDs at actual passages, or supported stair/landing route IDs. Fixed glazing is not a door; never cite glazing IDs as access.'),
+    accessIds: z.array(z.string().min(1).max(120)).max(64).describe('Existing entrance IDs at actual passages, or supported stair/landing route IDs. A recessed entrance may reach a floor across a proven clear, level rectangular slab route; proximity alone does not prove it. Fixed glazing is not a door; never cite glazing IDs as access.'),
     limitation: z.string().max(180),
 }).strict();
 export const programmeSchema = z.array(programmeSpaceSchema).min(1).max(24);
@@ -75,10 +76,13 @@ export function reviewProgramme(scene: ArchitecturalScene) {
         if (!floors.length) issues.push('no allocated floor evidence');
         if (!access.length) issues.push('no access construction evidence');
         if (enclosed && (!enclosure.length || !roofs.length)) issues.push('interior enclosure or overhead evidence missing');
+        const accessRoutes = floors.flatMap(floor=>access.flatMap(a=>{
+            const route=straightWalkingAccess(scene,a,floor); return route?[route]:[];
+        }));
         for (const floor of floors) {
             if (enclosed && !enclosure.some(e=>g.separation(e,floor)<=.25 && g.top(e)>g.top(floor)+.5 && g.bottom(e)<=g.top(floor)+.25)) issues.push(`${floor.id}: local enclosure evidence missing`);
-            if (enclosed && !overheadCoverage(g,floor,roofs)) issues.push(`${floor.id}: full overhead coverage unverified`);
-            if (!access.some(a=>a.id!==floor.id && g.separation(a,floor)<=.25 && g.top(a)>=g.top(floor)-.25 && g.bottom(a)<=g.top(floor)+.25)) issues.push(`${floor.id}: local access at walking datum unverified`);
+            if ((enclosed || (space.zone==='outdoor' && space.roofIds.length>0)) && !overheadCoverage(g,floor,roofs)) issues.push(`${floor.id}: full overhead coverage unverified`);
+            if (!access.some(a=>a.id!==floor.id && g.separation(a,floor)<=.25 && g.top(a)>=g.top(floor)-.25 && g.bottom(a)<=g.top(floor)+.25) && !accessRoutes.some(r=>r.floorId===floor.id)) issues.push(`${floor.id}: local access at walking datum unverified`);
         }
         if (space.requirement?.origin === 'user-required' && (!space.requirement.briefQuote ||
             !scene.generationBrief?.includes(space.requirement.briefQuote)))
@@ -106,7 +110,7 @@ export function reviewProgramme(scene: ArchitecturalScene) {
         // Reference validity and physical exterior evidence above are still reviewed.
         if (exterior && enclosed) deferredInteriors.push(`${space.name}: interior subdivision and fit-out unverified; ${space.limitation || 'deferred'}`);
         if (space.limitation && (!exterior || !enclosed)) issues.push(space.limitation);
-        return {...space, floorSurfaceM2:floors.reduce((sum,f)=>sum+f.size[0]*f.size[2],0), walkingDatums:floors.map(f=>f.kind==='pavilion'?g.world(f)[1]:g.top(f)), allocation:floors.map(f=>({id:f.id,world:g.world(f),size:f.size,walkingDatum:f.kind==='pavilion'?g.world(f)[1]:g.top(f)})), issues, status:issues.length?'missing-evidence':'referenced-geometry', verifiedComplete:false};
+        return {...space, accessRoutes, floorSurfaceM2:floors.reduce((sum,f)=>sum+f.size[0]*f.size[2],0), walkingDatums:floors.map(f=>f.kind==='pavilion'?g.world(f)[1]:g.top(f)), allocation:floors.map(f=>({id:f.id,world:g.world(f),size:f.size,walkingDatum:f.kind==='pavilion'?g.world(f)[1]:g.top(f)})), issues, status:issues.length?'missing-evidence':'referenced-geometry', verifiedComplete:false};
     });
     const names = new Set(spaces.map(s=>s.name));
     const omitted = Array.isArray(plan?.intendedSpaces) ? plan.intendedSpaces.filter(n=>typeof n==='string' && !names.has(n)).map(n=>`Programme: ${n} has no construction commitment.`) : [];

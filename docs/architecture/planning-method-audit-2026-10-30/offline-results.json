@@ -1,0 +1,683 @@
+{
+  "paidCalls": 0,
+  "network": "fetch denied",
+  "modelProducedArchitecture": false,
+  "results": [
+    {
+      "case": "compact-family",
+      "inputs": {
+        "name": "compact-family",
+        "frame": [
+          7,
+          0,
+          -13
+        ],
+        "yaw": 0,
+        "width": 5,
+        "depth": 7,
+        "split": 2,
+        "door": 1.2,
+        "wall": 2.8,
+        "datum": 0.2
+      },
+      "zones": [
+        {
+          "id": "compact-family-suite",
+          "x0": 0,
+          "x1": 5,
+          "z0": 0,
+          "z1": 7
+        },
+        {
+          "id": "compact-family-corridor",
+          "x0": 5,
+          "x1": 6.6,
+          "z0": 0,
+          "z1": 7
+        },
+        {
+          "id": "compact-family-bath",
+          "x0": -2.4,
+          "x1": 0,
+          "z0": 0,
+          "z1": 2
+        }
+      ],
+      "thresholds": [
+        {
+          "from": "compact-family-suite",
+          "to": "compact-family-corridor",
+          "doorId": "compact-family-threshold-0-door",
+          "worldCentre": [
+            12,
+            1.25,
+            -8.45,
+            1.5707963267948966
+          ],
+          "worldSill": 0.19999999999999996,
+          "openingAligned": true
+        },
+        {
+          "from": "compact-family-bath",
+          "to": "compact-family-suite",
+          "doorId": "compact-family-threshold-1-door",
+          "worldCentre": [
+            7,
+            1.25,
+            -12,
+            1.5707963267948966
+          ],
+          "worldSill": 0.19999999999999996,
+          "openingAligned": true
+        }
+      ],
+      "scene": {
+        "version": "architectural-scene-1",
+        "name": "DETERMINISTIC PARTS ONLY; not a complete house",
+        "elements": [
+          {
+            "id": "compact-family-frame",
+            "label": "explicit local frame",
+            "kind": "volume",
+            "at": [
+              7,
+              0,
+              -13
+            ],
+            "rotation": 0,
+            "size": [
+              0.01,
+              0.01,
+              0.01
+            ],
+            "material": "ivory",
+            "panels": 1
+          },
+          {
+            "id": "compact-family-threshold-0",
+            "label": "compact-family-threshold-0 partition",
+            "kind": "wall",
+            "parent": "compact-family-frame",
+            "at": [
+              5,
+              1.5999999999999999,
+              3.5
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              7,
+              2.8,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": -1.0499999999999998,
+              "sill": 0,
+              "width": 1.2,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "compact-family-threshold-0-door",
+            "label": "compact-family-threshold-0 door",
+            "kind": "entrance",
+            "parent": "compact-family-threshold-0",
+            "at": [
+              -1.0499999999999998,
+              -0.34999999999999987,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              1.2,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "compact-family-threshold-1",
+            "label": "compact-family-threshold-1 partition",
+            "kind": "wall",
+            "parent": "compact-family-frame",
+            "at": [
+              0,
+              1.5999999999999999,
+              1
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              2,
+              2.8,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 1.2,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "compact-family-threshold-1-door",
+            "label": "compact-family-threshold-1 door",
+            "kind": "entrance",
+            "parent": "compact-family-threshold-1",
+            "at": [
+              0,
+              -0.34999999999999987,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              1.2,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        ]
+      },
+      "scope": "Two explicitly selected shared-edge openings only. No full enclosure, circulation, style or house-quality certification."
+    },
+    {
+      "case": "distributed-luxury-estate",
+      "inputs": {
+        "name": "distributed-luxury-estate",
+        "frame": [
+          -42,
+          0,
+          61
+        ],
+        "yaw": 0.63,
+        "width": 11,
+        "depth": 14,
+        "split": 5,
+        "door": 2,
+        "wall": 3.7,
+        "datum": 0.45
+      },
+      "zones": [
+        {
+          "id": "distributed-luxury-estate-suite",
+          "x0": 0,
+          "x1": 11,
+          "z0": 0,
+          "z1": 14
+        },
+        {
+          "id": "distributed-luxury-estate-corridor",
+          "x0": 11,
+          "x1": 12.6,
+          "z0": 0,
+          "z1": 14
+        },
+        {
+          "id": "distributed-luxury-estate-bath",
+          "x0": -2.4,
+          "x1": 0,
+          "z0": 0,
+          "z1": 5
+        }
+      ],
+      "thresholds": [
+        {
+          "from": "distributed-luxury-estate-suite",
+          "to": "distributed-luxury-estate-corridor",
+          "doorId": "distributed-luxury-estate-threshold-0-door",
+          "worldCentre": [
+            -27.750480111291676,
+            1.5000000000000002,
+            61.87245798827561,
+            2.2007963267948965
+          ],
+          "worldSill": 0.4500000000000002,
+          "openingAligned": true
+        },
+        {
+          "from": "distributed-luxury-estate-bath",
+          "to": "distributed-luxury-estate-suite",
+          "doorId": "distributed-luxury-estate-threshold-1-door",
+          "worldCentre": [
+            -40.527138105144324,
+            1.5000000000000002,
+            63.02006877078038,
+            2.2007963267948965
+          ],
+          "worldSill": 0.4500000000000002,
+          "openingAligned": true
+        }
+      ],
+      "scene": {
+        "version": "architectural-scene-1",
+        "name": "DETERMINISTIC PARTS ONLY; not a complete house",
+        "elements": [
+          {
+            "id": "distributed-luxury-estate-frame",
+            "label": "explicit local frame",
+            "kind": "volume",
+            "at": [
+              -42,
+              0,
+              61
+            ],
+            "rotation": 0.63,
+            "size": [
+              0.01,
+              0.01,
+              0.01
+            ],
+            "material": "ivory",
+            "panels": 1
+          },
+          {
+            "id": "distributed-luxury-estate-threshold-0",
+            "label": "distributed-luxury-estate-threshold-0 partition",
+            "kind": "wall",
+            "parent": "distributed-luxury-estate-frame",
+            "at": [
+              11,
+              2.3000000000000003,
+              7
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              14,
+              3.7,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": -2.0999999999999996,
+              "sill": 0,
+              "width": 2,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "distributed-luxury-estate-threshold-0-door",
+            "label": "distributed-luxury-estate-threshold-0 door",
+            "kind": "entrance",
+            "parent": "distributed-luxury-estate-threshold-0",
+            "at": [
+              -2.0999999999999996,
+              -0.8,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              2,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "distributed-luxury-estate-threshold-1",
+            "label": "distributed-luxury-estate-threshold-1 partition",
+            "kind": "wall",
+            "parent": "distributed-luxury-estate-frame",
+            "at": [
+              0,
+              2.3000000000000003,
+              2.5
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              5,
+              3.7,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 2,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "distributed-luxury-estate-threshold-1-door",
+            "label": "distributed-luxury-estate-threshold-1 door",
+            "kind": "entrance",
+            "parent": "distributed-luxury-estate-threshold-1",
+            "at": [
+              0,
+              -0.8,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              2,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        ]
+      },
+      "scope": "Two explicitly selected shared-edge openings only. No full enclosure, circulation, style or house-quality certification."
+    },
+    {
+      "case": "constrained-multilevel",
+      "inputs": {
+        "name": "constrained-multilevel",
+        "frame": [
+          23,
+          0,
+          9
+        ],
+        "yaw": -1.1,
+        "width": 3.2,
+        "depth": 8.5,
+        "split": 3.1,
+        "door": 0.9,
+        "wall": 2.6,
+        "datum": 3.4
+      },
+      "zones": [
+        {
+          "id": "constrained-multilevel-suite",
+          "x0": 0,
+          "x1": 3.2,
+          "z0": 0,
+          "z1": 8.5
+        },
+        {
+          "id": "constrained-multilevel-corridor",
+          "x0": 3.2,
+          "x1": 4.800000000000001,
+          "z0": 0,
+          "z1": 8.5
+        },
+        {
+          "id": "constrained-multilevel-bath",
+          "x0": 4.800000000000001,
+          "x1": 6.800000000000001,
+          "z0": 0,
+          "z1": 3.1
+        }
+      ],
+      "thresholds": [
+        {
+          "from": "constrained-multilevel-suite",
+          "to": "constrained-multilevel-corridor",
+          "doorId": "constrained-multilevel-threshold-0-door",
+          "worldCentre": [
+            19.527586924222412,
+            4.45,
+            14.357982123072908,
+            0.47079632679489647
+          ],
+          "worldSill": 3.4000000000000004,
+          "openingAligned": true
+        },
+        {
+          "from": "constrained-multilevel-corridor",
+          "to": "constrained-multilevel-bath",
+          "doorId": "constrained-multilevel-threshold-1-door",
+          "worldCentre": [
+            23.795889974747546,
+            4.45,
+            13.980869316504537,
+            0.47079632679489647
+          ],
+          "worldSill": 3.4000000000000004,
+          "openingAligned": true
+        }
+      ],
+      "scene": {
+        "version": "architectural-scene-1",
+        "name": "DETERMINISTIC PARTS ONLY; not a complete house",
+        "elements": [
+          {
+            "id": "constrained-multilevel-frame",
+            "label": "explicit local frame",
+            "kind": "volume",
+            "at": [
+              23,
+              0,
+              9
+            ],
+            "rotation": -1.1,
+            "size": [
+              0.01,
+              0.01,
+              0.01
+            ],
+            "material": "ivory",
+            "panels": 1
+          },
+          {
+            "id": "constrained-multilevel-threshold-0",
+            "label": "constrained-multilevel-threshold-0 partition",
+            "kind": "wall",
+            "parent": "constrained-multilevel-frame",
+            "at": [
+              3.2,
+              4.7,
+              4.25
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              8.5,
+              2.6,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": -1.2750000000000004,
+              "sill": 0,
+              "width": 0.9,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "constrained-multilevel-threshold-0-door",
+            "label": "constrained-multilevel-threshold-0 door",
+            "kind": "entrance",
+            "parent": "constrained-multilevel-threshold-0",
+            "at": [
+              -1.2750000000000004,
+              -0.25,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              0.9,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          },
+          {
+            "id": "constrained-multilevel-threshold-1",
+            "label": "constrained-multilevel-threshold-1 partition",
+            "kind": "wall",
+            "parent": "constrained-multilevel-frame",
+            "at": [
+              4.800000000000001,
+              4.7,
+              1.55
+            ],
+            "rotation": 1.5707963267948966,
+            "size": [
+              3.1,
+              2.6,
+              0.15
+            ],
+            "material": "ivory",
+            "panels": 4,
+            "opening": {
+              "x": 0,
+              "sill": 0,
+              "width": 0.9,
+              "height": 2.1,
+              "glazed": false
+            }
+          },
+          {
+            "id": "constrained-multilevel-threshold-1-door",
+            "label": "constrained-multilevel-threshold-1 door",
+            "kind": "entrance",
+            "parent": "constrained-multilevel-threshold-1",
+            "at": [
+              0,
+              -0.25,
+              0
+            ],
+            "rotation": 0,
+            "size": [
+              0.9,
+              2.1,
+              0.06
+            ],
+            "material": "timber",
+            "panels": 4
+          }
+        ]
+      },
+      "scope": "Two explicitly selected shared-edge openings only. No full enclosure, circulation, style or house-quality certification."
+    }
+  ],
+  "estateSite": {
+    "scene": {
+      "version": "architectural-scene-1",
+      "name": "distributed site fixture only",
+      "elements": [
+        {
+          "id": "estate-west-deck",
+          "label": "west deck",
+          "kind": "plate",
+          "at": [
+            -10,
+            0.35,
+            0
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "estate-selected-link",
+          "label": "explicit outdoor route",
+          "kind": "plate",
+          "at": [
+            0,
+            0.35,
+            1
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            1.8
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "estate-east-deck",
+          "label": "east deck",
+          "kind": "plate",
+          "at": [
+            10,
+            0.35,
+            3
+          ],
+          "rotation": 0,
+          "size": [
+            10,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "estate-curved-screen",
+          "label": "selected curved screen, unrelated to threshold solving",
+          "kind": "volume",
+          "geometry": {
+            "type": "arc",
+            "axis": "y",
+            "start": 0,
+            "sweep": 3.141592653589793,
+            "innerRatio": 0.9,
+            "segments": 20
+          },
+          "at": [
+            10,
+            2,
+            10
+          ],
+          "rotation": 0,
+          "size": [
+            8,
+            3,
+            4
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      ]
+    },
+    "topology": "pavilion-deck → explicitly selected outdoor link → offset pavilion-deck",
+    "linkContactsBoth": true,
+    "withoutLinkDisconnected": true,
+    "curvedScreenPreserved": true
+  },
+  "refusals": [
+    {
+      "name": "unspecified opening",
+      "refused": true
+    },
+    {
+      "name": "detached pavilion",
+      "refused": true
+    },
+    {
+      "name": "corner contact",
+      "refused": true
+    },
+    {
+      "name": "oversized opening",
+      "refused": true
+    }
+  ],
+  "stair": {
+    "steps": 16,
+    "top": 3.4000000000000004,
+    "selectedUpperDatum": 3.4,
+    "invalidRatioRefused": true,
+    "limitations": [
+      "Landings, support, slab opening, headroom, guards and arrival route still require explicit design and independent checking. A matching top is not a usable stair certificate."
+    ]
+  },
+  "unsupported": [
+    "Curved or polygonal shared-edge solving was NOT implemented. Preserve existing profile geometry and return unresolved intent for review.",
+    "A distributed estate needs explicitly selected outdoor links; separated buildings are not silently joined.",
+    "Fixtures demonstrate part placement across frames and sizes, not three completed architectural designs."
+  ]
+}

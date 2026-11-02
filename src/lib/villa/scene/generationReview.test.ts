@@ -3,7 +3,7 @@ import { exteriorStudy } from './exteriorFirst.fixture';
 import { REVIEW_CATEGORIES, REVIEW_VIEWS, runGenerationReview, validateGenerationReview, stageGenerationRefinement, generationReviewRequestSchema, matchingReviewCamera, type GenerationReviewRecord } from './generationReview';
 import type { SceneCapture } from '../visual-review';
 const scene = exteriorStudy(false).scene;
-function review() { return { assessments: REVIEW_CATEGORIES.map(category => ({ category, observation: 'Visible in the actual views.' })), findings: [{ severity: 'minor' as const, category: 'material coordination' as const, targetIds: ['gable-roof'], observation: 'Roof finish is uncoordinated.', suggestedChange: 'Use timber on gable-roof.' }], refinement: { findingIndex: 0, targetIds: ['gable-roof'], instruction: 'Finish gable-roof with timber.' } }; }
+function review() { return { assessments: REVIEW_CATEGORIES.map(category => ({ category, observation: 'Visible in the actual views.' })), findings: [{ severity: 'minor' as const, category: 'material coordination' as const, targetIds: ['gable-roof'], observation: 'Roof finish is uncoordinated.', suggestedChange: 'Use timber on gable-roof.' }], refinement: { bundle: { objective: 'Coordinate roof material', views: ['Arrival' as const], successEvidence: 'Roof supports the entry material hierarchy in Arrival.', objects: [{id:'gable-roof', action:'modify' as const, reason:'Coordinate material'}], dependencies: [] }, findingIndex: 0, targetIds: ['gable-roof'], instruction: 'Finish gable-roof with timber.' } }; }
 const output = (material = 'timber') => ({ name: scene.name, summary: 'Targeted roof finish', unsupported: [], operations: [{ op: 'finish', id: 'gable-roof', material }] });
 function shots(): SceneCapture[] {
  const header = Buffer.alloc(36); Buffer.from('\x89PNG\r\n\x1a\n', 'binary').copy(header); header.write('IHDR', 12); header.writeUInt32BE(640, 16); header.writeUInt32BE(360, 20);
@@ -11,7 +11,7 @@ function shots(): SceneCapture[] {
 }
 function harness(verdict = 'prefer revised') {
  const records: GenerationReviewRecord[] = []; let edits = 0;
- const request = vi.fn<(input: { phase: string }) => Promise<unknown>>(async input => input.phase === 'review' ? review() : input.phase === 'refine' ? output(++edits === 1 ? 'timber' : 'bronze') : { verdict, reason: 'Visible roof finish comparison.', regressions: [] });
+ const request = vi.fn<(input: { phase: string }) => Promise<unknown>>(async input => input.phase === 'review' ? review() : input.phase === 'refine' ? output(++edits === 1 ? 'timber' : 'bronze') : { verdict, reason: 'MOCK architectural judgment, not actual render evidence.', regressions: [], significance: {noticeable:true, meaningful:true, objective:'Coordinate roof material', views:[{view:'Arrival',observation:'MOCK: material hierarchy improved.'}]} });
  const deps = { capture: vi.fn(async () => shots()), request, assertCurrent: vi.fn(), commit: vi.fn(), record: (r: GenerationReviewRecord) => records.push(r) };
  return { deps, records };
 }
@@ -61,7 +61,7 @@ describe('bounded Generate visual refinement', () => {
   expect(await runGenerationReview(scene, deps)).toEqual(scene); expect(deps.commit).not.toHaveBeenCalled(); expect(records).toHaveLength(1); expect(records[0].error).toBeTruthy();
  });
  it('rejects unknown IDs, repeated categories and ungrounded scopes', () => {
-  const r = review(); r.refinement.targetIds = ['main-floor']; expect(() => validateGenerationReview(r, scene)).toThrow(/targets/);
+  const r = review(); r.refinement.targetIds = ['main-floor']; expect(() => validateGenerationReview(r, scene)).toThrow(/target/);
   const unknown = review(); unknown.findings[0].targetIds = ['missing']; expect(() => validateGenerationReview(unknown, scene)).toThrow(/unknown/);
   const duplicate = review(); duplicate.assessments[1] = duplicate.assessments[0]; expect(() => validateGenerationReview(duplicate, scene)).toThrow(/once/);
  });
@@ -121,7 +121,7 @@ it('rejects destructive budgets, undeclared creation, identity reuse and remote 
 
 it('accepts thirteen explicitly scoped existing elements rather than the old twelve-ID ceiling', () => {
  const s=exteriorStudy(true).scene, targetIds=s.elements.slice(0,13).map(e=>e.id);
- const r={...review(),findings:[{...review().findings[0],targetIds}],refinement:{...review().refinement,targetIds}};
+ const r={...review(),findings:[{...review().findings[0],targetIds}],refinement:{...review().refinement,targetIds,bundle:{...review().refinement.bundle,objects:targetIds.map(id=>({id,action:'modify' as const,reason:'Explicitly scoped finish'}))}}};
  expect(validateGenerationReview(r,s).refinement?.targetIds).toHaveLength(13);
  const result=stageGenerationRefinement(s,r,{...output(),operations:targetIds.map(id=>({op:'finish',id,material:s.elements.find(e=>e.id===id)?.material==='bronze'?'timber':'bronze'}))});
  expect(result.diff.changedElementIds.length).toBe(13);

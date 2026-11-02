@@ -1,0 +1,1877 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "sourceProposal": "docs/architecture/canonical-roof-retrieval-2026-11-02/proposal.normalized.json",
+  "sourceProposalSha256": "792ebf0c8f9b464b6a74b6c2f41c8b51059f9edc1d536990d1441b1b8f311689",
+  "errorCount": 57,
+  "groupCount": 8,
+  "groups": [
+    {
+      "id": "chain-collision:living-salon × west-private-hall (diverge at central-gallery)",
+      "cause": "chain-collision",
+      "title": "Independently placed chains meet in the same volume: living-salon × west-private-hall (diverge at central-gallery)",
+      "rootCause": "Placement is relative, so each chain was authored without seeing where the other ended; the overlaps are one coordination fault, not separate room faults.",
+      "involves": [
+        "kitchen",
+        "west-suite-1",
+        "pantry",
+        "west-suite-2"
+      ],
+      "findings": [
+        {
+          "stage": "volumes",
+          "id": "kitchen/west-suite-1",
+          "message": "occupied volumes overlap by 6×6 m (3.6 m vertical): kitchen spans x -14..-4, z -21..-15, west-suite-1 spans x -10..-3, z -21..-14."
+        },
+        {
+          "stage": "volumes",
+          "id": "pantry/west-suite-1",
+          "message": "occupied volumes overlap by 1×1 m (3.3 m vertical): pantry spans x -14..-9, z -15..-12, west-suite-1 spans x -10..-3, z -21..-14."
+        },
+        {
+          "stage": "volumes",
+          "id": "pantry/west-suite-2",
+          "message": "occupied volumes overlap by 1×2 m (3.3 m vertical): pantry spans x -14..-9, z -15..-12, west-suite-2 spans x -10..-3, z -14..-7."
+        }
+      ],
+      "decisionRequired": "Decide which chain yields, or whether the two chains should meet at all (different arrangement, level, or gap); do not just nudge individual rooms."
+    },
+    {
+      "id": "site-containment",
+      "cause": "site-containment",
+      "title": "Allocations outside, or colliding within, the site",
+      "rootCause": "The site is centred on the room cells and is not placed independently; pools, lawns and rooms beyond the cell envelope fall off it.",
+      "involves": [
+        "waterfront-lawn-reserve"
+      ],
+      "findings": [
+        {
+          "stage": "site",
+          "id": "waterfront-lawn-reserve",
+          "message": "waterfront-lawn-reserve (x -11..19, z -60.7..-46.7) lies 10.7 m outside the 90×75 m site, which is centred on the room cells (building spans x -18..19, z -38..13)."
+        }
+      ],
+      "decisionRequired": "Decide the site size relative to the whole composition including outdoor allocations, or reduce/relocate the outdoor allocations."
+    },
+    {
+      "id": "opening-geometry",
+      "cause": "opening-geometry",
+      "title": "Openings that do not fit the walls they were authored on",
+      "rootCause": "Portal edges run counter-clockwise (north/west alignment is reversed against room placement) and openings must fit inside the shared segment with margins.",
+      "involves": [
+        "west-hall-suite-3-door",
+        "living-east-window"
+      ],
+      "findings": [
+        {
+          "stage": "openings",
+          "id": "west-hall-suite-3-door",
+          "message": "opening (19.65..20.75 m) does not fit the shared segment with west-suite-3 (0..7 m) with 0.18 m margins."
+        },
+        {
+          "stage": "openings",
+          "id": "living-east-window",
+          "message": "window faces media-lounge, not the exterior: east edge of living-salon is shared there."
+        }
+      ],
+      "decisionRequired": "Decide each opening on a wall that is actually shared with its target, at an alignment that fits."
+    },
+    {
+      "id": "consequence:openings@kitchen",
+      "cause": "consequence",
+      "title": "Openings that depend on the colliding room kitchen",
+      "rootCause": "The wall these openings assume is shared does not exist where the room currently sits; they will be re-evaluated once the arrangement is decided.",
+      "involves": [
+        "kitchen-pantry-door",
+        "kitchen-laundry-door"
+      ],
+      "findings": [
+        {
+          "stage": "openings",
+          "id": "kitchen-pantry-door",
+          "message": "opening (0.25..1.25 m) does not fit the shared segment with pantry (5..10 m) with 0.18 m margins."
+        },
+        {
+          "stage": "openings",
+          "id": "kitchen-laundry-door",
+          "message": "opening (4.75..5.75 m) does not fit the shared segment with laundry (0..5 m) with 0.18 m margins."
+        }
+      ],
+      "consequenceOf": "living-salon × west-private-hall (diverge at central-gallery)",
+      "decisionRequired": "None independently: settle the arrangement first."
+    },
+    {
+      "id": "consequence:openings@west-suite-1",
+      "cause": "consequence",
+      "title": "Openings that depend on the colliding room west-suite-1",
+      "rootCause": "The wall these openings assume is shared does not exist where the room currently sits; they will be re-evaluated once the arrangement is decided.",
+      "involves": [
+        "west-hall-suite-1-door"
+      ],
+      "findings": [
+        {
+          "stage": "openings",
+          "id": "west-hall-suite-1-door",
+          "message": "opening (0.25..1.35 m) does not fit the shared segment with west-suite-1 (14..21 m) with 0.18 m margins."
+        }
+      ],
+      "consequenceOf": "living-salon × west-private-hall (diverge at central-gallery)",
+      "decisionRequired": "None independently: settle the arrangement first."
+    },
+    {
+      "id": "roof-eaves",
+      "cause": "roof-eaves",
+      "title": "Roof eaves meeting neighbouring roofs and taller volumes",
+      "rootCause": "Eaves were applied to rooms regardless of exposure: 21 roofs carry overhangs (0.3, 0.35, 0.4, 0.45, 0.55, 0.6, 0.65, 0.8 m) although 21 of the rooms involved abut others. The explicit rule \"select separated roof sections\" was not applied, and the compiler cannot trim eaves to the exposed perimeter.",
+      "involves": [
+        "kitchen",
+        "west-suite-1",
+        "pantry",
+        "laundry",
+        "service-store",
+        "east-private-hall",
+        "east-suite-1",
+        "east-suite-2",
+        "east-suite-3",
+        "west-private-hall",
+        "west-suite-2",
+        "west-suite-3",
+        "main-shaded-terrace",
+        "dining-terrace",
+        "arrival-forecourt",
+        "entry-hall",
+        "powder-room",
+        "central-gallery",
+        "living-salon",
+        "dining-room",
+        "media-lounge"
+      ],
+      "findings": [
+        {
+          "stage": "roofs",
+          "id": "kitchen/west-suite-1",
+          "message": "roof bounds intersect by 6.9×6.7 m at the same height (overhangs 0.35 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "pantry/laundry",
+          "message": "roof bounds intersect by 0.6×0.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "pantry/service-store",
+          "message": "roof bounds intersect by 0.6×3.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "laundry/service-store",
+          "message": "roof bounds intersect by 4.6×0.6 m at the same height (overhangs 0.3 and 0.3 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/east-suite-1",
+          "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/east-suite-2",
+          "message": "roof bounds intersect by 0.95×8.1 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/east-suite-3",
+          "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/west-suite-1",
+          "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/west-suite-2",
+          "message": "roof bounds intersect by 0.95×8.1 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/west-suite-3",
+          "message": "roof bounds intersect by 0.95×7.95 m at the same height (overhangs 0.4 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-suite-1/east-suite-2",
+          "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-suite-2/east-suite-3",
+          "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-suite-1/west-suite-2",
+          "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-suite-2/west-suite-3",
+          "message": "roof bounds intersect by 8.1×1.1 m at the same height (overhangs 0.55 and 0.55 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "main-shaded-terrace/dining-terrace",
+          "message": "roof bounds intersect by 1.6×8.6 m at the same height (overhangs 0.8 and 0.8 m): select separated roof sections."
+        },
+        {
+          "stage": "roofs",
+          "id": "arrival-forecourt/entry-hall",
+          "message": "roof of arrival-forecourt (with 0.8 m eaves) projects 8×0.8 m into the taller volume of entry-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "powder-room/entry-hall",
+          "message": "roof of powder-room (with 0.35 m eaves) projects 0.35×3.35 m into the taller volume of entry-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "powder-room/east-private-hall",
+          "message": "roof of powder-room (with 0.35 m eaves) projects 3.35×0.35 m into the taller volume of east-private-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "powder-room/east-suite-3",
+          "message": "roof of powder-room (with 0.35 m eaves) projects 0.35×0.35 m into the taller volume of east-suite-3."
+        },
+        {
+          "stage": "roofs",
+          "id": "central-gallery/entry-hall",
+          "message": "roof of central-gallery (with 0.45 m eaves) projects 6.9×0.45 m into the taller volume of entry-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "central-gallery/living-salon",
+          "message": "roof of central-gallery (with 0.45 m eaves) projects 6.9×0.45 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "dining-room/living-salon",
+          "message": "roof of dining-room (with 0.55 m eaves) projects 0.55×10 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "kitchen/living-salon",
+          "message": "roof of kitchen (with 0.35 m eaves) projects 0.35×0.35 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "kitchen/dining-room",
+          "message": "roof of kitchen (with 0.35 m eaves) projects 10×0.35 m into the taller volume of dining-room."
+        },
+        {
+          "stage": "roofs",
+          "id": "pantry/kitchen",
+          "message": "roof of pantry (with 0.3 m eaves) projects 5.3×0.3 m into the taller volume of kitchen."
+        },
+        {
+          "stage": "roofs",
+          "id": "pantry/west-suite-1",
+          "message": "roof of pantry (with 0.3 m eaves) projects 1.3×1.3 m into the taller volume of west-suite-1."
+        },
+        {
+          "stage": "roofs",
+          "id": "pantry/west-suite-2",
+          "message": "roof of pantry (with 0.3 m eaves) projects 1.3×2.3 m into the taller volume of west-suite-2."
+        },
+        {
+          "stage": "roofs",
+          "id": "laundry/kitchen",
+          "message": "roof of laundry (with 0.3 m eaves) projects 0.3×5.3 m into the taller volume of kitchen."
+        },
+        {
+          "stage": "roofs",
+          "id": "service-store/kitchen",
+          "message": "roof of service-store (with 0.3 m eaves) projects 0.3×0.3 m into the taller volume of kitchen."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/entry-hall",
+          "message": "roof of east-private-hall (with 0.4 m eaves) projects 1.4×0.4 m into the taller volume of entry-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/central-gallery",
+          "message": "roof of east-private-hall (with 0.4 m eaves) projects 0.4×21 m into the taller volume of central-gallery."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-private-hall/living-salon",
+          "message": "roof of east-private-hall (with 0.4 m eaves) projects 4.8×0.4 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/entry-hall",
+          "message": "roof of west-private-hall (with 0.4 m eaves) projects 1.4×0.4 m into the taller volume of entry-hall."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/central-gallery",
+          "message": "roof of west-private-hall (with 0.4 m eaves) projects 0.4×21 m into the taller volume of central-gallery."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-private-hall/living-salon",
+          "message": "roof of west-private-hall (with 0.4 m eaves) projects 4.8×0.4 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-suite-1/living-salon",
+          "message": "roof of east-suite-1 (with 0.55 m eaves) projects 1.55×0.55 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "east-suite-1/media-lounge",
+          "message": "roof of east-suite-1 (with 0.55 m eaves) projects 6.55×0.55 m into the taller volume of media-lounge."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-suite-1/living-salon",
+          "message": "roof of west-suite-1 (with 0.55 m eaves) projects 1.55×0.55 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "west-suite-1/dining-room",
+          "message": "roof of west-suite-1 (with 0.55 m eaves) projects 6.55×0.55 m into the taller volume of dining-room."
+        },
+        {
+          "stage": "roofs",
+          "id": "media-lounge/living-salon",
+          "message": "roof of media-lounge (with 0.55 m eaves) projects 0.55×6.55 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "main-shaded-terrace/living-salon",
+          "message": "roof of main-shaded-terrace (with 0.8 m eaves) projects 16×0.8 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "main-shaded-terrace/dining-room",
+          "message": "roof of main-shaded-terrace (with 0.8 m eaves) projects 0.8×0.8 m into the taller volume of dining-room."
+        },
+        {
+          "stage": "roofs",
+          "id": "dining-terrace/living-salon",
+          "message": "roof of dining-terrace (with 0.8 m eaves) projects 0.8×0.8 m into the taller volume of living-salon."
+        },
+        {
+          "stage": "roofs",
+          "id": "dining-terrace/dining-room",
+          "message": "roof of dining-terrace (with 0.8 m eaves) projects 10×0.8 m into the taller volume of dining-room."
+        }
+      ],
+      "decisionRequired": "Decide where shade projection is wanted (exposed edges only), and give abutting rooms separated or overhang-free roof sections, or a different roof strategy."
+    },
+    {
+      "id": "consequence:screens",
+      "cause": "consequence",
+      "title": "Screens standing in rooms that are themselves in conflict",
+      "rootCause": "The space beside the facade is occupied only because the neighbouring chain collides with it.",
+      "involves": [
+        "west-suite-1-screen",
+        "west-suite-2-screen"
+      ],
+      "findings": [
+        {
+          "stage": "screens",
+          "id": "west-suite-1-screen",
+          "message": "screen stands in kitchen."
+        },
+        {
+          "stage": "screens",
+          "id": "west-suite-2-screen",
+          "message": "screen stands in pantry."
+        }
+      ],
+      "consequenceOf": "living-salon × west-private-hall (diverge at central-gallery)",
+      "decisionRequired": "None independently: settle the arrangement first."
+    },
+    {
+      "id": "screen-placement",
+      "cause": "opening-geometry",
+      "title": "Screens that do not fit their facade",
+      "rootCause": "A screen was authored on a boundary shared with another room, over an opening, or beyond the facade.",
+      "involves": [
+        "living-timber-sun-screen"
+      ],
+      "findings": [
+        {
+          "stage": "screens",
+          "id": "living-timber-sun-screen",
+          "message": "screen lies on the interior boundary shared with media-lounge."
+        },
+        {
+          "stage": "screens",
+          "id": "living-timber-sun-screen",
+          "message": "screen stands in media-lounge."
+        }
+      ],
+      "decisionRequired": "Decide each screen on an exposed facade away from passable openings."
+    }
+  ],
+  "compilerNote": "The compiler is fail-fast: later construction stages (junction splitting, stair fit, staggered walls, scene support checks) only run after earlier stages pass, so a clean diagnosis is not proof of acceptance.",
+  "signals": [
+    {
+      "id": "repeated-cells",
+      "fired": true,
+      "evidence": "6 of 18 interior rooms are identical cells in groups of three or more (6× 7×7 m)."
+    },
+    {
+      "id": "uniform-roofs",
+      "fired": true,
+      "evidence": "21 roofs use flat form with identical rise."
+    },
+    {
+      "id": "no-section-variation",
+      "fired": true,
+      "evidence": "18 interior rooms share one level; envelope tops span only 1.2 m (6 distinct heights); roof forms: flat."
+    },
+    {
+      "id": "single-level",
+      "fired": true,
+      "evidence": "1 level(s) for 18 interior rooms. A single level is not a defect on its own; this only contributes when combined with other signals."
+    },
+    {
+      "id": "unlit-interiors",
+      "fired": true,
+      "evidence": "9 of 18 interior rooms (44% of interior area) have no window: entry-hall, powder-room, central-gallery, kitchen, pantry, laundry, service-store, east-private-hall, west-private-hall."
+    },
+    {
+      "id": "unarticulated-footprint",
+      "fired": false,
+      "evidence": "Allocated cells fill 70% of their 37×51 m bounding rectangle: an articulated footprint."
+    },
+    {
+      "id": "programme-gaps",
+      "fired": false,
+      "evidence": "No obvious programme gaps among authored uses."
+    },
+    {
+      "id": "uniform-eaves",
+      "fired": true,
+      "evidence": "21 of 21 roofs carry an overhang (8 distinct values) irrespective of which edges are exposed."
+    }
+  ],
+  "disposition": {
+    "kind": "redesign",
+    "firedSignals": 6,
+    "reasons": [
+      "repeated-cells: 6 of 18 interior rooms are identical cells in groups of three or more (6× 7×7 m).",
+      "uniform-roofs: 21 roofs use flat form with identical rise.",
+      "no-section-variation: 18 interior rooms share one level; envelope tops span only 1.2 m (6 distinct heights); roof forms: flat.",
+      "single-level: 1 level(s) for 18 interior rooms. A single level is not a defect on its own; this only contributes when combined with other signals.",
+      "unlit-interiors: 9 of 18 interior rooms (44% of interior area) have no window: entry-hall, powder-room, central-gallery, kitchen, pantry, laundry, service-store, east-private-hall, west-private-hall.",
+      "uniform-eaves: 21 of 21 roofs carry an overhang (8 distinct values) irrespective of which edges are exposed."
+    ],
+    "note": "Several independent weaknesses are architectural. Correcting coordinates would leave the concept unchanged; revise the concept while retaining the brief."
+  },
+  "building": {
+    "x0": -18,
+    "x1": 19,
+    "z0": -38,
+    "z1": 13,
+    "width": 37,
+    "depth": 51
+  },
+  "site": {
+    "width": 90,
+    "depth": 75,
+    "x0": -44.5,
+    "x1": 45.5,
+    "z0": -50,
+    "z1": 25,
+    "note": "Site is centred on the room cells (before applying orientation); pools and lawns must fit inside it."
+  },
+  "levels": [
+    {
+      "id": "ground",
+      "above": null,
+      "rise": 0.45,
+      "floorDatum": 0.45
+    }
+  ],
+  "rooms": [
+    {
+      "id": "entry-hall",
+      "mass": "arrival-mass",
+      "level": "ground",
+      "use": "double-height-feeling ceremonial entrance hall",
+      "outdoor": false,
+      "x0": 0,
+      "x1": 8,
+      "z0": 0,
+      "z1": 7,
+      "width": 8,
+      "depth": 7,
+      "areaM2": 56,
+      "floorDatum": 0.45,
+      "envelopeHeight": 4.5,
+      "heightSource": "authored",
+      "top": 4.95,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.6,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": null,
+        "side": "origin",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 3
+    },
+    {
+      "id": "arrival-forecourt",
+      "mass": "arrival-mass",
+      "level": "ground",
+      "use": "covered arrival forecourt and weather-protected threshold",
+      "outdoor": true,
+      "x0": -2,
+      "x1": 10,
+      "z0": 7,
+      "z1": 13,
+      "width": 12,
+      "depth": 6,
+      "areaM2": 72,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.8,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "entry-hall",
+        "side": "north",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "powder-room",
+      "mass": "arrival-mass",
+      "level": "ground",
+      "use": "arrival powder room",
+      "outdoor": false,
+      "x0": 8,
+      "x1": 11,
+      "z0": 0,
+      "z1": 3,
+      "width": 3,
+      "depth": 3,
+      "areaM2": 9,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.3,
+      "heightSource": "authored",
+      "top": 3.75,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.35,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "entry-hall",
+        "side": "east",
+        "alignment": "start",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "central-gallery",
+      "mass": "social-mass",
+      "level": "ground",
+      "use": "long internal gallery linking arrival, suites and waterfront living",
+      "outdoor": false,
+      "x0": 1,
+      "x1": 7,
+      "z0": -21,
+      "z1": 0,
+      "width": 6,
+      "depth": 21,
+      "areaM2": 126,
+      "floorDatum": 0.45,
+      "envelopeHeight": 4.2,
+      "heightSource": "authored",
+      "top": 4.65,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.45,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "entry-hall",
+        "side": "south",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 4
+    },
+    {
+      "id": "living-salon",
+      "mass": "social-mass",
+      "level": "ground",
+      "use": "principal waterfront living salon",
+      "outdoor": false,
+      "x0": -4,
+      "x1": 12,
+      "z0": -31,
+      "z1": -21,
+      "width": 16,
+      "depth": 10,
+      "areaM2": 160,
+      "floorDatum": 0.45,
+      "envelopeHeight": 4.5,
+      "heightSource": "authored",
+      "top": 4.95,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.65,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "central-gallery",
+        "side": "south",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 4
+    },
+    {
+      "id": "dining-room",
+      "mass": "social-mass",
+      "level": "ground",
+      "use": "formal and informal dining room",
+      "outdoor": false,
+      "x0": -14,
+      "x1": -4,
+      "z0": -31,
+      "z1": -21,
+      "width": 10,
+      "depth": 10,
+      "areaM2": 100,
+      "floorDatum": 0.45,
+      "envelopeHeight": 4,
+      "heightSource": "authored",
+      "top": 4.45,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "living-salon",
+        "side": "west",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 3
+    },
+    {
+      "id": "kitchen",
+      "mass": "service-mass",
+      "level": "ground",
+      "use": "entertaining kitchen with direct dining service",
+      "outdoor": false,
+      "x0": -14,
+      "x1": -4,
+      "z0": -21,
+      "z1": -15,
+      "width": 10,
+      "depth": 6,
+      "areaM2": 60,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.35,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "dining-room",
+        "side": "north",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 3
+    },
+    {
+      "id": "pantry",
+      "mass": "service-mass",
+      "level": "ground",
+      "use": "walk-in pantry and catering store",
+      "outdoor": false,
+      "x0": -14,
+      "x1": -9,
+      "z0": -15,
+      "z1": -12,
+      "width": 5,
+      "depth": 3,
+      "areaM2": 15,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.3,
+      "heightSource": "authored",
+      "top": 3.75,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.3,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "kitchen",
+        "side": "north",
+        "alignment": "start",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "laundry",
+      "mass": "service-mass",
+      "level": "ground",
+      "use": "laundry and back-of-house workroom",
+      "outdoor": false,
+      "x0": -18,
+      "x1": -14,
+      "z0": -20,
+      "z1": -15,
+      "width": 4,
+      "depth": 5,
+      "areaM2": 20,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.3,
+      "heightSource": "authored",
+      "top": 3.75,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.3,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "kitchen",
+        "side": "west",
+        "alignment": "end",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 2
+    },
+    {
+      "id": "service-store",
+      "mass": "service-mass",
+      "level": "ground",
+      "use": "estate linen, cleaning and service store",
+      "outdoor": false,
+      "x0": -18,
+      "x1": -14,
+      "z0": -15,
+      "z1": -12,
+      "width": 4,
+      "depth": 3,
+      "areaM2": 12,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.3,
+      "heightSource": "authored",
+      "top": 3.75,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.3,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "laundry",
+        "side": "north",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "east-private-hall",
+      "mass": "east-suite-wing",
+      "level": "ground",
+      "use": "private east suite-wing hall",
+      "outdoor": false,
+      "x0": 7,
+      "x1": 11,
+      "z0": -21,
+      "z1": 0,
+      "width": 4,
+      "depth": 21,
+      "areaM2": 84,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.4,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "central-gallery",
+        "side": "east",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 4
+    },
+    {
+      "id": "west-private-hall",
+      "mass": "west-suite-wing",
+      "level": "ground",
+      "use": "private west suite-wing hall",
+      "outdoor": false,
+      "x0": -3,
+      "x1": 1,
+      "z0": -21,
+      "z1": 0,
+      "width": 4,
+      "depth": 21,
+      "areaM2": 84,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.4,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "central-gallery",
+        "side": "west",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 4
+    },
+    {
+      "id": "east-suite-1",
+      "mass": "east-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 1 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": 11,
+      "x1": 18,
+      "z0": -21,
+      "z1": -14,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "east-private-hall",
+        "side": "east",
+        "alignment": "start",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "east-suite-2",
+      "mass": "east-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 2 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": 11,
+      "x1": 18,
+      "z0": -14,
+      "z1": -7,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "east-private-hall",
+        "side": "east",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "east-suite-3",
+      "mass": "east-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 3 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": 11,
+      "x1": 18,
+      "z0": -7,
+      "z1": 0,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "east-private-hall",
+        "side": "east",
+        "alignment": "end",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "west-suite-1",
+      "mass": "west-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 4 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": -10,
+      "x1": -3,
+      "z0": -21,
+      "z1": -14,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "west-private-hall",
+        "side": "west",
+        "alignment": "start",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "west-suite-2",
+      "mass": "west-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 5 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": -10,
+      "x1": -3,
+      "z0": -14,
+      "z1": -7,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "west-private-hall",
+        "side": "west",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "west-suite-3",
+      "mass": "west-suite-wing",
+      "level": "ground",
+      "use": "private bedroom suite 6 with sleeping, dressing and ensuite allocation",
+      "outdoor": false,
+      "x0": -10,
+      "x1": -3,
+      "z0": -7,
+      "z1": 0,
+      "width": 7,
+      "depth": 7,
+      "areaM2": 49,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "west-private-hall",
+        "side": "west",
+        "alignment": "end",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "media-lounge",
+      "mass": "social-mass",
+      "level": "ground",
+      "use": "flexible media, games and evening lounge",
+      "outdoor": false,
+      "x0": 12,
+      "x1": 19,
+      "z0": -27,
+      "z1": -21,
+      "width": 7,
+      "depth": 6,
+      "areaM2": 42,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.8,
+      "heightSource": "authored",
+      "top": 4.25,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.55,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "living-salon",
+        "side": "east",
+        "alignment": "end",
+        "gap": 0
+      },
+      "windows": 1,
+      "doorsAndPassages": 1
+    },
+    {
+      "id": "main-shaded-terrace",
+      "mass": "waterfront-outdoor-mass",
+      "level": "ground",
+      "use": "large covered waterfront lounge and entertaining terrace",
+      "outdoor": true,
+      "x0": -4,
+      "x1": 12,
+      "z0": -38,
+      "z1": -31,
+      "width": 16,
+      "depth": 7,
+      "areaM2": 112,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.8,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "living-salon",
+        "side": "south",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 2
+    },
+    {
+      "id": "dining-terrace",
+      "mass": "waterfront-outdoor-mass",
+      "level": "ground",
+      "use": "covered outdoor dining terrace with direct kitchen service route",
+      "outdoor": true,
+      "x0": -14,
+      "x1": -4,
+      "z0": -38,
+      "z1": -31,
+      "width": 10,
+      "depth": 7,
+      "areaM2": 70,
+      "floorDatum": 0.45,
+      "envelopeHeight": 3.6,
+      "heightSource": "authored",
+      "top": 4.05,
+      "roof": {
+        "form": "flat",
+        "overhang": 0.8,
+        "rise": null
+      },
+      "placedBy": {
+        "relativeTo": "dining-room",
+        "side": "south",
+        "alignment": "centre",
+        "gap": 0
+      },
+      "windows": 0,
+      "doorsAndPassages": 2
+    }
+  ],
+  "siteItems": [
+    {
+      "id": "waterfront-rectangular-pool",
+      "kind": "pool",
+      "x0": -3,
+      "x1": 11,
+      "z0": -44.7,
+      "z1": -39.2
+    },
+    {
+      "id": "waterfront-lawn-reserve",
+      "kind": "lawn",
+      "x0": -11,
+      "x1": 19,
+      "z0": -60.7,
+      "z1": -46.7
+    },
+    {
+      "id": "east-arrival-bed-reserve",
+      "kind": "bed",
+      "x0": 11.5,
+      "x1": 21.5,
+      "z0": 6,
+      "z1": 14
+    },
+    {
+      "id": "west-service-bed-reserve",
+      "kind": "bed",
+      "x0": -27.5,
+      "x1": -19.5,
+      "z0": -22,
+      "z1": -13
+    }
+  ],
+  "chains": [
+    {
+      "root": "entry-hall",
+      "branches": [
+        {
+          "head": "arrival-forecourt",
+          "members": [
+            "arrival-forecourt"
+          ]
+        },
+        {
+          "head": "powder-room",
+          "members": [
+            "powder-room"
+          ]
+        },
+        {
+          "head": "central-gallery",
+          "members": [
+            "central-gallery",
+            "living-salon",
+            "dining-room",
+            "kitchen",
+            "pantry",
+            "laundry",
+            "service-store",
+            "east-private-hall",
+            "west-private-hall",
+            "east-suite-1",
+            "east-suite-2",
+            "east-suite-3",
+            "west-suite-1",
+            "west-suite-2",
+            "west-suite-3",
+            "media-lounge",
+            "main-shaded-terrace",
+            "dining-terrace"
+          ]
+        }
+      ]
+    }
+  ],
+  "access": {
+    "arrival": "arrival-forecourt",
+    "reachable": [
+      "arrival-forecourt",
+      "entry-hall",
+      "powder-room",
+      "central-gallery",
+      "living-salon",
+      "east-private-hall",
+      "west-private-hall",
+      "dining-room",
+      "media-lounge",
+      "main-shaded-terrace",
+      "east-suite-1",
+      "east-suite-2",
+      "east-suite-3",
+      "west-suite-1",
+      "west-suite-2",
+      "west-suite-3",
+      "kitchen",
+      "dining-terrace",
+      "pantry",
+      "laundry",
+      "service-store"
+    ],
+    "unreachable": [],
+    "depth": {
+      "arrival-forecourt": 0,
+      "entry-hall": 1,
+      "powder-room": 2,
+      "central-gallery": 2,
+      "living-salon": 3,
+      "east-private-hall": 3,
+      "west-private-hall": 3,
+      "dining-room": 4,
+      "media-lounge": 4,
+      "main-shaded-terrace": 4,
+      "east-suite-1": 4,
+      "east-suite-2": 4,
+      "east-suite-3": 4,
+      "west-suite-1": 4,
+      "west-suite-2": 4,
+      "west-suite-3": 4,
+      "kitchen": 5,
+      "dining-terrace": 5,
+      "pantry": 6,
+      "laundry": 6,
+      "service-store": 7
+    }
+  },
+  "dependencies": [
+    {
+      "from": "arrival-forecourt",
+      "to": "entry-hall",
+      "kind": "placement",
+      "side": "north",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "powder-room",
+      "to": "entry-hall",
+      "kind": "placement",
+      "side": "east",
+      "detail": "start, gap 0"
+    },
+    {
+      "from": "central-gallery",
+      "to": "entry-hall",
+      "kind": "placement",
+      "side": "south",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "living-salon",
+      "to": "central-gallery",
+      "kind": "placement",
+      "side": "south",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "dining-room",
+      "to": "living-salon",
+      "kind": "placement",
+      "side": "west",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "kitchen",
+      "to": "dining-room",
+      "kind": "placement",
+      "side": "north",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "pantry",
+      "to": "kitchen",
+      "kind": "placement",
+      "side": "north",
+      "detail": "start, gap 0"
+    },
+    {
+      "from": "laundry",
+      "to": "kitchen",
+      "kind": "placement",
+      "side": "west",
+      "detail": "end, gap 0"
+    },
+    {
+      "from": "service-store",
+      "to": "laundry",
+      "kind": "placement",
+      "side": "north",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "central-gallery",
+      "kind": "placement",
+      "side": "east",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "central-gallery",
+      "kind": "placement",
+      "side": "west",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "east-suite-1",
+      "to": "east-private-hall",
+      "kind": "placement",
+      "side": "east",
+      "detail": "start, gap 0"
+    },
+    {
+      "from": "east-suite-2",
+      "to": "east-private-hall",
+      "kind": "placement",
+      "side": "east",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "east-suite-3",
+      "to": "east-private-hall",
+      "kind": "placement",
+      "side": "east",
+      "detail": "end, gap 0"
+    },
+    {
+      "from": "west-suite-1",
+      "to": "west-private-hall",
+      "kind": "placement",
+      "side": "west",
+      "detail": "start, gap 0"
+    },
+    {
+      "from": "west-suite-2",
+      "to": "west-private-hall",
+      "kind": "placement",
+      "side": "west",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "west-suite-3",
+      "to": "west-private-hall",
+      "kind": "placement",
+      "side": "west",
+      "detail": "end, gap 0"
+    },
+    {
+      "from": "media-lounge",
+      "to": "living-salon",
+      "kind": "placement",
+      "side": "east",
+      "detail": "end, gap 0"
+    },
+    {
+      "from": "main-shaded-terrace",
+      "to": "living-salon",
+      "kind": "placement",
+      "side": "south",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "dining-terrace",
+      "to": "dining-room",
+      "kind": "placement",
+      "side": "south",
+      "detail": "centre, gap 0"
+    },
+    {
+      "from": "entry-hall",
+      "to": "arrival-forecourt",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "8 m shared"
+    },
+    {
+      "from": "entry-hall",
+      "to": "powder-room",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "3 m shared"
+    },
+    {
+      "from": "entry-hall",
+      "to": "central-gallery",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "6 m shared"
+    },
+    {
+      "from": "entry-hall",
+      "to": "east-private-hall",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "1 m shared"
+    },
+    {
+      "from": "entry-hall",
+      "to": "west-private-hall",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "1 m shared"
+    },
+    {
+      "from": "powder-room",
+      "to": "east-private-hall",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "3 m shared"
+    },
+    {
+      "from": "central-gallery",
+      "to": "living-salon",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "6 m shared"
+    },
+    {
+      "from": "central-gallery",
+      "to": "east-private-hall",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "21 m shared"
+    },
+    {
+      "from": "central-gallery",
+      "to": "west-private-hall",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "21 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "dining-room",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "10 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "east-private-hall",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "4 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "west-private-hall",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "4 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "east-suite-1",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "1 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "west-suite-1",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "1 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "media-lounge",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "6 m shared"
+    },
+    {
+      "from": "living-salon",
+      "to": "main-shaded-terrace",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "16 m shared"
+    },
+    {
+      "from": "dining-room",
+      "to": "kitchen",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "10 m shared"
+    },
+    {
+      "from": "dining-room",
+      "to": "west-suite-1",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "6 m shared"
+    },
+    {
+      "from": "dining-room",
+      "to": "dining-terrace",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "10 m shared"
+    },
+    {
+      "from": "kitchen",
+      "to": "pantry",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "5 m shared"
+    },
+    {
+      "from": "kitchen",
+      "to": "laundry",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "5 m shared"
+    },
+    {
+      "from": "pantry",
+      "to": "service-store",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "3 m shared"
+    },
+    {
+      "from": "laundry",
+      "to": "service-store",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "4 m shared"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-1",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-2",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-3",
+      "kind": "shared-wall",
+      "side": "east",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-1",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-2",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-3",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "east-suite-1",
+      "to": "east-suite-2",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "east-suite-1",
+      "to": "media-lounge",
+      "kind": "shared-wall",
+      "side": "south",
+      "detail": "6 m shared"
+    },
+    {
+      "from": "east-suite-2",
+      "to": "east-suite-3",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "west-suite-1",
+      "to": "west-suite-2",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "west-suite-2",
+      "to": "west-suite-3",
+      "kind": "shared-wall",
+      "side": "north",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "main-shaded-terrace",
+      "to": "dining-terrace",
+      "kind": "shared-wall",
+      "side": "west",
+      "detail": "7 m shared"
+    },
+    {
+      "from": "entry-hall",
+      "to": "arrival-forecourt",
+      "kind": "door",
+      "side": "north",
+      "detail": "arrival-entry-door 2.4×2.8 m centre"
+    },
+    {
+      "from": "entry-hall",
+      "to": "powder-room",
+      "kind": "door",
+      "side": "east",
+      "detail": "entry-powder-door 0.95×2.2 m start"
+    },
+    {
+      "from": "entry-hall",
+      "to": "central-gallery",
+      "kind": "passage",
+      "side": "south",
+      "detail": "entry-gallery-opening 2.8×3 m centre"
+    },
+    {
+      "from": "central-gallery",
+      "to": "living-salon",
+      "kind": "passage",
+      "side": "south",
+      "detail": "gallery-living-opening 3.6×3.1 m centre"
+    },
+    {
+      "from": "central-gallery",
+      "to": "east-private-hall",
+      "kind": "door",
+      "side": "east",
+      "detail": "gallery-east-wing-door 1.4×2.4 m centre"
+    },
+    {
+      "from": "central-gallery",
+      "to": "west-private-hall",
+      "kind": "door",
+      "side": "west",
+      "detail": "gallery-west-wing-door 1.4×2.4 m centre"
+    },
+    {
+      "from": "living-salon",
+      "to": "dining-room",
+      "kind": "passage",
+      "side": "west",
+      "detail": "living-dining-opening 3×2.8 m centre"
+    },
+    {
+      "from": "dining-room",
+      "to": "kitchen",
+      "kind": "passage",
+      "side": "north",
+      "detail": "dining-kitchen-opening 2×2.4 m centre"
+    },
+    {
+      "from": "kitchen",
+      "to": "pantry",
+      "kind": "door",
+      "side": "north",
+      "detail": "kitchen-pantry-door 1×2.2 m start"
+    },
+    {
+      "from": "kitchen",
+      "to": "laundry",
+      "kind": "door",
+      "side": "west",
+      "detail": "kitchen-laundry-door 1×2.2 m end"
+    },
+    {
+      "from": "laundry",
+      "to": "service-store",
+      "kind": "door",
+      "side": "north",
+      "detail": "laundry-service-store-door 0.9×2.1 m centre"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-1",
+      "kind": "door",
+      "side": "east",
+      "detail": "east-hall-suite-1-door 1.1×2.3 m start"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-2",
+      "kind": "door",
+      "side": "east",
+      "detail": "east-hall-suite-2-door 1.1×2.3 m centre"
+    },
+    {
+      "from": "east-private-hall",
+      "to": "east-suite-3",
+      "kind": "door",
+      "side": "east",
+      "detail": "east-hall-suite-3-door 1.1×2.3 m end"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-1",
+      "kind": "door",
+      "side": "west",
+      "detail": "west-hall-suite-1-door 1.1×2.3 m start"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-2",
+      "kind": "door",
+      "side": "west",
+      "detail": "west-hall-suite-2-door 1.1×2.3 m centre"
+    },
+    {
+      "from": "west-private-hall",
+      "to": "west-suite-3",
+      "kind": "door",
+      "side": "west",
+      "detail": "west-hall-suite-3-door 1.1×2.3 m end"
+    },
+    {
+      "from": "living-salon",
+      "to": "media-lounge",
+      "kind": "door",
+      "side": "east",
+      "detail": "living-media-door 1.4×2.4 m end"
+    },
+    {
+      "from": "living-salon",
+      "to": "main-shaded-terrace",
+      "kind": "passage",
+      "side": "south",
+      "detail": "living-terrace-opening 5.2×2.8 m centre"
+    },
+    {
+      "from": "dining-room",
+      "to": "dining-terrace",
+      "kind": "passage",
+      "side": "south",
+      "detail": "dining-terrace-opening 3.6×2.6 m centre"
+    },
+    {
+      "from": "dining-terrace",
+      "to": "main-shaded-terrace",
+      "kind": "passage",
+      "side": "east",
+      "detail": "terrace-terrace-opening 1.8×2.6 m centre"
+    },
+    {
+      "from": "living-salon",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "east",
+      "detail": "living-east-window 3.2×2.3 m centre sill 0.6"
+    },
+    {
+      "from": "dining-room",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "west",
+      "detail": "dining-west-window 2.8×2 m centre sill 0.9"
+    },
+    {
+      "from": "media-lounge",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "east",
+      "detail": "media-east-window 3×2.1 m centre sill 0.8"
+    },
+    {
+      "from": "east-suite-1",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "east",
+      "detail": "east-suite-1-window 3.2×2.1 m centre sill 0.75"
+    },
+    {
+      "from": "east-suite-2",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "east",
+      "detail": "east-suite-2-window 3.2×2.1 m centre sill 0.75"
+    },
+    {
+      "from": "east-suite-3",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "east",
+      "detail": "east-suite-3-window 3.2×2.1 m centre sill 0.75"
+    },
+    {
+      "from": "west-suite-1",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "west",
+      "detail": "west-suite-1-window 3.2×2.1 m centre sill 0.75"
+    },
+    {
+      "from": "west-suite-2",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "west",
+      "detail": "west-suite-2-window 3.2×2.1 m centre sill 0.75"
+    },
+    {
+      "from": "west-suite-3",
+      "to": "exterior",
+      "kind": "window-exterior",
+      "side": "west",
+      "detail": "west-suite-3-window 3.2×2.1 m centre sill 0.75"
+    }
+  ]
+}

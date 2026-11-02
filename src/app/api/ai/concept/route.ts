@@ -1,3 +1,4 @@
+import { legacyHouseAuthoringEnabled } from '@/lib/villa/canonical/authority';
 import { NextResponse } from 'next/server';
 import { generateText, NoObjectGeneratedError, Output } from 'ai';
 import { z } from 'zod';
@@ -16,11 +17,13 @@ const requestSchema = z.object({ prompt: z.string().trim().min(1).max(12000), la
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
 
 export async function GET() {
+  if(!legacyHouseAuthoringEnabled())return json({enabled:false,authority:'/api/ai/scene',providerCalls:0});
   if (!conceptEvaluationEnabled()) return json({ error: 'Architectural concept evaluation is disabled.' }, 403);
   return json({ enabled: true, model: getAiModelId(), maxProviderCalls: 1, maxOutputTokens: MAX_OUTPUT_TOKENS, persistence: 'debug-evidence-only' });
 }
 
 export async function POST(request: Request) {
+  if (!legacyHouseAuthoringEnabled()) return json({error:'Live concept generation is retired. New houses use /api/ai/scene.',code:'canonical_generation_required',providerCalls:0},409);
   if (!conceptEvaluationEnabled()) return json({ error: 'Architectural concept evaluation is disabled.' }, 403);
   let input;
   try { input = requestSchema.safeParse(await request.json()); } catch { return json({ error: 'Invalid JSON request.' }, 400); }

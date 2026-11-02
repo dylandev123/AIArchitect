@@ -1,0 +1,32 @@
+{
+  "providerId": "resp_0db9f7315027da89006ae4d667ad6487d2929dcc8c56709b23",
+  "model": "gpt-5.6-terra",
+  "status": "completed",
+  "usage": {
+    "input_tokens": 26409,
+    "input_tokens_details": {
+      "cache_write_tokens": 26406,
+      "cached_tokens": 0
+    },
+    "output_tokens": 8467,
+    "output_tokens_details": {
+      "reasoning_tokens": 3429
+    },
+    "total_tokens": 34876
+  },
+  "ratesUsdPerMillion": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "output": 12
+  },
+  "localPricingEstimateUsd": 0.154422,
+  "cacheWriteTokens": 26406,
+  "cacheWriteMultiplier": 1.25,
+  "additionalCacheWritePremiumUsd": 0.013203,
+  "estimatedBillIncludingCacheWritePremiumUsd": 0.167625,
+  "notes": [
+    "Actual provider token usage, not character estimates. Reasoning tokens are included in output_tokens and are not billed twice.",
+    "Local usage bookkeeping currently applies the standard input rate to cache writes; the separate estimate includes the 1.25x cache-write rate documented on the official model page during preparation.",
+    "Estimate only, not invoice reconciliation; no additional API calls made."
+  ]
+}

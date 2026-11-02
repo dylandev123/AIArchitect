@@ -1,0 +1,28 @@
+{
+  "status": "stopped-before-model-review",
+  "transportAttempts": 1,
+  "httpResponsesCaptured": 0,
+  "providerBillingConfirmed": false,
+  "localLoggedCostUsd": 0,
+  "paidRefinementCalls": 0,
+  "retries": 0,
+  "comparisonCalls": 0,
+  "dnsOnlyDiagnostic": {
+    "hostname": "api.openai.com",
+    "code": "ENOTFOUND",
+    "syscall": "getaddrinfo"
+  },
+  "historicalHashesUnchanged": {
+    "docs/architecture/retained-visual-review/original.scene.json": true,
+    "docs/architecture/retained-visual-review/review.provider-response.txt": true,
+    "docs/architecture/retained-visual-review/refine.provider-response.txt": true,
+    "docs/architecture/retained-visual-review/raw-candidate.operations.json": true
+  },
+  "baselineHash": "b76ed99bad6f6bda1c1e6f233ef9d65e9b01b0c1c0687f97e488dc44feadf983",
+  "applicationChanges": [
+    "normal visual-review response reports failureStage without private error text",
+    "runner records safe transport exception name/code chains for future attempts"
+  ],
+  "geometryChanges": 0,
+  "conclusion": "No evidence about fresh Terra architectural judgment. Network readiness is the next prerequisite; no automatic retry."
+}

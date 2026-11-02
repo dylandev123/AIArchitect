@@ -1,0 +1,6738 @@
+{
+  "version": "semantic-generation-1",
+  "brief": "Multilevel luxury waterfront property with unequal living wings, suites, tall social pavilion and terrace.",
+  "proposal": {
+    "status": "proposed",
+    "intent": {
+      "version": "semantic-pilot-1",
+      "id": "luxury",
+      "thesis": "Unequal two-level wings and a tall tapered waterfront salon around an arrival gallery.",
+      "frame": {
+        "origin": [
+          -12,
+          5
+        ],
+        "yaw": 0.27
+      },
+      "levels": [
+        {
+          "id": "ground",
+          "top": 0.2
+        },
+        {
+          "id": "upper",
+          "top": 3.8000000000000003
+        }
+      ],
+      "masses": [
+        {
+          "id": "base-mass",
+          "role": "arrival and shared base"
+        },
+        {
+          "id": "upper-mass",
+          "role": "subordinate private upper storey"
+        },
+        {
+          "id": "west-mass",
+          "role": "broad living wing"
+        },
+        {
+          "id": "east-mass",
+          "role": "narrow dining wing"
+        },
+        {
+          "id": "salon-mass",
+          "role": "dominant tall tapered waterfront pavilion"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "arrival",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "arrival",
+          "polygon": [
+            [
+              0,
+              -3
+            ],
+            [
+              4,
+              -3
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": true,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "entry-gallery",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "entry-gallery",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              0,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "upper-gallery",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "upper-gallery",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              0,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "living",
+          "mass": "west-mass",
+          "level": "ground",
+          "use": "connected living and library",
+          "polygon": [
+            [
+              -9,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              -9,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "dining",
+          "mass": "east-mass",
+          "level": "ground",
+          "use": "dining and kitchen allocation",
+          "polygon": [
+            [
+              4,
+              0
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              4,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "west-suite",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "west suite allocation; bath and fit-out unresolved",
+          "polygon": [
+            [
+              -9,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              -9,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "east-suite",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "east suite allocation; bath and fit-out unresolved",
+          "polygon": [
+            [
+              4,
+              0
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              4,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "ocean-salon",
+          "mass": "salon-mass",
+          "level": "ground",
+          "use": "ocean-salon",
+          "polygon": [
+            [
+              0,
+              10
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              11,
+              22
+            ],
+            [
+              -7,
+              22
+            ]
+          ],
+          "height": 5.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "limestone"
+        },
+        {
+          "id": "ocean-terrace",
+          "mass": "salon-mass",
+          "level": "ground",
+          "use": "ocean-terrace",
+          "polygon": [
+            [
+              -7,
+              22
+            ],
+            [
+              11,
+              22
+            ],
+            [
+              11,
+              27
+            ],
+            [
+              -7,
+              27
+            ]
+          ],
+          "height": 5.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "ivory"
+        }
+      ],
+      "portals": [
+        {
+          "id": "living-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 3
+          },
+          "to": "living",
+          "offset": 1.3,
+          "width": 1.5,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "dining-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 1
+          },
+          "to": "dining",
+          "offset": 8.7,
+          "width": 1.5,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "west-suite-door",
+          "host": {
+            "space": "upper-gallery",
+            "edge": 3
+          },
+          "to": "west-suite",
+          "offset": 1.3,
+          "width": 1.1,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "east-suite-door",
+          "host": {
+            "space": "upper-gallery",
+            "edge": 1
+          },
+          "to": "east-suite",
+          "offset": 8.7,
+          "width": 1.1,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "salon-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 2
+          },
+          "to": "ocean-salon",
+          "offset": 2,
+          "width": 3.4,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "terrace-door",
+          "host": {
+            "space": "ocean-salon",
+            "edge": 2
+          },
+          "to": "ocean-terrace",
+          "offset": 9,
+          "width": 6,
+          "height": 3.4,
+          "mode": "door"
+        },
+        {
+          "id": "front-door",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 0
+          },
+          "to": "arrival",
+          "offset": 2,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "main-stair",
+          "lower": "entry-gallery",
+          "upper": "upper-gallery",
+          "start": [
+            2,
+            1.3
+          ],
+          "width": 1.1,
+          "run": 5.4,
+          "risers": 20,
+          "landing": 1.1,
+          "headroom": 2.1,
+          "bypass": "right"
+        }
+      ],
+      "arrival": "arrival",
+      "requiredAccess": [
+        "arrival",
+        "entry-gallery",
+        "upper-gallery",
+        "living",
+        "dining",
+        "west-suite",
+        "east-suite",
+        "ocean-salon",
+        "ocean-terrace"
+      ]
+    },
+    "limitations": [
+      "Mock planning response, not live AI evidence.",
+      "Envelope/spatial study only: bathrooms, services, guards, facade windows, landscape and fit-out unresolved.",
+      "Architectural sophistication and completed home quality are not established."
+    ]
+  },
+  "compiled": {
+    "compiler": "semantic-pilot-1.0",
+    "intent": {
+      "version": "semantic-pilot-1",
+      "id": "luxury",
+      "thesis": "Unequal two-level wings and a tall tapered waterfront salon around an arrival gallery.",
+      "frame": {
+        "origin": [
+          -12,
+          5
+        ],
+        "yaw": 0.27
+      },
+      "levels": [
+        {
+          "id": "ground",
+          "top": 0.2
+        },
+        {
+          "id": "upper",
+          "top": 3.8000000000000003
+        }
+      ],
+      "masses": [
+        {
+          "id": "base-mass",
+          "role": "arrival and shared base"
+        },
+        {
+          "id": "upper-mass",
+          "role": "subordinate private upper storey"
+        },
+        {
+          "id": "west-mass",
+          "role": "broad living wing"
+        },
+        {
+          "id": "east-mass",
+          "role": "narrow dining wing"
+        },
+        {
+          "id": "salon-mass",
+          "role": "dominant tall tapered waterfront pavilion"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "arrival",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "arrival",
+          "polygon": [
+            [
+              0,
+              -3
+            ],
+            [
+              4,
+              -3
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": true,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "entry-gallery",
+          "mass": "base-mass",
+          "level": "ground",
+          "use": "entry-gallery",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              0,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "upper-gallery",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "upper-gallery",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              0,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "living",
+          "mass": "west-mass",
+          "level": "ground",
+          "use": "connected living and library",
+          "polygon": [
+            [
+              -9,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              -9,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "dining",
+          "mass": "east-mass",
+          "level": "ground",
+          "use": "dining and kitchen allocation",
+          "polygon": [
+            [
+              4,
+              0
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              4,
+              10
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": false,
+          "roof": false,
+          "material": "ivory"
+        },
+        {
+          "id": "west-suite",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "west suite allocation; bath and fit-out unresolved",
+          "polygon": [
+            [
+              -9,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              10
+            ],
+            [
+              -9,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "east-suite",
+          "mass": "upper-mass",
+          "level": "upper",
+          "use": "east suite allocation; bath and fit-out unresolved",
+          "polygon": [
+            [
+              4,
+              0
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              4,
+              10
+            ]
+          ],
+          "height": 2.9,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "ocean-salon",
+          "mass": "salon-mass",
+          "level": "ground",
+          "use": "ocean-salon",
+          "polygon": [
+            [
+              0,
+              10
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              11,
+              22
+            ],
+            [
+              -7,
+              22
+            ]
+          ],
+          "height": 5.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "limestone"
+        },
+        {
+          "id": "ocean-terrace",
+          "mass": "salon-mass",
+          "level": "ground",
+          "use": "ocean-terrace",
+          "polygon": [
+            [
+              -7,
+              22
+            ],
+            [
+              11,
+              22
+            ],
+            [
+              11,
+              27
+            ],
+            [
+              -7,
+              27
+            ]
+          ],
+          "height": 5.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "ivory"
+        }
+      ],
+      "portals": [
+        {
+          "id": "living-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 3
+          },
+          "to": "living",
+          "offset": 1.3,
+          "width": 1.5,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "dining-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 1
+          },
+          "to": "dining",
+          "offset": 8.7,
+          "width": 1.5,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "west-suite-door",
+          "host": {
+            "space": "upper-gallery",
+            "edge": 3
+          },
+          "to": "west-suite",
+          "offset": 1.3,
+          "width": 1.1,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "east-suite-door",
+          "host": {
+            "space": "upper-gallery",
+            "edge": 1
+          },
+          "to": "east-suite",
+          "offset": 8.7,
+          "width": 1.1,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "salon-link",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 2
+          },
+          "to": "ocean-salon",
+          "offset": 2,
+          "width": 3.4,
+          "height": 2.4,
+          "mode": "open"
+        },
+        {
+          "id": "terrace-door",
+          "host": {
+            "space": "ocean-salon",
+            "edge": 2
+          },
+          "to": "ocean-terrace",
+          "offset": 9,
+          "width": 6,
+          "height": 3.4,
+          "mode": "door"
+        },
+        {
+          "id": "front-door",
+          "host": {
+            "space": "entry-gallery",
+            "edge": 0
+          },
+          "to": "arrival",
+          "offset": 2,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "main-stair",
+          "lower": "entry-gallery",
+          "upper": "upper-gallery",
+          "start": [
+            2,
+            1.3
+          ],
+          "width": 1.1,
+          "run": 5.4,
+          "risers": 20,
+          "landing": 1.1,
+          "headroom": 2.1,
+          "bypass": "right"
+        }
+      ],
+      "arrival": "arrival",
+      "requiredAccess": [
+        "arrival",
+        "entry-gallery",
+        "upper-gallery",
+        "living",
+        "dining",
+        "west-suite",
+        "east-suite",
+        "ocean-salon",
+        "ocean-terrace"
+      ]
+    },
+    "scene": {
+      "version": "architectural-scene-1",
+      "name": "luxury",
+      "elements": [
+        {
+          "id": "main-stair",
+          "label": "main-stair step 1",
+          "kind": "volume",
+          "at": [
+            -9.689698595619747,
+            0.29000000000000004,
+            5.849548362907391
+          ],
+          "rotation": 0.27,
+          "size": [
+            1.1,
+            0.18,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-2",
+          "label": "main-stair step 2",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.09,
+            0.27
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.36,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-3",
+          "label": "main-stair step 3",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.18000000000000002,
+            0.54
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.54,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-4",
+          "label": "main-stair step 4",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.27,
+            0.81
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.72,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-5",
+          "label": "main-stair step 5",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.36,
+            1.08
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.8999999999999999,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-6",
+          "label": "main-stair step 6",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.45000000000000007,
+            1.35
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.08,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-7",
+          "label": "main-stair step 7",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.54,
+            1.62
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.26,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-8",
+          "label": "main-stair step 8",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.63,
+            1.8900000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.44,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-9",
+          "label": "main-stair step 9",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.72,
+            2.16
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.6199999999999999,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-10",
+          "label": "main-stair step 10",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.8099999999999999,
+            2.43
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.7999999999999998,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-11",
+          "label": "main-stair step 11",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.9,
+            2.7
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.98,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-12",
+          "label": "main-stair step 12",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.9900000000000001,
+            2.97
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.16,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-13",
+          "label": "main-stair step 13",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.0799999999999998,
+            3.24
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.34,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-14",
+          "label": "main-stair step 14",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.17,
+            3.5100000000000002
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.52,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-15",
+          "label": "main-stair step 15",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.2599999999999998,
+            3.7800000000000002
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.6999999999999997,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-16",
+          "label": "main-stair step 16",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.3499999999999999,
+            4.050000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.88,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-17",
+          "label": "main-stair step 17",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.44,
+            4.32
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.06,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-18",
+          "label": "main-stair step 18",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.5299999999999998,
+            4.59
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.2399999999999998,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-19",
+          "label": "main-stair step 19",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.6199999999999999,
+            4.86
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.42,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "main-stair-step-20",
+          "label": "main-stair step 20",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.7099999999999997,
+            5.130000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.5999999999999996,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "arrival-floor",
+          "label": "arrival-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -10.472555362301467,
+            0.1,
+            3.0208807820735024
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            3
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "entry-gallery-floor",
+          "label": "entry-gallery-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -8.738801023824063,
+            0.1,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-floor",
+          "label": "upper-gallery-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  -0.16250000000000003,
+                  -0.38
+                ],
+                [
+                  0.16249999999999998,
+                  -0.38
+                ],
+                [
+                  0.16249999999999998,
+                  0.17
+                ],
+                [
+                  -0.16250000000000003,
+                  0.17
+                ]
+              ]
+            ]
+          },
+          "at": [
+            -8.738801023824063,
+            3.7,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-roof",
+          "label": "upper-gallery-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -8.738801023824063,
+            6.79,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.18,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "living-floor",
+          "label": "living-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            0.1,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "dining-floor",
+          "label": "dining-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            0.1,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-floor",
+          "label": "west-suite-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            3.7,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-roof",
+          "label": "west-suite-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            6.79,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.18,
+            10
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-floor",
+          "label": "east-suite-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            3.7,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-roof",
+          "label": "east-suite-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            6.79,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.18,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "ocean-salon-floor",
+          "label": "ocean-salon-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -5.804755220246921,
+            0.1,
+            19.886871468476585
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.2,
+            12
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "ocean-salon-roof",
+          "label": "ocean-salon-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -5.804755220246921,
+            5.49,
+            19.886871468476585
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.18,
+            12
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "ocean-terrace-floor",
+          "label": "ocean-terrace-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.5375380083918566,
+            0.1,
+            28.078924087586657
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.2,
+            5
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "front-door",
+          "label": "front-door",
+          "kind": "entrance",
+          "at": [
+            -10.07245820726822,
+            1.4,
+            4.466537126622338
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            1.2,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "arrival-e2-wall",
+          "label": "arrival-e2",
+          "kind": "wall",
+          "at": [
+            -10.07245820726822,
+            2,
+            4.466537126622338
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "entry-gallery-e1-wall",
+          "label": "entry-gallery-e1",
+          "kind": "wall",
+          "at": [
+            -6.811259231092282,
+            2,
+            8.751928735074127
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 3.6999999999999993,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "entry-gallery-e2-wall",
+          "label": "entry-gallery-e2",
+          "kind": "wall",
+          "at": [
+            -7.405143840379909,
+            2.8000000000000003,
+            14.104246090281244
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            5.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 3.4,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "entry-gallery-e3-wall",
+          "label": "entry-gallery-e3",
+          "kind": "wall",
+          "at": [
+            -10.666342816555844,
+            2,
+            9.818854481829453
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": -3.7,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "upper-gallery-e0-wall",
+          "label": "upper-gallery-e0",
+          "kind": "wall",
+          "at": [
+            -10.07245820726822,
+            5.25,
+            4.466537126622338
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-door",
+          "label": "east-suite-door",
+          "kind": "entrance",
+          "at": [
+            -5.824352915343606,
+            5,
+            12.317881051627921
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            1.1,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-e1-wall",
+          "label": "upper-gallery-e1",
+          "kind": "wall",
+          "at": [
+            -6.811259231092282,
+            5.25,
+            8.751928735074127
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 3.6999999999999993,
+            "sill": 0,
+            "width": 1.1,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "upper-gallery-e2-wall",
+          "label": "upper-gallery-e2",
+          "kind": "wall",
+          "at": [
+            -7.405143840379909,
+            5.25,
+            14.104246090281244
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-door",
+          "label": "west-suite-door",
+          "kind": "entrance",
+          "at": [
+            -9.679436500807169,
+            5,
+            13.384806798383247
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            1.1,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "upper-gallery-e3-wall",
+          "label": "upper-gallery-e3",
+          "kind": "wall",
+          "at": [
+            -10.666342816555844,
+            5.25,
+            9.818854481829453
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": -3.7,
+            "sill": 0,
+            "width": 1.1,
+            "height": 2.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "living-e0-wall",
+          "label": "living-e0",
+          "kind": "wall",
+          "at": [
+            -16.336969033646508,
+            2,
+            6.20029146509974
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "living-e2-wall",
+          "label": "living-e2",
+          "kind": "wall",
+          "at": [
+            -13.669654666758197,
+            2,
+            15.838000428758646
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            9,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "living-e3-wall",
+          "label": "living-e3",
+          "kind": "wall",
+          "at": [
+            -19.34028088384886,
+            2,
+            12.219437412028933
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "dining-e0-wall",
+          "label": "dining-e0",
+          "kind": "wall",
+          "at": [
+            -5.253603725438766,
+            2,
+            3.1328799431781817
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "dining-e1-wall",
+          "label": "dining-e1",
+          "kind": "wall",
+          "at": [
+            -1.0286338528969388,
+            2,
+            7.151540114941142
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "dining-e2-wall",
+          "label": "dining-e2",
+          "kind": "wall",
+          "at": [
+            -2.5862893585504545,
+            2,
+            12.770588906837087
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-e0-wall",
+          "label": "west-suite-e0",
+          "kind": "wall",
+          "at": [
+            -16.336969033646508,
+            5.25,
+            6.20029146509974
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-e2-wall",
+          "label": "west-suite-e2",
+          "kind": "wall",
+          "at": [
+            -13.669654666758197,
+            5.25,
+            15.838000428758646
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            9,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "west-suite-e3-wall",
+          "label": "west-suite-e3",
+          "kind": "wall",
+          "at": [
+            -19.34028088384886,
+            5.25,
+            12.219437412028933
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-e0-wall",
+          "label": "east-suite-e0",
+          "kind": "wall",
+          "at": [
+            -5.253603725438766,
+            5.25,
+            3.1328799431781817
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-e1-wall",
+          "label": "east-suite-e1",
+          "kind": "wall",
+          "at": [
+            -1.0286338528969388,
+            5.25,
+            7.151540114941142
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "east-suite-e2-wall",
+          "label": "east-suite-e2",
+          "kind": "wall",
+          "at": [
+            -2.5862893585504545,
+            5.25,
+            12.770588906837087
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        },
+        {
+          "id": "ocean-salon-e1-wall",
+          "label": "ocean-salon-e1",
+          "kind": "wall",
+          "at": [
+            -0.5040152902345225,
+            2.8000000000000003,
+            18.419848566688014
+          ],
+          "rotation": -0.772721878368537,
+          "size": [
+            13.892443989449806,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4
+        },
+        {
+          "id": "terrace-door",
+          "label": "terrace-door",
+          "kind": "entrance",
+          "at": [
+            -4.204366600113934,
+            1.9,
+            25.66949684667193
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            3.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        },
+        {
+          "id": "ocean-salon-e2-wall",
+          "label": "ocean-salon-e2",
+          "kind": "wall",
+          "at": [
+            -4.204366600113934,
+            2.8000000000000003,
+            25.66949684667193
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            18,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 6,
+            "height": 3.4,
+            "glazed": false
+          }
+        },
+        {
+          "id": "ocean-salon-e3-wall",
+          "label": "ocean-salon-e3",
+          "kind": "wall",
+          "at": [
+            -11.105495150259319,
+            2.8000000000000003,
+            21.35389437026516
+          ],
+          "rotation": 1.312721878368537,
+          "size": [
+            13.892443989449806,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      ]
+    },
+    "operations": [
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair",
+          "label": "main-stair step 1",
+          "kind": "volume",
+          "at": [
+            -9.689698595619747,
+            0.29000000000000004,
+            5.849548362907391
+          ],
+          "rotation": 0.27,
+          "size": [
+            1.1,
+            0.18,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-2",
+          "label": "main-stair step 2",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.09,
+            0.27
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.36,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-3",
+          "label": "main-stair step 3",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.18000000000000002,
+            0.54
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.54,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-4",
+          "label": "main-stair step 4",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.27,
+            0.81
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.72,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-5",
+          "label": "main-stair step 5",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.36,
+            1.08
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            0.8999999999999999,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-6",
+          "label": "main-stair step 6",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.45000000000000007,
+            1.35
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.08,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-7",
+          "label": "main-stair step 7",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.54,
+            1.62
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.26,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-8",
+          "label": "main-stair step 8",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.63,
+            1.8900000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.44,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-9",
+          "label": "main-stair step 9",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.72,
+            2.16
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.6199999999999999,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-10",
+          "label": "main-stair step 10",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.8099999999999999,
+            2.43
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.7999999999999998,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-11",
+          "label": "main-stair step 11",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.9,
+            2.7
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            1.98,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-12",
+          "label": "main-stair step 12",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            0.9900000000000001,
+            2.97
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.16,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-13",
+          "label": "main-stair step 13",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.0799999999999998,
+            3.24
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.34,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-14",
+          "label": "main-stair step 14",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.17,
+            3.5100000000000002
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.52,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-15",
+          "label": "main-stair step 15",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.2599999999999998,
+            3.7800000000000002
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.6999999999999997,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-16",
+          "label": "main-stair step 16",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.3499999999999999,
+            4.050000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            2.88,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-17",
+          "label": "main-stair step 17",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.44,
+            4.32
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.06,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-18",
+          "label": "main-stair step 18",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.5299999999999998,
+            4.59
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.2399999999999998,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-19",
+          "label": "main-stair step 19",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.6199999999999999,
+            4.86
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.42,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "main-stair-step-20",
+          "label": "main-stair step 20",
+          "kind": "volume",
+          "parent": "main-stair",
+          "at": [
+            0,
+            1.7099999999999997,
+            5.130000000000001
+          ],
+          "rotation": 0,
+          "size": [
+            1.1,
+            3.5999999999999996,
+            0.27
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "arrival-floor",
+          "label": "arrival-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -10.472555362301467,
+            0.1,
+            3.0208807820735024
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            3
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "entry-gallery-floor",
+          "label": "entry-gallery-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -8.738801023824063,
+            0.1,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-floor",
+          "label": "upper-gallery-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  -0.16250000000000003,
+                  -0.38
+                ],
+                [
+                  0.16249999999999998,
+                  -0.38
+                ],
+                [
+                  0.16249999999999998,
+                  0.17
+                ],
+                [
+                  -0.16250000000000003,
+                  0.17
+                ]
+              ]
+            ]
+          },
+          "at": [
+            -8.738801023824063,
+            3.7,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-roof",
+          "label": "upper-gallery-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -8.738801023824063,
+            6.79,
+            9.285391608451791
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            0.18,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "living-floor",
+          "label": "living-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            0.1,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-floor",
+          "label": "dining-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            0.1,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-floor",
+          "label": "west-suite-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            3.7,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-roof",
+          "label": "west-suite-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -15.003311850202351,
+            6.79,
+            11.019145946929193
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            0.18,
+            10
+          ],
+          "material": "timber",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-floor",
+          "label": "east-suite-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            3.7,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.2,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-roof",
+          "label": "east-suite-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.9199465419946105,
+            6.79,
+            7.9517344250076345
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            0.18,
+            10
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-salon-floor",
+          "label": "ocean-salon-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -5.804755220246921,
+            0.1,
+            19.886871468476585
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.2,
+            12
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-salon-roof",
+          "label": "ocean-salon-roof",
+          "kind": "roof",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.1111111111111111,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -5.804755220246921,
+            5.49,
+            19.886871468476585
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.18,
+            12
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-terrace-floor",
+          "label": "ocean-terrace-floor",
+          "kind": "plate",
+          "geometry": {
+            "type": "extrusion",
+            "axis": "y",
+            "outline": [
+              [
+                -0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                -0.5
+              ],
+              [
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5
+              ]
+            ],
+            "holes": []
+          },
+          "at": [
+            -3.5375380083918566,
+            0.1,
+            28.078924087586657
+          ],
+          "rotation": 0.27,
+          "size": [
+            18,
+            0.2,
+            5
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "front-door",
+          "label": "front-door",
+          "kind": "entrance",
+          "at": [
+            -10.07245820726822,
+            1.4,
+            4.466537126622338
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            1.2,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "arrival-e2-wall",
+          "label": "arrival-e2",
+          "kind": "wall",
+          "at": [
+            -10.07245820726822,
+            2,
+            4.466537126622338
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 1.2,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "entry-gallery-e1-wall",
+          "label": "entry-gallery-e1",
+          "kind": "wall",
+          "at": [
+            -6.811259231092282,
+            2,
+            8.751928735074127
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 3.6999999999999993,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "entry-gallery-e2-wall",
+          "label": "entry-gallery-e2",
+          "kind": "wall",
+          "at": [
+            -7.405143840379909,
+            2.8000000000000003,
+            14.104246090281244
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            5.2,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 3.4,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "entry-gallery-e3-wall",
+          "label": "entry-gallery-e3",
+          "kind": "wall",
+          "at": [
+            -10.666342816555844,
+            2,
+            9.818854481829453
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": -3.7,
+            "sill": 0,
+            "width": 1.5,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-e0-wall",
+          "label": "upper-gallery-e0",
+          "kind": "wall",
+          "at": [
+            -10.07245820726822,
+            5.25,
+            4.466537126622338
+          ],
+          "rotation": 0.27,
+          "size": [
+            4,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-door",
+          "label": "east-suite-door",
+          "kind": "entrance",
+          "at": [
+            -5.824352915343606,
+            5,
+            12.317881051627921
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            1.1,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-e1-wall",
+          "label": "upper-gallery-e1",
+          "kind": "wall",
+          "at": [
+            -6.811259231092282,
+            5.25,
+            8.751928735074127
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": 3.6999999999999993,
+            "sill": 0,
+            "width": 1.1,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-e2-wall",
+          "label": "upper-gallery-e2",
+          "kind": "wall",
+          "at": [
+            -7.405143840379909,
+            5.25,
+            14.104246090281244
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            4,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-door",
+          "label": "west-suite-door",
+          "kind": "entrance",
+          "at": [
+            -9.679436500807169,
+            5,
+            13.384806798383247
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            1.1,
+            2.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "upper-gallery-e3-wall",
+          "label": "upper-gallery-e3",
+          "kind": "wall",
+          "at": [
+            -10.666342816555844,
+            5.25,
+            9.818854481829453
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4,
+          "opening": {
+            "x": -3.7,
+            "sill": 0,
+            "width": 1.1,
+            "height": 2.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "living-e0-wall",
+          "label": "living-e0",
+          "kind": "wall",
+          "at": [
+            -16.336969033646508,
+            2,
+            6.20029146509974
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "living-e2-wall",
+          "label": "living-e2",
+          "kind": "wall",
+          "at": [
+            -13.669654666758197,
+            2,
+            15.838000428758646
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            9,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "living-e3-wall",
+          "label": "living-e3",
+          "kind": "wall",
+          "at": [
+            -19.34028088384886,
+            2,
+            12.219437412028933
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-e0-wall",
+          "label": "dining-e0",
+          "kind": "wall",
+          "at": [
+            -5.253603725438766,
+            2,
+            3.1328799431781817
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-e1-wall",
+          "label": "dining-e1",
+          "kind": "wall",
+          "at": [
+            -1.0286338528969388,
+            2,
+            7.151540114941142
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "dining-e2-wall",
+          "label": "dining-e2",
+          "kind": "wall",
+          "at": [
+            -2.5862893585504545,
+            2,
+            12.770588906837087
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            3.6,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-e0-wall",
+          "label": "west-suite-e0",
+          "kind": "wall",
+          "at": [
+            -16.336969033646508,
+            5.25,
+            6.20029146509974
+          ],
+          "rotation": 0.27,
+          "size": [
+            9,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-e2-wall",
+          "label": "west-suite-e2",
+          "kind": "wall",
+          "at": [
+            -13.669654666758197,
+            5.25,
+            15.838000428758646
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            9,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "west-suite-e3-wall",
+          "label": "west-suite-e3",
+          "kind": "wall",
+          "at": [
+            -19.34028088384886,
+            5.25,
+            12.219437412028933
+          ],
+          "rotation": 1.8407963267948966,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "timber",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-e0-wall",
+          "label": "east-suite-e0",
+          "kind": "wall",
+          "at": [
+            -5.253603725438766,
+            5.25,
+            3.1328799431781817
+          ],
+          "rotation": 0.27,
+          "size": [
+            6,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-e1-wall",
+          "label": "east-suite-e1",
+          "kind": "wall",
+          "at": [
+            -1.0286338528969388,
+            5.25,
+            7.151540114941142
+          ],
+          "rotation": -1.3007963267948965,
+          "size": [
+            10,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "east-suite-e2-wall",
+          "label": "east-suite-e2",
+          "kind": "wall",
+          "at": [
+            -2.5862893585504545,
+            5.25,
+            12.770588906837087
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            2.9,
+            0.18
+          ],
+          "material": "ivory",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-salon-e1-wall",
+          "label": "ocean-salon-e1",
+          "kind": "wall",
+          "at": [
+            -0.5040152902345225,
+            2.8000000000000003,
+            18.419848566688014
+          ],
+          "rotation": -0.772721878368537,
+          "size": [
+            13.892443989449806,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "terrace-door",
+          "label": "terrace-door",
+          "kind": "entrance",
+          "at": [
+            -4.204366600113934,
+            1.9,
+            25.66949684667193
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            6,
+            3.4,
+            0.08
+          ],
+          "material": "bronze",
+          "panels": 4
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-salon-e2-wall",
+          "label": "ocean-salon-e2",
+          "kind": "wall",
+          "at": [
+            -4.204366600113934,
+            2.8000000000000003,
+            25.66949684667193
+          ],
+          "rotation": -2.871592653589793,
+          "size": [
+            18,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4,
+          "opening": {
+            "x": 0,
+            "sill": 0,
+            "width": 6,
+            "height": 3.4,
+            "glazed": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "element": {
+          "id": "ocean-salon-e3-wall",
+          "label": "ocean-salon-e3",
+          "kind": "wall",
+          "at": [
+            -11.105495150259319,
+            2.8000000000000003,
+            21.35389437026516
+          ],
+          "rotation": 1.312721878368537,
+          "size": [
+            13.892443989449806,
+            5.2,
+            0.18
+          ],
+          "material": "limestone",
+          "panels": 4
+        }
+      }
+    ],
+    "provenance": {
+      "main-stair": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-2": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-3": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-4": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-5": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-6": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-7": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-8": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-9": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-10": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-11": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-12": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-13": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-14": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-15": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-16": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-17": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-18": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-19": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "main-stair-step-20": {
+        "sources": [
+          "main-stair",
+          "entry-gallery",
+          "upper-gallery",
+          "ground",
+          "upper"
+        ],
+        "rule": "selected flight → existing straight-stair helper"
+      },
+      "arrival-floor": {
+        "sources": [
+          "arrival",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "entry-gallery-floor": {
+        "sources": [
+          "entry-gallery",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "upper-gallery-floor": {
+        "sources": [
+          "upper-gallery",
+          "upper",
+          "main-stair"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "upper-gallery-roof": {
+        "sources": [
+          "upper-gallery",
+          "upper"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "living-floor": {
+        "sources": [
+          "living",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "dining-floor": {
+        "sources": [
+          "dining",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "west-suite-floor": {
+        "sources": [
+          "west-suite",
+          "upper"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "west-suite-roof": {
+        "sources": [
+          "west-suite",
+          "upper"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "east-suite-floor": {
+        "sources": [
+          "east-suite",
+          "upper"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "east-suite-roof": {
+        "sources": [
+          "east-suite",
+          "upper"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "ocean-salon-floor": {
+        "sources": [
+          "ocean-salon",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "ocean-salon-roof": {
+        "sources": [
+          "ocean-salon",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "ocean-terrace-floor": {
+        "sources": [
+          "ocean-terrace",
+          "ground"
+        ],
+        "rule": "polygon and level → editable profile slab"
+      },
+      "front-door": {
+        "sources": [
+          "front-door",
+          "arrival-e2",
+          "ground"
+        ],
+        "rule": "single host opening → matching door transform"
+      },
+      "arrival-e2-wall": {
+        "sources": [
+          "arrival-e2",
+          "arrival",
+          "entry-gallery",
+          "ground",
+          "front-door"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "entry-gallery-e1-wall": {
+        "sources": [
+          "entry-gallery-e1",
+          "entry-gallery",
+          "dining",
+          "ground",
+          "dining-link"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "entry-gallery-e2-wall": {
+        "sources": [
+          "entry-gallery-e2",
+          "entry-gallery",
+          "ocean-salon",
+          "ground",
+          "salon-link"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "entry-gallery-e3-wall": {
+        "sources": [
+          "entry-gallery-e3",
+          "entry-gallery",
+          "living",
+          "ground",
+          "living-link"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "upper-gallery-e0-wall": {
+        "sources": [
+          "upper-gallery-e0",
+          "upper-gallery",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "east-suite-door": {
+        "sources": [
+          "east-suite-door",
+          "upper-gallery-e1",
+          "upper"
+        ],
+        "rule": "single host opening → matching door transform"
+      },
+      "upper-gallery-e1-wall": {
+        "sources": [
+          "upper-gallery-e1",
+          "upper-gallery",
+          "east-suite",
+          "upper",
+          "east-suite-door"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "upper-gallery-e2-wall": {
+        "sources": [
+          "upper-gallery-e2",
+          "upper-gallery",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "west-suite-door": {
+        "sources": [
+          "west-suite-door",
+          "upper-gallery-e3",
+          "upper"
+        ],
+        "rule": "single host opening → matching door transform"
+      },
+      "upper-gallery-e3-wall": {
+        "sources": [
+          "upper-gallery-e3",
+          "upper-gallery",
+          "west-suite",
+          "upper",
+          "west-suite-door"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "living-e0-wall": {
+        "sources": [
+          "living-e0",
+          "living",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "living-e2-wall": {
+        "sources": [
+          "living-e2",
+          "living",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "living-e3-wall": {
+        "sources": [
+          "living-e3",
+          "living",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "dining-e0-wall": {
+        "sources": [
+          "dining-e0",
+          "dining",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "dining-e1-wall": {
+        "sources": [
+          "dining-e1",
+          "dining",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "dining-e2-wall": {
+        "sources": [
+          "dining-e2",
+          "dining",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "west-suite-e0-wall": {
+        "sources": [
+          "west-suite-e0",
+          "west-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "west-suite-e2-wall": {
+        "sources": [
+          "west-suite-e2",
+          "west-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "west-suite-e3-wall": {
+        "sources": [
+          "west-suite-e3",
+          "west-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "east-suite-e0-wall": {
+        "sources": [
+          "east-suite-e0",
+          "east-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "east-suite-e1-wall": {
+        "sources": [
+          "east-suite-e1",
+          "east-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "east-suite-e2-wall": {
+        "sources": [
+          "east-suite-e2",
+          "east-suite",
+          "upper"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "ocean-salon-e1-wall": {
+        "sources": [
+          "ocean-salon-e1",
+          "ocean-salon",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "terrace-door": {
+        "sources": [
+          "terrace-door",
+          "ocean-salon-e2",
+          "ground"
+        ],
+        "rule": "single host opening → matching door transform"
+      },
+      "ocean-salon-e2-wall": {
+        "sources": [
+          "ocean-salon-e2",
+          "ocean-salon",
+          "ocean-terrace",
+          "ground",
+          "terrace-door"
+        ],
+        "rule": "one shared boundary → one wall"
+      },
+      "ocean-salon-e3-wall": {
+        "sources": [
+          "ocean-salon-e3",
+          "ocean-salon",
+          "ground"
+        ],
+        "rule": "one shared boundary → one wall"
+      }
+    },
+    "boundaries": [
+      {
+        "id": "arrival-e0",
+        "a": [
+          0,
+          -3
+        ],
+        "b": [
+          4,
+          -3
+        ],
+        "spaces": [
+          "arrival"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "arrival-e1",
+        "a": [
+          4,
+          -3
+        ],
+        "b": [
+          4,
+          0
+        ],
+        "spaces": [
+          "arrival"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "arrival-e2",
+        "a": [
+          4,
+          0
+        ],
+        "b": [
+          0,
+          0
+        ],
+        "spaces": [
+          "arrival",
+          "entry-gallery"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "arrival-e3",
+        "a": [
+          0,
+          0
+        ],
+        "b": [
+          0,
+          -3
+        ],
+        "spaces": [
+          "arrival"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "entry-gallery-e1",
+        "a": [
+          4,
+          0
+        ],
+        "b": [
+          4,
+          10
+        ],
+        "spaces": [
+          "entry-gallery",
+          "dining"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "entry-gallery-e2",
+        "a": [
+          4,
+          10
+        ],
+        "b": [
+          0,
+          10
+        ],
+        "spaces": [
+          "entry-gallery",
+          "ocean-salon"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "entry-gallery-e3",
+        "a": [
+          0,
+          10
+        ],
+        "b": [
+          0,
+          0
+        ],
+        "spaces": [
+          "entry-gallery",
+          "living"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "upper-gallery-e0",
+        "a": [
+          0,
+          0
+        ],
+        "b": [
+          4,
+          0
+        ],
+        "spaces": [
+          "upper-gallery"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "upper-gallery-e1",
+        "a": [
+          4,
+          0
+        ],
+        "b": [
+          4,
+          10
+        ],
+        "spaces": [
+          "upper-gallery",
+          "east-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "upper-gallery-e2",
+        "a": [
+          4,
+          10
+        ],
+        "b": [
+          0,
+          10
+        ],
+        "spaces": [
+          "upper-gallery"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "upper-gallery-e3",
+        "a": [
+          0,
+          10
+        ],
+        "b": [
+          0,
+          0
+        ],
+        "spaces": [
+          "upper-gallery",
+          "west-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "living-e0",
+        "a": [
+          -9,
+          0
+        ],
+        "b": [
+          0,
+          0
+        ],
+        "spaces": [
+          "living"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "living-e2",
+        "a": [
+          0,
+          10
+        ],
+        "b": [
+          -9,
+          10
+        ],
+        "spaces": [
+          "living"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "living-e3",
+        "a": [
+          -9,
+          10
+        ],
+        "b": [
+          -9,
+          0
+        ],
+        "spaces": [
+          "living"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "dining-e0",
+        "a": [
+          4,
+          0
+        ],
+        "b": [
+          10,
+          0
+        ],
+        "spaces": [
+          "dining"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "dining-e1",
+        "a": [
+          10,
+          0
+        ],
+        "b": [
+          10,
+          10
+        ],
+        "spaces": [
+          "dining"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "dining-e2",
+        "a": [
+          10,
+          10
+        ],
+        "b": [
+          4,
+          10
+        ],
+        "spaces": [
+          "dining"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "west-suite-e0",
+        "a": [
+          -9,
+          0
+        ],
+        "b": [
+          0,
+          0
+        ],
+        "spaces": [
+          "west-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "west-suite-e2",
+        "a": [
+          0,
+          10
+        ],
+        "b": [
+          -9,
+          10
+        ],
+        "spaces": [
+          "west-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "west-suite-e3",
+        "a": [
+          -9,
+          10
+        ],
+        "b": [
+          -9,
+          0
+        ],
+        "spaces": [
+          "west-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "east-suite-e0",
+        "a": [
+          4,
+          0
+        ],
+        "b": [
+          10,
+          0
+        ],
+        "spaces": [
+          "east-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "east-suite-e1",
+        "a": [
+          10,
+          0
+        ],
+        "b": [
+          10,
+          10
+        ],
+        "spaces": [
+          "east-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "east-suite-e2",
+        "a": [
+          10,
+          10
+        ],
+        "b": [
+          4,
+          10
+        ],
+        "spaces": [
+          "east-suite"
+        ],
+        "level": "upper"
+      },
+      {
+        "id": "ocean-salon-e1",
+        "a": [
+          4,
+          10
+        ],
+        "b": [
+          11,
+          22
+        ],
+        "spaces": [
+          "ocean-salon"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "ocean-salon-e2",
+        "a": [
+          11,
+          22
+        ],
+        "b": [
+          -7,
+          22
+        ],
+        "spaces": [
+          "ocean-salon",
+          "ocean-terrace"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "ocean-salon-e3",
+        "a": [
+          -7,
+          22
+        ],
+        "b": [
+          0,
+          10
+        ],
+        "spaces": [
+          "ocean-salon"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "ocean-terrace-e1",
+        "a": [
+          11,
+          22
+        ],
+        "b": [
+          11,
+          27
+        ],
+        "spaces": [
+          "ocean-terrace"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "ocean-terrace-e2",
+        "a": [
+          11,
+          27
+        ],
+        "b": [
+          -7,
+          27
+        ],
+        "spaces": [
+          "ocean-terrace"
+        ],
+        "level": "ground"
+      },
+      {
+        "id": "ocean-terrace-e3",
+        "a": [
+          -7,
+          27
+        ],
+        "b": [
+          -7,
+          22
+        ],
+        "spaces": [
+          "ocean-terrace"
+        ],
+        "level": "ground"
+      }
+    ],
+    "portalEvidence": [
+      {
+        "id": "front-door",
+        "host": "arrival-e2",
+        "from": "entry-gallery",
+        "to": "arrival",
+        "local": [
+          2,
+          0
+        ],
+        "world": [
+          -10.07245820726822,
+          0.2,
+          4.466537126622338
+        ],
+        "width": 1.2,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": 0
+      },
+      {
+        "id": "dining-link",
+        "host": "entry-gallery-e1",
+        "from": "entry-gallery",
+        "to": "dining",
+        "local": [
+          4,
+          8.7
+        ],
+        "world": [
+          -5.824352915343606,
+          0.2,
+          12.317881051627921
+        ],
+        "width": 1.5,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": null
+      },
+      {
+        "id": "salon-link",
+        "host": "entry-gallery-e2",
+        "from": "entry-gallery",
+        "to": "ocean-salon",
+        "local": [
+          2,
+          10
+        ],
+        "world": [
+          -7.405143840379909,
+          0.2,
+          14.104246090281244
+        ],
+        "width": 3.4,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": null
+      },
+      {
+        "id": "living-link",
+        "host": "entry-gallery-e3",
+        "from": "entry-gallery",
+        "to": "living",
+        "local": [
+          0,
+          8.7
+        ],
+        "world": [
+          -9.679436500807169,
+          0.2,
+          13.384806798383247
+        ],
+        "width": 1.5,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": null
+      },
+      {
+        "id": "east-suite-door",
+        "host": "upper-gallery-e1",
+        "from": "upper-gallery",
+        "to": "east-suite",
+        "local": [
+          4,
+          8.7
+        ],
+        "world": [
+          -5.824352915343606,
+          3.8000000000000003,
+          12.317881051627921
+        ],
+        "width": 1.1,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": 2.220446049250313e-16
+      },
+      {
+        "id": "west-suite-door",
+        "host": "upper-gallery-e3",
+        "from": "upper-gallery",
+        "to": "west-suite",
+        "local": [
+          0,
+          8.7
+        ],
+        "world": [
+          -9.679436500807169,
+          3.8000000000000003,
+          13.384806798383247
+        ],
+        "width": 1.1,
+        "height": 2.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": 9.930136612989092e-16
+      },
+      {
+        "id": "terrace-door",
+        "host": "ocean-salon-e2",
+        "from": "ocean-salon",
+        "to": "ocean-terrace",
+        "local": [
+          2,
+          22
+        ],
+        "world": [
+          -4.204366600113934,
+          0.2,
+          25.66949684667193
+        ],
+        "width": 6,
+        "height": 3.4,
+        "passable": true,
+        "floorGap": 0,
+        "cutPanelError": 2.220446049250313e-16
+      }
+    ],
+    "stairEvidence": [
+      {
+        "id": "main-stair",
+        "rise": 3.6,
+        "riser": 0.18,
+        "going": 0.27,
+        "void": [
+          [
+            1.3499999999999999,
+            1.2
+          ],
+          [
+            2.65,
+            1.2
+          ],
+          [
+            2.65,
+            6.7
+          ],
+          [
+            1.3499999999999999,
+            6.7
+          ]
+        ],
+        "lowerLanding": [
+          2,
+          0.75
+        ],
+        "upperLanding": [
+          2,
+          7.25
+        ],
+        "endpoint": 3.8000000000000003,
+        "minimumHeadroom": 2.7199999999999998,
+        "scope": "entire flight void, flat upper roof, convex landing envelopes; no guards/structure certification"
+      }
+    ],
+    "spaceEvidence": [
+      {
+        "id": "arrival",
+        "floor": "arrival-floor",
+        "floorTop": 0.2,
+        "centreY": 2,
+        "envelopeHeight": 3.6,
+        "clearHeight": 3.6,
+        "boundaries": [
+          "arrival-e0",
+          "arrival-e1",
+          "arrival-e2",
+          "arrival-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "entry-gallery",
+        "floor": "entry-gallery-floor",
+        "floorTop": 0.2,
+        "centreY": 1.9,
+        "envelopeHeight": 3.6,
+        "clearHeight": 3.4,
+        "boundaries": [
+          "arrival-e2",
+          "entry-gallery-e1",
+          "entry-gallery-e2",
+          "entry-gallery-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "upper-gallery",
+        "floor": "upper-gallery-floor",
+        "floorTop": 3.8000000000000003,
+        "centreY": 5.25,
+        "envelopeHeight": 2.9,
+        "clearHeight": 2.9,
+        "boundaries": [
+          "upper-gallery-e0",
+          "upper-gallery-e1",
+          "upper-gallery-e2",
+          "upper-gallery-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "living",
+        "floor": "living-floor",
+        "floorTop": 0.2,
+        "centreY": 1.9,
+        "envelopeHeight": 3.6,
+        "clearHeight": 3.4,
+        "boundaries": [
+          "entry-gallery-e3",
+          "living-e0",
+          "living-e2",
+          "living-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "dining",
+        "floor": "dining-floor",
+        "floorTop": 0.2,
+        "centreY": 1.9,
+        "envelopeHeight": 3.6,
+        "clearHeight": 3.4,
+        "boundaries": [
+          "entry-gallery-e1",
+          "dining-e0",
+          "dining-e1",
+          "dining-e2"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "west-suite",
+        "floor": "west-suite-floor",
+        "floorTop": 3.8000000000000003,
+        "centreY": 5.25,
+        "envelopeHeight": 2.9,
+        "clearHeight": 2.9,
+        "boundaries": [
+          "upper-gallery-e3",
+          "west-suite-e0",
+          "west-suite-e2",
+          "west-suite-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "east-suite",
+        "floor": "east-suite-floor",
+        "floorTop": 3.8000000000000003,
+        "centreY": 5.25,
+        "envelopeHeight": 2.9,
+        "clearHeight": 2.9,
+        "boundaries": [
+          "upper-gallery-e1",
+          "east-suite-e0",
+          "east-suite-e1",
+          "east-suite-e2"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "ocean-salon",
+        "floor": "ocean-salon-floor",
+        "floorTop": 0.2,
+        "centreY": 2.8000000000000003,
+        "envelopeHeight": 5.2,
+        "clearHeight": 5.2,
+        "boundaries": [
+          "entry-gallery-e2",
+          "ocean-salon-e1",
+          "ocean-salon-e2",
+          "ocean-salon-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      },
+      {
+        "id": "ocean-terrace",
+        "floor": "ocean-terrace-floor",
+        "floorTop": 0.2,
+        "centreY": 2.8000000000000003,
+        "envelopeHeight": 5.2,
+        "clearHeight": 5.2,
+        "boundaries": [
+          "ocean-salon-e2",
+          "ocean-terrace-e1",
+          "ocean-terrace-e2",
+          "ocean-terrace-e3"
+        ],
+        "note": "derived semantic occupied cell, not a physical solid; overhead floor thickness subtracted"
+      }
+    ],
+    "access": {
+      "arrival": "arrival",
+      "reachable": [
+        "arrival",
+        "entry-gallery",
+        "upper-gallery",
+        "east-suite",
+        "west-suite",
+        "dining",
+        "ocean-salon",
+        "ocean-terrace",
+        "living"
+      ],
+      "scope": "convex cells and proven thresholds; stair cell landing routing additionally reviewed; no general free-space navigation"
+    },
+    "completion": {
+      "spatial": "bounded proofs only",
+      "construction": "editable envelope study; guards, services, engineering and fit-out incomplete",
+      "composition": "requires independent visual judgment"
+    }
+  },
+  "scene": {
+    "version": "architectural-scene-1",
+    "name": "luxury",
+    "generationBrief": "Multilevel luxury waterfront property with unequal living wings, suites, tall social pavilion and terrace.",
+    "elements": [
+      {
+        "id": "main-stair",
+        "label": "main-stair step 1",
+        "kind": "volume",
+        "at": [
+          -9.689698595619747,
+          0.29000000000000004,
+          5.849548362907391
+        ],
+        "rotation": 0.27,
+        "size": [
+          1.1,
+          0.18,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-2",
+        "label": "main-stair step 2",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.09,
+          0.27
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.36,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-3",
+        "label": "main-stair step 3",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.18000000000000002,
+          0.54
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.54,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-4",
+        "label": "main-stair step 4",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.27,
+          0.81
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.72,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-5",
+        "label": "main-stair step 5",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.36,
+          1.08
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          0.8999999999999999,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-6",
+        "label": "main-stair step 6",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.45000000000000007,
+          1.35
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.08,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-7",
+        "label": "main-stair step 7",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.54,
+          1.62
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.26,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-8",
+        "label": "main-stair step 8",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.63,
+          1.8900000000000001
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.44,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-9",
+        "label": "main-stair step 9",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.72,
+          2.16
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.6199999999999999,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-10",
+        "label": "main-stair step 10",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.8099999999999999,
+          2.43
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.7999999999999998,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-11",
+        "label": "main-stair step 11",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.9,
+          2.7
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          1.98,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-12",
+        "label": "main-stair step 12",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          0.9900000000000001,
+          2.97
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.16,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-13",
+        "label": "main-stair step 13",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.0799999999999998,
+          3.24
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.34,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-14",
+        "label": "main-stair step 14",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.17,
+          3.5100000000000002
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.52,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-15",
+        "label": "main-stair step 15",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.2599999999999998,
+          3.7800000000000002
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.6999999999999997,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-16",
+        "label": "main-stair step 16",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.3499999999999999,
+          4.050000000000001
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          2.88,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-17",
+        "label": "main-stair step 17",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.44,
+          4.32
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.06,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-18",
+        "label": "main-stair step 18",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.5299999999999998,
+          4.59
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.2399999999999998,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-19",
+        "label": "main-stair step 19",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.6199999999999999,
+          4.86
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.42,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "main-stair-step-20",
+        "label": "main-stair step 20",
+        "kind": "volume",
+        "parent": "main-stair",
+        "at": [
+          0,
+          1.7099999999999997,
+          5.130000000000001
+        ],
+        "rotation": 0,
+        "size": [
+          1.1,
+          3.5999999999999996,
+          0.27
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "arrival-floor",
+        "label": "arrival-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -10.472555362301467,
+          0.1,
+          3.0208807820735024
+        ],
+        "rotation": 0.27,
+        "size": [
+          4,
+          0.2,
+          3
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "entry-gallery-floor",
+        "label": "entry-gallery-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -8.738801023824063,
+          0.1,
+          9.285391608451791
+        ],
+        "rotation": 0.27,
+        "size": [
+          4,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-gallery-floor",
+        "label": "upper-gallery-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": [
+            [
+              [
+                -0.16250000000000003,
+                -0.38
+              ],
+              [
+                0.16249999999999998,
+                -0.38
+              ],
+              [
+                0.16249999999999998,
+                0.17
+              ],
+              [
+                -0.16250000000000003,
+                0.17
+              ]
+            ]
+          ]
+        },
+        "at": [
+          -8.738801023824063,
+          3.7,
+          9.285391608451791
+        ],
+        "rotation": 0.27,
+        "size": [
+          4,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "upper-gallery-roof",
+        "label": "upper-gallery-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -8.738801023824063,
+          6.79,
+          9.285391608451791
+        ],
+        "rotation": 0.27,
+        "size": [
+          4,
+          0.18,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "living-floor",
+        "label": "living-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -15.003311850202351,
+          0.1,
+          11.019145946929193
+        ],
+        "rotation": 0.27,
+        "size": [
+          9,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "dining-floor",
+        "label": "dining-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -3.9199465419946105,
+          0.1,
+          7.9517344250076345
+        ],
+        "rotation": 0.27,
+        "size": [
+          6,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-floor",
+        "label": "west-suite-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -15.003311850202351,
+          3.7,
+          11.019145946929193
+        ],
+        "rotation": 0.27,
+        "size": [
+          9,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-roof",
+        "label": "west-suite-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -15.003311850202351,
+          6.79,
+          11.019145946929193
+        ],
+        "rotation": 0.27,
+        "size": [
+          9,
+          0.18,
+          10
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-floor",
+        "label": "east-suite-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -3.9199465419946105,
+          3.7,
+          7.9517344250076345
+        ],
+        "rotation": 0.27,
+        "size": [
+          6,
+          0.2,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-roof",
+        "label": "east-suite-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -3.9199465419946105,
+          6.79,
+          7.9517344250076345
+        ],
+        "rotation": 0.27,
+        "size": [
+          6,
+          0.18,
+          10
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "ocean-salon-floor",
+        "label": "ocean-salon-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.1111111111111111,
+              -0.5
+            ],
+            [
+              0.1111111111111111,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5.804755220246921,
+          0.1,
+          19.886871468476585
+        ],
+        "rotation": 0.27,
+        "size": [
+          18,
+          0.2,
+          12
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "ocean-salon-roof",
+        "label": "ocean-salon-roof",
+        "kind": "roof",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.1111111111111111,
+              -0.5
+            ],
+            [
+              0.1111111111111111,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -5.804755220246921,
+          5.49,
+          19.886871468476585
+        ],
+        "rotation": 0.27,
+        "size": [
+          18,
+          0.18,
+          12
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "ocean-terrace-floor",
+        "label": "ocean-terrace-floor",
+        "kind": "plate",
+        "geometry": {
+          "type": "extrusion",
+          "axis": "y",
+          "outline": [
+            [
+              -0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              -0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              -0.5,
+              0.5
+            ]
+          ],
+          "holes": []
+        },
+        "at": [
+          -3.5375380083918566,
+          0.1,
+          28.078924087586657
+        ],
+        "rotation": 0.27,
+        "size": [
+          18,
+          0.2,
+          5
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "front-door",
+        "label": "front-door",
+        "kind": "entrance",
+        "at": [
+          -10.07245820726822,
+          1.4,
+          4.466537126622338
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          1.2,
+          2.4,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "arrival-e2-wall",
+        "label": "arrival-e2",
+        "kind": "wall",
+        "at": [
+          -10.07245820726822,
+          2,
+          4.466537126622338
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          4,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 1.2,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "entry-gallery-e1-wall",
+        "label": "entry-gallery-e1",
+        "kind": "wall",
+        "at": [
+          -6.811259231092282,
+          2,
+          8.751928735074127
+        ],
+        "rotation": -1.3007963267948965,
+        "size": [
+          10,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 3.6999999999999993,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "entry-gallery-e2-wall",
+        "label": "entry-gallery-e2",
+        "kind": "wall",
+        "at": [
+          -7.405143840379909,
+          2.8000000000000003,
+          14.104246090281244
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          4,
+          5.2,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 3.4,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "entry-gallery-e3-wall",
+        "label": "entry-gallery-e3",
+        "kind": "wall",
+        "at": [
+          -10.666342816555844,
+          2,
+          9.818854481829453
+        ],
+        "rotation": 1.8407963267948966,
+        "size": [
+          10,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -3.7,
+          "sill": 0,
+          "width": 1.5,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "upper-gallery-e0-wall",
+        "label": "upper-gallery-e0",
+        "kind": "wall",
+        "at": [
+          -10.07245820726822,
+          5.25,
+          4.466537126622338
+        ],
+        "rotation": 0.27,
+        "size": [
+          4,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-door",
+        "label": "east-suite-door",
+        "kind": "entrance",
+        "at": [
+          -5.824352915343606,
+          5,
+          12.317881051627921
+        ],
+        "rotation": -1.3007963267948965,
+        "size": [
+          1.1,
+          2.4,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "upper-gallery-e1-wall",
+        "label": "upper-gallery-e1",
+        "kind": "wall",
+        "at": [
+          -6.811259231092282,
+          5.25,
+          8.751928735074127
+        ],
+        "rotation": -1.3007963267948965,
+        "size": [
+          10,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": 3.6999999999999993,
+          "sill": 0,
+          "width": 1.1,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "upper-gallery-e2-wall",
+        "label": "upper-gallery-e2",
+        "kind": "wall",
+        "at": [
+          -7.405143840379909,
+          5.25,
+          14.104246090281244
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          4,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-door",
+        "label": "west-suite-door",
+        "kind": "entrance",
+        "at": [
+          -9.679436500807169,
+          5,
+          13.384806798383247
+        ],
+        "rotation": 1.8407963267948966,
+        "size": [
+          1.1,
+          2.4,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "upper-gallery-e3-wall",
+        "label": "upper-gallery-e3",
+        "kind": "wall",
+        "at": [
+          -10.666342816555844,
+          5.25,
+          9.818854481829453
+        ],
+        "rotation": 1.8407963267948966,
+        "size": [
+          10,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4,
+        "opening": {
+          "x": -3.7,
+          "sill": 0,
+          "width": 1.1,
+          "height": 2.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "living-e0-wall",
+        "label": "living-e0",
+        "kind": "wall",
+        "at": [
+          -16.336969033646508,
+          2,
+          6.20029146509974
+        ],
+        "rotation": 0.27,
+        "size": [
+          9,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "living-e2-wall",
+        "label": "living-e2",
+        "kind": "wall",
+        "at": [
+          -13.669654666758197,
+          2,
+          15.838000428758646
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          9,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "living-e3-wall",
+        "label": "living-e3",
+        "kind": "wall",
+        "at": [
+          -19.34028088384886,
+          2,
+          12.219437412028933
+        ],
+        "rotation": 1.8407963267948966,
+        "size": [
+          10,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "dining-e0-wall",
+        "label": "dining-e0",
+        "kind": "wall",
+        "at": [
+          -5.253603725438766,
+          2,
+          3.1328799431781817
+        ],
+        "rotation": 0.27,
+        "size": [
+          6,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "dining-e1-wall",
+        "label": "dining-e1",
+        "kind": "wall",
+        "at": [
+          -1.0286338528969388,
+          2,
+          7.151540114941142
+        ],
+        "rotation": -1.3007963267948965,
+        "size": [
+          10,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "dining-e2-wall",
+        "label": "dining-e2",
+        "kind": "wall",
+        "at": [
+          -2.5862893585504545,
+          2,
+          12.770588906837087
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          6,
+          3.6,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-e0-wall",
+        "label": "west-suite-e0",
+        "kind": "wall",
+        "at": [
+          -16.336969033646508,
+          5.25,
+          6.20029146509974
+        ],
+        "rotation": 0.27,
+        "size": [
+          9,
+          2.9,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-e2-wall",
+        "label": "west-suite-e2",
+        "kind": "wall",
+        "at": [
+          -13.669654666758197,
+          5.25,
+          15.838000428758646
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          9,
+          2.9,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "west-suite-e3-wall",
+        "label": "west-suite-e3",
+        "kind": "wall",
+        "at": [
+          -19.34028088384886,
+          5.25,
+          12.219437412028933
+        ],
+        "rotation": 1.8407963267948966,
+        "size": [
+          10,
+          2.9,
+          0.18
+        ],
+        "material": "timber",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-e0-wall",
+        "label": "east-suite-e0",
+        "kind": "wall",
+        "at": [
+          -5.253603725438766,
+          5.25,
+          3.1328799431781817
+        ],
+        "rotation": 0.27,
+        "size": [
+          6,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-e1-wall",
+        "label": "east-suite-e1",
+        "kind": "wall",
+        "at": [
+          -1.0286338528969388,
+          5.25,
+          7.151540114941142
+        ],
+        "rotation": -1.3007963267948965,
+        "size": [
+          10,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "east-suite-e2-wall",
+        "label": "east-suite-e2",
+        "kind": "wall",
+        "at": [
+          -2.5862893585504545,
+          5.25,
+          12.770588906837087
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          6,
+          2.9,
+          0.18
+        ],
+        "material": "ivory",
+        "panels": 4
+      },
+      {
+        "id": "ocean-salon-e1-wall",
+        "label": "ocean-salon-e1",
+        "kind": "wall",
+        "at": [
+          -0.5040152902345225,
+          2.8000000000000003,
+          18.419848566688014
+        ],
+        "rotation": -0.772721878368537,
+        "size": [
+          13.892443989449806,
+          5.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      },
+      {
+        "id": "terrace-door",
+        "label": "terrace-door",
+        "kind": "entrance",
+        "at": [
+          -4.204366600113934,
+          1.9,
+          25.66949684667193
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          6,
+          3.4,
+          0.08
+        ],
+        "material": "bronze",
+        "panels": 4
+      },
+      {
+        "id": "ocean-salon-e2-wall",
+        "label": "ocean-salon-e2",
+        "kind": "wall",
+        "at": [
+          -4.204366600113934,
+          2.8000000000000003,
+          25.66949684667193
+        ],
+        "rotation": -2.871592653589793,
+        "size": [
+          18,
+          5.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4,
+        "opening": {
+          "x": 0,
+          "sill": 0,
+          "width": 6,
+          "height": 3.4,
+          "glazed": false
+        }
+      },
+      {
+        "id": "ocean-salon-e3-wall",
+        "label": "ocean-salon-e3",
+        "kind": "wall",
+        "at": [
+          -11.105495150259319,
+          2.8000000000000003,
+          21.35389437026516
+        ],
+        "rotation": 1.312721878368537,
+        "size": [
+          13.892443989449806,
+          5.2,
+          0.18
+        ],
+        "material": "limestone",
+        "panels": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "broaderSuite": {
+    "passed": 332,
+    "failed": 29,
+    "identicalFailuresWithPreFixAdapter": true,
+    "baselineFailed": 29
+  },
+  "browser": {
+    "mockedScenes": [
+      "compact",
+      "waterfront"
+    ],
+    "fourViewsEach": true,
+    "lifecycleChecks": true,
+    "result": "browser-result.json"
+  },
+  "schemaChangesAccountedFor": {
+    "root": "Add required result envelope; retain $schema at the document root",
+    "union": "oneOf -> nested anyOf only after pairwise disjoint discriminant proof",
+    "fields": "Eight previously optional fields become required nullable: plan.screens, site.cliff, masses[].relatesTo, spaces[].facadeMaterial, portals[].sill, roofs[].rise/overhang/material",
+    "otherSchemaConstraints": "Retained",
+    "nonSchemaProviderFields": "Identical"
+  },
+  "focused": {
+    "passed": 291,
+    "files": 53,
+    "failed": 0
+  },
+  "focusedTypecheck": "passed",
+  "focusedESLint": "passed",
+  "fullTypecheck": "pre-existing archived/script errors retained in full-typecheck.txt"
+}

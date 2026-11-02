@@ -1,0 +1,2343 @@
+{
+  "model": "sol",
+  "outputHash": "0e677b65a2250efc4ba7d9d9a4d33a4af55e1fdbe1a793acec428f9c9f48715f",
+  "schemaParsed": true,
+  "anchors": 62,
+  "spaces": [
+    {
+      "id": "great-hall",
+      "name": "Great Hall, Living and Entertainment",
+      "use": "Double-height living, dining and entertainment allocation with ocean outlook",
+      "environment": "interior",
+      "floorId": "central-great-hall-floor",
+      "centre": [
+        0,
+        2,
+        1
+      ],
+      "size": [
+        18,
+        3.8,
+        14
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "arrival-wall",
+        "ocean-facade-west",
+        "ocean-facade-door-bay",
+        "ocean-facade-east",
+        "great-hall-clerestory"
+      ],
+      "roofIds": [
+        "central-folded-roof"
+      ],
+      "accessIds": [
+        "main-entrance-door",
+        "ocean-garden-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Exterior boundaries and passages are committed; kitchen, bar, furniture, acoustic treatment and interior partitions remain deferred."
+    },
+    {
+      "id": "suite-1",
+      "name": "Garden Ocean Suite 1",
+      "use": "Generous bedroom suite with sleeping, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "west-ground-wing-floor",
+      "centre": [
+        -19,
+        2,
+        6
+      ],
+      "size": [
+        12,
+        3.8,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-outer-ground-wall",
+        "west-ground-suite-access-wall",
+        "west-ground-suite-north-wall",
+        "west-ground-suite-ocean-wall"
+      ],
+      "roofIds": [
+        "west-upper-floor"
+      ],
+      "accessIds": [
+        "west-ground-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are not yet constructed."
+    },
+    {
+      "id": "suite-2",
+      "name": "Garden Ocean Suite 2",
+      "use": "Generous bedroom suite with sleeping, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "east-ground-wing-floor",
+      "centre": [
+        19,
+        2,
+        6
+      ],
+      "size": [
+        12,
+        3.8,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-outer-ground-wall",
+        "east-ground-suite-access-wall",
+        "east-ground-suite-north-wall",
+        "east-ground-suite-ocean-wall"
+      ],
+      "roofIds": [
+        "east-upper-floor"
+      ],
+      "accessIds": [
+        "east-ground-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are deferred."
+    },
+    {
+      "id": "suite-3",
+      "name": "Upper Garden Suite 3",
+      "use": "Private bedroom suite overlooking the landward tropical gardens",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -19.25,
+        5.8,
+        -5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-outer-wall",
+        "west-upper-inner-north-wall",
+        "west-upper-divider",
+        "west-upper-landward-wall"
+      ],
+      "roofIds": [
+        "west-wing-roof"
+      ],
+      "accessIds": [
+        "west-upper-north-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "The bounded suite capacity is preserved; internal bathroom and wardrobe partitions remain unbuilt."
+    },
+    {
+      "id": "suite-4",
+      "name": "Upper Ocean Suite 4",
+      "use": "Private bedroom suite with broad ocean-facing glazing",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -19.25,
+        5.8,
+        5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-outer-wall",
+        "west-upper-inner-south-wall",
+        "west-upper-divider",
+        "west-upper-ocean-wall"
+      ],
+      "roofIds": [
+        "west-wing-roof"
+      ],
+      "accessIds": [
+        "west-upper-south-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Bedroom, dressing and bathroom fit-out are deferred despite the distinct bounded allocation."
+    },
+    {
+      "id": "suite-5",
+      "name": "Upper Garden Suite 5",
+      "use": "Private bedroom suite overlooking the arrival gardens",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        19.25,
+        5.8,
+        -5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-outer-wall",
+        "east-upper-inner-north-wall",
+        "east-upper-divider",
+        "east-upper-landward-wall"
+      ],
+      "roofIds": [
+        "east-wing-roof"
+      ],
+      "accessIds": [
+        "east-upper-north-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Bathroom, dressing and furniture remain deferred; the suite has a distinct floor allocation and entrance."
+    },
+    {
+      "id": "suite-6",
+      "name": "Primary Ocean Suite 6",
+      "use": "Largest bedroom suite with sleeping, lounge, dressing and bathroom capacity",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        19.25,
+        5.8,
+        5
+      ],
+      "size": [
+        11.5,
+        3.2,
+        9.5
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-outer-wall",
+        "east-upper-inner-south-wall",
+        "east-upper-divider",
+        "primary-ocean-wall"
+      ],
+      "roofIds": [
+        "east-wing-roof"
+      ],
+      "accessIds": [
+        "primary-suite-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "The primary allocation and wider entrance are committed, but ensuite, wardrobe and bedroom fit-out remain deferred."
+    },
+    {
+      "id": "upper-gallery",
+      "name": "Upper Bridge Gallery",
+      "use": "Protected circulation connecting stair and all four upper suites",
+      "environment": "interior",
+      "floorId": "upper-bridge-gallery",
+      "centre": [
+        0,
+        4.2,
+        -3
+      ],
+      "size": [
+        20,
+        2.3,
+        4
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "arrival-wall"
+      ],
+      "roofIds": [
+        "central-folded-roof"
+      ],
+      "accessIds": [
+        "main-stair-reserve",
+        "west-upper-north-door",
+        "west-upper-south-door",
+        "east-upper-north-door",
+        "primary-suite-door"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Guard geometry and detailed stair treads are reserved for the construction stage."
+    },
+    {
+      "id": "ocean-terrace-space",
+      "name": "Ocean Entertainment Terrace",
+      "use": "Outdoor dining, lounging and poolside entertainment",
+      "environment": "outdoor",
+      "floorId": "ocean-terrace",
+      "centre": [
+        0,
+        0.2,
+        16
+      ],
+      "size": [
+        50,
+        0.1,
+        10
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "terrace-pergola-beam"
+      ],
+      "accessIds": [
+        "ocean-garden-door"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Outdoor furniture, kitchen equipment, drainage and guard requirements remain unresolved."
+    },
+    {
+      "id": "pool-space",
+      "name": "Ocean-Edge Pool",
+      "use": "Long swimming and view-oriented water court",
+      "environment": "outdoor",
+      "floorId": "pool-basin-floor",
+      "centre": [
+        0,
+        -0.65,
+        26
+      ],
+      "size": [
+        24,
+        1.5,
+        8
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "pool-basin-ring"
+      ],
+      "roofIds": [],
+      "accessIds": [
+        "pool-coping-ring",
+        "ocean-terrace"
+      ],
+      "stage": "constructed-space",
+      "limitation": "The basin, water and dry perimeter are represented; infinity overflow, catch basin, pumps, filtration and safety certification are unsupported."
+    },
+    {
+      "id": "arrival-space",
+      "name": "Ceremonial Arrival Court",
+      "use": "Vehicle drop-off and protected pedestrian approach",
+      "environment": "outdoor",
+      "floorId": "arrival-court",
+      "centre": [
+        0,
+        0.2,
+        -18
+      ],
+      "size": [
+        24,
+        0.1,
+        12
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "entry-canopy"
+      ],
+      "accessIds": [
+        "arrival-spine",
+        "main-entrance-door"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Vehicle turning performance, gates, lighting and permeable paving performance are not simulated."
+    },
+    {
+      "id": "west-garden-space",
+      "name": "West Tropical Privacy Garden",
+      "use": "Layered planting reserve and private outlook for the western suites",
+      "environment": "outdoor",
+      "floorId": "west-tropical-garden",
+      "centre": [
+        -34,
+        0.1,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "ocean-terrace"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Planting beds are spatially reserved, but species, irrigation and mature canopy are not simulated."
+    },
+    {
+      "id": "east-garden-space",
+      "name": "East Tropical Service Garden",
+      "use": "Landscape screening and reserved service-side movement",
+      "environment": "outdoor",
+      "floorId": "east-tropical-garden",
+      "centre": [
+        34,
+        0.1,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "ocean-terrace"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Detailed service paving, waste handling, planting species and irrigation are deferred."
+    }
+  ],
+  "routes": 10,
+  "relationships": 15,
+  "currentSemanticValidationError": "Error: Selected proposal has inconsistent spatial relationships: central-great-hall-floor connected-to ocean-terrace: geometry does not evidence the declared relationship (clearance 0 m). Their matching 0.20 metre walking surfaces meet through the ocean garden door. Review openings, access and component extents; bounding rectangles alone do not prove usability. pool-water facing central-great-hall-floor: geometry does not evidence the declared relationship (clearance 0 m). The water court is centered on the entrance and great-hall view axis. Review openings, access and component extents; bounding rectangles alone do not prove usability. arrival-spine clear-of pool-water: geometry does not evidence the declared relationship (clearance 48 m). Landward vehicle and arrival circulation remain completely separated from pool access. Review openings, access and component extents; bounding rectangles alone do not prove usability. suite-1 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The western garden suite overlooks the terrace but retains private internal access. Review openings, access and component extents; bounding rectangles alone do not prove usability. suite-2 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis. Review openings, access and component extents; bounding rectangles alone do not prove usability. terrace-pergola-beam above ocean-terrace: geometry does not evidence the declared relationship (clearance 3.27 m). Creates a shaded outdoor room with an explicit pair of ground-contact supports. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+  "baselineOverheadKindMismatches": [
+    {
+      "space": "suite-1",
+      "id": "west-upper-floor",
+      "kind": "plate"
+    },
+    {
+      "space": "suite-2",
+      "id": "east-upper-floor",
+      "kind": "plate"
+    }
+  ],
+  "baselineSemanticValidationPassed": false,
+  "findings": [
+    {
+      "category": "confirmed-technical-defect",
+      "code": "water-obstruction",
+      "elementIds": [
+        "pool-water",
+        "pool-coping-ring"
+      ],
+      "message": "pool-coping-ring crosses pool-water's open interior water plane at Y=0.075 m."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "central-great-hall-floor",
+        "ocean-terrace"
+      ],
+      "message": "central-great-hall-floor connected-to ocean-terrace: geometry does not evidence the declared relationship (clearance 0 m). Their matching 0.20 metre walking surfaces meet through the ocean garden door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "profile-spatial-review",
+      "elementIds": [
+        "ocean-terrace",
+        "pool-coping-ring"
+      ],
+      "message": "ocean-terrace connected-to pool-coping-ring: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. The terrace ocean edge and pool coping near edge meet at Z=21 for continuous dry access."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "pool-water",
+        "central-great-hall-floor"
+      ],
+      "message": "pool-water facing central-great-hall-floor: geometry does not evidence the declared relationship (clearance 0 m). The water court is centered on the entrance and great-hall view axis. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "profile-spatial-review",
+      "elementIds": [
+        "pool-coping-ring",
+        "pool-water"
+      ],
+      "message": "pool-coping-ring clear-of pool-water: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. The coping profile contains a dedicated opening and does not cover the water."
+    },
+    {
+      "category": "unsupported-capability",
+      "code": "profile-spatial-review",
+      "elementIds": [
+        "upper-bridge-gallery",
+        "central-folded-roof"
+      ],
+      "message": "upper-bridge-gallery below central-folded-roof: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. Maintains useful headroom over the upper circulation bridge."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "arrival-spine",
+        "pool-water"
+      ],
+      "message": "arrival-spine clear-of pool-water: geometry does not evidence the declared relationship (clearance 48 m). Landward vehicle and arrival circulation remain completely separated from pool access. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "suite-1",
+        "ocean-terrace-space"
+      ],
+      "message": "suite-1 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The western garden suite overlooks the terrace but retains private internal access. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "suite-2",
+        "ocean-terrace-space"
+      ],
+      "message": "suite-2 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "terrace-pergola-beam",
+        "ocean-terrace"
+      ],
+      "message": "terrace-pergola-beam above ocean-terrace: geometry does not evidence the declared relationship (clearance 3.27 m). Creates a shaded outdoor room with an explicit pair of ground-contact supports. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    }
+  ],
+  "fidelity": {
+    "spaceEvidence": [
+      {
+        "id": "great-hall",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-1",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-2",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-3",
+        "status": "bounds-only"
+      },
+      {
+        "id": "suite-4",
+        "status": "bounds-only"
+      },
+      {
+        "id": "suite-5",
+        "status": "bounds-only"
+      },
+      {
+        "id": "suite-6",
+        "status": "bounds-only"
+      },
+      {
+        "id": "upper-gallery",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "ocean-terrace-space",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "pool-space",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "arrival-space",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "west-garden-space",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "east-garden-space",
+        "status": "bounds-mismatch"
+      }
+    ],
+    "spatialFindings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "central-great-hall-floor",
+          "ocean-terrace"
+        ],
+        "message": "central-great-hall-floor connected-to ocean-terrace: geometry does not evidence the declared relationship (clearance 0 m). Their matching 0.20 metre walking surfaces meet through the ocean garden door. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "unsupported-capability",
+        "code": "profile-spatial-review",
+        "elementIds": [
+          "ocean-terrace",
+          "pool-coping-ring"
+        ],
+        "message": "ocean-terrace connected-to pool-coping-ring: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. The terrace ocean edge and pool coping near edge meet at Z=21 for continuous dry access."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "pool-water",
+          "central-great-hall-floor"
+        ],
+        "message": "pool-water facing central-great-hall-floor: geometry does not evidence the declared relationship (clearance 0 m). The water court is centered on the entrance and great-hall view axis. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "unsupported-capability",
+        "code": "profile-spatial-review",
+        "elementIds": [
+          "pool-coping-ring",
+          "pool-water"
+        ],
+        "message": "pool-coping-ring clear-of pool-water: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. The coping profile contains a dedicated opening and does not cover the water."
+      },
+      {
+        "category": "unsupported-capability",
+        "code": "profile-spatial-review",
+        "elementIds": [
+          "upper-bridge-gallery",
+          "central-folded-roof"
+        ],
+        "message": "upper-bridge-gallery below central-folded-roof: profile relationship requires actual-surface review; bounding rectangles are insufficient evidence. Maintains useful headroom over the upper circulation bridge."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "arrival-spine",
+          "pool-water"
+        ],
+        "message": "arrival-spine clear-of pool-water: geometry does not evidence the declared relationship (clearance 48 m). Landward vehicle and arrival circulation remain completely separated from pool access. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "suite-1",
+          "ocean-terrace-space"
+        ],
+        "message": "suite-1 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The western garden suite overlooks the terrace but retains private internal access. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "suite-2",
+          "ocean-terrace-space"
+        ],
+        "message": "suite-2 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "terrace-pergola-beam",
+          "ocean-terrace"
+        ],
+        "message": "terrace-pergola-beam above ocean-terrace: geometry does not evidence the declared relationship (clearance 3.27 m). Creates a shaded outdoor room with an explicit pair of ground-contact supports. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      }
+    ],
+    "status": "diverged",
+    "issues": [
+      "central-great-hall-floor connected-to ocean-terrace: geometry does not evidence the declared relationship (clearance 0 m). Their matching 0.20 metre walking surfaces meet through the ocean garden door. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "pool-water facing central-great-hall-floor: geometry does not evidence the declared relationship (clearance 0 m). The water court is centered on the entrance and great-hall view axis. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "arrival-spine clear-of pool-water: geometry does not evidence the declared relationship (clearance 48 m). Landward vehicle and arrival circulation remain completely separated from pool access. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "suite-1 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The western garden suite overlooks the terrace but retains private internal access. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "suite-2 adjacent-to ocean-terrace-space: geometry does not evidence the declared relationship (clearance 0.5 m). The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "terrace-pergola-beam above ocean-terrace: geometry does not evidence the declared relationship (clearance 3.27 m). Creates a shaded outdoor room with an explicit pair of ground-contact supports. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "great-hall: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-1: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-2: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "upper-gallery: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "ocean-terrace-space: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "pool-space: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "arrival-space: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "west-garden-space: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "east-garden-space: selected accommodation does not fit its referenced floor bounds or walking datum."
+    ],
+    "accommodation": [
+      {
+        "id": "great-hall",
+        "name": "Great Hall, Living and Entertainment",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Exterior boundaries and passages are committed; kitchen, bar, furniture, acoustic treatment and interior partitions remain deferred."
+      },
+      {
+        "id": "suite-1",
+        "name": "Garden Ocean Suite 1",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are not yet constructed."
+      },
+      {
+        "id": "suite-2",
+        "name": "Garden Ocean Suite 2",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Suite perimeter and entrance are selected, but bathroom, dressing and bedroom fit-out are deferred."
+      },
+      {
+        "id": "suite-3",
+        "name": "Upper Garden Suite 3",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "The bounded suite capacity is preserved; internal bathroom and wardrobe partitions remain unbuilt."
+      },
+      {
+        "id": "suite-4",
+        "name": "Upper Ocean Suite 4",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Bedroom, dressing and bathroom fit-out are deferred despite the distinct bounded allocation."
+      },
+      {
+        "id": "suite-5",
+        "name": "Upper Garden Suite 5",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Bathroom, dressing and furniture remain deferred; the suite has a distinct floor allocation and entrance."
+      },
+      {
+        "id": "suite-6",
+        "name": "Primary Ocean Suite 6",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "The primary allocation and wider entrance are committed, but ensuite, wardrobe and bedroom fit-out remain deferred."
+      },
+      {
+        "id": "upper-gallery",
+        "name": "Upper Bridge Gallery",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Guard geometry and detailed stair treads are reserved for the construction stage."
+      },
+      {
+        "id": "ocean-terrace-space",
+        "name": "Ocean Entertainment Terrace",
+        "plannedStage": "constructed-space",
+        "evidence": "constructed-space-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Outdoor furniture, kitchen equipment, drainage and guard requirements remain unresolved."
+      },
+      {
+        "id": "pool-space",
+        "name": "Ocean-Edge Pool",
+        "plannedStage": "constructed-space",
+        "evidence": "constructed-space-unverified",
+        "completedUsableRoom": false,
+        "limitation": "The basin, water and dry perimeter are represented; infinity overflow, catch basin, pumps, filtration and safety certification are unsupported."
+      },
+      {
+        "id": "arrival-space",
+        "name": "Ceremonial Arrival Court",
+        "plannedStage": "constructed-space",
+        "evidence": "constructed-space-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Vehicle turning performance, gates, lighting and permeable paving performance are not simulated."
+      },
+      {
+        "id": "west-garden-space",
+        "name": "West Tropical Privacy Garden",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Planting beds are spatially reserved, but species, irrigation and mature canopy are not simulated."
+      },
+      {
+        "id": "east-garden-space",
+        "name": "East Tropical Service Garden",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Detailed service paving, waste handling, planting species and irrigation are deferred."
+      }
+    ],
+    "limitations": [
+      "Matching selected anchors does not verify enclosure, room independence, navigability, headroom, actual profile surfaces, architectural quality or completed usable rooms. Existing construction and architectural review still apply."
+    ]
+  },
+  "relationshipMetrics": [
+    {
+      "subject": "central-great-hall-floor",
+      "target": "ocean-terrace",
+      "relation": "connected-to",
+      "clearance": 0,
+      "reason": "Their matching 0.20 metre walking surfaces meet through the ocean garden door.",
+      "planSeparation": 1.9999999999999982,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "ocean-terrace",
+      "target": "pool-coping-ring",
+      "relation": "connected-to",
+      "clearance": 0,
+      "reason": "The terrace ocean edge and pool coping near edge meet at Z=21 for continuous dry access.",
+      "planSeparation": -2.6645352591003757e-15,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 0.05,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "pool-water",
+      "target": "central-great-hall-floor",
+      "relation": "facing",
+      "clearance": 0,
+      "reason": "The water court is centered on the entrance and great-hall view axis.",
+      "planSeparation": 13,
+      "subjectBottom": 0.075,
+      "subjectTop": 0.075,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "pool-basin-floor",
+      "target": "pool-water",
+      "relation": "below",
+      "clearance": 1.4,
+      "reason": "Provides an approximately 1.5 metre basin depth beneath the water surface.",
+      "planSeparation": -8.000000000000002,
+      "subjectBottom": -1.5,
+      "subjectTop": -1.35,
+      "targetBottom": 0.075,
+      "targetTop": 0.075
+    },
+    {
+      "subject": "pool-coping-ring",
+      "target": "pool-water",
+      "relation": "clear-of",
+      "clearance": 0.2,
+      "reason": "The coping profile contains a dedicated opening and does not cover the water.",
+      "planSeparation": -9.000000000000002,
+      "subjectBottom": 0.05,
+      "subjectTop": 0.2,
+      "targetBottom": 0.075,
+      "targetTop": 0.075
+    },
+    {
+      "subject": "upper-bridge-gallery",
+      "target": "central-folded-roof",
+      "relation": "below",
+      "clearance": 2.3,
+      "reason": "Maintains useful headroom over the upper circulation bridge.",
+      "planSeparation": -9,
+      "subjectBottom": 3.9999999999999996,
+      "subjectTop": 4.199999999999999,
+      "targetBottom": 6.6000000000000005,
+      "targetTop": 7.8
+    },
+    {
+      "subject": "west-upper-floor",
+      "target": "west-ground-wing-floor",
+      "relation": "above",
+      "clearance": 3.8,
+      "reason": "Creates a full ground-storey enclosure and a coordinated upper walking datum.",
+      "planSeparation": -15,
+      "subjectBottom": 3.9999999999999996,
+      "subjectTop": 4.199999999999999,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "east-upper-floor",
+      "target": "east-ground-wing-floor",
+      "relation": "above",
+      "clearance": 3.8,
+      "reason": "Creates a full ground-storey enclosure and supports two upper suites.",
+      "planSeparation": -15,
+      "subjectBottom": 3.9999999999999996,
+      "subjectTop": 4.199999999999999,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "west-wing-roof",
+      "target": "west-upper-floor",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The roof extends beyond the occupied upper floor on every side.",
+      "planSeparation": -16.2,
+      "subjectBottom": 7.32,
+      "subjectTop": 7.7,
+      "targetBottom": 3.9999999999999996,
+      "targetTop": 4.199999999999999
+    },
+    {
+      "subject": "east-wing-roof",
+      "target": "east-upper-floor",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The roof extends beyond the occupied upper floor on every side.",
+      "planSeparation": -16.2,
+      "subjectBottom": 7.32,
+      "subjectTop": 7.7,
+      "targetBottom": 3.9999999999999996,
+      "targetTop": 4.199999999999999
+    },
+    {
+      "subject": "entry-canopy",
+      "target": "main-entrance-door",
+      "relation": "covering",
+      "clearance": 0,
+      "reason": "The canopy shelters both the threshold and its exterior approach.",
+      "planSeparation": -0.2100000000000009,
+      "subjectBottom": 3.795,
+      "subjectTop": 4.125,
+      "targetBottom": 0.19999999999999996,
+      "targetTop": 3.5999999999999996
+    },
+    {
+      "subject": "arrival-spine",
+      "target": "pool-water",
+      "relation": "clear-of",
+      "clearance": 48,
+      "reason": "Landward vehicle and arrival circulation remain completely separated from pool access.",
+      "planSeparation": 46,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 0.075,
+      "targetTop": 0.075
+    },
+    {
+      "subject": "suite-1",
+      "target": "ocean-terrace-space",
+      "relation": "adjacent-to",
+      "clearance": 0.5,
+      "reason": "The western garden suite overlooks the terrace but retains private internal access.",
+      "missingAnchor": true
+    },
+    {
+      "subject": "suite-2",
+      "target": "ocean-terrace-space",
+      "relation": "adjacent-to",
+      "clearance": 0.5,
+      "reason": "The eastern garden suite shares the ocean frontage while remaining outside the public circulation axis.",
+      "missingAnchor": true
+    },
+    {
+      "subject": "terrace-pergola-beam",
+      "target": "ocean-terrace",
+      "relation": "above",
+      "clearance": 3.27,
+      "reason": "Creates a shaded outdoor room with an explicit pair of ground-contact supports.",
+      "planSeparation": -4.950000000000001,
+      "subjectBottom": 3.395,
+      "subjectTop": 3.725,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    }
+  ],
+  "missingInteriorAccess": [],
+  "anchorTable": [
+    {
+      "id": "central-great-hall-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        0,
+        0.1,
+        0
+      ],
+      "size": [
+        20,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Establishes the dominant entertaining volume and the uninterrupted entrance-to-ocean axis at a 0.20 metre walking datum."
+    },
+    {
+      "id": "west-ground-wing-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        -17.5,
+        0.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        22
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Supports the western guest suite, private garden allocation and upper suite wing."
+    },
+    {
+      "id": "east-ground-wing-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        17.5,
+        0.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        22
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Supports the eastern guest suite, service allocation and upper suite wing."
+    },
+    {
+      "id": "west-upper-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        -17.5,
+        4.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        20
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides upper-level capacity for two generous suites at a 4.20 metre walking datum."
+    },
+    {
+      "id": "east-upper-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        17.5,
+        4.1,
+        0
+      ],
+      "size": [
+        15,
+        0.2,
+        20
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides upper-level capacity for two generous suites, including the primary suite allocation."
+    },
+    {
+      "id": "upper-bridge-gallery",
+      "kind": "plate",
+      "role": "circulation",
+      "centre": [
+        0,
+        4.1,
+        -3
+      ],
+      "size": [
+        20,
+        0.2,
+        4
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Connects both upper suite wings within the tall central hall while preserving the ocean-facing double-height volume."
+    },
+    {
+      "id": "main-stair-reserve",
+      "kind": "volume",
+      "role": "circulation",
+      "centre": [
+        0,
+        2.2,
+        -7
+      ],
+      "size": [
+        2.6,
+        4,
+        6.5
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Reserves a straight stair rising 4.00 metres from the entrance datum to the upper bridge, with approximately 21 equal risers and a protected landing."
+    },
+    {
+      "id": "arrival-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        0,
+        3.4,
+        -9
+      ],
+      "size": [
+        20,
+        6.4,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 3.2,
+        "height": 3.4,
+        "glazed": false
+      },
+      "designReason": "Forms a monumental but shaded arrival elevation with a genuine sill-zero entrance opening."
+    },
+    {
+      "id": "main-entrance-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        0,
+        1.9,
+        -9
+      ],
+      "size": [
+        3.1,
+        3.4,
+        0.12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates the principal threshold on the estate axis and faces the landward approach."
+    },
+    {
+      "id": "entry-canopy",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        0,
+        4,
+        -11.1
+      ],
+      "size": [
+        9,
+        0.25,
+        4.5
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Projects beyond the entrance wall to shelter the drop-off threshold from sun and driving rain."
+    },
+    {
+      "id": "entry-west-pier",
+      "kind": "volume",
+      "role": "facade",
+      "centre": [
+        -4,
+        2,
+        -10.2
+      ],
+      "size": [
+        0.7,
+        4,
+        0.7
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Supports and visually frames the deep entrance canopy."
+    },
+    {
+      "id": "entry-east-pier",
+      "kind": "volume",
+      "role": "facade",
+      "centre": [
+        4,
+        2,
+        -10.2
+      ],
+      "size": [
+        0.7,
+        4,
+        0.7
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Completes the supported portal and establishes a symmetrical ceremonial threshold."
+    },
+    {
+      "id": "ocean-facade-west",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -6.5,
+        2.1,
+        9
+      ],
+      "size": [
+        7,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 5.8,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Provides broad shaded living-room views while retaining solid limestone-scale piers at the facade edges."
+    },
+    {
+      "id": "ocean-facade-door-bay",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        0,
+        2.1,
+        9
+      ],
+      "size": [
+        6,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 3.2,
+        "height": 3.2,
+        "glazed": false
+      },
+      "designReason": "Contains the actual garden passage connecting the great hall to the ocean terrace."
+    },
+    {
+      "id": "ocean-garden-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        0,
+        1.8,
+        9
+      ],
+      "size": [
+        3.1,
+        3.2,
+        0.12
+      ],
+      "yaw": 3.141593,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates a real passage between interior entertaining space and the dry terrace circuit."
+    },
+    {
+      "id": "ocean-facade-east",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        6.5,
+        2.1,
+        9
+      ],
+      "size": [
+        7,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.45,
+        "width": 5.8,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Balances the west living opening and frames the pool along the central view axis."
+    },
+    {
+      "id": "great-hall-clerestory",
+      "kind": "glazing",
+      "role": "facade",
+      "centre": [
+        0,
+        5.15,
+        9
+      ],
+      "size": [
+        17.5,
+        1.8,
+        0.12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Lifts the ocean elevation above the lower doors and glazing, admitting high light beneath the sloped roof."
+    },
+    {
+      "id": "central-folded-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        0,
+        7.2,
+        0
+      ],
+      "size": [
+        22,
+        1.2,
+        20
+      ],
+      "yaw": 0,
+      "profile": true,
+      "opening": null,
+      "designReason": "A disciplined rising plane gives the great hall a distinct silhouette, maintains stair headroom and lifts toward the ocean view."
+    },
+    {
+      "id": "west-outer-ground-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -25,
+        2.1,
+        0
+      ],
+      "size": [
+        22,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 5,
+        "sill": 0.8,
+        "width": 4.2,
+        "height": 2.2,
+        "glazed": true
+      },
+      "designReason": "Protects the west wing from arrival views while admitting controlled garden light to the ground suite."
+    },
+    {
+      "id": "west-ground-suite-access-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -10,
+        2.1,
+        6
+      ],
+      "size": [
+        10,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": -2,
+        "sill": 0,
+        "width": 1.4,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the inner boundary and actual private entrance of the western garden-level suite."
+    },
+    {
+      "id": "west-ground-suite-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        -10,
+        1.45,
+        4
+      ],
+      "size": [
+        1.35,
+        2.5,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides a real protected threshold from the great hall side gallery into Suite 1."
+    },
+    {
+      "id": "west-ground-suite-north-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -19,
+        2.1,
+        1
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Separates Suite 1 from quieter landward guest and wellness capacity."
+    },
+    {
+      "id": "west-ground-suite-ocean-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -19,
+        2.1,
+        11
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5.4,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 1 a broad shaded ocean outlook while retaining solid corners for privacy."
+    },
+    {
+      "id": "east-outer-ground-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        25,
+        2.1,
+        0
+      ],
+      "size": [
+        22,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 5,
+        "sill": 0.8,
+        "width": 4.2,
+        "height": 2.2,
+        "glazed": true
+      },
+      "designReason": "Forms a robust coastal edge and provides controlled light to the eastern garden suite."
+    },
+    {
+      "id": "east-ground-suite-access-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        10,
+        2.1,
+        6
+      ],
+      "size": [
+        10,
+        3.8,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": -2,
+        "sill": 0,
+        "width": 1.4,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the inner boundary and actual private entrance of the eastern garden-level suite."
+    },
+    {
+      "id": "east-ground-suite-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        10,
+        1.45,
+        4
+      ],
+      "size": [
+        1.35,
+        2.5,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides a protected threshold from the great hall side gallery into Suite 2."
+    },
+    {
+      "id": "east-ground-suite-north-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        19,
+        2.1,
+        1
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Separates Suite 2 from the landward service and support allocation."
+    },
+    {
+      "id": "east-ground-suite-ocean-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        19,
+        2.1,
+        11
+      ],
+      "size": [
+        12,
+        3.8,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 5.4,
+        "height": 2.9,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 2 direct ocean views and a facade rhythm matching the western wing."
+    },
+    {
+      "id": "west-upper-outer-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -25,
+        5.8,
+        0
+      ],
+      "size": [
+        20,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.75,
+        "width": 7,
+        "height": 2.1,
+        "glazed": true
+      },
+      "designReason": "Unifies the two western upper suites with a controlled side elevation."
+    },
+    {
+      "id": "west-upper-inner-north-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -11.75,
+        5.8,
+        -5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 3 against the upper gallery and contains its private entrance."
+    },
+    {
+      "id": "west-upper-north-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        -11.75,
+        5.4,
+        -5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides Suite 3 with a genuine door from the protected upper gallery."
+    },
+    {
+      "id": "west-upper-inner-south-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -11.75,
+        5.8,
+        5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 4 against the upper gallery and preserves separation from Suite 3."
+    },
+    {
+      "id": "west-upper-south-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        -11.75,
+        5.4,
+        5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides Suite 4 with direct access from the upper gallery."
+    },
+    {
+      "id": "west-upper-divider",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -19.25,
+        5.8,
+        0
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.25
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates distinct northern and southern suite allocations without overlapping floor area."
+    },
+    {
+      "id": "west-upper-landward-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -19.25,
+        5.8,
+        -10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 4.8,
+        "height": 2,
+        "glazed": true
+      },
+      "designReason": "Provides Suite 3 with filtered landward garden light."
+    },
+    {
+      "id": "west-upper-ocean-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -19.25,
+        5.8,
+        10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.3,
+        "width": 7.5,
+        "height": 2.5,
+        "glazed": true
+      },
+      "designReason": "Gives Suite 4 a broad but deeply shaded ocean elevation."
+    },
+    {
+      "id": "east-upper-outer-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        25,
+        5.8,
+        0
+      ],
+      "size": [
+        20,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.75,
+        "width": 7,
+        "height": 2.1,
+        "glazed": true
+      },
+      "designReason": "Unifies the eastern upper suites and balances the overall elevation."
+    },
+    {
+      "id": "east-upper-inner-north-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        11.75,
+        5.8,
+        -5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.3,
+        "height": 2.4,
+        "glazed": false
+      },
+      "designReason": "Defines Suite 5 and its private threshold along the upper gallery."
+    },
+    {
+      "id": "east-upper-north-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        11.75,
+        5.4,
+        -5
+      ],
+      "size": [
+        1.25,
+        2.4,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides Suite 5 with direct access from the bridge gallery."
+    },
+    {
+      "id": "east-upper-inner-south-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        11.75,
+        5.8,
+        5
+      ],
+      "size": [
+        9.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 1.5,
+        "height": 2.5,
+        "glazed": false
+      },
+      "designReason": "Defines the larger primary suite allocation and its gallery-facing entrance."
+    },
+    {
+      "id": "primary-suite-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        11.75,
+        5.45,
+        5
+      ],
+      "size": [
+        1.45,
+        2.5,
+        0.12
+      ],
+      "yaw": -1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates a wider, identifiable threshold for the primary suite."
+    },
+    {
+      "id": "east-upper-divider",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        19.25,
+        5.8,
+        0
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.25
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates distinct Suite 5 and primary-suite allocations."
+    },
+    {
+      "id": "east-upper-landward-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        19.25,
+        5.8,
+        -10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.8,
+        "width": 4.8,
+        "height": 2,
+        "glazed": true
+      },
+      "designReason": "Provides Suite 5 with private landward garden light."
+    },
+    {
+      "id": "primary-ocean-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        19.25,
+        5.8,
+        10
+      ],
+      "size": [
+        11.5,
+        3.2,
+        0.3
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0.25,
+        "width": 8.2,
+        "height": 2.55,
+        "glazed": true
+      },
+      "designReason": "Gives the primary suite the strongest framed ocean opening while preserving substantial side piers."
+    },
+    {
+      "id": "west-wing-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        -17.5,
+        7.55,
+        0
+      ],
+      "size": [
+        17.4,
+        0.3,
+        22.4
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates a thin horizontal cap with approximately 1.2 metre protection around the upper suite envelope."
+    },
+    {
+      "id": "east-wing-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        17.5,
+        7.55,
+        0
+      ],
+      "size": [
+        17.4,
+        0.3,
+        22.4
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Balances the west roof while deeply shading the primary and eastern guest-suite glazing."
+    },
+    {
+      "id": "west-upper-screen",
+      "kind": "screen",
+      "role": "facade",
+      "centre": [
+        -25.7,
+        5.8,
+        0
+      ],
+      "size": [
+        18,
+        3,
+        0.25
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Adds solar depth and privacy to the western upper elevation."
+    },
+    {
+      "id": "east-upper-screen",
+      "kind": "screen",
+      "role": "facade",
+      "centre": [
+        25.7,
+        5.8,
+        0
+      ],
+      "size": [
+        18,
+        3,
+        0.25
+      ],
+      "yaw": 1.570796,
+      "profile": false,
+      "opening": null,
+      "designReason": "Screens the service-side elevation and gives both wings a coherent tropical rhythm."
+    },
+    {
+      "id": "ocean-terrace",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.1,
+        16
+      ],
+      "size": [
+        50,
+        0.2,
+        10
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Extends from the suite wings and great hall to the pool coping, creating a continuous dry entertaining surface."
+    },
+    {
+      "id": "terrace-pergola-beam",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        0,
+        3.6,
+        13.2
+      ],
+      "size": [
+        20,
+        0.25,
+        5.5
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Defines a shaded outdoor living room immediately beyond the great hall."
+    },
+    {
+      "id": "pergola-west-support",
+      "kind": "volume",
+      "role": "facade",
+      "centre": [
+        -9,
+        1.8,
+        14.5
+      ],
+      "size": [
+        0.45,
+        3.6,
+        0.45
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides an explicit ground contact for the terrace shade structure."
+    },
+    {
+      "id": "pergola-east-support",
+      "kind": "volume",
+      "role": "facade",
+      "centre": [
+        9,
+        1.8,
+        14.5
+      ],
+      "size": [
+        0.45,
+        3.6,
+        0.45
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Completes the supported outdoor-room frame without obstructing the central pool route."
+    },
+    {
+      "id": "pool-coping-ring",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.125,
+        26
+      ],
+      "size": [
+        26,
+        0.15,
+        10
+      ],
+      "yaw": 0,
+      "profile": true,
+      "opening": null,
+      "designReason": "Forms a continuous dry perimeter around the reserved water opening and abuts the ocean terrace at the near edge."
+    },
+    {
+      "id": "pool-basin-ring",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        0,
+        -0.65,
+        26
+      ],
+      "size": [
+        24.5,
+        1.5,
+        8.5
+      ],
+      "yaw": 0,
+      "profile": true,
+      "opening": null,
+      "designReason": "Defines the four-sided basin perimeter from coping level to the basin floor."
+    },
+    {
+      "id": "pool-basin-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        0,
+        -1.425,
+        26
+      ],
+      "size": [
+        24,
+        0.15,
+        8
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Closes the pool basin at an approximate 1.5 metre depth."
+    },
+    {
+      "id": "pool-water",
+      "kind": "water",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.075,
+        26
+      ],
+      "size": [
+        24,
+        0.05,
+        8
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Reserves the long view-oriented swimming surface without claiming unsupported overflow hydraulics."
+    },
+    {
+      "id": "arrival-court",
+      "kind": "plate",
+      "role": "landscape",
+      "centre": [
+        0,
+        0.1,
+        -18
+      ],
+      "size": [
+        24,
+        0.2,
+        12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Provides a generous drop-off and dry pedestrian approach while remaining separate from the pool route."
+    },
+    {
+      "id": "arrival-spine",
+      "kind": "plate",
+      "role": "circulation",
+      "centre": [
+        0,
+        0.1,
+        -33
+      ],
+      "size": [
+        6,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Connects the assumed landward site entry to the arrival court and frames the entrance rather than the service wing."
+    },
+    {
+      "id": "west-tropical-garden",
+      "kind": "plate",
+      "role": "landscape",
+      "centre": [
+        -34,
+        0.05,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Creates a layered privacy garden beside the guest wing while preserving a generous side setback."
+    },
+    {
+      "id": "east-tropical-garden",
+      "kind": "plate",
+      "role": "landscape",
+      "centre": [
+        34,
+        0.05,
+        4
+      ],
+      "size": [
+        14,
+        0.1,
+        34
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Screens service movement and softens the eastern elevation."
+    },
+    {
+      "id": "arrival-rain-garden-west",
+      "kind": "volume",
+      "role": "landscape",
+      "centre": [
+        -9,
+        0.35,
+        -31
+      ],
+      "size": [
+        8,
+        0.7,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Represents a raised tropical planting mass that narrows and frames the long arrival view."
+    },
+    {
+      "id": "arrival-rain-garden-east",
+      "kind": "volume",
+      "role": "landscape",
+      "centre": [
+        9,
+        0.35,
+        -31
+      ],
+      "size": [
+        8,
+        0.7,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Balances the western planting mass and separates the pedestrian axis from wider vehicle movement."
+    }
+  ],
+  "routesDetail": [
+    {
+      "from": "arrival-space",
+      "to": "great-hall",
+      "via": [
+        "arrival-spine",
+        "arrival-court",
+        "entry-canopy",
+        "main-entrance-door"
+      ],
+      "description": "A level, dry ceremonial approach terminates at the sheltered 3.2 metre-wide entrance."
+    },
+    {
+      "from": "great-hall",
+      "to": "ocean-terrace-space",
+      "via": [
+        "ocean-garden-door",
+        "ocean-terrace"
+      ],
+      "description": "The central living volume opens through a true sill-zero garden door onto the terrace at the same 0.20 metre walking datum."
+    },
+    {
+      "from": "ocean-terrace-space",
+      "to": "pool-space",
+      "via": [
+        "ocean-terrace",
+        "pool-coping-ring"
+      ],
+      "description": "The terrace abuts the pool coping at its near edge, preserving a continuous dry route around the water."
+    },
+    {
+      "from": "great-hall",
+      "to": "upper-gallery",
+      "via": [
+        "main-stair-reserve",
+        "upper-bridge-gallery"
+      ],
+      "description": "A protected straight stair rises 4.00 metres to the bridge gallery beneath the elevated central roof."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-3",
+      "via": [
+        "upper-bridge-gallery",
+        "west-upper-north-door"
+      ],
+      "description": "The bridge turns into the western gallery and enters Suite 3 through its dedicated door."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-4",
+      "via": [
+        "upper-bridge-gallery",
+        "west-upper-south-door"
+      ],
+      "description": "The same protected gallery serves Suite 4 without crossing another suite."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-5",
+      "via": [
+        "upper-bridge-gallery",
+        "east-upper-north-door"
+      ],
+      "description": "The eastern gallery branch reaches Suite 5 through a distinct private threshold."
+    },
+    {
+      "from": "upper-gallery",
+      "to": "suite-6",
+      "via": [
+        "upper-bridge-gallery",
+        "primary-suite-door"
+      ],
+      "description": "The primary suite is reached through a wider door at the quieter ocean end of the east gallery."
+    },
+    {
+      "from": "great-hall",
+      "to": "suite-1",
+      "via": [
+        "west-ground-suite-door"
+      ],
+      "description": "Suite 1 is entered from the western internal side gallery rather than directly from the public terrace."
+    },
+    {
+      "from": "great-hall",
+      "to": "suite-2",
+      "via": [
+        "east-ground-suite-door"
+      ],
+      "description": "Suite 2 is entered from the eastern internal side gallery, maintaining privacy from pool circulation."
+    }
+  ],
+  "constructionCalls": 0,
+  "constructedScene": false
+}

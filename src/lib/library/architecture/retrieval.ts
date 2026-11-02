@@ -3,13 +3,21 @@ import { fragmentDetails } from './fragments';
 import { inferScaleFromBrief } from '@/lib/house/scale';
 import type { KnowledgeRevision } from './model';
 import { constructionFor, knowledgeCategory } from './constructibility';
+import { CANONICAL_KNOWLEDGE_HEADER, canonicalKnowledgeChunk } from './canonicalKnowledge';
 export const MAX_KNOWLEDGE_CHARS = 18000;
 export const MAX_KNOWLEDGE_ENTRIES = 12;
+/** Scale cues describe the requested property, not rejected alternatives or the
+ * size of an incidental pool/representation. Keep the original brief intact. */
+function positiveScaleIntent(brief: string) {
+ return brief.replace(/\b(?:rather than|instead of|do not (?:want|build|design|create)|don't want|not|no|without|avoid(?:ing)?|exclude|omit)\b(?!\s+only\b)(?:(?!\b(?:but|however|instead|(?:and )?(?:build|design|create|construct))\b)[^.!?;,:\n—])*/gi, ' ');
+}
 export function projectKnowledgeContext(brief: string) {
- const inferred = inferScaleFromBrief(brief);
- const propertyValue = propertyValueContext(brief);
- const scale = /\b(compact|small|tiny)\b/i.test(brief) ? 'compact' : inferred === 'mansion' ? 'mansion' : inferred === 'estate' || inferred === 'luxury' || (propertyValue?.amount ?? 0) >= 3000000 ? 'estate' : 'family';
- return { scale: propertyValue && propertyValue.amount < 500000 && !/\b(estate|mansion|luxury|large)\b/i.test(brief) ? 'compact' : scale, propertyValue, location: brief.match(/\b(caribbean|mediterranean|tropical|waterfront|coastal|beach|urban|rural)\b/gi) ?? [],
+ const intent = positiveScaleIntent(brief);
+ const inferred = inferScaleFromBrief(intent);
+ const propertyValue = propertyValueContext(intent);
+ const compact = inferred === 'cottage' || /\b(?:compact|small|tiny)\s+(?:[\w$-]+\s+){0,3}(?:house|home|villa|cabin|dwelling|residence|retreat|lot|site)\b/i.test(intent);
+ const scale = inferred === 'mansion' ? 'mansion' : inferred === 'estate' ? 'estate' : compact ? 'compact' : inferred === 'luxury' || (propertyValue?.amount ?? 0) >= 3000000 ? 'estate' : 'family';
+ return { scale: propertyValue && propertyValue.amount < 500000 && !/\b(estate|mansion|luxury|large)\b/i.test(intent) ? 'compact' : scale, propertyValue, location: brief.match(/\b(caribbean|mediterranean|tropical|waterfront|coastal|beach|urban|rural)\b/gi) ?? [],
   style: brief.match(/\b(modern|contemporary|mediterranean|tuscan|traditional|minimalist)\b/gi) ?? [],
   use: /\b(rental|hotel|resort)\b/i.test(brief) ? 'hospitality' : 'residential',
   requirements: (brief.match(/\b(?:(?:(?:[0-9]+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)[- ])?(?:bedrooms?(?: suites?)?|bathrooms?)|pool|gym|spa|cinema|garage|dock|courtyard|outdoor kitchen|rooftop lounge)\b/gi) ?? []).filter(term=>matchesKnowledgeTerm(brief,term)), brief };
@@ -41,7 +49,8 @@ function requestedSpecialist(e:KnowledgeRevision,brief:string) {
 }
 /** Semantic category coverage plus explicit phrase relevance; no provider call or
  * new persistence engine. Coverage promotes complementary categories, not amenities. */
-export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], brief: string, mode: 'generate' | 'edit' = 'generate') {
+/** `canonical` narrows only the provider-facing text (see canonicalKnowledge.ts); ranking, budgets and evidence are identical. */
+export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], brief: string, mode: 'generate' | 'edit' = 'generate', options: {canonical?: boolean} = {}) {
  const project=projectKnowledgeContext(brief),budget=knowledgeBudget(brief,mode);
  const superseded=new Set(entries.filter(e=>e.status==='approved').flatMap(e=>e.supersedes));
  const excluded: {id:string;reason:string}[] = [];
@@ -77,7 +86,8 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
  const identity = regionalIdentity ?? ranked.find(r => r.entry.kind === 'recipe' && r.category !== 'property-value' && r.reasons.some(reason => reason.startsWith('brief matches ')));
  const priorities = [project.propertyValue?.profileId, identity?.entry.id].filter(Boolean);
  const selected:typeof ranked=[];const counts=new Map<string,number>();let text='';
- const header='\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. '+(mode==='edit'?'Scoped edit: preserve unrelated geometry and programme. ':'')+'Stored knowledge is retrieval, not retraining.\n';
+ let retiredSentencesRemoved=0,budgetText=0;
+ const header=options.canonical?CANONICAL_KNOWLEDGE_HEADER:'\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. '+(mode==='edit'?'Scoped edit: preserve unrelated geometry and programme. ':'')+'Stored knowledge is retrieval, not retraining.\n';
  const remaining=[...ranked];
  const diversityKey=(row:typeof ranked[number])=>row.category==='amenity' ? 'amenity:'+(/gym|fitness|exercise/.test(row.entry.id)?'gym':/garage/.test(row.entry.id)?'garage':/pool/.test(row.entry.id)?'pool':row.entry.id) : row.category;
  const diversityCounts=new Map<string,number>();
@@ -89,14 +99,16 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
   const index=priorityIndex>=0 ? priorityIndex : essential.length ? remaining.findIndex(r=>essential.includes(r.category)) : 0;
   const row=remaining.splice(index,1)[0],e=row.entry;
   if((counts.get(row.category)??0)>=Math.max(2,Math.ceil(budget.entries/3))) { excluded.push({id:e.id,reason:'category diversity budget'});continue; }
-  const chunk=JSON.stringify({id:e.id,version:e.version,category:row.category,when:e.when,title:e.title,combinations:e.combinations,placement:e.placement,principles:e.principles,capabilities:e.capabilities,sources:e.sources,construction:constructionFor(e)})+'\n';
-  if(header.length+text.length+chunk.length>budget.chars)continue;
+  const original=JSON.stringify({id:e.id,version:e.version,category:row.category,when:e.when,title:e.title,combinations:e.combinations,placement:e.placement,principles:e.principles,capabilities:e.capabilities,sources:e.sources,construction:constructionFor(e)})+'\n';
+  // The canonical filter narrows the text sent, never the choice: budget and selection use the original chunk size.
+  const canonicalChunk=options.canonical?canonicalKnowledgeChunk(e,row.category):undefined,chunk=canonicalChunk?.line??original;
+  if(header.length+budgetText+original.length>budget.chars)continue;
   if(selected.some(s=>s.entry.principles.trim().toLowerCase()===e.principles.trim().toLowerCase() && s.entry.placement.trim().toLowerCase()===e.placement.trim().toLowerCase())) { excluded.push({id:e.id,reason:'duplicate selected guidance'}); continue; }
   const count=counts.get(row.category)??0;
-  selected.push({...row,reasons:[...row.reasons,count?'complementary detail within category':`adds ${row.category} coverage`]});text+=chunk;counts.set(row.category,count+1);diversityCounts.set(diversityKey(row),(diversityCounts.get(diversityKey(row))??0)+1);
+  selected.push({...row,reasons:[...row.reasons,count?'complementary detail within category':`adds ${row.category} coverage`]});text+=chunk;budgetText+=original.length;retiredSentencesRemoved+=canonicalChunk?.removed??0;counts.set(row.category,count+1);diversityCounts.set(diversityKey(row),(diversityCounts.get(diversityKey(row))??0)+1);
  }
  const chars=text?header.length+text.length:0;
  return {project,budget,selected:selected.map(({entry,reasons,category,score})=>({id:entry.id,version:entry.version,category,score,reasons})),text:text?header+text:'',chars,
   evidence:selected.map(({entry})=>({id:entry.id,version:entry.version,requiredKinds:constructionFor(entry)!.requiredKinds})),
-  metrics:{total:entries.length,approvedActive:active.length,excluded:[...excluded,...ranked.filter(r=>!selected.some(s=>s.entry.id===r.entry.id)&&!excluded.some(e=>e.id===r.entry.id)).map(r=>({id:r.entry.id,reason:'retrieval budget'}))],excludedByBudget:ranked.filter(r=>!selected.some(s=>s.entry.id===r.entry.id)).map(r=>({id:r.entry.id,category:r.category,score:r.score})),eligible:ranked.length,selected:selected.length,categories:[...counts.keys()],omitted:ranked.length-selected.length,estimatedTokens:Math.ceil(chars/4),tokenMeasurement:'character estimate only; provider usage is recorded separately' as const}};
+  metrics:{...(options.canonical?{canonicalFilter:{droppedFields:['capabilities','sources','construction'],retiredSentencesRemoved}}:{}),total:entries.length,approvedActive:active.length,excluded:[...excluded,...ranked.filter(r=>!selected.some(s=>s.entry.id===r.entry.id)&&!excluded.some(e=>e.id===r.entry.id)).map(r=>({id:r.entry.id,reason:'retrieval budget'}))],excludedByBudget:ranked.filter(r=>!selected.some(s=>s.entry.id===r.entry.id)).map(r=>({id:r.entry.id,category:r.category,score:r.score})),eligible:ranked.length,selected:selected.length,categories:[...counts.keys()],omitted:ranked.length-selected.length,estimatedTokens:Math.ceil(chars/4),tokenMeasurement:'character estimate only; provider usage is recorded separately' as const}};
 }

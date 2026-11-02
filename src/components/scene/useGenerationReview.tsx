@@ -39,7 +39,7 @@ export function useGenerationReview() {
           const response = await fetch('/api/ai/scene/visual-review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input), signal: AbortSignal.any([abort.current!.signal, AbortSignal.timeout(175000)]) });
           const body = await response.json(); if (!response.ok) throw Error(body.error || 'Visual review failed.'); return body.output;
         },
-        commit: (next, record) => { assertCurrent(); commit(next, `Visual refinement ${record.pass} — Terra preferred`); baseline = JSON.stringify(next); expectedRevision = revision(); },
+        commit: (next, record) => { assertCurrent(); commit(next, next.generationStatus ? `Canonical review: ${next.generationStatus}` : `Visual refinement ${record.pass} — Terra preferred`); baseline = JSON.stringify(next); expectedRevision = revision(); },
         record: record => { if (mounted.current) { setRecords(old => [...old, record]); setStatus(record.error || (record.accepted ? `Pass ${record.pass}: refinement retained by Terra comparison.` : record.comparison ? `Pass ${record.pass}: previous version retained. ${record.comparison.reason}` : 'Review completed without a supported refinement.')); } },
       });
     } finally { running.current = false; if (mounted.current) setCapture(undefined); }

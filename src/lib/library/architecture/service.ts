@@ -45,7 +45,7 @@ export async function inspectArchitecturalKnowledge(query = '') {
  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
  return records.filter(e => terms.every(t => JSON.stringify(e.revisions.at(-1)).toLowerCase().includes(t)));
 }
-export async function generationKnowledge(brief: string, mode: 'generate' | 'edit') {
+export async function generationKnowledge(brief: string, mode: 'generate' | 'edit', options: {canonical?: boolean} = {}) {
  const snapshot = await readLibrary();
- return retrieveArchitecturalKnowledge([...latestKnowledge(snapshot.architecturalKnowledge), ...legacyRecipeKnowledge(snapshot.recipes)],brief,mode);
+ return retrieveArchitecturalKnowledge([...latestKnowledge(snapshot.architecturalKnowledge), ...legacyRecipeKnowledge(snapshot.recipes)],brief,mode,options);
 }

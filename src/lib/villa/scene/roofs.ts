@@ -10,5 +10,6 @@ export function buildSceneRoof(element: SceneElement, material: ResolvedMaterial
     const builder = element.roofForm === 'gable' ? buildGableRoof : buildHipRoof;
     return builder(width, depth, -rise / 2, element.id, material, material, {
         pitch: rise / Math.min(width, depth), overhang: element.overhang ?? 0, rakeOverhang: element.overhang ?? 0,
+        fascia: element.fascia,
     });
 }

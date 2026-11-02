@@ -1,0 +1,131 @@
+{
+  "providerCalls": 0,
+  "productionDatabaseChanges": 0,
+  "commits": 0,
+  "deployments": 0,
+  "automaticRepairPasses": 0,
+  "fixtures": [
+    {
+      "name": "compact",
+      "source": "developer-authored, not AI output",
+      "compiler": "architectural-plan-1.1",
+      "elements": 44,
+      "sceneFileSha256": "e261abe538646f543989050844a974a2b8850f116c9dc56278b5841f8843d052",
+      "physicalCheckGroups": 36,
+      "physicalFailures": [],
+      "relationshipFindings": [],
+      "captures": [
+        "compact.arrival.png",
+        "compact.aerial.png",
+        "compact.garden.png",
+        "compact.poolside.png"
+      ]
+    },
+    {
+      "name": "waterfront",
+      "source": "developer-authored, not AI output",
+      "compiler": "architectural-plan-1.1",
+      "elements": 67,
+      "sceneFileSha256": "12b9caeb8873311aed45e3423c44488340ca0cc3a789851dc1b36476fd7cc106",
+      "physicalCheckGroups": 47,
+      "physicalFailures": [],
+      "relationshipFindings": [],
+      "captures": [
+        "waterfront.arrival.png",
+        "waterfront.aerial.png",
+        "waterfront.garden.png",
+        "waterfront.poolside.png"
+      ]
+    },
+    {
+      "name": "courtyard",
+      "source": "developer-authored, not AI output",
+      "compiler": "architectural-plan-1.1",
+      "elements": 32,
+      "sceneFileSha256": "926d5dc1a6bb95eea68c25585d3f5db7e2c559883bd17731a28fcced61bd8d96",
+      "physicalCheckGroups": 18,
+      "physicalFailures": [],
+      "relationshipFindings": [],
+      "captures": [
+        "courtyard.arrival.png",
+        "courtyard.aerial.png",
+        "courtyard.garden.png",
+        "courtyard.poolside.png"
+      ]
+    }
+  ],
+  "tests": {
+    "passed": 99,
+    "files": 13,
+    "success": true
+  },
+  "browser": {
+    "renderedViews": 12,
+    "lifecyclePasses": 3,
+    "errors": [],
+    "apisBlocked": true,
+    "externalPageResourcesBlocked": true
+  },
+  "verification": {
+    "focusedEslint": "passed",
+    "sourceAndNewScriptsTypecheck": "npx tsc --noEmit -p docs/architecture/canonical-expressiveness/tsconfig.verify.json (passed)",
+    "repositoryTypecheck": "blocked by pre-existing design-first experiment imports/types and duplicate property in scripts/sol-planning-comparison-review.ts",
+    "wholeRepositoryTestClaim": false
+  },
+  "sourceHashes": {
+    "src/lib/villa/canonical/plan.ts": "6f170f1721a4b756aa45cea54e7efbf721b4d0faf346d74f4ad5bda89aa4b7cc",
+    "src/lib/villa/canonical/generate.ts": "fb577a4ca838a0d087add1336a5106a9a7ddd7c59878f8fe08c85e1e80edebdc",
+    "src/lib/villa/canonical/generate.test.ts": "409234880af6e8cb26b8659ea62a98ad81733ee2873028ed0bea4ddaf2debf4c",
+    "src/lib/villa/canonical/compositions.fixture.ts": "ccaf46ebbcf7733e575ae83fd1ca1b75e876996fbfa986bd4dadea92a159f2b9",
+    "src/lib/villa/canonical/compositions.test.ts": "ff8af32de9ac1f32a29f384a9f535b4faf4d6cac7228e52a686661674f1c86d4",
+    "src/lib/villa/experimental/semantic-building/compiler.ts": "3f123f7ce366b328bbe44e0e11ec5e9b08279962eeb89c719fb25e03422cb9c4",
+    "src/lib/villa/experimental/semantic-building/compiler.test.ts": "b2f83f4f15f375036253e403f199eabb87c32cfa320d99033e4a20f84c92a3b6",
+    "src/lib/villa/experimental/semantic-building/generation.test.ts": "ceb83ea99c52295b0d4422683143389654ac95fb364fd5e205063e68041db6b4",
+    "src/lib/villa/experimental/semantic-building/physical.ts": "728460dadd72f64a3ea0e200a03b3a8e0ac56bdfd127e44c75ed281f60154ffe",
+    "src/app/dev/canonical-expressiveness/page.tsx": "8064572fdf2ab4b5004be59049aee855573950c6a2d9986a0ac6cd314f808f95",
+    "src/app/dev/canonical-expressiveness/viewer.tsx": "c1486f2da35ea3d921db322b7dcb3c81a9aa9dada57efce5e8d1490c0f1a2d41",
+    "src/app/dev/semantic-building/viewer.tsx": "a8647efe6caf640d8650cdb3886c2334db600ef855162c816690432528b65ce7",
+    "scripts/canonical-expressiveness-offline.ts": "c439f868692fd17fedb238e7d7c4f7208703cdcb10af85ba1f5a3900f1015520",
+    "scripts/canonical-expressiveness-drawings.ts": "fe2b0e72062a727de10cab2804c98bce8260bf049c44036e54a7cbc104478623",
+    "scripts/canonical-expressiveness-capture.mjs": "05690a4438108a6d163eb3cb1a5087311877409434afb9412bfb1df4cda61a1f"
+  },
+  "artifactHashes": {
+    "courtyard.garden.png": "61b59443f83fa71c5c3f92429244f431889c94d24c7e274b0ac55e852f293fb4",
+    "compact.arrival.png": "d6d88a2ccb15886fdca5b4969a6d0e91c1eef83594a09bb10c7d34269903398d",
+    "compact.aerial.png": "79cf4cc162a29a6e691c55416b1aa8b4926687a6970c64ada08325a003269e43",
+    "tests.json": "e84974cf1eafc5f1deb0491ef5b8b41c2d2382ae9cefc5bb89a36d306ec054c3",
+    "compact.section.png": "0ec767fa460375003126ce05b1341ba1dc951ff5d45a3f9545c18efe07624df3",
+    "waterfront.garden.png": "bde001241ff2d6e8e61c025eea3e4d687e362929f701b7de6d84bf753c579414",
+    "compact.section.svg": "e54a4add534ce77ede374d11a45dd6bb3d7d3d2d04b2a1c0cb03c312213e2ac5",
+    "courtyard.poolside.png": "413ae5b795e5f3fde1fc28d4b2e12f09fdec52d0530d96a506bcfc1620eec014",
+    "compact.scene.json": "e261abe538646f543989050844a974a2b8850f116c9dc56278b5841f8843d052",
+    "courtyard.aerial.png": "5f4433ff531f01f1ed27614bc241141871da7992e9d3b02bbbcf2ac662dc3143",
+    "waterfront.plan-ground.png": "f7dea7f39f11b70a99b89ccb9238372f73ae4e1cd5879859748753d91aef9b3d",
+    "compact.garden.png": "618da0d4f80ba22c179811d7c8ab81465a423722ac996b62c08125d64834b202",
+    "courtyard.arrival.png": "0af760ce9185599df15593f68c8f4812c7cb0e0c3203744c52691713c32a9570",
+    "waterfront.plan-upper.png": "a12a2aaefe5a508105065fba9ddc3ecd27eec90e6927629e72ddad8a6826cefb",
+    "compact.plan-ground.png": "21b625036e2b02198ac72df7fe957f2ed544e293541528ccb675b643dc47bcbf",
+    "courtyard.plan-ground.png": "d41105a97e5142c5694075e802158ce8b827ea11612eb2030ba2e21792d5f3cc",
+    "tsconfig.verify.json": "f5432e8d52fa7097fc0cc9969e5e0f598fe83c512c710e0a3ebb20cb6fd1803e",
+    "courtyard.section.png": "111fa9fb110c70f75efd431bac06cecf12a03a9f78faa0e34a4c845b0583e8f8",
+    "compact.poolside.png": "3f201536d752e4a91527fb6e611dce9a17848cced464d5a6e351a7ba635ce2b1",
+    "compact.plan-upper.svg": "a498bfe0d37685e82c3ffe68335bc78caf5da92cbe4b7ce1af506a340745e284",
+    "waterfront.section.svg": "03e36d85bf823751a27c5398b9252b876a1d52689d28102dd844d921248b99a7",
+    "waterfront.scene.json": "12b9caeb8873311aed45e3423c44488340ca0cc3a789851dc1b36476fd7cc106",
+    "browser-result.json": "73c4984066bcd174c94c08b1e99ae398b796b8c9f96d81917f544bd8b8e5eabd",
+    "compact.json": "687dab791ff8a062064d9b1cec881c08d5422405a1769ab274e79a26588de3a9",
+    "waterfront.poolside.png": "58dea9b63ae56e374d74622188e4c2e62226d98f05315e31f1f571f99caa2228",
+    "waterfront.aerial.png": "668079bf941237dd1f44dd803521d3b8c022f7a19e19827123132caeab0fb733",
+    "waterfront.section.png": "93708167bd27bc1571a3600ee8b9254b0830bde1bd82cfda0e1e087ca039ae3d",
+    "compact.plan-upper.png": "2bcedf3b4f1790c94d469ad35d7f36cbf63ca00e57aee9241c99568734d5d514",
+    "courtyard.section.svg": "58f6b209ff65d81ac45f4ae9008e1e840bb34d684e3de4874ee72019d09a8e80",
+    "courtyard.plan-ground.svg": "5d8408c4ba7d2e3e8bd954e6e06e7c6076fe7c0e799ed12c5caad26a4ef4a47e",
+    "compact.plan-ground.svg": "2f3af4a831855b1cb72fcd9ebe372be895465222f2088587ecd24a431fd1e5cc",
+    "waterfront.json": "9d9dd705e749a2d5f1ed49f35e38b89b04b60ad5a883cb4fb7199eb163e62646",
+    "courtyard.json": "acba09a9760993444211ceca82d9d426220b5c229d05ddedd047e6dc730521a3",
+    "waterfront.plan-upper.svg": "086cc189d7a041b4323b67b7556ced7671e1e602cdee61768fc676dc1b88ec2e",
+    "courtyard.scene.json": "926d5dc1a6bb95eea68c25585d3f5db7e2c559883bd17731a28fcced61bd8d96",
+    "waterfront.plan-ground.svg": "bb3bb43b6bf8ea2d9a1e8da154cd79f0519447cba6bd41dc5c5aefd519cb08bd",
+    "waterfront.arrival.png": "84b6fb246633871fadcbc0f436238703c33170364cedc1409e65796c8647dcb9"
+  }
+}

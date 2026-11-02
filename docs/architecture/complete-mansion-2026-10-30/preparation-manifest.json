@@ -1,0 +1,321 @@
+{
+  "status": "corrected-preflight-ready-awaiting-separate-paid-authorization",
+  "paidGenerationRequests": 0,
+  "paidAuthorizationGranted": false,
+  "proposedMaximumGenerationCalls": 1,
+  "model": "gpt-5.6-terra",
+  "reasoning": "provider-default; unset on wire",
+  "maxOutputTokens": 30000,
+  "maxRetries": 0,
+  "sourceFingerprint": "bd027ab8d078c045a57070631ec29f93ef36bb4f18ea2bfc764ee1d5a8ec87c2",
+  "sourceHashesMatch": true,
+  "originalBriefUnchanged": true,
+  "retrieval": {
+    "scale": "estate",
+    "propertyValue": 25000000,
+    "approvedActive": 334,
+    "selected": [
+      {
+        "id": "property-value-25m-50m",
+        "version": 2,
+        "category": "property-value",
+        "score": 100,
+        "reasons": [
+          "explicit currency selects one contextual value reference; no valuation inferred",
+          "adds property-value coverage"
+        ]
+      },
+      {
+        "id": "infinity-pool",
+        "version": 1,
+        "category": "amenity",
+        "score": 19,
+        "reasons": [
+          "brief matches infinity",
+          "brief matches pool",
+          "brief matches waterfront",
+          "adds amenity coverage"
+        ]
+      },
+      {
+        "id": "waterfront-estate",
+        "version": 1,
+        "category": "climate-site",
+        "score": 18,
+        "reasons": [
+          "brief matches waterfront",
+          "brief matches ocean",
+          "adds climate-site coverage"
+        ]
+      },
+      {
+        "id": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+        "version": 1,
+        "category": "roof-outdoor",
+        "score": 16.3,
+        "reasons": [
+          "brief matches tropical",
+          "brief matches roof",
+          "brief matches tropical",
+          "brief matches roof",
+          "adds roof-outdoor coverage"
+        ]
+      },
+      {
+        "id": "tropical-envelope",
+        "version": 1,
+        "category": "envelope",
+        "score": 16,
+        "reasons": [
+          "brief matches caribbean",
+          "brief matches tropical",
+          "adds envelope coverage"
+        ]
+      },
+      {
+        "id": "estate-composition",
+        "version": 1,
+        "category": "composition",
+        "score": 13.6,
+        "reasons": [
+          "brief matches waterfront",
+          "adds composition coverage"
+        ]
+      },
+      {
+        "id": "living-view",
+        "version": 1,
+        "category": "programme",
+        "score": 12,
+        "reasons": [
+          "brief matches living",
+          "brief matches ocean",
+          "brief matches waterfront",
+          "adds programme coverage"
+        ]
+      },
+      {
+        "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+        "version": 1,
+        "category": "arrival",
+        "score": 8.3,
+        "reasons": [
+          "brief matches tropical",
+          "brief matches tropical",
+          "adds arrival coverage"
+        ]
+      }
+    ],
+    "compactGuidanceSelected": false
+  },
+  "terrain": {
+    "approximation": "Single flat ground plane Y=0; ground slabs rest on it. Gentle slope is not constructed.",
+    "policy": "NEW GENERATION SITE POLICY: Always design on one level ground plane at Y=0. Do not emit set-terrain during generation, even for a hillside brief; disclose the temporary flat-site constraint. Place ground floor/deck slab bottoms at Y=0 and their walking surfaces at a consistent small positive datum (typically 0.2m). Doors and enclosure start at that walking surface. Coordinate water freeboard with the selected coping datum and basin depth; model pool perimeter and basin explicitly using plates/walls, never cover water with an unbroken deck. Upper floors and balconies must have explicit slabs and architectural support/attachments; a balcony element is ONLY a glass railing, never a floor. No unsupported elevated ground terraces or isolated plinths.",
+    "limitations": [
+      "No accurate site grading, terrain-following foundations, retaining structures, drainage or shoreline/bathymetric model is established.",
+      "Waterfront orientation, views and architecture may be designed, but a marketing description or scenic name is not terrain evidence.",
+      "The unchanged original brief still requests a gentle slope; the existing higher-priority generation policy explicitly requires disclosing the approximation."
+    ]
+  },
+  "verification": {
+    "focusedTests": 146,
+    "testFiles": 12,
+    "typecheck": "passed",
+    "focusedEslint": "passed",
+    "offlinePolygonChecks": "passed",
+    "historicalFixtureOfflineReview": "passed",
+    "historicalFixtureViews": [
+      {
+        "view": "Arrival",
+        "elements": 47,
+        "contextLost": false
+      },
+      {
+        "view": "Aerial",
+        "elements": 47,
+        "contextLost": false
+      },
+      {
+        "view": "Garden",
+        "elements": 47,
+        "contextLost": false
+      },
+      {
+        "view": "Poolside",
+        "elements": 47,
+        "contextLost": false
+      }
+    ],
+    "pageErrors": [],
+    "connectivity": {
+      "at": "2026-10-30T17:35:40.958Z",
+      "pid": 43147,
+      "node": "v26.12.1",
+      "endpoint": "https://api.openai.com/v1/models",
+      "method": "GET",
+      "generationRequests": 0,
+      "retries": 0,
+      "credentialPresent": true,
+      "environment": {
+        "HTTP_PROXY": false,
+        "HTTPS_PROXY": false,
+        "ALL_PROXY": false,
+        "NO_PROXY": false,
+        "NODE_USE_ENV_PROXY": false,
+        "NODE_EXTRA_CA_CERTS": false,
+        "NODE_OPTIONS": false,
+        "OPENAI_BASE_URL": false
+      },
+      "dns": {
+        "ok": true,
+        "addresses": [
+          {
+            "address": "162.159.140.245",
+            "family": 4
+          },
+          {
+            "address": "172.66.0.243",
+            "family": 4
+          },
+          {
+            "address": "2606:4700:7::f3",
+            "family": 6
+          },
+          {
+            "address": "2a06:98c1:58::f3",
+            "family": 6
+          }
+        ]
+      },
+      "tls": [
+        {
+          "family": 4,
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        {
+          "family": 6,
+          "ok": false,
+          "causes": [
+            {
+              "name": "Error",
+              "code": "EHOSTUNREACH"
+            }
+          ]
+        }
+      ],
+      "http": {
+        "status": 200,
+        "requestId": "8352f98b-fdee-4441-8bd4-e9468d5f69e1"
+      },
+      "ok": true,
+      "providerEndpoint": {
+        "method": "GET",
+        "status": 401,
+        "requestId": "req_0d5ac43ac4474edbb302ef4020e4fd1a",
+        "code": "missing_scope",
+        "type": "invalid_request_error",
+        "reachable": true,
+        "readScopeRestricted": true,
+        "creationPermissionVerified": false
+      }
+    }
+  },
+  "estimate": {
+    "wireChars": 148564,
+    "estimatedInputTokens": 37141,
+    "method": "wire characters / 4; not tokenizer measurement",
+    "usdAt30000Output": 0.434282,
+    "hardDollarCap": false
+  },
+  "changes": [
+    "src/lib/library/architecture/retrieval.ts",
+    "src/lib/library/architecture/scaleIntent.test.ts",
+    "scripts/complete-mansion-once.ts",
+    "scripts/complete-mansion-preflight-verify.ts",
+    "scripts/complete-mansion-review.ts",
+    "scripts/complete-mansion-capture.mjs"
+  ],
+  "scriptHashes": {
+    "src/lib/library/architecture/retrieval.ts": "4e3f6ab52001735671e3eb5f0057585a5913e57ffd1fbe8836e8015a04d619ff",
+    "src/lib/library/architecture/scaleIntent.test.ts": "cceac81a600e95af857b6699a4abc3574f9e17e597075a2d8f117683dcd965be",
+    "scripts/complete-mansion-once.ts": "4ef64d04ae5fa57323d4998e1dd0be3de8a047cac5c6cb1ff00214cb2a0f8ba0",
+    "scripts/complete-mansion-preflight-verify.ts": "68f78e72bb477b29bef1fc43b64bda46b2e9d0afc786d9172600ae286bcd6345",
+    "scripts/complete-mansion-review.ts": "231fdcbedfbbb86cdfc0b1e350fa595608259f7f9016d0668e186ad9ed599cc8",
+    "scripts/complete-mansion-capture.mjs": "17793cbabdb900a26db0e9187ad2287d8dda9975981fcd741350b07780d2da7e"
+  },
+  "artifactHashes": {
+    "REPORT.md": "c7fc3f47884ff3023d55fbed79550e802f00aa88a5780bc49a533b06d5a54e45",
+    "REVIEW.md": "ba948336a652a0115996f7b7e39f40745eb2deb9091db74e1d41b51d45863cc8",
+    "brief.txt": "8bca0ef1eaa22433c600ff32f425036a50676a37b5897806385449c66bd596d2",
+    "corrected-preflight-verification.json": "9ceb458b4a78aaf6d4cf458263df25b66c65baa35550c1af20d13ffb48a18eb9",
+    "corrected-tests-final.json": "31d86e5984a24c55f237d59b6d9488cce5d9309e24c714ba19e32f2e1c09071e",
+    "corrected-tests.json": "6454a93f158b2bea66c6ef68c41dc3c245fff48f4f4f104951dea92061441cfc",
+    "preflight-before-intent-fix/REPORT.md": "7f4b50ae6f00218e05dafc9c5f502020419131a855c4e606049b8a825e122622",
+    "preflight-before-intent-fix/REVIEW.md": "44cde198363467cff897773093322b530b29b056857c1ae6073aafdcb798af4b",
+    "preflight-before-intent-fix/preflight-result.json": "cdc0f2aeaf11ac648516acc8f18023000b29e4d77cb1b353edd32e17de8babea",
+    "preflight-before-intent-fix/preflight-retained.diagnostics.json": "5cf78be72c79eb2e83ca929be0e5b605161fd4dbf40b336f11b1f28748d9c719",
+    "preflight-before-intent-fix/preflight-retained.json": "ddf4b9ea1534ffb22e90d79fed2676bd654fe01be27bc3c9600c37345e0dbf3a",
+    "preflight-before-intent-fix/preflight-route-response.json": "8e7749adfe1364a8742ec9c48060d604c9794a9ddf7c2e4c274cc80174316d14",
+    "preflight-before-intent-fix/preflight-usage-log-values.json": "0f5483cd229f0e4da4e08344f567fd5cf14411a4da199cf354cedcaa0db4cfa0",
+    "preflight-before-intent-fix/preflight.json": "ace1ab4d8fadba406595cb1e1c4248ac96a816a4f92791b096adae64720d70d1",
+    "preflight-before-intent-fix/provider-request.exact.json": "952d03e5c147dafe4e104afa7ad92014e13544d78c71bcbd700eb654e13c3688",
+    "preflight-before-intent-fix/request.json": "952546ab5ebb1b503cd83cee7358c8e05fe778be481b41210eb99c2ea368f939",
+    "preflight-intent-fix-initial/preflight-result.json": "68a9eb64e21ca1ba1ac96ee5c62bf8cd5dce1b23385a10494b5a0ad949254528",
+    "preflight-intent-fix-initial/preflight-retained.diagnostics.json": "31b793080cede9cadcfd2da5461e65ad12ca5119b6deeacb6b17693a21e7afaa",
+    "preflight-intent-fix-initial/preflight-retained.json": "35ccfff8243a895ffeb98ba11d690408f309e32d4c2b2653bb29c532990d97f8",
+    "preflight-intent-fix-initial/preflight-route-response.json": "192f1bc42d533516ef99c882a0657ddc04664ec81bc1e03407a8041aa3a2f190",
+    "preflight-intent-fix-initial/preflight-usage-log-values.json": "71059cdcbbc9a964d19449f99e4c2913b8cdacc9979751f83fc3a5276dfb1412",
+    "preflight-intent-fix-initial/preflight.json": "d06d8c6c4ae89f09ff16f6a27e86d275fd0d9d9a1227c55e6059b9d1397b6194",
+    "preflight-intent-fix-initial/provider-request.exact.json": "335b24abc710331f3c7d8669f97ff108d6cc4c7bd754615bc527128b7ac0fe30",
+    "preflight-intent-fix-initial/request.json": "952546ab5ebb1b503cd83cee7358c8e05fe778be481b41210eb99c2ea368f939",
+    "preflight-result.json": "8fed85c324b24a46fce61cfe0edc8f5381cabdaf1617bc9206f8e47c6a289ab8",
+    "preflight-retained.diagnostics.json": "0b5864c40ebea972d3b58a14b6399869a03e39c13be3a52f85421121cbf9c107",
+    "preflight-retained.json": "141d574ea2e964814b21411cfc1b479dbdbe08d3d3413d8184c95ad3eb879337",
+    "preflight-revision-1/preflight-result.json": "8caf4c857c8b9cbbc30b464d548c5f3d8f0ba639276bd50186b770554e0c6232",
+    "preflight-revision-1/preflight-retained.diagnostics.json": "32656e2a67010cdf3cf7af98bf1faa818ad16c22b29af00d8b3457581676a7eb",
+    "preflight-revision-1/preflight-retained.json": "1fcf90ad10f88d42bb963a4023915d3f69555088afe09255ab27c5f07c89fa7c",
+    "preflight-revision-1/preflight-route-response.json": "5a6b668aad5e94e09916973ea14be203c8bd8326a6409f352b50afcc4b2c1341",
+    "preflight-revision-1/preflight-usage-log-values.json": "ae8be1bbcb442418056673faecd40e401e35fdf0f56ff70b86b799194f6a440e",
+    "preflight-revision-1/preflight.json": "e7b3aef3dd9a1ad564190db6cfea8d78a1a4bd02264425ab53ff834318d015a7",
+    "preflight-revision-1/provider-request.exact.json": "952d03e5c147dafe4e104afa7ad92014e13544d78c71bcbd700eb654e13c3688",
+    "preflight-revision-1/request.json": "952546ab5ebb1b503cd83cee7358c8e05fe778be481b41210eb99c2ea368f939",
+    "preflight-route-response.json": "dff8d12acb0f41f071468f15da13ecc99bedaaa7366aae071db14c5ce5a96cfb",
+    "preflight-usage-log-values.json": "b59867697914ed60e39b2eaa507a332035e0f39a649360e562cc8befea3d942d",
+    "preflight.json": "b9f88c58fb5c03b4eab08a966970b6d95715543d3bc7a2bc4669dbd19ff11f56",
+    "preparation-measurement/architecture-audit.json": "3ba39a2fee43e9b3cefffb9f5a5ef3675833e24805a8b7fa5de8fff9b35c3758",
+    "preparation-measurement/expanded-operations.json": "f7897a66bffc8d9aed4e7bff7fc07ef17a88b03199f37b13fe20abaee9958ce8",
+    "preparation-measurement/geometry-ledger.json": "6c655f2bee794e985d984285ba7d497ad405058ae23931f0eb5a8a92284a2d9c",
+    "preparation-measurement/measurements.json": "48a256fd5555d98a26a7d78ea9b91011fb15b50edc912ddb8b8e06050c35c98c",
+    "preparation-measurement/normalized-output.json": "ad4b205547879ac68dff5759519ca4a3d026a96162ad7418e74c288a6a5becd1",
+    "preparation-measurement/operations.json": "b2e623bc245e25484b52a49675a711e3b90ecffbd206633a7f91d895c350c86c",
+    "preparation-measurement/programme.json": "b6363d58f17cb9f35be035e9b7069733f04353d5312fff11c2ecdc3f402dc6b6",
+    "preparation-measurement/relationship-findings.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "preparation-measurement/review-summary.json": "b6a4534cad91452f1e6f5cfabde974e0fe946b2f5b05e57d4ec1ff4eabcf570b",
+    "preparation-measurement/scene.json": "602e2fa3a7446e6655e289c71707899c5dd28b83116ec0ef454d0d9d09f12d03",
+    "preparation-measurement/sha256.json": "21b5afebee41043c0ff900acd903a2b2ddae31f6a7a8c4cf12e037a50a4227f3",
+    "preparation-measurement-before-intent-fix/architecture-audit.json": "3ba39a2fee43e9b3cefffb9f5a5ef3675833e24805a8b7fa5de8fff9b35c3758",
+    "preparation-measurement-before-intent-fix/expanded-operations.json": "f7897a66bffc8d9aed4e7bff7fc07ef17a88b03199f37b13fe20abaee9958ce8",
+    "preparation-measurement-before-intent-fix/geometry-ledger.json": "6c655f2bee794e985d984285ba7d497ad405058ae23931f0eb5a8a92284a2d9c",
+    "preparation-measurement-before-intent-fix/measurements.json": "48a256fd5555d98a26a7d78ea9b91011fb15b50edc912ddb8b8e06050c35c98c",
+    "preparation-measurement-before-intent-fix/normalized-output.json": "ad4b205547879ac68dff5759519ca4a3d026a96162ad7418e74c288a6a5becd1",
+    "preparation-measurement-before-intent-fix/operations.json": "b2e623bc245e25484b52a49675a711e3b90ecffbd206633a7f91d895c350c86c",
+    "preparation-measurement-before-intent-fix/programme.json": "b6363d58f17cb9f35be035e9b7069733f04353d5312fff11c2ecdc3f402dc6b6",
+    "preparation-measurement-before-intent-fix/relationship-findings.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "preparation-measurement-before-intent-fix/review-summary.json": "b6a4534cad91452f1e6f5cfabde974e0fe946b2f5b05e57d4ec1ff4eabcf570b",
+    "preparation-measurement-before-intent-fix/scene.json": "602e2fa3a7446e6655e289c71707899c5dd28b83116ec0ef454d0d9d09f12d03",
+    "preparation-measurement-before-intent-fix/sha256.json": "21b5afebee41043c0ff900acd903a2b2ddae31f6a7a8c4cf12e037a50a4227f3",
+    "preparation-render/aerial.png": "0c6c93ef56ee1168722b7e2c6bf7ce51d1241bdfeb49beb14089459d4dc594a1",
+    "preparation-render/arrival.png": "bcb57ecf3649f63f5b9d6a4d5c8aff57d5f05e99d4912521faf877da388dd86b",
+    "preparation-render/browser-result.json": "11548c237648c016ecdde44332dedb1de21ef4c1c534f20450987b4b2eda9888",
+    "preparation-render/garden.png": "4fee0b1b7c42434bbc9dddd464b5b097886ed8ba1de40423b29f331b8cc40775",
+    "preparation-render/poolside.png": "3d6084ef39bba52b74dd8e8b318fc4732ddcfd40de1807f5206b304818a54163",
+    "preparation-render-before-intent-fix/aerial.png": "7109773382c3d7ca96ffb51049528a845c87e1a691dba3a7aaf8733ecfb69446",
+    "preparation-render-before-intent-fix/arrival.png": "bcb57ecf3649f63f5b9d6a4d5c8aff57d5f05e99d4912521faf877da388dd86b",
+    "preparation-render-before-intent-fix/browser-result.json": "11548c237648c016ecdde44332dedb1de21ef4c1c534f20450987b4b2eda9888",
+    "preparation-render-before-intent-fix/garden.png": "1ea10de71a017506f64b989e0bfa120854c6b7f39ac27550c935fb298b2521cc",
+    "preparation-render-before-intent-fix/poolside.png": "220d16595752069a12ed20c693710785ee770147710bf7474a0ca4a118328aa6",
+    "provider-request.exact.json": "335b24abc710331f3c7d8669f97ff108d6cc4c7bd754615bc527128b7ac0fe30",
+    "request.json": "952546ab5ebb1b503cd83cee7358c8e05fe778be481b41210eb99c2ea368f939"
+  }
+}

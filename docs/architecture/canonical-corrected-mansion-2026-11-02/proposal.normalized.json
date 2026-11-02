@@ -1,0 +1,1257 @@
+{
+  "status": "proposed",
+  "plan": {
+    "version": "architectural-plan-1",
+    "id": "saint-lucia-waterfront-estate-01",
+    "thesis": "A low, shaded waterfront estate organized as a limestone-and-timber promenade: a memorable south arrival court leads through a compressed entry sequence into a broad north-facing living terrace, pool, and conceptual ocean outlook. A three-suite guest wing forms a private western garden edge, while a compact upper retreat holds three further suites above the arrival-side stair volume. Deep bronze roof planes, timber screens, and recessed openings give the facade climatic depth without treating the waterfront elevation as uniformly glazed.",
+    "orientation": 0,
+    "site": {
+      "width": 90,
+      "depth": 75,
+      "elevation": 0,
+      "grade": 0,
+      "fall": "z"
+    },
+    "levels": [
+      {
+        "id": "ground",
+        "above": null,
+        "rise": 0.01
+      },
+      {
+        "id": "upper",
+        "above": "ground",
+        "rise": 3.6
+      }
+    ],
+    "masses": [
+      {
+        "id": "main-house",
+        "role": "Primary public residence volume"
+      },
+      {
+        "id": "guest-wing",
+        "role": "Ground-level private guest accommodation wing",
+        "relatesTo": "main-house"
+      },
+      {
+        "id": "service-wing",
+        "role": "Kitchen, pantry, laundry, and service court support",
+        "relatesTo": "main-house"
+      },
+      {
+        "id": "upper-retreat",
+        "role": "Upper-level private suite retreat",
+        "relatesTo": "main-house"
+      },
+      {
+        "id": "waterfront-outdoor",
+        "role": "Shaded terrace, pool, and landscape reserve",
+        "relatesTo": "main-house"
+      }
+    ],
+    "spaces": [
+      {
+        "id": "foyer",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Memorable arrival foyer and view axis",
+        "width": 8,
+        "depth": 7,
+        "height": 4.2,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "arrival-court",
+        "mass": "waterfront-outdoor",
+        "level": "ground",
+        "use": "Covered arrival landing and threshold court",
+        "width": 8,
+        "depth": 4,
+        "height": 3.6,
+        "outdoor": true,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "foyer",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "gallery",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Central circulation gallery connecting arrival, living, suites, and stair",
+        "width": 12,
+        "depth": 5,
+        "height": 3.9,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "foyer",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "ground-stair",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Protected stair cell to upper private retreat",
+        "width": 4,
+        "depth": 7,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "foyer",
+          "side": "east",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "living",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Principal waterfront living and entertaining room",
+        "width": 16,
+        "depth": 10,
+        "height": 4.2,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "gallery",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "dining",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Formal and informal waterfront dining room",
+        "width": 10,
+        "depth": 10,
+        "height": 4,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "living",
+          "side": "east",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "kitchen",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Large social kitchen with direct dining connection",
+        "width": 7,
+        "depth": 10,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "dining",
+          "side": "east",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "pantry",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Walk-in pantry and service transfer room",
+        "width": 7,
+        "depth": 3,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "kitchen",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "service-court",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Outdoor service landing",
+        "width": 7,
+        "depth": 4,
+        "height": 3,
+        "outdoor": true,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "pantry",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "laundry",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Laundry and household support room",
+        "width": 4,
+        "depth": 6,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "kitchen",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "powder-room",
+        "mass": "main-house",
+        "level": "ground",
+        "use": "Guest powder room",
+        "width": 4,
+        "depth": 3,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "dining",
+          "side": "south",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-lobby-north",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Private guest-wing circulation lobby",
+        "width": 3,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "gallery",
+          "side": "west",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-suite-1",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Guest bedroom suite one",
+        "width": 8,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-lobby-north",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bath-1",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "En-suite bath and dressing for guest suite one",
+        "width": 4,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "guest-suite-1",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-lobby-middle",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Private guest-wing circulation lobby",
+        "width": 3,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-lobby-north",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-suite-2",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Guest bedroom suite two",
+        "width": 8,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-lobby-middle",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bath-2",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "En-suite bath and dressing for guest suite two",
+        "width": 4,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "guest-suite-2",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-lobby-south",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Private guest-wing circulation lobby",
+        "width": 3,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-lobby-middle",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-suite-3",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Guest bedroom suite three",
+        "width": 8,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-lobby-south",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bath-3",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "En-suite bath and dressing for guest suite three",
+        "width": 4,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "guest-suite-3",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "waterfront-veranda",
+        "mass": "waterfront-outdoor",
+        "level": "ground",
+        "use": "Substantial shaded outdoor living and dining terrace",
+        "width": 16,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": true,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "living",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-stair",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Upper stair arrival cell",
+        "width": 4,
+        "depth": 7,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "ground-stair",
+          "side": "same",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-landing",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Upper private landing and gallery",
+        "width": 8,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "upper-stair",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-lounge",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Private family lounge serving upper suites",
+        "width": 10,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "upper-landing",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-suite-4",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Waterfront bedroom suite four",
+        "width": 10,
+        "depth": 7,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "upper-lounge",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-bath-4",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "En-suite bath and dressing for suite four",
+        "width": 10,
+        "depth": 4,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "upper-suite-4",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-suite-5",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Bedroom suite five",
+        "width": 8,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "upper-lounge",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-bath-5",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "En-suite bath and dressing for suite five",
+        "width": 4,
+        "depth": 5,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "upper-suite-5",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-suite-6",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "Bedroom suite six",
+        "width": 10,
+        "depth": 5,
+        "height": 3.6,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "upper-lounge",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "upper-bath-6",
+        "mass": "upper-retreat",
+        "level": "upper",
+        "use": "En-suite bath and dressing for suite six",
+        "width": 10,
+        "depth": 4,
+        "height": 3.3,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "upper-suite-6",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      }
+    ],
+    "portals": [
+      {
+        "id": "arrival-door",
+        "host": {
+          "space": "arrival-court",
+          "side": "north"
+        },
+        "to": "foyer",
+        "alignment": "centre",
+        "width": 2.4,
+        "height": 2.8,
+        "mode": "door"
+      },
+      {
+        "id": "foyer-gallery",
+        "host": {
+          "space": "foyer",
+          "side": "north"
+        },
+        "to": "gallery",
+        "alignment": "centre",
+        "width": 3,
+        "height": 3,
+        "mode": "open"
+      },
+      {
+        "id": "foyer-stair",
+        "host": {
+          "space": "foyer",
+          "side": "east"
+        },
+        "to": "ground-stair",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "gallery-living",
+        "host": {
+          "space": "gallery",
+          "side": "north"
+        },
+        "to": "living",
+        "alignment": "centre",
+        "width": 4,
+        "height": 3,
+        "mode": "open"
+      },
+      {
+        "id": "gallery-guest-wing",
+        "host": {
+          "space": "gallery",
+          "side": "west"
+        },
+        "to": "guest-lobby-north",
+        "alignment": "start",
+        "width": 1.4,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "living-dining",
+        "host": {
+          "space": "living",
+          "side": "east"
+        },
+        "to": "dining",
+        "alignment": "centre",
+        "width": 3,
+        "height": 3,
+        "mode": "open"
+      },
+      {
+        "id": "dining-kitchen",
+        "host": {
+          "space": "dining",
+          "side": "east"
+        },
+        "to": "kitchen",
+        "alignment": "centre",
+        "width": 2,
+        "height": 2.4,
+        "mode": "open"
+      },
+      {
+        "id": "kitchen-pantry",
+        "host": {
+          "space": "kitchen",
+          "side": "south"
+        },
+        "to": "pantry",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "pantry-service-court",
+        "host": {
+          "space": "pantry",
+          "side": "south"
+        },
+        "to": "service-court",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "kitchen-laundry",
+        "host": {
+          "space": "kitchen",
+          "side": "east"
+        },
+        "to": "laundry",
+        "alignment": "end",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "dining-powder",
+        "host": {
+          "space": "dining",
+          "side": "south"
+        },
+        "to": "powder-room",
+        "alignment": "end",
+        "width": 0.9,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "living-veranda",
+        "host": {
+          "space": "living",
+          "side": "north"
+        },
+        "to": "waterfront-veranda",
+        "alignment": "centre",
+        "width": 5,
+        "height": 3,
+        "mode": "open"
+      },
+      {
+        "id": "guest-lobby-1",
+        "host": {
+          "space": "guest-lobby-north",
+          "side": "west"
+        },
+        "to": "guest-suite-1",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-suite-1-bath",
+        "host": {
+          "space": "guest-suite-1",
+          "side": "west"
+        },
+        "to": "guest-bath-1",
+        "alignment": "centre",
+        "width": 0.9,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "guest-lobby-north-middle",
+        "host": {
+          "space": "guest-lobby-north",
+          "side": "south"
+        },
+        "to": "guest-lobby-middle",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-lobby-2",
+        "host": {
+          "space": "guest-lobby-middle",
+          "side": "west"
+        },
+        "to": "guest-suite-2",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-suite-2-bath",
+        "host": {
+          "space": "guest-suite-2",
+          "side": "west"
+        },
+        "to": "guest-bath-2",
+        "alignment": "centre",
+        "width": 0.9,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "guest-lobby-middle-south",
+        "host": {
+          "space": "guest-lobby-middle",
+          "side": "south"
+        },
+        "to": "guest-lobby-south",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-lobby-3",
+        "host": {
+          "space": "guest-lobby-south",
+          "side": "west"
+        },
+        "to": "guest-suite-3",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-suite-3-bath",
+        "host": {
+          "space": "guest-suite-3",
+          "side": "west"
+        },
+        "to": "guest-bath-3",
+        "alignment": "centre",
+        "width": 0.9,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "upper-stair-landing",
+        "host": {
+          "space": "upper-stair",
+          "side": "north"
+        },
+        "to": "upper-landing",
+        "alignment": "centre",
+        "width": 1.4,
+        "height": 2.4,
+        "mode": "open"
+      },
+      {
+        "id": "upper-landing-lounge",
+        "host": {
+          "space": "upper-landing",
+          "side": "west"
+        },
+        "to": "upper-lounge",
+        "alignment": "centre",
+        "width": 1.8,
+        "height": 2.4,
+        "mode": "open"
+      },
+      {
+        "id": "upper-lounge-suite-4",
+        "host": {
+          "space": "upper-lounge",
+          "side": "north"
+        },
+        "to": "upper-suite-4",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "upper-suite-4-bath",
+        "host": {
+          "space": "upper-suite-4",
+          "side": "north"
+        },
+        "to": "upper-bath-4",
+        "alignment": "centre",
+        "width": 1,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "upper-lounge-suite-5",
+        "host": {
+          "space": "upper-lounge",
+          "side": "west"
+        },
+        "to": "upper-suite-5",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "upper-suite-5-bath",
+        "host": {
+          "space": "upper-suite-5",
+          "side": "west"
+        },
+        "to": "upper-bath-5",
+        "alignment": "centre",
+        "width": 0.9,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "upper-lounge-suite-6",
+        "host": {
+          "space": "upper-lounge",
+          "side": "south"
+        },
+        "to": "upper-suite-6",
+        "alignment": "centre",
+        "width": 1.2,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "upper-suite-6-bath",
+        "host": {
+          "space": "upper-suite-6",
+          "side": "south"
+        },
+        "to": "upper-bath-6",
+        "alignment": "centre",
+        "width": 1,
+        "height": 2.1,
+        "mode": "door"
+      },
+      {
+        "id": "living-west-window",
+        "host": {
+          "space": "living",
+          "side": "west"
+        },
+        "to": "exterior",
+        "alignment": "centre",
+        "width": 3.2,
+        "height": 2.2,
+        "mode": "window",
+        "sill": 0.8
+      },
+      {
+        "id": "suite-3-south-window",
+        "host": {
+          "space": "guest-suite-3",
+          "side": "south"
+        },
+        "to": "exterior",
+        "alignment": "centre",
+        "width": 2.4,
+        "height": 1.8,
+        "mode": "window",
+        "sill": 0.9
+      },
+      {
+        "id": "suite-4-north-window",
+        "host": {
+          "space": "upper-suite-4",
+          "side": "north"
+        },
+        "to": "exterior",
+        "alignment": "centre",
+        "width": 3,
+        "height": 2,
+        "mode": "window",
+        "sill": 0.8
+      }
+    ],
+    "stairs": [
+      {
+        "id": "private-retreat-stair",
+        "lower": "ground-stair",
+        "upper": "upper-stair",
+        "width": 3,
+        "run": 5,
+        "landing": 1,
+        "headroom": 2.4
+      }
+    ],
+    "arrival": "arrival-court",
+    "roofs": [
+      {
+        "space": "foyer",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.8,
+        "material": "bronze"
+      },
+      {
+        "space": "arrival-court",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 1,
+        "material": "bronze"
+      },
+      {
+        "space": "gallery",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.8,
+        "material": "bronze"
+      },
+      {
+        "space": "living",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 1.2,
+        "material": "bronze"
+      },
+      {
+        "space": "dining",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 1,
+        "material": "bronze"
+      },
+      {
+        "space": "kitchen",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.8,
+        "material": "bronze"
+      },
+      {
+        "space": "pantry",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "laundry",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "powder-room",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-lobby-north",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-suite-1",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bath-1",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-lobby-middle",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-suite-2",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bath-2",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-lobby-south",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-suite-3",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bath-3",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "waterfront-veranda",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 1.2,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-stair",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.7,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-landing",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.8,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-lounge",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-suite-4",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 1,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-bath-4",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-suite-5",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-bath-5",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-suite-6",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.9,
+        "material": "bronze"
+      },
+      {
+        "space": "upper-bath-6",
+        "form": "flat",
+        "rise": 0.18,
+        "overhang": 0.6,
+        "material": "bronze"
+      }
+    ],
+    "screens": [
+      {
+        "id": "arrival-timber-screen",
+        "space": "arrival-court",
+        "side": "east",
+        "alignment": "centre",
+        "width": 2.8,
+        "height": 2.8,
+        "sill": 0.2,
+        "standOff": 0.25,
+        "depth": 0.08,
+        "panels": 9,
+        "material": "timber"
+      },
+      {
+        "id": "living-west-shade-screen",
+        "space": "living",
+        "side": "west",
+        "alignment": "end",
+        "width": 3,
+        "height": 2.6,
+        "sill": 0.7,
+        "standOff": 0.35,
+        "depth": 0.08,
+        "panels": 10,
+        "material": "timber"
+      }
+    ],
+    "terraces": [
+      "arrival-court",
+      "waterfront-veranda"
+    ],
+    "pools": [
+      {
+        "id": "waterfront-rectangular-pool",
+        "placement": {
+          "relativeTo": "waterfront-veranda",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 1.5
+        },
+        "width": 14,
+        "depth": 5,
+        "waterDepth": 1.4,
+        "level": "ground"
+      }
+    ],
+    "landscape": [
+      {
+        "id": "waterfront-lawn-reserve",
+        "kind": "lawn",
+        "placement": {
+          "relativeTo": "waterfront-veranda",
+          "side": "east",
+          "alignment": "centre",
+          "gap": 2
+        },
+        "width": 14,
+        "depth": 12
+      },
+      {
+        "id": "arrival-bed-reserve",
+        "kind": "bed",
+        "placement": {
+          "relativeTo": "arrival-court",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 2
+        },
+        "width": 8,
+        "depth": 6
+      },
+      {
+        "id": "poolside-bed-reserve",
+        "kind": "bed",
+        "placement": {
+          "relativeTo": "waterfront-veranda",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 2
+        },
+        "width": 10,
+        "depth": 8
+      }
+    ],
+    "materials": {
+      "floor": "limestone",
+      "wall": "ivory",
+      "roof": "bronze"
+    },
+    "cameraViews": [
+      "Aerial",
+      "Arrival",
+      "Garden",
+      "Poolside"
+    ]
+  },
+  "limitations": [
+    "The US$25 million figure is treated solely as a USD design-ambition reference; it is not a construction budget, cost allocation, or valuation claim.",
+    "The estate is a supported editable envelope only. Interior fit-out, furniture, kitchens, sanitary fixtures, lighting, mechanical systems, and joinery are not constructed by this plan.",
+    "The Saint Lucia waterfront setting and ocean outlook are conceptual. The plan uses the required flat-site representation and does not establish survey data, coastal setbacks, flood levels, shoreline works, marine engineering, or legal permissions.",
+    "Landscape reserves are limited to lawn and bed surfaces. Planting, trees, irrigation, terrain grading, retaining, and detailed garden design are outside supported scope.",
+    "The pool is a rectangular basin with water only. No infinity edge, catch basin, filtration, hydraulics, pool safety system, guard design, or engineering verification is included.",
+    "Climatic intent is expressed through shaded terraces, overhangs, recessed openings, and timber screens. Hurricane, wind, corrosion, thermal, drainage, structural, accessibility, and code compliance require specialist design and verification."
+  ]
+}

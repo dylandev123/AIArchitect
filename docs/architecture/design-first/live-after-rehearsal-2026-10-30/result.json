@@ -1,0 +1,64 @@
+{
+  "status": 422,
+  "paidCalls": 1,
+  "mockProviderRequests": 0,
+  "checkpointPassed": false,
+  "environmentFailed": false,
+  "responseId": "6fe2885e-9c7b-4313-8c28-abc64116e77b",
+  "error": "Error: Selected proposal has inconsistent spatial relationships: living-floor below living-roof: geometry does not evidence the declared relationship (clearance 5.4 m). Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6. Review openings, access and component extents; bounding rectangles alone do not prove usability. west-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability. east-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability. pool-terrace adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum. Review openings, access and component extents; bounding rectangles alone do not prove usability. pool-basin facing living-floor: geometry does not evidence the declared relationship (clearance 0 m). Pool center lies in the ocean-facing +Z direction from the living pavilion. Review openings, access and component extents; bounding rectangles alone do not prove usability. ocean-pavilion-deck adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Pavilion deck begins immediately beyond the pool court, with a dry side route to be built. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+  "dbEvents": [
+    {
+      "suppressed": "initializer DDL",
+      "sha256": "5b09a599f1054b46c9d15f482a50ca9b62febf6cc3e6dfa39cb94709942ae0c1"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "completed": "callback",
+      "rows": 128
+    },
+    {
+      "completed": "promise",
+      "rows": 128
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "read": "SELECT kind, data FROM library_docs"
+    },
+    {
+      "completed": "callback",
+      "rows": 128
+    },
+    {
+      "completed": "promise",
+      "rows": 128
+    },
+    {
+      "read": "SELECT current_setting('transaction_read_only') AS read_only"
+    },
+    {
+      "read": "SELECT current_setting('transaction_read_only') AS read_only"
+    },
+    {
+      "completed": "callback",
+      "rows": 1
+    },
+    {
+      "completed": "promise",
+      "rows": 1
+    },
+    {
+      "suppressed": "initializer DDL",
+      "sha256": "67c010de8b5026cb88418e28182504479c71b92d52a7260c6fdcb2101ae14ee2"
+    },
+    {
+      "redirected": "usage to experiment evidence"
+    }
+  ]
+}

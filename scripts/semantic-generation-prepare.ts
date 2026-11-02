@@ -1,0 +1,12 @@
+/** PREPARATION ONLY. This script cannot submit requests or access credentials. */
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {z} from 'zod';
+import {SEMANTIC_PLANNING_INSTRUCTIONS,semanticProposalSchema} from '../src/lib/villa/experimental/semantic-building/generation';
+const dir='docs/architecture/semantic-generation';
+const original=JSON.parse(readFileSync('docs/architecture/design-first/experiment.request.json','utf8'));
+const request={model:'gpt-5.6-terra',max_output_tokens:30000,input:[{role:'system',content:SEMANTIC_PLANNING_INSTRUCTIONS+'\nReturn your proposal inside the root proposal property.'},{role:'user',content:original.prompt}],text:{format:{type:'json_schema',name:'experimental_semantic_design',strict:false,schema:z.toJSONSchema(z.strictObject({proposal:semanticProposalSchema}))}}};
+const text=JSON.stringify(request,null,2)+'\n';
+writeFileSync(`${dir}/mansion.request.NOT-SUBMITTED.json`,text);
+writeFileSync(`${dir}/preflight.json`,JSON.stringify({submitted:false,authorizationRequired:true,model:request.model,paidCallsSoFar:0,maxPaidCalls:1,retries:0,constructionCalls:0,maxOutputTokens:30000,reasoning:'provider-default',briefSource:'docs/architecture/design-first/experiment.request.json',requestSha256:createHash('sha256').update(text).digest('hex'),requestBytes:Buffer.byteLength(text),knowledge:'No retrieved knowledge in this prepared request; contract and original brief only. This differs from historical calls and precludes a controlled causal comparison.',cost:{currency:'USD',source:'src/lib/ai/pricing.ts static defaults, NOT verified current provider rates',inputPerMillion:2,outputPerMillion:12,scenarioInputTokens:12000,scenarioOutputTokens:15000,scenarioEstimate:.204,scenarioAtOutputCap:.384,qualification:'Conditional planning estimate; actual input/output/reasoning usage and current rates must be verified before submission. No invoiced-price claim.'},expectedResult:'Either editable supported envelope study OR explicit decision-required. The original brief requests unsupported pool/landscape/terrain and potentially facade/roof features. A refusal is a valid experiment outcome, not a completed mansion.',execution:'No live runner installed. Explicit user approval required before adding a one-shot transport using existing authorized configuration. Parse response.proposal with constructSemantic; never retry or repair silently.'},null,2));
+console.log('Prepared request only; no network, credentials or database access.');

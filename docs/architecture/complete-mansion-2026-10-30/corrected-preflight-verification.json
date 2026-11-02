@@ -1,0 +1,242 @@
+{
+  "at": "2026-10-30T17:35:43.086Z",
+  "status": "offline-payload-verified",
+  "paidGenerationRequests": 0,
+  "originalBriefPreserved": true,
+  "sourceFingerprint": "bd027ab8d078c045a57070631ec29f93ef36bb4f18ea2bfc764ee1d5a8ec87c2",
+  "sourceHashesMatch": true,
+  "providerRequestSha256": "335b24abc710331f3c7d8669f97ff108d6cc4c7bd754615bc527128b7ac0fe30",
+  "project": {
+    "scale": "estate",
+    "propertyValue": {
+      "amount": 25000000,
+      "kind": "property-value",
+      "currencyAssumption": "Explicit USD.",
+      "referenceOnly": true,
+      "profileId": "property-value-25m-50m"
+    },
+    "location": [
+      "Caribbean",
+      "waterfront",
+      "waterfront",
+      "tropical"
+    ],
+    "style": [
+      "contemporary"
+    ],
+    "use": "residential",
+    "requirements": [
+      "bedroom suites",
+      "pool"
+    ],
+    "brief": "Design and construct an extraordinary contemporary Caribbean waterfront estate in Saint Lucia with an estimated property value of US$25 million.\n\nThe property occupies a spacious waterfront site with ocean views and a gently sloping landscape.\n\nCreate a sophisticated luxury residence with approximately six generous bedroom suites, expansive living and entertainment spaces, a memorable entrance, exceptional indoor-outdoor connections, substantial terraces, a spectacular infinity pool and integrated tropical landscaping.\n\nDevelop a coherent architectural concept with impressive massing, coordinated building volumes, beautiful proportions, interesting elevations, sophisticated materials and an unmistakable luxury-estate presence.\n\nYou have creative freedom over the building composition, number of levels, architectural style, roof forms and overall arrangement.\n\nConstruct the complete, editable 3D exterior architecture rather than a small conceptual representation."
+  },
+  "budget": {
+    "entries": 12,
+    "chars": 18000,
+    "tier": "complex"
+  },
+  "selected": [
+    {
+      "id": "property-value-25m-50m",
+      "version": 2,
+      "category": "property-value",
+      "score": 100,
+      "reasons": [
+        "explicit currency selects one contextual value reference; no valuation inferred",
+        "adds property-value coverage"
+      ]
+    },
+    {
+      "id": "infinity-pool",
+      "version": 1,
+      "category": "amenity",
+      "score": 19,
+      "reasons": [
+        "brief matches infinity",
+        "brief matches pool",
+        "brief matches waterfront",
+        "adds amenity coverage"
+      ]
+    },
+    {
+      "id": "waterfront-estate",
+      "version": 1,
+      "category": "climate-site",
+      "score": 18,
+      "reasons": [
+        "brief matches waterfront",
+        "brief matches ocean",
+        "adds climate-site coverage"
+      ]
+    },
+    {
+      "id": "legacy-recipe-3b2b038a-d096-4f7d-a405-001fb1493795",
+      "version": 1,
+      "category": "roof-outdoor",
+      "score": 16.3,
+      "reasons": [
+        "brief matches tropical",
+        "brief matches roof",
+        "brief matches tropical",
+        "brief matches roof",
+        "adds roof-outdoor coverage"
+      ]
+    },
+    {
+      "id": "tropical-envelope",
+      "version": 1,
+      "category": "envelope",
+      "score": 16,
+      "reasons": [
+        "brief matches caribbean",
+        "brief matches tropical",
+        "adds envelope coverage"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "version": 1,
+      "category": "composition",
+      "score": 13.6,
+      "reasons": [
+        "brief matches waterfront",
+        "adds composition coverage"
+      ]
+    },
+    {
+      "id": "living-view",
+      "version": 1,
+      "category": "programme",
+      "score": 12,
+      "reasons": [
+        "brief matches living",
+        "brief matches ocean",
+        "brief matches waterfront",
+        "adds programme coverage"
+      ]
+    },
+    {
+      "id": "legacy-recipe-15dd352f-73be-4803-a630-d590ba125c97",
+      "version": 1,
+      "category": "arrival",
+      "score": 8.3,
+      "reasons": [
+        "brief matches tropical",
+        "brief matches tropical",
+        "adds arrival coverage"
+      ]
+    }
+  ],
+  "compactGuidanceSelected": false,
+  "terrain": {
+    "approximation": "Single flat ground plane Y=0; ground slabs rest on it. Gentle slope is not constructed.",
+    "policy": "NEW GENERATION SITE POLICY: Always design on one level ground plane at Y=0. Do not emit set-terrain during generation, even for a hillside brief; disclose the temporary flat-site constraint. Place ground floor/deck slab bottoms at Y=0 and their walking surfaces at a consistent small positive datum (typically 0.2m). Doors and enclosure start at that walking surface. Coordinate water freeboard with the selected coping datum and basin depth; model pool perimeter and basin explicitly using plates/walls, never cover water with an unbroken deck. Upper floors and balconies must have explicit slabs and architectural support/attachments; a balcony element is ONLY a glass railing, never a floor. No unsupported elevated ground terraces or isolated plinths.",
+    "limitations": [
+      "No accurate site grading, terrain-following foundations, retaining structures, drainage or shoreline/bathymetric model is established.",
+      "Waterfront orientation, views and architecture may be designed, but a marketing description or scenic name is not terrain evidence.",
+      "The unchanged original brief still requests a gentle slope; the existing higher-priority generation policy explicitly requires disclosing the approximation."
+    ]
+  },
+  "construction": {
+    "workflow": "normal Generate route, SDK, retrieval, construction and validation",
+    "model": "gpt-5.6-terra",
+    "reasoning": "provider-default; unset",
+    "maxOutputTokens": 30000,
+    "maxOperations": 800,
+    "strictSchema": true,
+    "requiredPhysicalProgramme": true,
+    "maxRetries": 0,
+    "timeoutMs": 170000
+  },
+  "estimate": {
+    "wireChars": 148564,
+    "estimatedInputTokens": 37141,
+    "method": "wire characters / 4; not tokenizer measurement",
+    "usdAt30000Output": 0.434282,
+    "hardDollarCap": false
+  },
+  "connectivity": {
+    "at": "2026-10-30T17:35:40.958Z",
+    "pid": 43147,
+    "node": "v26.12.1",
+    "endpoint": "https://api.openai.com/v1/models",
+    "method": "GET",
+    "generationRequests": 0,
+    "retries": 0,
+    "credentialPresent": true,
+    "environment": {
+      "HTTP_PROXY": false,
+      "HTTPS_PROXY": false,
+      "ALL_PROXY": false,
+      "NO_PROXY": false,
+      "NODE_USE_ENV_PROXY": false,
+      "NODE_EXTRA_CA_CERTS": false,
+      "NODE_OPTIONS": false,
+      "OPENAI_BASE_URL": false
+    },
+    "dns": {
+      "ok": true,
+      "addresses": [
+        {
+          "address": "162.159.140.245",
+          "family": 4
+        },
+        {
+          "address": "172.66.0.243",
+          "family": 4
+        },
+        {
+          "address": "2606:4700:7::f3",
+          "family": 6
+        },
+        {
+          "address": "2a06:98c1:58::f3",
+          "family": 6
+        }
+      ]
+    },
+    "tls": [
+      {
+        "family": 4,
+        "ok": true,
+        "protocol": "TLSv1.3"
+      },
+      {
+        "family": 6,
+        "ok": false,
+        "causes": [
+          {
+            "name": "Error",
+            "code": "EHOSTUNREACH"
+          }
+        ]
+      }
+    ],
+    "http": {
+      "status": 200,
+      "requestId": "8352f98b-fdee-4441-8bd4-e9468d5f69e1"
+    },
+    "ok": true,
+    "providerEndpoint": {
+      "method": "GET",
+      "status": 401,
+      "requestId": "req_0d5ac43ac4474edbb302ef4020e4fd1a",
+      "code": "missing_scope",
+      "type": "invalid_request_error",
+      "reachable": true,
+      "readScopeRestricted": true,
+      "creationPermissionVerified": false
+    }
+  },
+  "httpRequests": [
+    {
+      "url": "https://api.openai.com/v1/models",
+      "method": "GET"
+    },
+    {
+      "url": "https://api.openai.com/v1/responses",
+      "method": "GET"
+    }
+  ]
+}

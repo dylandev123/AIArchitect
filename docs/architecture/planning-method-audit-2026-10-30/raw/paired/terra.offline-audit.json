@@ -1,0 +1,1432 @@
+{
+  "model": "terra",
+  "outputHash": "dac53f65fd7f38c6fc5a84f039e57714710cf55e3f3960e35ec8258ce15b9e8b",
+  "schemaParsed": true,
+  "anchors": 32,
+  "spaces": [
+    {
+      "id": "arrival-sequence",
+      "name": "Arrival court and entrance",
+      "use": "Vehicle drop-off, pedestrian forecourt, and formal entry threshold",
+      "environment": "outdoor",
+      "floorId": "arrival-court",
+      "centre": [
+        0,
+        0.2,
+        -12
+      ],
+      "size": [
+        18,
+        0.1,
+        8
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "arrival-screen-west",
+        "arrival-screen-east",
+        "living-rear-wall"
+      ],
+      "roofIds": [
+        "living-roof"
+      ],
+      "accessIds": [
+        "main-entry"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Driveway turning geometry, gate, lighting, and planting detail remain for construction."
+    },
+    {
+      "id": "great-room",
+      "name": "Great room",
+      "use": "Living, dining, bar, and entertaining capacity",
+      "environment": "interior",
+      "floorId": "living-floor",
+      "centre": [
+        0,
+        0.2,
+        0
+      ],
+      "size": [
+        16,
+        5.4,
+        12
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "living-west-wall",
+        "living-east-wall",
+        "living-rear-wall"
+      ],
+      "roofIds": [
+        "living-roof"
+      ],
+      "accessIds": [
+        "main-entry",
+        "living-garden-door-west",
+        "living-garden-door-east"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Exterior envelope and thresholds are committed; interior partitions, kitchen, bar, furnishings, and service fit-out are deferred."
+    },
+    {
+      "id": "suite-01",
+      "name": "Ocean garden suite 01",
+      "use": "Primary-level private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "west-wing-ground-floor",
+      "centre": [
+        -15,
+        0.2,
+        4.5
+      ],
+      "size": [
+        10,
+        3.2,
+        9
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-wing-ground-shell"
+      ],
+      "roofIds": [
+        "west-upper-floor"
+      ],
+      "accessIds": [
+        "west-suite1-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite envelope capacity only; bedroom/bath/dressing partitions and rear corridor door are deferred."
+    },
+    {
+      "id": "suite-02",
+      "name": "Upper west suite 02",
+      "use": "Private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -17.5,
+        3.64,
+        -2.5
+      ],
+      "size": [
+        5,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-shell"
+      ],
+      "roofIds": [
+        "west-upper-roof"
+      ],
+      "accessIds": [],
+      "stage": "planned-accommodation",
+      "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+    },
+    {
+      "id": "suite-03",
+      "name": "Upper west suite 03",
+      "use": "Private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "west-upper-floor",
+      "centre": [
+        -12.5,
+        3.64,
+        -2.5
+      ],
+      "size": [
+        5,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "west-upper-shell"
+      ],
+      "roofIds": [
+        "west-upper-roof"
+      ],
+      "accessIds": [],
+      "stage": "planned-accommodation",
+      "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+    },
+    {
+      "id": "suite-04",
+      "name": "Ocean garden suite 04",
+      "use": "Primary-level private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "east-wing-ground-floor",
+      "centre": [
+        15,
+        0.2,
+        4.5
+      ],
+      "size": [
+        10,
+        3.2,
+        9
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-wing-ground-shell"
+      ],
+      "roofIds": [
+        "east-upper-floor"
+      ],
+      "accessIds": [
+        "east-suite4-door"
+      ],
+      "stage": "allocated-capacity",
+      "limitation": "Suite envelope capacity only; bedroom/bath/dressing partitions and rear corridor door are deferred."
+    },
+    {
+      "id": "suite-05",
+      "name": "Upper east suite 05",
+      "use": "Private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        12.5,
+        3.64,
+        -2.5
+      ],
+      "size": [
+        5,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-shell"
+      ],
+      "roofIds": [
+        "east-upper-roof"
+      ],
+      "accessIds": [],
+      "stage": "planned-accommodation",
+      "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+    },
+    {
+      "id": "suite-06",
+      "name": "Upper east suite 06",
+      "use": "Private bedroom suite with bath and dressing allowance",
+      "environment": "interior",
+      "floorId": "east-upper-floor",
+      "centre": [
+        17.5,
+        3.64,
+        -2.5
+      ],
+      "size": [
+        5,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "enclosureIds": [
+        "east-upper-shell"
+      ],
+      "roofIds": [
+        "east-upper-roof"
+      ],
+      "accessIds": [],
+      "stage": "planned-accommodation",
+      "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+    },
+    {
+      "id": "ocean-terrace",
+      "name": "Ocean terrace",
+      "use": "Outdoor dining, lounging, and pool approach",
+      "environment": "outdoor",
+      "floorId": "pool-terrace",
+      "centre": [
+        0,
+        0.2,
+        12
+      ],
+      "size": [
+        32,
+        0.1,
+        8
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "living-roof"
+      ],
+      "accessIds": [
+        "living-garden-door-west",
+        "living-garden-door-east"
+      ],
+      "stage": "constructed-space",
+      "limitation": "Loose furniture and shade furnishings are deferred; terrace must be split around basin construction."
+    },
+    {
+      "id": "pool-court",
+      "name": "Infinity-view pool court",
+      "use": "Swimming, sun terrace, and poolside circulation",
+      "environment": "outdoor",
+      "floorId": "pool-coping",
+      "centre": [
+        0,
+        0.2,
+        21
+      ],
+      "size": [
+        20,
+        0.1,
+        9
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [],
+      "accessIds": [
+        "living-garden-door-west",
+        "living-garden-door-east"
+      ],
+      "stage": "planned-accommodation",
+      "limitation": "Requires explicit basin floor, four basin walls, coping segments, and water. Overflow/catch basin hydraulics and true infinity-edge performance are unsupported."
+    },
+    {
+      "id": "ocean-lounge",
+      "name": "Ocean lounge pavilion",
+      "use": "Sheltered outdoor lounge overlooking the waterfront reserve",
+      "environment": "outdoor",
+      "floorId": "ocean-pavilion-deck",
+      "centre": [
+        0,
+        0.2,
+        29
+      ],
+      "size": [
+        12,
+        0.1,
+        5
+      ],
+      "yaw": 0,
+      "enclosureIds": [],
+      "roofIds": [
+        "ocean-pavilion"
+      ],
+      "accessIds": [],
+      "stage": "allocated-capacity",
+      "limitation": "A dry connecting path from pool coping to pavilion deck must be constructed; pavilion furniture is component-defined rather than independently editable."
+    }
+  ],
+  "routes": 8,
+  "relationships": 10,
+  "currentSemanticValidationError": "Error: Selected proposal has inconsistent spatial relationships: living-floor below living-roof: geometry does not evidence the declared relationship (clearance 5.4 m). Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6. Review openings, access and component extents; bounding rectangles alone do not prove usability. west-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability. east-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability. pool-terrace adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum. Review openings, access and component extents; bounding rectangles alone do not prove usability. pool-basin facing living-floor: geometry does not evidence the declared relationship (clearance 0 m). Pool center lies in the ocean-facing +Z direction from the living pavilion. Review openings, access and component extents; bounding rectangles alone do not prove usability. ocean-pavilion-deck adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Pavilion deck begins immediately beyond the pool court, with a dry side route to be built. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+  "baselineOverheadKindMismatches": [
+    {
+      "space": "suite-01",
+      "id": "west-upper-floor",
+      "kind": "plate"
+    },
+    {
+      "space": "suite-04",
+      "id": "east-upper-floor",
+      "kind": "plate"
+    },
+    {
+      "space": "ocean-lounge",
+      "id": "ocean-pavilion",
+      "kind": "pavilion"
+    }
+  ],
+  "baselineSemanticValidationPassed": false,
+  "findings": [
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "living-floor",
+        "living-roof"
+      ],
+      "message": "living-floor below living-roof: geometry does not evidence the declared relationship (clearance 5.4 m). Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "west-upper-roof",
+        "living-roof"
+      ],
+      "message": "west-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "east-upper-roof",
+        "living-roof"
+      ],
+      "message": "east-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "pool-terrace",
+        "pool-coping"
+      ],
+      "message": "pool-terrace adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "pool-basin",
+        "living-floor"
+      ],
+      "message": "pool-basin facing living-floor: geometry does not evidence the declared relationship (clearance 0 m). Pool center lies in the ocean-facing +Z direction from the living pavilion. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    },
+    {
+      "category": "likely-architectural-incompleteness",
+      "code": "spatial-intent-mismatch",
+      "elementIds": [
+        "ocean-pavilion-deck",
+        "pool-coping"
+      ],
+      "message": "ocean-pavilion-deck adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Pavilion deck begins immediately beyond the pool court, with a dry side route to be built. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+    }
+  ],
+  "fidelity": {
+    "spaceEvidence": [
+      {
+        "id": "arrival-sequence",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "great-room",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-01",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-02",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-03",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-04",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-05",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "suite-06",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "ocean-terrace",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "pool-court",
+        "status": "bounds-mismatch"
+      },
+      {
+        "id": "ocean-lounge",
+        "status": "bounds-mismatch"
+      }
+    ],
+    "spatialFindings": [
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "living-floor",
+          "living-roof"
+        ],
+        "message": "living-floor below living-roof: geometry does not evidence the declared relationship (clearance 5.4 m). Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "west-upper-roof",
+          "living-roof"
+        ],
+        "message": "west-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "east-upper-roof",
+          "living-roof"
+        ],
+        "message": "east-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "pool-terrace",
+          "pool-coping"
+        ],
+        "message": "pool-terrace adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "pool-basin",
+          "living-floor"
+        ],
+        "message": "pool-basin facing living-floor: geometry does not evidence the declared relationship (clearance 0 m). Pool center lies in the ocean-facing +Z direction from the living pavilion. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      },
+      {
+        "category": "likely-architectural-incompleteness",
+        "code": "spatial-intent-mismatch",
+        "elementIds": [
+          "ocean-pavilion-deck",
+          "pool-coping"
+        ],
+        "message": "ocean-pavilion-deck adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Pavilion deck begins immediately beyond the pool court, with a dry side route to be built. Review openings, access and component extents; bounding rectangles alone do not prove usability."
+      }
+    ],
+    "status": "diverged",
+    "issues": [
+      "living-floor below living-roof: geometry does not evidence the declared relationship (clearance 5.4 m). Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "west-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "east-upper-roof clear-of living-roof: geometry does not evidence the declared relationship (clearance 3 m). Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "pool-terrace adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "pool-basin facing living-floor: geometry does not evidence the declared relationship (clearance 0 m). Pool center lies in the ocean-facing +Z direction from the living pavilion. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "ocean-pavilion-deck adjacent-to pool-coping: geometry does not evidence the declared relationship (clearance 0 m). Pavilion deck begins immediately beyond the pool court, with a dry side route to be built. Review openings, access and component extents; bounding rectangles alone do not prove usability.",
+      "arrival-sequence: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "great-room: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-01: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-02: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-03: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-04: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-05: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "suite-06: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "ocean-terrace: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "pool-court: selected accommodation does not fit its referenced floor bounds or walking datum.",
+      "ocean-lounge: selected accommodation does not fit its referenced floor bounds or walking datum."
+    ],
+    "accommodation": [
+      {
+        "id": "arrival-sequence",
+        "name": "Arrival court and entrance",
+        "plannedStage": "constructed-space",
+        "evidence": "constructed-space-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Driveway turning geometry, gate, lighting, and planting detail remain for construction."
+      },
+      {
+        "id": "great-room",
+        "name": "Great room",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Exterior envelope and thresholds are committed; interior partitions, kitchen, bar, furnishings, and service fit-out are deferred."
+      },
+      {
+        "id": "suite-01",
+        "name": "Ocean garden suite 01",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Suite envelope capacity only; bedroom/bath/dressing partitions and rear corridor door are deferred."
+      },
+      {
+        "id": "suite-02",
+        "name": "Upper west suite 02",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+      },
+      {
+        "id": "suite-03",
+        "name": "Upper west suite 03",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+      },
+      {
+        "id": "suite-04",
+        "name": "Ocean garden suite 04",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "Suite envelope capacity only; bedroom/bath/dressing partitions and rear corridor door are deferred."
+      },
+      {
+        "id": "suite-05",
+        "name": "Upper east suite 05",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+      },
+      {
+        "id": "suite-06",
+        "name": "Upper east suite 06",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Dedicated exterior door, internal suite partitions, and stair/landing must be constructed in the next stage; this proposal reserves both."
+      },
+      {
+        "id": "ocean-terrace",
+        "name": "Ocean terrace",
+        "plannedStage": "constructed-space",
+        "evidence": "constructed-space-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Loose furniture and shade furnishings are deferred; terrace must be split around basin construction."
+      },
+      {
+        "id": "pool-court",
+        "name": "Infinity-view pool court",
+        "plannedStage": "planned-accommodation",
+        "evidence": "planned-accommodation-unverified",
+        "completedUsableRoom": false,
+        "limitation": "Requires explicit basin floor, four basin walls, coping segments, and water. Overflow/catch basin hydraulics and true infinity-edge performance are unsupported."
+      },
+      {
+        "id": "ocean-lounge",
+        "name": "Ocean lounge pavilion",
+        "plannedStage": "allocated-capacity",
+        "evidence": "allocated-capacity",
+        "completedUsableRoom": false,
+        "limitation": "A dry connecting path from pool coping to pavilion deck must be constructed; pavilion furniture is component-defined rather than independently editable."
+      }
+    ],
+    "limitations": [
+      "Matching selected anchors does not verify enclosure, room independence, navigability, headroom, actual profile surfaces, architectural quality or completed usable rooms. Existing construction and architectural review still apply."
+    ]
+  },
+  "relationshipMetrics": [
+    {
+      "subject": "living-floor",
+      "target": "living-roof",
+      "relation": "below",
+      "clearance": 5.4,
+      "reason": "Central occupied volume has floor top Y=0.2, wall head Y=5.6, and flat roof underside approximately Y=5.6.",
+      "planSeparation": -14,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 5.52,
+      "targetTop": 5.84
+    },
+    {
+      "subject": "west-upper-floor",
+      "target": "west-wing-ground-floor",
+      "relation": "above",
+      "clearance": 3.2,
+      "reason": "Upper slab top Y=3.64 clears the 3.2 m lower wing enclosure height.",
+      "planSeparation": -10,
+      "subjectBottom": 3.4,
+      "subjectTop": 3.64,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "east-upper-floor",
+      "target": "east-wing-ground-floor",
+      "relation": "above",
+      "clearance": 3.2,
+      "reason": "Upper slab top Y=3.64 clears the 3.2 m lower wing enclosure height.",
+      "planSeparation": -10,
+      "subjectBottom": 3.4,
+      "subjectTop": 3.64,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "west-upper-roof",
+      "target": "living-roof",
+      "relation": "clear-of",
+      "clearance": 3,
+      "reason": "Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection.",
+      "planSeparation": -1,
+      "subjectBottom": 6.96,
+      "subjectTop": 7.28,
+      "targetBottom": 5.52,
+      "targetTop": 5.84
+    },
+    {
+      "subject": "east-upper-roof",
+      "target": "living-roof",
+      "relation": "clear-of",
+      "clearance": 3,
+      "reason": "Separate roof plans are more than 3 m apart at their closest edges, avoiding roof intersection.",
+      "planSeparation": -1,
+      "subjectBottom": 6.96,
+      "subjectTop": 7.28,
+      "targetBottom": 5.52,
+      "targetTop": 5.84
+    },
+    {
+      "subject": "pool-terrace",
+      "target": "pool-coping",
+      "relation": "adjacent-to",
+      "clearance": 0,
+      "reason": "Terrace terminates at the near dry pool circuit and shares the Y=0.2 walking datum.",
+      "planSeparation": 0.4999999999999982,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "pool-basin",
+      "target": "pool-coping",
+      "relation": "inside",
+      "clearance": 0,
+      "reason": "The water footprint is intentionally reserved inside the larger dry coping perimeter.",
+      "planSeparation": -8.000000000000002,
+      "subjectBottom": -1.15,
+      "subjectTop": -1.15,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "pool-basin",
+      "target": "living-floor",
+      "relation": "facing",
+      "clearance": 0,
+      "reason": "Pool center lies in the ocean-facing +Z direction from the living pavilion.",
+      "planSeparation": 11.5,
+      "subjectBottom": -1.15,
+      "subjectTop": -1.15,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "ocean-pavilion-deck",
+      "target": "pool-coping",
+      "relation": "adjacent-to",
+      "clearance": 0,
+      "reason": "Pavilion deck begins immediately beyond the pool court, with a dry side route to be built.",
+      "planSeparation": 0.9999999999999991,
+      "subjectBottom": 0,
+      "subjectTop": 0.2,
+      "targetBottom": 0,
+      "targetTop": 0.2
+    },
+    {
+      "subject": "waterfront-planting",
+      "target": "pool-basin",
+      "relation": "set-back-from",
+      "clearance": 6.5,
+      "reason": "Planted waterfront reserve keeps the pool court visually open and away from the assumed shore edge.",
+      "planSeparation": 7.5,
+      "subjectBottom": 0,
+      "subjectTop": 1.6,
+      "targetBottom": -1.15,
+      "targetTop": -1.15
+    }
+  ],
+  "missingInteriorAccess": [
+    "suite-02",
+    "suite-03",
+    "suite-05",
+    "suite-06"
+  ],
+  "anchorTable": [
+    {
+      "id": "arrival-drive",
+      "kind": "plate",
+      "role": "landscape",
+      "centre": [
+        0,
+        0.1,
+        -22
+      ],
+      "size": [
+        7,
+        0.2,
+        16
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "A 7 m wide pale-stone arrival drive ends at the protected pedestrian forecourt rather than at the house facade."
+    },
+    {
+      "id": "arrival-court",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.1,
+        -12
+      ],
+      "size": [
+        18,
+        0.2,
+        8
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "A broad, level arrival court provides a memorable pause between driveway and entry portal."
+    },
+    {
+      "id": "living-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        0,
+        0.1,
+        0
+      ],
+      "size": [
+        16,
+        0.2,
+        12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Central principal slab, top datum Y=0.2, holds the 192 m² shared living and entertaining pavilion."
+    },
+    {
+      "id": "living-west-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -8,
+        2.9,
+        0
+      ],
+      "size": [
+        0.35,
+        5.4,
+        12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "A substantial west return provides a cool furniture/service wall and braces the open ocean elevation."
+    },
+    {
+      "id": "living-east-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        8,
+        2.9,
+        0
+      ],
+      "size": [
+        0.35,
+        5.4,
+        12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Matching east return frames the tall social volume without glazing every facade."
+    },
+    {
+      "id": "living-rear-wall",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        0,
+        2.9,
+        -6
+      ],
+      "size": [
+        16,
+        5.4,
+        0.35
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": {
+        "x": 0,
+        "sill": 0,
+        "width": 2.4,
+        "height": 3,
+        "glazed": false
+      },
+      "designReason": "Landward wall contains the tall, real entrance opening and shields the living room from arrival."
+    },
+    {
+      "id": "main-entry",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        0,
+        1.7,
+        -6.19
+      ],
+      "size": [
+        2.4,
+        3,
+        0.18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Overscaled bronze pivot-style entry is fitted to the sill-zero rear wall opening and approached from the arrival court."
+    },
+    {
+      "id": "living-ocean-glazing-west",
+      "kind": "glazing",
+      "role": "facade",
+      "centre": [
+        -4.2,
+        2.9,
+        6.02
+      ],
+      "size": [
+        5.2,
+        5,
+        0.12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Tall fixed ocean glazing is held between limestone piers, preserving solid-to-glass balance."
+    },
+    {
+      "id": "living-ocean-glazing-east",
+      "kind": "glazing",
+      "role": "facade",
+      "centre": [
+        4.2,
+        2.9,
+        6.02
+      ],
+      "size": [
+        5.2,
+        5,
+        0.12
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Symmetrical second glazed bay preserves the framed panorama while leaving room for operable garden thresholds."
+    },
+    {
+      "id": "living-garden-door-west",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        -1.15,
+        1.7,
+        6.19
+      ],
+      "size": [
+        1.8,
+        3,
+        0.18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Real hinged garden door reserved in a sill-zero opening between glazing bays; it is the primary dry connection to the pool terrace."
+    },
+    {
+      "id": "living-garden-door-east",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        1.15,
+        1.7,
+        6.19
+      ],
+      "size": [
+        1.8,
+        3,
+        0.18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Second real garden door supports two-sided pool and terrace circulation."
+    },
+    {
+      "id": "living-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        0,
+        5.72,
+        0
+      ],
+      "size": [
+        20,
+        0.24,
+        16
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Thin 20 by 16 m flat roof has a 2 m deep perimeter shade line; underside remains above the 5.4 m living enclosure head."
+    },
+    {
+      "id": "west-wing-ground-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        -15,
+        0.1,
+        0
+      ],
+      "size": [
+        10,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "West wing ground slab, top datum Y=0.2, contains Suite 01 and the west stair/lobby zone."
+    },
+    {
+      "id": "west-wing-ground-shell",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -15,
+        1.8,
+        0
+      ],
+      "size": [
+        10,
+        3.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Grouped shell commitment for the lower west wing; later construction must split it into fitted facade bays and actual suite boundaries."
+    },
+    {
+      "id": "west-suite1-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        -15,
+        1.5,
+        9.08
+      ],
+      "size": [
+        1.5,
+        2.6,
+        0.18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Suite 01 has a dedicated terrace-facing garden threshold."
+    },
+    {
+      "id": "west-upper-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        -15,
+        3.52,
+        -2.5
+      ],
+      "size": [
+        10,
+        0.24,
+        13
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Recessed upper west slab, top datum Y=3.64, accommodates Suites 02 and 03 while leaving an open lower ocean terrace."
+    },
+    {
+      "id": "west-upper-shell",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        -15,
+        5.34,
+        -2.5
+      ],
+      "size": [
+        10,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Upper west accommodation enclosure is set back 2.5 m from the ocean edge for privacy and terrace depth."
+    },
+    {
+      "id": "west-upper-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        -15,
+        7.16,
+        -2.5
+      ],
+      "size": [
+        12,
+        0.24,
+        15
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Independent upper-wing roof clears the central living roof in plan and creates a shaded, low horizontal datum."
+    },
+    {
+      "id": "east-wing-ground-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        15,
+        0.1,
+        0
+      ],
+      "size": [
+        10,
+        0.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "East wing ground slab mirrors the private capacity and keeps a generous central garden axis."
+    },
+    {
+      "id": "east-wing-ground-shell",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        15,
+        1.8,
+        0
+      ],
+      "size": [
+        10,
+        3.2,
+        18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Grouped lower east wing shell to be articulated by exterior bays and suite boundaries in construction."
+    },
+    {
+      "id": "east-suite4-door",
+      "kind": "entrance",
+      "role": "entrance",
+      "centre": [
+        15,
+        1.5,
+        9.08
+      ],
+      "size": [
+        1.5,
+        2.6,
+        0.18
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Suite 04 has a dedicated terrace-facing garden threshold."
+    },
+    {
+      "id": "east-upper-floor",
+      "kind": "plate",
+      "role": "floor",
+      "centre": [
+        15,
+        3.52,
+        -2.5
+      ],
+      "size": [
+        10,
+        0.24,
+        13
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Upper east slab top at Y=3.64 carries Suites 05 and 06 and is intended to be reached from the east stair."
+    },
+    {
+      "id": "east-upper-shell",
+      "kind": "wall",
+      "role": "enclosure",
+      "centre": [
+        15,
+        5.34,
+        -2.5
+      ],
+      "size": [
+        10,
+        3.4,
+        13
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Recessed upper east envelope balances the composition and protects its suites from direct pool activity."
+    },
+    {
+      "id": "east-upper-roof",
+      "kind": "roof",
+      "role": "roof",
+      "centre": [
+        15,
+        7.16,
+        -2.5
+      ],
+      "size": [
+        12,
+        0.24,
+        15
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Independent upper east roof repeats the wing roof datum and avoids crossing the central living volume."
+    },
+    {
+      "id": "pool-terrace",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.1,
+        12
+      ],
+      "size": [
+        32,
+        0.2,
+        8
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "32 m wide ocean terrace abuts the living threshold at the same Y=0.2 walking datum and reserves the pool footprint ahead."
+    },
+    {
+      "id": "pool-basin",
+      "kind": "water",
+      "role": "outdoor",
+      "centre": [
+        0,
+        -1.15,
+        21
+      ],
+      "size": [
+        18,
+        0.12,
+        7
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Long rectangular water surface is set within a required explicit basin, coping, and dry circulation; it is not itself an infinity-edge claim."
+    },
+    {
+      "id": "pool-coping",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.1,
+        21
+      ],
+      "size": [
+        20,
+        0.2,
+        9
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Continuous 1 m coping perimeter at terrace datum establishes dry access around the water and a precise pool court edge."
+    },
+    {
+      "id": "ocean-pavilion-deck",
+      "kind": "plate",
+      "role": "outdoor",
+      "centre": [
+        0,
+        0.1,
+        29
+      ],
+      "size": [
+        12,
+        0.2,
+        5
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "A separate timber deck beyond the pool makes an outdoor lounge destination without invading the waterfront reserve."
+    },
+    {
+      "id": "ocean-pavilion",
+      "kind": "pavilion",
+      "role": "roof",
+      "centre": [
+        0,
+        0.2,
+        29
+      ],
+      "size": [
+        12,
+        4.2,
+        7
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Supported open elliptical lounge pavilion supplies a distinct shaded poolside destination; its fixed approved component geometry is intentionally retained."
+    },
+    {
+      "id": "arrival-screen-west",
+      "kind": "screen",
+      "role": "facade",
+      "centre": [
+        -10.2,
+        2.1,
+        -10
+      ],
+      "size": [
+        5.4,
+        4,
+        0.22
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Timber slatted screen filters views to the west wing and thickens the arrival court edge."
+    },
+    {
+      "id": "arrival-screen-east",
+      "kind": "screen",
+      "role": "facade",
+      "centre": [
+        10.2,
+        2.1,
+        -10
+      ],
+      "size": [
+        5.4,
+        4,
+        0.22
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Matching screen balances the portal and conceals private-suite approach zones."
+    },
+    {
+      "id": "waterfront-planting",
+      "kind": "volume",
+      "role": "landscape",
+      "centre": [
+        0,
+        0.8,
+        36
+      ],
+      "size": [
+        34,
+        1.6,
+        8
+      ],
+      "yaw": 0,
+      "profile": false,
+      "opening": null,
+      "designReason": "Editable layered planting mass marks a soft waterfront reserve beyond the pool without asserting specific plant species or shoreline works."
+    }
+  ],
+  "routesDetail": [
+    {
+      "from": "arrival-sequence",
+      "to": "great-room",
+      "via": [
+        "arrival-court",
+        "main-entry"
+      ],
+      "description": "Level pedestrian approach from arrival court through the bronze main entry at Y=0.2."
+    },
+    {
+      "from": "great-room",
+      "to": "ocean-terrace",
+      "via": [
+        "living-garden-door-west",
+        "pool-terrace"
+      ],
+      "description": "Real sill-zero garden threshold from the great room to the continuous limestone terrace."
+    },
+    {
+      "from": "great-room",
+      "to": "pool-court",
+      "via": [
+        "living-garden-door-east",
+        "pool-terrace",
+        "pool-coping"
+      ],
+      "description": "Dry route reaches the near pool coping without crossing water."
+    },
+    {
+      "from": "pool-court",
+      "to": "ocean-lounge",
+      "via": [
+        "pool-coping",
+        "ocean-pavilion-deck"
+      ],
+      "description": "Reserved direct dry path along the east or west side of the basin to the pavilion deck."
+    },
+    {
+      "from": "suite-01",
+      "to": "great-room",
+      "via": [
+        "west-wing-ground-floor",
+        "living-floor"
+      ],
+      "description": "Ground-level private route through a later-built west lobby connection."
+    },
+    {
+      "from": "suite-04",
+      "to": "great-room",
+      "via": [
+        "east-wing-ground-floor",
+        "living-floor"
+      ],
+      "description": "Ground-level private route through a later-built east lobby connection."
+    },
+    {
+      "from": "suite-02",
+      "to": "suite-01",
+      "via": [
+        "west-upper-floor",
+        "west-wing-ground-floor"
+      ],
+      "description": "Reserved enclosed west stair must rise 3.44 m from slab top Y=0.2 to upper slab top Y=3.64 with equal risers, landing, headroom, and real doors."
+    },
+    {
+      "from": "suite-05",
+      "to": "suite-04",
+      "via": [
+        "east-upper-floor",
+        "east-wing-ground-floor"
+      ],
+      "description": "Reserved enclosed east stair must rise 3.44 m from slab top Y=0.2 to upper slab top Y=3.64 with equal risers, landing, headroom, and real doors."
+    }
+  ],
+  "constructionCalls": 0,
+  "constructedScene": false
+}

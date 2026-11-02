@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { profileContactTester } from './profileContact';
+import { straightWalkingAccess } from './walkingAccess';
 import type { ArchitecturalScene, SceneElement } from './model';
 import type { CompletionFinding } from './completion';
 
@@ -67,7 +68,9 @@ export function waterObstructions(scene: ArchitecturalScene) {
 /** Intent checks are review findings, never universal restrictions on architecture. */
 export function spatialCoordinationFindings(scene: ArchitecturalScene): CompletionFinding[] {
     const plan=scene.architecturalPlan as {spatialRelationships?: unknown} | undefined;
-    const parsed=z.array(spatialRelationshipSchema).max(40).safeParse(plan?.spatialRelationships ?? []);
+    // The design-first proposal permits 80 relationships. Review every accepted
+    // declaration rather than replacing 41–80 valid entries with a contract error.
+    const parsed=z.array(spatialRelationshipSchema).max(80).safeParse(plan?.spatialRelationships ?? []);
     if (!parsed.success) return [{category:'likely-architectural-incompleteness',code:'spatial-contract',elementIds:[],message:'Spatial relationships are malformed; retained geometry was not modified.'}];
     const g=sceneSpatialGeometry(scene);
     const obstructions: CompletionFinding[]=waterObstructions(scene).map(({water,solid})=>({category:'confirmed-technical-defect',code:'water-obstruction',elementIds:[water.id,solid.id],message:`${solid.id} crosses ${water.id}'s open interior water plane at Y=${g.world(water)[1]} m.`}));
@@ -83,7 +86,8 @@ export function spatialCoordinationFindings(scene: ArchitecturalScene): Completi
                 case 'below': consistent=g.top(a)<=g.bottom(b)-r.clearance+.02; break;
                 case 'covering': consistent=g.contains(a,b)&&g.bottom(a)>=g.top(b)-.02; break;
                 case 'inside': consistent=g.contains(b,a); break;
-                case 'connected-to': consistent=gap<=.03&&g.bottom(a)<=g.top(b)+.25&&g.top(a)>=g.bottom(b)-.25; break;
+                case 'connected-to': consistent=(gap<=.03&&g.bottom(a)<=g.top(b)+.25&&g.top(a)>=g.bottom(b)-.25) ||
+                    !!straightWalkingAccess(scene,a,b) || !!straightWalkingAccess(scene,b,a); break;
                 case 'adjacent-to': consistent=gap>=-.02&&gap<=r.clearance+.03; break;
                 case 'facing': consistent=Math.sin(p[3])*(q[0]-p[0])+Math.cos(p[3])*(q[2]-p[2])>0; break;
             }

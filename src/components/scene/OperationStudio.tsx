@@ -1,4 +1,5 @@
 'use client';
+import { isCanonicalPlan } from '@/lib/villa/canonical/plan';
 import { useGenerationReview } from './useGenerationReview';
 import {ProfileEditor} from './ProfileEditor';
 import {SCENE_TEST_MODELS,type SceneTestSettings} from '@/lib/ai/sceneTesting';
@@ -109,7 +110,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
             if (output.recoverableDraft) setRecoverableDraft(validateScene(output.recoverableDraft));
             throw Error(output.error + (Array.isArray(output.candidates) && output.candidates.length ? ` Candidates: ${output.candidates.slice(0,10).join(', ')}. Select one and refer to the selected object.` : ''));
         }
-        const result = resolveSceneResult(input, { architecturalPlan: output.architecturalPlan, name: output.name, summary: output.summary, unsupported: output.unsupported, operations: output.operations }, output.scene?.knowledgeEvidence);
+        const result = output.canonical ? {scene:validateScene(output.scene),operations:output.operations,summary:output.summary,unsupported:output.unsupported} : resolveSceneResult(input, { architecturalPlan: output.architecturalPlan, name: output.name, summary: output.summary, unsupported: output.unsupported, operations: output.operations }, output.scene?.knowledgeEvidence);
         if (project && useProjectStore.getState().getProject(project.id)?.houseConfigJson !== revision)
             throw Error('Project changed while Terra was working; response was not applied.');
         if (JSON.stringify(sceneRef.current) !== baseline) throw Error('Scene changed while Terra was working; response was not applied.');
@@ -131,6 +132,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     } }
     const e = scene.elements.find(e => e.id === selected) ?? scene.elements[0];
     function edit(ops: SceneOperation[]) { try {
+        if(isCanonicalPlan(scene.architecturalPlan))throw Error('This house is compiled from its architectural plan. Revise and recompile the plan to change geometry.');
         const next = applySceneOperations(scene, ops);
         commit(next);
     }
@@ -159,7 +161,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     setReference(sceneReferenceSchema.parse({source:file.name,image}));
  } catch (err) { setError(String(err)); } }} /></label>{reference && <><span>{reference.source}</span> <button onClick={() => setReference(undefined)}>Clear reference</button></>}</p>
  {generationReview.panel}
- {process.env.NODE_ENV === 'development' && <SceneReview scene={scene} reference={reference} brief={brief} commit={next => commit(next)} current={() => sceneRef.current} />}
+ {process.env.NODE_ENV === 'development' && !isCanonicalPlan(scene.architecturalPlan) && <SceneReview scene={scene} reference={reference} brief={brief} commit={next => commit(next)} current={() => sceneRef.current} />}
  {!project && <label>Comparison <select aria-label="Comparison" value={source} onChange={ev => setSource(ev.target.value)}><option value="ladera">Current direct scene</option><option value="solana">Villa Solana</option></select></label>}
  {!project && <p><button onClick={() => commit(laderaScene)}>Load Casa Ladera</button></p>}
  <details><summary>Advanced Terrain &amp; Elevation</summary><p>Optional natural ground. Building elevations stay authored; pads and route grading require explicit design.</p><label><input type="checkbox" aria-label="Enable advanced terrain" checked={!!scene.terrain} onChange={ev => edit([{op:'set-terrain',terrain:ev.target.checked ? {width:120,depth:120,elevation:-.5,grade:.05,fall:'z'} : null}])} /> Enable terrain</label>{scene.terrain && <>{(['elevation','grade'] as const).map(key=><label key={key} style={{display:'block'}}>Terrain {key}<input aria-label={`Terrain ${key}`} type="number" step={key==='grade' ? .01 : .5} value={scene.terrain![key]} onChange={ev=>edit([{op:'set-terrain',terrain:{...scene.terrain!,[key]:Number(ev.target.value)}}])} /></label>)}<label>Fall direction<select aria-label="Terrain fall" value={scene.terrain.fall} onChange={ev=>edit([{op:'set-terrain',terrain:{...scene.terrain!,fall:ev.target.value as 'x'|'-x'|'z'|'-z'}}])}>{['x','-x','z','-z'].map(axis=><option key={axis}>{axis}</option>)}</select></label></>}</details>
@@ -184,6 +186,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         return;
     } localRevision.current++; sceneRef.current=history[history.length - 1]; localStorage.setItem('terra-direct-scene-1', JSON.stringify(history[history.length - 1])); setScene(history[history.length - 1]); setHistory(history.slice(0, -1)); }}>Undo</button> <button disabled={busy || !project || project.currentVersionIndex >= project.versions.length - 1} onClick={() => { if (project)
         useProjectStore.getState().redo(project.id); }}>Redo</button></p>
+ {scene.generationStatus && <p role="status">House review: {scene.generationStatus.replaceAll('-', ' ')}. Envelope candidate; interiors and planting are incomplete.</p>}
  {recoverableDraft && <p>Construction failed. Current house preserved. <button onClick={()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(recoverableDraft,null,2)],{type:'application/json'}));a.download='recoverable-construction-draft.json';a.click();URL.revokeObjectURL(a.href);}}>Download recoverable draft</button></p>}
  <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(scene, null, 2)], { type: 'application/json' })); a.download = 'architectural.scene.json'; a.click(); URL.revokeObjectURL(a.href); }}>Export scene JSON</button>
  <p><label>Import scene JSON <input aria-label="Import scene JSON" type="file" accept=".json" onChange={async (ev) => { try {

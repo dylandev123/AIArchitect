@@ -27,6 +27,7 @@ export const elementFieldsSchema = z.object({
     parent: id.optional(), at: vector, rotation: scalar.default(0), size,
     material: z.enum(['ivory', 'limestone', 'timber', 'bronze', 'sage']).default('ivory'),
     roofForm: z.enum(['flat', 'gable', 'hip']).optional(), overhang: z.number().finite().min(0).max(10).optional(),
+    fascia: z.array(z.enum(['north', 'east', 'south', 'west'])).max(4).optional(),
     panels: z.number().int().min(1).max(40).default(4),
     opening: z.object({ x: scalar, sill: z.number().finite().min(0).max(10000), width: z.number().finite().positive().max(10000), height: z.number().finite().positive().max(10000), glazed: z.boolean() }).strict().optional(),
 }).strict();
@@ -44,7 +45,7 @@ export const sceneTerrainSchema = z.object({
     grade: z.number().finite().min(0).max(1), fall: z.enum(['x', '-x', 'z', '-z']),
     cliff: z.object({at: z.number().finite().min(-100).max(100), drop: z.number().finite().min(0).max(100), run: z.number().finite().min(1).max(100)}).strict().optional(),
 }).strict();
-export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationBrief: z.string().max(12000).optional(), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(400), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementFieldsSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
+export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationStatus:z.enum(['pending-visual-review','rejected','reviewed-envelope']).optional(), generationBrief: z.string().max(12000).optional(), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(400), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementFieldsSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
 export type ArchitecturalScene = z.infer<typeof sceneSchema>;
 export function validateScene(input: unknown): ArchitecturalScene {
     const scene = sceneSchema.parse(input), map = new Map(scene.elements.map(e => [e.id, e]));
@@ -54,12 +55,14 @@ export function validateScene(input: unknown): ArchitecturalScene {
         if (e.semanticType && !DIRECT_SCENE_KINDS[e.semanticType]?.includes(e.kind)) throw Error(`Element ${e.id}: semantic type ${e.semanticType} is incompatible with renderer kind ${e.kind}`);
         if (e.geometry) {
             if (!['plate','wall','roof','volume','glazing','entrance'].includes(e.kind)) throw Error('Custom profile requires plate, wall, roof, volume, glazing or entrance');
-            if (e.opening || e.roofForm || e.overhang !== undefined) throw Error('Profile geometry cannot combine with legacy opening/roof parameters; use profile holes or separate pieces');
+            if (e.opening || e.roofForm || e.overhang !== undefined || e.fascia) throw Error('Profile geometry cannot combine with legacy opening/roof parameters; use profile holes or separate pieces');
             validateProfile(e.geometry);
         }
         if (e.kind === 'pavilion') scenePavilionPlacement(e);
-        if ((e.roofForm !== undefined || e.overhang !== undefined) && e.kind !== 'roof')
+        if ((e.roofForm !== undefined || e.overhang !== undefined || e.fascia !== undefined) && e.kind !== 'roof')
             throw Error('Roof parameters require a roof element');
+        if (e.fascia && ((e.roofForm !== 'gable' && e.roofForm !== 'hip') || new Set(e.fascia).size !== e.fascia.length))
+            throw Error('Fascia edges require a gable or hip roof and each edge once');
         if (e.roofForm && e.roofForm !== 'flat' && e.size[1] < .6)
             throw Error('Pitched roof rise must be at least 0.6 metres');
         const visited = new Set([e.id]);

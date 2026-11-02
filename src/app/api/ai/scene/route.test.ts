@@ -1,3 +1,6 @@
+// Legacy construction/edit regressions isolate the new planning stage.
+// route.designFirst.test.ts exercises both actual stages and fidelity failures.
+vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
 import { emptySnapshot } from '@/lib/library/store';
 vi.mock('@/lib/library/store', async original => ({ ...await original<typeof import('@/lib/library/store')>(), readLibrary: async () => emptySnapshot() }));
 import { NoObjectGeneratedError } from 'ai';
@@ -117,7 +120,7 @@ it('generates an elevated terrace and railing with place-on, then edits and relo
   const {POST:compatibility}=await import('../villa/scene/route');
   expect(compatibility).toBe(POST);
   const input={prompt:'House with an elevated terrace and glass railing',mode:'generate' as const};
-  const intent={scaleRationale:laderaPlan.scaleRationale,arrivalAndCirculation:laderaPlan.arrivalAndCirculation,volumeHierarchy:laderaPlan.volumeHierarchy,relationshipsAndViews:laderaPlan.relationshipsAndViews,roofFacadeAndMaterials:laderaPlan.roofFacadeAndMaterials,intendedSpaces:laderaPlan.spaces.map(s=>s.name),programme:laderaPlan.spaces.map(s=>({name:s.name,zone:s.use==='outdoor'?'outdoor':'public',strategy:'Offline construction fixture',floorIds:s.floorIds,enclosureIds:s.enclosureIds,roofIds:s.roofIds,accessIds:laderaScene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Fixture completeness remains unverified.'}))};
+  const intent={physicalProgramme:{propertyType:'Offline Ladera capacity',basis:'Regression fixture; no model design claim.',allocations:[{name:'Residence',quantity:1,unitNetAreaM2:240,allowanceM2:40,floorIds:['salon-floor','east-floor','bridge-floor']}]},scaleRationale:laderaPlan.scaleRationale,arrivalAndCirculation:laderaPlan.arrivalAndCirculation,volumeHierarchy:laderaPlan.volumeHierarchy,relationshipsAndViews:laderaPlan.relationshipsAndViews,roofFacadeAndMaterials:laderaPlan.roofFacadeAndMaterials,intendedSpaces:laderaPlan.spaces.map(s=>s.name),programme:laderaPlan.spaces.map(s=>({name:s.name,zone:s.use==='outdoor'?'outdoor':'public',strategy:'Offline construction fixture',floorIds:s.floorIds,enclosureIds:s.enclosureIds,roofIds:s.roofIds,accessIds:laderaScene.elements.filter(e=>e.kind==='entrance').map(e=>e.id),limitation:'Fixture completeness remains unverified.'}))};
   const output={architecturalPlan:intent,name:laderaScene.name,summary:'Elevated terrace',unsupported:[],operations:[
    ...laderaScene.elements.map(element=>({op:'add',element})),
    {op:'place-on',id:'balcony-deck',support:'bridge-floor',offset:[0,4.35]},

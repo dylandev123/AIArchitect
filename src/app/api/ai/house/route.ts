@@ -1,3 +1,4 @@
+import { canonicalGenerationRequired } from '@/lib/villa/canonical/authority';
 import { assertV3LocalPreserved, planV3LocalEdit, validateV3LocalPlan } from '@/lib/semantic/v3Editing';
 import { SemanticEditError } from '@/lib/semantic/vocabulary';
 import { V3_INITIAL_MAX_OUTPUT_TOKENS, V3_STRUCTURED_OUTPUT_RAW_PREVIEW_MAX_CHARS } from '@/lib/ai/v3GenerationLimits';
@@ -311,11 +312,13 @@ function logV3StructuredOutputFailure(error: unknown): V3StructuredOutputFailure
   return failure;
 }
 
-/** Safe flag diagnostics: no model, project data, credentials or provider call. */
+/** Safe diagnostics: no model, project data, credentials or provider call. New-house generation
+ * is owned by /api/ai/scene; the retired AI_V3_* authoring flags cannot enable it here. */
 export async function GET() {
   return NextResponse.json({
     architecturalBlueprint: {
-      enabledForNewFlatGenerations: v3ArchitecturalBlueprintEnabled(process.env.AI_V3_ARCHITECTURAL_BLUEPRINT, 'flat'),
+      enabledForNewFlatGenerations: false,
+      authority: '/api/ai/scene',
       contract: 'v3-plan-first-1',
       maxAuthoringAttempts: 2,
       maxOutputTokens: V3_INITIAL_MAX_OUTPUT_TOKENS,
@@ -330,6 +333,8 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
+
+  if (canonicalGenerationRequired(body.mode)) return NextResponse.json({error:'New houses use the canonical architectural plan pipeline in the direct-scene workspace.',code:'canonical_generation_required',endpoint:'/api/ai/scene',providerCalls:0},{status:409});
 
   const prompt = body.prompt?.trim();
   if (!prompt) {

@@ -1,0 +1,11 @@
+{
+  "offline": true,
+  "providerCalls": 0,
+  "databaseConnections": 0,
+  "reproduction": "TypeError: Cannot read properties of undefined (reading 'catch')",
+  "cause": "The experiment guard assumed every pg query returned a Promise. pg-pool dispatches Client.query with a callback, for which pg returns undefined. Calling .catch on that return throws before knowledge retrieval completes.",
+  "originalExperimentSourceHashMatches": true,
+  "architecturalConclusion": "Not evaluated: neither design nor construction was requested.",
+  "correctionForFuturePreparation": "Preserve pg callback overloads and observe errors through callbacks; attach Promise.catch only to Promise-returning overloads. Test Pool-to-Client callback delegation offline before any separately authorized run.",
+  "rerunAttempted": false
+}

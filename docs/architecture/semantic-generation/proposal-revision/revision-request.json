@@ -1,0 +1,2303 @@
+{
+  "attempt": 1,
+  "maximumAttempts": 2,
+  "brief": "Retained mansion brief; offline mock decisions, not a model-produced revision",
+  "originalResponse": {
+    "status": "proposed",
+    "intent": {
+      "version": "semantic-pilot-1",
+      "id": "saint-lucia-waterfront-estate",
+      "thesis": "A Caribbean belvedere estate organized as a ceremonial arrival plinth, a broad ocean-facing social salon, a lower guest wing, and a more secluded elevated family-and-owner pavilion. Deep limestone terraces frame the sea-facing edge while warm timber, ivory render, bronze openings, and sage-toned screened service volumes give the composition a refined tropical character without relying on ornamental facade detail.",
+      "frame": {
+        "origin": [
+          0,
+          0
+        ],
+        "yaw": 0
+      },
+      "levels": [
+        {
+          "id": "L0",
+          "top": 0
+        },
+        {
+          "id": "L1",
+          "top": 4.2
+        }
+      ],
+      "masses": [
+        {
+          "id": "arrival-plinth",
+          "role": "A low, processional limestone arrival court that establishes a memorable threshold from the landward side.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "social-belvedere",
+          "role": "The principal double-aspect entertaining volume, opening from arrival through to the waterfront terrace.",
+          "relatesTo": "ocean-terrace"
+        },
+        {
+          "id": "guest-wing",
+          "role": "A long, quieter east wing containing three generous guest-suite allocations and their private internal threshold sequence.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "vertical-hinge",
+          "role": "An open-roof lower stair court capped by an upper stair lantern, joining the social level to the private pavilion.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "private-pavilion",
+          "role": "An elevated family gallery with owner and family suite allocations, set back behind a substantial sky terrace.",
+          "relatesTo": "vertical-hinge"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "arrival-court",
+          "mass": "arrival-plinth",
+          "level": "L0",
+          "use": "ceremonial covered-entry forecourt and arrival terrace",
+          "polygon": [
+            [
+              0,
+              -6
+            ],
+            [
+              12,
+              -6
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "great-salon",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "ocean-view living, dining, bar, and principal entertaining salon",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              0,
+              8
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "chef-kitchen",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "show kitchen, back-of-house preparation, and service pantry zone",
+          "polygon": [
+            [
+              -8,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              -8,
+              8
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "sage"
+        },
+        {
+          "id": "ocean-terrace",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "substantial waterfront entertaining terrace and future pool-deck interface",
+          "polygon": [
+            [
+              0,
+              8
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              14
+            ],
+            [
+              0,
+              14
+            ]
+          ],
+          "height": 0.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "guest-suite-1",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation with a private vestibule zone",
+          "polygon": [
+            [
+              12,
+              0
+            ],
+            [
+              20,
+              0
+            ],
+            [
+              20,
+              8
+            ],
+            [
+              12,
+              8
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "guest-suite-2",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation",
+          "polygon": [
+            [
+              20,
+              0
+            ],
+            [
+              28,
+              0
+            ],
+            [
+              28,
+              8
+            ],
+            [
+              20,
+              8
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "guest-suite-3",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation",
+          "polygon": [
+            [
+              12,
+              8
+            ],
+            [
+              20,
+              8
+            ],
+            [
+              20,
+              16
+            ],
+            [
+              12,
+              16
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "lower-stair-court",
+          "mass": "vertical-hinge",
+          "level": "L0",
+          "use": "open-roof stair court and vertical circulation threshold",
+          "polygon": [
+            [
+              -8,
+              8
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              16
+            ],
+            [
+              -8,
+              16
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "upper-stair-lantern",
+          "mass": "vertical-hinge",
+          "level": "L1",
+          "use": "roofed upper stair landing and private-pavilion threshold",
+          "polygon": [
+            [
+              -8,
+              8
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              16
+            ],
+            [
+              -8,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "bronze"
+        },
+        {
+          "id": "upper-family-gallery",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "upper family lounge, library gallery, and private entertaining salon",
+          "polygon": [
+            [
+              0,
+              8
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              16
+            ],
+            [
+              0,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "sky-terrace",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "elevated ocean-view lounge terrace",
+          "polygon": [
+            [
+              0,
+              16
+            ],
+            [
+              12,
+              16
+            ],
+            [
+              12,
+              24
+            ],
+            [
+              0,
+              24
+            ]
+          ],
+          "height": 0.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "primary-suite",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "owner bedroom-suite allocation with ocean-oriented private lounge zone",
+          "polygon": [
+            [
+              12,
+              8
+            ],
+            [
+              24,
+              8
+            ],
+            [
+              24,
+              16
+            ],
+            [
+              12,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "family-suite-5",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "family or VIP bedroom-suite allocation",
+          "polygon": [
+            [
+              24,
+              8
+            ],
+            [
+              32,
+              8
+            ],
+            [
+              32,
+              16
+            ],
+            [
+              24,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "family-suite-6",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "family or VIP bedroom-suite allocation",
+          "polygon": [
+            [
+              12,
+              16
+            ],
+            [
+              24,
+              16
+            ],
+            [
+              24,
+              24
+            ],
+            [
+              12,
+              24
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        }
+      ],
+      "portals": [
+        {
+          "id": "arrival-to-salon",
+          "host": {
+            "space": "great-salon",
+            "edge": 0
+          },
+          "to": "arrival-court",
+          "offset": 0.5,
+          "width": 3.2,
+          "height": 3,
+          "mode": "door"
+        },
+        {
+          "id": "salon-to-kitchen",
+          "host": {
+            "space": "great-salon",
+            "edge": 3
+          },
+          "to": "chef-kitchen",
+          "offset": 0.5,
+          "width": 2.4,
+          "height": 2.7,
+          "mode": "door"
+        },
+        {
+          "id": "salon-to-ocean-terrace",
+          "host": {
+            "space": "great-salon",
+            "edge": 2
+          },
+          "to": "ocean-terrace",
+          "offset": 0.5,
+          "width": 4.8,
+          "height": 3,
+          "mode": "open"
+        },
+        {
+          "id": "salon-to-guest-wing",
+          "host": {
+            "space": "great-salon",
+            "edge": 1
+          },
+          "to": "guest-suite-1",
+          "offset": 0.5,
+          "width": 1.8,
+          "height": 2.7,
+          "mode": "door"
+        },
+        {
+          "id": "guest-one-to-two",
+          "host": {
+            "space": "guest-suite-1",
+            "edge": 1
+          },
+          "to": "guest-suite-2",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "guest-one-to-three",
+          "host": {
+            "space": "guest-suite-1",
+            "edge": 2
+          },
+          "to": "guest-suite-3",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "kitchen-to-stair-court",
+          "host": {
+            "space": "chef-kitchen",
+            "edge": 2
+          },
+          "to": "lower-stair-court",
+          "offset": 0.5,
+          "width": 1.4,
+          "height": 2.5,
+          "mode": "door"
+        },
+        {
+          "id": "upper-stair-to-gallery",
+          "host": {
+            "space": "upper-stair-lantern",
+            "edge": 1
+          },
+          "to": "upper-family-gallery",
+          "offset": 0.5,
+          "width": 1.8,
+          "height": 2.6,
+          "mode": "door"
+        },
+        {
+          "id": "gallery-to-sky-terrace",
+          "host": {
+            "space": "upper-family-gallery",
+            "edge": 2
+          },
+          "to": "sky-terrace",
+          "offset": 0.5,
+          "width": 4.2,
+          "height": 2.9,
+          "mode": "open"
+        },
+        {
+          "id": "gallery-to-primary",
+          "host": {
+            "space": "upper-family-gallery",
+            "edge": 1
+          },
+          "to": "primary-suite",
+          "offset": 0.5,
+          "width": 1.6,
+          "height": 2.5,
+          "mode": "door"
+        },
+        {
+          "id": "primary-to-suite-five",
+          "host": {
+            "space": "primary-suite",
+            "edge": 1
+          },
+          "to": "family-suite-5",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "primary-to-suite-six",
+          "host": {
+            "space": "primary-suite",
+            "edge": 2
+          },
+          "to": "family-suite-6",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "belvedere-stair",
+          "lower": "lower-stair-court",
+          "upper": "upper-stair-lantern",
+          "start": [
+            -4,
+            9
+          ],
+          "width": 2,
+          "run": 3.6,
+          "risers": 24,
+          "landing": 1.5,
+          "headroom": 2.2,
+          "bypass": "right"
+        }
+      ],
+      "arrival": "arrival-court",
+      "requiredAccess": [
+        "great-salon",
+        "chef-kitchen",
+        "guest-suite-1",
+        "guest-suite-2",
+        "guest-suite-3",
+        "lower-stair-court",
+        "upper-stair-lantern",
+        "upper-family-gallery",
+        "primary-suite",
+        "family-suite-5",
+        "family-suite-6"
+      ]
+    },
+    "limitations": [
+      "The proposal is a supported semantic architectural study, not a verified US$25 million valuation, complete construction package, or claim of a finished premium residence.",
+      "The requested infinity pool is not represented: pool basins, hydraulic edges, water, equipment, and detailed pool-deck construction are outside the supported geometry. The ocean terrace reserves the appropriate waterfront social interface only.",
+      "Tropical planting, landscape design, terrain shaping, retaining, site grading, and a literal response to the gently sloping Saint Lucia site are omitted; all represented spaces use a common datum.",
+      "Only separate flat polygon roofs are represented. Pitched, sculptural, overhanging, and otherwise advanced roof forms are omitted.",
+      "Facade articulation beyond the selected material intent, including shading systems, screens, balustrades, guards, ordinary elevated-sill windows, exterior lighting, and detailed joinery, remains unresolved.",
+      "The six suite allocations establish architectural area and circulation intent only. Bathrooms, wardrobes, furniture, fixtures, kitchens, service rooms, acoustic separation, and all detailed interior fit-out remain unfinished.",
+      "Guest and family suite privacy is expressed through wing hierarchy and suite-threshold sequencing, but internal suite vestibules, bathrooms, and secondary private corridors require later detailed planning.",
+      "Structural design, foundations, hurricane and coastal-resilience design, MEP systems, drainage, code review, accessibility review, permits, and waterfront approvals are unresolved."
+    ]
+  },
+  "latestResponse": {
+    "status": "proposed",
+    "intent": {
+      "version": "semantic-pilot-1",
+      "id": "saint-lucia-waterfront-estate",
+      "thesis": "A Caribbean belvedere estate organized as a ceremonial arrival plinth, a broad ocean-facing social salon, a lower guest wing, and a more secluded elevated family-and-owner pavilion. Deep limestone terraces frame the sea-facing edge while warm timber, ivory render, bronze openings, and sage-toned screened service volumes give the composition a refined tropical character without relying on ornamental facade detail.",
+      "frame": {
+        "origin": [
+          0,
+          0
+        ],
+        "yaw": 0
+      },
+      "levels": [
+        {
+          "id": "L0",
+          "top": 0
+        },
+        {
+          "id": "L1",
+          "top": 4.2
+        }
+      ],
+      "masses": [
+        {
+          "id": "arrival-plinth",
+          "role": "A low, processional limestone arrival court that establishes a memorable threshold from the landward side.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "social-belvedere",
+          "role": "The principal double-aspect entertaining volume, opening from arrival through to the waterfront terrace.",
+          "relatesTo": "ocean-terrace"
+        },
+        {
+          "id": "guest-wing",
+          "role": "A long, quieter east wing containing three generous guest-suite allocations and their private internal threshold sequence.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "vertical-hinge",
+          "role": "An open-roof lower stair court capped by an upper stair lantern, joining the social level to the private pavilion.",
+          "relatesTo": "social-belvedere"
+        },
+        {
+          "id": "private-pavilion",
+          "role": "An elevated family gallery with owner and family suite allocations, set back behind a substantial sky terrace.",
+          "relatesTo": "vertical-hinge"
+        }
+      ],
+      "spaces": [
+        {
+          "id": "arrival-court",
+          "mass": "arrival-plinth",
+          "level": "L0",
+          "use": "ceremonial covered-entry forecourt and arrival terrace",
+          "polygon": [
+            [
+              0,
+              -6
+            ],
+            [
+              12,
+              -6
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "height": 3.6,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "great-salon",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "ocean-view living, dining, bar, and principal entertaining salon",
+          "polygon": [
+            [
+              0,
+              0
+            ],
+            [
+              12,
+              0
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              0,
+              8
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "chef-kitchen",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "show kitchen, back-of-house preparation, and service pantry zone",
+          "polygon": [
+            [
+              -8,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              -8,
+              8
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": true,
+          "material": "sage"
+        },
+        {
+          "id": "ocean-terrace",
+          "mass": "social-belvedere",
+          "level": "L0",
+          "use": "substantial waterfront entertaining terrace and future pool-deck interface",
+          "polygon": [
+            [
+              0,
+              8
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              14
+            ],
+            [
+              0,
+              14
+            ]
+          ],
+          "height": 0.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "guest-suite-1",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation with a private vestibule zone",
+          "polygon": [
+            [
+              12,
+              0
+            ],
+            [
+              20,
+              0
+            ],
+            [
+              20,
+              8
+            ],
+            [
+              12,
+              8
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "guest-suite-2",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation",
+          "polygon": [
+            [
+              20,
+              0
+            ],
+            [
+              28,
+              0
+            ],
+            [
+              28,
+              8
+            ],
+            [
+              20,
+              8
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "guest-suite-3",
+          "mass": "guest-wing",
+          "level": "L0",
+          "use": "generous guest bedroom-suite allocation",
+          "polygon": [
+            [
+              12,
+              8
+            ],
+            [
+              20,
+              8
+            ],
+            [
+              20,
+              16
+            ],
+            [
+              12,
+              16
+            ]
+          ],
+          "height": 4,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "lower-stair-court",
+          "mass": "vertical-hinge",
+          "level": "L0",
+          "use": "open-roof stair court and vertical circulation threshold",
+          "polygon": [
+            [
+              -8,
+              8
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              16
+            ],
+            [
+              -8,
+              16
+            ]
+          ],
+          "height": 4.2,
+          "outdoor": false,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "upper-stair-lantern",
+          "mass": "vertical-hinge",
+          "level": "L1",
+          "use": "roofed upper stair landing and private-pavilion threshold",
+          "polygon": [
+            [
+              -8,
+              8
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              16
+            ],
+            [
+              -8,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "bronze"
+        },
+        {
+          "id": "upper-family-gallery",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "upper family lounge, library gallery, and private entertaining salon",
+          "polygon": [
+            [
+              0,
+              8
+            ],
+            [
+              12,
+              8
+            ],
+            [
+              12,
+              16
+            ],
+            [
+              0,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "sky-terrace",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "elevated ocean-view lounge terrace",
+          "polygon": [
+            [
+              0,
+              16
+            ],
+            [
+              12,
+              16
+            ],
+            [
+              12,
+              24
+            ],
+            [
+              0,
+              24
+            ]
+          ],
+          "height": 0.2,
+          "outdoor": true,
+          "roof": false,
+          "material": "limestone"
+        },
+        {
+          "id": "primary-suite",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "owner bedroom-suite allocation with ocean-oriented private lounge zone",
+          "polygon": [
+            [
+              12,
+              8
+            ],
+            [
+              24,
+              8
+            ],
+            [
+              24,
+              16
+            ],
+            [
+              12,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        },
+        {
+          "id": "family-suite-5",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "family or VIP bedroom-suite allocation",
+          "polygon": [
+            [
+              24,
+              8
+            ],
+            [
+              32,
+              8
+            ],
+            [
+              32,
+              16
+            ],
+            [
+              24,
+              16
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "ivory"
+        },
+        {
+          "id": "family-suite-6",
+          "mass": "private-pavilion",
+          "level": "L1",
+          "use": "family or VIP bedroom-suite allocation",
+          "polygon": [
+            [
+              12,
+              16
+            ],
+            [
+              24,
+              16
+            ],
+            [
+              24,
+              24
+            ],
+            [
+              12,
+              24
+            ]
+          ],
+          "height": 3.8,
+          "outdoor": false,
+          "roof": true,
+          "material": "timber"
+        }
+      ],
+      "portals": [
+        {
+          "id": "arrival-to-salon",
+          "host": {
+            "space": "great-salon",
+            "edge": 0
+          },
+          "to": "arrival-court",
+          "offset": 0.5,
+          "width": 3.2,
+          "height": 3,
+          "mode": "door"
+        },
+        {
+          "id": "salon-to-kitchen",
+          "host": {
+            "space": "great-salon",
+            "edge": 3
+          },
+          "to": "chef-kitchen",
+          "offset": 0.5,
+          "width": 2.4,
+          "height": 2.7,
+          "mode": "door"
+        },
+        {
+          "id": "salon-to-ocean-terrace",
+          "host": {
+            "space": "great-salon",
+            "edge": 2
+          },
+          "to": "ocean-terrace",
+          "offset": 0.5,
+          "width": 4.8,
+          "height": 3,
+          "mode": "open"
+        },
+        {
+          "id": "salon-to-guest-wing",
+          "host": {
+            "space": "great-salon",
+            "edge": 1
+          },
+          "to": "guest-suite-1",
+          "offset": 0.5,
+          "width": 1.8,
+          "height": 2.7,
+          "mode": "door"
+        },
+        {
+          "id": "guest-one-to-two",
+          "host": {
+            "space": "guest-suite-1",
+            "edge": 1
+          },
+          "to": "guest-suite-2",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "guest-one-to-three",
+          "host": {
+            "space": "guest-suite-1",
+            "edge": 2
+          },
+          "to": "guest-suite-3",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "kitchen-to-stair-court",
+          "host": {
+            "space": "chef-kitchen",
+            "edge": 2
+          },
+          "to": "lower-stair-court",
+          "offset": 0.5,
+          "width": 1.4,
+          "height": 2.5,
+          "mode": "door"
+        },
+        {
+          "id": "upper-stair-to-gallery",
+          "host": {
+            "space": "upper-stair-lantern",
+            "edge": 1
+          },
+          "to": "upper-family-gallery",
+          "offset": 0.5,
+          "width": 1.8,
+          "height": 2.6,
+          "mode": "door"
+        },
+        {
+          "id": "gallery-to-sky-terrace",
+          "host": {
+            "space": "upper-family-gallery",
+            "edge": 2
+          },
+          "to": "sky-terrace",
+          "offset": 0.5,
+          "width": 4.2,
+          "height": 2.9,
+          "mode": "open"
+        },
+        {
+          "id": "gallery-to-primary",
+          "host": {
+            "space": "upper-family-gallery",
+            "edge": 1
+          },
+          "to": "primary-suite",
+          "offset": 0.5,
+          "width": 1.6,
+          "height": 2.5,
+          "mode": "door"
+        },
+        {
+          "id": "primary-to-suite-five",
+          "host": {
+            "space": "primary-suite",
+            "edge": 1
+          },
+          "to": "family-suite-5",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        },
+        {
+          "id": "primary-to-suite-six",
+          "host": {
+            "space": "primary-suite",
+            "edge": 2
+          },
+          "to": "family-suite-6",
+          "offset": 0.5,
+          "width": 1.2,
+          "height": 2.4,
+          "mode": "door"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "belvedere-stair",
+          "lower": "lower-stair-court",
+          "upper": "upper-stair-lantern",
+          "start": [
+            -4,
+            9
+          ],
+          "width": 2,
+          "run": 3.6,
+          "risers": 24,
+          "landing": 1.5,
+          "headroom": 2.2,
+          "bypass": "right"
+        }
+      ],
+      "arrival": "arrival-court",
+      "requiredAccess": [
+        "great-salon",
+        "chef-kitchen",
+        "guest-suite-1",
+        "guest-suite-2",
+        "guest-suite-3",
+        "lower-stair-court",
+        "upper-stair-lantern",
+        "upper-family-gallery",
+        "primary-suite",
+        "family-suite-5",
+        "family-suite-6"
+      ]
+    },
+    "limitations": [
+      "The proposal is a supported semantic architectural study, not a verified US$25 million valuation, complete construction package, or claim of a finished premium residence.",
+      "The requested infinity pool is not represented: pool basins, hydraulic edges, water, equipment, and detailed pool-deck construction are outside the supported geometry. The ocean terrace reserves the appropriate waterfront social interface only.",
+      "Tropical planting, landscape design, terrain shaping, retaining, site grading, and a literal response to the gently sloping Saint Lucia site are omitted; all represented spaces use a common datum.",
+      "Only separate flat polygon roofs are represented. Pitched, sculptural, overhanging, and otherwise advanced roof forms are omitted.",
+      "Facade articulation beyond the selected material intent, including shading systems, screens, balustrades, guards, ordinary elevated-sill windows, exterior lighting, and detailed joinery, remains unresolved.",
+      "The six suite allocations establish architectural area and circulation intent only. Bathrooms, wardrobes, furniture, fixtures, kitchens, service rooms, acoustic separation, and all detailed interior fit-out remain unfinished.",
+      "Guest and family suite privacy is expressed through wing hierarchy and suite-threshold sequencing, but internal suite vestibules, bathrooms, and secondary private corridors require later detailed planning.",
+      "Structural design, foundations, hurricane and coastal-resilience design, MEP systems, drainage, code review, accessibility review, permits, and waterfront approvals are unresolved."
+    ]
+  },
+  "findings": [
+    {
+      "code": "reference",
+      "objects": [
+        "social-belvedere",
+        "ocean-terrace"
+      ],
+      "relationship": "typed reference",
+      "facts": {
+        "message": "intent.masses.1.relatesTo: broken masses reference ocean-terrace."
+      },
+      "decision": "Select a declared entity of the correct type; no inferred substitution.",
+      "alternatives": [
+        "Revise the reference explicitly",
+        "Request a broader semantic representation change"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "partial-edge",
+      "objects": [
+        "ocean-terrace",
+        "guest-suite-3"
+      ],
+      "relationship": "shared boundary",
+      "facts": {
+        "aEdge": 1,
+        "bEdge": 3,
+        "a": [
+          [
+            12,
+            8
+          ],
+          [
+            12,
+            14
+          ]
+        ],
+        "b": [
+          [
+            12,
+            16
+          ],
+          [
+            12,
+            8
+          ]
+        ],
+        "sharedLength": 6
+      },
+      "decision": "This physically possible partial adjacency is unsupported; select an explicit topology revision.",
+      "alternatives": [
+        "Revise named outlines to complete coincident edges",
+        "Escalate for boundary-segmentation support; do not add collinear vertices to strict-convex cells"
+      ],
+      "responsibility": "representation"
+    },
+    {
+      "code": "partial-edge",
+      "objects": [
+        "ocean-terrace",
+        "lower-stair-court"
+      ],
+      "relationship": "shared boundary",
+      "facts": {
+        "aEdge": 3,
+        "bEdge": 1,
+        "a": [
+          [
+            0,
+            14
+          ],
+          [
+            0,
+            8
+          ]
+        ],
+        "b": [
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            16
+          ]
+        ],
+        "sharedLength": 6
+      },
+      "decision": "This physically possible partial adjacency is unsupported; select an explicit topology revision.",
+      "alternatives": [
+        "Revise named outlines to complete coincident edges",
+        "Escalate for boundary-segmentation support; do not add collinear vertices to strict-convex cells"
+      ],
+      "responsibility": "representation"
+    },
+    {
+      "code": "roof-floor",
+      "objects": [
+        "guest-suite-3",
+        "primary-suite",
+        "l0",
+        "l1"
+      ],
+      "relationship": "lower roof / upper floor",
+      "facts": {
+        "roof": [
+          4,
+          4.18
+        ],
+        "floor": [
+          4,
+          4.2
+        ],
+        "compilerClearance": 0.3
+      },
+      "decision": "Choose cover composition; compiler does not remove selected roofs.",
+      "alternatives": [
+        "Use upper floor as cover: explicitly remove lower roof",
+        "Revise upper footprint or level and dependent stair/section"
+      ],
+      "responsibility": "model"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "arrival-to-salon",
+        "great-salon",
+        "arrival-court"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 3.2,
+        "height": 3,
+        "edge": [
+          [
+            0,
+            0
+          ],
+          [
+            12,
+            0
+          ]
+        ],
+        "edgeLength": 12,
+        "allowedOffset": [
+          1.78,
+          10.22
+        ],
+        "wallHeight": 4.2,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "salon-to-kitchen",
+        "great-salon",
+        "chef-kitchen"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 2.4,
+        "height": 2.7,
+        "edge": [
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          1.38,
+          6.62
+        ],
+        "wallHeight": 4.2,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "salon-to-ocean-terrace",
+        "great-salon",
+        "ocean-terrace"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 4.8,
+        "height": 3,
+        "edge": [
+          [
+            12,
+            8
+          ],
+          [
+            0,
+            8
+          ]
+        ],
+        "edgeLength": 12,
+        "allowedOffset": [
+          2.58,
+          9.42
+        ],
+        "wallHeight": 4.2,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "salon-to-guest-wing",
+        "great-salon",
+        "guest-suite-1"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.8,
+        "height": 2.7,
+        "edge": [
+          [
+            12,
+            0
+          ],
+          [
+            12,
+            8
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          1.08,
+          6.92
+        ],
+        "wallHeight": 4.2,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "guest-one-to-two",
+        "guest-suite-1",
+        "guest-suite-2"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.2,
+        "height": 2.4,
+        "edge": [
+          [
+            20,
+            0
+          ],
+          [
+            20,
+            8
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          0.78,
+          7.220000000000001
+        ],
+        "wallHeight": 4,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "guest-one-to-three",
+        "guest-suite-1",
+        "guest-suite-3"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.2,
+        "height": 2.4,
+        "edge": [
+          [
+            20,
+            8
+          ],
+          [
+            12,
+            8
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          0.78,
+          7.220000000000001
+        ],
+        "wallHeight": 4,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "kitchen-to-stair-court",
+        "chef-kitchen",
+        "lower-stair-court"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.4,
+        "height": 2.5,
+        "edge": [
+          [
+            0,
+            8
+          ],
+          [
+            -8,
+            8
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          0.8799999999999999,
+          7.12
+        ],
+        "wallHeight": 4.2,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "upper-stair-to-gallery",
+        "upper-stair-lantern",
+        "upper-family-gallery"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.8,
+        "height": 2.6,
+        "edge": [
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            16
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          1.08,
+          6.92
+        ],
+        "wallHeight": 3.8,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "gallery-to-sky-terrace",
+        "upper-family-gallery",
+        "sky-terrace"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 4.2,
+        "height": 2.9,
+        "edge": [
+          [
+            12,
+            16
+          ],
+          [
+            0,
+            16
+          ]
+        ],
+        "edgeLength": 12,
+        "allowedOffset": [
+          2.2800000000000002,
+          9.72
+        ],
+        "wallHeight": 3.8,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "gallery-to-primary",
+        "upper-family-gallery",
+        "primary-suite"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.6,
+        "height": 2.5,
+        "edge": [
+          [
+            12,
+            8
+          ],
+          [
+            12,
+            16
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          0.98,
+          7.0200000000000005
+        ],
+        "wallHeight": 3.8,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "primary-to-suite-five",
+        "primary-suite",
+        "family-suite-5"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.2,
+        "height": 2.4,
+        "edge": [
+          [
+            24,
+            8
+          ],
+          [
+            24,
+            16
+          ]
+        ],
+        "edgeLength": 8,
+        "allowedOffset": [
+          0.78,
+          7.220000000000001
+        ],
+        "wallHeight": 3.8,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "portal-fit",
+      "objects": [
+        "primary-to-suite-six",
+        "primary-suite",
+        "family-suite-6"
+      ],
+      "relationship": "hosted opening / edge margins",
+      "facts": {
+        "offsetMetres": 0.5,
+        "width": 1.2,
+        "height": 2.4,
+        "edge": [
+          [
+            24,
+            16
+          ],
+          [
+            12,
+            16
+          ]
+        ],
+        "edgeLength": 12,
+        "allowedOffset": [
+          0.78,
+          11.22
+        ],
+        "wallHeight": 3.8,
+        "units": "metres from selected host edge start"
+      },
+      "decision": "Select opening position/dimensions; 0.5 is not interpreted as a fraction.",
+      "alternatives": [
+        "Choose an offset within the stated interval",
+        "Revise opening dimensions or entire hosting boundary group"
+      ],
+      "responsibility": "contract"
+    },
+    {
+      "code": "stair-section",
+      "objects": [
+        "belvedere-stair",
+        "lower-stair-court",
+        "upper-stair-lantern",
+        "l0",
+        "l1"
+      ],
+      "relationship": "flight / landings / void / cover",
+      "facts": {
+        "rise": 4.2,
+        "riser": 0.17500000000000002,
+        "going": 0.15,
+        "minimumRun": 6,
+        "minimumLength": 9.18,
+        "selectedFootprint": [
+          [
+            -5.1,
+            7.5
+          ],
+          [
+            -2.9,
+            7.5
+          ],
+          [
+            -2.9,
+            14.1
+          ],
+          [
+            -5.1,
+            14.1
+          ]
+        ],
+        "fits": false,
+        "lowerHeight": 4.2,
+        "lowerRoof": false,
+        "upperRoof": true,
+        "upperClearance": 3.6199999999999997,
+        "requiredHeadroom": 2.2
+      },
+      "decision": "Choose a complete supported flight and cell/landing arrangement.",
+      "alternatives": [
+        "Resize/reposition both stair cells, adjacent outlines and portals consistently",
+        "Revise level section with dependent envelopes and treads",
+        "Escalate if a turn-back or differently directed stair is required"
+      ],
+      "responsibility": "model"
+    },
+    {
+      "code": "construction",
+      "objects": [],
+      "relationship": "complete compiler transaction",
+      "facts": {
+        "decisions": [
+          "intent.masses.1.relatesTo: broken masses reference ocean-terrace."
+        ]
+      },
+      "decision": "Resolve all compiler conflicts before construction.",
+      "alternatives": [],
+      "responsibility": "model"
+    }
+  ],
+  "editableIds": [
+    "social-belvedere",
+    "ocean-terrace",
+    "guest-suite-3",
+    "lower-stair-court",
+    "upper-stair-lantern",
+    "upper-family-gallery",
+    "sky-terrace",
+    "primary-suite",
+    "family-suite-5",
+    "family-suite-6",
+    "arrival-to-salon",
+    "salon-to-kitchen",
+    "salon-to-ocean-terrace",
+    "salon-to-guest-wing",
+    "guest-one-to-two",
+    "guest-one-to-three",
+    "kitchen-to-stair-court",
+    "upper-stair-to-gallery",
+    "gallery-to-sky-terrace",
+    "gallery-to-primary",
+    "primary-to-suite-five",
+    "primary-to-suite-six",
+    "belvedere-stair"
+  ],
+  "dependencyReview": {
+    "spaces": [
+      "great-salon",
+      "chef-kitchen",
+      "ocean-terrace",
+      "guest-suite-3",
+      "lower-stair-court",
+      "upper-stair-lantern",
+      "upper-family-gallery",
+      "sky-terrace",
+      "primary-suite",
+      "family-suite-5",
+      "family-suite-6",
+      "arrival-court",
+      "guest-suite-1",
+      "guest-suite-2"
+    ],
+    "portals": [
+      "arrival-to-salon",
+      "salon-to-kitchen",
+      "salon-to-ocean-terrace",
+      "salon-to-guest-wing",
+      "guest-one-to-two",
+      "guest-one-to-three",
+      "kitchen-to-stair-court",
+      "upper-stair-to-gallery",
+      "gallery-to-sky-terrace",
+      "gallery-to-primary",
+      "primary-to-suite-five",
+      "primary-to-suite-six"
+    ],
+    "stairs": [
+      "belvedere-stair"
+    ],
+    "note": "Typed dependency neighbourhood, not permission to change locked objects. Full proposal compilation checks geometric neighbours, shared boundaries, covers and routes; generated components update together."
+  },
+  "preserved": {
+    "concept": "A Caribbean belvedere estate organized as a ceremonial arrival plinth, a broad ocean-facing social salon, a lower guest wing, and a more secluded elevated family-and-owner pavilion. Deep limestone terraces frame the sea-facing edge while warm timber, ivory render, bronze openings, and sage-toned screened service volumes give the composition a refined tropical character without relying on ornamental facade detail.",
+    "frame": {
+      "origin": [
+        0,
+        0
+      ],
+      "yaw": 0
+    },
+    "arrival": "arrival-court",
+    "requiredAccess": [
+      "great-salon",
+      "chef-kitchen",
+      "guest-suite-1",
+      "guest-suite-2",
+      "guest-suite-3",
+      "lower-stair-court",
+      "upper-stair-lantern",
+      "upper-family-gallery",
+      "primary-suite",
+      "family-suite-5",
+      "family-suite-6"
+    ],
+    "entities": [
+      {
+        "id": "l0",
+        "top": 0
+      },
+      {
+        "id": "l1",
+        "top": 4.2
+      },
+      {
+        "id": "arrival-plinth",
+        "role": "A low, processional limestone arrival court that establishes a memorable threshold from the landward side.",
+        "relatesTo": "social-belvedere"
+      },
+      {
+        "id": "guest-wing",
+        "role": "A long, quieter east wing containing three generous guest-suite allocations and their private internal threshold sequence.",
+        "relatesTo": "social-belvedere"
+      },
+      {
+        "id": "vertical-hinge",
+        "role": "An open-roof lower stair court capped by an upper stair lantern, joining the social level to the private pavilion.",
+        "relatesTo": "social-belvedere"
+      },
+      {
+        "id": "private-pavilion",
+        "role": "An elevated family gallery with owner and family suite allocations, set back behind a substantial sky terrace.",
+        "relatesTo": "vertical-hinge"
+      },
+      {
+        "id": "arrival-court",
+        "mass": "arrival-plinth",
+        "level": "l0",
+        "use": "ceremonial covered-entry forecourt and arrival terrace",
+        "polygon": [
+          [
+            0,
+            -6
+          ],
+          [
+            12,
+            -6
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "height": 3.6,
+        "outdoor": true,
+        "roof": false,
+        "material": "limestone"
+      },
+      {
+        "id": "great-salon",
+        "mass": "social-belvedere",
+        "level": "l0",
+        "use": "ocean-view living, dining, bar, and principal entertaining salon",
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            12,
+            8
+          ],
+          [
+            0,
+            8
+          ]
+        ],
+        "height": 4.2,
+        "outdoor": false,
+        "roof": true,
+        "material": "ivory"
+      },
+      {
+        "id": "chef-kitchen",
+        "mass": "social-belvedere",
+        "level": "l0",
+        "use": "show kitchen, back-of-house preparation, and service pantry zone",
+        "polygon": [
+          [
+            -8,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            -8,
+            8
+          ]
+        ],
+        "height": 4.2,
+        "outdoor": false,
+        "roof": true,
+        "material": "sage"
+      },
+      {
+        "id": "guest-suite-1",
+        "mass": "guest-wing",
+        "level": "l0",
+        "use": "generous guest bedroom-suite allocation with a private vestibule zone",
+        "polygon": [
+          [
+            12,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            20,
+            8
+          ],
+          [
+            12,
+            8
+          ]
+        ],
+        "height": 4,
+        "outdoor": false,
+        "roof": true,
+        "material": "timber"
+      },
+      {
+        "id": "guest-suite-2",
+        "mass": "guest-wing",
+        "level": "l0",
+        "use": "generous guest bedroom-suite allocation",
+        "polygon": [
+          [
+            20,
+            0
+          ],
+          [
+            28,
+            0
+          ],
+          [
+            28,
+            8
+          ],
+          [
+            20,
+            8
+          ]
+        ],
+        "height": 4,
+        "outdoor": false,
+        "roof": true,
+        "material": "ivory"
+      }
+    ],
+    "programme": [
+      {
+        "id": "arrival-court",
+        "mass": "arrival-plinth",
+        "level": "l0",
+        "use": "ceremonial covered-entry forecourt and arrival terrace",
+        "outdoor": true,
+        "vertices": 4
+      },
+      {
+        "id": "great-salon",
+        "mass": "social-belvedere",
+        "level": "l0",
+        "use": "ocean-view living, dining, bar, and principal entertaining salon",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "chef-kitchen",
+        "mass": "social-belvedere",
+        "level": "l0",
+        "use": "show kitchen, back-of-house preparation, and service pantry zone",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "ocean-terrace",
+        "mass": "social-belvedere",
+        "level": "l0",
+        "use": "substantial waterfront entertaining terrace and future pool-deck interface",
+        "outdoor": true,
+        "vertices": 4
+      },
+      {
+        "id": "guest-suite-1",
+        "mass": "guest-wing",
+        "level": "l0",
+        "use": "generous guest bedroom-suite allocation with a private vestibule zone",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "guest-suite-2",
+        "mass": "guest-wing",
+        "level": "l0",
+        "use": "generous guest bedroom-suite allocation",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "guest-suite-3",
+        "mass": "guest-wing",
+        "level": "l0",
+        "use": "generous guest bedroom-suite allocation",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "lower-stair-court",
+        "mass": "vertical-hinge",
+        "level": "l0",
+        "use": "open-roof stair court and vertical circulation threshold",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "upper-stair-lantern",
+        "mass": "vertical-hinge",
+        "level": "l1",
+        "use": "roofed upper stair landing and private-pavilion threshold",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "upper-family-gallery",
+        "mass": "private-pavilion",
+        "level": "l1",
+        "use": "upper family lounge, library gallery, and private entertaining salon",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "sky-terrace",
+        "mass": "private-pavilion",
+        "level": "l1",
+        "use": "elevated ocean-view lounge terrace",
+        "outdoor": true,
+        "vertices": 4
+      },
+      {
+        "id": "primary-suite",
+        "mass": "private-pavilion",
+        "level": "l1",
+        "use": "owner bedroom-suite allocation with ocean-oriented private lounge zone",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "family-suite-5",
+        "mass": "private-pavilion",
+        "level": "l1",
+        "use": "family or VIP bedroom-suite allocation",
+        "outdoor": false,
+        "vertices": 4
+      },
+      {
+        "id": "family-suite-6",
+        "mass": "private-pavilion",
+        "level": "l1",
+        "use": "family or VIP bedroom-suite allocation",
+        "outdoor": false,
+        "vertices": 4
+      }
+    ],
+    "massRoles": [
+      {
+        "id": "arrival-plinth",
+        "role": "A low, processional limestone arrival court that establishes a memorable threshold from the landward side."
+      },
+      {
+        "id": "social-belvedere",
+        "role": "The principal double-aspect entertaining volume, opening from arrival through to the waterfront terrace."
+      },
+      {
+        "id": "guest-wing",
+        "role": "A long, quieter east wing containing three generous guest-suite allocations and their private internal threshold sequence."
+      },
+      {
+        "id": "vertical-hinge",
+        "role": "An open-roof lower stair court capped by an upper stair lantern, joining the social level to the private pavilion."
+      },
+      {
+        "id": "private-pavilion",
+        "role": "An elevated family gallery with owner and family suite allocations, set back behind a substantial sky terrace."
+      }
+    ],
+    "limitations": [
+      "The proposal is a supported semantic architectural study, not a verified US$25 million valuation, complete construction package, or claim of a finished premium residence.",
+      "The requested infinity pool is not represented: pool basins, hydraulic edges, water, equipment, and detailed pool-deck construction are outside the supported geometry. The ocean terrace reserves the appropriate waterfront social interface only.",
+      "Tropical planting, landscape design, terrain shaping, retaining, site grading, and a literal response to the gently sloping Saint Lucia site are omitted; all represented spaces use a common datum.",
+      "Only separate flat polygon roofs are represented. Pitched, sculptural, overhanging, and otherwise advanced roof forms are omitted.",
+      "Facade articulation beyond the selected material intent, including shading systems, screens, balustrades, guards, ordinary elevated-sill windows, exterior lighting, and detailed joinery, remains unresolved.",
+      "The six suite allocations establish architectural area and circulation intent only. Bathrooms, wardrobes, furniture, fixtures, kitchens, service rooms, acoustic separation, and all detailed interior fit-out remain unfinished.",
+      "Guest and family suite privacy is expressed through wing hierarchy and suite-threshold sequencing, but internal suite vestibules, bathrooms, and secondary private corridors require later detailed planning.",
+      "Structural design, foundations, hurricane and coastal-resilience design, MEP systems, drainage, code review, accessibility review, permits, and waterfront approvals are unresolved."
+    ]
+  },
+  "instructions": "Return one complete semantic proposal using the existing schema. Make only explicit architectural choices in editableIds; coordinate their entire dependency group. Preserve identities, concept, programme, mass roles, frame, access obligations and limitations. Offsets are metres from the host edge start. Do not infer normalized offsets, bridge gaps or invent intent. If the supported straight stair, full-edge topology or preserved programme prevents a valid design, return decision-required with a broader redesign request. No scene geometry is committed until the entire revised proposal compiles and passes sampled physical checks. Alternatives in findings are options, never selected repairs."
+}

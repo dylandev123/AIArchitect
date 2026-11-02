@@ -3,6 +3,7 @@ import type { HousePrimitive } from "../types";
 import { ROOF_OVERHANG } from "../constants";
 import type { ResolvedMaterial } from "../materials";
 import type { RoofShape } from "../architecture/profiles";
+import { withFascia } from "./fascia";
 
 /**
  * Ridge runs along the longer footprint axis; the roof slopes down across
@@ -108,5 +109,5 @@ export function buildGableRoof(
     );
   }
 
-  return primitives;
+  return withFascia(primitives, shape?.fascia);
 }

@@ -1,0 +1,87 @@
+{
+  "accepted": true,
+  "plannedDemandM2": null,
+  "occupiedFloorIds": [
+    "main-floor",
+    "west-wing-floor",
+    "east-wing-floor"
+  ],
+  "missingOrInvalidFloorIds": [],
+  "occupiedProjectionUnionM2": 228,
+  "occupiedProjectionBounds": {
+    "minX": -12,
+    "maxX": 12,
+    "minZ": -7,
+    "maxZ": 5,
+    "width": 24,
+    "depth": 12
+  },
+  "levels": [
+    {
+      "datum": 0.15,
+      "floorIds": [
+        "main-floor",
+        "west-wing-floor",
+        "east-wing-floor"
+      ],
+      "horizontalSurfaceUnionM2": 228
+    }
+  ],
+  "constructedReferencedHorizontalAreaM2": 228,
+  "editableElementIds": [
+    "main-floor",
+    "west-wing-floor",
+    "east-wing-floor",
+    "arrival-path",
+    "front-left-wall",
+    "front-entry-wall",
+    "front-door",
+    "front-right-wall",
+    "rear-left-wall",
+    "rear-garden-wall",
+    "garden-door",
+    "rear-right-wall",
+    "west-front-wall",
+    "west-rear-wall",
+    "west-side-north",
+    "west-side-middle",
+    "west-side-south",
+    "east-front-wall",
+    "east-rear-wall",
+    "east-side-north",
+    "east-side-south",
+    "main-roof",
+    "west-wing-roof",
+    "east-wing-roof",
+    "dining-terrace",
+    "dining-post-west-front",
+    "dining-post-east-front",
+    "dining-post-west-rear",
+    "dining-post-east-rear",
+    "dining-canopy",
+    "entry-post-west",
+    "entry-post-east",
+    "entry-canopy",
+    "family-pool",
+    "family-pool-floor",
+    "family-pool-water",
+    "family-pool-wall-z-minus",
+    "family-pool-wall-x-minus",
+    "family-pool-coping-z-minus",
+    "family-pool-coping-x-minus",
+    "family-pool-deck-x-minus",
+    "family-pool-wall-z-plus",
+    "family-pool-wall-x-plus",
+    "family-pool-coping-z-plus",
+    "family-pool-coping-x-plus",
+    "family-pool-deck-x-plus",
+    "family-pool-deck-far"
+  ],
+  "limitations": [
+    "Occupied classification comes from model references and requires inspection against all plates in geometry-ledger.json. Missing/unreferenced habitable floors must be reported separately.",
+    "Projection union is occupied slab footprint across levels, not site area, net enclosed floor area or roof/eave footprint.",
+    "Union removes overlaps within each 1 mm datum bucket; near-duplicate slabs at different heights need manual review. Slab datums do not certify storeys or usable stair connections.",
+    "Horizontal y-axis profiles use actual polygons with holes; other axes remain unverified.",
+    "Use the full programme/physical/relationship audits and rendered review for enclosure, six distinct suites, access, major spaces, infinity edge, landscaping and design. No area total establishes success."
+  ]
+}

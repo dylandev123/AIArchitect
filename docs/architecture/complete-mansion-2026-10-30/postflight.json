@@ -1,0 +1,528 @@
+{
+  "paidProviderCalls": 1,
+  "additionalPostflightProviderCalls": 0,
+  "exactSceneReplay": true,
+  "sceneSha256": "8d98aa7fbbe806b80700fd121c5407d04f77e3ac961fcba826fc739fcba90c01",
+  "providerStatus": "completed",
+  "finishReason": "stop",
+  "construction": {
+    "authored": 23,
+    "expanded": 84,
+    "surviving": 78,
+    "hardRelationshipFindings": 0,
+    "architecturalFindings": 38
+  },
+  "programme": {
+    "accepted": true,
+    "plannedDemandM2": 791,
+    "occupiedFloorIds": [
+      "suite-west",
+      "suite-east",
+      "main-living"
+    ],
+    "missingOrInvalidFloorIds": [],
+    "occupiedProjectionUnionM2": 776,
+    "occupiedProjectionBounds": {
+      "minX": -29,
+      "maxX": 29,
+      "minZ": -6,
+      "maxZ": 14,
+      "width": 58,
+      "depth": 20
+    },
+    "levels": [
+      {
+        "datum": 0.2,
+        "floorIds": [
+          "suite-west",
+          "suite-east",
+          "main-living"
+        ],
+        "horizontalSurfaceUnionM2": 776
+      }
+    ],
+    "constructedReferencedHorizontalAreaM2": 776,
+    "editableElementIds": [
+      "main-living",
+      "main-living-west",
+      "main-living-east",
+      "main-living-bay-0",
+      "main-living-glass-0",
+      "main-living-reveal-0",
+      "main-living-bay-1",
+      "main-living-glass-1",
+      "main-living-reveal-1",
+      "main-living-bay-2",
+      "main-living-glass-2",
+      "main-living-reveal-2",
+      "main-living-bay-3",
+      "main-living-glass-3",
+      "main-living-reveal-3",
+      "main-living-bay-4",
+      "main-living-glass-4",
+      "main-living-reveal-4",
+      "main-living-roof",
+      "suite-west",
+      "suite-west-west",
+      "suite-west-east",
+      "suite-west-bay-0",
+      "suite-west-glass-0",
+      "suite-west-reveal-0",
+      "suite-west-bay-1",
+      "suite-west-glass-1",
+      "suite-west-reveal-1",
+      "suite-west-bay-2",
+      "suite-west-glass-2",
+      "suite-west-reveal-2",
+      "suite-west-roof",
+      "suite-east",
+      "suite-east-west",
+      "suite-east-east",
+      "suite-east-bay-0",
+      "suite-east-glass-0",
+      "suite-east-reveal-0",
+      "suite-east-bay-1",
+      "suite-east-glass-1",
+      "suite-east-reveal-1",
+      "suite-east-bay-2",
+      "suite-east-glass-2",
+      "suite-east-reveal-2",
+      "suite-east-roof",
+      "main-rear-garden",
+      "main-rear-garden-panel",
+      "main-living-rear-left",
+      "main-living-rear-right",
+      "suite-west-rear-view",
+      "suite-west-rear-view-panel",
+      "suite-east-rear-view",
+      "suite-east-rear-view-panel",
+      "pool-terrace",
+      "infinity-pool",
+      "infinity-pool-floor",
+      "infinity-pool-water",
+      "infinity-pool-wall-z-minus",
+      "infinity-pool-wall-x-minus",
+      "infinity-pool-coping-z-minus",
+      "infinity-pool-coping-x-minus",
+      "infinity-pool-deck-x-minus",
+      "infinity-pool-wall-z-plus",
+      "infinity-pool-wall-x-plus",
+      "infinity-pool-coping-z-plus",
+      "infinity-pool-coping-x-plus",
+      "infinity-pool-deck-x-plus",
+      "infinity-pool-deck-far",
+      "canopy-post-west-front",
+      "canopy-post-east-front",
+      "canopy-post-west-rear",
+      "canopy-post-east-rear",
+      "pool-terrace-canopy",
+      "arrival-drive",
+      "arrival-bed-west",
+      "arrival-bed-east",
+      "pool-bed-west",
+      "pool-bed-east"
+    ],
+    "limitations": [
+      "Occupied classification comes from model references and requires inspection against all plates in geometry-ledger.json. Missing/unreferenced habitable floors must be reported separately.",
+      "Projection union is occupied slab footprint across levels, not site area, net enclosed floor area or roof/eave footprint.",
+      "Union removes overlaps within each 1 mm datum bucket; near-duplicate slabs at different heights need manual review. Slab datums do not certify storeys or usable stair connections.",
+      "Horizontal y-axis profiles use actual polygons with holes; other axes remain unverified.",
+      "Use the full programme/physical/relationship audits and rendered review for enclosure, six distinct suites, access, major spaces, infinity edge, landscaping and design. No area total establishes success."
+    ]
+  },
+  "inspectedFloorClassification": {
+    "occupied": [
+      "main-living",
+      "suite-west",
+      "suite-east"
+    ],
+    "allPlates": [
+      {
+        "id": "main-living",
+        "size": [
+          28,
+          0.2,
+          14
+        ],
+        "world": [
+          0,
+          0.1,
+          7,
+          0
+        ]
+      },
+      {
+        "id": "suite-west",
+        "size": [
+          12,
+          0.2,
+          16
+        ],
+        "world": [
+          -23,
+          0.1,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "suite-east",
+        "size": [
+          12,
+          0.2,
+          16
+        ],
+        "world": [
+          23,
+          0.1,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "pool-terrace",
+        "semanticType": "terrace",
+        "size": [
+          28,
+          0.2,
+          2.35
+        ],
+        "world": [
+          0,
+          0.1,
+          -1.175,
+          0
+        ]
+      },
+      {
+        "id": "infinity-pool",
+        "size": [
+          14.2,
+          0.3,
+          1.5
+        ],
+        "world": [
+          0,
+          0.05,
+          -3.1,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-floor",
+        "size": [
+          11.4,
+          0.2,
+          15.4
+        ],
+        "world": [
+          -0.0000031003713492435712,
+          -1.55,
+          -12.049999999999462,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-coping-z-minus",
+        "size": [
+          12.2,
+          0.1,
+          0.7
+        ],
+        "world": [
+          -3.810512272813327e-7,
+          0.15000000000000002,
+          -4.199999999999934,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-coping-x-minus",
+        "size": [
+          0.6,
+          0.1,
+          15
+        ],
+        "world": [
+          5.799996899628304,
+          0.15000000000000002,
+          -12.050002009178662,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-deck-x-minus",
+        "size": [
+          1,
+          0.3,
+          16.4
+        ],
+        "world": [
+          6.599996899628255,
+          0.05,
+          -12.050002286306826,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-coping-z-plus",
+        "size": [
+          12.2,
+          0.1,
+          0.7
+        ],
+        "world": [
+          -0.000005819691471205809,
+          0.15000000000000002,
+          -19.899999999998993,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-coping-x-plus",
+        "size": [
+          0.6,
+          0.1,
+          15
+        ],
+        "world": [
+          -5.8000031003710015,
+          0.15000000000000002,
+          -12.049997990820264,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-deck-x-plus",
+        "size": [
+          1,
+          0.3,
+          16.4
+        ],
+        "world": [
+          -6.600003100370953,
+          0.05,
+          -12.049997713692099,
+          3.141593
+        ]
+      },
+      {
+        "id": "infinity-pool-deck-far",
+        "size": [
+          14.2,
+          0.3,
+          1.5
+        ],
+        "world": [
+          -0.0000062007426984871425,
+          0.05,
+          -20.999999999998927,
+          3.141593
+        ]
+      },
+      {
+        "id": "arrival-drive",
+        "semanticType": "driveway",
+        "size": [
+          6.5,
+          0.2,
+          10
+        ],
+        "world": [
+          0,
+          0.1,
+          19,
+          0
+        ]
+      },
+      {
+        "id": "arrival-bed-west",
+        "semanticType": "planting-bed",
+        "size": [
+          3.5,
+          0.08,
+          10
+        ],
+        "world": [
+          -6,
+          0.04,
+          19,
+          0
+        ]
+      },
+      {
+        "id": "arrival-bed-east",
+        "semanticType": "planting-bed",
+        "size": [
+          3.5,
+          0.08,
+          10
+        ],
+        "world": [
+          6,
+          0.04,
+          19,
+          0
+        ]
+      },
+      {
+        "id": "pool-bed-west",
+        "semanticType": "planting-bed",
+        "size": [
+          3,
+          0.08,
+          15
+        ],
+        "world": [
+          -10,
+          0.04,
+          -12,
+          0
+        ]
+      },
+      {
+        "id": "pool-bed-east",
+        "semanticType": "planting-bed",
+        "size": [
+          3,
+          0.08,
+          15
+        ],
+        "world": [
+          10,
+          0.04,
+          -12,
+          0
+        ]
+      }
+    ],
+    "note": "All remaining plates are terrace, pool basin/coping/deck, drive or planting bed. No omitted upper occupied floor was found."
+  },
+  "coordination": {
+    "occupiedLevels": 1,
+    "occupiedSlabTop": 0.2,
+    "mainSlabSize": [
+      28,
+      0.2,
+      14
+    ],
+    "privateSlabSizes": [
+      {
+        "id": "suite-west",
+        "size": [
+          12,
+          0.2,
+          16
+        ],
+        "world": [
+          -23,
+          0.1,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "suite-east",
+        "size": [
+          12,
+          0.2,
+          16
+        ],
+        "world": [
+          23,
+          0.1,
+          2,
+          0
+        ]
+      }
+    ],
+    "slabPlanGaps": 3,
+    "roofEavePlanGaps": 0.7,
+    "privateDoors": [
+      {
+        "id": "suite-west-glass-1",
+        "world": [
+          -23,
+          1.7750000000000001,
+          9.85,
+          0
+        ],
+        "sill": 0.20000000000000018
+      },
+      {
+        "id": "suite-east-glass-1",
+        "world": [
+          23,
+          1.7750000000000001,
+          9.85,
+          0
+        ],
+        "sill": 0.20000000000000018
+      }
+    ],
+    "privateRouteNote": "Suite doors exist in fitted front bays. No authored slab links or covered shared arrival court connects either side pavilion to the main pavilion or central drive. This does not claim walking across lawn is impossible.",
+    "terraceM2": 65.8,
+    "canopyPlanM2": 33.6,
+    "terraceToNearDeckGapM": 0,
+    "poolWater": {
+      "size": [
+        11,
+        0.02,
+        15
+      ],
+      "world": [
+        -0.0000031003713492435712,
+        0.1,
+        -12.049999999999462,
+        3.141593
+      ],
+      "areaM2": 165
+    },
+    "poolFarWallTop": 0.20000000000000007,
+    "poolWaterTop": 0.1,
+    "landscapeBedM2": 160,
+    "landscapeNote": "Four flat sage plates, no planted/tree volumes.",
+    "centralRearWallWidth": 28,
+    "centralRearDoorOpeningWidth": 5.2,
+    "centralRearOpaqueWidth": 22.8
+  },
+  "comparison": [
+    {
+      "name": "25m-rejected-estate",
+      "path": "docs/architecture/terra-controlled-estate-2026-10-29/draft.REJECTED.json",
+      "retainedGrossFloorM2": 510,
+      "occupiedBounds": {
+        "width": 38.72059843420891,
+        "depth": 23.33857409942164
+      },
+      "occupiedDatums": [
+        0.2
+      ],
+      "areaDifferenceCurrentM2": 266,
+      "areaDifferencePercent": 52.15686274509803,
+      "measurementCaveat": "Historical totals are retained gross rectangular floor sums; current 776 m² is a unique union of three disjoint rectangular occupied slabs. None is certified net enclosed area."
+    },
+    {
+      "name": "massive-waterfront",
+      "path": "docs/architecture/architectural-bottleneck/latest.RETAINED.json",
+      "retainedGrossFloorM2": 952,
+      "occupiedBounds": {
+        "width": 58.00000692820329,
+        "depth": 20.000004849741693
+      },
+      "occupiedDatums": [
+        0.2
+      ],
+      "areaDifferenceCurrentM2": -176,
+      "areaDifferencePercent": -18.487394957983195,
+      "measurementCaveat": "Historical totals are retained gross rectangular floor sums; current 776 m² is a unique union of three disjoint rectangular occupied slabs. None is certified net enclosed area."
+    }
+  ],
+  "firstDemonstratedLoss": "Architectural plan chooses a 776 m² single-level campus: one central pavilion and two identical subordinate suite pavilions, explicitly reserving rooms rather than constructing six suites and avoiding upper-level access. Authored first three operations select that composition through residential-wing assemblies. Exact replay shows no later massing loss. Numeric demand itself sums to 791 m², exceeding the plan and actual slabs by 15 m².",
+  "limitations": [
+    "No single-storey prohibition applies; the concern is repetitive massing, unconnected pavilions and undeveloped facades, not storey count alone.",
+    "15 m² demand discrepancy is 1.90% and is not by itself the reason for the unsuccessful luxury-design verdict.",
+    "Existing planted-volume semantic capabilities exist; this output did not use them. Model statements that planting geometry is unsupported are not established capability facts.",
+    "True pool hydraulics/engineering and accurate sloping/coastal terrain remain outside this experiment."
+  ]
+}

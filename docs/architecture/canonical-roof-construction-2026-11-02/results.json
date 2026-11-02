@@ -1,0 +1,551 @@
+{
+  "note": "Offline. No provider, network, credential, database or commit. Retained Terra files read only. Nothing in the plan was changed.",
+  "previousRule": {
+    "findings": 52,
+    "roofRoof": 27,
+    "roofVolume": 24,
+    "partlyCoveredPitched": 1,
+    "reproducesRetained52": true
+  },
+  "physicalClasses": {
+    "bounding box only: no roof part touches the other": 22,
+    "fascia board only (slopes and gable ends clear)": 26,
+    "rooms overlap (not a roof fault)": 2,
+    "roof surface penetrates": 1
+  },
+  "distinctNeighbourRelationships": 32,
+  "distinctPitchedRoofsInvolved": 9,
+  "pitchedRoofsInPlan": 9,
+  "builderFacts": {
+    "fasciaThicknessM": 0.1,
+    "fasciaDropM": 0.28,
+    "boardsPerForm": {
+      "hip": 4,
+      "gable": 2
+    },
+    "gableEndsCarryBoard": false,
+    "overhangInRetainedPlan": [
+      0
+    ]
+  },
+  "realSurfaceEvents": [
+    {
+      "pair": "east-suite-3/owner-suite",
+      "hits": [
+        {
+          "a": "hip-north",
+          "b": "volume:owner-suite",
+          "depth": 0.348
+        },
+        {
+          "a": "hip-north",
+          "b": "volume:owner-suite",
+          "depth": 0.323
+        },
+        {
+          "a": "hip-south",
+          "b": "volume:owner-suite",
+          "depth": 0.323
+        }
+      ]
+    }
+  ],
+  "classified": [
+    {
+      "kind": "roof-roof",
+      "pair": "arrival-cloakroom/west-suite-3",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "living-salon/sunset-lounge",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "living-salon/east-suite-1",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "living-salon/west-suite-1",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "dining-room/west-suite-1",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "sunset-lounge/media-lounge",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~flat-slab:0.1"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "sunset-lounge/east-suite-1",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~hip-north:0.099",
+        "fascia-s~hip-east:0.071",
+        "fascia-w~fascia-n:0.08"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "media-lounge/east-suite-1",
+      "class": "rooms overlap (not a roof fault)",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-private-hall/east-suite-1",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-private-hall/west-suite-1",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-private-hall/west-suite-3",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-1/east-suite-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-1/east-bath-1",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-e~flat-slab:0.1"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-1/east-bath-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-2/east-suite-3",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-3/east-bath-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "east-suite-3/east-bath-3",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-e~flat-slab:0.1"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-1/west-suite-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-1/west-bath-1",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~flat-slab:0.1"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-1/west-bath-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-2/west-suite-3",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-3/west-bath-2",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "west-suite-3/west-bath-3",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~flat-slab:0.1"
+      ]
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "upper-landing/upper-west-suite",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "upper-landing/upper-east-suite",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "owner-suite/upper-west-suite",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-roof",
+      "pair": "owner-suite/upper-east-suite",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "sunset-lounge/living-salon",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~volume:living-salon:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "sunset-lounge/media-lounge",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~volume:media-lounge:0.08"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "sunset-lounge/east-suite-1",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~volume:east-suite-1:0.08"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-1/living-salon",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:living-salon:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-1/sunset-lounge",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:sunset-lounge:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-1/media-lounge",
+      "class": "rooms overlap (not a roof fault)",
+      "hits": []
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-1/east-private-hall",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~volume:east-private-hall:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-1/east-suite-2",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~volume:east-suite-2:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/stair-hall",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~volume:stair-hall:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/east-private-hall",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~volume:east-private-hall:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/east-suite-2",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:east-suite-2:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/upper-landing",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/owner-suite",
+      "class": "roof surface penetrates",
+      "hits": [
+        "hip-north~volume:owner-suite:0.348",
+        "hip-north~volume:owner-suite:0.323",
+        "hip-south~volume:owner-suite:0.323",
+        "hip-south~volume:owner-suite:0.348",
+        "hip-west~volume:owner-suite:0.35"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "east-suite-3/upper-east-suite",
+      "class": "bounding box only: no roof part touches the other",
+      "hits": []
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-1/living-salon",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:living-salon:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-1/dining-room",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:dining-room:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-1/west-private-hall",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-e~volume:west-private-hall:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-1/west-suite-2",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-s~volume:west-suite-2:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-3/west-private-hall",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-e~volume:west-private-hall:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "west-suite-3/west-suite-2",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:west-suite-2:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "upper-west-suite/upper-landing",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-e~volume:upper-landing:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "upper-west-suite/owner-suite",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:owner-suite:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "upper-east-suite/upper-landing",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-w~volume:upper-landing:0.1"
+      ]
+    },
+    {
+      "kind": "roof-volume",
+      "pair": "upper-east-suite/owner-suite",
+      "class": "fascia board only (slopes and gable ends clear)",
+      "hits": [
+        "fascia-n~volume:owner-suite:0.1"
+      ]
+    }
+  ],
+  "afterFix": {
+    "findings": [
+      {
+        "id": "east-suite-3",
+        "message": "hip roof over a partly covered space needs a lean-to or valley junction."
+      },
+      {
+        "id": "media-lounge/east-suite-1",
+        "message": "roof bounds intersect by 8×6 m at the same height (overhangs 0 and 0 m): select separated roof sections."
+      },
+      {
+        "id": "east-suite-3/owner-suite",
+        "message": "roof of east-suite-3 (0 m overhang) projects 6×6 m into the taller volume of owner-suite."
+      }
+    ],
+    "totalErrors": 36,
+    "samePlanSameLevelPenetrationsWithExposedBoardsOnly": 0,
+    "penetrationsAcrossLevels": [
+      "east-suite-3/owner-suite: hip-north~volume:owner-suite 0.348 m",
+      "east-suite-3/owner-suite: hip-north~volume:owner-suite 0.323 m",
+      "east-suite-3/owner-suite: hip-south~volume:owner-suite 0.323 m",
+      "east-suite-3/owner-suite: hip-south~volume:owner-suite 0.348 m",
+      "east-suite-3/owner-suite: hip-west~volume:owner-suite 0.35 m"
+    ]
+  },
+  "decisions": [
+    {
+      "kind": "wall",
+      "title": "east wall of east-suite-2 (shared with east-bath-2)",
+      "findings": 5
+    },
+    {
+      "kind": "wall",
+      "title": "east wall of east-suite-3 (shared with east-bath-3)",
+      "findings": 5
+    },
+    {
+      "kind": "wall",
+      "title": "west wall of west-suite-2 (shared with west-bath-2)",
+      "findings": 5
+    },
+    {
+      "kind": "wall",
+      "title": "west wall of west-suite-3 (shared with west-bath-3)",
+      "findings": 5
+    },
+    {
+      "kind": "circulation",
+      "title": "owner-suite, upper-west-suite, upper-east-suite are not connected to upper-landing",
+      "findings": 3
+    },
+    {
+      "kind": "arrangement",
+      "title": "Independently placed rooms meet: media-lounge/east-suite-1, media-lounge/east-suite-1",
+      "findings": 2
+    },
+    {
+      "kind": "pitched-roof",
+      "title": "Pitched roof on east-suite-3",
+      "findings": 2
+    },
+    {
+      "kind": "wall",
+      "title": "west wall of dining-room (shared with kitchen)",
+      "findings": 2
+    },
+    {
+      "kind": "wall",
+      "title": "east wall of entry-hall (shared with stair-hall)",
+      "findings": 2
+    },
+    {
+      "kind": "site",
+      "title": "Site allocation: east-arrival-bed-reserve",
+      "findings": 1
+    },
+    {
+      "kind": "wall",
+      "title": "west wall of central-gallery (shared with west-private-hall)",
+      "findings": 1
+    },
+    {
+      "kind": "wall",
+      "title": "north wall of east-suite-1 (shared with east-suite-2)",
+      "findings": 1
+    },
+    {
+      "kind": "wall",
+      "title": "east wall of media-lounge (shared with east-bath-1)",
+      "findings": 1
+    },
+    {
+      "kind": "wall",
+      "title": "north wall of west-suite-1 (shared with west-suite-2)",
+      "findings": 1
+    }
+  ],
+  "decisionCount": 14,
+  "errorCount": 36,
+  "decisionsByKind": {
+    "wall": {
+      "decisions": 10,
+      "findings": 28
+    },
+    "circulation": {
+      "decisions": 1,
+      "findings": 3
+    },
+    "arrangement": {
+      "decisions": 1,
+      "findings": 2
+    },
+    "pitched-roof": {
+      "decisions": 1,
+      "findings": 2
+    },
+    "site": {
+      "decisions": 1,
+      "findings": 1
+    }
+  },
+  "windowsOnSharedWalls": {
+    "derivableWithExposed": 4,
+    "impossibleOnAnyWall": 6
+  },
+  "unreachableRooms": [
+    "owner-suite",
+    "upper-west-suite",
+    "upper-east-suite"
+  ]
+}

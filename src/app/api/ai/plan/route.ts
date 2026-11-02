@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { legacyHouseAuthoringEnabled } from '@/lib/villa/canonical/authority';
 import { planResponseEvidence, retainPlanResponse, type PlanResponseEvidence } from '@/lib/ai/planResponseArtifact';
 import { generateText, Output, NoObjectGeneratedError } from 'ai';
 import { classifyPlanFailure, retainPlanFailure, type PlanFailure, type PlanFailurePhase } from '@/lib/ai/planFailure';
@@ -23,12 +24,13 @@ export async function POST(req:NextRequest) {
   let body;
   try{body=await req.json();}catch{return NextResponse.json({error:'Invalid request body.'},{status:400});}
   if(!body||!['design','elaborate'].includes(body.action)||(body.prompt!==undefined&&(typeof body.prompt!=='string'||body.prompt.length>12000))||(body.action==='design'&&!body.prompt?.trim())||typeof body.currentHouseJson!=='string')return NextResponse.json({error:'A valid action, design brief and current project are required.'},{status:400});
+  if(body.action==='design'&&!legacyHouseAuthoringEnabled())return NextResponse.json({error:'New house design uses /api/ai/scene in the direct-scene workspace.',code:'canonical_generation_required',providerCalls:0},{status:409});
   const baseRevision=revisionOf(body.currentHouseJson);
   if(body.baseRevision!==baseRevision)return NextResponse.json({error:'The project revision changed; use the current saved plan.'},{status:409});
   let root;
   try{root=JSON.parse(body.currentHouseJson);}catch{return NextResponse.json({error:'Invalid project JSON.'},{status:400});}
   if(!isV3ProjectRoot(root)||root.v3Scene.metadata.terrainMode==='advanced'|| (root.v3Scene.site.naturalGround&&((root.v3Scene.site.naturalGround.grade??0)!==0||root.v3Scene.site.naturalGround.cliff)))return NextResponse.json({error:'Evaluation requires a flat V3 project.'},{status:409});
-  const design=body.action==='design';
+  const design=String(body.action)==='design';
   const request=body.prompt?.trim()||DEFAULT_PLAN_EXTERIOR_REQUEST;
   if(design&&!isBlankSite(body.currentHouseJson))return NextResponse.json({error:'Design 2D Plan requires a new blank project; existing designs are preserved.'},{status:409});
   if(!design&&!isV3PlanEvaluation(root.v3Scene))return NextResponse.json({error:'Build in 3D requires a saved 2D evaluation plan.'},{status:409});

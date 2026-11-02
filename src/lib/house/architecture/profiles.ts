@@ -25,7 +25,10 @@ export interface RoofShape {
   overhang: number;
   /** Overhang at gable ends (m). */
   rakeOverhang: number;
+  /** Eave edges that carry a fascia board (builder-local compass, north = -z). Omitted: every edge the form has one on. */
+  fascia?: readonly FasciaEdge[];
 }
+export type FasciaEdge = "north" | "east" | "south" | "west";
 
 export interface ArchitectureProfile {
   key: StyleKey;

@@ -1,0 +1,38 @@
+{
+  "status": "PREPARED ONLY; no execution authorized",
+  "baselineModel": "gpt-5.6-terra",
+  "alternativeModel": "gpt-5.6-sol",
+  "changedRequestFields": [
+    "model"
+  ],
+  "reasoning": "omitted in both: provider default; official documentation states medium for GPT-5.6",
+  "max_output_tokens": 30000,
+  "callsPlanned": 1,
+  "constructionCalls": 0,
+  "retries": 0,
+  "criteria": [
+    "distinctive-massing",
+    "volume-hierarchy",
+    "six-individual-suites",
+    "circulation-and-arrival",
+    "waterfront-and-outdoor-relationships",
+    "construction-precision",
+    "estate-ambition"
+  ],
+  "baselineFilesSHA256": {
+    "design.provider-request.exact.json": "96e7fc328d215b31aec7e71883d20951e8accab07ac82748bcbe79820bfe1731",
+    "design.provider-response.exact.json": "445e8de9e96e0b16b41102a2fc88b52d9832b937033c72e0a8339479bfff05b1",
+    "proposal.provider-output.exact.txt": "dac53f65fd7f38c6fc5a84f039e57714710cf55e3f3960e35ec8258ce15b9e8b",
+    "proposal.REJECTED.json": "5d4b28992eb605d38f6ca94b66306f4b85fde06f2983e84aa5ea4a16695707fb",
+    "checkpoint.assessment.offline.json": "adf9a85937d0194b83df9ec3aaca82362166072c094cfc2f45de3e8763343ca4",
+    "offline-investigation.json": "c6cdfd95191231b45ab91d02d66b92e83fe39403ff02b8962a25d7c3ece22369"
+  },
+  "alternativeRequestSHA256": "96e9437e276cf223a34ffe9f834d37750862fcf97bf9b4c299a8840fb5f7b0ea",
+  "evaluation": "Retain complete raw response even if semantic validation fails. Evaluate all seven criteria on exact output. No repair, feedback, reroll or construction. Compare architecture separately from numeric contract errors.",
+  "limitations": [
+    "One sample cannot establish reliability.",
+    "Frozen original schema deliberately excludes audit corrections to isolate model change.",
+    "128 reported baseline reasoning tokens do not expose hidden reasoning or prove its cause.",
+    "API model availability is not verified by a paid request."
+  ]
+}

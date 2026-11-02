@@ -32,7 +32,7 @@ it('finds identical world-space parts across parent frames without mutating the 
 });
 it('keeps numeric design and four-view checks in Generate without expanding targeted edits',()=>{
  const generation=sceneSystemPrompt({mode:'generate',prompt:'A compact modern house on a narrow lot'});
- for(const text of ['slab TOP datums','ELEVATIONS BEFORE ORNAMENT','FINAL FOUR-VIEW SELF-CHECK','No editable planting/tree kind','400 elements'])expect(generation).toContain(text);
+ for(const text of ['slab TOP datums','ELEVATIONS BEFORE ORNAMENT','FINAL FOUR-VIEW SELF-CHECK','Editable volume/profile parts can represent planting masses and trees','400 elements'])expect(generation).toContain(text);
  const {scene}=exteriorStudy(false);
  expect(sceneSystemPrompt({mode:'edit',prompt:'Make the roof timber',current:scene})).not.toContain('FINAL FOUR-VIEW SELF-CHECK');
 });

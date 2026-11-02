@@ -1,3 +1,5 @@
+// Retired direct-scene operations author: the planning stage is isolated here (route.designFirst.test.ts covers both stages).
+vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
 import { readFileSync } from 'node:fs';
 import { beforeEach, expect, it, vi } from 'vitest';
 const captured=vi.hoisted(()=>({generate:vi.fn(),retained:[] as string[]}));
@@ -23,7 +25,7 @@ it('sends concept, scale, approved knowledge and capabilities through the real h
   captured.generate.mockResolvedValue({output:retained.output,text:JSON.stringify(retained.output),finishReason:'stop'});
   const input=generationSceneRequest('Property value $25m, construction budget $5m. Tropical waterfront estate.');
   const response=await POST(new Request('http://localhost/api/ai/scene',{method:'POST',body:JSON.stringify(input)}));
-  expect(response.status).toBe(200);
+  const text=await response.clone().text();expect(response.status,text.slice(0,600)).toBe(200);
   const system=captured.generate.mock.calls[0][0].system;
   expect(system).toContain('Neither assemblies, stored recipes nor previous projects prescribe these choices');
   expect(system).toContain('Record the selected design and its constructed relationships');

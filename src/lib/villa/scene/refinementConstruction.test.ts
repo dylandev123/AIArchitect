@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {expect,it} from 'vitest';
 import {elementSchema,validateScene,type ArchitecturalScene} from './model';
 import {generationQualityFindings} from './generationQuality';
-import {architecturalReferenceDependencies,refinementConstructionContext} from './visualEvidence';
+import {architecturalReferenceDependencies,refinementConstructionContext,sceneVisualEvidence} from './visualEvidence';
 import {generationReviewProviderSchema,generationReviewSchema} from './generationReview';
 
 it.each([0,.73,Math.PI/2])('finds independent nested flat-roof penetration at yaw %s, allows touching and separation',rotation=>{
@@ -34,5 +34,20 @@ it('requires an architectural selection explanation for newly requested reviews,
  expect(generationReviewSchema.safeParse(review).success).toBe(true);
  const provider=generationReviewProviderSchema;
  expect(provider.safeParse(review).success).toBe(false);
- expect(provider.safeParse({...review,selectionReason:'A local rear facade change leaves the major roof hierarchy unresolved; a coordinated roof revision needs broader dependencies.'}).success).toBe(true);
+ expect(provider.safeParse({...review, stop:null, refinement:null, selectionReason:'A local rear facade change leaves the major roof hierarchy unresolved; a coordinated roof revision needs broader dependencies.'}).success).toBe(true);
+});
+
+it('shows authored openings, roof forms and transformed datums before intervention selection',()=>{
+ const elements=[
+  elementSchema.parse({id:'frame',kind:'plate',label:'Frame',at:[12,2,8],size:[1,.1,1],rotation:.7}),
+  elementSchema.parse({id:'roof',kind:'roof',label:'Roof',parent:'frame',at:[0,3,0],size:[8,2,6],roofForm:'gable',overhang:.4,material:'timber'}),
+  elementSchema.parse({id:'wall',kind:'wall',label:'Passage',parent:'frame',at:[0,1.5,2],size:[4,3,.2],opening:{x:0,width:1,height:2.2,sill:0,glazed:false}}),
+ ];
+ const scene=validateScene({version:'architectural-scene-1',name:'Selection evidence',elements});
+ const bytes=JSON.stringify(scene),evidence=sceneVisualEvidence(scene);
+ for(const element of elements) expect(evidence.constructed.find(e=>e.id===element.id)).toMatchObject(element);
+ expect(evidence.constructed.find(e=>e.id==='roof')?.world[1]).toBe(5);
+ expect(evidence.constructed.find(e=>e.id==='wall')?.renderedBottom).toBeCloseTo(2);
+ expect(evidence.refinementContract).toContain('spatial/knowledge references remain protected');
+ expect(JSON.stringify(scene)).toBe(bytes);
 });

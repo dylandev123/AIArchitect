@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-30T16:11:57.825Z",
+  "pid": 2062,
+  "node": "v26.12.1",
+  "endpoint": "https://api.openai.com/v1/models",
+  "method": "GET",
+  "generationRequests": 0,
+  "retries": 0,
+  "credentialPresent": true,
+  "environment": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "NODE_USE_ENV_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "NODE_OPTIONS": false,
+    "OPENAI_BASE_URL": false
+  },
+  "dns": {
+    "ok": true,
+    "addresses": [
+      {
+        "address": "162.159.140.245",
+        "family": 4
+      },
+      {
+        "address": "172.66.0.243",
+        "family": 4
+      },
+      {
+        "address": "2606:4700:7::f3",
+        "family": 6
+      },
+      {
+        "address": "2a06:98c1:58::f3",
+        "family": 6
+      }
+    ]
+  },
+  "tls": [
+    {
+      "family": 4,
+      "ok": true,
+      "protocol": "TLSv1.3"
+    },
+    {
+      "family": 6,
+      "ok": false,
+      "causes": [
+        {
+          "name": "Error",
+          "code": "EHOSTUNREACH"
+        }
+      ]
+    }
+  ],
+  "http": {
+    "status": 200,
+    "requestId": "80f5a29d-80ed-497e-896f-b1a6b71f8d3d"
+  },
+  "ok": false,
+  "providerEndpoint": {
+    "method": "GET",
+    "status": 401,
+    "requestId": "req_8fb739143f1a421e9c3bdcef1a2e99a4",
+    "code": "missing_scope",
+    "type": "invalid_request_error"
+  },
+  "failureClass": "unexpected-provider-endpoint-status"
+}

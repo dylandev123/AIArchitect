@@ -1,3 +1,6 @@
+import { designProposalSchema, reviewDesignFidelity } from './designProposal';
+import { physicalProgrammeSchema, reviewPhysicalProgramme } from './physicalProgramme';
+import { evidenceRevisionHistorySchema } from './evidenceRevision';
 import { programmeSchema, reviewProgramme } from './programme';
 import { generationQualityFindings } from './generationQuality';
 import { focusedConstructionFindings } from './focusedConstruction';
@@ -9,6 +12,7 @@ const text = z.string().min(1).max(1200);
 export const constructionScopeSchema = z.enum(['exterior', 'interior-inclusive']);
 const refs = z.array(z.string().min(1));
 export const architecturalPlanSchema = z.object({
+    designProposal: designProposalSchema.optional(),
     constructionScope: constructionScopeSchema.optional(),
     scaleRationale: text.describe('Explain scale in relation to budget, brief and site; justify an unusually compact luxury residence.'),
     levels: z.number().int().positive(),
@@ -34,7 +38,7 @@ export const designDecisionSchema = z.object({
     knowledgeId: z.string().min(1).max(80), decision: z.string().min(1).max(300),
     elementIds: z.array(z.string().min(1).max(120)).max(12), limitation: z.string().max(300),
 }).strict();
-export const architecturalIntentSchema = architecturalPlanSchema.pick({scaleRationale:true,arrivalAndCirculation:true,volumeHierarchy:true,relationshipsAndViews:true,roofFacadeAndMaterials:true}).extend({constructionScope:constructionScopeSchema.optional(),intendedSpaces:z.array(text).min(1),programme:programmeSchema.describe('Return for every new Generate: selected accommodation mapped to final construction IDs; omit only for legacy compatibility.').optional(),spatialRelationships:z.array(spatialRelationshipSchema).max(40).optional(),designDecisions:z.array(designDecisionSchema).max(12).optional()}).strict();
+export const architecturalIntentSchema = architecturalPlanSchema.pick({scaleRationale:true,arrivalAndCirculation:true,volumeHierarchy:true,relationshipsAndViews:true,roofFacadeAndMaterials:true}).extend({designProposal:designProposalSchema.optional(),physicalProgramme:physicalProgrammeSchema.optional(),constructionScope:constructionScopeSchema.optional(),intendedSpaces:z.array(text).min(1),programme:programmeSchema.describe('Return for every new Generate: selected accommodation mapped to final construction IDs; omit only for legacy compatibility.').optional(),spatialRelationships:z.array(spatialRelationshipSchema).max(40).optional(),designDecisions:z.array(designDecisionSchema).max(12).optional()}).strict();
 export const providerArchitecturalPlanSchema = z.union([architecturalIntentSchema,architecturalPlanSchema]);
 export type ArchitecturalPlan = z.infer<typeof architecturalPlanSchema>;
 
@@ -134,13 +138,13 @@ export function auditArchitecturalPlan(scene: ArchitecturalScene, plan: Architec
         limitations:['Floor evidence estimates area; enclosure completeness, spatial quality and circulation usability require visual review.'] };
 }
 export const ARCHITECTURAL_PLANNING_INSTRUCTIONS = `
-DESIGN INTENT: Return architecturalPlan with five brief sentences: scaleRationale (requirements versus assumptions; price is context, not an area formula), arrivalAndCirculation (public/private/service and level access), volumeHierarchy (primary/secondary allocation and datums), relationshipsAndViews (arrival and indoor/outdoor links), roofFacadeAndMaterials (identity, roof proportions and facade depth). intendedSpaces contains names only. No fixed programme template.
+DESIGN INTENT: Return architecturalPlan with concise design reasoning (new Generate also requires numeric physicalProgramme): scaleRationale (requirements versus assumptions; price is context, not an area formula), arrivalAndCirculation (public/private/service and level access), volumeHierarchy (primary/secondary allocation and datums), relationshipsAndViews (arrival and indoor/outdoor links), roofFacadeAndMaterials (identity, roof proportions and facade depth). intendedSpaces contains names only. No fixed programme template.
 EXTERIOR FIRST: In Generate, constructionScope is exterior unless the user explicitly requests interior construction (then interior-inclusive). Follow Concept → Massing → Levels → Roofs → Façades → Entrances → Terraces and pool → Exterior detailing. Compose a developed main residence before satellites or small details. Keep style, geography/climate, terrain assumptions, site size, levels, bedroom count, privacy, views and outdoor requirements. Bedroom count drives footprint/wing/level capacity; it does not require individual room fit-out. Property value signals architectural ambition, not construction budget or a fixed area formula. Vary organization, proportions, roofs and facades with the brief.
-PROGRAMME: Return at most 24 grouped entries {name,zone,strategy,floorIds,enclosureIds,roofIds,accessIds,limitation}, matching intendedSpaces. For exterior scope allocate accommodation capacity to actual envelope floors/wings/levels; preserve exact user-required excerpts in requirement {origin,briefQuote} and purpose. State interior subdivision/fit-out deferred in limitation. Shared floors are capacity allocations, never verified distinct bedrooms. Do not construct individual bedrooms, bathroom partitions, kitchen cabinets, furniture or fixtures unless explicitly requested. construction {partitionIds,fitOutIds,bathroomNames,levelAccessIds} may be omitted for exterior scope. Preserve interior capabilities for requested work. Use surviving IDs including assembly children; empty evidence is unbuilt. Exterior entrances, envelope, roof coverage, supports and sensible level access remain construction obligations. Record critical spatialRelationships; disclose omissions.
+PROGRAMME: Return at most 24 grouped entries {name,zone,strategy,floorIds,enclosureIds,roofIds,accessIds,limitation}, matching intendedSpaces. For exterior scope allocate accommodation capacity to actual envelope floors/wings/levels; preserve exact user-required excerpts in requirement {origin,briefQuote} and purpose. Disclose deferred work; construct selected boundaries. Shared floors are capacity allocations, never verified distinct bedrooms. Construct selected accommodation boundaries/access. Defer unrequested bathroom/kitchen fit-out and furniture. construction {partitionIds,fitOutIds,bathroomNames,levelAccessIds} may be omitted for exterior scope. Preserve interior capabilities for requested work. Use surviving IDs including assembly children; empty evidence is unbuilt. Exterior entrances, envelope, roof coverage, supports and sensible level access remain construction obligations. Record critical spatialRelationships; disclose omissions.
 KNOWLEDGE: Up to twelve designDecisions {knowledgeId,decision,elementIds,limitation,disposition} cite final IDs and omissions. References remain evidence, never proof or automatic repairs.
 CONSTRUCTION: Complete the selected exterior in ONE response: the chosen massing and levels, coordinated roofs and developed elevations, fitted glazing, real entrances/thresholds and the requested outdoor relationships. Select materials and shading appropriate to the brief. Reserve plausible access to occupied levels and balcony doors, supports, landings and necessary slab/roof voids before details; unfinished interior fit-out never excuses an inaccessible upper level. An inaccessible upper residence is incomplete. Check door clearances on both sides. Complete selected pool bottom, perimeter, coping and dry access; disclose unsupported hydraulics. Detail every elevation, including arrival and rear walls. For interior-inclusive scope also construct explicitly requested partitions/fit-out and report unfinished interior work.
 COHERENT CONSTRUCTION: Coordinate datums/voids; no overlapping bedrooms or filled double-height air. Use non-overlapping slabs; terraces, roofs and water are not enclosed area. Shared boundaries need one wall. Align enclosure bases to slab tops and heads to roof undersides. A railing is not a deck; water and coping are not a basin.
-SHARED SPATIAL CONTRACT: Before details derive level datums from slab tops and occupied footprints from programme floors/enclosure. Check roofs against ALL levels: a complete lower roof can cross an upper suite. Explicitly split/replace it around occupied space. Reuse floor IDs for wings, zones and routes; operations alone own coordinates. Record critical spatialRelationships {subject,target,relation,clearance,reason} using construction IDs. Relations: adjacent-to (maximum gap), clear-of/set-back-from/above/below (minimum separation), connected-to, covering, inside, facing (local +Z toward target); otherwise clearance=0. Reserve open pool footprints before splitting terraces. Pavilion entrance faces +Z; connect a dry approach at its floor datum and allow 0.65 m roof/0.25 m floor extensions. Declare intentional roof coverage. Proximity and parentage do not prove access.
+SHARED SPATIAL CONTRACT: Before details derive level datums from slab tops and occupied footprints from programme floors/enclosure. Check roofs against ALL levels: a complete lower roof can cross an upper suite. Explicitly split/replace it around occupied space. Reuse floor IDs for wings, zones and routes; The selected proposal commits principal world geometry; operations implement it. Record critical spatialRelationships {subject,target,relation,clearance,reason} using construction IDs. Relations: adjacent-to (maximum gap), clear-of/set-back-from/above/below (minimum separation), connected-to, covering, inside, facing (local +Z toward target); otherwise clearance=0. Reserve open pool footprints before splitting terraces. Pavilion entrance faces +Z; connect a dry approach at its floor datum and allow 0.65 m roof/0.25 m floor extensions. Declare intentional roof coverage. Proximity and parentage do not prove access.
 
 COORDINATES: Element at is its centre, including parent-local attachments. For a wall opening the panel's local Y centre is -wallHeight/2 + sill + panelHeight/2. Do not reuse a sill value as the panel centre. Glazed wall openings already render glass; do not add duplicate glazing over them. Fit openings and glazing to actual enclosure. Design every exterior edge and roof return, not only the presentation facade.
 REVIEW: Complete omissions or disclose in unsupported. Prose proves no construction; all geometry gates remain strict.
@@ -150,14 +154,15 @@ REVIEW: Complete omissions or disclose in unsupported. Prose proves no construct
 /** Scene-derived inventory. Plan references never change kinds or manufacture parts.
  * Totals describe modelled surfaces, not certified enclosed/net residential area. */
 export function reviewSceneArchitecture(scene: ArchitecturalScene) {
-    const parsed = architecturalPlanSchema.safeParse(scene.architecturalPlan);
+    const parsed = architecturalPlanSchema.extend({evidenceRevisions:evidenceRevisionHistorySchema.optional()}).safeParse(scene.architecturalPlan);
     const plan = parsed.success ? parsed.data : undefined;
-    const intent = architecturalIntentSchema.safeParse(scene.architecturalPlan);
+    const intent = architecturalIntentSchema.extend({evidenceRevisions:evidenceRevisionHistorySchema.optional()}).safeParse(scene.architecturalPlan);
     const original = plan ? auditArchitecturalPlan(scene, plan) : undefined;
     const programme = reviewProgramme(scene);
+    const physicalProgramme = reviewPhysicalProgramme(scene);
     const constructionScope = (plan ?? (intent.success ? intent.data : undefined))?.constructionScope;
     const designStage = constructionScope === 'exterior' ? 'Exterior-designed, interiors unfinished' : constructionScope === 'interior-inclusive' ? 'Interior-inclusive design; completeness unverified' : 'Historical design scope unrecorded';
-    const issues = [...(original?.issues ?? []), ...programme.issues];
+    const issues = [...(original?.issues ?? []), ...physicalProgramme.issues, ...programme.issues];
     if(scene.elements.some(e=>e.geometry)) issues.push('Profile geometry: full roof coverage, occupied-volume clearance, circulation/headroom and railing support require review of actual surfaces; rectangular evidence does not certify these relationships.');
     const map = new Map(scene.elements.map(e => [e.id,e]));
     const world = (e: SceneElement): number[] => {
@@ -274,6 +279,9 @@ export function reviewSceneArchitecture(scene: ArchitecturalScene) {
     }
     const circulation = [...circulationFindings(scene), ...focusedConstructionFindings(scene), ...spatialCoordinationFindings(scene), ...generationQualityFindings(scene)];
     issues.push(...circulation.map(f=>f.message));
+    const selected=designProposalSchema.safeParse((scene.architecturalPlan as {designProposal?:unknown}|undefined)?.designProposal);
+    const designFidelity=selected.success?reviewDesignFidelity(scene,selected.data):undefined;
+    if(designFidelity)issues.push(...designFidelity.issues,...designFidelity.accommodation.map(s=>`Selected accommodation ${s.name}: ${s.evidence}; completed usable room remains unverified. ${s.limitation}`));
     const uniqueIssues=[...new Set(issues)];
     const findings: CompletionFinding[] = uniqueIssues.map(message => circulation.find(f=>f.message===message) ?? ({
         category: /door host .*no wall opening|door does not fit|door sill does not align|panel centre does not align|duplicates glazing/.test(message) ? 'confirmed-technical-defect'
@@ -282,6 +290,6 @@ export function reviewSceneArchitecture(scene: ArchitecturalScene) {
         elementIds: scene.elements.filter(e=>message.includes(e.id)).map(e=>e.id), message,
     }));
     return {constructionScope,designStage,interiorsDeferred:constructionScope === 'exterior',status:uniqueIssues.length?'incomplete' as const:'consistent' as const,issues:uniqueIssues,findings,
-        originalPlanAudit:original,programme,designDecisions,knowledgeUse,geometry:{kindCounts,surfaces,overlaps,walkingDatums:[...new Set(surfaces.filter(s=>s.kind==='plate').map(s=>Math.round(s.walkingDatum*1000)/1000))],plateSurfaceAreaM2:overlaps.length||surfaces.some(s=>s.kind==='plate'&&s.areaM2===null)?null:surfaces.filter(s=>s.kind==='plate').reduce((n,s)=>n+(s.areaM2??0),0),waterSurfaceAreaM2:surfaces.filter(s=>s.kind==='water').reduce((n,s)=>n+(s.areaM2??0),0)},
+        originalPlanAudit:original,designFidelity,physicalProgramme,programme,designDecisions,knowledgeUse,geometry:{kindCounts,surfaces,overlaps,walkingDatums:[...new Set(surfaces.filter(s=>s.kind==='plate').map(s=>Math.round(s.walkingDatum*1000)/1000))],plateSurfaceAreaM2:overlaps.length||surfaces.some(s=>s.kind==='plate'&&s.areaM2===null)?null:surfaces.filter(s=>s.kind==='plate').reduce((n,s)=>n+(s.areaM2??0),0),waterSurfaceAreaM2:surfaces.filter(s=>s.kind==='water').reduce((n,s)=>n+(s.areaM2??0),0)},
         limitations:['Surface areas are per physical element; overlapping surfaces are not additional usable area. Enclosed area, requested-space completeness, pool construction and circulation require architectural review. A renderable model is not a completed building.']};
 }

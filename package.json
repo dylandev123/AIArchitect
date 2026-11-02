@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test:ai": "node --test scripts/test-ai-house.mjs",
     "test": "vitest run",
+    "test:active": "vitest run --project active",
+    "test:retired": "vitest run --project retired-authors",
     "recover:blueprint": "vite-node --config vitest.config.mts scripts/recover-architectural-blueprint.ts",
     "typecheck": "next typegen && tsc --noEmit"
   },
