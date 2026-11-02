@@ -1,0 +1,547 @@
+{
+ "generatedBy": "scripts/canonical-arrangement-offline.ts",
+ "note": "Offline. Retained plans read, never written. Fixtures developer-authored. No quality claim.",
+ "retained": [
+  {
+   "hash": "65814b25df",
+   "id": "saint-lucia-waterfront-estate-01",
+   "where": [
+    "canonical-corrected-mansion-2026-11-02/proposal.normalized.json#plan"
+   ],
+   "extraLocations": 0,
+   "spaces": 30,
+   "masses": 5,
+   "levels": 2,
+   "unresolvedPlacements": 0,
+   "collisions": 6,
+   "collisionsByCause": {
+    "branch-crossing": 6
+   },
+   "collisionsByWingPair": {
+    "main-house × upper-retreat": 6
+   },
+   "collisionsWithSideEffectFreeSingleEdge": 4,
+   "collisionsWithAnyVerifiedSingleEdge": 4,
+   "composition": {
+    "spine": {
+     "id": "foyer",
+     "dependants": 3
+    },
+    "bilateral": [
+     {
+      "host": "foyer",
+      "sides": {
+       "south": 1,
+       "north": 1,
+       "east": 1
+      }
+     },
+     {
+      "host": "upper-lounge",
+      "sides": {
+       "north": 1,
+       "west": 1,
+       "south": 1
+      }
+     }
+    ],
+    "mirrorShare": 0.24,
+    "mirrorAxis": "x",
+    "repeated": {
+     "count": 5,
+     "of": 27,
+     "width": 8,
+     "depth": 5
+    },
+    "distinctFootprints": 15,
+    "indoorRooms": 27,
+    "maxChainDepth": 6,
+    "levels": 2,
+    "roofForms": {
+     "flat": 28
+    },
+    "footprintFill": 0.63,
+    "wings": [
+     {
+      "id": "main-house",
+      "rooms": 6,
+      "w": 26,
+      "d": 22,
+      "fill": 0.73
+     },
+     {
+      "id": "guest-wing",
+      "rooms": 9,
+      "w": 15,
+      "d": 15,
+      "fill": 1
+     },
+     {
+      "id": "service-wing",
+      "rooms": 4,
+      "w": 11,
+      "d": 17,
+      "fill": 0.61
+     },
+     {
+      "id": "upper-retreat",
+      "rooms": 9,
+      "w": 30,
+      "d": 25,
+      "fill": 0.5
+     },
+     {
+      "id": "waterfront-outdoor",
+      "rooms": 2,
+      "w": 16,
+      "d": 31,
+      "fill": 0
+     }
+    ]
+   }
+  },
+  {
+   "hash": "3263e7dd2e",
+   "id": "saint-lucia-waterfront-courtyard-estate",
+   "where": [
+    "canonical-plan-revision-2026-11-02/revision-record.json#original.plan",
+    "canonical-roof-retrieval-2026-11-02/proposal.normalized.json#plan"
+   ],
+   "extraLocations": 0,
+   "spaces": 21,
+   "masses": 6,
+   "levels": 1,
+   "unresolvedPlacements": 0,
+   "collisions": 3,
+   "collisionsByCause": {
+    "branch-crossing": 3
+   },
+   "collisionsByWingPair": {
+    "service-mass × west-suite-wing": 3
+   },
+   "collisionsWithSideEffectFreeSingleEdge": 3,
+   "collisionsWithAnyVerifiedSingleEdge": 3,
+   "composition": {
+    "spine": {
+     "id": "central-gallery",
+     "dependants": 3
+    },
+    "bilateral": [
+     {
+      "host": "entry-hall",
+      "sides": {
+       "north": 1,
+       "east": 1,
+       "south": 1
+      }
+     },
+     {
+      "host": "central-gallery",
+      "sides": {
+       "south": 1,
+       "east": 1,
+       "west": 1
+      }
+     },
+     {
+      "host": "living-salon",
+      "sides": {
+       "west": 1,
+       "east": 1,
+       "south": 1
+      }
+     },
+     {
+      "host": "dining-room",
+      "sides": {
+       "north": 1,
+       "south": 1
+      }
+     }
+    ],
+    "mirrorShare": 0.76,
+    "mirrorAxis": "x",
+    "repeated": {
+     "count": 6,
+     "of": 18,
+     "width": 7,
+     "depth": 7
+    },
+    "distinctFootprints": 12,
+    "indoorRooms": 18,
+    "maxChainDepth": 6,
+    "levels": 1,
+    "roofForms": {
+     "flat": 21
+    },
+    "footprintFill": 0.73,
+    "wings": [
+     {
+      "id": "arrival-mass",
+      "rooms": 3,
+      "w": 13,
+      "d": 13,
+      "fill": 0.38
+     },
+     {
+      "id": "social-mass",
+      "rooms": 4,
+      "w": 33,
+      "d": 31,
+      "fill": 0.42
+     },
+     {
+      "id": "east-suite-wing",
+      "rooms": 4,
+      "w": 11,
+      "d": 21,
+      "fill": 1
+     },
+     {
+      "id": "west-suite-wing",
+      "rooms": 4,
+      "w": 11,
+      "d": 21,
+      "fill": 1
+     },
+     {
+      "id": "service-mass",
+      "rooms": 4,
+      "w": 14,
+      "d": 9,
+      "fill": 0.85
+     },
+     {
+      "id": "waterfront-outdoor-mass",
+      "rooms": 2,
+      "w": 26,
+      "d": 7,
+      "fill": 0
+     }
+    ]
+   }
+  },
+  {
+   "hash": "d8e0e9c533",
+   "id": "saint-lucia-waterfront-belvedere-estate",
+   "where": [
+    "canonical-plan-revision-2026-11-02/revision-record.json#response.output.plan",
+    "canonical-plan-revision-2026-11-02/revision-record.json#revised.plan",
+    "canonical-redesign-revision-2026-11-02/revision-record.json#original.plan"
+   ],
+   "extraLocations": 0,
+   "spaces": 33,
+   "masses": 7,
+   "levels": 2,
+   "unresolvedPlacements": 0,
+   "collisions": 1,
+   "collisionsByCause": {
+    "branch-crossing": 1
+   },
+   "collisionsByWingPair": {
+    "east-suite-wing × social-mass": 1
+   },
+   "collisionsWithSideEffectFreeSingleEdge": 1,
+   "collisionsWithAnyVerifiedSingleEdge": 1,
+   "composition": {
+    "spine": {
+     "id": "entry-hall",
+     "dependants": 4
+    },
+    "bilateral": [
+     {
+      "host": "entry-hall",
+      "sides": {
+       "north": 1,
+       "west": 1,
+       "east": 1,
+       "south": 1
+      }
+     },
+     {
+      "host": "central-gallery",
+      "sides": {
+       "south": 1,
+       "east": 1,
+       "west": 1
+      }
+     },
+     {
+      "host": "living-salon",
+      "sides": {
+       "west": 1,
+       "east": 1,
+       "south": 1
+      }
+     },
+     {
+      "host": "upper-landing",
+      "sides": {
+       "south": 1,
+       "west": 1,
+       "east": 1
+      }
+     }
+    ],
+    "mirrorShare": 0.6,
+    "mirrorAxis": "x",
+    "repeated": {
+     "count": 6,
+     "of": 30,
+     "width": 9,
+     "depth": 6
+    },
+    "distinctFootprints": 15,
+    "indoorRooms": 30,
+    "maxChainDepth": 6,
+    "levels": 2,
+    "roofForms": {
+     "flat": 23,
+     "gable": 2,
+     "hip": 7
+    },
+    "footprintFill": 0.72,
+    "wings": [
+     {
+      "id": "arrival-mass",
+      "rooms": 4,
+      "w": 19,
+      "d": 14,
+      "fill": 0.53
+     },
+     {
+      "id": "social-mass",
+      "rooms": 5,
+      "w": 36,
+      "d": 29,
+      "fill": 0.53
+     },
+     {
+      "id": "east-suite-wing",
+      "rooms": 7,
+      "w": 17,
+      "d": 18,
+      "fill": 1
+     },
+     {
+      "id": "west-suite-wing",
+      "rooms": 7,
+      "w": 17,
+      "d": 18,
+      "fill": 1
+     },
+     {
+      "id": "service-mass",
+      "rooms": 4,
+      "w": 15,
+      "d": 12,
+      "fill": 0.8
+     },
+     {
+      "id": "belvedere-mass",
+      "rooms": 4,
+      "w": 22,
+      "d": 17,
+      "fill": 0.72
+     },
+     {
+      "id": "waterfront-outdoor-mass",
+      "rooms": 2,
+      "w": 28,
+      "d": 7,
+      "fill": 0
+     }
+    ]
+   }
+  },
+  {
+   "hash": "2083dc52ab",
+   "id": "saint-lucia-water-court-estate-revised",
+   "where": [
+    "canonical-redesign-revision-2026-11-02/revision-record.json#response.output.plan",
+    "canonical-redesign-revision-2026-11-02/revision-record.json#revised.plan"
+   ],
+   "extraLocations": 0,
+   "spaces": 21,
+   "masses": 6,
+   "levels": 1,
+   "unresolvedPlacements": 0,
+   "collisions": 9,
+   "collisionsByCause": {
+    "branch-crossing": 7,
+    "adjacent-overhang": 2
+   },
+   "collisionsByWingPair": {
+    "arrival-mass × west-cloister-mass": 1,
+    "east-cloister-mass × social-mass": 3,
+    "social-mass × west-cloister-mass": 3,
+    "service-mass × west-cloister-mass": 2
+   },
+   "collisionsWithSideEffectFreeSingleEdge": 9,
+   "collisionsWithAnyVerifiedSingleEdge": 9,
+   "composition": {
+    "spine": {
+     "id": "central-gallery",
+     "dependants": 3
+    },
+    "bilateral": [
+     {
+      "host": "entry-hall",
+      "sides": {
+       "north": 1,
+       "west": 1,
+       "south": 1
+      }
+     },
+     {
+      "host": "central-gallery",
+      "sides": {
+       "south": 1,
+       "east": 1,
+       "west": 1
+      }
+     },
+     {
+      "host": "living-salon",
+      "sides": {
+       "west": 1,
+       "east": 1,
+       "south": 1
+      }
+     }
+    ],
+    "mirrorShare": 0.74,
+    "mirrorAxis": "x",
+    "repeated": {
+     "count": 6,
+     "of": 18,
+     "width": 10,
+     "depth": 6
+    },
+    "distinctFootprints": 11,
+    "indoorRooms": 18,
+    "maxChainDepth": 6,
+    "levels": 1,
+    "roofForms": {
+     "flat": 21
+    },
+    "footprintFill": 0.74,
+    "wings": [
+     {
+      "id": "arrival-mass",
+      "rooms": 3,
+      "w": 15,
+      "d": 14,
+      "fill": 0.44
+     },
+     {
+      "id": "social-mass",
+      "rooms": 4,
+      "w": 33,
+      "d": 18,
+      "fill": 0.65
+     },
+     {
+      "id": "east-cloister-mass",
+      "rooms": 4,
+      "w": 14,
+      "d": 20,
+      "fill": 0.93
+     },
+     {
+      "id": "west-cloister-mass",
+      "rooms": 4,
+      "w": 14,
+      "d": 20,
+      "fill": 0.93
+     },
+     {
+      "id": "service-mass",
+      "rooms": 4,
+      "w": 14,
+      "d": 12,
+      "fill": 0.79
+     },
+     {
+      "id": "waterfront-outdoor-mass",
+      "rooms": 2,
+      "w": 25,
+      "d": 8,
+      "fill": 0
+     }
+    ]
+   }
+  }
+ ],
+ "fixtures": [
+  {
+   "fixture": "linear-bar",
+   "wings": 4,
+   "collisions": 0,
+   "mirrorShare": 0.72,
+   "mirrorAxis": "x",
+   "footprintFill": 0.42,
+   "wingSizes": [
+    "bar 42×9",
+    "pavilion 11×10",
+    "entry 7×5",
+    "garden-room 12×8"
+   ]
+  },
+  {
+   "fixture": "courtyard-u",
+   "wings": 5,
+   "collisions": 0,
+   "mirrorShare": 0.46,
+   "mirrorAxis": "x",
+   "footprintFill": 0.6,
+   "wingSizes": [
+    "long-wing 30×10",
+    "west-wing 9×22",
+    "east-wing 12×15",
+    "court 9×15",
+    "gate 6×4"
+   ]
+  },
+  {
+   "fixture": "pinwheel",
+   "wings": 5,
+   "collisions": 0,
+   "mirrorShare": 0,
+   "mirrorAxis": null,
+   "footprintFill": 0.35,
+   "wingSizes": [
+    "core 8×8",
+    "living-arm 20×9",
+    "sleep-arm 8×18",
+    "guest-arm 15×7",
+    "service-arm 7×12"
+   ]
+  },
+  {
+   "fixture": "spine-and-wings",
+   "wings": 3,
+   "collisions": 0,
+   "mirrorShare": 1,
+   "mirrorAxis": "x",
+   "footprintFill": 0.68,
+   "wingSizes": [
+    "social 16×28",
+    "east-wing 14×20",
+    "west-wing 14×20"
+   ]
+  }
+ ],
+ "spineSweep": {
+  "samples": 2000,
+  "seed": 20261102,
+  "roomAnchored": {
+   "withAnyCollision": 1943,
+   "share": 0.972,
+   "withCornerOverhangCause": 1894
+  },
+  "wingAnchored": {
+   "withCrossWingCollision": 0
+  }
+ }
+}

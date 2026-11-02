@@ -7,6 +7,7 @@ import { withUsageLogging } from '@/lib/ai/usage/track';
 import { strictSceneResponseSchema, sceneMessages, type SceneRequest } from '../scene/terra';
 import { canonicalProposalSchema, CANONICAL_INSTRUCTIONS, CANONICAL_CONTEXT_PRECEDENCE, compileArchitecturalPlan } from './plan';
 import { reviewSceneArchitecture } from '../scene/planning';
+import { coordinatePlan } from './spatial';
 /** One author, one compiler. No fallback to operations or legacy generation. */
 export async function generateCanonical(input:SceneRequest, selection:{model:string;reasoningEffort?:string}, signal:AbortSignal){
  let providerCalls=0;
@@ -22,6 +23,6 @@ export async function generateCanonical(input:SceneRequest, selection:{model:str
   if(proposal.status==='decision-required')return Response.json({error:proposal.decisions.join(' '),providerCalls,decisions:proposal.decisions},{status:422});
   const compiled=compileArchitecturalPlan(proposal.plan);
   const scene={...compiled.scene,generationStatus:'pending-visual-review' as const,generationBrief:input.prompt,knowledgeEvidence:context.evidence};
-  return Response.json({scene,operations:compiled.operations,architecturalPlan:proposal.plan,name:scene.name,summary:'Compiled envelope candidate — rendered review required.',unsupported:proposal.limitations,architecturalAudit:reviewSceneArchitecture(scene),responseId:randomUUID(),providerCalls,canonical:true,reviewStatus:'pending',repairBudget:0});
+  return Response.json({scene,operations:compiled.operations,architecturalPlan:proposal.plan,coordination:coordinatePlan(proposal.plan),name:scene.name,summary:'Compiled envelope candidate — rendered review required.',unsupported:proposal.limitations,architecturalAudit:reviewSceneArchitecture(scene),responseId:randomUUID(),providerCalls,canonical:true,reviewStatus:'pending',repairBudget:0});
  }catch(error){return Response.json({error:String(error),providerCalls,...(error instanceof DesignConflict?{decisions:error.decisions}: {})},{status:422});}
 }

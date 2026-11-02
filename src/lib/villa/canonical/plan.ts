@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { compileBuilding, DesignConflict, type BuildingIntent, type Point } from '../experimental/semantic-building/compiler';
 import { coverOf, type Cover } from '../experimental/semantic-building/vertical';
+import { isMassAnchor, massMembers, boundsOf, massAnchorProblem } from './massAnchor';
+import { locate, resolveLayout, rootSpaces, type Rect } from './layout';
+import { coordinatePlan } from './spatial';
 import { placePortals, exposedFascia, fasciaSides, roofFootprints, ELEMENT_EDGE, FASCIA_DEPTH, FASCIA_THICKNESS, type Side } from './coordination';
 import { sceneTerrainSchema, elementSchema, validateScene, type SceneElement } from '../scene/model';
 const id=z.string().regex(/^[a-z][a-z0-9-]{0,39}$/);
@@ -8,12 +11,18 @@ const dimension=z.number().finite().positive().max(100);
 const material=z.enum(['ivory','limestone','timber','bronze','sage']);
 export const isNewGeneration=(mode:unknown):boolean=>mode==='generate';
 const placement=z.object({relativeTo:id.nullable(),side:z.enum(['origin','north','east','south','west','same']),alignment:z.enum(['start','centre','end']),gap:z.number().finite().min(0).max(50)}).strict();
+/** A declared architectural relationship that software verifies against the resolved arrangement (never repairs):
+ * separate = minimum clear plan distance between two wings/spaces/site items (privacy, acoustics, view);
+ * adjoin = the two share at least `amount` metres of wall on one level (a real connection is possible);
+ * enclose = at least fraction `amount` (0..1) of an outdoor space's perimeter is bounded by interior rooms (a court is enclosed, not merely near). */
+export const constraintSchema=z.object({id,kind:z.enum(['separate','adjoin','enclose']),a:id,b:id.optional(),amount:z.number().finite().min(0).max(100),reason:z.string()}).strict();
+export type ArchitecturalConstraint=z.infer<typeof constraintSchema>;
 /** No authored component coordinates, polygon arrays, slab datums or riser counts. */
 export const architecturalPlanSchema=z.object({
  version:z.literal('architectural-plan-1'),id,thesis:z.string().min(1),orientation:z.number().finite(),
  site:sceneTerrainSchema,
  levels:z.array(z.object({id,above:id.nullable(),rise:dimension}).strict()).min(1).max(12),
- masses:z.array(z.object({id,role:z.string(),relatesTo:id.optional()}).strict()).min(1).max(100),
+ masses:z.array(z.object({id,role:z.string(),relatesTo:id.optional(),placement:placement.optional()}).strict()).min(1).max(100),
  spaces:z.array(z.object({id,mass:id,level:id,use:z.string(),width:dimension,depth:dimension,height:dimension.optional(),outdoor:z.boolean(),facadeMaterial:material.optional(),placement}).strict()).min(1).max(200),
  portals:z.array(z.object({id,host:z.object({space:id,side:z.enum(['south','east','north','west','shared','exposed'])}).strict(),to:id,alignment:z.enum(['start','centre','end']),width:dimension,height:dimension,mode:z.enum(['door','open','window']),sill:z.number().finite().min(0).max(8).optional()}).strict()).max(300),
  stairs:z.array(z.object({id,lower:id,upper:id,width:dimension,run:dimension,landing:dimension,headroom:dimension}).strict()).max(20),
@@ -23,6 +32,7 @@ export const architecturalPlanSchema=z.object({
  terraces:z.array(id).max(100),
  pools:z.array(z.object({id,placement,width:dimension,depth:dimension,waterDepth:z.number().min(.3).max(3),level:id}).strict()).max(10),
  landscape:z.array(z.object({id,kind:z.enum(['lawn','bed']),placement,width:dimension,depth:dimension}).strict()).max(100),
+ constraints:z.array(constraintSchema).max(40).optional(),
  materials:z.object({floor:material,wall:material,roof:material}).strict(),
  cameraViews:z.array(z.enum(['Aerial','Arrival','Garden','Poolside'])).length(4),
 }).strict();
@@ -36,8 +46,10 @@ export const canonicalProposalSchema=z.discriminatedUnion('status',[
 export const CANONICAL_INSTRUCTIONS=`You are the architectural planner for the sole new-house authoring path. Return architectural-plan-1 in a proposed plan or decision-required with unsupported choices. Never return scene operations, component coordinates, polygons, wall/slab/tread arrays, calculated world transforms, access-target lists or riser counts.
 Choose a brief-specific architectural thesis, mass hierarchy, room uses and dimensions, privacy, levels, openings, circulation, terraces, pools, landscape, materials and camera views. Software owns placement coordinates, shared walls, cuts, matching doors, floors, roofs, stairs, collisions and evidence. Do not silently simplify or omit a requested feature.
 Spaces are rectangular allocations. Choose one root space with placement relativeTo:null, side:origin, alignment:centre, gap:0. All other spaces refer to another space by relativeTo and side north (+Z), east (+X), south (-Z), west (-X), or same (stacked plan alignment). Alignment start/centre/end aligns the perpendicular dimension. gap is a selected design separation; connected rooms require gap:0 and a shared segment wide enough for the selected opening. References may be forward but must not cycle. Software centres the whole allocation on the site and applies orientation in radians.
+Compose the building as WINGS first, then rooms inside each wing. Every entry of masses is a wing (a group of rooms that belong together: a living pavilion, a sleeping wing, a link, a court). A wing may carry its own placement {relativeTo, side, alignment, gap} that places the WHOLE wing by its envelope against another wing's envelope (relativeTo a wing id) or against one space: north/east/south/west put it beside the anchor, "same" stacks its envelope over the anchor's footprint, alignment start/centre/end aligns the perpendicular dimension of the two envelopes, gap is a selected separation (a detached pavilion has gap>0 and an outdoor landing). Rooms of a placed wing are arranged in that wing's own frame: exactly one room of it is the wing's local origin (relativeTo:null, side:origin, alignment:centre, gap:0) and every other room of the wing is placed against another room of the same wing; a room of a placed wing is never anchored outside its wing. Software arranges the rooms, takes the wing's envelope, and moves the wing as one rigid body to satisfy its placement, so you never calculate where a wing's corners or rooms land and resizing a room moves what is placed against its wing. Exactly one root space exists among wings without placement. A wing without placement keeps the older meaning: its rooms are placed individually (against rooms, or against a whole wing by relativeTo:<wing id>, never "same" against a wing). Reasoning room by room hides collisions: two wings placed on adjacent sides of one wing both claim its corner whenever each is longer than that wing along the other's axis, so choose alignment and gap for each wing deliberately. Nothing requires symmetry, a particular number of wings or levels, or any one circulation idiom; relate wings as the concept demands (shared wall, link wing, court between wings, stacked over, detached across a gap).
+Optional constraints state relationships your concept depends on; software measures each on the resolved arrangement and rejects the plan if one is not met (it never moves anything): kind "separate" (a, b wings/rooms/site items: minimum clear plan distance in metres, for privacy or quiet), "adjoin" (a, b: minimum metres of shared wall on one level, so a connection is possible), "enclose" (a: a court or terrace; amount 0..1 is the share of its perimeter bounded by interior rooms). Give the reason. Declare only what the concept needs; contradictory declarations (separate and adjoin on one pair) are rejected.
 Levels use above:null and rise from site elevation for the one ground datum, or above:<level id> and rise as floor-to-floor height. Space height is the envelope height and is normally omitted (null): the compiler derives it, to the floor datum of the level stacked above the space, otherwise to the rise of the next level, so never restate level rises. State height only for a deliberate departure with nothing stacked above (a roofed double-height room) or where no level above supplies a storey height (a single-storey house or a top storey). A stated height beyond the floor datum above it, and an open-to-above void beneath a stacked plan, are not expressible: use decision-required. Floor thickness reduces actual clear height. Every interior must be reachable from arrival. A space whose top is exposed needs a roof entry; a space wholly covered by spaces above must have none (the floor above is its cover); a space only partly covered by spaces above takes a roof entry and the compiler roofs just its exposed remainder (flat only, no overhang; a pitched roof against the taller wall above is not expressible, so give such a space a flat roof or keep the upper rooms wholly over or clear of it). Roofs are declared only in roofs, once per roofed space.
-Portal host side selects a room edge; to must share a segment at the same level, or be exterior for an exposed fixed window (doors/passages require an explicit outdoor landing allocation). Alignment selects the opening at start, centre or end of that directed edge with software-owned margins. Edges run counter-clockwise: south edge west→east, east edge south→north, north edge east→west, west edge north→south, so on a north or west wall portal start is the east or north end, the opposite of room-placement alignment where start is always the west or south end. Instead of choosing the edge, host side "shared" (a door or open passage to a neighbouring room) makes software find the wall the two rooms share and place the opening inside that shared segment at start/centre/end of it, and host side "exposed" (a fixed window to the exterior) makes software use the room's one exterior wall run wide enough for it, refusing as ambiguous when several qualify. Prefer them: a connection is a relationship, not a coordinate. Software never infers a connection: every interior room, including each upper room, needs its own door or open passage to the landing or circulation space it hangs from, in addition to the stair that reaches that landing. A window needs a wall exposed to the outside: a wall shared with a bath, hall, neighbouring room or terrace is not exterior, a room enclosed on every edge cannot have an exterior window or screen, and placing a room beside another changes that wall for every opening and screen already on it. Supported modes: door, open, fixed window. Only windows may have a nonzero sill. Multiple openings on an edge are allowed at distinct alignments with at least 0.36m piers; openings cannot cross a room junction. Fixed windows are not access. No independent door transforms.
+Portal host side selects a room edge; to must share a segment at the same level, or be exterior for an exposed fixed window (doors/passages require an explicit outdoor landing allocation). Alignment selects the opening at start, centre or end of that directed edge with software-owned margins. Edges run counter-clockwise: south edge west→east, east edge south→north, north edge east→west, west edge north→south, so on a north or west wall portal start is the east or north end, the opposite of room-placement alignment where start is always the west or south end. Instead of choosing the edge, host side "shared" (a door or open passage to a neighbouring room) makes software find the wall the two rooms share and place the opening inside that shared segment at start/centre/end of it, and host side "exposed" (a fixed window to the exterior) makes software use the room's one exterior wall run wide enough for it, refusing as ambiguous when several qualify. Prefer them: a connection is a relationship, not a coordinate. Software never infers a connection: every interior room, including each upper room, needs its own door or open passage to a neighbouring room, landing or circulation space that leads toward the arrival, in addition to the stair that reaches that landing; a wing may be entered directly from the room beside it, from a link wing, or across an outdoor landing. A window needs a wall exposed to the outside: a wall shared with a bath, hall, neighbouring room or terrace is not exterior, a room enclosed on every edge cannot have an exterior window or screen, and placing a room beside another changes that wall for every opening and screen already on it. Supported modes: door, open, fixed window. Only windows may have a nonzero sill. Multiple openings on an edge are allowed at distinct alignments with at least 0.36m piers; openings cannot cross a room junction. Fixed windows are not access. No independent door transforms.
 Stairs connect matching lower and upper rectangular cells. The compiler centres the flight across the lower cell, starts after the south landing, derives risers from level rise, creates the upper void, and reserves a right-side bypass. Choose dimensions that fit the cells, keep lower roof absent and upper roof present. More complex stairs require decision-required.
 Terraces refer to outdoor spaces. Pools and landscape use relative placement against a space, or against another pool or landscape item (for example a lawn beyond a pool; no cycles), in the building frame; the compiler owns world positions. Every pool and landscape item must lie within the site, which is centred on the room cells, so size the site for the pool and lawn as well as the house. Pools use a selected level top; landscape sits at site elevation. Pools include basin shell and water; landscape lawn/bed means ground surfaces, not planting. All four cameraViews must occur once: Aerial, Arrival, Garden, Poolside. Software chooses their poses.
 Supported scope: flat site, rectangular room cells composed into asymmetric L/U arrangements with partial shared edges, multiple facade openings and elevated fixed windows, flat/gable/hip roofs with selected rise and uniform overhang, per-space facade materials, wall-relative editable slatted screens, the described straight stair, rectangular pools and lawn/bed surfaces. Roof rise defaults to 0.18m only for historical flat plans; select rise for pitched roofs (>=0.6m). Roof undersides meet space wall tops. Select stepped, separated roofs; intersecting roof bounds require decision-required, not automatic valleys. A gable or hip roof stays within its own room cell: a gable or hip may abut a neighbour of any height or roof form (flat or pitched), and its 0.1 m fascia boards are built only on edges no other room shares, so neighbouring rooms need no matching heights. Pitched roofs are not valid over a space that has a room stacked over part of it (no lean-to or valley junction: give that space a flat roof, or keep the upper rooms wholly over or wholly clear of it), and an overhang is valid only where nothing stands within its reach at the roof's height (over open ground, or over a neighbour whose wall top and roof lie below the roof underside); rooms never overlap, which no roof can repair. Screens require explicit side, alignment, width, height, sill, standOff, depth, panels and material; they must stand on an exposed facade (never a wall shared with another room) and must not obstruct a passable opening. Outdoor roofed spaces are verandas/canopies without invented columns. Unsupported requested polygonal/curved outlines, overlapping occupied cells, roof valleys/junctions, grading, trees/planting, arbitrary stairs, guards, engineering and full fit-out require decision-required. Never substitute a simpler house or claim a complete/premium home from an envelope. Disclose limitations.`;
@@ -47,38 +59,25 @@ export const CANONICAL_CONTEXT_PRECEDENCE=`
 CONTRACT PRECEDENCE: Retrieved knowledge and guidance above may mention scene operations, parts, transforms or "exterior scope defers interior fit-out". Those phrases describe retired direct-scene authoring. Here only architectural-plan-1 applies: express every idea as masses, spaces, portals, stairs, roofs, screens, pools or landscape; plan the requested rooms as spaces; state anything unsupported as a limitation or decision-required.
 `;
 export function isCanonicalPlan(value:unknown):boolean{return !!value&&typeof value==='object'&&'version' in value&&value.version==='architectural-plan-1';}
-export type Rect={x:number;z:number;width:number;depth:number};
+export { locate };
+export type { Rect };
 const fail=(message:string):never=>{throw new DesignConflict([message]);};
-export function locate(width:number,depth:number,p:z.infer<typeof placement>,base?:Rect):Rect{
- if(!base){if(p.relativeTo!==null||p.side!=='origin'||p.gap!==0)fail('Choose a single origin placement.');return {x:0,z:0,width,depth};}
- if(p.side==='origin')fail('Only the root may use origin placement.');
- const align=(a:number,b:number)=>p.alignment==='start'?0:p.alignment==='end'?a-b:(a-b)/2;
- let x=base.x+align(base.width,width),z=base.z+align(base.depth,depth);
- if(p.side==='east')x=base.x+base.width+p.gap;
- if(p.side==='west')x=base.x-width-p.gap;
- if(p.side==='north')z=base.z+base.depth+p.gap;
- if(p.side==='south')z=base.z-depth-p.gap;
- if(p.side==='same'&&p.gap!==0)fail('Stacked placement cannot include a horizontal gap.');
- return {x,z,width,depth};
-}
 /** Resolve the model's selected dimensional relationships. Cycles and unsupported
  * layouts reject; there is no hidden packing, fallback template or repair. */
 export function deriveBuildingIntent(raw:unknown){const parsed=architecturalPlanSchema.parse(raw);return derive(parsed);}
 function derive(plan:ArchitecturalPlan){
- const rects=new Map<string,Rect>(),tops=new Map<string,number>();
- if(plan.spaces.filter(s=>s.placement.relativeTo===null).length!==1)fail('Choose exactly one root space.');
+ const tops=new Map<string,number>();
+ if(rootSpaces(plan).length!==1)fail('Choose exactly one root space.');
  if(plan.levels.filter(l=>l.above===null).length!==1)fail('Choose exactly one ground level.');
  const resolveLevel=(key:string,active=new Set<string>()):number=>{
   if(tops.has(key))return tops.get(key)!;
   const l=plan.levels.find(l=>l.id===key);if(!l||active.has(key))return fail(`${key}: missing or cyclic level reference.`);
   active.add(key);const top=(l.above===null?plan.site.elevation:resolveLevel(l.above,active))+l.rise;tops.set(key,top);return top;
  };
- const resolveSpace=(key:string,active=new Set<string>()):Rect=>{
-  if(rects.has(key))return rects.get(key)!;
-  const s=plan.spaces.find(s=>s.id===key);if(!s||active.has(key))return fail(`${key}: missing or cyclic placement reference.`);
-  active.add(key);const r=locate(s.width,s.depth,s.placement,s.placement.relativeTo===null?undefined:resolveSpace(s.placement.relativeTo,active));rects.set(key,r);return r;
- };
- plan.levels.forEach(l=>resolveLevel(l.id));plan.spaces.forEach(s=>resolveSpace(s.id));
+ plan.levels.forEach(l=>resolveLevel(l.id));
+ // One resolver for rooms and whole wings (layout.ts); an unresolvable relationship rejects with every reason.
+ const layout=resolveLayout(plan),rects=layout.rects;
+ if(layout.problems.length)throw new DesignConflict(layout.problems.map(q=>q.message));
  const all=[...rects.values()],x0=Math.min(...all.map(r=>r.x)),x1=Math.max(...all.map(r=>r.x+r.width)),z0=Math.min(...all.map(r=>r.z)),z1=Math.max(...all.map(r=>r.z+r.depth));
  const c=Math.cos(plan.orientation),s=Math.sin(plan.orientation),cx=(x0+x1)/2,cz=(z0+z1)/2;
  const world=(p:Point):Point=>[c*(p[0]-cx)+s*(p[1]-cz),-s*(p[0]-cx)+c*(p[1]-cz)];
@@ -119,7 +118,7 @@ function derive(plan:ArchitecturalPlan){
   if(anchor===null)return fail(`${item.id}: site allocation needs a space or site-item anchor.`);
   if(active.has(item.id)||anchor===item.id)return fail(`${item.id}: cyclic site anchor.`);
   active.add(item.id);
-  const base=rects.get(anchor)??(siteDefs.has(anchor)?resolveSite(siteDefs.get(anchor)!,active):fail(`${item.id}: site anchor ${anchor} is neither a space nor a pool/landscape item.`));
+  const base=rects.get(anchor)??(isMassAnchor(plan,anchor)?(()=>{const problem=massAnchorProblem(plan,item.id,anchor,item.placement.side);if(problem)return fail(problem);return boundsOf(massMembers(plan,anchor).map(m=>rects.get(m.id)!));})():siteDefs.has(anchor)?resolveSite(siteDefs.get(anchor)!,active):fail(`${item.id}: site anchor ${anchor} is neither a space nor a pool/landscape item.`));
   const r=locate(item.width,item.depth,item.placement,base);siteRects.set(item.id,r);return r;
  };
  const siteItem=(item:SiteItem)=>{const r=resolveSite(item);return {...item,centre:world([r.x+r.width/2,r.z+r.depth/2]),top:'level' in item?(tops.get(item.level)??fail(`${item.id}: missing pool level.`)):plan.site.elevation};};
@@ -128,7 +127,14 @@ function derive(plan:ArchitecturalPlan){
 export function compileArchitecturalPlan(raw:unknown){
  const parsed=architecturalPlanSchema.safeParse(raw);
  if(!parsed.success)throw new DesignConflict(parsed.error.issues.map(issue=>`unsupported-plan-contract ${issue.path.join('.')||'plan'}: ${issue.message}`));
- const authored=parsed.data,derived=derive(authored);
+ const authored=parsed.data;
+ let derived!:ReturnType<typeof derive>;
+ try{derived=derive(authored);}catch(error){
+  if(!(error instanceof DesignConflict))throw error;
+  // A fundamental arrangement fault (overlapping wings, a violated declaration) is the cause; door failures that follow from it are secondary, so it is reported first.
+  const primary=coordinatePlan(authored).errors.filter(e=>e.kind==='collision'||e.kind==='constraint'||e.kind==='declaration').map(e=>e.message);
+  throw new DesignConflict([...primary,...error.decisions]);
+ }
  const plan={...authored,...derived.intent,pools:derived.sitePools,landscape:derived.siteLandscape};
  const ids=[...plan.levels,...plan.masses,...plan.spaces,...plan.portals,...plan.stairs,...plan.pools,...plan.landscape,...(authored.screens??[])].map(e=>e.id);
  if(new Set(ids).size!==ids.length)fail('Plan identifiers must be unique across all entity types.');
@@ -147,9 +153,13 @@ export function compileArchitecturalPlan(raw:unknown){
  }
  for(const roof of plan.roofs)if(!plan.spaces.some(s=>s.id===roof.space))fail('Unknown roof space.');
  for(const terrace of plan.terraces)if(!plan.spaces.some(s=>s.id===terrace&&s.outdoor))fail('Terrace must reference an outdoor space.');
- let compiled!:ReturnType<typeof compileBuilding>;
- try{compiled=compileBuilding(derived.intent);}catch(error){if(!(error instanceof DesignConflict))throw error;throw new DesignConflict([...enclosure,...error.decisions]);}
- if(enclosure.length)throw new DesignConflict(enclosure);
+ // Whole-building coordination: declared constraints are verified against the resolved arrangement, and every overlap is
+ // explained at the placement decision where its two chains meet. Nothing is moved; a violated declaration rejects.
+ const coordination=coordinatePlan(authored);
+ let compiled!:ReturnType<typeof compileBuilding>,compilerDecisions:string[]=[];
+ try{compiled=compileBuilding(derived.intent);}catch(error){if(!(error instanceof DesignConflict))throw error;compilerDecisions=error.decisions;}
+ const spatial=coordination.errors.filter(e=>e.kind==='constraint'||e.kind==='declaration'||(e.kind==='collision'&&compilerDecisions.length>0)).map(e=>e.message);
+ if(enclosure.length||compilerDecisions.length||spatial.length)throw new DesignConflict([...enclosure,...compilerDecisions,...spatial]);
  const walls=compiled.scene.elements.filter(e=>e.kind==='wall');
  for(let i=0;i<walls.length;i++)for(let j=i+1;j<walls.length;j++){
   const a=walls[i],b=walls[j];

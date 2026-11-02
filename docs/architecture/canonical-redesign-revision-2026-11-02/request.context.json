@@ -8,7 +8,6 @@
   "requirements": {
     "authority": "The original user brief is authoritative for the architectural programme.",
     "currentPlanCounts": {
-      "bedroom": 9,
       "bathroom": 16,
       "kitchen": 1,
       "living": 4,
@@ -17,16 +16,20 @@
       "entry": 5,
       "terrace": 2,
       "pool": 1,
-      "outdoorSpace": 3
+      "outdoorSpace": 3,
+      "bedroomSuites": 9,
+      "sleepingRooms": 9
     },
     "derivedRequirements": [
       {
         "id": "bedrooms",
         "category": "bedroom",
         "minimum": 5,
-        "approximately": 6,
+        "maximum": 7,
+        "suite": true,
+        "target": 6,
         "briefPhrase": "approximately six generous bedroom suites",
-        "rule": "approximately 6: at least 5 bedroom spaces; no upper limit is enforced"
+        "rule": "approximately 6: target 6, accept 5 to 7 bedroom suites (sleeping accommodation with private bathroom facilities, as connected spaces or within the room); fewer than 5 suites or more than 7 sleeping rooms is rejected"
       },
       {
         "id": "living-entertainment",
@@ -65,7 +68,7 @@
       }
     ],
     "arrival": "arrival-forecourt",
-    "note": "Only derivedRequirements are programme obligations (minimums, taken from the brief's own words). currentPlanCounts describe your earlier design for information only: spaces or counts it introduced beyond the brief may be merged, reorganised, differentiated or removed. Do not drop anything the brief states; nothing here adds to the brief."
+    "note": "Only derivedRequirements are programme obligations (minimums, and a maximum where the brief says \"approximately\", taken from the brief's own words). currentPlanCounts describe your earlier design for information only: spaces or counts it introduced beyond the brief may be merged, reorganised, differentiated or removed. Do not drop anything the brief states; nothing here adds to the brief."
   },
   "currentPlan": {
     "version": "architectural-plan-1",

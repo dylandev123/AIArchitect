@@ -2,8 +2,10 @@
  * It never edits the plan, never relaxes compilation and does not execute later compiler stages: each check
  * re-derives its own facts from the authored placements, so independent errors are reported together.
  * Findings are evidence for a person or a bounded revision step, not construction. */
-import {architecturalPlanSchema,locate,type ArchitecturalPlan,type Rect} from './plan';
+import {architecturalPlanSchema,type ArchitecturalPlan} from './plan';
+import {resolveLayout,resolveSiteRects,type Rect} from './layout';
 import {coverOf,exposedPieces} from '../experimental/semantic-building/vertical';
+import {volumeCollisions,explainCollisions,describeDecision} from './arrangement';
 import {WALL,SIDES,FASCIA_DEPTH,exposedFascia,roofFootprints,edgeOf,sharedRuns,edgeExposure,placePortals,pointOnEdge,stairKeepOuts,crossesFlight } from './coordination';
 export type Finding={stage:'contract'|'resolution'|'volumes'|'site'|'openings'|'access'|'roofs'|'screens'|'programme';severity:'error'|'observation';id:string;message:string};
 const PIER=.36;
@@ -27,40 +29,23 @@ export function diagnosePlan(raw:unknown){
   tops.set(key,base+l.rise);return base+l.rise;
  };
  plan.levels.forEach(l=>level(l.id));
- const rects=new Map<string,Rect>(),bad=new Set<string>();
- const space=(key:string,active=new Set<string>()):Rect|undefined=>{
-  if(rects.has(key))return rects.get(key);
-  const s=plan.spaces.find(s=>s.id===key);
-  if(!s||active.has(key)||bad.has(key)){bad.add(key);return undefined;}
-  active.add(key);
-  let base:Rect|undefined;
-  if(s.placement.relativeTo!==null){base=space(s.placement.relativeTo,active);if(!base){add('resolution','error',s.id,`placement anchor ${s.placement.relativeTo} is missing, cyclic or itself unresolved`);bad.add(key);return undefined;}}
-  const r=locate(s.width,s.depth,s.placement,base);rects.set(key,r);return r;
- };
- plan.spaces.forEach(s=>space(s.id));
+ const layout=resolveLayout(plan),rects=layout.rects;
+ for(const q of layout.problems)add('resolution','error',q.id,q.message);
  const spaceOf=(id:string)=>plan.spaces.find(s=>s.id===id);
  const heightOf=(id:string)=>{const s=spaceOf(id)!;if(s.height!==undefined)return s.height;const up=plan.levels.find(l=>l.above===s.level);return up?up.rise:3;};
  const live=plan.spaces.filter(s=>rects.has(s.id)).map(s=>({id:s.id,rect:rects.get(s.id)!,s}));
- // Volumes: same-level footprints (and any overlapping vertical extents) intersecting.
- for(let i=0;i<live.length;i++)for(let j=i+1;j<live.length;j++){
-  const a=live[i],b=live[j],common=overlapRect(a.rect,b.rect);if(!common)continue;
-  const ta=tops.get(a.s.level),tb=tops.get(b.s.level);if(ta===undefined||tb===undefined)continue;
-  const pen=Math.min(ta+heightOf(a.id),tb+heightOf(b.id))-Math.max(ta,tb);if(pen<=1e-7)continue;
-  add('volumes','error',`${a.id}/${b.id}`,`occupied volumes overlap by ${f2(common.width)}×${f2(common.depth)} m (${f2(pen)} m vertical): ${a.id} spans ${span(a.rect)}, ${b.id} spans ${span(b.rect)}.`);
+ // Volumes: same-level footprints (and any overlapping vertical extents) intersecting. Each finding carries its measured cause and the single placement edits that would clear it (offers only; nothing is applied).
+ {
+  const decisions=new Map(explainCollisions(plan).map(d=>[d.pair.join('/'),d]));
+  for(const c of volumeCollisions(plan,rects,tops)){
+   const a=live.find(l=>l.id===c.a)!,b=live.find(l=>l.id===c.b)!,d=decisions.get(`${c.a}/${c.b}`);
+   add('volumes','error',`${c.a}/${c.b}`,`occupied volumes overlap by ${f2(c.overlap.width)}×${f2(c.overlap.depth)} m (${f2(c.vertical)} m vertical): ${c.a} spans ${span(a.rect)}, ${c.b} spans ${span(b.rect)}.${d?` Cause: ${describeDecision(d)}`:''}`);
+  }
  }
  // Site: item rectangles anchored to a space or a site item; bounds and allocation conflicts.
- const defs=new Map([...plan.pools,...plan.landscape].map(i=>[i.id,i]));
- const siteRects=new Map<string,Rect>();
- const site=(item:(typeof plan.pools)[number]|(typeof plan.landscape)[number],active=new Set<string>()):Rect|undefined=>{
-  if(siteRects.has(item.id))return siteRects.get(item.id);
-  const anchor=item.placement.relativeTo;
-  if(anchor===null||active.has(item.id)){add('resolution','error',item.id,'site item has no valid anchor');return undefined;}
-  active.add(item.id);
-  const base=rects.get(anchor)??(defs.has(anchor)?site(defs.get(anchor)!,active):undefined);
-  if(!base){add('resolution','error',item.id,`site anchor ${anchor} is not a resolvable space or pool/landscape item`);return undefined;}
-  const r=locate(item.width,item.depth,item.placement,base);siteRects.set(item.id,r);return r;
- };
- const items=[...plan.pools,...plan.landscape];items.forEach(i=>site(i));
+ const siteLayout=resolveSiteRects(plan,rects),siteRects=siteLayout.rects;
+ for(const q of siteLayout.problems)add('resolution','error',q.id,q.message);
+ const items=[...plan.pools,...plan.landscape];
  if(live.length){
   const xs=live.flatMap(l=>[l.rect.x,l.rect.x+l.rect.width]),zs=live.flatMap(l=>[l.rect.z,l.rect.z+l.rect.depth]);
   const cx=(Math.min(...xs)+Math.max(...xs))/2,cz=(Math.min(...zs)+Math.max(...zs))/2,halfW=plan.site.width/2,halfD=plan.site.depth/2;

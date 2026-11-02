@@ -116,7 +116,9 @@ export function compileBuilding(intent:BuildingIntent) {
  const emit=(data:Parameters<typeof elementSchema.parse>[0],sources:string[],rule:string)=>{const e=elementSchema.parse(data);if(provenance[e.id])fail(`Generated ID collision ${e.id}`);elements.push(e);provenance[e.id]={sources,rule};};
  const slab=(id:string,poly:Point[],top:number,kind:'plate'|'roof',holes:Point[][],sources:string[],material:SceneElement['material'])=>{
   const lo=[0,1].map(i=>Math.min(...poly.map(p=>p[i]))),hi=[0,1].map(i=>Math.max(...poly.map(p=>p[i]))),size:SceneElement['size']=[hi[0]-lo[0],kind==='roof'?roofThickness:thickness,hi[1]-lo[1]],c:Point=[(lo[0]+hi[0])/2,(lo[1]+hi[1])/2],w=world(c);
-  const normalize=(ring:Point[])=>ring.map(p=>[(p[0]-c[0])/size[0],(p[1]-c[1])/size[2]]);
+  // A vertex on the bounding box normalizes to exactly ±0.5 in real arithmetic; floating-point noise (e.g. 9.4-7 = 2.4000000000000004) must not turn it into a rejection.
+  const unit=(v:number)=>Math.abs(v)>.5&&Math.abs(v)<.5+1e-9?Math.sign(v)*.5:v;
+  const normalize=(ring:Point[])=>ring.map(p=>[unit((p[0]-c[0])/size[0]),unit((p[1]-c[1])/size[2])]);
   const geometry={type:'extrusion' as const,axis:'y' as const,outline:normalize(poly),holes:holes.map(normalize)};validateProfile(geometry);
   emit({id,label:id,kind,at:[w[0],top-size[1]/2,w[1]],rotation:intent.frame.yaw,size,material,geometry},sources,'polygon and level → editable profile slab');
  };

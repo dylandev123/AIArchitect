@@ -1,5 +1,5 @@
 {
-  "newSha256": "123e60b9f100e672facc2dece7d3d8962b3869a57e5bfd6c51a719df92f04a14",
+  "newSha256": "1de8e0b187f59364730aebe8af6a501b8871d6dff52acecb134c164cadf28759",
   "approved": {
     "label": "approved d830dac2 request",
     "file": "docs/architecture/canonical-plan-revision-2026-11-02/provider-request.exact.json",
@@ -290,6 +290,149 @@
       }
     }
   },
+  "supersededV2": {
+    "label": "superseded 123e60b9 request (never submitted)",
+    "file": "docs/architecture/canonical-redesign-revision-SUPERSEDED-123e60b9/request.prepared.NOT-SUBMITTED.json",
+    "sha256": "123e60b9f100e672facc2dece7d3d8962b3869a57e5bfd6c51a719df92f04a14",
+    "envelope": {
+      "model": [
+        "gpt-5.6-terra",
+        "gpt-5.6-terra"
+      ],
+      "maxOutputTokens": [
+        30000,
+        30000
+      ],
+      "strict": [
+        true,
+        true
+      ],
+      "name": [
+        "response",
+        "response"
+      ]
+    },
+    "systemSegments": {
+      "contract": {
+        "identical": true,
+        "previousChars": 7279,
+        "newChars": 7279
+      },
+      "knowledge": {
+        "identical": true,
+        "previousChars": 9081,
+        "newChars": 9081
+      },
+      "precedence": {
+        "identical": true,
+        "previousChars": 441,
+        "newChars": 441
+      },
+      "addendum": {
+        "identical": true,
+        "previousChars": 3322,
+        "newChars": 3322
+      },
+      "redesignAuthorization": {
+        "identical": true,
+        "previousChars": 859,
+        "newChars": 859
+      }
+    },
+    "briefIdentical": true,
+    "outputSchemaIdentical": true,
+    "contextTopLevel": {
+      "task": {
+        "status": "identical"
+      },
+      "budget": {
+        "status": "identical",
+        "sub": {
+          "modelRevisions": "identical",
+          "automaticRepeat": "identical"
+        }
+      },
+      "brief": {
+        "status": "identical"
+      },
+      "requirements": {
+        "status": "changed",
+        "sub": {
+          "authority": "identical",
+          "currentPlanCounts": "changed",
+          "derivedRequirements": "changed",
+          "arrival": "identical",
+          "note": "changed"
+        }
+      },
+      "currentPlan": {
+        "status": "identical",
+        "sub": {
+          "version": "identical",
+          "id": "identical",
+          "thesis": "identical",
+          "orientation": "identical",
+          "site": "identical",
+          "levels": "identical",
+          "masses": "identical",
+          "spaces": "identical",
+          "portals": "identical",
+          "stairs": "identical",
+          "arrival": "identical",
+          "roofs": "identical",
+          "screens": "identical",
+          "terraces": "identical",
+          "pools": "identical",
+          "landscape": "identical",
+          "materials": "identical",
+          "cameraViews": "identical"
+        }
+      },
+      "measured": {
+        "status": "identical",
+        "sub": {
+          "exposure": "identical",
+          "units": "identical",
+          "building": "identical",
+          "site": "identical",
+          "levels": "identical",
+          "rooms": "identical",
+          "siteItems": "identical"
+        }
+      },
+      "dependencies": {
+        "status": "identical",
+        "sub": {
+          "placementChains": "identical",
+          "adjacencyAndConnections": "identical",
+          "access": "identical"
+        }
+      },
+      "findings": {
+        "status": "identical",
+        "sub": {
+          "errorCount": "identical",
+          "completeness": "identical",
+          "groupedByCause": "identical",
+          "relationshipDecisions": "identical",
+          "observations": "identical",
+          "compilerNote": "identical",
+          "latentCompilerLimits": "identical",
+          "compilerFirstRejection": "identical"
+        }
+      },
+      "architecturalWeaknesses": {
+        "status": "identical",
+        "sub": {
+          "signals": "identical",
+          "disposition": "identical"
+        }
+      },
+      "drawing": {
+        "status": "identical"
+      }
+    }
+  },
   "requirementsBefore": {
     "programmeCounts": {
       "bedroom": 12,
@@ -310,7 +453,6 @@
   "requirementsNow": {
     "authority": "The original user brief is authoritative for the architectural programme.",
     "currentPlanCounts": {
-      "bedroom": 9,
       "bathroom": 16,
       "kitchen": 1,
       "living": 4,
@@ -319,16 +461,20 @@
       "entry": 5,
       "terrace": 2,
       "pool": 1,
-      "outdoorSpace": 3
+      "outdoorSpace": 3,
+      "bedroomSuites": 9,
+      "sleepingRooms": 9
     },
     "derivedRequirements": [
       {
         "id": "bedrooms",
         "category": "bedroom",
         "minimum": 5,
-        "approximately": 6,
+        "maximum": 7,
+        "suite": true,
+        "target": 6,
         "briefPhrase": "approximately six generous bedroom suites",
-        "rule": "approximately 6: at least 5 bedroom spaces; no upper limit is enforced"
+        "rule": "approximately 6: target 6, accept 5 to 7 bedroom suites (sleeping accommodation with private bathroom facilities, as connected spaces or within the room); fewer than 5 suites or more than 7 sleeping rooms is rejected"
       },
       {
         "id": "living-entertainment",
@@ -367,7 +513,7 @@
       }
     ],
     "arrival": "arrival-forecourt",
-    "note": "Only derivedRequirements are programme obligations (minimums, taken from the brief's own words). currentPlanCounts describe your earlier design for information only: spaces or counts it introduced beyond the brief may be merged, reorganised, differentiated or removed. Do not drop anything the brief states; nothing here adds to the brief."
+    "note": "Only derivedRequirements are programme obligations (minimums, and a maximum where the brief says \"approximately\", taken from the brief's own words). currentPlanCounts describe your earlier design for information only: spaces or counts it introduced beyond the brief may be merged, reorganised, differentiated or removed. Do not drop anything the brief states; nothing here adds to the brief."
   },
   "dispositionNow": {
     "kind": "redesign",

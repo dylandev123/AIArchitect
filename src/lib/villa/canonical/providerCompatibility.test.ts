@@ -39,6 +39,9 @@ function revertOptionalHeight(node:unknown):unknown{
  for(const [k,v] of Object.entries(node as Json))out[k]=revertOptionalHeight(v);
  if(Array.isArray(out.enum)&&out.enum.join()==='south,east,north,west,shared,exposed')out.enum=['south','east','north','west'];
  const props=out.properties as Record<string,Json>|undefined;
+ // Additive optional fields of the whole-building coordination layer: a wing's own placement, and declared constraints.
+ if(props?.id&&props.role&&props.relatesTo&&props.placement){delete props.placement;out.required=(out.required as string[]).filter(k=>k!=='placement');}
+ if(props?.cameraViews&&props.constraints){delete props.constraints;out.required=(out.required as string[]).filter(k=>k!=='constraints');}
  if(props?.height&&props.width&&props.depth&&props.outdoor){
   const branches=props.height.anyOf as Json[]|undefined;
   expect(branches).toHaveLength(2);expect(branches![1]).toEqual({type:'null'});
@@ -50,7 +53,7 @@ it('the historical prepared wire request is still strict-valid and unmodified',(
  expect(strictSchemaIssues(historical.text.format.schema)).toEqual([]);
  expect(historical.input[0].content).toBe(live.input[0].content);
 });
-it('serializes the current schema as the historical wire format plus an optional height and two derived opening sides',async()=>{
+it('serializes the current schema as the historical wire format plus an optional height, two derived opening sides, optional wing placement and declared constraints',async()=>{
  const wire=await serialize(live.input[0].content);
  expect(strictSchemaIssues(wire.text.format.schema)).toEqual([]);
  // Every other byte of the request (model, messages, token ceiling, format name/strictness) is unchanged.

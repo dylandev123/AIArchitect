@@ -6,6 +6,7 @@ import {compileArchitecturalPlan,type ArchitecturalPlan,type Rect} from '../plan
 import {DesignConflict} from '../../experimental/semantic-building/compiler';
 import {coverOf} from '../../experimental/semantic-building/vertical';
 import {placePortals} from '../coordination';
+import {placementPath} from '../layout';
 import {decisionsOf,roomExposure,type Decision,type RoomExposure} from './decisions';
 type Side='south'|'east'|'north'|'west';
 const f2=(n:number)=>Number(n.toFixed(2));
@@ -43,8 +44,8 @@ const sharedWall=(a:Rect,b:Rect):{side:Side;length:number}|null=>{
  if(Math.abs(b.z+b.depth-a.z)<1e-6&&ov(a.x,a.x+a.width,b.x,b.x+b.width)>1e-6)return {side:'south',length:ov(a.x,a.x+a.width,b.x,b.x+b.width)};
  return null;
 };
-/** Placement ancestry (self first, root last). Tolerates unknown ids and cycles. */
-function ancestry(plan:ArchitecturalPlan,id:string){const out:string[]=[],seen=new Set<string>();let cur:string|null=id;while(cur&&!seen.has(cur)){seen.add(cur);out.push(cur);cur=plan.spaces.find(s=>s.id===cur)?.placement.relativeTo??null;}return out;}
+/** Placement ancestry (self first, root last), through placed wings. Tolerates unknown ids and cycles. */
+const ancestry=placementPath;
 function groupFindings(plan:ArchitecturalPlan,findings:Finding[],decisions:string[]){
  const errors=findings.filter(f=>f.severity==='error'),groups:FindingGroup[]=[],take=(f:Finding[])=>f.map(x=>({stage:x.stage,id:x.id,message:x.message}));
  // Volume collisions: rooms reached by independent placement chains, grouped by the pair of chains that meet.

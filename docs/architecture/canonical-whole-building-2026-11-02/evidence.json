@@ -1,0 +1,831 @@
+{
+ "generated": "offline, no provider/database/network",
+ "arrangements": [
+  {
+   "arrangement": "compact-family",
+   "compiled": "compiled",
+   "elements": 54,
+   "physicalFailures": 0,
+   "diagnosedErrors": 0,
+   "coordinationOk": true,
+   "wings": [
+    {
+     "id": "living",
+     "placed": false,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "17.0×7.0",
+     "relation": null
+    },
+    {
+     "id": "approach",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "4.0×2.0",
+     "relation": "south of living, start, gap 0"
+    },
+    {
+     "id": "sleeping",
+     "placed": true,
+     "rooms": 4,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "11.0×6.4",
+     "relation": "north of living, start, gap 0"
+    },
+    {
+     "id": "terrace",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "8.0×4.0",
+     "relation": "south of living, centre, gap 0"
+    }
+   ],
+   "levels": 1,
+   "footprintFill": 0.74,
+   "mirrorShare": 0.22,
+   "repeated": null,
+   "distinctFootprints": 7,
+   "roofForms": {
+    "flat": 7
+   },
+   "constraints": [],
+   "wingCirculation": [
+    {
+     "id": "living",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "sleeping",
+       "sharedM": 7,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "sleeping",
+     "reachable": "4/4",
+     "adjoins": [
+      {
+       "wing": "living",
+       "sharedM": 7,
+       "connected": true
+      }
+     ]
+    }
+   ],
+   "stacking": [],
+   "site": {
+    "required": {
+     "width": 17,
+     "depth": 31.4
+    },
+    "available": {
+     "width": 60,
+     "depth": 60
+    },
+    "fits": true
+   }
+  },
+  {
+   "arrangement": "asymmetric-multilevel",
+   "compiled": "compiled",
+   "elements": 71,
+   "physicalFailures": 0,
+   "diagnosedErrors": 0,
+   "coordinationOk": true,
+   "wings": [
+    {
+     "id": "core",
+     "placed": false,
+     "rooms": 2,
+     "levels": [
+      "ground",
+      "upper"
+     ],
+     "envelope": "3.2×8.4",
+     "relation": null
+    },
+    {
+     "id": "approach",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "5.0×3.0",
+     "relation": "south of core, centre, gap 0"
+    },
+    {
+     "id": "living",
+     "placed": true,
+     "rooms": 2,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "17.0×8.4",
+     "relation": "east of core, start, gap 0"
+    },
+    {
+     "id": "sleeping",
+     "placed": true,
+     "rooms": 2,
+     "levels": [
+      "upper"
+     ],
+     "envelope": "17.0×8.4",
+     "relation": "same of living, start, gap 0"
+    },
+    {
+     "id": "walk",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "2.4×3.0",
+     "relation": "north of living, end, gap 0"
+    },
+    {
+     "id": "studio",
+     "placed": true,
+     "rooms": 2,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "10.0×5.0",
+     "relation": "north of walk, end, gap 0"
+    }
+   ],
+   "levels": 2,
+   "footprintFill": 0.65,
+   "mirrorShare": 0.91,
+   "repeated": {
+    "count": 2,
+    "of": 7,
+    "width": 3.25,
+    "depth": 8.5
+   },
+   "distinctFootprints": 4,
+   "roofForms": {
+    "flat": 4
+   },
+   "constraints": [],
+   "wingCirculation": [
+    {
+     "id": "core",
+     "reachable": "2/2",
+     "adjoins": [
+      {
+       "wing": "living",
+       "sharedM": 8.4,
+       "connected": true
+      },
+      {
+       "wing": "sleeping",
+       "sharedM": 8.4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "living",
+     "reachable": "2/2",
+     "adjoins": [
+      {
+       "wing": "core",
+       "sharedM": 8.4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "sleeping",
+     "reachable": "2/2",
+     "adjoins": [
+      {
+       "wing": "core",
+       "sharedM": 8.4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "studio",
+     "reachable": "1/1",
+     "adjoins": []
+    }
+   ],
+   "stacking": [
+    "gallery 100% supported",
+    "suite-a 100% supported",
+    "suite-b 100% supported"
+   ],
+   "site": {
+    "required": {
+     "width": 21.5,
+     "depth": 32.6
+    },
+    "available": {
+     "width": 90,
+     "depth": 80
+    },
+    "fits": true
+   }
+  },
+  {
+   "arrangement": "courtyard",
+   "compiled": "compiled",
+   "elements": 78,
+   "physicalFailures": 0,
+   "diagnosedErrors": 0,
+   "coordinationOk": true,
+   "wings": [
+    {
+     "id": "south-range",
+     "placed": false,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "24.0×7.0",
+     "relation": null
+    },
+    {
+     "id": "approach",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "4.0×2.0",
+     "relation": "south of south-range, start, gap 0"
+    },
+    {
+     "id": "west-range",
+     "placed": true,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "6.0×12.4",
+     "relation": "north of south-range, start, gap 0"
+    },
+    {
+     "id": "court",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "12.0×12.4",
+     "relation": "north of south-range, centre, gap 0"
+    },
+    {
+     "id": "east-range",
+     "placed": true,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "6.0×12.4",
+     "relation": "north of south-range, end, gap 0"
+    },
+    {
+     "id": "north-range",
+     "placed": true,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "24.0×6.0",
+     "relation": "north of court, centre, gap 0"
+    }
+   ],
+   "levels": 1,
+   "footprintFill": 0.77,
+   "mirrorShare": 1,
+   "repeated": {
+    "count": 4,
+    "of": 12,
+    "width": 6,
+    "depth": 5
+   },
+   "distinctFootprints": 5,
+   "roofForms": {
+    "flat": 12
+   },
+   "constraints": [
+    {
+     "id": "court-enclosed",
+     "kind": "enclose",
+     "required": 0.9,
+     "measured": 1,
+     "ok": true
+    }
+   ],
+   "wingCirculation": [
+    {
+     "id": "south-range",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "west-range",
+       "sharedM": 6,
+       "connected": true
+      },
+      {
+       "wing": "east-range",
+       "sharedM": 6,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "west-range",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "south-range",
+       "sharedM": 6,
+       "connected": true
+      },
+      {
+       "wing": "north-range",
+       "sharedM": 6,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "east-range",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "south-range",
+       "sharedM": 6,
+       "connected": true
+      },
+      {
+       "wing": "north-range",
+       "sharedM": 6,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "north-range",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "west-range",
+       "sharedM": 6,
+       "connected": true
+      },
+      {
+       "wing": "east-range",
+       "sharedM": 6,
+       "connected": true
+      }
+     ]
+    }
+   ],
+   "stacking": [],
+   "site": {
+    "required": {
+     "width": 24,
+     "depth": 27.4
+    },
+    "available": {
+     "width": 100,
+     "depth": 100
+    },
+    "fits": true
+   }
+  },
+  {
+   "arrangement": "multi-wing-estate",
+   "compiled": "compiled",
+   "elements": 106,
+   "physicalFailures": 0,
+   "diagnosedErrors": 0,
+   "coordinationOk": true,
+   "wings": [
+    {
+     "id": "great-house",
+     "placed": false,
+     "rooms": 4,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "38.0×17.0",
+     "relation": null
+    },
+    {
+     "id": "forecourt",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "12.0×5.0",
+     "relation": "south of great-house, start, gap 0"
+    },
+    {
+     "id": "loggia",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "16.0×4.0",
+     "relation": "south of salon, start, gap 0"
+    },
+    {
+     "id": "owner-wing",
+     "placed": true,
+     "rooms": 3,
+     "levels": [
+      "ground",
+      "upper"
+     ],
+     "envelope": "18.0×10.0",
+     "relation": "east of great-house, start, gap 0"
+    },
+    {
+     "id": "link",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "4.0×12.0",
+     "relation": "north of great-house, end, gap 0"
+    },
+    {
+     "id": "guest-pavilion",
+     "placed": true,
+     "rooms": 3,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "24.0×8.0",
+     "relation": "north of link, centre, gap 0"
+    },
+    {
+     "id": "spa-path",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "4.0×14.0",
+     "relation": "south of owner-wing, start, gap 0"
+    },
+    {
+     "id": "spa",
+     "placed": true,
+     "rooms": 1,
+     "levels": [
+      "ground"
+     ],
+     "envelope": "10.0×7.0",
+     "relation": "south of spa-path, start, gap 0"
+    }
+   ],
+   "levels": 2,
+   "footprintFill": 0.29,
+   "mirrorShare": 0.22,
+   "repeated": {
+    "count": 3,
+    "of": 12,
+    "width": 12,
+    "depth": 10
+   },
+   "distinctFootprints": 9,
+   "roofForms": {
+    "flat": 11
+   },
+   "constraints": [
+    {
+     "id": "guests-private",
+     "kind": "separate",
+     "required": 18,
+     "measured": 19,
+     "ok": true
+    },
+    {
+     "id": "link-meets-house",
+     "kind": "adjoin",
+     "required": 2.4,
+     "measured": 4,
+     "ok": true
+    },
+    {
+     "id": "link-meets-guests",
+     "kind": "adjoin",
+     "required": 2.4,
+     "measured": 4,
+     "ok": true
+    }
+   ],
+   "wingCirculation": [
+    {
+     "id": "great-house",
+     "reachable": "4/4",
+     "adjoins": [
+      {
+       "wing": "owner-wing",
+       "sharedM": 10,
+       "connected": true
+      },
+      {
+       "wing": "link",
+       "sharedM": 4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "owner-wing",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "great-house",
+       "sharedM": 10,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "link",
+     "reachable": "1/1",
+     "adjoins": [
+      {
+       "wing": "great-house",
+       "sharedM": 4,
+       "connected": true
+      },
+      {
+       "wing": "guest-pavilion",
+       "sharedM": 4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "guest-pavilion",
+     "reachable": "3/3",
+     "adjoins": [
+      {
+       "wing": "link",
+       "sharedM": 4,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "spa",
+     "reachable": "1/1",
+     "adjoins": []
+    }
+   ],
+   "stacking": [
+    "owner-retreat 100% supported"
+   ],
+   "site": {
+    "required": {
+     "width": 56,
+     "depth": 58.4
+    },
+    "available": {
+     "width": 170,
+     "depth": 130
+    },
+    "fits": true
+   }
+  }
+ ],
+ "cases": [
+  {
+   "case": "privacy demand of 40 m between guest pavilion and owner wing (arrangement gives ~24 m)",
+   "kind": "competing",
+   "outcome": [
+    "guests-private (separate: guests and owners should not overlook each other) is not met: guest-pavilion and owner-wing are 19 m apart, 40 m required. Single edits that would meet it: wing guest-pavilion.gap 0→21 (creates 1 new); wing link.gap 0→21 (creates 1 new). Software has changed nothing."
+   ]
+  },
+  {
+   "case": "separate and adjoin declared on one pair",
+   "kind": "competing",
+   "outcome": [
+    "touch (adjoin: share a wall) is not met: guest-pavilion and owner-wing share 0 m of wall, 3 m required. No single placement edit meets it. The relationships that produce this measurement are: guest-pavilion: north of link, centre, gap 0 | link: north of great-house, end, gap 0 | owner-wing: east of great-house, start, gap 0; one of them, or the constraint, must be reconsidered. Software has changed nothing.",
+    "guests-private (separate guest-pavilion/owner-wing by 18 m) and touch (adjoin by 3 m) cannot both hold: wings that share a wall are 0 m apart. Decide which relationship the concept needs."
+   ]
+  },
+  {
+   "case": "34 m privacy on a 62×70 m site",
+   "kind": "competing",
+   "outcome": [
+    "measured 19 m; 2 single edit(s) meet it; creating: guest-pavilion.gap→15: constraint:link-meets-guests,site:fit; link.gap→15: constraint:link-meets-house,site:fit"
+   ]
+  },
+  {
+   "case": "court declared 90% enclosed but the west range is shortened",
+   "kind": "competing",
+   "outcome": [
+    "court-enclosed (enclose: the court must read as a room of the house, closed on all four sides) is not met: court-yard is bounded by interior rooms along 87.7% of its perimeter, 90% required. No single placement edit meets it. The relationships that produce this measurement are: court: north of south-range, centre, gap 0; one of them, or the constraint, must be reconsidered. Software has changed nothing."
+   ]
+  },
+  {
+   "case": "two wings placed against each other",
+   "kind": "impossible",
+   "outcome": [
+    "wing approach is placed against something that depends on its own position (cyclic wing placement).",
+    "wing terrace is placed against approach, which is missing, cyclic or itself unresolved.",
+    "wing approach is placed against terrace, which is missing, cyclic or itself unresolved."
+   ]
+  },
+  {
+   "case": "a room of a placed wing anchored to a room of another wing",
+   "kind": "impossible",
+   "outcome": [
+    "bed-two (anchored to kitchen) belongs to wing sleeping, which is placed as a whole: rooms in it may be placed only against rooms of the same wing. Relate the wings (placement of sleeping), not one room to another wing's room."
+   ]
+  },
+  {
+   "case": "a wing with two local origins",
+   "kind": "impossible",
+   "outcome": [
+    "wing sleeping is placed as a whole, so exactly one of its spaces must be its local origin (relativeTo:null, side:origin, gap:0); found 2: hall, bed-one."
+   ]
+  },
+  {
+   "case": "a wing stacked over another on the same level",
+   "kind": "impossible",
+   "outcome": [
+    "living-room-hall: living-room and hall share no wall, so there is no wall to open between them."
+   ]
+  },
+  {
+   "case": "two long wings on adjacent sides of one core (corner claim)",
+   "kind": "impossible",
+   "outcome": [
+    "east-a × north-a (wings east-arm × north-arm): wing east-arm (east of wing core, 8×14) and wing north-arm (north of wing core, 14×6) are both anchored to wing core on adjacent sides. Each is larger than wing core along the other's axis (wing east-arm projects 0/8 m past wing core's low/high ends, wing north-arm 0/8 m), so both claim the corner quadrant: 8×6 m overlap (east-a × north-a). Wings were related as whole envelopes, but two envelopes on adjacent sides of one host still contend for its corner. Single edits that clear it: wing east-arm.gap 0→8; wing north-arm.gap 0→8; wing north-arm.relativeTo core→east-arm; wing east-arm.alignment start→end.",
+    "OPEN CHOICE: east-a × north-a: east-arm or north-arm must yield: wing east-arm.gap 0→8 | wing north-arm.gap 0→8 | wing north-arm.relativeTo core→east-arm | wing east-arm.alignment start→end | wing north-arm.alignment start→end | wing east-arm.relativeTo core→north-arm"
+   ]
+  }
+ ],
+ "sweeps": [
+  {
+   "sweep": "wings on opposite sides only (east+west)",
+   "samples": 1000,
+   "arrangementsColliding": {
+    "roomPlacement": 184,
+    "wingPlacement": 0
+   },
+   "collisionCount": {
+    "roomPlacement": 184,
+    "wingPlacement": 0
+   },
+   "remainingWingCollisionsByClass": {
+    "wingCornerClaim": 0,
+    "anythingElse": 0
+   }
+  },
+  {
+   "sweep": "wings on opposite sides only (north+south)",
+   "samples": 1000,
+   "arrangementsColliding": {
+    "roomPlacement": 645,
+    "wingPlacement": 0
+   },
+   "collisionCount": {
+    "roomPlacement": 1122,
+    "wingPlacement": 0
+   },
+   "remainingWingCollisionsByClass": {
+    "wingCornerClaim": 0,
+    "anythingElse": 0
+   }
+  },
+  {
+   "sweep": "wings on all four sides",
+   "samples": 2000,
+   "arrangementsColliding": {
+    "roomPlacement": 1627,
+    "wingPlacement": 308
+   },
+   "collisionCount": {
+    "roomPlacement": 4010,
+    "wingPlacement": 394
+   },
+   "remainingWingCollisionsByClass": {
+    "wingCornerClaim": 394,
+    "anythingElse": 0
+   }
+  }
+ ],
+ "spineParti": {
+  "samples": 2000,
+  "roomAnchoredCollidingArrangements": 1943,
+  "wingPlacedCrossWingCollidingArrangements": 0
+ },
+ "retainedModelProposals": [
+  {
+   "file": "docs/architecture/canonical-corrected-mansion-2026-11-02/proposal.normalized.json",
+   "spaces": 30,
+   "wingsDeclared": 5,
+   "wingPlacementsUsed": 0,
+   "collisions": 6,
+   "byCause": {
+    "branch-crossing": 6
+   },
+   "singleEditOptionsAvailable": 4,
+   "spineDependants": {
+    "id": "foyer",
+    "dependants": 3
+   },
+   "mirrorShare": 0.24,
+   "repeatedCells": {
+    "count": 5,
+    "of": 27,
+    "width": 8,
+    "depth": 5
+   },
+   "maxChainDepth": 6,
+   "levels": 2,
+   "roofForms": {
+    "flat": 28
+   },
+   "openChoices": 3
+  },
+  {
+   "file": "docs/architecture/canonical-plan-revision-2026-11-02/revision-record.json",
+   "spaces": 33,
+   "wingsDeclared": 7,
+   "wingPlacementsUsed": 0,
+   "collisions": 1,
+   "byCause": {
+    "branch-crossing": 1
+   },
+   "singleEditOptionsAvailable": 1,
+   "spineDependants": {
+    "id": "entry-hall",
+    "dependants": 4
+   },
+   "mirrorShare": 0.6,
+   "repeatedCells": {
+    "count": 6,
+    "of": 30,
+    "width": 9,
+    "depth": 6
+   },
+   "maxChainDepth": 6,
+   "levels": 2,
+   "roofForms": {
+    "flat": 23,
+    "gable": 2,
+    "hip": 7
+   },
+   "openChoices": 1
+  },
+  {
+   "file": "docs/architecture/canonical-redesign-revision-2026-11-02/revision-record.json",
+   "spaces": 21,
+   "wingsDeclared": 6,
+   "wingPlacementsUsed": 0,
+   "collisions": 9,
+   "byCause": {
+    "branch-crossing": 7,
+    "adjacent-overhang": 2
+   },
+   "singleEditOptionsAvailable": 9,
+   "spineDependants": {
+    "id": "central-gallery",
+    "dependants": 3
+   },
+   "mirrorShare": 0.74,
+   "repeatedCells": {
+    "count": 6,
+    "of": 18,
+    "width": 10,
+    "depth": 6
+   },
+   "maxChainDepth": 6,
+   "levels": 1,
+   "roofForms": {
+    "flat": 21
+   },
+   "openChoices": 9
+  }
+ ]
+}

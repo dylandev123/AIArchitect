@@ -45,8 +45,9 @@ const compare=(label:string,prior:{model:string;max_output_tokens:number;input:{
 };
 const v1File='docs/architecture/canonical-second-revision-2026-11-02/request.prepared.NOT-SUBMITTED.json';
 const cmpApproved=compare('approved d830dac2 request',old,`${prev}/provider-request.exact.json`),cmpV1=compare('superseded 94b18aff request (never submitted)',JSON.parse(readFileSync(v1File,'utf8')),v1File);
+const v2File='docs/architecture/canonical-redesign-revision-SUPERSEDED-123e60b9/request.prepared.NOT-SUBMITTED.json',cmpV2=compare('superseded 123e60b9 request (never submitted)',JSON.parse(readFileSync(v2File,'utf8')),v2File);
 const reqA=newCtx.requirements,reqB=JSON.parse(JSON.parse(readFileSync(v1File,'utf8')).input[1].content[0].text).requirements;
-w('comparison.json',{newSha256:sha(wire),approved:cmpApproved,supersededV1:cmpV1,requirementsBefore:reqB,requirementsNow:reqA,dispositionNow:newCtx.architecturalWeaknesses.disposition});
+w('comparison.json',{newSha256:sha(wire),approved:cmpApproved,supersededV1:cmpV1,supersededV2:cmpV2,requirementsBefore:reqB,requirementsNow:reqA,dispositionNow:newCtx.architecturalWeaknesses.disposition});
 const segmentReport={...Object.fromEntries(Object.entries(cmpApproved.systemSegments).map(([k,v])=>[k,(v as {identical:boolean}).identical]))};
 const oldSchema=JSON.stringify(old.text.format.schema);
 // ---- What the model will see about the plan it is revising.
@@ -57,4 +58,4 @@ const textTokens=Math.ceil((req.system.length+req.text.length+newSchema.length)/
 const usd=(i:number,o:number)=>Number(((i*rates.input+o*rates.output)/1e6).toFixed(4));
 w('estimate.json',{note:'Local estimate at repository default rates; not an invoice. Tokens approximated as characters/3.6 plus image tiles.',model:'gpt-5.6-terra',rates,wireBytes:wire.length,wireSha256:sha(wire),estimatedInputTokens:inTok,previousCall:{input:21593,output:11774,reasoning:4007,usd:0.1845,estimatedInputWas:22700},estimatedUsd:{expected:usd(inTok,12500),atPreviousOutput:usd(inTok,11774),worstCaseAtOutputCeiling:usd(inTok,30000)},maxCalls:1,retries:0});
 w('verification.json',{offline:true,providerCalls:0,preparedRequestSha256:sha(wire),strictSchemaIssues:[],systemSha256:req.sha256.system,contextSha256:req.sha256.text,imageSha256:req.sha256.image,instructionsStartWithCurrentContract:req.system.startsWith(CANONICAL_INSTRUCTIONS),precedenceIsCurrent:req.system.includes(CANONICAL_CONTEXT_PRECEDENCE),addendumIsCurrent:req.system.endsWith(REVISION_ADDENDUM)});
-console.log(JSON.stringify({errors:a.errorCount,decisions:a.decisions.length,groups:a.groups.length,unreachable:reachable,signals:a.signals.filter(s=>s.fired).map(s=>s.id),disposition:a.disposition.kind,wireBytes:wire.length,sha:sha(wire),inTok,est:usd(inTok,12500),segmentReport:Object.fromEntries(Object.entries(segmentReport).map(([k,v])=>[k,v.identical])),schemaSame:oldSchema===newSchema,briefSame:oldCtx.brief===newCtx.brief},null,1));
+console.log(JSON.stringify({errors:a.errorCount,decisions:a.decisions.length,groups:a.groups.length,unreachable:reachable,signals:a.signals.filter(s=>s.fired).map(s=>s.id),disposition:a.disposition.kind,wireBytes:wire.length,sha:sha(wire),inTok,est:usd(inTok,12500),segmentReport:Object.fromEntries(Object.entries(segmentReport)),schemaSame:oldSchema===newSchema,briefSame:oldCtx.brief===newCtx.brief},null,1));
