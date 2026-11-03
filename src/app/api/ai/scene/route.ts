@@ -19,7 +19,7 @@ import { withUsageLogging } from '@/lib/ai/usage/track';
 import { SceneConstructionError, sceneRuntimeOutputSchema, sceneResponseFormatSchema, sceneMessages, sceneRequestSchema, sceneProviderOutputSchema, resolveSceneResult, type SceneRequest } from '@/lib/villa/scene/terra';
 import { architecturalRequestContext } from '@/lib/villa/scene/knowledgeContext';
 import { validateScene } from '@/lib/villa/scene/model';
-export const maxDuration = 360;
+export const maxDuration = 300;
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET(request:Request){
     if(process.env.NODE_ENV!=='development')return json({error:'Not found'},404);
