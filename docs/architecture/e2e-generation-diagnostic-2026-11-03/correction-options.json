@@ -1,0 +1,31 @@
+{
+  "appliedToPlan": false,
+  "note": "Offers computed by the existing arrangement/spatial analysers. Choosing one is an architectural decision; none was applied.",
+  "collisions": [],
+  "constraintOptions": [
+    {
+      "id": "west-wing-pavilion-adjoin",
+      "reason": "The west private gallery is directly entered from the central salon while its suites remain secluded behind it.",
+      "implicated": [
+        {
+          "node": "west-suite-wing",
+          "placement": "west-suite-wing: west of core-pavilion, centre, gap 0"
+        }
+      ],
+      "options": [
+        {
+          "node": "west-suite-wing",
+          "entity": "wing",
+          "field": "alignment",
+          "from": "centre",
+          "to": "end",
+          "measuredAfter": 5,
+          "displaces": 0,
+          "newErrors": [],
+          "note": "re-align west-suite-wing"
+        }
+      ]
+    }
+  ],
+  "openChoices": []
+}

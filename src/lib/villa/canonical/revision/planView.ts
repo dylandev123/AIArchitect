@@ -4,6 +4,7 @@
 import type {ArchitecturalPlan,Rect} from '../plan';
 import {analysePlan,overlap,type PlanAnalysis} from './analysis';
 import {placePortals,pointOnEdge} from '../coordination';
+import {composedView} from '../composition';
 const esc=(s:string)=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]!);
 const f1=(n:number)=>Number(n.toFixed(1));
 const PALETTE=['#e8dcc0','#dfe9d8','#d6dfee','#eed9d9','#e5f0f0','#efe3f1','#f3ead2','#dde6e0','#e9dfd3','#d9e4ef'];
@@ -26,7 +27,9 @@ export function planViewModel(plan:ArchitecturalPlan,analysis:PlanAnalysis=analy
    for(const [id,r] of Object.entries(analysis.siteRects)){const pool=plan.pools.some(p=>p.id===id);shapes.push({kind:pool?'pool':plan.landscape.find(x=>x.id===id)!.kind,id,...r,flags:errors.some(f=>f.stage==='site'&&f.id.split('/').includes(id))?['conflict']:[]});}
   }
   // Roof extents including eaves, at the level of the roofed space; conflicting eave overlaps filled.
-  const sections=plan.roofs.flatMap(r=>{const s=plan.spaces.find(x=>x.id===r.space),rect=rects[r.space];if(!s||!rect||s.level!==l.id)return [];const e=(r.overhang??0)+(r.form!=='flat'?.1:0);return [{id:r.space,rect:{x:rect.x-e,z:rect.z-e,width:rect.width+2*e,depth:rect.depth+2*e},form:r.form,overhang:r.overhang??0}];});
+  const view=composedView(plan,new Map(Object.entries(rects)));
+  // A declared roof span is one roof over its combined footprint (the compiler's expansion), drawn once from its lead room.
+  const sections=view.roofs.flatMap(r=>{const s=plan.spaces.find(x=>x.id===r.space),span=view.spans.find(q=>q.lead===r.space),rect=span?span.rect:rects[r.space];if(!s||!rect||s.level!==l.id)return [];const e=(r.overhang??0)+(r.form!=='flat'?.1:0);return [{id:r.space,rect:{x:rect.x-e,z:rect.z-e,width:rect.width+2*e,depth:rect.depth+2*e},form:r.form,overhang:r.overhang??0}];});
   for(const r of sections)shapes.push({kind:'roof',id:r.id,level:l.id,...r.rect,data:{form:r.form,overhang:r.overhang}});
   for(let i=0;i<sections.length;i++)for(let j=i+1;j<sections.length;j++){const ov=overlap(sections[i].rect,sections[j].rect);if(ov)shapes.push({kind:'roof-conflict',id:`${sections[i].id}/${sections[j].id}`,...ov});}
   // Openings drawn on the wall edge they sit on (authored, or derived from the declared relationship), at the compiler's own offset.

@@ -1,0 +1,261 @@
+{
+ "hillcrest.composed": {
+  "elements": 93,
+  "roofs": 4,
+  "walls": 38,
+  "openingsInWalls": 23,
+  "composition": {
+   "volumes": [
+    {
+     "id": "stone-house",
+     "tier": "primary",
+     "top": 8,
+     "spaces": [
+      "hall",
+      "salon",
+      "upper-gallery",
+      "upper-lounge",
+      "porch"
+     ],
+     "roof": "crown-roof"
+    },
+    {
+     "id": "timber-bar",
+     "tier": "secondary",
+     "top": 4,
+     "spaces": [
+      "west-gallery",
+      "bed-1",
+      "bed-2",
+      "bed-3"
+     ],
+     "roof": "sleeping-roof"
+    },
+    {
+     "id": "garden-room-volume",
+     "tier": "subordinate",
+     "top": 3,
+     "spaces": [
+      "garden-room",
+      "veranda"
+     ],
+     "roof": "garden-roof"
+    }
+   ],
+   "roofs": [
+    {
+     "id": "crown-roof",
+     "form": "hip",
+     "spans": [
+      "upper-gallery",
+      "upper-lounge"
+     ],
+     "elements": [
+      "crown-roof"
+     ]
+    },
+    {
+     "id": "sleeping-roof",
+     "form": "gable",
+     "spans": [
+      "west-gallery",
+      "bed-1",
+      "bed-2",
+      "bed-3"
+     ],
+     "elements": [
+      "sleeping-roof"
+     ]
+    },
+    {
+     "id": "garden-roof",
+     "form": "flat",
+     "spans": [
+      "garden-room",
+      "veranda"
+     ],
+     "elements": [
+      "garden-roof"
+     ]
+    }
+   ],
+   "facades": [
+    {
+     "id": "salon-south",
+     "openings": [
+      "salon-south-1",
+      "salon-south-2",
+      "salon-south-3"
+     ]
+    },
+    {
+     "id": "salon-east",
+     "openings": [
+      "salon-east-1",
+      "salon-east-2"
+     ]
+    },
+    {
+     "id": "lounge-south",
+     "openings": [
+      "lounge-south-1",
+      "lounge-south-2",
+      "lounge-south-3"
+     ]
+    },
+    {
+     "id": "lounge-east",
+     "openings": [
+      "lounge-east-1",
+      "lounge-east-2"
+     ]
+    },
+    {
+     "id": "garden-doors",
+     "openings": [
+      "garden-doors-1",
+      "garden-doors-2",
+      "garden-doors-3"
+     ]
+    },
+    {
+     "id": "bed-north",
+     "openings": [
+      "bed-north-1",
+      "bed-north-2"
+     ]
+    }
+   ],
+   "entrance": {
+    "portal": "estate-door",
+    "porch": "porch",
+    "roofed": true
+   },
+   "roofElements": 4,
+   "interiorRooms": 9
+  }
+ },
+ "hillcrest.roomwise": {
+  "elements": 86,
+  "roofs": 9,
+  "walls": 29,
+  "openingsInWalls": 8,
+  "composition": null
+ },
+ "pavilion-court.composed": {
+  "elements": 59,
+  "roofs": 4,
+  "walls": 29,
+  "openingsInWalls": 17,
+  "composition": {
+   "volumes": [
+    {
+     "id": "living-pavilion",
+     "tier": "primary",
+     "top": 5.2,
+     "spaces": [
+      "living",
+      "dining",
+      "porch"
+     ],
+     "roof": "pavilion-roof"
+    },
+    {
+     "id": "sleeping-bar",
+     "tier": "secondary",
+     "top": 3.4000000000000004,
+     "spaces": [
+      "spine",
+      "bed-a",
+      "bed-b",
+      "bed-c",
+      "bed-d"
+     ],
+     "roof": "bar-roof"
+    },
+    {
+     "id": "court-garden",
+     "tier": "subordinate",
+     "top": 0,
+     "spaces": [
+      "court",
+      "deck"
+     ],
+     "roof": null
+    }
+   ],
+   "roofs": [
+    {
+     "id": "pavilion-roof",
+     "form": "hip",
+     "spans": [
+      "living",
+      "dining"
+     ],
+     "elements": [
+      "pavilion-roof"
+     ]
+    },
+    {
+     "id": "bar-roof",
+     "form": "gable",
+     "spans": [
+      "spine",
+      "bed-a",
+      "bed-b",
+      "bed-c",
+      "bed-d"
+     ],
+     "elements": [
+      "bar-roof"
+     ]
+    }
+   ],
+   "facades": [
+    {
+     "id": "living-west",
+     "openings": [
+      "living-west-1",
+      "living-west-2",
+      "living-west-3"
+     ]
+    },
+    {
+     "id": "dining-south",
+     "openings": [
+      "dining-south-1",
+      "dining-south-2"
+     ]
+    },
+    {
+     "id": "dining-deck",
+     "openings": [
+      "dining-deck-1",
+      "dining-deck-2"
+     ]
+    },
+    {
+     "id": "bed-north",
+     "openings": [
+      "bed-north-1",
+      "bed-north-2"
+     ]
+    }
+   ],
+   "entrance": {
+    "portal": "front-door",
+    "porch": "porch",
+    "roofed": true
+   },
+   "roofElements": 4,
+   "interiorRooms": 7
+  }
+ },
+ "pavilion-court.roomwise": {
+  "elements": 57,
+  "roofs": 9,
+  "walls": 24,
+  "openingsInWalls": 8,
+  "composition": null
+ }
+}

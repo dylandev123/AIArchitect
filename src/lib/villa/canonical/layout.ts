@@ -12,7 +12,7 @@
  * A mass without `placement` behaves exactly as before. Pure functions; nothing here edits a plan. */
 import {DesignConflict} from '../experimental/semantic-building/compiler';
 import type {ArchitecturalPlan} from './plan';
-import {isMassAnchor,massMembers,boundsOf,massAnchorProblem} from './massAnchor';
+import {isMassAnchor,massMembers,primaryMembers,boundsOf,massAnchorProblem} from './massAnchor';
 export type Rect={x:number;z:number;width:number;depth:number};
 export type Placement={relativeTo:string|null;side:'origin'|'north'|'east'|'south'|'west'|'same';alignment:'start'|'centre'|'end';gap:number};
 const fail=(message:string):never=>{throw new DesignConflict([message]);};
@@ -27,6 +27,11 @@ export function locate(width:number,depth:number,p:Placement,base?:Rect):Rect{
  if(p.side==='south')z=base.z-depth-p.gap;
  if(p.side==='same'&&p.gap!==0)fail('Stacked placement cannot include a horizontal gap.');
  return {x,z,width,depth};
+}
+/** Rectangles that define a wing's own volume (see primaryMembers). The same rule for the wing being placed and the wing it is placed against. */
+function extentRects(plan:ArchitecturalPlan,massId:string,parts:{m:ArchitecturalPlan['spaces'][number];r:Rect}[]):Rect[]{
+ const own=new Set(primaryMembers(plan,massId).map(m=>m.id));
+ return parts.filter(p=>own.has(p.m.id)).map(p=>p.r);
 }
 export type LayoutProblem={id:string;message:string};
 export type WingFrame={
@@ -61,9 +66,9 @@ export function resolveLayout(plan:ArchitecturalPlan){
   const anchor=s.placement.relativeTo;
   if(anchor!==null){
    if(isMassAnchor(plan,anchor)){
-    const problem=massAnchorProblem(plan,s.id,anchor,s.placement.side),parts=problem?[]:massMembers(plan,anchor).map(m=>space(m.id,active));
-    if(problem||parts.some(p=>!p)){note(s.id,problem??`${s.id}: placement anchor wing ${anchor} contains a space that is missing, cyclic or itself unresolved`);bad.add(key);return undefined;}
-    base=boundsOf(parts as Rect[]);
+    const problem=massAnchorProblem(plan,s.id,anchor,s.placement.side),parts=problem?[]:massMembers(plan,anchor).map(m=>({m,r:space(m.id,active)}));
+    if(problem||parts.some(p=>!p.r)){note(s.id,problem??`${s.id}: placement anchor wing ${anchor} contains a space that is missing, cyclic or itself unresolved`);bad.add(key);return undefined;}
+    base=boundsOf(extentRects(plan,anchor,parts as {m:typeof plan.spaces[number];r:Rect}[]));
    }else{base=space(anchor,active);if(!base){note(s.id,`${s.id}: placement anchor ${anchor} is missing, cyclic or itself unresolved`);bad.add(key);return undefined;}}
   }
   try{const r=locate(s.width,s.depth,s.placement,base);rects.set(key,r);return r;}catch(e){note(s.id,String((e as Error).message??e));bad.add(key);return undefined;}
@@ -92,7 +97,8 @@ export function resolveLayout(plan:ArchitecturalPlan){
   };
   for(const s of members)if(!loc(s.id)){ok=false;if(!problems.some(q=>q.id===s.id))note(s.id,`${s.id}: placement inside wing ${massId} is cyclic or refers to an unresolved room`);}
   if(!ok){bad.add(wk);return undefined;}
-  const envLocal=boundsOf([...local.values()]);
+  // The wing is placed by its own volume: spaces the author declared `attached` (porch, terrace, annex) travel with it but do not enlarge the extent it is placed by.
+  const envLocal=boundsOf(extentRects(plan,massId,[...local].map(([id,r])=>({m:spaces.get(id)!,r}))));
   const anchorId=p.relativeTo;
   if(anchorId===null)return give(`wing ${massId} is placed as a whole but its placement has no anchor (relativeTo:null).`);
   if(anchorId===massId||spaces.get(anchorId)?.mass===massId)return give(`wing ${massId} cannot be placed against itself.`);
@@ -100,8 +106,8 @@ export function resolveLayout(plan:ArchitecturalPlan){
   if(spaces.has(anchorId))base=space(anchorId,active);
   else if(masses.has(anchorId)){
    if(!massMembers(plan,anchorId).length)return give(`wing ${massId} is placed against ${anchorId}, which has no spaces.`);
-   const parts=massMembers(plan,anchorId).map(m=>space(m.id,active));
-   base=parts.some(r=>!r)?undefined:boundsOf(parts as Rect[]);
+   const parts=massMembers(plan,anchorId).map(m=>({m,r:space(m.id,active)}));
+   base=parts.some(p=>!p.r)?undefined:boundsOf(extentRects(plan,anchorId,parts as {m:typeof plan.spaces[number];r:Rect}[]));
   }else return give(`wing ${massId} is placed against ${anchorId}, which is neither a wing nor a space.`);
   if(!base)return give(`wing ${massId} is placed against ${anchorId}, which is missing, cyclic or itself unresolved.`);
   let target:Rect;

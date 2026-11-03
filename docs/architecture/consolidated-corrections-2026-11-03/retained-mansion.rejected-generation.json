@@ -1,0 +1,2310 @@
+{
+ "status": "rejected",
+ "completedHouse": false,
+ "scene": null,
+ "stage": "derive",
+ "notReached": [
+  "construction",
+  "exterior",
+  "composition",
+  "site",
+  "validate"
+ ],
+ "compilerRejection": {
+  "decisions": [
+   "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing.",
+   "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+   "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+   "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+  ]
+ },
+ "limitations": [
+  "The scheme uses the required flat-site representation. The waterfront lies conceptually north of the house; no surveyed shoreline, flood datum, setbacks, terrain, retaining work, marine engineering or infinity edge is represented.",
+  "The rectangular pool is an editable basin and water volume only; it does not claim an infinity edge, catchment, pool equipment, safety systems or marine construction.",
+  "Suite cells establish six generous private suite allocations and direct gallery access, but bathroom layouts, wardrobes, furniture, kitchen equipment, lighting, planting and interior fit-out remain outside the supported envelope.",
+  "Saint Lucia hurricane, wind-driven rain, corrosion, drainage, structural, accessibility and local planning requirements require specialist coordination before construction.",
+  "US$25 million is treated solely as the client-stated property-value ambition in explicit USD, not as a construction budget, cost estimate or valuation claim."
+ ],
+ "persisted": false,
+ "plan": {
+  "version": "architectural-plan-1",
+  "id": "saint-lucia-waterfront-estate-01",
+  "thesis": "A tall limestone-and-bronze waterfront salon forms the estate’s civic heart: an elevated, deeply shaded living pavilion with a single calm roofline facing the sea. Lower timber-lined suite bars engage its flanks as quiet inhabited buttresses, while a low arrival porch and a broad seaward terrace make the journey from landward arrival to water deliberately legible.",
+  "orientation": 0,
+  "site": {
+   "width": 80,
+   "depth": 75,
+   "elevation": 0,
+   "grade": 0,
+   "fall": "-z"
+  },
+  "levels": [
+   {
+    "id": "ground",
+    "above": null,
+    "rise": 0.3
+   }
+  ],
+  "masses": [
+   {
+    "id": "core-pavilion",
+    "role": "double-height waterfront living pavilion with arrival, dining and service rooms"
+   },
+   {
+    "id": "west-suite-wing",
+    "role": "three-suite private accommodation bar",
+    "relatesTo": "core-pavilion",
+    "placement": {
+     "relativeTo": "core-pavilion",
+     "side": "west",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-suite-wing",
+    "role": "primary and guest accommodation bar",
+    "relatesTo": "core-pavilion",
+    "placement": {
+     "relativeTo": "core-pavilion",
+     "side": "east",
+     "alignment": "centre",
+     "gap": 0
+    }
+   }
+  ],
+  "spaces": [
+   {
+    "id": "living-salon",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "double-height living and entertainment salon",
+    "width": 8,
+    "depth": 12,
+    "height": 6,
+    "outdoor": false,
+    "facadeMaterial": "limestone",
+    "placement": {
+     "relativeTo": null,
+     "side": "origin",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "dining-salon",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "double-height formal dining salon",
+    "width": 6,
+    "depth": 12,
+    "height": 6,
+    "outdoor": false,
+    "facadeMaterial": "limestone",
+    "placement": {
+     "relativeTo": "living-salon",
+     "side": "east",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "arrival-porch",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "roofed landward arrival porch",
+    "width": 6,
+    "depth": 3.5,
+    "height": 3.6,
+    "outdoor": true,
+    "facadeMaterial": "bronze",
+    "placement": {
+     "relativeTo": "living-salon",
+     "side": "south",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "waterfront-terrace",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "deep shaded waterfront entertaining terrace",
+    "width": 14,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": true,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "living-salon",
+     "side": "north",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "kitchen",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "catering kitchen with direct dining service",
+    "width": 6,
+    "depth": 6,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "sage",
+    "placement": {
+     "relativeTo": "dining-salon",
+     "side": "south",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "pantry",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "walk-in pantry and back-of-house store",
+    "width": 3,
+    "depth": 6,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "sage",
+    "placement": {
+     "relativeTo": "kitchen",
+     "side": "east",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "powder-room",
+    "mass": "core-pavilion",
+    "level": "ground",
+    "use": "guest powder room",
+    "width": 3,
+    "depth": 3,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "sage",
+    "placement": {
+     "relativeTo": "pantry",
+     "side": "south",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-gallery",
+    "mass": "west-suite-wing",
+    "level": "ground",
+    "use": "shaded private suite gallery",
+    "width": 3,
+    "depth": 15,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": null,
+     "side": "origin",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-guest-suite-1",
+    "mass": "west-suite-wing",
+    "level": "ground",
+    "use": "guest bedroom suite one",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "west-gallery",
+     "side": "west",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-guest-suite-2",
+    "mass": "west-suite-wing",
+    "level": "ground",
+    "use": "guest bedroom suite two",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "west-guest-suite-1",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-guest-suite-3",
+    "mass": "west-suite-wing",
+    "level": "ground",
+    "use": "guest bedroom suite three",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "west-guest-suite-2",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-gallery",
+    "mass": "east-suite-wing",
+    "level": "ground",
+    "use": "shaded private suite gallery",
+    "width": 3,
+    "depth": 15,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": null,
+     "side": "origin",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "primary-suite",
+    "mass": "east-suite-wing",
+    "level": "ground",
+    "use": "waterfront primary bedroom suite",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "east-gallery",
+     "side": "east",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-guest-suite-1",
+    "mass": "east-suite-wing",
+    "level": "ground",
+    "use": "guest bedroom suite four",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "primary-suite",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-guest-suite-2",
+    "mass": "east-suite-wing",
+    "level": "ground",
+    "use": "guest bedroom suite five",
+    "width": 7,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "facadeMaterial": "timber",
+    "placement": {
+     "relativeTo": "east-guest-suite-1",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   }
+  ],
+  "portals": [
+   {
+    "id": "arrival-door",
+    "host": {
+     "space": "living-salon",
+     "side": "south"
+    },
+    "to": "arrival-porch",
+    "alignment": "centre",
+    "width": 2.4,
+    "height": 3.2,
+    "mode": "door"
+   },
+   {
+    "id": "living-to-dining",
+    "host": {
+     "space": "living-salon",
+     "side": "shared"
+    },
+    "to": "dining-salon",
+    "alignment": "centre",
+    "width": 3,
+    "height": 3.2,
+    "mode": "open"
+   },
+   {
+    "id": "living-to-terrace",
+    "host": {
+     "space": "living-salon",
+     "side": "north"
+    },
+    "to": "waterfront-terrace",
+    "alignment": "centre",
+    "width": 3.6,
+    "height": 3.2,
+    "mode": "door"
+   },
+   {
+    "id": "dining-to-terrace",
+    "host": {
+     "space": "dining-salon",
+     "side": "north"
+    },
+    "to": "waterfront-terrace",
+    "alignment": "centre",
+    "width": 2.8,
+    "height": 3.2,
+    "mode": "door"
+   },
+   {
+    "id": "dining-to-kitchen",
+    "host": {
+     "space": "dining-salon",
+     "side": "shared"
+    },
+    "to": "kitchen",
+    "alignment": "centre",
+    "width": 1.5,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "kitchen-to-pantry",
+    "host": {
+     "space": "kitchen",
+     "side": "shared"
+    },
+    "to": "pantry",
+    "alignment": "centre",
+    "width": 1.1,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "pantry-to-powder",
+    "host": {
+     "space": "pantry",
+     "side": "shared"
+    },
+    "to": "powder-room",
+    "alignment": "centre",
+    "width": 0.9,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "living-to-west-gallery",
+    "host": {
+     "space": "living-salon",
+     "side": "shared"
+    },
+    "to": "west-gallery",
+    "alignment": "centre",
+    "width": 1.5,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "dining-to-east-gallery",
+    "host": {
+     "space": "dining-salon",
+     "side": "shared"
+    },
+    "to": "east-gallery",
+    "alignment": "centre",
+    "width": 1.5,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "west-suite-1-door",
+    "host": {
+     "space": "west-gallery",
+     "side": "shared"
+    },
+    "to": "west-guest-suite-1",
+    "alignment": "centre",
+    "width": 1,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "west-suite-2-door",
+    "host": {
+     "space": "west-gallery",
+     "side": "shared"
+    },
+    "to": "west-guest-suite-2",
+    "alignment": "centre",
+    "width": 1,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "west-suite-3-door",
+    "host": {
+     "space": "west-gallery",
+     "side": "shared"
+    },
+    "to": "west-guest-suite-3",
+    "alignment": "centre",
+    "width": 1,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "primary-suite-door",
+    "host": {
+     "space": "east-gallery",
+     "side": "shared"
+    },
+    "to": "primary-suite",
+    "alignment": "centre",
+    "width": 1.2,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "east-suite-1-door",
+    "host": {
+     "space": "east-gallery",
+     "side": "shared"
+    },
+    "to": "east-guest-suite-1",
+    "alignment": "centre",
+    "width": 1,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "east-suite-2-door",
+    "host": {
+     "space": "east-gallery",
+     "side": "shared"
+    },
+    "to": "east-guest-suite-2",
+    "alignment": "centre",
+    "width": 1,
+    "height": 2.2,
+    "mode": "door"
+   }
+  ],
+  "stairs": [],
+  "arrival": "arrival-porch",
+  "roofs": [
+   {
+    "space": "arrival-porch",
+    "form": "flat",
+    "material": "bronze"
+   },
+   {
+    "space": "waterfront-terrace",
+    "form": "flat",
+    "material": "timber"
+   },
+   {
+    "space": "kitchen",
+    "form": "flat",
+    "material": "sage"
+   },
+   {
+    "space": "pantry",
+    "form": "flat",
+    "material": "sage"
+   },
+   {
+    "space": "powder-room",
+    "form": "flat",
+    "material": "sage"
+   }
+  ],
+  "screens": [
+   {
+    "id": "arrival-porch-screen",
+    "space": "arrival-porch",
+    "side": "west",
+    "alignment": "centre",
+    "width": 2.4,
+    "height": 2.7,
+    "sill": 0,
+    "standOff": 0.15,
+    "depth": 0.08,
+    "panels": 8,
+    "material": "timber"
+   },
+   {
+    "id": "terrace-west-screen",
+    "space": "waterfront-terrace",
+    "side": "west",
+    "alignment": "centre",
+    "width": 3.5,
+    "height": 2.8,
+    "sill": 0,
+    "standOff": 0.18,
+    "depth": 0.08,
+    "panels": 10,
+    "material": "timber"
+   }
+  ],
+  "terraces": [
+   "arrival-porch",
+   "waterfront-terrace"
+  ],
+  "pools": [
+   {
+    "id": "waterfront-pool",
+    "placement": {
+     "relativeTo": "waterfront-terrace",
+     "side": "north",
+     "alignment": "centre",
+     "gap": 4
+    },
+    "width": 12,
+    "depth": 5,
+    "waterDepth": 1.4,
+    "level": "ground"
+   }
+  ],
+  "landscape": [
+   {
+    "id": "arrival-lawn",
+    "kind": "lawn",
+    "placement": {
+     "relativeTo": "arrival-porch",
+     "side": "south",
+     "alignment": "centre",
+     "gap": 5
+    },
+    "width": 22,
+    "depth": 16
+   },
+   {
+    "id": "pool-lawn-reserve",
+    "kind": "lawn",
+    "placement": {
+     "relativeTo": "waterfront-pool",
+     "side": "north",
+     "alignment": "centre",
+     "gap": 3
+    },
+    "width": 28,
+    "depth": 14
+   },
+   {
+    "id": "east-garden-reserve",
+    "kind": "bed",
+    "placement": {
+     "relativeTo": "east-suite-wing",
+     "side": "east",
+     "alignment": "centre",
+     "gap": 4
+    },
+    "width": 8,
+    "depth": 22
+   }
+  ],
+  "constraints": [
+   {
+    "id": "west-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "west-suite-wing",
+    "b": "core-pavilion",
+    "amount": 3,
+    "reason": "The west private gallery is directly entered from the central salon while its suites remain secluded behind it."
+   },
+   {
+    "id": "east-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "east-suite-wing",
+    "b": "core-pavilion",
+    "amount": 3,
+    "reason": "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room."
+   },
+   {
+    "id": "private-wing-separation",
+    "kind": "separate",
+    "a": "west-suite-wing",
+    "b": "east-suite-wing",
+    "amount": 14,
+    "reason": "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings."
+   }
+  ],
+  "composition": {
+   "volumes": [
+    {
+     "id": "waterfront-salon-volume",
+     "masses": [
+      "core-pavilion"
+     ],
+     "tier": "primary",
+     "roof": "salon-gable",
+     "material": "limestone"
+    },
+    {
+     "id": "west-accommodation-volume",
+     "masses": [
+      "west-suite-wing"
+     ],
+     "tier": "secondary",
+     "roof": "west-wing-hip",
+     "material": "timber"
+    },
+    {
+     "id": "east-accommodation-volume",
+     "masses": [
+      "east-suite-wing"
+     ],
+     "tier": "secondary",
+     "roof": "east-wing-hip",
+     "material": "timber"
+    }
+   ],
+   "heightStep": 1.8,
+   "roofSpans": [
+    {
+     "id": "salon-gable",
+     "spaces": [
+      "living-salon",
+      "dining-salon"
+     ],
+     "form": "gable",
+     "rise": 2,
+     "overhang": 0.9,
+     "material": "bronze"
+    },
+    {
+     "id": "west-wing-hip",
+     "spaces": [
+      "west-gallery",
+      "west-guest-suite-1",
+      "west-guest-suite-2",
+      "west-guest-suite-3"
+     ],
+     "form": "hip",
+     "rise": 0.8,
+     "overhang": 0,
+     "material": "bronze"
+    },
+    {
+     "id": "east-wing-hip",
+     "spaces": [
+      "east-gallery",
+      "primary-suite",
+      "east-guest-suite-1",
+      "east-guest-suite-2"
+     ],
+     "form": "hip",
+     "rise": 0.8,
+     "overhang": 0,
+     "material": "bronze"
+    }
+   ],
+   "facades": [
+    {
+     "id": "west-suite-window-rhythm",
+     "space": "west-guest-suite-1",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "west-suite-two-window-rhythm",
+     "space": "west-guest-suite-2",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "west-suite-three-window-rhythm",
+     "space": "west-guest-suite-3",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "primary-suite-window-rhythm",
+     "space": "primary-suite",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.4,
+     "height": 1.8,
+     "sill": 0.75
+    },
+    {
+     "id": "east-suite-one-window-rhythm",
+     "space": "east-guest-suite-1",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "east-suite-two-window-rhythm",
+     "space": "east-guest-suite-2",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "kitchen-service-light",
+     "space": "kitchen",
+     "side": "south",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.1,
+     "height": 1.2,
+     "sill": 1.25
+    }
+   ],
+   "entrance": {
+    "portal": "arrival-door",
+    "porch": "arrival-porch"
+   }
+  },
+  "materials": {
+   "floor": "limestone",
+   "wall": "ivory",
+   "roof": "bronze"
+  },
+  "cameraViews": [
+   "Aerial",
+   "Arrival",
+   "Garden",
+   "Poolside"
+  ]
+ },
+ "designDecisions": {
+  "thesis": "A tall limestone-and-bronze waterfront salon forms the estate’s civic heart: an elevated, deeply shaded living pavilion with a single calm roofline facing the sea. Lower timber-lined suite bars engage its flanks as quiet inhabited buttresses, while a low arrival porch and a broad seaward terrace make the journey from landward arrival to water deliberately legible.",
+  "orientation": 0,
+  "arrival": "arrival-porch",
+  "levels": [
+   {
+    "id": "ground",
+    "above": null,
+    "rise": 0.3
+   }
+  ],
+  "wings": [
+   {
+    "id": "core-pavilion",
+    "role": "double-height waterfront living pavilion with arrival, dining and service rooms",
+    "placement": null,
+    "rooms": 7
+   },
+   {
+    "id": "west-suite-wing",
+    "role": "three-suite private accommodation bar",
+    "placement": {
+     "relativeTo": "core-pavilion",
+     "side": "west",
+     "alignment": "centre",
+     "gap": 0
+    },
+    "rooms": 4
+   },
+   {
+    "id": "east-suite-wing",
+    "role": "primary and guest accommodation bar",
+    "placement": {
+     "relativeTo": "core-pavilion",
+     "side": "east",
+     "alignment": "centre",
+     "gap": 0
+    },
+    "rooms": 4
+   }
+  ],
+  "composition": {
+   "volumes": [
+    {
+     "id": "waterfront-salon-volume",
+     "masses": [
+      "core-pavilion"
+     ],
+     "tier": "primary",
+     "roof": "salon-gable",
+     "material": "limestone"
+    },
+    {
+     "id": "west-accommodation-volume",
+     "masses": [
+      "west-suite-wing"
+     ],
+     "tier": "secondary",
+     "roof": "west-wing-hip",
+     "material": "timber"
+    },
+    {
+     "id": "east-accommodation-volume",
+     "masses": [
+      "east-suite-wing"
+     ],
+     "tier": "secondary",
+     "roof": "east-wing-hip",
+     "material": "timber"
+    }
+   ],
+   "heightStep": 1.8,
+   "roofSpans": [
+    {
+     "id": "salon-gable",
+     "spaces": [
+      "living-salon",
+      "dining-salon"
+     ],
+     "form": "gable",
+     "rise": 2,
+     "overhang": 0.9,
+     "material": "bronze"
+    },
+    {
+     "id": "west-wing-hip",
+     "spaces": [
+      "west-gallery",
+      "west-guest-suite-1",
+      "west-guest-suite-2",
+      "west-guest-suite-3"
+     ],
+     "form": "hip",
+     "rise": 0.8,
+     "overhang": 0,
+     "material": "bronze"
+    },
+    {
+     "id": "east-wing-hip",
+     "spaces": [
+      "east-gallery",
+      "primary-suite",
+      "east-guest-suite-1",
+      "east-guest-suite-2"
+     ],
+     "form": "hip",
+     "rise": 0.8,
+     "overhang": 0,
+     "material": "bronze"
+    }
+   ],
+   "facades": [
+    {
+     "id": "west-suite-window-rhythm",
+     "space": "west-guest-suite-1",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "west-suite-two-window-rhythm",
+     "space": "west-guest-suite-2",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "west-suite-three-window-rhythm",
+     "space": "west-guest-suite-3",
+     "side": "west",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "primary-suite-window-rhythm",
+     "space": "primary-suite",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.4,
+     "height": 1.8,
+     "sill": 0.75
+    },
+    {
+     "id": "east-suite-one-window-rhythm",
+     "space": "east-guest-suite-1",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "east-suite-two-window-rhythm",
+     "space": "east-guest-suite-2",
+     "side": "east",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.2,
+     "height": 1.7,
+     "sill": 0.9
+    },
+    {
+     "id": "kitchen-service-light",
+     "space": "kitchen",
+     "side": "south",
+     "kind": "windows",
+     "bays": 2,
+     "width": 1.1,
+     "height": 1.2,
+     "sill": 1.25
+    }
+   ],
+   "entrance": {
+    "portal": "arrival-door",
+    "porch": "arrival-porch"
+   }
+  },
+  "roofForms": [
+   "flat"
+  ],
+  "site": {
+   "width": 80,
+   "depth": 75,
+   "elevation": 0,
+   "grade": 0,
+   "fall": "-z"
+  },
+  "siteBasis": "model-defined",
+  "constraints": [
+   {
+    "id": "west-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "west-suite-wing",
+    "b": "core-pavilion",
+    "amount": 3,
+    "reason": "The west private gallery is directly entered from the central salon while its suites remain secluded behind it."
+   },
+   {
+    "id": "east-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "east-suite-wing",
+    "b": "core-pavilion",
+    "amount": 3,
+    "reason": "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room."
+   },
+   {
+    "id": "private-wing-separation",
+    "kind": "separate",
+    "a": "west-suite-wing",
+    "b": "east-suite-wing",
+    "amount": 14,
+    "reason": "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings."
+   }
+  ],
+  "materials": {
+   "floor": "limestone",
+   "wall": "ivory",
+   "roof": "bronze"
+  }
+ },
+ "diagnostics": {
+  "findings": [
+   {
+    "stage": "site",
+    "severity": "error",
+    "id": "arrival-lawn",
+    "message": "arrival-lawn overlaps powder-room."
+   },
+   {
+    "stage": "site",
+    "severity": "error",
+    "id": "pool-lawn-reserve",
+    "message": "pool-lawn-reserve (x -10..18, z 29..43) lies 1.5 m outside the 80×75 m site, which is centred on the room cells (building spans x -13..27, z -9..17)."
+   },
+   {
+    "stage": "openings",
+    "severity": "error",
+    "id": "dining-to-terrace",
+    "message": "dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms."
+   },
+   {
+    "stage": "openings",
+    "severity": "error",
+    "id": "living-to-west-gallery",
+    "message": "living-salon and west-gallery share no wall, so there is no wall to open between them."
+   },
+   {
+    "stage": "openings",
+    "severity": "error",
+    "id": "dining-to-east-gallery",
+    "message": "dining-salon and east-gallery share no wall, so there is no wall to open between them."
+   },
+   {
+    "stage": "programme",
+    "severity": "observation",
+    "id": "bathrooms",
+    "message": "bedrooms are allocated but no bathroom or dressing space exists; bathrooms are prose inside the bedroom use."
+   },
+   {
+    "stage": "programme",
+    "severity": "observation",
+    "id": "levels",
+    "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+   },
+   {
+    "stage": "programme",
+    "severity": "observation",
+    "id": "daylight",
+    "message": "6 of 13 interior rooms have no window: living-salon, dining-salon, pantry, powder-room, west-gallery, east-gallery."
+   }
+  ],
+  "errors": 5,
+  "observations": 3,
+  "truncated": false,
+  "metrics": {
+   "levels": 1,
+   "spaces": 15,
+   "interiorSpaces": 13,
+   "footprintAreaM2": 622,
+   "interiorAreaM2": 531,
+   "roofForms": [
+    "flat",
+    "gable",
+    "hip"
+   ],
+   "roofOverhangs": [
+    0,
+    0.9
+   ],
+   "masses": 3,
+   "screens": 2,
+   "bedroomSpaces": 8,
+   "bathroomSpaces": 0,
+   "windowedInteriorRooms": 7,
+   "interiorRoomsWithoutAnyWindow": [
+    "living-salon",
+    "dining-salon",
+    "pantry",
+    "powder-room",
+    "west-gallery",
+    "east-gallery"
+   ]
+  }
+ },
+ "measured": {
+  "rects": {
+   "living-salon": {
+    "x": 0,
+    "z": 0,
+    "width": 8,
+    "depth": 12
+   },
+   "dining-salon": {
+    "x": 8,
+    "z": 0,
+    "width": 6,
+    "depth": 12
+   },
+   "arrival-porch": {
+    "x": 1,
+    "z": -3.5,
+    "width": 6,
+    "depth": 3.5
+   },
+   "waterfront-terrace": {
+    "x": -3,
+    "z": 12,
+    "width": 14,
+    "depth": 5
+   },
+   "kitchen": {
+    "x": 8,
+    "z": -6,
+    "width": 6,
+    "depth": 6
+   },
+   "pantry": {
+    "x": 14,
+    "z": -6,
+    "width": 3,
+    "depth": 6
+   },
+   "powder-room": {
+    "x": 14,
+    "z": -9,
+    "width": 3,
+    "depth": 3
+   },
+   "west-gallery": {
+    "x": -6,
+    "z": -3.5,
+    "width": 3,
+    "depth": 15
+   },
+   "west-guest-suite-1": {
+    "x": -13,
+    "z": -3.5,
+    "width": 7,
+    "depth": 5
+   },
+   "west-guest-suite-2": {
+    "x": -13,
+    "z": 1.5,
+    "width": 7,
+    "depth": 5
+   },
+   "west-guest-suite-3": {
+    "x": -13,
+    "z": 6.5,
+    "width": 7,
+    "depth": 5
+   },
+   "east-gallery": {
+    "x": 17,
+    "z": -3.5,
+    "width": 3,
+    "depth": 15
+   },
+   "primary-suite": {
+    "x": 20,
+    "z": -3.5,
+    "width": 7,
+    "depth": 5
+   },
+   "east-guest-suite-1": {
+    "x": 20,
+    "z": 1.5,
+    "width": 7,
+    "depth": 5
+   },
+   "east-guest-suite-2": {
+    "x": 20,
+    "z": 6.5,
+    "width": 7,
+    "depth": 5
+   }
+  },
+  "siteRects": {
+   "waterfront-pool": {
+    "x": -2,
+    "z": 21,
+    "width": 12,
+    "depth": 5
+   },
+   "arrival-lawn": {
+    "x": -7,
+    "z": -24.5,
+    "width": 22,
+    "depth": 16
+   },
+   "pool-lawn-reserve": {
+    "x": -10,
+    "z": 29,
+    "width": 28,
+    "depth": 14
+   },
+   "east-garden-reserve": {
+    "x": 31,
+    "z": -7,
+    "width": 8,
+    "depth": 22
+   }
+  }
+ },
+ "coordination": {
+  "wings": [
+   {
+    "id": "core-pavilion",
+    "role": "double-height waterfront living pavilion with arrival, dining and service rooms",
+    "placed": false,
+    "rooms": 7,
+    "indoorRooms": 5,
+    "levels": [
+     "ground"
+    ],
+    "envelope": {
+     "x": -3,
+     "z": -9,
+     "width": 20,
+     "depth": 26
+    },
+    "placementEnvelope": {
+     "x": -3,
+     "z": -9,
+     "width": 20,
+     "depth": 26
+    },
+    "attached": [],
+    "extentDrivers": [
+     {
+      "side": "west",
+      "spaces": [
+       "waterfront-terrace"
+      ],
+      "beyondBy": 3,
+      "outdoor": true
+     },
+     {
+      "side": "east",
+      "spaces": [
+       "pantry",
+       "powder-room"
+      ],
+      "beyondBy": 3,
+      "outdoor": false
+     },
+     {
+      "side": "south",
+      "spaces": [
+       "powder-room"
+      ],
+      "beyondBy": 3,
+      "outdoor": false
+     },
+     {
+      "side": "north",
+      "spaces": [
+       "waterfront-terrace"
+      ],
+      "beyondBy": 5,
+      "outdoor": true
+     }
+    ],
+    "indoorAreaM2": 231,
+    "fill": 0.44,
+    "relation": null,
+    "seed": null
+   },
+   {
+    "id": "west-suite-wing",
+    "role": "three-suite private accommodation bar",
+    "placed": true,
+    "rooms": 4,
+    "indoorRooms": 4,
+    "levels": [
+     "ground"
+    ],
+    "envelope": {
+     "x": -13,
+     "z": -3.5,
+     "width": 10,
+     "depth": 15
+    },
+    "placementEnvelope": {
+     "x": -13,
+     "z": -3.5,
+     "width": 10,
+     "depth": 15
+    },
+    "attached": [],
+    "extentDrivers": [
+     {
+      "side": "west",
+      "spaces": [
+       "west-guest-suite-1",
+       "west-guest-suite-2",
+       "west-guest-suite-3"
+      ],
+      "beyondBy": 7,
+      "outdoor": false
+     },
+     {
+      "side": "east",
+      "spaces": [
+       "west-gallery"
+      ],
+      "beyondBy": 3,
+      "outdoor": false
+     },
+     {
+      "side": "south",
+      "spaces": [
+       "west-gallery",
+       "west-guest-suite-1"
+      ],
+      "beyondBy": 5,
+      "outdoor": false
+     },
+     {
+      "side": "north",
+      "spaces": [
+       "west-gallery",
+       "west-guest-suite-3"
+      ],
+      "beyondBy": 5,
+      "outdoor": false
+     }
+    ],
+    "indoorAreaM2": 150,
+    "fill": 1,
+    "relation": "west of core-pavilion, centre, gap 0",
+    "seed": "west-gallery"
+   },
+   {
+    "id": "east-suite-wing",
+    "role": "primary and guest accommodation bar",
+    "placed": true,
+    "rooms": 4,
+    "indoorRooms": 4,
+    "levels": [
+     "ground"
+    ],
+    "envelope": {
+     "x": 17,
+     "z": -3.5,
+     "width": 10,
+     "depth": 15
+    },
+    "placementEnvelope": {
+     "x": 17,
+     "z": -3.5,
+     "width": 10,
+     "depth": 15
+    },
+    "attached": [],
+    "extentDrivers": [
+     {
+      "side": "west",
+      "spaces": [
+       "east-gallery"
+      ],
+      "beyondBy": 3,
+      "outdoor": false
+     },
+     {
+      "side": "east",
+      "spaces": [
+       "primary-suite",
+       "east-guest-suite-1",
+       "east-guest-suite-2"
+      ],
+      "beyondBy": 7,
+      "outdoor": false
+     },
+     {
+      "side": "south",
+      "spaces": [
+       "east-gallery",
+       "primary-suite"
+      ],
+      "beyondBy": 5,
+      "outdoor": false
+     },
+     {
+      "side": "north",
+      "spaces": [
+       "east-gallery",
+       "east-guest-suite-2"
+      ],
+      "beyondBy": 5,
+      "outdoor": false
+     }
+    ],
+    "indoorAreaM2": 150,
+    "fill": 1,
+    "relation": "east of core-pavilion, centre, gap 0",
+    "seed": "east-gallery"
+   }
+  ],
+  "collisions": [],
+  "constraints": [
+   {
+    "id": "west-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "west-suite-wing",
+    "b": "core-pavilion",
+    "required": 3,
+    "measured": 0,
+    "ok": false,
+    "reason": "The west private gallery is directly entered from the central salon while its suites remain secluded behind it.",
+    "implicated": [
+     {
+      "node": "west-suite-wing",
+      "placement": "west-suite-wing: west of core-pavilion, centre, gap 0"
+     }
+    ],
+    "options": [
+     {
+      "node": "waterfront-terrace",
+      "entity": "space",
+      "field": "attached",
+      "from": false,
+      "to": true,
+      "edits": [
+       {
+        "node": "waterfront-terrace",
+        "field": "attached",
+        "from": false,
+        "to": true
+       }
+      ],
+      "measuredAfter": 9,
+      "displaces": 8,
+      "newErrors": [],
+      "note": "declare waterfront-terrace attached to wing core-pavilion: it belongs to the wing but is not its enclosed volume, so the wing is placed and anchored by its remaining rooms",
+      "checked": [
+       "layout",
+       "collisions",
+       "constraints",
+       "site"
+      ],
+      "status": "candidate"
+     },
+     {
+      "node": "waterfront-terrace",
+      "entity": "space",
+      "field": "attached",
+      "from": false,
+      "to": true,
+      "edits": [
+       {
+        "node": "waterfront-terrace",
+        "field": "attached",
+        "from": false,
+        "to": true
+       },
+       {
+        "node": "pantry",
+        "field": "attached",
+        "from": false,
+        "to": true
+       },
+       {
+        "node": "powder-room",
+        "field": "attached",
+        "from": false,
+        "to": true
+       }
+      ],
+      "measuredAfter": 10.5,
+      "displaces": 8,
+      "newErrors": [
+       "collision:pantry/east-gallery"
+      ],
+      "note": "declare waterfront-terrace, pantry, powder-room attached to wing core-pavilion: they belong to the wing but are not its enclosed volume, so the wing is placed and anchored by its remaining rooms",
+      "checked": [
+       "layout",
+       "collisions",
+       "constraints",
+       "site"
+      ],
+      "status": "candidate"
+     }
+    ]
+   },
+   {
+    "id": "east-wing-pavilion-adjoin",
+    "kind": "adjoin",
+    "a": "east-suite-wing",
+    "b": "core-pavilion",
+    "required": 3,
+    "measured": 3.5,
+    "ok": true,
+    "reason": "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room.",
+    "implicated": [
+     {
+      "node": "east-suite-wing",
+      "placement": "east-suite-wing: east of core-pavilion, centre, gap 0"
+     }
+    ],
+    "options": []
+   },
+   {
+    "id": "private-wing-separation",
+    "kind": "separate",
+    "a": "west-suite-wing",
+    "b": "east-suite-wing",
+    "required": 14,
+    "measured": 20,
+    "ok": true,
+    "reason": "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings.",
+    "implicated": [
+     {
+      "node": "west-suite-wing",
+      "placement": "west-suite-wing: west of core-pavilion, centre, gap 0"
+     },
+     {
+      "node": "east-suite-wing",
+      "placement": "east-suite-wing: east of core-pavilion, centre, gap 0"
+     }
+    ],
+    "options": []
+   }
+  ],
+  "circulation": {
+   "arrival": "arrival-porch",
+   "wings": [
+    {
+     "id": "core-pavilion",
+     "interiorRooms": 5,
+     "reachable": 5,
+     "adjoins": [
+      {
+       "wing": "east-suite-wing",
+       "sharedM": 3.5,
+       "connected": true
+      }
+     ]
+    },
+    {
+     "id": "west-suite-wing",
+     "interiorRooms": 4,
+     "reachable": 4,
+     "adjoins": []
+    },
+    {
+     "id": "east-suite-wing",
+     "interiorRooms": 4,
+     "reachable": 4,
+     "adjoins": [
+      {
+       "wing": "core-pavilion",
+       "sharedM": 3.5,
+       "connected": true
+      }
+     ]
+    }
+   ]
+  },
+  "vertical": [],
+  "site": {
+   "required": {
+    "width": 64,
+    "depth": 78
+   },
+   "available": {
+    "width": 80,
+    "depth": 75
+   },
+   "fits": false,
+   "basis": "model-defined",
+   "drivers": {
+    "width": "east-garden-reserve",
+    "depth": "pool-lawn-reserve"
+   }
+  },
+  "siteConflicts": [
+   {
+    "item": "arrival-lawn",
+    "with": "powder-room",
+    "overlap": {
+     "x": 14,
+     "z": -9,
+     "width": 1,
+     "depth": 0.5
+    },
+    "decision": "arrival-lawn: arrival-lawn: south of arrival-porch, centre, gap 5",
+    "explanation": "arrival-lawn (arrival-lawn: south of arrival-porch, centre, gap 5; 22×16 m, x -7..15, z -24.5..-8.5) overlaps powder-room (powder-room: south of pantry, centre, gap 0) by 1×0.5 m. It is 22 m wide against its anchor arrival-porch, which is 6 m wide, so it extends 8 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by powder-room.",
+    "options": [
+     {
+      "edits": [
+       {
+        "node": "arrival-lawn",
+        "field": "alignment",
+        "from": "centre",
+        "to": "end"
+       }
+      ],
+      "note": "re-align arrival-lawn",
+      "newErrors": [],
+      "status": "candidate"
+     },
+     {
+      "edits": [
+       {
+        "node": "arrival-lawn",
+        "field": "gap",
+        "from": 5,
+        "to": 5.5
+       }
+      ],
+      "note": "move arrival-lawn 0.5 m further from arrival-porch (the gap is a design separation)",
+      "newErrors": [],
+      "status": "candidate"
+     },
+     {
+      "edits": [
+       {
+        "node": "arrival-lawn",
+        "field": "width",
+        "from": 22,
+        "to": 20
+       }
+      ],
+      "note": "reduce arrival-lawn width to 20 m",
+      "newErrors": [],
+      "status": "candidate"
+     }
+    ]
+   }
+  ],
+  "errors": [
+   {
+    "kind": "constraint",
+    "ids": [
+     "west-wing-pavilion-adjoin",
+     "west-suite-wing",
+     "core-pavilion"
+    ],
+    "message": "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing."
+   },
+   {
+    "kind": "site",
+    "ids": [
+     "east-garden-reserve",
+     "pool-lawn-reserve"
+    ],
+    "message": "The arrangement needs a site of at least 64×78 m (centred on the room cells, orientation applied); the plan declares 80×75 m. Depth is set by pool-lawn-reserve (pool-lawn-reserve: north of waterfront-pool, centre, gap 3). The site is model-defined: enlarging it to the stated minimum is a determined consequence; moving the allocations inward is a design choice."
+   },
+   {
+    "kind": "site",
+    "ids": [
+     "arrival-lawn",
+     "powder-room"
+    ],
+    "message": "arrival-lawn (arrival-lawn: south of arrival-porch, centre, gap 5; 22×16 m, x -7..15, z -24.5..-8.5) overlaps powder-room (powder-room: south of pantry, centre, gap 0) by 1×0.5 m. It is 22 m wide against its anchor arrival-porch, which is 6 m wide, so it extends 8 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by powder-room. Candidate edits (not verified beyond the arrangement): arrival-lawn.alignment centre→end; arrival-lawn.gap 5→5.5; arrival-lawn.width 22→20. Software has moved nothing."
+   }
+  ],
+  "openChoices": [
+   {
+    "about": "west-wing-pavilion-adjoin (adjoin west-suite-wing / core-pavilion, required 3, measured 0)",
+    "options": [
+     "waterfront-terrace.attached false→true",
+     "waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true"
+    ]
+   }
+  ],
+  "ok": false
+ },
+ "corrections": {
+  "baseline": {
+   "arrangementFindings": 3,
+   "diagnosticErrors": 5,
+   "compiles": false,
+   "compilationStage": "derive"
+  },
+  "corrections": [
+   {
+    "targets": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "edits": [
+     {
+      "node": "arrival-lawn",
+      "field": "alignment",
+      "from": "centre",
+      "to": "end"
+     }
+    ],
+    "note": "re-align arrival-lawn",
+    "resolved": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "alsoResolved": [
+     "diag:site:arrival-lawn"
+    ],
+    "newFindings": [],
+    "compilationBlockers": [
+     "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing.",
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+     "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+     "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    ],
+    "lostConnections": [],
+    "displaced": [],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": true,
+      "detail": "2 arrangement finding(s) after, 0 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": true,
+      "detail": "4 diagnostic error(s) after, 0 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 4 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": true,
+      "detail": "no interior adjacency is lost"
+     }
+    ],
+    "status": "unverified",
+    "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (4 problem(s)); downstream phases were not reached, so the edit is not verified."
+   },
+   {
+    "targets": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "edits": [
+     {
+      "node": "arrival-lawn",
+      "field": "gap",
+      "from": 5,
+      "to": 5.5
+     }
+    ],
+    "note": "move arrival-lawn 0.5 m further from arrival-porch (the gap is a design separation)",
+    "resolved": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "alsoResolved": [
+     "diag:site:arrival-lawn"
+    ],
+    "newFindings": [],
+    "compilationBlockers": [
+     "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing.",
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+     "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+     "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    ],
+    "lostConnections": [],
+    "displaced": [],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": true,
+      "detail": "2 arrangement finding(s) after, 0 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": true,
+      "detail": "4 diagnostic error(s) after, 0 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 4 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": true,
+      "detail": "no interior adjacency is lost"
+     }
+    ],
+    "status": "unverified",
+    "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (4 problem(s)); downstream phases were not reached, so the edit is not verified."
+   },
+   {
+    "targets": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "edits": [
+     {
+      "node": "arrival-lawn",
+      "field": "width",
+      "from": 22,
+      "to": 20
+     }
+    ],
+    "note": "reduce arrival-lawn width to 20 m",
+    "resolved": [
+     "arr:site:overlap:arrival-lawn/powder-room"
+    ],
+    "alsoResolved": [
+     "diag:site:arrival-lawn"
+    ],
+    "newFindings": [],
+    "compilationBlockers": [
+     "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing.",
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+     "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+     "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    ],
+    "lostConnections": [],
+    "displaced": [],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": true,
+      "detail": "2 arrangement finding(s) after, 0 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": true,
+      "detail": "4 diagnostic error(s) after, 0 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 4 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": true,
+      "detail": "no interior adjacency is lost"
+     }
+    ],
+    "status": "unverified",
+    "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (4 problem(s)); downstream phases were not reached, so the edit is not verified."
+   },
+   {
+    "targets": [
+     "arr:site:fit"
+    ],
+    "edits": [
+     {
+      "node": "site",
+      "field": "site-depth",
+      "from": 75,
+      "to": 78
+     }
+    ],
+    "note": "enlarge the model-defined site to its stated minimum (64×78 m, rounded up): a determined consequence of the arrangement",
+    "resolved": [
+     "arr:site:fit"
+    ],
+    "alsoResolved": [
+     "diag:site:pool-lawn-reserve"
+    ],
+    "newFindings": [],
+    "compilationBlockers": [
+     "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): waterfront-terrace.attached false→true; waterfront-terrace.attached false→true + pantry.attached false→true + powder-room.attached false→true (creates 1 new). Software has changed nothing.",
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+     "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+     "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    ],
+    "lostConnections": [],
+    "displaced": [],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": true,
+      "detail": "2 arrangement finding(s) after, 0 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": true,
+      "detail": "4 diagnostic error(s) after, 0 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 4 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": true,
+      "detail": "no interior adjacency is lost"
+     }
+    ],
+    "status": "unverified",
+    "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (4 problem(s)); downstream phases were not reached, so the edit is not verified."
+   },
+   {
+    "targets": [
+     "arr:constraint:west-wing-pavilion-adjoin"
+    ],
+    "edits": [
+     {
+      "node": "waterfront-terrace",
+      "field": "attached",
+      "from": false,
+      "to": true
+     }
+    ],
+    "note": "declare waterfront-terrace attached to wing core-pavilion: it belongs to the wing but is not its enclosed volume, so the wing is placed and anchored by its remaining rooms",
+    "resolved": [
+     "arr:constraint:west-wing-pavilion-adjoin"
+    ],
+    "alsoResolved": [
+     "diag:openings:living-to-west-gallery"
+    ],
+    "newFindings": [],
+    "compilationBlockers": [
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.",
+     "dining-to-east-gallery: dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    ],
+    "lostConnections": [],
+    "displaced": [
+     "west-gallery",
+     "west-guest-suite-1",
+     "west-guest-suite-2",
+     "west-guest-suite-3",
+     "east-gallery",
+     "primary-suite",
+     "east-guest-suite-1",
+     "east-guest-suite-2"
+    ],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": true,
+      "detail": "2 arrangement finding(s) after, 0 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": true,
+      "detail": "4 diagnostic error(s) after, 0 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 2 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": true,
+      "detail": "no interior adjacency is lost"
+     }
+    ],
+    "status": "unverified",
+    "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (2 problem(s)); downstream phases were not reached, so the edit is not verified."
+   },
+   {
+    "targets": [
+     "arr:constraint:west-wing-pavilion-adjoin"
+    ],
+    "edits": [
+     {
+      "node": "waterfront-terrace",
+      "field": "attached",
+      "from": false,
+      "to": true
+     },
+     {
+      "node": "pantry",
+      "field": "attached",
+      "from": false,
+      "to": true
+     },
+     {
+      "node": "powder-room",
+      "field": "attached",
+      "from": false,
+      "to": true
+     }
+    ],
+    "note": "declare waterfront-terrace, pantry, powder-room attached to wing core-pavilion: they belong to the wing but are not its enclosed volume, so the wing is placed and anchored by its remaining rooms",
+    "resolved": [
+     "arr:constraint:west-wing-pavilion-adjoin"
+    ],
+    "alsoResolved": [
+     "diag:openings:living-to-west-gallery",
+     "diag:openings:dining-to-east-gallery"
+    ],
+    "newFindings": [
+     "arr:collision:pantry/east-gallery",
+     "diag:volumes:pantry/east-gallery",
+     "diag:roofs:pantry/east-gallery",
+     "diag:roofs:east-gallery/pantry",
+     "compile:pantry"
+    ],
+    "compilationBlockers": [
+     "pantry × east-gallery (wings core-pavilion × east-suite-wing): pantry and east-gallery are reached by independent placement chains (pantry ← kitchen ← dining-salon ← living-salon | east-gallery ← east-suite-wing ← core-pavilion, no shared ancestor); neither chain accounts for the other's extent: 3×4.5 m overlap. No single placement edit clears it: the arrangement needs a wider decision.",
+     "dining-to-terrace: dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms."
+    ],
+    "lostConnections": [
+     "east-gallery ↔ pantry"
+    ],
+    "displaced": [
+     "west-gallery",
+     "west-guest-suite-1",
+     "west-guest-suite-2",
+     "west-guest-suite-3",
+     "east-gallery",
+     "primary-suite",
+     "east-guest-suite-1",
+     "east-guest-suite-2"
+    ],
+    "neverApplied": true,
+    "checks": [
+     {
+      "name": "arrangement",
+      "ran": true,
+      "passed": false,
+      "detail": "3 arrangement finding(s) after, 1 new"
+     },
+     {
+      "name": "diagnosis",
+      "ran": true,
+      "passed": false,
+      "detail": "6 diagnostic error(s) after, 3 new"
+     },
+     {
+      "name": "compilation",
+      "ran": true,
+      "passed": false,
+      "detail": "stops at the derive phase with 2 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+     },
+     {
+      "name": "interior-connections",
+      "ran": true,
+      "passed": false,
+      "detail": "gives up 1 interior adjacency: east-gallery ↔ pantry"
+     }
+    ],
+    "status": "introduces-conflicts",
+    "statusReason": "The edit introduces 5 finding(s) that the plan did not have: arr:collision:pantry/east-gallery, diag:volumes:pantry/east-gallery, diag:roofs:pantry/east-gallery, diag:roofs:east-gallery/pantry, …."
+   }
+  ],
+  "byStatus": {
+   "verified": 0,
+   "decision-required": 0,
+   "introduces-conflicts": 1,
+   "unverified": 5
+  },
+  "noOffer": [
+   "diag:openings:dining-to-terrace",
+   "diag:openings:dining-to-east-gallery"
+  ]
+ },
+ "concept": {
+  "commission": {
+   "ambitious": true,
+   "reasons": [
+    "brief asks for \"estate\"",
+    "budget of about US$25 million",
+    "the plan has 13 interior rooms"
+   ]
+  },
+  "composition": {
+   "declared": true,
+   "gaps": []
+  },
+  "programme": {
+   "brief": {
+    "requirements": [
+     {
+      "id": "bedrooms",
+      "category": "bedroom",
+      "minimum": 5,
+      "maximum": 7,
+      "found": 0,
+      "sleepingRooms": 6,
+      "ok": false
+     },
+     {
+      "id": "living-entertainment",
+      "category": "living",
+      "minimum": 2,
+      "found": 2,
+      "ok": true
+     },
+     {
+      "id": "entrance",
+      "category": "entry",
+      "minimum": 1,
+      "found": 1,
+      "ok": true
+     },
+     {
+      "id": "service",
+      "category": "service",
+      "minimum": 1,
+      "found": 2,
+      "ok": true
+     },
+     {
+      "id": "terraces",
+      "category": "terrace",
+      "minimum": 2,
+      "found": 2,
+      "ok": true
+     },
+     {
+      "id": "pool",
+      "category": "pool",
+      "minimum": 1,
+      "found": 1,
+      "ok": true
+     }
+    ],
+    "missing": [
+     {
+      "id": "bedrooms",
+      "category": "bedroom",
+      "minimum": 5,
+      "maximum": 7,
+      "found": 0,
+      "sleepingRooms": 6,
+      "problem": "needs at least 5 suites with private bathroom facilities, found 0",
+      "briefPhrase": "approximately six generous bedroom suites"
+     }
+    ]
+   },
+   "daylight": [
+    {
+     "room": "living-salon",
+     "windows": 0,
+     "exteriorDoors": [
+      "arrival-porch",
+      "waterfront-terrace"
+     ],
+     "status": "doors-only"
+    },
+    {
+     "room": "dining-salon",
+     "windows": 0,
+     "exteriorDoors": [
+      "waterfront-terrace"
+     ],
+     "status": "doors-only"
+    },
+    {
+     "room": "kitchen",
+     "windows": 2,
+     "exteriorDoors": [],
+     "status": "windowed"
+    }
+   ],
+   "repeatedCells": [
+    {
+     "cell": "7×5 m",
+     "rooms": [
+      "west-guest-suite-1",
+      "west-guest-suite-2",
+      "west-guest-suite-3",
+      "primary-suite",
+      "east-guest-suite-1",
+      "east-guest-suite-2"
+     ]
+    }
+   ],
+   "findings": [
+    {
+     "category": "likely-architectural-incompleteness",
+     "code": "brief-programme",
+     "elementIds": [],
+     "message": "Brief programme: the brief says \"approximately six generous bedroom suites\" but the plan needs at least 5 suites with private bathroom facilities, found 0. 6 sleeping room(s) are declared and 0 of them have a bathroom space joined by a door or state their own facilities; a suite label or \"ensuite\" in prose is not a bathroom the plan contains."
+    },
+    {
+     "category": "subjective-design-concern",
+     "code": "daylight-unestablished",
+     "elementIds": [
+      "living-salon"
+     ],
+     "message": "Daylight: living-salon is a primary living or dining space with no window; its exterior openings are doors to arrival-porch, waterfront-terrace. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+    },
+    {
+     "category": "subjective-design-concern",
+     "code": "daylight-unestablished",
+     "elementIds": [
+      "dining-salon"
+     ],
+     "message": "Daylight: dining-salon is a primary living or dining space with no window; its exterior openings are doors to waterfront-terrace. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+    },
+    {
+     "category": "subjective-design-concern",
+     "code": "repeated-cells",
+     "elementIds": [
+      "west-guest-suite-1",
+      "west-guest-suite-2",
+      "west-guest-suite-3",
+      "primary-suite",
+      "east-guest-suite-1",
+      "east-guest-suite-2"
+     ],
+     "message": "Repetition: 6 bedroom spaces are identical 7×5 m cells (west-guest-suite-1, west-guest-suite-2, west-guest-suite-3, primary-suite, east-guest-suite-1, east-guest-suite-2). Whether identical suites suit the commission is a design judgement; the brief's mission asks for no repetitive suites unless that repetition is deliberate."
+    }
+   ]
+  },
+  "findings": [
+   {
+    "category": "likely-architectural-incompleteness",
+    "code": "brief-programme",
+    "elementIds": [],
+    "message": "Brief programme: the brief says \"approximately six generous bedroom suites\" but the plan needs at least 5 suites with private bathroom facilities, found 0. 6 sleeping room(s) are declared and 0 of them have a bathroom space joined by a door or state their own facilities; a suite label or \"ensuite\" in prose is not a bathroom the plan contains."
+   },
+   {
+    "category": "subjective-design-concern",
+    "code": "daylight-unestablished",
+    "elementIds": [
+     "living-salon"
+    ],
+    "message": "Daylight: living-salon is a primary living or dining space with no window; its exterior openings are doors to arrival-porch, waterfront-terrace. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+   },
+   {
+    "category": "subjective-design-concern",
+    "code": "daylight-unestablished",
+    "elementIds": [
+     "dining-salon"
+    ],
+    "message": "Daylight: dining-salon is a primary living or dining space with no window; its exterior openings are doors to waterfront-terrace. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+   },
+   {
+    "category": "subjective-design-concern",
+    "code": "repeated-cells",
+    "elementIds": [
+     "west-guest-suite-1",
+     "west-guest-suite-2",
+     "west-guest-suite-3",
+     "primary-suite",
+     "east-guest-suite-1",
+     "east-guest-suite-2"
+    ],
+    "message": "Repetition: 6 bedroom spaces are identical 7×5 m cells (west-guest-suite-1, west-guest-suite-2, west-guest-suite-3, primary-suite, east-guest-suite-1, east-guest-suite-2). Whether identical suites suit the commission is a design judgement; the brief's mission asks for no repetitive suites unless that repetition is deliberate."
+   }
+  ],
+  "limits": "Plan-level review only: no house was built, so concept fidelity of built geometry is not assessed. Programme counts come from the brief's own words; nothing is scored, rejected or repaired."
+ },
+ "notes": [
+  "Compilation stopped in the \"derive\" phase; the later phases (construction, exterior, composition, site, validate) never ran, so their results are unknown, not passed.",
+  "The plan is exactly as authored; correction offers are never applied."
+ ]
+}

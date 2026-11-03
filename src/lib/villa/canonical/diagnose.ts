@@ -3,10 +3,12 @@
  * re-derives its own facts from the authored placements, so independent errors are reported together.
  * Findings are evidence for a person or a bounded revision step, not construction. */
 import {architecturalPlanSchema,type ArchitecturalPlan} from './plan';
+import {expandComposition,type SpanInfo} from './composition';
+import {DesignConflict} from '../experimental/semantic-building/compiler';
 import {resolveLayout,resolveSiteRects,type Rect} from './layout';
 import {coverOf,exposedPieces} from '../experimental/semantic-building/vertical';
 import {volumeCollisions,explainCollisions,describeDecision} from './arrangement';
-import {WALL,SIDES,FASCIA_DEPTH,exposedFascia,roofFootprints,edgeOf,sharedRuns,edgeExposure,placePortals,pointOnEdge,stairKeepOuts,crossesFlight } from './coordination';
+import {WALL,SIDES,FASCIA_DEPTH,exposedFascia,roofFootprints,edgeOf,sharedRuns,edgeExposure,placePortals,pointOnEdge,stairKeepOuts,crossesFlight,type Side,type RequestedSide } from './coordination';
 export type Finding={stage:'contract'|'resolution'|'volumes'|'site'|'openings'|'access'|'roofs'|'screens'|'programme';severity:'error'|'observation';id:string;message:string};
 const PIER=.36;
 const f2=(n:number)=>Number(n.toFixed(2));
@@ -18,7 +20,7 @@ export function diagnosePlan(raw:unknown){
  const findings:Finding[]=[];
  const add=(stage:Finding['stage'],severity:Finding['severity'],id:string,message:string)=>{findings.push({stage,severity,id,message});};
  const parsed=architecturalPlanSchema.safeParse(raw);
- if(!parsed.success){parsed.error.issues.forEach(i=>add('contract','error','plan',`${i.path.join('.')||'plan'}: ${i.message}`));return {findings,rects:{},siteRects:{},metrics:{}};}
+ if(!parsed.success){parsed.error.issues.forEach(i=>add('contract','error','plan',`${i.path.join('.')||'plan'}: ${i.message}`));return {findings,rects:{} as Record<string,Rect>,siteRects:{} as Record<string,Rect>,metrics:{} as Record<string,unknown>};}
  const plan:ArchitecturalPlan=parsed.data;
  // Resolution (tolerant): levels, space rectangles, site-item rectangles.
  const tops=new Map<string,number>();
@@ -34,6 +36,12 @@ export function diagnosePlan(raw:unknown){
  const spaceOf=(id:string)=>plan.spaces.find(s=>s.id===id);
  const heightOf=(id:string)=>{const s=spaceOf(id)!;if(s.height!==undefined)return s.height;const up=plan.levels.find(l=>l.above===s.level);return up?up.rise:3;};
  const live=plan.spaces.filter(s=>rects.has(s.id)).map(s=>({id:s.id,rect:rects.get(s.id)!,s}));
+ // Composition: roof spans, facade rhythms and volume materials are expanded by the SAME function the compiler's derive step calls, over the same
+ // resolved rectangles, so this diagnosis reads one normalized plan rather than its own interpretation of the authored one.
+ let composed:ReturnType<typeof expandComposition>|undefined;
+ try{composed=expandComposition(plan,plan.composition,rects);}
+ catch(e){if(!(e instanceof DesignConflict))throw e;e.decisions.forEach(m=>add('resolution','error','composition',m));}
+ const allRoofs=composed?.roofs??plan.roofs,spans:SpanInfo[]=composed?.spans??[];
  // Volumes: same-level footprints (and any overlapping vertical extents) intersecting. Each finding carries its measured cause and the single placement edits that would clear it (offers only; nothing is applied).
  {
   const decisions=new Map(explainCollisions(plan).map(d=>[d.pair.join('/'),d]));
@@ -68,11 +76,10 @@ export function diagnosePlan(raw:unknown){
  const sameLevel=(a:string,b:string)=>spaceOf(a)?.level===spaceOf(b)?.level;
  const centresOnEdge=new Map<string,{id:string;c:number;w:number}[]>();
  const placed=placePortals({spaces:plan.spaces,portals:plan.portals,stairs:plan.stairs},Object.fromEntries(rects));
- for(const p of plan.portals){
-  const host=rects.get(p.host.space);if(!host){add('openings','error',p.id,`host ${p.host.space} is unresolved`);continue;}
-  const at=placed.get(p.id)!;
-  if(at.problem!==undefined){add('openings','error',p.id,at.problem);continue;}
-  const side=at.side,e=edgeOf(host,side),centre=at.centre,lo=centre-p.width/2,hi=centre+p.width/2;
+ type OpeningLike={id:string;host:{space:string;side:RequestedSide};to:string;width:number;height:number;mode:'door'|'open'|'window';sill?:number};
+ /** Every fit, exposure, pier, stair and height check for one placed opening: authored portals and composition facade bays alike. */
+ const checkOpening=(p:OpeningLike,side:Side,centre:number)=>{
+  const host=rects.get(p.host.space)!,e=edgeOf(host,side),lo=centre-p.width/2,hi=centre+p.width/2;
   const key=`${p.host.space}:${side}`;centresOnEdge.set(key,[...(centresOnEdge.get(key)??[]),{id:p.id,c:centre,w:p.width}]);
   if(lo<WALL||hi>e.len-WALL)add('openings','error',p.id,`opening (${f2(lo)}..${f2(hi)} m) leaves less than a ${WALL} m margin on the ${side} edge of ${p.host.space} (${f2(e.len)} m long).`);
   const others=live.filter(l=>l.id!==p.host.space&&sameLevel(l.id,p.host.space));
@@ -86,10 +93,10 @@ export function diagnosePlan(raw:unknown){
    }
   }else{
    const target=live.find(l=>l.id===p.to);
-   if(!target){add('openings','error',p.id,`target ${p.to} is missing or unresolved`);continue;}
-   if(!sameLevel(p.to,p.host.space)){add('openings','error',p.id,`${p.to} is on another level; a stair is required.`);continue;}
+   if(!target){add('openings','error',p.id,`target ${p.to} is missing or unresolved`);return;}
+   if(!sameLevel(p.to,p.host.space)){add('openings','error',p.id,`${p.to} is on another level; a stair is required.`);return;}
    const seg=shared(host,side,[target]);
-   if(!seg.length){add('openings','error',p.id,`${p.host.space} and ${p.to} share no wall on the ${side} edge.${(()=>{const real=SIDES.find(s=>shared(host,s,[target]).length);return real?` They do share the ${real} edge of ${p.host.space}; host side "shared" derives it.`:'';})()}`);continue;}
+   if(!seg.length){add('openings','error',p.id,`${p.host.space} and ${p.to} share no wall on the ${side} edge.${(()=>{const real=SIDES.find(s=>shared(host,s,[target]).length);return real?` They do share the ${real} edge of ${p.host.space}; host side "shared" derives it.`:'';})()}`);return;}
    const fits=seg.some(t=>lo>=t.lo+WALL-1e-6&&hi<=t.hi-WALL+1e-6);
    if(!fits)add('openings','error',p.id,`opening (${f2(lo)}..${f2(hi)} m) does not fit the shared segment with ${p.to} (${seg.map(t=>`${f2(t.lo)}..${f2(t.hi)}`).join(', ')} m) with ${WALL} m margins.`);
   }
@@ -102,6 +109,18 @@ export function diagnosePlan(raw:unknown){
   const ceiling=Math.min(...[p.host.space,p.to].filter(id=>{const x=spaceOf(id);return x&&!x.outdoor;}).map(heightOf),Infinity);
   if((p.sill??0)+p.height>ceiling+1e-6)add('openings','error',p.id,`opening top ${f2((p.sill??0)+p.height)} m exceeds the ${f2(ceiling)} m room height.`);
   if(p.mode!=='window'&&(p.sill??0)!==0)add('openings','error',p.id,'only windows may have a sill.');
+ };
+ for(const p of plan.portals){
+  if(!rects.has(p.host.space)){add('openings','error',p.id,`host ${p.host.space} is unresolved`);continue;}
+  const at=placed.get(p.id)!;
+  if(at.problem!==undefined){add('openings','error',p.id,at.problem);continue;}
+  checkOpening(p,at.side,at.centre);
+ }
+ // Facade rhythms declared in composition become ordinary openings (the compiler's expansion) and meet the same checks.
+ for(const f of composed?.facades??[]){
+  const side=SIDES[f.host.edge];
+  if(!rects.has(f.host.space)){add('openings','error',f.id,`host ${f.host.space} is unresolved`);continue;}
+  checkOpening({id:f.id,host:{space:f.host.space,side},to:f.to,width:f.width,height:f.height,mode:f.mode,sill:f.sill},side,f.offset);
  }
  for(const [key,list] of centresOnEdge)for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){const a=list[i],b=list[j];if(Math.abs(a.c-b.c)<(a.w+b.w)/2+PIER-1e-6)add('openings','error',`${a.id}/${b.id}`,`openings on ${key} leave under ${PIER} m of pier.`);}
  // Access: reachability from arrival through doors and passages (and stairs).
@@ -117,24 +136,27 @@ export function diagnosePlan(raw:unknown){
  }
  // Roofs: coverage per room using exact rectangles, mirroring the partial-cover rule.
  const polys=live.map(l=>({id:l.id,level:l.s.level,polygon:[[l.rect.x,l.rect.z],[l.rect.x+l.rect.width,l.rect.z],[l.rect.x+l.rect.width,l.rect.z+l.rect.depth],[l.rect.x,l.rect.z+l.rect.depth]] as [number,number][]}));
- const levelTop=(id:string)=>tops.get(id)??0,roofed=new Map(plan.roofs.map(r=>[r.space,r]));
+ const levelTop=(id:string)=>tops.get(id)??0,roofed=new Map<string,{space:string;form:'flat'|'gable'|'hip';rise?:number;overhang?:number}>(allRoofs.map(r=>[r.space,r]));
+ // A room under a declared roof span is roofed by the span (one roof over several rooms), not by an entry of its own.
+ for(const sp of spans)for(const m of sp.members)if(!roofed.has(m))roofed.set(m,{space:m,form:sp.form,rise:sp.rise,overhang:sp.overhang});
  for(const l of live){
   const cover=coverOf(polys.find(p=>p.id===l.id)!,polys,levelTop),r=roofed.get(l.id);
   if(!l.s.outdoor&&!r&&cover.state!=='full')add('roofs','error',l.id,cover.state==='none'?'interior room has neither a roof nor a space above it.':`only ${Math.round(cover.fraction*100)}% covered by spaces above and no roof entry.`);
   if(r&&cover.state==='full')add('roofs','error',l.id,'roof on a fully covered space (the floor above is its cover).');
   if(r&&cover.state==='partial'&&r.form!=='flat')add('roofs','error',l.id,`${r.form} roof over a partly covered space needs a lean-to or valley junction.`);
  }
- for(const r of plan.roofs)if(!spaceOf(r.space))add('roofs','error',r.space,'roof names an unknown space.');
+ for(const r of allRoofs)if(!spaceOf(r.space))add('roofs','error',r.space,'roof names an unknown space.');
  // Roof sections: the slope envelope (overhang) and each fascia board against other roofs and against neighbouring volumes.
  // A fascia board only exists on an edge no other room shares (see exposedFascia), so abutting roofs do not collide through it.
- const sections=plan.roofs.flatMap(r=>{
+ const sections=allRoofs.flatMap(r=>{
   const l=live.find(x=>x.id===r.space);if(!l)return [];
+  const sp=spans.find(q=>q.lead===r.space),joined=new Set(sp?.members??[l.id]);
   const pitched=r.form!=='flat',overhang=r.overhang??0,rise=r.rise??.18,base=(tops.get(l.s.level)??0)+heightOf(l.id);
   // A flat roof over a partly covered space is built over the exposed remainder only (the compiler subtracts what is stacked above it).
   const poly=polys.find(p=>p.id===l.id)!,cover=coverOf(poly,polys,levelTop);
-  const pieces=cover.state==='partial'&&!pitched&&overhang===0?exposedPieces(poly,polys,cover).map(pc=>{const xs=pc.map(q=>q[0]),zs=pc.map(q=>q[1]);return {x:Math.min(...xs),z:Math.min(...zs),width:Math.max(...xs)-Math.min(...xs),depth:Math.max(...zs)-Math.min(...zs)};}):[{x:l.rect.x,z:l.rect.z,width:l.rect.width,depth:l.rect.depth}];
-  const neighbours=live.filter(x=>x.id!==l.id&&x.s.level===l.s.level).map(x=>x.rect);
-  return pieces.map(pc=>({id:r.space,extra:overhang,pitched,
+  const pieces=sp?[{x:sp.rect.x,z:sp.rect.z,width:sp.rect.width,depth:sp.rect.depth}]:cover.state==='partial'&&!pitched&&overhang===0?exposedPieces(poly,polys,cover).map(pc=>{const xs=pc.map(q=>q[0]),zs=pc.map(q=>q[1]);return {x:Math.min(...xs),z:Math.min(...zs),width:Math.max(...xs)-Math.min(...xs),depth:Math.max(...zs)-Math.min(...zs)};}):[{x:l.rect.x,z:l.rect.z,width:l.rect.width,depth:l.rect.depth}];
+  const neighbours=live.filter(x=>!joined.has(x.id)&&x.s.level===l.s.level).map(x=>x.rect);
+  return pieces.map(pc=>({id:r.space,members:joined,extra:overhang,pitched,
    solids:roofFootprints(pc,overhang,pitched?exposedFascia(r.form,pc,neighbours,overhang):[]).map(f=>({rect:f.rect,board:f.board,bottom:f.board?base-FASCIA_DEPTH:base,top:f.board?base:base+rise}))}));
  });
  const clash=(a:typeof sections[number],b:{rect:Rect;bottom:number;top:number}[])=>{
@@ -146,7 +168,7 @@ export function diagnosePlan(raw:unknown){
   const a=sections[i],b=sections[j],hit=clash(a,b.solids);
   if(hit)add('roofs','error',`${a.id}/${b.id}`,`roof bounds intersect by ${f2(hit.common.width)}×${f2(hit.common.depth)} m at the same height (overhangs ${f2(a.extra)} and ${f2(b.extra)} m)${hit.board?' through a fascia board':''}: select separated roof sections.`);
  }
- for(const a of sections)for(const o of live.filter(x=>!x.s.outdoor&&x.id!==a.id)){
+ for(const a of sections)for(const o of live.filter(x=>!x.s.outdoor&&!a.members.has(x.id))){
   const top=tops.get(o.s.level)??0,hit=clash(a,[{rect:o.rect,bottom:top,top:top+heightOf(o.id)}]);
   if(hit)add('roofs','error',`${a.id}/${o.id}`,`roof of ${a.id} (${f2(a.extra)} m overhang${hit.board?', fascia board':''}) projects ${f2(hit.common.width)}×${f2(hit.common.depth)} m into the taller volume of ${o.id}.`);
  }
@@ -165,13 +187,14 @@ export function diagnosePlan(raw:unknown){
  }
  // Programme and architectural observations (not compiler errors).
  const interior=live.filter(l=>!l.s.outdoor);
- const windowed=new Set(plan.portals.filter(p=>p.mode==='window').map(p=>p.host.space));
+ // Windows authored directly and window bays declared in composition.facades are one population (the compiler's expansion).
+ const windowed=new Set([...plan.portals.filter(p=>p.mode==='window').map(p=>p.host.space),...(composed?.facades??[]).filter(f=>f.mode==='window').map(f=>f.host.space)]);
  const dark=interior.filter(l=>!windowed.has(l.id)).map(l=>l.id);
  const count=(re:RegExp)=>plan.spaces.filter(s=>re.test(s.use)||re.test(s.id)).length;
- const metrics={levels:plan.levels.length,spaces:plan.spaces.length,interiorSpaces:interior.length,footprintAreaM2:f2(live.reduce((n,l)=>n+l.rect.width*l.rect.depth,0)),interiorAreaM2:f2(interior.reduce((n,l)=>n+l.rect.width*l.rect.depth,0)),roofForms:[...new Set(plan.roofs.map(r=>r.form))],roofOverhangs:[...new Set(plan.roofs.map(r=>r.overhang??0))],masses:plan.masses.length,screens:plan.screens?.length??0,bedroomSpaces:count(/bedroom|suite/i),bathroomSpaces:count(/\bbath|ensuite|wc\b/i),windowedInteriorRooms:interior.length-dark.length,interiorRoomsWithoutAnyWindow:dark};
+ const metrics={levels:plan.levels.length,spaces:plan.spaces.length,interiorSpaces:interior.length,footprintAreaM2:f2(live.reduce((n,l)=>n+l.rect.width*l.rect.depth,0)),interiorAreaM2:f2(interior.reduce((n,l)=>n+l.rect.width*l.rect.depth,0)),roofForms:[...new Set(allRoofs.map(r=>r.form))],roofOverhangs:[...new Set(allRoofs.map(r=>r.overhang??0))],masses:plan.masses.length,screens:plan.screens?.length??0,bedroomSpaces:count(/bedroom|suite/i),bathroomSpaces:count(/\bbath|ensuite|wc\b/i),windowedInteriorRooms:interior.length-dark.length,interiorRoomsWithoutAnyWindow:dark};
  if(metrics.bedroomSpaces>0&&metrics.bathroomSpaces===0)add('programme','observation','bathrooms','bedrooms are allocated but no bathroom or dressing space exists; bathrooms are prose inside the bedroom use.');
  if(plan.levels.length===1)add('programme','observation','levels','single level: no vertical composition, no stair, no upper terrace or roof deck.');
- if(metrics.roofForms.length===1&&metrics.roofForms[0]==='flat'&&metrics.roofOverhangs.every(o=>o===0))add('programme','observation','roofs',`every roof is flat with no overhang (${plan.roofs.length} slabs): no roof-led silhouette or deep eaves for shade.`);
+ if(metrics.roofForms.length===1&&metrics.roofForms[0]==='flat'&&metrics.roofOverhangs.every(o=>o===0))add('programme','observation','roofs',`every roof is flat with no overhang (${allRoofs.length} roofs): no roof-led silhouette or deep eaves for shade.`);
  if(dark.length)add('programme','observation','daylight',`${dark.length} of ${interior.length} interior rooms have no window: ${dark.join(', ')}.`);
  return {findings,rects:Object.fromEntries(rects),siteRects:Object.fromEntries(siteRects),metrics};
 }

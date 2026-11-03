@@ -78,13 +78,27 @@ const overhang=(r:Rect,host:Rect,side:Side)=>{
  // Extent past the host along the axis perpendicular to the placement side: [low end, high end].
  return sideAxis(side)==='x'?[Math.max(0,host.z-r.z),Math.max(0,r.z+r.depth-host.z-host.depth)]:[Math.max(0,host.x-r.x),Math.max(0,r.x+r.width-host.x-host.width)];
 };
-/** The placement object of a space or placed wing inside a (cloned) plan. */
+/** The placement object of a space, placed wing, pool or landscape item inside a (cloned) plan. */
 export function placementRef(plan:ArchitecturalPlan,node:string):Placement|undefined{
- return plan.spaces.find(s=>s.id===node)?.placement??plan.masses.find(m=>m.id===node)?.placement;
+ return plan.spaces.find(s=>s.id===node)?.placement??plan.masses.find(m=>m.id===node)?.placement??[...plan.pools,...plan.landscape].find(i=>i.id===node)?.placement;
+}
+/** One edit to the authored plan, as an offer. Placement fields, a declared attachment, a dimension, the declared site, or an opening's host side. */
+export type PlanEdit={node:string;field:'alignment'|'gap'|'relativeTo'|'attached'|'width'|'depth'|'site-width'|'site-depth'|'portal-side';from:string|number|boolean;to:string|number|boolean};
+/** A clone of the plan with the edits applied. The original is never touched; applying an edit to the real plan is the author's decision. */
+export function withEdits(plan:ArchitecturalPlan,edits:PlanEdit[]){
+ const copy=structuredClone(plan);
+ for(const e of edits){
+  if(e.field==='site-width')copy.site.width=e.to as number;
+  else if(e.field==='site-depth')copy.site.depth=e.to as number;
+  else if(e.field==='portal-side'){const p=copy.portals.find(x=>x.id===e.node);if(p)p.host.side=e.to as typeof p.host.side;}
+  else if(e.field==='attached'){const s=copy.spaces.find(x=>x.id===e.node);if(s)s.attached=e.to as boolean;}
+  else if(e.field==='width'||e.field==='depth'){const t=copy.spaces.find(x=>x.id===e.node)??[...copy.pools,...copy.landscape].find(x=>x.id===e.node);if(t)(t as Record<string,unknown>)[e.field]=e.to;}
+  else{const ref=placementRef(copy,e.node);if(ref)(ref as unknown as Record<string,unknown>)[e.field]=e.to;}
+ }
+ return copy;
 }
 export function withEdit(plan:ArchitecturalPlan,node:string,field:Option['field'],value:string|number){
- const copy=structuredClone(plan);
- (placementRef(copy,node) as unknown as Record<string,unknown>)[field]=value;return copy;
+ return withEdits(plan,[{node,field,from:'',to:value}]);
 }
 const key=(c:{a:string;b:string})=>`${c.a}/${c.b}`;
 /** The rectangle a node (space or wing) occupies. */

@@ -1,0 +1,39 @@
+{
+ "stage": "derive",
+ "decisions": [
+  "suites-meet-salon (adjoin: the suite hall is entered from the salon) is not met: suite-wing and pavilion share 0 m of wall, 3 m required. Candidate edits that meet the measurement (checked against layout, collisions, constraints and site only; not verified against openings, access, roofs or compilation, see corrections): terrace.attached false→true; terrace.attached false→true + porch.attached false→true. Software has changed nothing.",
+  "salon-suite-hall: salon and suite-hall share no wall, so there is no wall to open between them."
+ ],
+ "corrections": [
+  {
+   "edits": [
+    {
+     "node": "terrace",
+     "field": "attached",
+     "from": false,
+     "to": true
+    }
+   ],
+   "status": "verified",
+   "reason": "Every check ran: the target is cleared, nothing new appears in arrangement or diagnosis, no interior adjacency is lost and the edited plan compiles end to end. It is still an offer; the author applies it."
+  },
+  {
+   "edits": [
+    {
+     "node": "terrace",
+     "field": "attached",
+     "from": false,
+     "to": true
+    },
+    {
+     "node": "porch",
+     "field": "attached",
+     "from": false,
+     "to": true
+    }
+   ],
+   "status": "verified",
+   "reason": "Every check ran: the target is cleared, nothing new appears in arrangement or diagnosis, no interior adjacency is lost and the edited plan compiles end to end. It is still an offer; the author applies it."
+  }
+ ]
+}

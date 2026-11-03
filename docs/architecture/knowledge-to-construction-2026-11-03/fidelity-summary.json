@@ -1,0 +1,506 @@
+{
+ "label": "DEVELOPER-AUTHORED FIXTURES — NOT TERRA OUTPUT",
+ "providerCalls": 0,
+ "summary": {
+  "waterfront-pavilion": {
+   "elements": 64,
+   "roofs": 5,
+   "interiorRooms": 8,
+   "fidelity": {
+    "declared": true,
+    "volumes": [
+     {
+      "id": "living-pavilion",
+      "tier": "primary",
+      "interiorRooms": 2,
+      "interiorAreaM2": 240,
+      "areaShare": 0.5,
+      "top": 6.2,
+      "centreOffset": 0,
+      "roofElements": 3,
+      "roofForms": [
+       "hip",
+       "flat"
+      ],
+      "maxOverhang": 1,
+      "exteriorOpenings": {
+       "windows": 2,
+       "doors": 6,
+       "fromComposedBays": 7
+      }
+     },
+     {
+      "id": "west-range",
+      "tier": "subordinate",
+      "interiorRooms": 3,
+      "interiorAreaM2": 120,
+      "areaShare": 0.25,
+      "top": 3.8,
+      "centreOffset": 0.72,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 2,
+       "doors": 0,
+       "fromComposedBays": 2
+      }
+     },
+     {
+      "id": "east-range",
+      "tier": "subordinate",
+      "interiorRooms": 3,
+      "interiorAreaM2": 120,
+      "areaShare": 0.25,
+      "top": 3.8,
+      "centreOffset": 0.72,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 2,
+       "doors": 0,
+       "fromComposedBays": 2
+      }
+     }
+    ],
+    "entrance": {
+     "portal": "estate-door",
+     "porch": "porch",
+     "porchAreaM2": 48,
+     "porchWidthM": 12,
+     "porchDepthM": 4,
+     "porchRoofed": true,
+     "porchOverhangM": 0,
+     "doorWidthM": 3,
+     "doorHeightM": 3.8,
+     "hostRoomHeightM": 6,
+     "volume": "living-pavilion",
+     "volumeTier": "primary"
+    },
+    "claims": [
+     {
+      "claim": "central",
+      "quote": "central",
+      "measured": "primary volume centre lies 0 of the way from the building centre to its corner (supported at 0.35 or less)",
+      "supported": true
+     },
+     {
+      "claim": "shade",
+      "quote": "shaded",
+      "measured": "greatest roof overhang 1 m; roofed outdoor spaces: porch, terrace",
+      "supported": true
+     },
+     {
+      "claim": "entrance",
+      "quote": "dramatic entrance",
+      "measured": "entrance declared: 12×4 m roofed porch, door 3×3.8 m in a 6 m room, in living-pavilion volume (primary)",
+      "supported": true
+     }
+    ],
+    "observations": [],
+    "notMeasurable": [
+     "proportion and silhouette",
+     "material richness and colour harmony",
+     "whether an entrance reads as dramatic rather than merely roofed and tall",
+     "facade depth beyond eaves, porch and placement (recesses and projections are not representable)",
+     "whether the hierarchy is beautiful rather than present",
+     "landscape character (no planting exists)"
+    ]
+   }
+  },
+  "tropical-pavilion-court": {
+   "elements": 59,
+   "roofs": 4,
+   "interiorRooms": 7,
+   "fidelity": {
+    "declared": true,
+    "volumes": [
+     {
+      "id": "living-pavilion",
+      "tier": "primary",
+      "interiorRooms": 2,
+      "interiorAreaM2": 180,
+      "areaShare": 0.44,
+      "top": 5.2,
+      "centreOffset": 0.47,
+      "roofElements": 2,
+      "roofForms": [
+       "hip",
+       "flat"
+      ],
+      "maxOverhang": 0.8,
+      "exteriorOpenings": {
+       "windows": 5,
+       "doors": 4,
+       "fromComposedBays": 7
+      }
+     },
+     {
+      "id": "sleeping-bar",
+      "tier": "secondary",
+      "interiorRooms": 5,
+      "interiorAreaM2": 225.6,
+      "areaShare": 0.56,
+      "top": 3.4,
+      "centreOffset": 0.46,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0.8,
+      "exteriorOpenings": {
+       "windows": 2,
+       "doors": 1,
+       "fromComposedBays": 2
+      }
+     },
+     {
+      "id": "court-garden",
+      "tier": "subordinate",
+      "interiorRooms": 0,
+      "interiorAreaM2": 0,
+      "areaShare": 0,
+      "top": 0,
+      "centreOffset": 0,
+      "roofElements": 1,
+      "roofForms": [
+       "flat"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 0,
+       "doors": 0,
+       "fromComposedBays": 0
+      }
+     }
+    ],
+    "entrance": {
+     "portal": "front-door",
+     "porch": "porch",
+     "porchAreaM2": 40,
+     "porchWidthM": 10,
+     "porchDepthM": 4,
+     "porchRoofed": true,
+     "porchOverhangM": 0,
+     "doorWidthM": 2.6,
+     "doorHeightM": 3.2,
+     "hostRoomHeightM": 5,
+     "volume": "living-pavilion",
+     "volumeTier": "primary"
+    },
+    "claims": [
+     {
+      "claim": "court",
+      "quote": "court",
+      "measured": "most enclosed outdoor space is court, 75% of its perimeter bounded by rooms (supported at 50% or more)",
+      "supported": true
+     },
+     {
+      "claim": "entrance",
+      "quote": "sheltered porch",
+      "measured": "entrance declared: 10×4 m roofed porch, door 2.6×3.2 m in a 5 m room, in living-pavilion volume (primary)",
+      "supported": true
+     }
+    ],
+    "observations": [
+     "living-pavilion is primary by height (5.2 m) but sleeping-bar has more interior area (225.6 m² against 180 m²): its dominance rests on height alone."
+    ],
+    "notMeasurable": [
+     "proportion and silhouette",
+     "material richness and colour harmony",
+     "whether an entrance reads as dramatic rather than merely roofed and tall",
+     "facade depth beyond eaves, porch and placement (recesses and projections are not representable)",
+     "whether the hierarchy is beautiful rather than present",
+     "landscape character (no planting exists)"
+    ]
+   }
+  },
+  "courtyard-residence": {
+   "elements": 48,
+   "roofs": 5,
+   "interiorRooms": 6,
+   "fidelity": {
+    "declared": true,
+    "volumes": [
+     {
+      "id": "living-volume",
+      "tier": "primary",
+      "interiorRooms": 1,
+      "interiorAreaM2": 128,
+      "areaShare": 0.41,
+      "top": 5.2,
+      "centreOffset": 0.39,
+      "roofElements": 1,
+      "roofForms": [
+       "hip"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 4,
+       "doors": 1,
+       "fromComposedBays": 4
+      }
+     },
+     {
+      "id": "west-volume",
+      "tier": "secondary",
+      "interiorRooms": 2,
+      "interiorAreaM2": 60,
+      "areaShare": 0.19,
+      "top": 3.8,
+      "centreOffset": 0.63,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 1,
+       "doors": 2,
+       "fromComposedBays": 1
+      }
+     },
+     {
+      "id": "east-volume",
+      "tier": "secondary",
+      "interiorRooms": 2,
+      "interiorAreaM2": 60,
+      "areaShare": 0.19,
+      "top": 3.8,
+      "centreOffset": 0.63,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 1,
+       "doors": 2,
+       "fromComposedBays": 1
+      }
+     },
+     {
+      "id": "gate-volume",
+      "tier": "subordinate",
+      "interiorRooms": 1,
+      "interiorAreaM2": 64,
+      "areaShare": 0.21,
+      "top": 3,
+      "centreOffset": 0.51,
+      "roofElements": 2,
+      "roofForms": [
+       "flat"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 0,
+       "doors": 2,
+       "fromComposedBays": 0
+      }
+     }
+    ],
+    "entrance": {
+     "portal": "gate-door",
+     "porch": "porch",
+     "porchAreaM2": 18,
+     "porchWidthM": 6,
+     "porchDepthM": 3,
+     "porchRoofed": true,
+     "porchOverhangM": 0,
+     "doorWidthM": 2,
+     "doorHeightM": 2.4,
+     "hostRoomHeightM": 2.8,
+     "volume": "gate-volume",
+     "volumeTier": "subordinate"
+    },
+    "claims": [
+     {
+      "claim": "court",
+      "quote": "court",
+      "measured": "most enclosed outdoor space is court, 100% of its perimeter bounded by rooms (supported at 50% or more)",
+      "supported": true
+     }
+    ],
+    "observations": [],
+    "notMeasurable": [
+     "proportion and silhouette",
+     "material richness and colour harmony",
+     "whether an entrance reads as dramatic rather than merely roofed and tall",
+     "facade depth beyond eaves, porch and placement (recesses and projections are not representable)",
+     "whether the hierarchy is beautiful rather than present",
+     "landscape character (no planting exists)"
+    ]
+   }
+  },
+  "stepped-multilevel": {
+   "elements": 93,
+   "roofs": 4,
+   "interiorRooms": 9,
+   "fidelity": {
+    "declared": true,
+    "volumes": [
+     {
+      "id": "stone-house",
+      "tier": "primary",
+      "interiorRooms": 4,
+      "interiorAreaM2": 480,
+      "areaShare": 0.63,
+      "top": 8,
+      "centreOffset": 0.45,
+      "roofElements": 2,
+      "roofForms": [
+       "hip",
+       "flat"
+      ],
+      "maxOverhang": 0.6,
+      "exteriorOpenings": {
+       "windows": 10,
+       "doors": 1,
+       "fromComposedBays": 10
+      }
+     },
+     {
+      "id": "timber-bar",
+      "tier": "secondary",
+      "interiorRooms": 4,
+      "interiorAreaM2": 216,
+      "areaShare": 0.29,
+      "top": 4,
+      "centreOffset": 0.5,
+      "roofElements": 1,
+      "roofForms": [
+       "gable"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 2,
+       "doors": 0,
+       "fromComposedBays": 2
+      }
+     },
+     {
+      "id": "garden-room-volume",
+      "tier": "subordinate",
+      "interiorRooms": 1,
+      "interiorAreaM2": 60,
+      "areaShare": 0.08,
+      "top": 3,
+      "centreOffset": 0.69,
+      "roofElements": 1,
+      "roofForms": [
+       "flat"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 0,
+       "doors": 3,
+       "fromComposedBays": 3
+      }
+     }
+    ],
+    "entrance": {
+     "portal": "estate-door",
+     "porch": "porch",
+     "porchAreaM2": 32,
+     "porchWidthM": 8,
+     "porchDepthM": 4,
+     "porchRoofed": true,
+     "porchOverhangM": 0,
+     "doorWidthM": 2.8,
+     "doorHeightM": 3.4,
+     "hostRoomHeightM": 4.4,
+     "volume": "stone-house",
+     "volumeTier": "primary"
+    },
+    "claims": [],
+    "observations": [],
+    "notMeasurable": [
+     "proportion and silhouette",
+     "material richness and colour harmony",
+     "whether an entrance reads as dramatic rather than merely roofed and tall",
+     "facade depth beyond eaves, porch and placement (recesses and projections are not representable)",
+     "whether the hierarchy is beautiful rather than present",
+     "landscape character (no planting exists)"
+    ]
+   }
+  },
+  "compact-two-volume": {
+   "elements": 35,
+   "roofs": 3,
+   "interiorRooms": 5,
+   "fidelity": {
+    "declared": true,
+    "volumes": [
+     {
+      "id": "day-volume",
+      "tier": "primary",
+      "interiorRooms": 2,
+      "interiorAreaM2": 84,
+      "areaShare": 0.66,
+      "top": 4.2,
+      "centreOffset": 0.32,
+      "roofElements": 2,
+      "roofForms": [
+       "gable",
+       "flat"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 0,
+       "doors": 4,
+       "fromComposedBays": 3
+      }
+     },
+     {
+      "id": "night-volume",
+      "tier": "subordinate",
+      "interiorRooms": 3,
+      "interiorAreaM2": 43.4,
+      "areaShare": 0.34,
+      "top": 3.2,
+      "centreOffset": 0.62,
+      "roofElements": 1,
+      "roofForms": [
+       "flat"
+      ],
+      "maxOverhang": 0,
+      "exteriorOpenings": {
+       "windows": 1,
+       "doors": 0,
+       "fromComposedBays": 1
+      }
+     }
+    ],
+    "entrance": {
+     "portal": "front-door",
+     "porch": "porch",
+     "porchAreaM2": 17.5,
+     "porchWidthM": 7,
+     "porchDepthM": 2.5,
+     "porchRoofed": true,
+     "porchOverhangM": 0,
+     "doorWidthM": 1.6,
+     "doorHeightM": 2.4,
+     "hostRoomHeightM": 4,
+     "volume": "day-volume",
+     "volumeTier": "primary"
+    },
+    "claims": [],
+    "observations": [],
+    "notMeasurable": [
+     "proportion and silhouette",
+     "material richness and colour harmony",
+     "whether an entrance reads as dramatic rather than merely roofed and tall",
+     "facade depth beyond eaves, porch and placement (recesses and projections are not representable)",
+     "whether the hierarchy is beautiful rather than present",
+     "landscape character (no planting exists)"
+    ]
+   }
+  }
+ }
+}

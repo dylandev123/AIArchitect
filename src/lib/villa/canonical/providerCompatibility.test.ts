@@ -42,11 +42,24 @@ function revertOptionalHeight(node:unknown):unknown{
  // Additive optional fields of the whole-building coordination layer: a wing's own placement, and declared constraints.
  if(props?.id&&props.role&&props.relatesTo&&props.placement){delete props.placement;out.required=(out.required as string[]).filter(k=>k!=='placement');}
  if(props?.cameraViews&&props.constraints){delete props.constraints;out.required=(out.required as string[]).filter(k=>k!=='constraints');}
+ // Additive optional building-scale composition (volumes, roof spans, facade rhythms, entrance).
+ if(props?.cameraViews&&props.composition){delete props.composition;out.required=(out.required as string[]).filter(k=>k!=='composition');}
+ // Additive optional declaration that a space is attached to its wing (placement extent only).
+ if(props?.height&&props.width&&props.depth&&props.outdoor&&props.attached){delete props.attached;out.required=(out.required as string[]).filter(k=>k!=='attached');}
  if(props?.height&&props.width&&props.depth&&props.outdoor){
   const branches=props.height.anyOf as Json[]|undefined;
   expect(branches).toHaveLength(2);expect(branches![1]).toEqual({type:'null'});
   props.height=branches![0];
  }
+ return out;
+}
+/** The wire schema with only the additive composition property removed. */
+function withoutComposition(node:unknown):unknown{
+ if(Array.isArray(node))return node.map(withoutComposition);
+ if(!node||typeof node!=='object')return node;
+ const out:Json={};for(const [k,v] of Object.entries(node as Json))out[k]=withoutComposition(v);
+ const props=out.properties as Record<string,Json>|undefined;
+ if(props?.cameraViews&&props.composition){delete props.composition;out.required=(out.required as string[]).filter(k=>k!=='composition');}
  return out;
 }
 it('the historical prepared wire request is still strict-valid and unmodified',()=>{
@@ -63,7 +76,7 @@ it('serializes the current schema as the historical wire format plus an optional
 });
 it('the new optional height is the only wire difference and stays within the OpenAI strict subset',async()=>{
  const wire=await serialize(live.input[0].content);
- const text=JSON.stringify(wire.text.format.schema);
+ const text=JSON.stringify(withoutComposition(wire.text.format.schema));
  expect(text.split('"height"').length-1).toBe(JSON.stringify(historical.text.format.schema).split('"height"').length-1);
  const spaceHeight=(JSON.parse(text) as Json);
  expect(JSON.stringify(spaceHeight)).toContain('"height":{"anyOf":[{"type":"number"');

@@ -7,6 +7,13 @@ import type {ArchitecturalPlan,Rect} from './plan';
 export const isMassAnchor=(plan:ArchitecturalPlan,id:string):boolean=>
  plan.masses.some(m=>m.id===id)&&!plan.spaces.some(s=>s.id===id)&&![...plan.pools,...plan.landscape].some(i=>i.id===id);
 export const massMembers=(plan:ArchitecturalPlan,massId:string)=>plan.spaces.filter(s=>s.mass===massId);
+/** The spaces that make up a wing's own volume: every member except those the author declared `attached` (a porch, terrace or service
+ * annex that belongs to the wing and moves with it but projects beyond it). A wing whose members are all attached keeps every member,
+ * so the extent is never empty. Software never decides a space is attached; only the plan's own declaration does. */
+export function primaryMembers(plan:ArchitecturalPlan,massId:string){
+ const all=massMembers(plan,massId),own=all.filter(s=>!s.attached);
+ return own.length?own:all;
+}
 export function boundsOf(rects:Rect[]):Rect{
  const x0=Math.min(...rects.map(r=>r.x)),x1=Math.max(...rects.map(r=>r.x+r.width)),z0=Math.min(...rects.map(r=>r.z)),z1=Math.max(...rects.map(r=>r.z+r.depth));
  return {x:x0,z:z0,width:x1-x0,depth:z1-z0};

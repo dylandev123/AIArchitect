@@ -11,7 +11,6 @@ import {getAiModelId} from '../src/lib/ai/model';
 import {Output} from 'ai';
 import {CANONICAL_INSTRUCTIONS,canonicalProposalSchema} from '../src/lib/villa/canonical/plan';
 import {strictSceneResponseSchema} from '../src/lib/villa/scene/terra';
-// @ts-expect-error Existing GET-only transport helper has no declaration.
 import {semanticTransportPreflight} from './semantic-transport-preflight.mjs';
 const dir='docs/architecture/canonical-acceptance-2026-11-02';
 const live=process.argv.includes('--authorize-one-live-call');
@@ -66,7 +65,8 @@ const fingerprint=hash(JSON.stringify({system,messages,format,sourceHashes}));
 if(!live){save('request.json',input);save('preflight.json',{fingerprint,sourceHashes,model:getAiModelId(),reasoningEffort:null,reasoningPolicy:'unset, normal production default',maxOutputTokens:30000,maxRetries:0,timeoutMs:170000,context,system,format,messages});}
 else assert.equal(JSON.parse(readFileSync(`${dir}/preflight.json`,'utf8')).fingerprint,fingerprint,'Context changed since preflight');
 let calls=0;const nativeFetch=globalThis.fetch;
-async function probeConnectivity(request:unknown,wire:string){const guarded=globalThis.fetch;globalThis.fetch=nativeFetch;try{return await semanticTransportPreflight(request,wire);}finally{globalThis.fetch=guarded;}}
+type Transport={ok?:boolean;failureStage?:string;[k:string]:unknown};
+async function probeConnectivity(request:unknown,wire:string):Promise<Transport>{const guarded=globalThis.fetch;globalThis.fetch=nativeFetch;try{return await semanticTransportPreflight(request,wire) as Transport;}finally{globalThis.fetch=guarded;}}
 globalThis.fetch=async(url,init)=>{
  const address=String(url instanceof Request?url.url:url);assert.equal(address,'https://api.openai.com/v1/responses');
  const body=String(init?.body),wire=JSON.parse(body);

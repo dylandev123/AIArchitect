@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { expect, it, vi } from 'vitest';
 import type { LibrarySnapshot } from '@/lib/library/store';
+import { isWholeHouseStrategy } from '@/lib/library/architecture/canonicalKnowledge';
 const captured = vi.hoisted(()=>({generate:vi.fn(), artifacts:[] as string[]}));
 vi.mock('ai',async original=>({...await original<typeof import('ai')>(),generateText:captured.generate}));
 vi.mock('@/lib/ai/model',()=>({isAiConfigured:()=>true,getAiModel:()=> 'offline',getAiModelId:()=> 'offline',AI_PROVIDER_OPTIONS:{},AI_NOT_CONFIGURED_MESSAGE:'offline'}));
@@ -39,8 +40,8 @@ it('captures four actual homepage handler requests offline against the stored li
    const artifact=JSON.parse(captured.artifacts[0]);
    expect(captured.generate).toHaveBeenCalledOnce();
    expect(request.system).toContain(constructionCapabilityReference());
-   expect(artifact.knowledge.metrics.approvedActive).toBe(334);
-   expect(artifact.knowledge.metrics.excluded.length+artifact.knowledge.selected.length).toBe(334);
+   expect(artifact.knowledge.metrics.approvedActive).toBe(339);
+   expect(artifact.knowledge.metrics.excluded.length+artifact.knowledge.selected.length).toBe(339);
    expect(request.system.endsWith(artifact.knowledge.text)).toBe(true);
    expect(artifact.knowledge.text.length).toBe(artifact.knowledge.chars);
    expect(request.system.split('ARCHITECTURAL DESIGN GUIDE').length-1).toBe(1);
@@ -63,7 +64,7 @@ it('uses the shared context for all edit intents without imposing Refine scope o
   const context=await architecturalRequestContext({mode:'edit',editIntent,prompt:'Improve roof',current:{...laderaScene,architecturalPlan:{scaleRationale:'$25m Caribbean waterfront mansion',arrivalAndCirculation:'Entrance to living',volumeHierarchy:'Main residence',relationshipsAndViews:'Ocean views',roofFacadeAndMaterials:'Tropical shade',intendedSpaces:['living']}}});
   expect(context.trace.query.includes('Retained design intent')).toBe(editIntent!=='refine');
   expect(context.system.includes('Scoped edit: preserve unrelated geometry')).toBe(editIntent==='refine');
-  expect(context.trace.metrics.approvedActive).toBe(334);
+  expect(context.trace.metrics.approvedActive).toBe(339);
  }
 });
 
@@ -94,7 +95,7 @@ it('allows every approved architectural record into the same relevance path for 
  const entries=latestKnowledge(snapshot.architecturalKnowledge);
  for(const entry of entries){
   const brief=`${entry.title} ${entry.scales[0]??'family'} house ${entry.tags.join(' ')} ${entry.category==='property-value'?entry.when:''}`;
-  const result=retrieveArchitecturalKnowledge(entries,brief);
+  const result=retrieveArchitecturalKnowledge(entries,brief,'generate',{canonical:isWholeHouseStrategy(entry)});
   const excluded=result.metrics.excluded.find(e=>e.id===entry.id);
   expect(!excluded || ['retrieval budget','category diversity budget','duplicate selected guidance'].includes(excluded.reason),`${entry.id}: ${excluded?.reason}`).toBe(true);
  }

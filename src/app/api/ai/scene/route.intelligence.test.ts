@@ -34,7 +34,7 @@ it('sends concept, scale, approved knowledge and capabilities through the real h
   expect(system).toContain('RETRIEVED ARCHITECTURAL KNOWLEDGE');
   expect(system).toContain('No external search was performed');
   const artifact=JSON.parse(captured.retained[0]);
-  expect(artifact.knowledge.metrics.approvedActive).toBe(334);
+  expect(artifact.knowledge.metrics.approvedActive).toBe(339);
   expect(artifact.knowledge.research.bounds.maxProviderCalls).toBe(0);
   expect(artifact.knowledge.project.propertyValue.amount).toBe(25e6);
   expect(captured.generate).toHaveBeenCalledOnce();expect(network).not.toHaveBeenCalled();

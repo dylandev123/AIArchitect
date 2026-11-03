@@ -12,6 +12,7 @@
 import type {Finding} from '../diagnose';
 import type {ArchitecturalPlan,Rect} from '../plan';
 import {SIDES,edgeExposure,placePortals,type Side} from '../coordination';
+import {composedView} from '../composition';
 const f2=(n:number)=>Number(n.toFixed(2));
 export type EdgeExposure={side:Side;lengthM:number;sharedWith:{room:string;from:number;to:number}[];exposed:{from:number;to:number}[]};
 export type RoomExposure={room:string;level:string;outdoor:boolean;edges:EdgeExposure[]};
@@ -39,7 +40,9 @@ export type Decision={
 type Keyed={f:Finding;keys:string[]};
 export function decisionsOf(plan:ArchitecturalPlan,findings:Finding[],rects:Record<string,Rect>,baseline?:ArchitecturalPlan):Decision[]{
  const errors=findings.filter(f=>f.severity==='error'),spaceOf=(id:string)=>plan.spaces.find(s=>s.id===id);
- const placed=placePortals(plan,rects),roofOf=(id:string)=>plan.roofs.find(r=>r.space===id);
+ // Roofs as the compiler derives them: a room under a declared roof span is roofed by the span.
+ const view=composedView(plan,new Map(Object.entries(rects)));
+ const placed=placePortals(plan,rects),roofOf=(id:string)=>view.roofs.find(r=>r.space===id)??(()=>{const sp=view.spans.find(q=>q.members.includes(id));return sp?{space:id,form:sp.form,rise:sp.rise,overhang:sp.overhang}:undefined;})();
  const pitched=(id:string)=>{const r=roofOf(id);return !!r&&r.form!=='flat';};
  const sideOfPortal=(id:string)=>{const p=plan.portals.find(q=>q.id===id);if(!p)return undefined;const at=placed.get(id);return `${p.host.space}:${at&&at.problem===undefined?at.side:p.host.side}`;};
  // Reachable rooms and, for each unreachable one, the reachable room it should hang from (largest shared wall).

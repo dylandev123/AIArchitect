@@ -1,0 +1,283 @@
+{
+  "wings": [
+    {
+      "id": "social-hall",
+      "role": "Primary arrival, entertaining and service pavilion",
+      "placed": false,
+      "rooms": 12,
+      "indoorRooms": 8,
+      "levels": [
+        "ground"
+      ],
+      "envelope": {
+        "x": -9,
+        "z": -20,
+        "width": 45.5,
+        "depth": 34
+      },
+      "indoorAreaM2": 686,
+      "fill": 0.44,
+      "relation": null,
+      "seed": null
+    },
+    {
+      "id": "west-suite-cloister",
+      "role": "Three-suite private western sleeping wing",
+      "placed": true,
+      "rooms": 7,
+      "indoorRooms": 7,
+      "levels": [
+        "ground"
+      ],
+      "envelope": {
+        "x": -32,
+        "z": -20,
+        "width": 23,
+        "depth": 33
+      },
+      "indoorAreaM2": 705,
+      "fill": 0.93,
+      "relation": "west of social-hall, start, gap 0",
+      "seed": "west-suite-hall"
+    },
+    {
+      "id": "east-suite-cloister",
+      "role": "Three-suite private eastern sleeping wing",
+      "placed": true,
+      "rooms": 7,
+      "indoorRooms": 7,
+      "levels": [
+        "ground"
+      ],
+      "envelope": {
+        "x": 36.5,
+        "z": -19,
+        "width": 23,
+        "depth": 33
+      },
+      "indoorAreaM2": 705,
+      "fill": 0.93,
+      "relation": "east of social-hall, end, gap 0",
+      "seed": "east-suite-hall"
+    }
+  ],
+  "collisions": [
+    {
+      "pair": [
+        "living-salon",
+        "west-gallery"
+      ],
+      "overlap": {
+        "x": -4.5,
+        "z": -6,
+        "width": 0.5,
+        "depth": 6
+      },
+      "cause": "branch-crossing",
+      "host": null,
+      "diverge": "entry-hall",
+      "chains": [
+        [
+          "living-salon",
+          "entry-hall"
+        ],
+        [
+          "west-gallery",
+          "powder-room",
+          "entry-hall"
+        ]
+      ],
+      "heads": [
+        "living-salon",
+        "powder-room"
+      ],
+      "explanation": "living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neither chain accounts for the other's extent: 0.5×6 m overlap.",
+      "options": [
+        {
+          "space": "powder-room",
+          "entity": "space",
+          "field": "gap",
+          "from": 0,
+          "to": 0.5,
+          "displaces": 15,
+          "clearsThis": true,
+          "newCollisions": [],
+          "note": "separate powder-room from its anchor by 0.5 m (a design separation, not a connected room)"
+        },
+        {
+          "space": "powder-room",
+          "entity": "space",
+          "field": "gap",
+          "from": 0,
+          "to": 6,
+          "displaces": 15,
+          "clearsThis": true,
+          "newCollisions": [],
+          "note": "separate powder-room from its anchor by 6 m (a design separation, not a connected room)"
+        },
+        {
+          "space": "living-salon",
+          "entity": "space",
+          "field": "gap",
+          "from": 0,
+          "to": 6,
+          "displaces": 21,
+          "clearsThis": true,
+          "newCollisions": [],
+          "note": "separate living-salon from its anchor by 6 m (a design separation, not a connected room)"
+        },
+        {
+          "space": "living-salon",
+          "entity": "space",
+          "field": "alignment",
+          "from": "centre",
+          "to": "start",
+          "displaces": 21,
+          "clearsThis": true,
+          "newCollisions": [],
+          "note": "re-align living-salon along entry-hall (changes which end it overhangs)"
+        }
+      ],
+      "judgement": "Which of living-salon and powder-room yields, and whether moving it (together with its dependants) keeps the intended composition, is an architectural decision. Software has changed nothing."
+    }
+  ],
+  "constraints": [
+    {
+      "id": "suite-wing-privacy",
+      "kind": "separate",
+      "a": "west-suite-cloister",
+      "b": "east-suite-cloister",
+      "required": 28,
+      "measured": 45.5,
+      "ok": true,
+      "reason": "The paired cloisters must remain materially and acoustically separated by the substantial social pavilion.",
+      "implicated": [
+        {
+          "node": "west-suite-cloister",
+          "placement": "west-suite-cloister: west of social-hall, start, gap 0"
+        },
+        {
+          "node": "east-suite-cloister",
+          "placement": "east-suite-cloister: east of social-hall, end, gap 0"
+        }
+      ],
+      "options": []
+    },
+    {
+      "id": "waterfront-social-adjacency",
+      "kind": "adjoin",
+      "a": "living-salon",
+      "b": "water-veranda",
+      "required": 6,
+      "measured": 18,
+      "ok": true,
+      "reason": "The estate concept depends on a broad, operable indoor-outdoor living threshold.",
+      "implicated": [
+        {
+          "node": "living-salon",
+          "placement": "living-salon: south of entry-hall, centre, gap 0"
+        },
+        {
+          "node": "water-veranda",
+          "placement": "water-veranda: south of living-salon, centre, gap 0"
+        }
+      ],
+      "options": []
+    },
+    {
+      "id": "terrace-pool-sequence",
+      "kind": "separate",
+      "a": "water-veranda",
+      "b": "waterfront-pool",
+      "required": 2.5,
+      "measured": 2.5,
+      "ok": true,
+      "reason": "A generous sun deck and circulation band is preserved between shade and water.",
+      "implicated": [
+        {
+          "node": "water-veranda",
+          "placement": "water-veranda: south of living-salon, centre, gap 0"
+        },
+        {
+          "node": "living-salon",
+          "placement": "living-salon: south of entry-hall, centre, gap 0"
+        }
+      ],
+      "options": []
+    }
+  ],
+  "circulation": {
+    "arrival": "arrival-court",
+    "wings": [
+      {
+        "id": "social-hall",
+        "interiorRooms": 8,
+        "reachable": 8,
+        "adjoins": [
+          {
+            "wing": "west-suite-cloister",
+            "sharedM": 19,
+            "connected": true
+          }
+        ]
+      },
+      {
+        "id": "west-suite-cloister",
+        "interiorRooms": 7,
+        "reachable": 7,
+        "adjoins": [
+          {
+            "wing": "social-hall",
+            "sharedM": 19,
+            "connected": true
+          }
+        ]
+      },
+      {
+        "id": "east-suite-cloister",
+        "interiorRooms": 7,
+        "reachable": 7,
+        "adjoins": []
+      }
+    ]
+  },
+  "vertical": [],
+  "site": {
+    "required": {
+      "width": 91.5,
+      "depth": 81
+    },
+    "available": {
+      "width": 110,
+      "depth": 80
+    },
+    "fits": false
+  },
+  "errors": [
+    {
+      "kind": "collision",
+      "ids": [
+        "living-salon",
+        "west-gallery"
+      ],
+      "message": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neither chain accounts for the other's extent: 0.5×6 m overlap. Single edits that clear it: powder-room.gap 0→0.5; powder-room.gap 0→6; living-salon.gap 0→6; living-salon.alignment centre→start."
+    },
+    {
+      "kind": "site",
+      "ids": [],
+      "message": "The arrangement needs a site of at least 91.5×81 m (centred on the room cells, orientation applied); the plan declares 110×80 m. Enlarging the site is a determined consequence; moving the allocations inward is a design choice."
+    }
+  ],
+  "openChoices": [
+    {
+      "about": "living-salon × west-gallery: living-salon or powder-room must yield",
+      "options": [
+        "powder-room.gap 0→0.5",
+        "powder-room.gap 0→6",
+        "living-salon.gap 0→6",
+        "living-salon.alignment centre→start"
+      ]
+    }
+  ],
+  "ok": false
+}

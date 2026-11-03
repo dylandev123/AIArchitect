@@ -3,7 +3,8 @@
 import {describe,expect,it} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {diagnosePlan} from './diagnose';
-import {compileArchitecturalPlan,type ArchitecturalPlan} from './plan';
+import {compileArchitecturalPlan,type ArchitecturalPlan,type Rect} from './plan';
+import {placePortals} from './coordination';
 import {canonicalFixture} from './fixture';
 import {compositionFixture} from './compositions.fixture';
 import {DesignConflict} from '../experimental/semantic-building/compiler';
@@ -56,7 +57,9 @@ describe('retained Terra mansion (never edited)',()=>{
  it('finds the independent errors: lawn outside site, misdirected opening alignments, window and screen on a shared wall',()=>{
   const d=errors(retained());
   expect(d.find(f=>f.id==='waterfront-lawn-reserve')?.message).toMatch(/10\.\d m outside/);
-  expect(d.filter(f=>f.stage==='openings'&&/shared segment/.test(f.message)).map(f=>f.id).sort()).toEqual(['kitchen-laundry-door','kitchen-pantry-door','west-hall-suite-1-door','west-hall-suite-3-door']);
+  // Four doors authored on an explicit side whose whole-edge position missed the wall they share were once reported here; they are now fitted into the shared run (coordination.ts), so none is a finding.
+  expect(d.filter(f=>f.stage==='openings'&&/shared segment/.test(f.message)).map(f=>f.id)).toEqual([]);
+  expect(placePortals(retained(),diagnosePlan(retained()).rects as Record<string,Rect>).get('kitchen-pantry-door')?.refitted).toBeDefined();
   expect(d.find(f=>f.id==='living-east-window')?.message).toMatch(/faces media-lounge/);
   expect(d.some(f=>f.id==='living-timber-sun-screen'&&/interior boundary/.test(f.message))).toBe(true);
  });
@@ -77,10 +80,15 @@ describe('portal alignment direction (documented counter-clockwise convention)',
   plan.roofs.push({space:'nook',form:'flat'});
   return plan;
  };
- it('on a north wall, end reaches the west end, and the compiler and the diagnosis agree',()=>{
+ it('on a north wall, end reaches the west end; a start that misses the shared run is fitted into it, in the compiler and the diagnosis alike',()=>{
   const ok=withNook('end');expect(compilerDecisions(ok)).toEqual([]);expect(errors(ok)).toEqual([]);
-  const wrong=withNook('start');
-  expect(compilerDecisions(wrong).join('\n')).toMatch(/nook-door/);
-  expect(errors(wrong).map(f=>f.id)).toContain('nook-door');
+  const refit=withNook('start');
+  expect(compilerDecisions(refit)).toEqual([]);expect(errors(refit)).toEqual([]);
+  const placed=placePortals(refit,diagnosePlan(refit).rects as Record<string,Rect>).get('nook-door')!;
+  expect(placed.refitted).toBeDefined();expect(placed.centre).toBeGreaterThan(3-1.6);expect(placed.centre).toBeLessThan(3);
+  // An opening too wide for the shared 1.6 m boundary is refused with the same reason by both.
+  const wide=withNook('start');wide.portals.find(p=>p.id==='nook-door')!.width=1.5;
+  expect(compilerDecisions(wide).join('\n')).toMatch(/nook-door.*cannot fit the shared boundary/);
+  expect(errors(wide).map(f=>f.id)).toContain('nook-door');
  });
 });

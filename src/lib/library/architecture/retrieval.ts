@@ -3,7 +3,7 @@ import { fragmentDetails } from './fragments';
 import { inferScaleFromBrief } from '@/lib/house/scale';
 import type { KnowledgeRevision } from './model';
 import { constructionFor, knowledgeCategory } from './constructibility';
-import { CANONICAL_KNOWLEDGE_HEADER, canonicalKnowledgeChunk } from './canonicalKnowledge';
+import { CANONICAL_KNOWLEDGE_HEADER, canonicalKnowledgeChunk, isWholeHouseStrategy, unbuildableRoofForm } from './canonicalKnowledge';
 export const MAX_KNOWLEDGE_CHARS = 18000;
 export const MAX_KNOWLEDGE_ENTRIES = 12;
 /** Scale cues describe the requested property, not rejected alternatives or the
@@ -25,6 +25,33 @@ export function projectKnowledgeContext(brief: string) {
 export function matchesKnowledgeTerm(brief: string, tag: string) {
  const escaped = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
  return new RegExp(`\\b${escaped}\\b`, 'i').test(brief) && !new RegExp(`\\b(?:no|without|exclude|omit)\\s+(?:(?:a|any)\\s+)?(?:[a-z -]+(?:,|\\band\\b|\\bor\\b)\\s*)*${escaped}\\b`, 'i').test(brief);
+}
+/** Plainer exclusions than matchesKnowledgeTerm reads ("not a courtyard house", "avoid a courtyard", "do not use a central pavilion"; up to two modifier words, no punctuation between).
+ * Applied only to whole-house strategy tags, so the wider net cannot shift the ordinary record selection. */
+export function explicitlyExcluded(brief: string, tag: string) {
+ const escaped = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+ return new RegExp(`\\b(?:no|without|exclude|omit|avoid(?:ing)?|not|never|rather than|instead of|do not (?:want|use|include|build|need)|don't (?:want|use|need))\\b(?!\\s+only\\b)\\s+(?:(?:a|an|any|the)\\s+)?(?:[a-z-]+\\s+){0,2}${escaped}\\b`, 'i').test(brief);
+}
+/** Terms that define a record: the tags that appear in its id or title, and its fragment phrases ("infinity edge" for pool-infinity-limit). Generic words never define one. */
+/** Words that qualify a feature rather than name one ("an unsupported infinity edge"); a record is never defined by them. */
+const QUALIFIERS=new Set(['unsupported','simple','simplified','basic','standard','extra','additional','optional']);
+function definingTerms(entry:KnowledgeRevision):string[]{
+ const named=(entry.id+' '+entry.title.toLowerCase()).replace(/-/g,' ');
+ return [...new Set([...entry.tags.filter(t=>!generic.has(t)&&!QUALIFIERS.has(t)&&named.includes(t.replace(/-/g,' '))),...(fragmentDetails[entry.id]?.terms??[]).filter(t=>t.includes(' ')||(!QUALIFIERS.has(t)&&named.includes(t)))])];
+}
+/** A defining term shared by this many records or fewer names one specific feature ("infinity"); more means a broad architectural word ("edge", "pavilion", "court")
+ * that a client may rule out in one phrase ("no three-pavilion arrangement") without ruling out every record that uses it. Measured on the library itself. */
+export const SPECIFIC_FEATURE_MAX_RECORDS=3;
+export function featureFrequency(entries:KnowledgeRevision[]):Map<string,number>{
+ const df=new Map<string,number>();
+ for(const e of entries)for(const t of definingTerms(e))df.set(t,(df.get(t)??0)+1);
+ return df;
+}
+/** The client's own prohibition of a record's specific defining feature ("not an unsupported infinity-edge amenity", "avoid a sauna"). Hyphens read as spaces. An explicit
+ * exclusion outranks every suggestion: a record about an excluded feature is never retrieved, however well it scores, and never fills a slot. Broad words are left alone. */
+export function excludedByBrief(entry:KnowledgeRevision,brief:string,frequency:Map<string,number>):string|undefined{
+ const plain=brief.replace(/-/g,' ');
+ return definingTerms(entry).find(t=>(frequency.get(t)??0)<=SPECIFIC_FEATURE_MAX_RECORDS&&explicitlyExcluded(plain,t.replace(/-/g,' ')));
 }
 export function knowledgeBudget(brief:string, mode:'generate'|'edit'='generate') {
  const p=projectKnowledgeContext(brief);
@@ -55,7 +82,7 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
  const superseded=new Set(entries.filter(e=>e.status==='approved').flatMap(e=>e.supersedes));
  const excluded: {id:string;reason:string}[] = [];
  const reject=(entry:KnowledgeRevision,reason:string)=>{excluded.push({id:entry.id,reason});return [];};
- const active=entries.filter(e=>e.status==='approved'&&!superseded.has(e.id));
+ const active=entries.filter(e=>e.status==='approved'&&!superseded.has(e.id)),frequency=featureFrequency(active);
  entries.filter(e=>!active.includes(e)).forEach(e=>excluded.push({id:e.id,reason:e.status!=='approved'?e.status:'superseded'}));
  const ranked=entries.filter(e=>e.status==='approved'&&!superseded.has(e.id)).flatMap(entry=>{
   if(entry.category==='property-value') {
@@ -64,7 +91,11 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
   }
   if(entry.scales.length&&!entry.scales.includes(project.scale as 'compact'|'family'|'estate'|'mansion'))return reject(entry,'incompatible scale');
   if(!requestedSpecialist(entry,brief))return reject(entry,'specialist use absent or excluded');
-  const tags=entry.tags.filter(t=>matchesKnowledgeTerm(brief,t));
+  { const term=excludedByBrief(entry,brief,frequency); if(term)return reject(entry,`brief explicitly excludes ${term}`); }
+  if(!options.canonical&&isWholeHouseStrategy(entry))return reject(entry,'canonical-only strategy');
+  if(options.canonical&&unbuildableRoofForm(entry))return reject(entry,'roof form outside flat/gable/hip');
+  if(options.canonical&&isWholeHouseStrategy(entry)&&entry.tags.includes('multilevel')&&/\b(?:single|one)[- ](?:storey|story|level|floor)\b|\bbungalow\b/i.test(brief))return reject(entry,'brief requires a single level');
+  const tags=entry.tags.filter(t=>matchesKnowledgeTerm(brief,t)&&!(isWholeHouseStrategy(entry)&&explicitlyExcluded(brief,t)));
   const specific=tags.filter(t=>!generic.has(t) && (!entry.category || ((entry.id+' '+entry.title.toLowerCase()).includes(t) || fragmentDetails[entry.id]?.terms.includes(t))));
   const contextualBoost=!entry.category && specific.length ? (entry.kind==='recipe'?6:1) : 0;
   const category=knowledgeCategory(entry);
@@ -84,7 +115,9 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
  // Preserve the strongest brief-specific recipe before generic category coverage.
  const regionalIdentity = ranked.find(r => r.entry.kind === 'recipe' && r.entry.tags.some(tag=>project.style.some(style=>!['modern','contemporary'].includes(style.toLowerCase()) && style.toLowerCase()===tag.toLowerCase())));
  const identity = regionalIdentity ?? ranked.find(r => r.entry.kind === 'recipe' && r.category !== 'property-value' && r.reasons.some(reason => reason.startsWith('brief matches ')));
- const priorities = [project.propertyValue?.profileId, identity?.entry.id].filter(Boolean);
+ // One whole-house organising idea is reserved for canonical Generate: a parti shapes every other decision, so it must not lose a slot to single-feature records.
+ const strategy = options.canonical&&mode==='generate' ? ranked.find(r => isWholeHouseStrategy(r.entry)) : undefined;
+ const priorities = [project.propertyValue?.profileId, identity?.entry.id, strategy?.entry.id].filter(Boolean);
  const selected:typeof ranked=[];const counts=new Map<string,number>();let text='';
  let retiredSentencesRemoved=0,budgetText=0;
  const header=options.canonical?CANONICAL_KNOWLEDGE_HEADER:'\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. User exclusions and the scene construction contract prevail over stored suggestions and parameter ranges. Combine relevant fragments; unknown site facts remain assumptions. '+(mode==='edit'?'Scoped edit: preserve unrelated geometry and programme. ':'')+'Stored knowledge is retrieval, not retraining.\n';
@@ -100,12 +133,13 @@ export function retrieveArchitecturalKnowledge(entries: KnowledgeRevision[], bri
   const row=remaining.splice(index,1)[0],e=row.entry;
   if((counts.get(row.category)??0)>=Math.max(2,Math.ceil(budget.entries/3))) { excluded.push({id:e.id,reason:'category diversity budget'});continue; }
   const original=JSON.stringify({id:e.id,version:e.version,category:row.category,when:e.when,title:e.title,combinations:e.combinations,placement:e.placement,principles:e.principles,capabilities:e.capabilities,sources:e.sources,construction:constructionFor(e)})+'\n';
-  // The canonical filter narrows the text sent, never the choice: budget and selection use the original chunk size.
+  // The canonical filter narrows the text sent; the allowance is counted on that text.
   const canonicalChunk=options.canonical?canonicalKnowledgeChunk(e,row.category):undefined,chunk=canonicalChunk?.line??original;
-  if(header.length+budgetText+original.length>budget.chars)continue;
+  // Measure what is sent: the canonical filter drops capabilities/sources/construction, so budgeting the original wasted most of the allowance.
+  if(header.length+budgetText+chunk.length>budget.chars)continue;
   if(selected.some(s=>s.entry.principles.trim().toLowerCase()===e.principles.trim().toLowerCase() && s.entry.placement.trim().toLowerCase()===e.placement.trim().toLowerCase())) { excluded.push({id:e.id,reason:'duplicate selected guidance'}); continue; }
   const count=counts.get(row.category)??0;
-  selected.push({...row,reasons:[...row.reasons,count?'complementary detail within category':`adds ${row.category} coverage`]});text+=chunk;budgetText+=original.length;retiredSentencesRemoved+=canonicalChunk?.removed??0;counts.set(row.category,count+1);diversityCounts.set(diversityKey(row),(diversityCounts.get(diversityKey(row))??0)+1);
+  selected.push({...row,reasons:[...row.reasons,count?'complementary detail within category':`adds ${row.category} coverage`]});text+=chunk;budgetText+=chunk.length;retiredSentencesRemoved+=canonicalChunk?.removed??0;counts.set(row.category,count+1);diversityCounts.set(diversityKey(row),(diversityCounts.get(diversityKey(row))??0)+1);
  }
  const chars=text?header.length+text.length:0;
  return {project,budget,selected:selected.map(({entry,reasons,category,score})=>({id:entry.id,version:entry.version,category,score,reasons})),text:text?header+text:'',chars,

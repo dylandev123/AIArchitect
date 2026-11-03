@@ -1,0 +1,40 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "sourceSha256": "c60100d82d2c35353f1c974b6cdbac804fd898bc3875350ad77969dc5c7e621d",
+  "note": "Probe of the single offer produced by the existing coordinator. Not applied to the retained plan; not an accepted design.",
+  "baseline": {
+    "label": "as authored",
+    "wallContactsOfWestWing": [],
+    "compile": "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Single edits that would meet it: wing west-suite-wing.alignment centre→end. Software has changed nothing. | living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+    "diagnosticErrors": [
+      "site:arrival-lawn",
+      "site:pool-lawn-reserve",
+      "openings:dining-to-terrace",
+      "openings:living-to-west-gallery",
+      "openings:dining-to-east-gallery"
+    ]
+  },
+  "offered": {
+    "label": "west-suite-wing.alignment centre→end (the coordinator's only offer)",
+    "wallContactsOfWestWing": [
+      {
+        "from": "west-gallery",
+        "side": "east",
+        "to": "waterfront-terrace",
+        "toIsOutdoor": true,
+        "lengthM": 5
+      }
+    ],
+    "compile": "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them.",
+    "diagnosticErrors": [
+      "site:arrival-lawn",
+      "site:pool-lawn-reserve",
+      "openings:dining-to-terrace",
+      "openings:living-to-west-gallery",
+      "openings:dining-to-east-gallery",
+      "screens:terrace-west-screen",
+      "screens:terrace-west-screen"
+    ]
+  }
+}

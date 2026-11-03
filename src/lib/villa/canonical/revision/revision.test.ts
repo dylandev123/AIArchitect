@@ -27,9 +27,9 @@ describe('the saved mansion is read, never modified',()=>{
   expect(createHash('sha256').update(mansionBytes()).digest('hex')).toBe(findings.sourceProposalSha256);
  });
  it('analysis does not mutate the plan',()=>{const p=mansionOriginal(),before=JSON.stringify(p);analysePlan(p);renderPlanSvg(p);expect(JSON.stringify(p)).toBe(before);});
- it('groups all 57 findings by cause, with consequences kept apart from independent decisions',()=>{
+ it('groups all 53 findings by cause (57 before explicit-side doors were fitted into the wall they share), with consequences kept apart from independent decisions',()=>{
   const a=analysePlan(mansionOriginal());
-  expect(a.errorCount).toBe(57);expect(a.groups.flatMap(g=>g.findings).length).toBe(57);
+  expect(a.errorCount).toBe(53);expect(a.groups.flatMap(g=>g.findings).length).toBe(53); // the four explicit-side doors that missed their shared wall are no longer findings
   const chain=a.groups.filter(g=>g.cause==='chain-collision');expect(chain).toHaveLength(1);
   expect(chain[0].findings).toHaveLength(3);expect(chain[0].id).toContain('west-private-hall');expect(chain[0].involves).toEqual(expect.arrayContaining(['kitchen','pantry','west-suite-1','west-suite-2']));
   expect(a.groups.find(g=>g.cause==='roof-eaves')!.findings).toHaveLength(44);
@@ -68,7 +68,7 @@ describe('planning drawing represents the authored geometry',()=>{
   const k=shapes.find(s=>s.kind==='overlap'&&s.id==='kitchen/west-suite-1')!;expect([k.width,k.depth]).toEqual([6,6]);
   expect(shapes.filter(s=>s.kind==='roof-conflict').length).toBeGreaterThan(10);
   expect(shapes.filter(s=>s.kind==='roof')).toHaveLength(p.roofs.length);
-  expect(shapes.filter(s=>s.kind==='opening'&&s.flags?.includes('misfit')).map(s=>s.id)).toEqual(expect.arrayContaining(['kitchen-laundry-door','west-hall-suite-1-door']));
+  expect(shapes.filter(s=>s.kind==='opening'&&s.flags?.includes('misfit')).map(s=>s.id)).toEqual(['living-east-window']); // explicit-side doors are now fitted into the wall they share; the window on a shared wall remains
   const site=shapes.find(s=>s.kind==='site')!;expect([site.width,site.depth]).toEqual([90,75]);
   expect(shapes.filter(s=>s.kind==='pool'||s.kind==='lawn').some(s=>s.flags?.includes('conflict'))).toBe(true);
  });
@@ -93,7 +93,7 @@ describe('the revision request carries the whole picture and no proposed layout'
  it('contains brief, plan, measurements, dependencies, all findings, signals and the drawing',async()=>{
   const p=mansionOriginal(),req=await buildRevisionRequest({brief:'BRIEF-TEXT',plan:p,image:true}),c=req.context as Record<string,any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   expect(c.brief).toBe('BRIEF-TEXT');expect(c.currentPlan).toEqual(p);
-  expect(c.measured.rooms.rows).toHaveLength(21);expect(c.findings.groupedByCause.flatMap((g:{findings:unknown[]})=>g.findings)).toHaveLength(57);expect(c.findings.groupedByCause.length).toBeGreaterThan(3);
+  expect(c.measured.rooms.rows).toHaveLength(21);expect(c.findings.groupedByCause.flatMap((g:{findings:unknown[]})=>g.findings)).toHaveLength(53);expect(c.findings.groupedByCause.length).toBeGreaterThan(3);
   expect(c.architecturalWeaknesses.disposition.kind).toBe('redesign');expect(c.dependencies.adjacencyAndConnections.length).toBeGreaterThan(20);
   expect(req.png!.subarray(0,4).toString('hex')).toBe('89504e47');expect(req.messages[0].content.some(x=>x.type==='image')).toBe(true);
   expect(req.system).toContain('PLAN REVISION');expect(req.system).toContain('architectural-plan-1');
@@ -195,7 +195,7 @@ describe('one model-produced revision per authorized experiment',()=>{
   const original=mansionOriginal(),json=JSON.stringify(original),output=revised(mansionCoordinateRepairMock(),'repair');
   const record=await reviseCanonicalPlan({authorization:auth(),brief:'BRIEF',plan:original,model:'mock',submit:async()=>({output,raw:JSON.stringify(output),usage:{totalTokens:1}})});
   expect(JSON.stringify(record.original.plan)).toBe(json);expect(record.original.sha256).toBe(createHash('sha256').update(json).digest('hex'));expect(JSON.stringify(original)).toBe(json);
-  expect(record.response.raw).toBe(JSON.stringify(output));expect(record.assessment.diff!.entities.spaces.changed.length).toBeGreaterThan(0);expect(record.analysis.errorCount).toBe(57);
+  expect(record.response.raw).toBe(JSON.stringify(output));expect(record.assessment.diff!.entities.spaces.changed.length).toBeGreaterThan(0);expect(record.analysis.errorCount).toBe(53);
   expect(record.provenance).toMatchObject({providerCalls:1,maxModelRevisions:1,model:'mock'});expect(record.request.sha256.all).toHaveLength(64);expect(record.accepted).toBe(false);
   expect(()=>sceneFromAcceptedRevision(record)).toThrow(/accepted/);
   expect(JSON.parse(JSON.stringify(record)).version).toBe('canonical-plan-revision-1');

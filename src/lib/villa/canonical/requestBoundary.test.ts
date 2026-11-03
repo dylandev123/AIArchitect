@@ -40,12 +40,19 @@ describe('canonical Generate provider request',()=>{
   expect(developer).toContain('Never return scene operations');
   expect(developer.indexOf('CONTRACT PRECEDENCE')).toBeGreaterThan(developer.indexOf('RETRIEVED ARCHITECTURAL KNOWLEDGE'));
  });
- it('selects exactly the same records as the unfiltered path, with the same evidence',async()=>{
+ it('counts the allowance on the text actually sent, so more design records fit than when the stripped fields are budgeted',async()=>{
   const legacy=await architecturalRequestContext(generationSceneRequest(brief)),canonical=await architecturalRequestContext(generationSceneRequest(brief),{canonical:true});
-  expect(canonical.trace.selected).toEqual(legacy.trace.selected);expect(canonical.evidence).toEqual(legacy.evidence);
-  expect(canonical.trace.metrics.canonicalFilter?.droppedFields).toEqual(['capabilities','sources','construction']);
-  expect(canonical.trace.text.length).toBeLessThan(legacy.trace.text.length);
+  // Before this change the canonical path chose the same 9 records as the unfiltered path although it sent less than half their text.
+  // Ten, not nine: the brief rules out an infinity edge, so the infinity-pool record no longer takes a slot (retrieval.ts, excludedByBrief).
+  expect(legacy.trace.selected).toHaveLength(10);expect(legacy.trace.selected.map(r=>r.id)).not.toContain('infinity-pool');
+  expect(canonical.trace.selected.length).toBeGreaterThan(legacy.trace.selected.length);
+  expect(canonical.trace.selected.length).toBeLessThanOrEqual(canonical.trace.budget.entries);
   expect(canonical.trace.chars).toBeLessThanOrEqual(canonical.trace.budget.chars);
+  expect(canonical.evidence.map(e=>e.id)).toEqual(canonical.trace.selected.map(r=>r.id));
+  expect(canonical.trace.metrics.canonicalFilter?.droppedFields).toEqual(['capabilities','sources','construction']);
+  // The default (operations-author) path never offers a whole-house strategy; the canonical path reserves exactly one.
+  expect(legacy.trace.selected.some(r=>r.id.startsWith('strategy-'))).toBe(false);
+  expect(canonical.trace.selected.filter(r=>r.id.startsWith('strategy-'))).toHaveLength(1);
  });
  it('proves the check is meaningful: the unfiltered path for the same brief does contain the retired wording',async()=>{
   const legacy=await architecturalRequestContext(generationSceneRequest(brief));

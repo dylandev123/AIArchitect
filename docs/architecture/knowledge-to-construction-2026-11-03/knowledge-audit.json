@@ -1,0 +1,258 @@
+{
+ "label": "Offline knowledge audit. No model call, no database.",
+ "library": {
+  "records": 334,
+  "byCategory": {
+   "composition": 20,
+   "programme": 43,
+   "roof-outdoor": 55,
+   "envelope": 21,
+   "climate-site": 38,
+   "amenity": 42,
+   "materials": 18,
+   "arrival": 26,
+   "construction": 32,
+   "tradition": 30,
+   "property-value": 9
+  },
+  "byKind": {
+   "recipe": 273,
+   "principle": 46,
+   "experience": 15
+  },
+  "averageCharsPerRecord": 439,
+  "recordsTouchingDesignDomains": {
+   "0 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 80,
+   "1 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 143,
+   "2 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 63,
+   "3 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 31,
+   "4 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 9,
+   "5 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 7,
+   "6 of 6 (roof, facade, entrance, landscape, hierarchy, circulation)": 1
+  },
+  "curatedRecordsWhoseCombinationsFieldIsSharedBoilerplate": 235,
+  "curatedRecords": 301,
+  "legacyRecipes": 24,
+  "recordsRestingOnUnbuildableRoofForms": [
+   "Oceanfront Split-Plane Canopy Roof 01",
+   "Modern Tropical Floating Ridge Roof 01",
+   "Modern Tropical Lantern Roof 01",
+   "Modern Tropical Ventilated Mono-Pitch Roof 01"
+  ],
+  "recordsMentioningSceneOperations": 279
+ },
+ "strategiesAdded": [
+  "strategy-waterfront-central-pavilion",
+  "strategy-tropical-pavilion-court",
+  "strategy-courtyard-residence",
+  "strategy-hillside-stepped-levels",
+  "strategy-compact-two-volume"
+ ],
+ "retrieval": {
+  "mansion": {
+   "before": {
+    "entries": 9,
+    "chars": 16972,
+    "allowance": 18000,
+    "ids": [
+     "property-value-25m-50m",
+     "facade-materials",
+     "waterfront-estate",
+     "estate-composition",
+     "living-view",
+     "legacy-recipe-65a14c7e-0559-45f0-adfe-589551ca499c",
+     "tropical-envelope",
+     "covered-threshold",
+     "infinity-pool"
+    ]
+   },
+   "after": {
+    "entries": 12,
+    "chars": 11511,
+    "allowance": 18000,
+    "ids": [
+     "property-value-25m-50m",
+     "facade-materials",
+     "strategy-waterfront-central-pavilion",
+     "waterfront-estate",
+     "living-view",
+     "legacy-recipe-65a14c7e-0559-45f0-adfe-589551ca499c",
+     "tropical-envelope",
+     "covered-threshold",
+     "infinity-pool",
+     "lesson-roof-over-void",
+     "balinese-pavilion-links",
+     "estate-composition"
+    ]
+   }
+  },
+  "tropical": {
+   "before": {
+    "entries": 4,
+    "chars": 11454,
+    "allowance": 12000,
+    "ids": [
+     "legacy-recipe-c6951c3e-fd4f-4656-9242-6df2fa7a0bf4",
+     "legacy-recipe-bc512300-37ab-47ae-816e-fa562e9239ec",
+     "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+     "tropical-envelope"
+    ]
+   },
+   "after": {
+    "entries": 8,
+    "chars": 11562,
+    "allowance": 12000,
+    "ids": [
+     "legacy-recipe-c6951c3e-fd4f-4656-9242-6df2fa7a0bf4",
+     "strategy-tropical-pavilion-court",
+     "legacy-recipe-bc512300-37ab-47ae-816e-fa562e9239ec",
+     "legacy-recipe-21d1571a-86f7-4226-bb31-33b2677f13ec",
+     "tropical-envelope",
+     "living-view",
+     "pool-court-alignment",
+     "sports-court"
+    ]
+   }
+  },
+  "courtyard": {
+   "before": {
+    "entries": 8,
+    "chars": 11494,
+    "allowance": 12000,
+    "ids": [
+     "mediterranean-courtyard",
+     "privacy-gradient",
+     "entry-court-door-axis",
+     "window-tall-narrow",
+     "quiet-court-route",
+     "sports-court",
+     "narrow-lot-court",
+     "build-court-by-separation"
+    ]
+   },
+   "after": {
+    "entries": 8,
+    "chars": 6100,
+    "allowance": 12000,
+    "ids": [
+     "mediterranean-courtyard",
+     "strategy-courtyard-residence",
+     "privacy-gradient",
+     "entry-court-door-axis",
+     "window-tall-narrow",
+     "quiet-court-route",
+     "sports-court",
+     "narrow-lot-court"
+    ]
+   }
+  },
+  "hillside": {
+   "before": {
+    "entries": 4,
+    "chars": 5651,
+    "allowance": 6500,
+    "ids": [
+     "pool-garden-view",
+     "view-fan-order",
+     "room-enclosure",
+     "build-pool-bottom-order"
+    ]
+   },
+   "after": {
+    "entries": 5,
+    "chars": 6121,
+    "allowance": 6500,
+    "ids": [
+     "pool-garden-view",
+     "strategy-hillside-stepped-levels",
+     "room-enclosure",
+     "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+     "build-pool-bottom-order"
+    ]
+   }
+  },
+  "compact": {
+   "before": {
+    "entries": 4,
+    "chars": 5703,
+    "allowance": 6500,
+    "ids": [
+     "compact-family",
+     "compact-core-order",
+     "covered-threshold",
+     "short-circulation"
+    ]
+   },
+   "after": {
+    "entries": 5,
+    "chars": 4233,
+    "allowance": 6500,
+    "ids": [
+     "compact-family",
+     "strategy-compact-two-volume",
+     "covered-threshold",
+     "compact-core-order",
+     "short-circulation"
+    ]
+   }
+  },
+  "contemporary": {
+   "before": {
+    "entries": 10,
+    "chars": 17529,
+    "allowance": 18000,
+    "ids": [
+     "infinity-pool",
+     "asymmetric-balance",
+     "solid-glass-balance",
+     "covered-threshold",
+     "room-enclosure",
+     "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+     "legacy-recipe-ec76f7ea-3c19-4a9a-8a0a-a256d350b82e",
+     "build-pool-bottom-order",
+     "contemporary-rustic",
+     "facade-materials"
+    ]
+   },
+   "after": {
+    "entries": 12,
+    "chars": 9093,
+    "allowance": 18000,
+    "ids": [
+     "infinity-pool",
+     "asymmetric-balance",
+     "solid-glass-balance",
+     "covered-threshold",
+     "room-enclosure",
+     "legacy-recipe-3efc1acf-c6db-4afb-91ac-ec5b963fb3b1",
+     "legacy-recipe-ec76f7ea-3c19-4a9a-8a0a-a256d350b82e",
+     "build-pool-bottom-order",
+     "contemporary-rustic",
+     "facade-materials",
+     "pool-sun-shelf",
+     "composition-hierarchy"
+    ]
+   }
+  },
+  "plain": {
+   "before": {
+    "entries": 2,
+    "chars": 2987,
+    "allowance": 6500,
+    "ids": [
+     "room-enclosure",
+     "covered-threshold"
+    ]
+   },
+   "after": {
+    "entries": 2,
+    "chars": 1368,
+    "allowance": 6500,
+    "ids": [
+     "room-enclosure",
+     "covered-threshold"
+    ]
+   }
+  }
+ }
+}

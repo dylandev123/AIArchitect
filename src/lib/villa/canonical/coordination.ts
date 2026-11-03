@@ -67,8 +67,8 @@ export function forbiddenRuns(r:Rect,side:Side,keep:KeepOut[]):{lo:number;hi:num
  });
 }
 export type PortalLike={id:string;host:{space:string;side:RequestedSide};to:string;alignment:'start'|'centre'|'end';width:number;mode:'door'|'open'|'window'};
-export type Placed={id:string;requested:RequestedSide;side:Side;centre:number;derived:boolean;/** The run the opening sits in, edge parameter. */run:{lo:number;hi:number};/** Set when the preferred position crossed a stair flight and the opening was moved the least distance that clears it. */movedFrom?:number;problem?:undefined}
- |{id:string;requested:RequestedSide;side:null;centre:null;derived:boolean;movedFrom?:undefined;problem:string};
+export type Placed={id:string;requested:RequestedSide;side:Side;centre:number;derived:boolean;/** The run the opening sits in, edge parameter. */run:{lo:number;hi:number};/** Set when the preferred position crossed a stair flight and the opening was moved the least distance that clears it. */movedFrom?:number;/** Explicit side whose whole-edge position missed the shared boundary: the opening was fitted into the run it shares with its target. */refitted?:{from:number};problem?:undefined}
+ |{id:string;requested:RequestedSide;side:null;centre:null;derived:boolean;movedFrom?:undefined;refitted?:undefined;problem:string};
 /** One exposure summary per edge: what it is shared with and what remains free to the outside. */
 export function edgeExposure(rect:Rect,side:Side,others:{id:string;rect:Rect}[]){
  const e=edgeOf(rect,side),shared=sharedRuns(rect,side,others);
@@ -79,8 +79,18 @@ const describe=(runs:{lo:number;hi:number}[])=>runs.map(r=>`${f2(r.lo)}..${f2(r.
 export function placePortal(p:PortalLike,host:Rect,rects:Record<string,Rect>,others:{id:string;rect:Rect}[],sameLevel:(id:string)=>boolean,keep:KeepOut[]=[]):Placed{
  const side=p.host.side;
  if(side!=='shared'&&side!=='exposed'){
-  const e=edgeOf(host,side);
-  return {id:p.id,requested:side,side,centre:placeInRun(p.alignment,p.width,0,e.len),derived:false,run:{lo:0,hi:e.len}};
+  const e=edgeOf(host,side),whole=placeInRun(p.alignment,p.width,0,e.len),target=p.to==='exterior'?undefined:rects[p.to];
+  const plain:Placed={id:p.id,requested:side,side,centre:whole,derived:false,run:{lo:0,hi:e.len}};
+  // A connection to a neighbouring room can only open where the two rooms actually share wall. Over the whole edge the historical position is kept whenever it already
+  // lies inside that shared boundary (every plan that compiled before is unchanged); when it does not, the opening is fitted into the shared run, or refused if it cannot fit.
+  if(!target||!sameLevel(p.to)||p.mode==='window')return plain;
+  const runs=sharedRuns(host,side,[{id:p.to,rect:target}]);
+  if(!runs.length||runs.some(r=>fits(whole,p.width,r.lo,r.hi)))return plain;
+  const need=p.width+2*WALL,usable=runs.filter(r=>r.hi-r.lo>=need-1e-6);
+  if(!usable.length)return {id:p.id,requested:side,side:null,centre:null,derived:false,problem:`${p.host.space} touches ${p.to} along only ${runs.map(r=>`${f2(r.lo)}..${f2(r.hi)} m (${f2(r.hi-r.lo)} m)`).join(', ')} of its ${side} edge (${f2(e.len)} m long), but a ${p.width} m opening needs ${f2(need)} m with ${WALL} m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms.`};
+  if(usable.length>1)return {id:p.id,requested:side,side:null,centre:null,derived:false,problem:`${p.host.space} touches ${p.to} along ${usable.length} separate runs of its ${side} edge (${usable.map(r=>`${f2(r.lo)}..${f2(r.hi)} m`).join('; ')}); the opening could stand in any of them. Use host side "shared" with alignment, or name which run by choosing a different alignment.`};
+  const run=usable[0];
+  return {id:p.id,requested:side,side,centre:placeInRun(p.alignment,p.width,run.lo,run.hi),derived:false,run:{lo:run.lo,hi:run.hi},refitted:{from:whole}};
  }
  const need=p.width+2*WALL;
  if(side==='shared'){

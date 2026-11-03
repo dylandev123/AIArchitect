@@ -1,0 +1,134 @@
+{
+ "basis": "Authored after reading every artifact in this directory. The retained plan (canonical-plan.json, sha256 of the file c60100d8…621d) was never modified; the one probe on a clone is option-probe.json.",
+ "totals": {
+  "errorsAsFirstReportedByRoute": 2,
+  "diagnosticFindingsRaw": "15 diagnosePlan errors + 2 coordinator errors + 4 observations",
+  "afterRemovingDiagnosticBlindSpot": "5 diagnosePlan errors + 2 coordinator errors",
+  "distinctRealPhysicalConflicts": 6,
+  "falsePositivesFromSoftwareDefect": "10 roof findings + 1 daylight observation (+ 'every roof is flat' observation)",
+  "independentRootCauses": 7,
+  "realConflictsMap": {
+   "RC1": ["west-wing-pavilion-adjoin", "living-to-west-gallery", "dining-to-east-gallery"],
+   "RC3": ["dining-to-terrace"],
+   "RC4": ["site 80x75 too small (needs 64x78) / pool-lawn-reserve 1.5 m outside", "arrival-lawn overlaps powder-room 1.0x0.5 m"]
+  }
+ },
+ "rootCauses": [
+  {
+   "id": "RC1",
+   "title": "Wings were placed against an inflated wing envelope, so the galleries touch neither the salon nor the dining room",
+   "priority": 1,
+   "whatHappened": "Terra put the porch, terrace, kitchen, pantry and powder room into the same wing (core-pavilion) as the two salons. The wing's envelope therefore runs x -3..17, z -9..17 (20x26 m, fill 0.44) while living-salon spans only x 0..8. Both suite wings were placed 'west/east of core-pavilion, centre, gap 0', i.e. against that envelope, not against the salons.",
+   "evidence": {
+    "constraint": "west-wing-pavilion-adjoin: measured 0 m of shared wall, 3 m required (compile error #1)",
+    "geometry": "west-gallery spans x -6..-3; living-salon spans x 0..8: a 3 m void. east-gallery starts at x 17; dining-salon ends at x 14: a 3 m void. The east gallery only touches pantry (x 14..17), 3.5 m, i.e. the service room.",
+    "portalErrors": ["living-to-west-gallery: share no wall", "dining-to-east-gallery: share no wall"],
+    "authoredIntent": "constraint reasons and portals state the galleries are 'directly entered from the central salon' and 'from the dining side of the pavilion'",
+    "file": "coordination in diagnostics.json; floorplan-ground.png"
+   },
+   "originatedIn": ["model design (service and outdoor rooms placed in the hero wing)", "knowledge retrieval / strategy text (strategy-waterfront-central-pavilion says wings are 'masses placed gap 0 against the pavilion' and 'an adjoin constraint hall to wing', without saying the envelope includes every room of the pavilion mass)", "planning representation (wing placement is envelope-to-envelope and the model gets no computed adjacency before answering)"],
+   "consequences": ["compile error #1 and #2", "diagnostic findings living-to-west-gallery and dining-to-east-gallery", "the concept 'suites reached from the hall, never through living rooms' has no geometry", "coordinator reports 'west-suite-wing reachable 4/4' from declared doors that cannot exist (false reassurance)"],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Partly. Software can derive from the model's own declared portals (living-to-west-gallery states which two rooms must share a wall) the placement edits that make those declared rooms adjacent (e.g. place west-suite-wing relativeTo living-salon, side west) and offer them. Choosing among them, or moving the porch/terrace/service out of the hero wing, is a design decision.",
+   "mustChangeToPreventRecurrence": ["Planning representation: before the plan is accepted, compute envelope-vs-room adjacency for every declared inter-wing portal and report the inflated-envelope cause in plain words", "Strategy/guidance text: instruct wing placement relativeTo the hall SPACE (supported by the contract) or keep terraces, porch and service rooms in their own masses", "Offer generation: derive offers from declared portals (see RC2)"],
+   "offlineVerification": "Replay canonical-plan.json (no provider). Expected: diagnostic names the envelope inflation as cause; offers include 'west-suite-wing relativeTo living-salon' and 'east-suite-wing relativeTo dining-salon'; each offer applied to a clone compiles or fails only on RC3/RC4 items; unit fixtures with a terrace wider than its salon.",
+   "preservesIntendedArchitecture": "Yes if the offer keeps wings flanking the pavilion and keeps galleries entered from the salons; the probe showed the only existing offer does not (RC2)."
+  },
+  {
+   "id": "RC2",
+   "title": "The only 'verified' correction option satisfies the constraint through an outdoor terrace and does not fix the compile",
+   "priority": 2,
+   "whatHappened": "The coordinator's single offer is west-suite-wing.alignment centre→end ('measured after: 5 m', 'new errors: none'). The adjoin measure counts shared wall with ANY room of the other wing, including the outdoor waterfront-terrace.",
+   "evidence": {
+    "file": "option-probe.json",
+    "offered": "after the edit the west wing's only wall contact is west-gallery east side ↔ waterfront-terrace (outdoor) 5 m; compile still fails on living-to-west-gallery; diagnostics add a terrace-west-screen collision (2 findings)"
+   },
+   "originatedIn": ["coordinator (spatial.ts measure/sharedLength counts outdoor rooms for adjoin; options verified only against 'new errors' of the same kind)"],
+   "consequences": ["a person or bounded revision step following the offer would put a bedroom gallery on the waterfront terrace and still not compile"],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Yes for the measurement: count only interior rooms for adjoin (as separate already does), and verify offers by the full compile and diagnostic set rather than by the one constraint.",
+   "mustChangeToPreventRecurrence": ["adjoin counts interior-to-interior shared wall", "offers are validated by compileArchitecturalPlan on a clone and must not introduce new diagnostic errors"],
+   "offlineVerification": "Unit test on this plan: the 'end' offer must no longer be produced (or must be rejected with 'touches only an outdoor space'); option-probe.json becomes a regression fixture.",
+   "preservesIntendedArchitecture": "Yes; it removes a misleading option only."
+  },
+  {
+   "id": "RC3",
+   "title": "Explicit portal side + centre alignment ignores a shared segment narrower than the host edge",
+   "priority": 3,
+   "whatHappened": "dining-to-terrace (door 2.8 m, host side 'north', alignment centre) is centred on dining-salon's whole 6 m north edge (1.6..4.4 m). Only 3 m of that edge (3..6 m) touches the 14 m terrace, which overhangs the salon by 3 m on the west.",
+   "evidence": {"message": "opening (1.6..4.4 m) does not fit the shared segment with waterfront-terrace (3..6 m) with 0.18 m margins.", "file": "diagnostics.json openings:dining-to-terrace", "note": "Reported by diagnosePlan only; the compiler stopped earlier (RC6), so its own verdict on this opening is unknown, not 'passed'."},
+   "originatedIn": ["model design (terrace much wider than either salon)", "contract ambiguity (side 'shared' derives the position inside the run; an explicit side does not, and the prompt does not say that explicit sides align against the whole edge)"],
+   "consequences": [],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Yes. When 'to' is a single adjacent room, position the opening within the actual shared run (what side 'shared' already does); the model stated the relationship, the software chooses only the position.",
+   "mustChangeToPreventRecurrence": ["placePortal: explicit side with a declared target aligns inside the shared run", "or report an offer 'use host side shared'"],
+   "offlineVerification": "placePortal unit test with edge 6 m, run 3..6 m, width 2.8: opening lands at 3.18..5.82 or is rejected with the 'shared' offer.",
+   "preservesIntendedArchitecture": "Yes."
+  },
+  {
+   "id": "RC4",
+   "title": "Site and landscape allocations were sized without the resulting building extent",
+   "priority": 4,
+   "whatHappened": "The site is declared 80x75 m and is centred on the room cells; the arrangement needs at least 64x78. pool-lawn-reserve lies 1.5 m beyond the north boundary. arrival-lawn (anchored to the porch) overlaps powder-room by 1.0x0.5 m.",
+   "evidence": {"coordinator": "site required 64x78, available 80x75, fits:false", "diagnostic": ["pool-lawn-reserve 1.5 m outside the site", "arrival-lawn overlaps powder-room"]},
+   "originatedIn": ["model design (arithmetic)", "planning representation (the model must compute the site from placements it cannot see)"],
+   "consequences": [],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Site size: yes (the coordinator itself calls enlarging the site 'a determined consequence'). The lawn overlap is a trivial design choice (shrink or move 0.5 m); software can offer it.",
+   "mustChangeToPreventRecurrence": ["derive site extent from the declared allocations when it is not a client constraint", "or offer the enlargement as the default verified option"],
+   "offlineVerification": "Clone of the retained plan with site depth 78: site diagnostics clear (see canonical-recovery-probe.ts pattern).",
+   "preservesIntendedArchitecture": "Yes."
+  },
+  {
+   "id": "RC5",
+   "title": "The read-only diagnostic does not understand composition",
+   "priority": 2,
+   "whatHappened": "diagnosePlan reads plan.roofs and plan.portals only. This plan declares its roofs through composition.roofSpans (3 spans) and its windows through composition.facades (7 rhythms = 14 window bays). diagnosePlan therefore reported 10 rooms as having no roof, '13 of 13 interior rooms have no window' and 'every roof is flat with no overhang'. All are untrue of the plan as the compiler would expand it.",
+   "evidence": {"file": "diagnostics.json diagnosticBlindSpot and daylight", "expandComposition": "3 spans (salon-gable gable rise 2 overhang 0.9; two hip spans) and 14 window bays", "rawFindings": "rawFindingsBeforeBlindSpotRemoval"},
+   "originatedIn": ["software defect (diagnose.ts predates composition)"],
+   "consequences": ["10 false roof findings, 1 false daylight observation, 1 false roof-form observation", "roof-section clash analysis is not evaluated for span roofs at all (unknown, not passed)"],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Yes: run expandComposition inside diagnosePlan, treat span members as roofed, and model span roofs in the clash analysis.",
+   "mustChangeToPreventRecurrence": ["diagnosePlan consumes expandComposition output", "regression fixture: this plan"],
+   "offlineVerification": "diagnosePlan on canonical-plan.json yields zero 'neither a roof nor a space above' findings and a daylight count of 7 rooms with windows (six without: living-salon, dining-salon, pantry, powder-room, both galleries).",
+   "preservesIntendedArchitecture": "Not applicable (diagnostic only)."
+  },
+  {
+   "id": "RC6",
+   "title": "Rejection discards both the plan and most of the independent errors",
+   "priority": 3,
+   "whatHappened": "The compiler stopped at the derive phase: placePortals throws on the first unplaceable portal, so one portal problem (of at least three) and none of the later phases were reported. The route then returned only {error, providerCalls, decisions} with status 422: no plan, no draft, no diagram, no retained response file. The rejected plan survives only because this harness intercepted the provider response.",
+   "evidence": {"file": "compile-result.json (phases 3-10 not-reached), route-response.json (keys: error, providerCalls, decisions)", "paidCost": "US$0.0918"},
+   "originatedIn": ["compiler (stop-at-first in derive)", "route/product (generateCanonical returns no recoverable draft on a DesignConflict)"],
+   "consequences": ["the user would pay for a response and receive two sentences", "downstream phases (enclosure, geometry, spatial constraints, composition fidelity, site bounds) are unexecuted for this plan: their verdicts are unknown"],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "Yes: collect all portal placement problems; retain and return the rejected plan and the diagnostic/diagram as a labelled draft (never as a scene).",
+   "mustChangeToPreventRecurrence": ["derive collects every portal problem", "generateCanonical returns architecturalPlan + diagnostics + labelled drawing with the 422"],
+   "offlineVerification": "route test with a mocked provider returning this response: 422 body contains the plan, the 7 grouped conflicts and the drawing; compile test expecting 3 portal problems reported together.",
+   "preservesIntendedArchitecture": "Yes."
+  },
+  {
+   "id": "RC7",
+   "title": "The model produced a thin, template-faithful scheme for an 'extraordinary' US$25 million estate",
+   "priority": 1,
+   "whatHappened": "Terra followed strategy-waterfront-central-pavilion structurally almost point by point (primary double-height pavilion, hip-roofed flanking wings, gap-0 galleries, adjoin constraint, heightStep, entrance+porch, limestone pavilion/timber wings, pool on the same axis) and delivered 13 interior rooms, 531 m2, one level, six identical 7x5 m (35 m2) suites, no bathrooms or dressing rooms (disclosed as prose), one powder room, one living and one dining room, no family/entertainment/study/staff/guest spaces and no garage or service wing. The thesis says 'elevated' but the only level rises 0.3 m. The primary salon (8x12 m, 6 m high) has no window: its only openings are three doors of 2.4-3.6 m x 3.2 m. Suite windows face the flanks, not the water. The terrace roof is flat with zero overhang; the arrival is a 6x3.5 m flat-roofed porch with one 2.4 m screen.",
+   "evidence": {"files": ["architectural-decisions.json", "concept-review.json", "stage-a-findings.json"], "measured": {"interiorAreaM2": 531, "bedroomLikeFootprints": "6 x 7x5", "heightStepDeclared": 1.8, "levels": 1, "windowsOnSalonVolume": "0 (2 bays on kitchen only)", "doorFacadeRhythms": 0, "encloseConstraints": 0}},
+   "originatedIn": ["model design", "prompt/knowledge contract (value record: 'No fixed floor areas, storey counts or room counts', 'a restrained home may be justified' while the brief asks for 'expansive living and entertainment spaces'; no programme-scale anchor reaches the model)", "knowledge retrieval (an 18,000-character budget kept 12 of 115 eligible records; pool-infinity-limit, composition-hierarchy, strategy-tropical-pavilion-court and 10 arrival/entry records were cut while infinity-pool was kept)", "capability under-use (door facade rhythms and enclose constraint, which the selected strategy names, were not used)"],
+   "consequences": ["none of the other errors; this is independent of RC1-RC6, but would limit quality even if all compiled"],
+   "deterministicCorrectionWithoutNewArchitecturalChoice": "No. Programme richness, room count, section and glazing are architectural decisions.",
+   "mustChangeToPreventRecurrence": ["decide how programme scale is communicated for an ambitious brief (an explicit minimum-programme completeness check or guidance), because 'no fixed counts' + 'restraint may be justified' currently licenses a 13-room answer", "strategy records should encode failure-prevention for their own placement step (RC1) and show a worked-out wing/adjacency example", "retrieval budget should reserve the matching limit record when an amenity record is selected"],
+   "offlineVerification": "Programme-completeness check on this plan reports missing bathrooms/dressing, no entertainment/family/service/staff space and 0 salon glazing; knowledge test: selecting infinity-pool forces pool-infinity-limit.",
+   "preservesIntendedArchitecture": "Only a change to the prompt/strategy can raise ambition; deterministic software must not invent rooms."
+  }
+ ],
+ "dependencyGraph": {
+  "RC1": ["compile error 1", "compile error 2 (living-to-west-gallery)", "dining-to-east-gallery", "coordinator reachability false reassurance"],
+  "RC2": ["misleading offer"],
+  "RC3": ["dining-to-terrace (diagnostic only)"],
+  "RC4": ["site undersized", "pool-lawn-reserve outside", "arrival-lawn overlap"],
+  "RC5": ["10 roof false positives", "daylight false observation", "flat-roof false observation"],
+  "RC6": ["only 2 of >=6 conflicts reported", "no plan returned"],
+  "RC7": ["thin programme", "unglazed salon", "generic suites"]
+ },
+ "unresolvedArchitecturalDecisions": [
+  "How the galleries should meet the salons: place wings relativeTo the salon spaces, or restructure the pavilion mass (move porch, terrace and service rooms out of it).",
+  "Whether the east gallery may be entered from the service side (pantry) at all.",
+  "Whether the salons should be glazed to the water (door-bay rhythm or clerestory) and how deep the terrace roof should be.",
+  "Programme richness for a US$25 million estate: rooms, bathrooms, entertainment, service, levels.",
+  "Whether suites should differ from one repeated 7x5 m module."
+ ]
+}

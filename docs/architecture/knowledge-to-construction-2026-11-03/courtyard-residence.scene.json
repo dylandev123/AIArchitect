@@ -1,0 +1,1633 @@
+{
+ "version": "architectural-scene-1",
+ "name": "courtyard-residence",
+ "elements": [
+  {
+   "id": "living-floor",
+   "label": "living-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    0.1,
+    8.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    0.2,
+    8
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "living-roof",
+   "label": "living-roof",
+   "kind": "roof",
+   "at": [
+    0,
+    6.2,
+    8.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    2,
+    8
+   ],
+   "material": "timber",
+   "roofForm": "hip",
+   "overhang": 0,
+   "fascia": [
+    "east",
+    "south",
+    "west"
+   ],
+   "panels": 4
+  },
+  {
+   "id": "court-floor",
+   "label": "court-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    0.1,
+    -0.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    0.2,
+    10
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "west-bed-a-floor",
+   "label": "west-bed-a-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    -11,
+    0.1,
+    -3
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    5
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "west-roof",
+   "label": "west-roof",
+   "kind": "roof",
+   "at": [
+    -11,
+    4.700000000000001,
+    -0.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    1.8,
+    10
+   ],
+   "material": "timber",
+   "roofForm": "gable",
+   "overhang": 0,
+   "fascia": [
+    "west"
+   ],
+   "panels": 4
+  },
+  {
+   "id": "west-bed-b-floor",
+   "label": "west-bed-b-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    -11,
+    0.1,
+    2
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    5
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "east-bed-a-floor",
+   "label": "east-bed-a-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    11,
+    0.1,
+    -3
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    5
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "east-roof",
+   "label": "east-roof",
+   "kind": "roof",
+   "at": [
+    11,
+    4.700000000000001,
+    -0.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    1.8,
+    10
+   ],
+   "material": "timber",
+   "roofForm": "gable",
+   "overhang": 0,
+   "fascia": [
+    "east"
+   ],
+   "panels": 4
+  },
+  {
+   "id": "east-bed-b-floor",
+   "label": "east-bed-b-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    11,
+    0.1,
+    2
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    5
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-floor",
+   "label": "gate-hall-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    0.1,
+    -7.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    0.2,
+    4
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-roof",
+   "label": "gate-hall-roof",
+   "kind": "roof",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    3.1100000000000003,
+    -7.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    0.22,
+    4
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "porch-floor",
+   "label": "porch-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    0.1,
+    -11
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    3
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "porch-roof",
+   "label": "porch-roof",
+   "kind": "roof",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    0,
+    3.3100000000000005,
+    -11
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.22,
+    3
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "living-court",
+   "label": "living-court",
+   "kind": "entrance",
+   "at": [
+    0,
+    1.5999999999999999,
+    4.5
+   ],
+   "rotation": 0,
+   "size": [
+    3,
+    2.8,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "living-e0-wall",
+   "label": "living-e0",
+   "kind": "wall",
+   "at": [
+    0,
+    2.7,
+    4.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 3,
+    "height": 2.8,
+    "glazed": false
+   }
+  },
+  {
+   "id": "living-e1-wall",
+   "label": "living-e1",
+   "kind": "wall",
+   "at": [
+    8,
+    2.7,
+    8.5
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    8,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "living-e2-s0-wall",
+   "label": "living-e2-s0",
+   "kind": "wall",
+   "at": [
+    6,
+    2.7,
+    12.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    4,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.6,
+    "width": 2.2,
+    "height": 3.4,
+    "glazed": true
+   }
+  },
+  {
+   "id": "living-e2-s1-wall",
+   "label": "living-e2-s1",
+   "kind": "wall",
+   "at": [
+    2,
+    2.7,
+    12.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    4,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.6,
+    "width": 2.2,
+    "height": 3.4,
+    "glazed": true
+   }
+  },
+  {
+   "id": "living-e2-s2-wall",
+   "label": "living-e2-s2",
+   "kind": "wall",
+   "at": [
+    -2,
+    2.7,
+    12.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    4,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.6,
+    "width": 2.2,
+    "height": 3.4,
+    "glazed": true
+   }
+  },
+  {
+   "id": "living-e2-s3-wall",
+   "label": "living-e2-s3",
+   "kind": "wall",
+   "at": [
+    -6,
+    2.7,
+    12.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    4,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.6,
+    "width": 2.2,
+    "height": 3.4,
+    "glazed": true
+   }
+  },
+  {
+   "id": "living-e3-wall",
+   "label": "living-e3",
+   "kind": "wall",
+   "at": [
+    -8,
+    2.7,
+    8.5
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    8,
+    5,
+    0.18
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "gate-court",
+   "label": "gate-court",
+   "kind": "entrance",
+   "at": [
+    0,
+    1.4,
+    -5.5
+   ],
+   "rotation": 0,
+   "size": [
+    2.4,
+    2.4,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "court-e0-wall",
+   "label": "court-e0",
+   "kind": "wall",
+   "at": [
+    0,
+    1.5999999999999999,
+    -5.5
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 2.4,
+    "height": 2.4,
+    "glazed": false
+   }
+  },
+  {
+   "id": "east-court-a",
+   "label": "east-court-a",
+   "kind": "entrance",
+   "at": [
+    8,
+    1.3,
+    -3
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    1.2,
+    2.2,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "court-e1-s0-wall",
+   "label": "court-e1-s0",
+   "kind": "wall",
+   "at": [
+    8,
+    2,
+    -3
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 1.2,
+    "height": 2.2,
+    "glazed": false
+   }
+  },
+  {
+   "id": "east-court-b",
+   "label": "east-court-b",
+   "kind": "entrance",
+   "at": [
+    8,
+    1.3,
+    2
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    1.2,
+    2.2,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "court-e1-s1-wall",
+   "label": "court-e1-s1",
+   "kind": "wall",
+   "at": [
+    8,
+    2,
+    2
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 1.2,
+    "height": 2.2,
+    "glazed": false
+   }
+  },
+  {
+   "id": "west-court-b",
+   "label": "west-court-b",
+   "kind": "entrance",
+   "at": [
+    -8,
+    1.3,
+    2
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    1.2,
+    2.2,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "court-e3-s0-wall",
+   "label": "court-e3-s0",
+   "kind": "wall",
+   "at": [
+    -8,
+    2,
+    2
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 1.2,
+    "height": 2.2,
+    "glazed": false
+   }
+  },
+  {
+   "id": "west-court-a",
+   "label": "west-court-a",
+   "kind": "entrance",
+   "at": [
+    -8,
+    1.3,
+    -3
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    1.2,
+    2.2,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "court-e3-s1-wall",
+   "label": "court-e3-s1",
+   "kind": "wall",
+   "at": [
+    -8,
+    2,
+    -3
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 1.2,
+    "height": 2.2,
+    "glazed": false
+   }
+  },
+  {
+   "id": "west-bed-a-e0-wall",
+   "label": "west-bed-a-e0",
+   "kind": "wall",
+   "at": [
+    -11,
+    2,
+    -5.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "west-bed-a-e2-wall",
+   "label": "west-bed-a-e2",
+   "kind": "wall",
+   "at": [
+    -11,
+    2,
+    -0.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "west-bed-a-e3-wall",
+   "label": "west-bed-a-e3",
+   "kind": "wall",
+   "at": [
+    -14,
+    2,
+    -3
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.9,
+    "width": 1.6,
+    "height": 2,
+    "glazed": true
+   }
+  },
+  {
+   "id": "west-bed-b-e2-wall",
+   "label": "west-bed-b-e2",
+   "kind": "wall",
+   "at": [
+    -11,
+    2,
+    4.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "west-bed-b-e3-wall",
+   "label": "west-bed-b-e3",
+   "kind": "wall",
+   "at": [
+    -14,
+    2,
+    2
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "east-bed-a-e0-wall",
+   "label": "east-bed-a-e0",
+   "kind": "wall",
+   "at": [
+    11,
+    2,
+    -5.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "east-bed-a-e1-wall",
+   "label": "east-bed-a-e1",
+   "kind": "wall",
+   "at": [
+    14,
+    2,
+    -3
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0.9,
+    "width": 1.6,
+    "height": 2,
+    "glazed": true
+   }
+  },
+  {
+   "id": "east-bed-a-e2-wall",
+   "label": "east-bed-a-e2",
+   "kind": "wall",
+   "at": [
+    11,
+    2,
+    -0.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "east-bed-b-e1-wall",
+   "label": "east-bed-b-e1",
+   "kind": "wall",
+   "at": [
+    14,
+    2,
+    2
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    5,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "east-bed-b-e2-wall",
+   "label": "east-bed-b-e2",
+   "kind": "wall",
+   "at": [
+    11,
+    2,
+    4.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    6,
+    3.6,
+    0.18
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-e0-s0-wall",
+   "label": "gate-hall-e0-s0",
+   "kind": "wall",
+   "at": [
+    -5.5,
+    1.5999999999999999,
+    -9.5
+   ],
+   "rotation": 0,
+   "size": [
+    5,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "gate-door",
+   "label": "gate-door",
+   "kind": "entrance",
+   "at": [
+    0,
+    1.4,
+    -9.5
+   ],
+   "rotation": 0,
+   "size": [
+    2,
+    2.4,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-e0-s1-wall",
+   "label": "gate-hall-e0-s1",
+   "kind": "wall",
+   "at": [
+    0,
+    1.5999999999999999,
+    -9.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 2,
+    "height": 2.4,
+    "glazed": false
+   }
+  },
+  {
+   "id": "gate-hall-e0-s2-wall",
+   "label": "gate-hall-e0-s2",
+   "kind": "wall",
+   "at": [
+    5.5,
+    1.5999999999999999,
+    -9.5
+   ],
+   "rotation": 0,
+   "size": [
+    5,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-e1-wall",
+   "label": "gate-hall-e1",
+   "kind": "wall",
+   "at": [
+    8,
+    1.5999999999999999,
+    -7.5
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    4,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "gate-hall-e3-wall",
+   "label": "gate-hall-e3",
+   "kind": "wall",
+   "at": [
+    -8,
+    1.5999999999999999,
+    -7.5
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    4,
+    2.8,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "court-bed",
+   "label": "court-bed",
+   "kind": "plate",
+   "at": [
+    0,
+    -0.03,
+    16
+   ],
+   "rotation": 0,
+   "size": [
+    16,
+    0.1,
+    3
+   ],
+   "material": "limestone",
+   "panels": 4
+  }
+ ],
+ "terrain": {
+  "width": 110,
+  "depth": 110,
+  "elevation": 0,
+  "grade": 0,
+  "fall": "z"
+ },
+ "architecturalPlan": {
+  "version": "architectural-plan-1",
+  "id": "courtyard-residence",
+  "thesis": "A tall hip-roofed living range closes the north of a private court; two lower gabled bedroom wings flank it and a low gate range closes the south, so the court is enclosed on all four sides.",
+  "orientation": 0,
+  "site": {
+   "width": 110,
+   "depth": 110,
+   "elevation": 0,
+   "grade": 0,
+   "fall": "z"
+  },
+  "levels": [
+   {
+    "id": "ground",
+    "above": null,
+    "rise": 0.2
+   }
+  ],
+  "masses": [
+   {
+    "id": "living-range",
+    "role": "primary living range"
+   },
+   {
+    "id": "west-wing",
+    "role": "secondary bedroom wing"
+   },
+   {
+    "id": "east-wing",
+    "role": "secondary bedroom wing"
+   },
+   {
+    "id": "gate",
+    "role": "subordinate gate range and entrance"
+   },
+   {
+    "id": "garden",
+    "role": "enclosed court"
+   }
+  ],
+  "spaces": [
+   {
+    "id": "living",
+    "mass": "living-range",
+    "level": "ground",
+    "use": "living",
+    "width": 16,
+    "depth": 8,
+    "height": 5,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": null,
+     "side": "origin",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "court",
+    "mass": "garden",
+    "level": "ground",
+    "use": "court",
+    "width": 16,
+    "depth": 10,
+    "outdoor": true,
+    "placement": {
+     "relativeTo": "living",
+     "side": "south",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-bed-a",
+    "mass": "west-wing",
+    "level": "ground",
+    "use": "west-bed-a",
+    "width": 6,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "court",
+     "side": "west",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "west-bed-b",
+    "mass": "west-wing",
+    "level": "ground",
+    "use": "west-bed-b",
+    "width": 6,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "west-bed-a",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-bed-a",
+    "mass": "east-wing",
+    "level": "ground",
+    "use": "east-bed-a",
+    "width": 6,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "court",
+     "side": "east",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "east-bed-b",
+    "mass": "east-wing",
+    "level": "ground",
+    "use": "east-bed-b",
+    "width": 6,
+    "depth": 5,
+    "height": 3.6,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "east-bed-a",
+     "side": "north",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "gate-hall",
+    "mass": "gate",
+    "level": "ground",
+    "use": "gate-hall",
+    "width": 16,
+    "depth": 4,
+    "height": 2.8,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "court",
+     "side": "south",
+     "alignment": "start",
+     "gap": 0
+    }
+   },
+   {
+    "id": "porch",
+    "mass": "gate",
+    "level": "ground",
+    "use": "porch",
+    "width": 6,
+    "depth": 3,
+    "height": 3,
+    "outdoor": true,
+    "placement": {
+     "relativeTo": "gate-hall",
+     "side": "south",
+     "alignment": "centre",
+     "gap": 0
+    }
+   }
+  ],
+  "portals": [
+   {
+    "id": "gate-door",
+    "host": {
+     "space": "gate-hall",
+     "side": "south"
+    },
+    "to": "porch",
+    "alignment": "centre",
+    "width": 2,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "gate-court",
+    "host": {
+     "space": "gate-hall",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 2.4,
+    "height": 2.4,
+    "mode": "door"
+   },
+   {
+    "id": "living-court",
+    "host": {
+     "space": "living",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 3,
+    "height": 2.8,
+    "mode": "door"
+   },
+   {
+    "id": "west-court-a",
+    "host": {
+     "space": "west-bed-a",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 1.2,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "west-court-b",
+    "host": {
+     "space": "west-bed-b",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 1.2,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "east-court-a",
+    "host": {
+     "space": "east-bed-a",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 1.2,
+    "height": 2.2,
+    "mode": "door"
+   },
+   {
+    "id": "east-court-b",
+    "host": {
+     "space": "east-bed-b",
+     "side": "shared"
+    },
+    "to": "court",
+    "alignment": "centre",
+    "width": 1.2,
+    "height": 2.2,
+    "mode": "door"
+   }
+  ],
+  "stairs": [],
+  "arrival": "porch",
+  "roofs": [
+   {
+    "space": "living",
+    "form": "hip",
+    "rise": 2,
+    "overhang": 0
+   },
+   {
+    "space": "gate-hall",
+    "form": "flat",
+    "rise": 0.22,
+    "overhang": 0
+   },
+   {
+    "space": "porch",
+    "form": "flat",
+    "rise": 0.22,
+    "overhang": 0
+   }
+  ],
+  "screens": [],
+  "terraces": [
+   "court"
+  ],
+  "pools": [],
+  "landscape": [
+   {
+    "id": "court-bed",
+    "kind": "bed",
+    "placement": {
+     "relativeTo": "living",
+     "side": "north",
+     "alignment": "start",
+     "gap": 2
+    },
+    "width": 16,
+    "depth": 3
+   }
+  ],
+  "constraints": [
+   {
+    "id": "court-enclosed",
+    "kind": "enclose",
+    "a": "court",
+    "amount": 0.9,
+    "reason": "the court must read as a room of the house, closed on all four sides"
+   }
+  ],
+  "composition": {
+   "volumes": [
+    {
+     "id": "living-volume",
+     "masses": [
+      "living-range",
+      "garden"
+     ],
+     "tier": "primary",
+     "material": "limestone"
+    },
+    {
+     "id": "west-volume",
+     "masses": [
+      "west-wing"
+     ],
+     "tier": "secondary",
+     "roof": "west-roof",
+     "material": "timber"
+    },
+    {
+     "id": "east-volume",
+     "masses": [
+      "east-wing"
+     ],
+     "tier": "secondary",
+     "roof": "east-roof",
+     "material": "timber"
+    },
+    {
+     "id": "gate-volume",
+     "masses": [
+      "gate"
+     ],
+     "tier": "subordinate",
+     "material": "ivory"
+    }
+   ],
+   "heightStep": 0.8,
+   "roofSpans": [
+    {
+     "id": "west-roof",
+     "spaces": [
+      "west-bed-a",
+      "west-bed-b"
+     ],
+     "form": "gable",
+     "rise": 1.8,
+     "overhang": 0,
+     "material": "timber"
+    },
+    {
+     "id": "east-roof",
+     "spaces": [
+      "east-bed-a",
+      "east-bed-b"
+     ],
+     "form": "gable",
+     "rise": 1.8,
+     "overhang": 0,
+     "material": "timber"
+    }
+   ],
+   "facades": [
+    {
+     "id": "living-north",
+     "space": "living",
+     "side": "north",
+     "kind": "windows",
+     "bays": 4,
+     "width": 2.2,
+     "height": 3.4,
+     "sill": 0.6
+    },
+    {
+     "id": "west-outer",
+     "space": "west-bed-a",
+     "side": "west",
+     "kind": "windows",
+     "bays": 1,
+     "width": 1.6,
+     "height": 2,
+     "sill": 0.9
+    },
+    {
+     "id": "east-outer",
+     "space": "east-bed-a",
+     "side": "east",
+     "kind": "windows",
+     "bays": 1,
+     "width": 1.6,
+     "height": 2,
+     "sill": 0.9
+    }
+   ],
+   "entrance": {
+    "portal": "gate-door",
+    "porch": "porch"
+   }
+  },
+  "materials": {
+   "floor": "limestone",
+   "wall": "ivory",
+   "roof": "timber"
+  },
+  "cameraViews": [
+   "Aerial",
+   "Arrival",
+   "Garden",
+   "Poolside"
+  ]
+ }
+}

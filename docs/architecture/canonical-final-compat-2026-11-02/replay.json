@@ -1,0 +1,177 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "sourcePlanSha256": "b6f55347c5d1fa842d83cfc4c0acc4ebcf08a88c1ad44e57b45d38577c3799d8",
+  "errorCount": 2,
+  "errors": [
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "waterfront-lawn-reserve",
+      "message": "waterfront-lawn-reserve (x -10..18, z 39..55) lies 7.75 m outside the 90×70 m site, which is centred on the room cells (building spans x -16..38, z -5..29.5)."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "guest-wing-entry",
+      "message": "guest-hall and dining-room share no wall, so there is no wall to open between them."
+    }
+  ],
+  "compile": {
+    "success": false,
+    "error": "Error: guest-wing-entry: guest-hall and dining-room share no wall, so there is no wall to open between them.",
+    "decisions": [
+      "guest-wing-entry: guest-hall and dining-room share no wall, so there is no wall to open between them."
+    ]
+  },
+  "deriveIntent": {
+    "ok": false,
+    "decisions": [
+      "guest-wing-entry: guest-hall and dining-room share no wall, so there is no wall to open between them."
+    ]
+  },
+  "coordination": {
+    "wings": [
+      {
+        "id": "social-belvedere",
+        "role": "primary living, entertaining, arrival, and service pavilion",
+        "placed": false,
+        "rooms": 10,
+        "indoorRooms": 8,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -4,
+          "z": -5,
+          "width": 30,
+          "depth": 34.5
+        },
+        "indoorAreaM2": 478,
+        "fill": 0.46,
+        "relation": null,
+        "seed": null
+      },
+      {
+        "id": "private-suite-bar",
+        "role": "quiet four-suite private wing",
+        "placed": true,
+        "rooms": 9,
+        "indoorRooms": 9,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -16,
+          "z": -1.75,
+          "width": 12,
+          "depth": 28
+        },
+        "indoorAreaM2": 336,
+        "fill": 1,
+        "relation": "west of social-belvedere, centre, gap 0",
+        "seed": "private-hall"
+      },
+      {
+        "id": "guest-suite-bar",
+        "role": "two-suite guest wing",
+        "placed": true,
+        "rooms": 5,
+        "indoorRooms": 5,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": 26,
+          "z": 5.25,
+          "width": 12,
+          "depth": 14
+        },
+        "indoorAreaM2": 168,
+        "fill": 1,
+        "relation": "east of social-belvedere, centre, gap 0",
+        "seed": "guest-hall"
+      }
+    ],
+    "collisions": [],
+    "constraints": [
+      {
+        "id": "private-wing-quiet",
+        "kind": "separate",
+        "a": "private-suite-bar",
+        "b": "arrival-court",
+        "required": 3,
+        "measured": 3,
+        "ok": true,
+        "reason": "The principal bedroom wing is held away from the ceremonial arrival threshold for acoustic and visual privacy.",
+        "implicated": [
+          {
+            "node": "private-suite-bar",
+            "placement": "private-suite-bar: west of social-belvedere, centre, gap 0"
+          },
+          {
+            "node": "arrival-court",
+            "placement": "arrival-court: south of foyer, centre, gap 0"
+          }
+        ],
+        "options": []
+      }
+    ],
+    "circulation": {
+      "arrival": "arrival-court",
+      "wings": [
+        {
+          "id": "social-belvedere",
+          "interiorRooms": 8,
+          "reachable": 8,
+          "adjoins": [
+            {
+              "wing": "private-suite-bar",
+              "sharedM": 11,
+              "connected": true
+            }
+          ]
+        },
+        {
+          "id": "private-suite-bar",
+          "interiorRooms": 9,
+          "reachable": 9,
+          "adjoins": [
+            {
+              "wing": "social-belvedere",
+              "sharedM": 11,
+              "connected": true
+            }
+          ]
+        },
+        {
+          "id": "guest-suite-bar",
+          "interiorRooms": 5,
+          "reachable": 5,
+          "adjoins": []
+        }
+      ]
+    },
+    "vertical": [],
+    "site": {
+      "required": {
+        "width": 54,
+        "depth": 85.5
+      },
+      "available": {
+        "width": 90,
+        "depth": 70
+      },
+      "fits": false
+    },
+    "errors": [
+      {
+        "kind": "site",
+        "ids": [],
+        "message": "The arrangement needs a site of at least 54×85.5 m (centred on the room cells, orientation applied); the plan declares 90×70 m. Enlarging the site is a determined consequence; moving the allocations inward is a design choice."
+      }
+    ],
+    "openChoices": [],
+    "ok": false
+  }
+}

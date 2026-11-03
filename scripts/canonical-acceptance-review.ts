@@ -16,7 +16,7 @@ const output=Output.object({schema:await strictSceneResponseSchema(canonicalProp
 const proposal=canonicalProposalSchema.parse(await output.parseCompleteOutput({text},{response:{id:response.id,timestamp:new Date(response.created_at*1000),modelId:response.model},usage:{inputTokens:usage.input_tokens,outputTokens:usage.output_tokens,totalTokens:usage.total_tokens,inputTokenDetails:{noCacheTokens:usage.input_tokens,cacheReadTokens:0,cacheWriteTokens:0},outputTokenDetails:{textTokens:usage.output_tokens,reasoningTokens:usage.output_tokens_details?.reasoning_tokens??0}},finishReason:'stop'} as never));
 save('proposal.normalized.json',proposal);
 if(proposal.status!=='proposed'&&!('plan' in proposal))throw Error('no plan');
-const plan=(proposal as {plan:never}).plan;
+const plan=(proposal as unknown as {plan:never}).plan;
 const d=diagnosePlan(plan);
 save('diagnosis.json',{findings:d.findings,errors:d.findings.filter(f=>f.severity==='error').length,rects:d.rects,siteRects:d.siteRects});
 let coordination:unknown;try{coordination=coordinatePlan(plan);}catch(e){coordination={threw:String(e)};}

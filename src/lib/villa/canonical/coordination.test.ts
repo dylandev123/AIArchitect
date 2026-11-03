@@ -7,7 +7,7 @@ vi.mock('@/lib/ai/model',()=>({getAiModel:()=>({})}));
 vi.mock('@/lib/ai/usage/track',()=>({withUsageLogging:(_m:unknown,call:()=>unknown)=>call()}));
 import {architecturalPlanSchema,compileArchitecturalPlan,CANONICAL_INSTRUCTIONS,type ArchitecturalPlan,type Rect} from './plan';
 import {diagnosePlan} from './diagnose';
-import {placePortals,placeInRun,edgeOf,sharedRuns,exposedFascia,forbiddenRuns,stairKeepOuts,type Side} from './coordination';
+import {WALL,placePortals,placeInRun,edgeOf,sharedRuns,exposedFascia,forbiddenRuns,stairKeepOuts,type Side} from './coordination';
 import {DesignConflict} from '../experimental/semantic-building/compiler';
 import {canonicalFixture} from './fixture';
 import {compositionFixture} from './compositions.fixture';
@@ -41,16 +41,50 @@ describe('derived connections: the declared relationship fixes the wall and the 
   const plan=miniPair('east','start','centre'),compiled=compileArchitecturalPlan(plan),link=evidenceOf(compiled,'link');
   const b=rectsOf(plan).b;expect(link.local[1]).toBeCloseTo(b.z+b.depth/2);
  });
- it('the explicit-side formula is unchanged: start/end keep 0.25 m from the corner, centre the middle',()=>{
+ it('the explicit-side formula is unchanged wherever it already lands inside the shared boundary; elsewhere the opening is fitted into the run it shares, or refused',()=>{
   expect(placeInRun('start',1.2,0,10)).toBeCloseTo(.85);expect(placeInRun('end',1.2,0,10)).toBeCloseTo(9.15);expect(placeInRun('centre',1.2,0,10)).toBe(5);
+  let refitted=0;
   for(const plan of [originalMansion(),rejectedRevision(),compositionFixture('compact'),compositionFixture('waterfront'),compositionFixture('courtyard')]){
    const rects=rectsOf(plan),placed=placePortals(plan,rects);
    for(const p of plan.portals.filter(x=>x.host.side!=='shared'&&x.host.side!=='exposed')){
     const at=placed.get(p.id)!,len=edgeOf(rects[p.host.space],p.host.side as Side).len;
-    expect(at.problem).toBeUndefined();expect(at.derived).toBe(false);
+    expect(at.derived).toBe(false);
+    if(at.problem!==undefined){expect(at.problem).toMatch(/cannot fit the shared boundary|separate runs/);continue;}
+    if(at.refitted){refitted++;expect(at.centre).toBeCloseTo(placeInRun(p.alignment,p.width,at.run.lo,at.run.hi));expect(at.refitted.from).toBeCloseTo(p.alignment==='centre'?len/2:p.alignment==='start'?p.width/2+.25:len-p.width/2-.25);continue;}
     expect(at.centre).toBeCloseTo(p.alignment==='centre'?len/2:p.alignment==='start'?p.width/2+.25:len-p.width/2-.25);
    }
   }
+  expect(refitted).toBeGreaterThan(0); // the original saved mansion alone holds four doors whose whole-edge position missed the wall they share
+ });
+ describe('an explicit side whose whole-edge position misses the shared boundary (partial overlap)',()=>{
+  /** Room a (10 m wide) with room b (4 m wide) to its east, offset along z: they share only part of a's east edge. */
+  const pair=(width:number,alignment:'start'|'centre'|'end',bAlign:'start'|'centre'|'end'='end',bDepth=4)=>{
+   const host={x:0,z:0,width:10,depth:10},target={x:10,z:bAlign==='end'?6:bAlign==='start'?0:3,width:4,depth:bDepth};
+   const portal={id:'d',host:{space:'a',side:'east' as const},to:'b',alignment,width,height:2.2,mode:'door' as const};
+   return {rects:{a:host,b:target},portal,placed:placePortals({spaces:[{id:'a',level:'g'},{id:'b',level:'g'}],portals:[portal]},{a:host,b:target}).get('d')!};
+  };
+  it('places the opening inside the shared run, honouring the alignment within it',()=>{
+   const c=pair(1,'centre').placed;
+   expect(c.problem).toBeUndefined();expect(c.side).toBe('east');expect(c.refitted?.from).toBeCloseTo(5);
+   expect(c.centre).toBeCloseTo(8); // east edge z 0..10 runs south→north; b spans z 6..10, so the run is 6..10 and its middle is 8
+   const s=pair(1,'start').placed,e=pair(1,'end').placed;
+   expect(s.centre).toBeCloseTo(6+.5+.25);expect(e.centre).toBeCloseTo(10-.5-.25);
+   expect(s.centre!-.5).toBeGreaterThanOrEqual(6+WALL-1e-6);expect(e.centre!+.5).toBeLessThanOrEqual(10-WALL+1e-6);
+  });
+  it('leaves the historical position alone when it already lies inside the shared run',()=>{
+   const at=pair(1,'centre','centre').placed; // run z 3..7 contains the edge middle (5)
+   expect(at.problem).toBeUndefined();expect(at.refitted).toBeUndefined();expect(at.centre).toBeCloseTo(5);
+  });
+  it('refuses an opening that cannot physically fit the short shared boundary, naming the run',()=>{
+   const at=pair(3.8,'centre').placed;
+   expect(at.problem).toMatch(/touches b along only 6\.\.10 m \(4 m\) of its east edge.*needs 4\.16 m/);
+  });
+  it('is the same for a rotated building because placement is made in the plan frame before rotation',()=>{
+   const rotated=(orientation:number)=>{const plan=structuredClone(compositionFixture('waterfront'));plan.orientation=orientation;return plan;};
+   const a=compileArchitecturalPlan(rotated(0)),b=compileArchitecturalPlan(rotated(.7));
+   const local=(c:typeof a)=>c.intent.portals.map(p=>[p.id,p.host.space,p.host.edge,Number(p.offset.toFixed(6))]);
+   expect(local(b)).toEqual(local(a));
+  });
  });
  it('a connection between rooms that share no wall is a precise finding, not a guess',()=>{
   const plan=miniPair('east','centre');plan.spaces.find(s=>s.id==='b')!.placement.gap=2;
@@ -200,7 +234,8 @@ describe('Terra\'s rejected revision: independent decisions, not 87 faults',()=>
 describe('the original saved mansion: coordinate faults disappear when only the relationship is declared',()=>{
  it('its opening faults on walls it already shared are derived away; what remains is a real wall decision',()=>{
   const plan=originalMansion(),before=errors(plan,'openings'),after=errors(connectionsAsRelationships(plan),'openings');
-  expect(before.length).toBe(5);expect(after.map(f=>f.id)).toEqual(['living-east-window']);
+  expect(before.map(f=>f.id)).toEqual(['living-east-window']); // four explicit-side doors that missed the wall they share are now fitted into it; only the real wall decision remains
+  expect(after.map(f=>f.id)).toEqual(['living-east-window']);
   expect(after[0].message).toMatch(/window faces media-lounge.*Exposed wall wide enough for 3.2 m: east 0\.\.4 m/);
  });
  it('rewriting connections as relationships changes no room, level, roof or screen',()=>{
@@ -222,9 +257,10 @@ describe('a different compact multilevel house: an ensuite and study added by de
   expect(f.find(x=>x.id==='master-bath-door')!.message).toMatch(/share the south edge of master-suite/);
   expect(f.find(x=>x.id==='suite-passage')!.message).toMatch(/stair flight/);
  });
- it('adding rooms beside an existing explicit opening breaks it; the derived opening follows the new wall',()=>{
+ it('adding rooms beside an existing explicit opening no longer breaks it: the opening is fitted into the wall it now shares',()=>{
   const moved=deeperWing(9);moved.portals.find(p=>p.id==='suite-passage')!.alignment='start';
-  expect(errors(moved,'openings').map(f=>f.id)).toContain('suite-passage'); // 4..11 m shared segment: the old 0.25..1.65 m position no longer touches it
+  expect(errors(moved,'openings').map(f=>f.id)).not.toContain('suite-passage'); // 4..11 m shared segment: the old 0.25..1.65 m whole-edge position missed it, so it is fitted into 4..11 m
+  expect(placePortals(moved,rectsOf(moved)).get('suite-passage')?.refitted).toBeDefined();
   const derived=structuredClone(moved);derived.portals.find(p=>p.id==='suite-passage')!.host.side='shared';
   expect(errors(derived,'openings').map(f=>f.id)).not.toContain('suite-passage');
  });

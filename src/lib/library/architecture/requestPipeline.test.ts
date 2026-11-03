@@ -36,14 +36,14 @@ import {legacyRecipeKnowledge} from './legacyRecipes';
 import {requestPipelineFixtures} from './requestPipeline.fixture';
 import {generationSceneRequest,sceneMessages} from '@/lib/villa/scene/terra';
 
-it('checks scales, exclusions, distinct value records and exact provider messages against all 334 retained approved records',()=>{
+it('checks scales, exclusions, distinct value records and exact provider messages against all 339 retained approved records',()=>{
  const network=vi.spyOn(globalThis,'fetch').mockRejectedValue(Error('Offline only'));
  try {
   const snapshot=JSON.parse(readFileSync('docs/architecture/unified-knowledge/library-snapshot.json','utf8'));
   const catalogue=[...latestKnowledge(snapshot.architecturalKnowledge),...legacyRecipeKnowledge(snapshot.recipes)];
   for(const fixture of requestPipelineFixtures) {
    const result=retrieveArchitecturalKnowledge(catalogue,fixture.brief);
-   expect(result.metrics.approvedActive).toBe(334);
+   expect(result.metrics.approvedActive).toBe(339);
    expect(result.selected.filter(e=>e.category==='property-value').map(e=>e.id)).toEqual(fixture.profile?[fixture.profile]:[]);
    expect(result.chars).toBeLessThanOrEqual(result.budget.chars);
    expect(result.selected.some(e=>/gym|cinema/.test(e.id))).toBe(false);

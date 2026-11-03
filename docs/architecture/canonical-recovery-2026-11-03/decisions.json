@@ -1,0 +1,89 @@
+{
+ "label": "SOFTWARE-ASSISTED DIAGNOSTIC RECONSTRUCTION — NOT AN ACCEPTED TERRA GENERATION",
+ "providerCalls": 0,
+ "sourceSha256": "dd8c2ef009a28ff4d9aeddd655fd83c2dec43ac3587083619a23c67f2a2fbf6c",
+ "decisions": [
+  {
+   "id": "D1",
+   "kind": "site-boundary",
+   "what": "plan.site.depth (m)",
+   "before": 80,
+   "after": 81,
+   "why": "Lawn lay 0.5 m outside the declared 110×80 m site. NOTE: the brief gives no site size (Terra declared it), but if the plot is real and fixed this enlargement is NOT permitted; the alternative is shrinking the lawn instead."
+  },
+  {
+   "id": "D2",
+   "kind": "salon-gallery overlap",
+   "what": "living-salon.placement.alignment",
+   "before": "centre",
+   "after": "start",
+   "why": "Clears the 0.5×6 m overlap. Shifts the salon, veranda, pool, lawn, dining/kitchen/service chain 4.5 m east relative to the entry hall and breaks the entry/salon axis. Chosen from 6 valid options; not Terra's."
+  },
+  {
+   "id": "D3",
+   "kind": "dining-deck connection",
+   "what": "dining-gallery.placement.alignment",
+   "before": "end",
+   "after": "start",
+   "why": "Dining room now shares its south wall with the deck; kitchen/pantry/laundry/yard chain shifts 2 m south."
+  },
+  {
+   "id": "D4",
+   "kind": "east-wing access",
+   "what": "portal pantry-east-cloister.host.space",
+   "before": "pantry",
+   "after": "service-yard",
+   "why": "Pantry and east wing share no wall (6 m gap). Rerouted the wing's only link through the outdoor service yard. NOT acceptable architecture by default: bedrooms entered via the service yard."
+  },
+  {
+   "id": "D5",
+   "kind": "arrival bed",
+   "what": "landscape arrival-bed",
+   "before": {
+    "id": "arrival-bed",
+    "kind": "bed",
+    "placement": {
+     "relativeTo": "arrival-court",
+     "side": "west",
+     "alignment": "centre",
+     "gap": 2
+    },
+    "width": 12,
+    "depth": 10
+   },
+   "after": "removed",
+   "why": "Bed overlapped four rooms; removed. Not an approved design decision."
+  },
+  {
+   "id": "D6",
+   "kind": "east garden reserve",
+   "what": "east-garden-reserve.width (m)",
+   "before": 16,
+   "after": 10,
+   "why": "Largest width that fits between the deck and the east wing (37.5% smaller)."
+  },
+  {
+   "id": "D7",
+   "kind": "bronze screen",
+   "what": "screens arrival-bronze-screen",
+   "before": {
+    "id": "arrival-bronze-screen",
+    "space": "entry-hall",
+    "side": "north",
+    "alignment": "centre",
+    "width": 4.2,
+    "height": 3.6,
+    "sill": 0,
+    "standOff": 0.35,
+    "depth": 0.12,
+    "panels": 9,
+    "material": "bronze"
+   },
+   "after": "removed",
+   "why": "Screen blocked the entry door and stood in the arrival court. Removed; Terra's arrival-screen idea is lost. Not an approved design decision."
+  }
+ ],
+ "diagnosticErrorsAfter": 0,
+ "compile": "success",
+ "elements": 168
+}

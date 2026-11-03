@@ -1,0 +1,90 @@
+{
+  "basis": "Objective comparisons of the frozen retrieval trace and the brief. No claim is made about hidden model reasoning.",
+  "retrieval": {
+    "eligible": 339,
+    "selected": 12,
+    "budgetChars": 18000,
+    "tier": "complex",
+    "excludedForBudget": 103,
+    "lowestSelectedScore": 7.6,
+    "excludedForBudgetScoringAboveLowestSelected": [
+      "pool-edge-levels (amenity, 15.3)",
+      "staff-privacy-edge (programme, 13.2)",
+      "roof-flat-parapet (roof-outdoor, 12.6)",
+      "site-garden-room-privacy (climate-site, 12.6)",
+      "material-roof-edge (materials, 12.3)",
+      "pool-infinity-limit (amenity, 12.3)",
+      "pool-rectangular-lap (amenity, 12.3)",
+      "facade-rear-completion (envelope, 12)",
+      "composition-hierarchy (composition, 11.9)",
+      "outdoor-entertaining (programme, 11.3)",
+      "landscape-room (roof-outdoor, 11)",
+      "privacy-gradient (climate-site, 11)",
+      "entry-offset-privacy (arrival, 10.3)",
+      "laundry-service-edge (programme, 10.3)",
+      "pool-deck-width (amenity, 10.3)",
+      "pool-garden-view (amenity, 10.3)",
+      "pool-screened-service (amenity, 10.3)",
+      "pool-step-representation (amenity, 10.3)",
+      "climate-roof-rain-edge (climate-site, 10)",
+      "court-living-edge (roof-outdoor, 10)",
+      "facade-floor-edge (envelope, 10)",
+      "facade-service-discretion (envelope, 10)",
+      "strategy-tropical-pavilion-court (composition, 10)",
+      "pavilion-cluster-order (composition, 9.9)",
+      "roof-main-secondary (roof-outdoor, 9.6)",
+      "pool-private-offset (amenity, 9.3)",
+      "private-bedroom-wing (programme, 9.3)",
+      "site-waterfront-setback-limit (climate-site, 9.3)",
+      "service-parallel-route (programme, 8.2)",
+      "edge-and-centre (composition, 7.9)"
+    ]
+  },
+  "strategiesSelected": [
+    {
+      "id": "strategy-waterfront-central-pavilion",
+      "score": 14.6,
+      "reasons": [
+        "brief matches waterfront",
+        "brief matches pavilion",
+        "adds composition coverage"
+      ],
+      "recordChars": 2761,
+      "sharedThreeWordPhrasesWithPlanProse": 1,
+      "examples": [
+        "pavilion with a"
+      ]
+    },
+    {
+      "id": "estate-composition",
+      "score": 15.9,
+      "reasons": [
+        "brief matches waterfront",
+        "complementary detail within category"
+      ],
+      "recordChars": 493,
+      "sharedThreeWordPhrasesWithPlanProse": 0,
+      "examples": []
+    }
+  ],
+  "strategyNotSelectedButHighlyRelevantByName": [
+    "strategy-tropical-pavilion-court (10) excluded for budget",
+    "strategy-hillside-stepped-levels (7) excluded for budget"
+  ],
+  "conflicts": [
+    {
+      "kind": "knowledge-vs-brief",
+      "detail": "infinity-pool (score 19) was selected although the brief says an infinity-edge amenity is unsupported and must not be claimed; the matching limit record pool-infinity-limit WAS excluded for budget (score 12.3)."
+    },
+    {
+      "kind": "legacy-content",
+      "detail": "A legacy recipe record (legacy-recipe-65a14c7e-0559-45f0-adfe-589551ca499c) is in the selected set for a canonical request; its text may use retired operations language (canonical filter removed 0 retired sentences)."
+    }
+  ],
+  "unsupportedRequirementsInBriefThatAreDeterminable": [
+    "infinity edge (brief itself excludes)",
+    "terrain/grading/planting (brief excludes)",
+    "sea/water-edge geometry (contract has none: ocean is conceptual)"
+  ],
+  "precedenceNote": "CONTRACT PRECEDENCE paragraph follows the knowledge block (see system-prompt.txt)."
+}

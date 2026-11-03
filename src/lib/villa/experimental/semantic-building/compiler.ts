@@ -7,7 +7,7 @@ import {sceneSpatialGeometry} from '../../scene/spatial';
 import {validateProfile} from '../../scene/profileGeometry';
 import {coverOf,exposedPieces,minimumWidth,clipConvex,polygonArea} from './vertical';
 export type Point = [number,number];
-export type Space = {id:string; mass:string; level:string; use:string; polygon:Point[]; height:number; outdoor?:boolean; roof?:boolean; material?:SceneElement['material']};
+export type Space = {id:string; mass:string; level:string; use:string; polygon:Point[]; height:number; outdoor?:boolean; roof?:boolean; material?:SceneElement['material']; roofSpan?:{id:string;lead:boolean;members:string[];polygon:Point[]}};
 export type Portal = {id:string; host:{space:string;edge:number}; to:string; offset:number; width:number; height:number; mode:'door'|'open'|'window'; sill?:number};
 export type Stair = {id:string; lower:string; upper:string; start:Point; width:number; run:number; risers:number; landing:number; headroom:number; bypass:'right'};
 export type BuildingIntent = {version:'semantic-pilot-1'; id:string; thesis:string; frame:{origin:Point;yaw:number}; levels:{id:string;top:number}[]; masses:{id:string;role:string; relatesTo?:string}[]; spaces:Space[]; portals:Portal[]; stairs:Stair[]; arrival:string; requiredAccess:string[]};
@@ -34,14 +34,14 @@ export function compileBuilding(intent:BuildingIntent) {
  for(const m of intent.masses){if(m.relatesTo&&!intent.masses.some(n=>n.id===m.relatesTo))fail(`${m.id}: missing related mass.`);}
  for(const s of intent.spaces){
   level(s);if(!intent.masses.some(m=>m.id===s.mass))fail(`${s.id}: missing mass.`);
-  if(!((s.outdoor&&!s.roof?s.height>0:s.height>=2.4)&&s.height<=8))fail(`${s.id}: choose a supported height (interior 2.4–8m; outdoor positive and <=8m).`);
+  if(!((s.outdoor&&!s.roof?s.height>=0:s.height>=2.4)&&s.height<=8))fail(`${s.id}: choose a supported height (interior 2.4–8m; outdoor unroofed 0–8m).`);
   if(s.polygon.length<3||s.polygon.some((p,i)=>cross(p,s.polygon[(i+1)%s.polygon.length],s.polygon[(i+2)%s.polygon.length])<=eps))fail(`${s.id}: pilot requires strictly convex counterclockwise polygons; decompose concave space explicitly.`);
  }
  const conflicts:string[]=[];
  for(let i=0;i<intent.spaces.length;i++)for(let j=i+1;j<intent.spaces.length;j++){
   const a=intent.spaces[i],b=intent.spaces[j];
   const penetration=Math.min(level(a)+a.height,level(b)+b.height)-Math.max(level(a),level(b));
-  if(overlap(a.polygon,b.polygon)&&penetration>eps){
+  if(overlap(a.polygon,b.polygon)&&(penetration>eps||level(a)===level(b))){// same-level footprints always clash, even when one is an open-air space of zero envelope height
    // Report every clash with its cause; nothing is repositioned or tolerated.
    const [lower,upper]=level(a)<=level(b)?[a,b]:[b,a];
    const cause=level(lower)<level(upper)?` ${lower.id} (level ${lower.level}, height ${lower.height}m) rises ${penetration.toFixed(2)}m above the ${upper.level} floor datum under ${upper.id}: omit its height so it is derived from the level datums, remove the stacked space, or make a roofed double-height room with nothing stacked above.`:` same-level footprints intersect: ${a.id} spans ${span(a.polygon)}, ${b.id} spans ${span(b.polygon)}; they share ${span(clipConvex(a.polygon,b.polygon))}. Revise outlines or placement.`;
@@ -146,7 +146,9 @@ export function compileBuilding(intent:BuildingIntent) {
  }
  for(const s of intent.spaces){
   slab(`${s.id}-floor`,s.polygon,level(s),'plate',voids.get(s.id)??[],[s.id,s.level,...intent.stairs.filter(st=>st.upper===s.id).map(st=>st.id)],s.outdoor?'limestone':'ivory');
-  if(s.roof)(roofPieces.get(s.id)??[s.polygon]).forEach((piece,i)=>slab(i?`${s.id}-roof-${i+1}`:`${s.id}-roof`,piece,level(s)+s.height+roofThickness,'roof',[],[s.id,s.level],s.material??'ivory'));
+  // One roof declared over several rooms is built once, by its lead room, over the rooms' combined footprint.
+  if(s.roof&&s.roofSpan){if(s.roofSpan.lead)slab(s.roofSpan.id,s.roofSpan.polygon,level(s)+s.height+roofThickness,'roof',[],[s.id,s.level,...s.roofSpan.members],s.material??'ivory');}
+  else if(s.roof)(roofPieces.get(s.id)??[s.polygon]).forEach((piece,i)=>slab(i?`${s.id}-roof-${i+1}`:`${s.id}-roof`,piece,level(s)+s.height+roofThickness,'roof',[],[s.id,s.level],s.material??'ivory'));
  }
  for(const b of boundaries){
   const members=b.spaces.map(space),inside=members.filter(s=>!s.outdoor);if(!inside.length)continue;

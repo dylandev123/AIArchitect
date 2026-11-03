@@ -5,8 +5,9 @@ import {laderaScene} from './example';
 it('makes Generate strict-compatible and normalizes null without changing geometry',async()=>{
  const schema=await sceneResponseFormatSchema({mode:'generate',prompt:'A waterfront estate'});
  const format=await Output.object({schema}).responseFormat;
- function check(node:any){if(node.properties){expect(node.additionalProperties).toBe(false);expect(node.required).toEqual(Object.keys(node.properties));Object.values(node.properties).forEach(check);}if(node.items)check(node.items);if(node.anyOf)node.anyOf.forEach(check);expect(node).not.toHaveProperty('default');}
- if(format?.type!=='json')throw Error('JSON schema expected');check(format.schema);
+ type SchemaNode={properties?:Record<string,SchemaNode>;items?:SchemaNode;anyOf?:SchemaNode[];additionalProperties?:unknown;required?:string[]};
+ function check(node:SchemaNode){if(node.properties){expect(node.additionalProperties).toBe(false);expect(node.required).toEqual(Object.keys(node.properties));Object.values(node.properties).forEach(check);}if(node.items)check(node.items);if(node.anyOf)node.anyOf.forEach(check);expect(node).not.toHaveProperty('default');}
+ if(format?.type!=='json')throw Error('JSON schema expected');check(format.schema as SchemaNode);
  const element=laderaScene.elements[0];
  const value={name:'Roundtrip',summary:'Offline',unsupported:[],architecturalPlan:{physicalProgramme:{propertyType:'Offline test',basis:'Adapter fixture, capacity unverified.',allocations:[{name:'Home',quantity:1,unitNetAreaM2:50,allowanceM2:10,floorIds:['salon-floor']}]},scaleRationale:'A residence',arrivalAndCirculation:'Entry',volumeHierarchy:'Primary and secondary',relationshipsAndViews:'Water',roofFacadeAndMaterials:'Stone',intendedSpaces:['Salon'],programme:[{name:'Salon',zone:'public',strategy:'Ground shared salon',floorIds:['salon-floor'],enclosureIds:['salon-back'],roofIds:['salon-roof'],accessIds:['pivot-door'],limitation:'Access requires review'}],spatialRelationships:null,designDecisions:null},operations:[{op:'add',element:{...element,parent:null,roofForm:null,overhang:null,opening:null}}]};
  const result=await schema.validate!(value);

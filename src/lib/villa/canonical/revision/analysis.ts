@@ -6,7 +6,8 @@ import {compileArchitecturalPlan,type ArchitecturalPlan,type Rect} from '../plan
 import {DesignConflict} from '../../experimental/semantic-building/compiler';
 import {coverOf} from '../../experimental/semantic-building/vertical';
 import {placePortals} from '../coordination';
-import {placementPath} from '../layout';
+import {placementPath,resolveLayout} from '../layout';
+import {composedView} from '../composition';
 import {decisionsOf,roomExposure,type Decision,type RoomExposure} from './decisions';
 type Side='south'|'east'|'north'|'west';
 const f2=(n:number)=>Number(n.toFixed(2));
@@ -72,7 +73,7 @@ function groupFindings(plan:ArchitecturalPlan,findings:Finding[],decisions:strin
  const roofs=errors.filter(e=>e.stage==='roofs');
  const eave=roofs.filter(e=>/bounds intersect|projects .* into the taller/.test(e.message)),other=roofs.filter(e=>!eave.includes(e));
  if(eave.length){
-  const withEaves=plan.roofs.filter(r=>(r.overhang??0)>0),abutting=new Set(eave.flatMap(f=>f.id.split('/')));
+  const withEaves=composedView(plan,resolveLayout(plan).rects).roofs.filter(r=>(r.overhang??0)>0),abutting=new Set(eave.flatMap(f=>f.id.split('/')));
   groups.push({id:'roof-eaves',cause:'roof-eaves',title:'Roof eaves meeting neighbouring roofs and taller volumes',rootCause:`Eaves were applied to rooms regardless of exposure: ${withEaves.length} roofs carry overhangs (${[...new Set(withEaves.map(r=>r.overhang))].sort().join(', ')} m) although ${abutting.size} of the rooms involved abut others. The explicit rule "select separated roof sections" was not applied, and the compiler cannot trim eaves to the exposed perimeter.`,involves:[...abutting],findings:take(eave),decisionRequired:'Decide where shade projection is wanted (exposed edges only), and give abutting rooms separated or overhang-free roof sections, or a different roof strategy.'});
  }
  if(other.length)groups.push({id:'roof-coverage',cause:'enclosure',title:'Roof or overhead-enclosure faults',rootCause:'A room lacks a cover, or a roof was declared where the floor above is the cover.',involves:[...new Set(other.flatMap(f=>f.id.split('/')))],findings:take(other),decisionRequired:'Decide the roof or enclosure strategy per affected room.'});
@@ -94,14 +95,16 @@ export function analysePlan(plan:ArchitecturalPlan,baseline?:ArchitecturalPlan):
  let compilerDecisions:string[]=[],compilerNote='Compiler accepted the plan.';
  try{compileArchitecturalPlan(plan);}catch(e){if(!(e instanceof DesignConflict)&&!(e instanceof Error))throw e;compilerDecisions=e instanceof DesignConflict?e.decisions:e.message.split('\n').filter(Boolean);compilerNote=e instanceof DesignConflict?'The compiler is fail-fast: later construction stages (junction splitting, stair fit, staggered walls, scene support checks) only run after earlier stages pass, so a clean diagnosis is not proof of acceptance.':'The compiler produced a scene that failed the scene relationship checks (later stage); diagnosis does not replicate these.';}
  const tops=resolveLevels(plan),rects=d.rects as Record<string,Rect>,siteRects=d.siteRects as Record<string,Rect>;
+ // Roofs and openings declared through composition, expanded by the compiler's own function (see composition.ts).
+ const view=composedView(plan,new Map(Object.entries(rects)));
  const polys=plan.spaces.filter(s=>rects[s.id]).map(s=>{const r=rects[s.id];return {id:s.id,level:s.level,polygon:[[r.x,r.z],[r.x+r.width,r.z],[r.x+r.width,r.z+r.depth],[r.x,r.z+r.depth]] as [number,number][]};});
  const rooms:MeasuredRoom[]=plan.spaces.flatMap(s=>{
   const r=rects[s.id];if(!r)return [];
   const datum=tops.get(s.level)??NaN;let h:number|null=null,src:MeasuredRoom['heightSource']='unresolved';
   if(s.height!==undefined){h=s.height;src='authored';}
   else{const cover=coverOf(polys.find(p=>p.id===s.id)!,polys,id=>tops.get(id)??0),storeys=plan.levels.filter(l=>l.above===s.level);if(cover.datum!==undefined){h=cover.datum-datum;src='derived';}else if(storeys.length===1){h=storeys[0].rise;src='derived';}}
-  const roof=plan.roofs.find(x=>x.space===s.id);
-  return [{id:s.id,mass:s.mass,level:s.level,use:s.use,outdoor:s.outdoor,x0:f2(r.x),x1:f2(r.x+r.width),z0:f2(r.z),z1:f2(r.z+r.depth),width:f2(r.width),depth:f2(r.depth),areaM2:f2(area(r)),floorDatum:f2(datum),envelopeHeight:h===null?null:f2(h),heightSource:src,top:h===null?null:f2(datum+h),roof:roof?{form:roof.form,overhang:roof.overhang??0,rise:roof.rise??null}:null,placedBy:s.placement,windows:plan.portals.filter(p=>p.host.space===s.id&&p.mode==='window').length,doorsAndPassages:plan.portals.filter(p=>p.mode!=='window'&&(p.host.space===s.id||p.to===s.id)).length}];
+  const roof=view.roofs.find(x=>x.space===s.id)??(()=>{const sp=view.spans.find(q=>q.members.includes(s.id));return sp?{form:sp.form,overhang:sp.overhang,rise:sp.rise}:undefined;})();
+  return [{id:s.id,mass:s.mass,level:s.level,use:s.use,outdoor:s.outdoor,x0:f2(r.x),x1:f2(r.x+r.width),z0:f2(r.z),z1:f2(r.z+r.depth),width:f2(r.width),depth:f2(r.depth),areaM2:f2(area(r)),floorDatum:f2(datum),envelopeHeight:h===null?null:f2(h),heightSource:src,top:h===null?null:f2(datum+h),roof:roof?{form:roof.form,overhang:roof.overhang??0,rise:roof.rise??null}:null,placedBy:s.placement,windows:plan.portals.filter(p=>p.host.space===s.id&&p.mode==='window').length+view.facades.filter(f=>f.host.space===s.id&&f.mode==='window').length,doorsAndPassages:plan.portals.filter(p=>p.mode!=='window'&&(p.host.space===s.id||p.to===s.id)).length}];
  });
  const rs=Object.values(rects),x0=Math.min(...rs.map(r=>r.x)),x1=Math.max(...rs.map(r=>r.x+r.width)),z0=Math.min(...rs.map(r=>r.z)),z1=Math.max(...rs.map(r=>r.z+r.depth)),cx=(x0+x1)/2,cz=(z0+z1)/2;
  const siteItems=Object.entries(siteRects).map(([id,r])=>({id,kind:(plan.pools.some(p=>p.id===id)?'pool':plan.landscape.find(l=>l.id===id)!.kind) as 'pool'|'lawn'|'bed',x0:f2(r.x),x1:f2(r.x+r.width),z0:f2(r.z),z1:f2(r.z+r.depth)}));
@@ -145,8 +148,8 @@ function weaknessSignals(plan:ArchitecturalPlan,rooms:MeasuredRoom[],metrics:{be
  const buckets=new Map<string,MeasuredRoom[]>();for(const r of interior)buckets.set(keyOf(r),[...(buckets.get(keyOf(r))??[]),r]);
  const repeated=[...buckets.values()].filter(b=>b.length>=3),repeatedCount=repeated.reduce((n,b)=>n+b.length,0),share=interior.length?repeatedCount/interior.length:0;
  out.push({id:'repeated-cells',fired:share>=.3,evidence:`${repeatedCount} of ${interior.length} interior rooms are identical cells in groups of three or more${repeated.length?` (${repeated.map(b=>`${b.length}× ${b[0].width}×${b[0].depth} m`).join('; ')})`:''}.`});
- const forms=[...new Set(plan.roofs.map(r=>r.form))],specs=new Set(plan.roofs.map(r=>`${r.form}|${r.rise??''}`));
- out.push({id:'uniform-roofs',fired:plan.roofs.length>=4&&specs.size===1,evidence:`${plan.roofs.length} roofs use ${forms.join('/')||'no'} form${specs.size===1?' with identical rise':''}.`});
+ const roofs=composedView(plan,new Map(Object.entries(rects))).roofs,forms=[...new Set(roofs.map(r=>r.form))],specs=new Set(roofs.map(r=>`${r.form}|${r.rise??''}`));
+ out.push({id:'uniform-roofs',fired:roofs.length>=4&&specs.size===1,evidence:`${roofs.length} roofs use ${forms.join('/')||'no'} form${specs.size===1?' with identical rise':''}.`});
  const topVals=interior.flatMap(r=>r.top===null?[]:[r.top]),spread=topVals.length?Math.max(...topVals)-Math.min(...topVals):0,heights=new Set(interior.map(r=>r.envelopeHeight));
  out.push({id:'no-section-variation',fired:interior.length>=6&&plan.levels.length===1&&spread<=1.5,evidence:`${interior.length} interior rooms share one level; envelope tops span only ${f2(spread)} m (${heights.size} distinct heights); roof forms: ${forms.join(', ')||'none'}.`});
  out.push({id:'single-level',fired:plan.levels.length===1&&interior.length>=8,evidence:`${plan.levels.length} level(s) for ${interior.length} interior rooms. A single level is not a defect on its own; this only contributes when combined with other signals.`});
@@ -156,7 +159,7 @@ function weaknessSignals(plan:ArchitecturalPlan,rooms:MeasuredRoom[],metrics:{be
  out.push({id:'unarticulated-footprint',fired:fp/box>=.75&&plan.levels.length===1,evidence:`Allocated cells fill ${Math.round(100*Math.min(1,fp/box))}% of their ${f2(bX-bx)}×${f2(bZ-bz)} m bounding rectangle: ${fp/box>=.75?'a compact block with little articulation, courtyard or recess':'an articulated footprint'}.`});
  const gaps:string[]=[];if((metrics.bedroomSpaces??0)>0&&metrics.bathroomSpaces===0)gaps.push('bedrooms without any bathroom or dressing space');
  out.push({id:'programme-gaps',fired:gaps.length>0,evidence:gaps.join('; ')||'No obvious programme gaps among authored uses.'});
- const overhangs=plan.roofs.map(r=>r.overhang??0),varied=new Set(overhangs.filter(o=>o>0)).size;
- out.push({id:'uniform-eaves',fired:overhangs.filter(o=>o>0).length>=Math.max(4,.7*plan.roofs.length)&&plan.roofs.length>=4,evidence:`${overhangs.filter(o=>o>0).length} of ${plan.roofs.length} roofs carry an overhang (${varied} distinct values) irrespective of which edges are exposed.`});
+ const overhangs=roofs.map(r=>r.overhang??0),varied=new Set(overhangs.filter(o=>o>0)).size;
+ out.push({id:'uniform-eaves',fired:overhangs.filter(o=>o>0).length>=Math.max(4,.7*roofs.length)&&roofs.length>=4,evidence:`${overhangs.filter(o=>o>0).length} of ${roofs.length} roofs carry an overhang (${varied} distinct values) irrespective of which edges are exposed.`});
  return out;
 }

@@ -1,0 +1,598 @@
+{
+  "basis": "Plan did not compile: measurements below are taken from the model-authored arrangement (resolved by the layout resolver) only. No built geometry exists to confirm them.",
+  "thesis": "A tall limestone-and-bronze waterfront salon forms the estate’s civic heart: an elevated, deeply shaded living pavilion with a single calm roofline facing the sea. Lower timber-lined suite bars engage its flanks as quiet inhabited buttresses, while a low arrival porch and a broad seaward terrace make the journey from landward arrival to water deliberately legible.",
+  "claims": [
+    {
+      "claim": "dominant / central / principal volume",
+      "declaredIn": [
+        "A tall limestone-and-bronze waterfront salon forms the estate’s civic heart: an elevated, deeply shaded living pavilion with a single calm roofline facing the sea.",
+        "double-height waterfront living pavilion with arrival, dining and service rooms",
+        "primary and guest accommodation bar",
+        "The west private gallery is directly entered from the central salon while its suites remain secluded behind it.",
+        "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room.",
+        "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings."
+      ],
+      "measured": {
+        "compositionDeclared": true,
+        "volumes": [
+          {
+            "id": "waterfront-salon-volume",
+            "tier": "primary",
+            "wings": [
+              "core-pavilion"
+            ],
+            "interiorRooms": 5,
+            "interiorAreaM2": 231,
+            "areaShare": 0.44,
+            "maxEnvelopeTopM": 6,
+            "levels": [
+              "ground"
+            ],
+            "roofForms": [
+              "gable",
+              "flat"
+            ],
+            "maxOverhangM": 0.9,
+            "centreOffsetFromBuildingCentreM": 2.47,
+            "centreOffsetShareOfHalfExtent": 0.12
+          },
+          {
+            "id": "west-accommodation-volume",
+            "tier": "secondary",
+            "wings": [
+              "west-suite-wing"
+            ],
+            "interiorRooms": 4,
+            "interiorAreaM2": 150,
+            "areaShare": 0.28,
+            "maxEnvelopeTopM": 3.6,
+            "levels": [
+              "ground"
+            ],
+            "roofForms": [
+              "hip"
+            ],
+            "maxOverhangM": 0,
+            "centreOffsetFromBuildingCentreM": 15.21,
+            "centreOffsetShareOfHalfExtent": 0.76
+          },
+          {
+            "id": "east-accommodation-volume",
+            "tier": "secondary",
+            "wings": [
+              "east-suite-wing"
+            ],
+            "interiorRooms": 4,
+            "interiorAreaM2": 150,
+            "areaShare": 0.28,
+            "maxEnvelopeTopM": 3.6,
+            "levels": [
+              "ground"
+            ],
+            "roofForms": [
+              "hip"
+            ],
+            "maxOverhangM": 0,
+            "centreOffsetFromBuildingCentreM": 15.21,
+            "centreOffsetShareOfHalfExtent": 0.76
+          }
+        ],
+        "primaryCount": 1,
+        "largestVolumeAreaShare": 0.44,
+        "heightSpreadAcrossVolumesM": 2.4,
+        "distinctEnvelopeTopsM": [
+          3.6,
+          6
+        ],
+        "levelsUsed": 1
+      },
+      "supportedByGeometry": true,
+      "rule": "Heuristic: a primary volume holds >=30% of interior area AND its envelope top is >=0.5 m above every other volume. null = no primary/secondary hierarchy was declared to test."
+    },
+    {
+      "claim": "shaded terraces / veranda / canopy / deep eaves",
+      "declaredIn": [
+        "A tall limestone-and-bronze waterfront salon forms the estate’s civic heart: an elevated, deeply shaded living pavilion with a single calm roofline facing the sea."
+      ],
+      "measured": {
+        "outdoorSpaces": [
+          {
+            "id": "arrival-porch",
+            "use": "roofed landward arrival porch",
+            "areaM2": 21,
+            "roof": {
+              "form": "flat",
+              "overhang": 0
+            },
+            "coveredByUpperSpaces": [],
+            "shaded": true
+          },
+          {
+            "id": "waterfront-terrace",
+            "use": "deep shaded waterfront entertaining terrace",
+            "areaM2": 70,
+            "roof": {
+              "form": "flat",
+              "overhang": 0
+            },
+            "coveredByUpperSpaces": [],
+            "shaded": true
+          }
+        ],
+        "shadedOutdoorSpaces": 2,
+        "outdoorSpaceCount": 2,
+        "screens": [
+          {
+            "id": "arrival-porch-screen",
+            "space": "arrival-porch",
+            "side": "west",
+            "widthM": 2.4,
+            "heightM": 2.7,
+            "standOffM": 0.15,
+            "panels": 8
+          },
+          {
+            "id": "terrace-west-screen",
+            "space": "waterfront-terrace",
+            "side": "west",
+            "widthM": 3.5,
+            "heightM": 2.8,
+            "standOffM": 0.18,
+            "panels": 10
+          }
+        ],
+        "roofOverhangsM": [
+          0
+        ],
+        "maxOverhangM": 0.9
+      },
+      "supportedByGeometry": true,
+      "rule": "Supported if at least one declared outdoor space of >=20 m2 has a roof entry/span or an upper-level space above it. Does not test sun angle or depth adequacy."
+    },
+    {
+      "claim": "memorable / developed entrance",
+      "declaredIn": [
+        "Lower timber-lined suite bars engage its flanks as quiet inhabited buttresses, while a low arrival porch and a broad seaward terrace make the journey from landward arrival to water deliberately legible.",
+        "double-height waterfront living pavilion with arrival, dining and service rooms"
+      ],
+      "measured": {
+        "arrival": {
+          "id": "arrival-porch",
+          "use": "roofed landward arrival porch",
+          "widthM": 6,
+          "depthM": 3.5,
+          "level": "ground",
+          "outdoor": true,
+          "roof": {
+            "form": "flat",
+            "overhang": 0
+          }
+        },
+        "compositionEntrance": {
+          "portal": "arrival-door",
+          "porch": "arrival-porch"
+        },
+        "entrancePortal": {
+          "id": "arrival-door",
+          "mode": "door",
+          "widthM": 2.4,
+          "heightM": 3.2
+        },
+        "porch": {
+          "id": "arrival-porch",
+          "widthM": 6,
+          "depthM": 3.5,
+          "roof": {
+            "form": "flat",
+            "overhang": 0
+          }
+        },
+        "exteriorDoorCount": 3,
+        "screensOnArrivalSide": [
+          {
+            "id": "arrival-porch-screen",
+            "space": "arrival-porch",
+            "side": "west",
+            "widthM": 2.4,
+            "heightM": 2.7,
+            "standOffM": 0.15,
+            "panels": 8
+          }
+        ]
+      },
+      "supportedByGeometry": true,
+      "rule": "Supported if a composition.entrance names a door and a roofed porch, or the arrival space is >=20 m2 and roofed. Dramatic quality is not measurable."
+    },
+    {
+      "claim": "courtyard / enclosed court",
+      "declaredIn": [],
+      "measured": {
+        "courts": [],
+        "declaredEncloseConstraints": []
+      },
+      "supportedByGeometry": null,
+      "rule": "Supported if a court-named outdoor space has >=50% of its perimeter bounded by interior rooms on its level."
+    },
+    {
+      "claim": "composed facade / opening relationships",
+      "declaredIn": [],
+      "measured": {
+        "openingsByVolume": [
+          {
+            "volume": "waterfront-salon-volume",
+            "tier": "primary",
+            "exteriorWindows": 1,
+            "windowBays": 2,
+            "doorsToOutdoorSpaces": [
+              "arrival-door",
+              "living-to-terrace",
+              "dining-to-terrace"
+            ]
+          },
+          {
+            "volume": "west-accommodation-volume",
+            "tier": "secondary",
+            "exteriorWindows": 3,
+            "windowBays": 6,
+            "doorsToOutdoorSpaces": []
+          },
+          {
+            "volume": "east-accommodation-volume",
+            "tier": "secondary",
+            "exteriorWindows": 3,
+            "windowBays": 6,
+            "doorsToOutdoorSpaces": []
+          }
+        ],
+        "compositionFacades": [
+          {
+            "id": "west-suite-window-rhythm",
+            "space": "west-guest-suite-1",
+            "side": "west",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.2,
+            "height": 1.7,
+            "sill": 0.9
+          },
+          {
+            "id": "west-suite-two-window-rhythm",
+            "space": "west-guest-suite-2",
+            "side": "west",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.2,
+            "height": 1.7,
+            "sill": 0.9
+          },
+          {
+            "id": "west-suite-three-window-rhythm",
+            "space": "west-guest-suite-3",
+            "side": "west",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.2,
+            "height": 1.7,
+            "sill": 0.9
+          },
+          {
+            "id": "primary-suite-window-rhythm",
+            "space": "primary-suite",
+            "side": "east",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.4,
+            "height": 1.8,
+            "sill": 0.75
+          },
+          {
+            "id": "east-suite-one-window-rhythm",
+            "space": "east-guest-suite-1",
+            "side": "east",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.2,
+            "height": 1.7,
+            "sill": 0.9
+          },
+          {
+            "id": "east-suite-two-window-rhythm",
+            "space": "east-guest-suite-2",
+            "side": "east",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.2,
+            "height": 1.7,
+            "sill": 0.9
+          },
+          {
+            "id": "kitchen-service-light",
+            "space": "kitchen",
+            "side": "south",
+            "kind": "windows",
+            "bays": 2,
+            "width": 1.1,
+            "height": 1.2,
+            "sill": 1.25
+          }
+        ],
+        "facadeBayCount": 14,
+        "authoredPortalCount": 15,
+        "exteriorWindows": 0,
+        "spacesWithAnyExteriorWindow": 0,
+        "interiorSpaces": 13,
+        "interiorRoomsWithoutExteriorWindow": [
+          "living-salon",
+          "dining-salon",
+          "pantry",
+          "powder-room",
+          "west-gallery",
+          "east-gallery"
+        ],
+        "windowBaysFromComposition": 14
+      },
+      "supportedByGeometry": true,
+      "rule": "Reports declared bays and window coverage only; proportion, rhythm quality and glazing ratio on elevations are not measured here."
+    },
+    {
+      "claim": "privacy / separation of suites from social and service",
+      "declaredIn": [
+        "Lower timber-lined suite bars engage its flanks as quiet inhabited buttresses, while a low arrival porch and a broad seaward terrace make the journey from landward arrival to water deliberately legible.",
+        "double-height waterfront living pavilion with arrival, dining and service rooms",
+        "three-suite private accommodation bar",
+        "The west private gallery is directly entered from the central salon while its suites remain secluded behind it.",
+        "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room.",
+        "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings.",
+        "Suite cells establish six generous private suite allocations and direct gallery access, but bathroom layouts, wardrobes, furniture, kitchen equipment, lighting, planting and interior fit-out remain outside the supported envelope."
+      ],
+      "measured": {
+        "separateConstraints": [
+          {
+            "id": "private-wing-separation",
+            "a": "west-suite-wing",
+            "b": "east-suite-wing",
+            "required": 14,
+            "measured": 20,
+            "ok": true
+          }
+        ],
+        "adjoinConstraints": [
+          {
+            "id": "west-wing-pavilion-adjoin",
+            "a": "west-suite-wing",
+            "b": "core-pavilion",
+            "required": 3,
+            "measured": 0,
+            "ok": false
+          },
+          {
+            "id": "east-wing-pavilion-adjoin",
+            "a": "east-suite-wing",
+            "b": "core-pavilion",
+            "required": 3,
+            "measured": 3.5,
+            "ok": true
+          }
+        ]
+      },
+      "supportedByGeometry": true,
+      "rule": "Only declared separate constraints are measurable; line-of-sight privacy is not."
+    }
+  ],
+  "repeatedModules": {
+    "compositionOfRepeated": {
+      "count": 6,
+      "of": 13,
+      "width": 7,
+      "depth": 5
+    },
+    "distinctFootprints": 7,
+    "indoorRooms": 13,
+    "bedroomFootprints": [
+      {
+        "footprint": "7x5",
+        "count": 6,
+        "ids": [
+          "west-guest-suite-1",
+          "west-guest-suite-2",
+          "west-guest-suite-3",
+          "primary-suite",
+          "east-guest-suite-1",
+          "east-guest-suite-2"
+        ]
+      }
+    ],
+    "mirrorShare": 0.56,
+    "mirrorAxis": "x",
+    "footprintFill": 0.63,
+    "bilateral": 1,
+    "spine": {
+      "id": "living-salon",
+      "dependants": 3
+    }
+  },
+  "massing": {
+    "levels": 1,
+    "roofForms": {
+      "flat": 5
+    },
+    "volumes": [
+      {
+        "id": "waterfront-salon-volume",
+        "tier": "primary",
+        "wings": [
+          "core-pavilion"
+        ],
+        "interiorRooms": 5,
+        "interiorAreaM2": 231,
+        "areaShare": 0.44,
+        "maxEnvelopeTopM": 6,
+        "levels": [
+          "ground"
+        ],
+        "roofForms": [
+          "gable",
+          "flat"
+        ],
+        "maxOverhangM": 0.9,
+        "centreOffsetFromBuildingCentreM": 2.47,
+        "centreOffsetShareOfHalfExtent": 0.12
+      },
+      {
+        "id": "west-accommodation-volume",
+        "tier": "secondary",
+        "wings": [
+          "west-suite-wing"
+        ],
+        "interiorRooms": 4,
+        "interiorAreaM2": 150,
+        "areaShare": 0.28,
+        "maxEnvelopeTopM": 3.6,
+        "levels": [
+          "ground"
+        ],
+        "roofForms": [
+          "hip"
+        ],
+        "maxOverhangM": 0,
+        "centreOffsetFromBuildingCentreM": 15.21,
+        "centreOffsetShareOfHalfExtent": 0.76
+      },
+      {
+        "id": "east-accommodation-volume",
+        "tier": "secondary",
+        "wings": [
+          "east-suite-wing"
+        ],
+        "interiorRooms": 4,
+        "interiorAreaM2": 150,
+        "areaShare": 0.28,
+        "maxEnvelopeTopM": 3.6,
+        "levels": [
+          "ground"
+        ],
+        "roofForms": [
+          "hip"
+        ],
+        "maxOverhangM": 0,
+        "centreOffsetFromBuildingCentreM": 15.21,
+        "centreOffsetShareOfHalfExtent": 0.76
+      }
+    ],
+    "wingEnvelopes": [
+      {
+        "id": "core-pavilion",
+        "role": "double-height waterfront living pavilion with arrival, dining and service rooms",
+        "rooms": 7,
+        "levels": [
+          "ground"
+        ],
+        "bounds": {
+          "x": -3,
+          "z": -9,
+          "width": 20,
+          "depth": 26
+        },
+        "roomAreaM2": 231,
+        "fill": 0.44
+      },
+      {
+        "id": "west-suite-wing",
+        "role": "three-suite private accommodation bar",
+        "rooms": 4,
+        "levels": [
+          "ground"
+        ],
+        "bounds": {
+          "x": -13,
+          "z": -3.5,
+          "width": 10,
+          "depth": 15
+        },
+        "roomAreaM2": 150,
+        "fill": 1
+      },
+      {
+        "id": "east-suite-wing",
+        "role": "primary and guest accommodation bar",
+        "rooms": 4,
+        "levels": [
+          "ground"
+        ],
+        "bounds": {
+          "x": 17,
+          "z": -3.5,
+          "width": 10,
+          "depth": 15
+        },
+        "roomAreaM2": 150,
+        "fill": 1
+      }
+    ]
+  },
+  "programmeVsBrief": {
+    "suitesRequested": "approximately six",
+    "bedroomLikeSpaces": [
+      {
+        "id": "west-guest-suite-1",
+        "use": "guest bedroom suite one",
+        "areaM2": 35,
+        "level": "ground"
+      },
+      {
+        "id": "west-guest-suite-2",
+        "use": "guest bedroom suite two",
+        "areaM2": 35,
+        "level": "ground"
+      },
+      {
+        "id": "west-guest-suite-3",
+        "use": "guest bedroom suite three",
+        "areaM2": 35,
+        "level": "ground"
+      },
+      {
+        "id": "primary-suite",
+        "use": "waterfront primary bedroom suite",
+        "areaM2": 35,
+        "level": "ground"
+      },
+      {
+        "id": "east-guest-suite-1",
+        "use": "guest bedroom suite four",
+        "areaM2": 35,
+        "level": "ground"
+      },
+      {
+        "id": "east-guest-suite-2",
+        "use": "guest bedroom suite five",
+        "areaM2": 35,
+        "level": "ground"
+      }
+    ],
+    "bedroomCount": 6,
+    "bathroomLikeSpaces": 1,
+    "poolRectangular": true,
+    "poolCount": 1,
+    "shadedTerraces": 1,
+    "levels": 1,
+    "infinityEdgeMentionedInLimitationsOrThesis": true,
+    "unsupportedDeclaredByModel": [
+      "The scheme uses the required flat-site representation. The waterfront lies conceptually north of the house; no surveyed shoreline, flood datum, setbacks, terrain, retaining work, marine engineering or infinity edge is represented.",
+      "The rectangular pool is an editable basin and water volume only; it does not claim an infinity edge, catchment, pool equipment, safety systems or marine construction.",
+      "Suite cells establish six generous private suite allocations and direct gallery access, but bathroom layouts, wardrobes, furniture, kitchen equipment, lighting, planting and interior fit-out remain outside the supported envelope.",
+      "Saint Lucia hurricane, wind-driven rain, corrosion, drainage, structural, accessibility and local planning requirements require specialist coordination before construction.",
+      "US$25 million is treated solely as the client-stated property-value ambition in explicit USD, not as a construction budget, cost estimate or valuation claim."
+    ]
+  },
+  "existingConceptReview": null,
+  "notMeasurable": [
+    "proportion and silhouette",
+    "material richness, colour harmony and luxury character",
+    "whether an entrance reads as dramatic rather than merely roofed",
+    "facade depth and rhythm quality on real elevations",
+    "view orientation to the sea (the contract has no water-edge geometry)",
+    "originality"
+  ],
+  "note": "Each claim reports quotes from the model's own text, measured facts, and a heuristic yes/no only where a threshold is stated. Nothing is scored."
+}

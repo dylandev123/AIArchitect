@@ -1,0 +1,70 @@
+{
+ "errors": [
+  {
+   "stage": "site",
+   "severity": "error",
+   "id": "arrival-lawn",
+   "message": "arrival-lawn overlaps powder-room."
+  },
+  {
+   "stage": "site",
+   "severity": "error",
+   "id": "pool-lawn-reserve",
+   "message": "pool-lawn-reserve (x -10..18, z 29..43) lies 1.5 m outside the 80×75 m site, which is centred on the room cells (building spans x -13..27, z -9..17)."
+  },
+  {
+   "stage": "openings",
+   "severity": "error",
+   "id": "dining-to-terrace",
+   "message": "dining-salon touches waterfront-terrace along only 3..6 m (3 m) of its north edge (6 m long), but a 2.8 m opening needs 3.16 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms."
+  },
+  {
+   "stage": "openings",
+   "severity": "error",
+   "id": "living-to-west-gallery",
+   "message": "living-salon and west-gallery share no wall, so there is no wall to open between them."
+  },
+  {
+   "stage": "openings",
+   "severity": "error",
+   "id": "dining-to-east-gallery",
+   "message": "dining-salon and east-gallery share no wall, so there is no wall to open between them."
+  }
+ ],
+ "observations": [
+  {
+   "stage": "programme",
+   "severity": "observation",
+   "id": "bathrooms",
+   "message": "bedrooms are allocated but no bathroom or dressing space exists; bathrooms are prose inside the bedroom use."
+  },
+  {
+   "stage": "programme",
+   "severity": "observation",
+   "id": "levels",
+   "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+  },
+  {
+   "stage": "programme",
+   "severity": "observation",
+   "id": "daylight",
+   "message": "6 of 13 interior rooms have no window: living-salon, dining-salon, pantry, powder-room, west-gallery, east-gallery."
+  }
+ ],
+ "site": {
+  "required": {
+   "width": 64,
+   "depth": 78
+  },
+  "available": {
+   "width": 80,
+   "depth": 75
+  },
+  "fits": false,
+  "basis": "model-defined",
+  "drivers": {
+   "width": "east-garden-reserve",
+   "depth": "pool-lawn-reserve"
+  }
+ }
+}

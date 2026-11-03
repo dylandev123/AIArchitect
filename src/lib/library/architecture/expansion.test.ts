@@ -14,8 +14,8 @@ import { applySceneOperations, validateScene } from '@/lib/villa/scene/model';
 import { laderaScene } from '@/lib/villa/scene/example';
 const intent={scaleRationale:'Offline contract fixture, not generated output.',arrivalAndCirculation:'Retain the fixture entrance route.',volumeHierarchy:'Retain the fixture hierarchy.',relationshipsAndViews:'Orientation unverified.',roofFacadeAndMaterials:'Retain existing roof and enclosure.',intendedSpaces:['residence']};
 afterEach(()=>vi.unstubAllEnvs());
-it('provides 310 unique valid entries, eleven categories and constructibility for every recipe',()=>{
- expect(entries).toHaveLength(310);expect(expanded).toHaveLength(240);
+it('provides 315 unique valid entries, eleven categories and constructibility for every recipe',()=>{
+ expect(entries).toHaveLength(315);expect(expanded).toHaveLength(240);
  expect(new Set(entries.map(e=>e.id)).size).toBe(entries.length);
  expect(new Set(entries.map(e=>e.title.toLowerCase().replace(/[^a-z0-9]/g,''))).size).toBe(entries.length);
  expect(new Set(expanded.map(e=>e.placement))).toHaveLength(expanded.length);
@@ -71,7 +71,7 @@ it('round-trips every expanded entry through the existing atomic 100-entry bulk 
   await importArchitecturalKnowledge(batch);
  }
  const stored=await inspectArchitecturalKnowledge();
- expect(stored).toHaveLength(310);
+ expect(stored).toHaveLength(315);
  expect(stored.filter(e=>e.revisions.length===2)).toHaveLength(240);
  expect(stored.find(e=>e.id===expanded[0].id)?.revisions.at(-1)?.construction).toEqual(expanded[0].construction);
  }finally{await rm(dir,{recursive:true,force:true});}

@@ -1,0 +1,63 @@
+{
+  "compiled": false,
+  "firstBlockingError": "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Single edits that would meet it: wing west-suite-wing.alignment centre→end. Software has changed nothing.",
+  "allCompilerReportedErrors": [
+    "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Single edits that would meet it: wing west-suite-wing.alignment centre→end. Software has changed nothing.",
+    "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them."
+  ],
+  "errorName": "Error",
+  "phases": [
+    {
+      "phase": "1 contract parse (architecturalPlanSchema)",
+      "status": "passed",
+      "reason": "schema validation of the normalized plan"
+    },
+    {
+      "phase": "2 derive: single root, ground level, layout resolution, composition expansion, roof-span checks, portal placement, site-anchor resolution",
+      "status": "failed",
+      "reason": "living-to-west-gallery: living-salon and west-gallery share no wall, so there is no wall to open between them."
+    },
+    {
+      "phase": "3 id uniqueness, flat-site, camera views, duplicate roofs",
+      "status": "not-reached",
+      "reason": "not reached: derive failed first"
+    },
+    {
+      "phase": "4 overhead enclosure of every roofless interior",
+      "status": "not-reached",
+      "reason": "not reached: derive failed first; independently analysed by diagnosePlan stage \"roofs\""
+    },
+    {
+      "phase": "5 compileBuilding (walls, slabs, openings, stairs, roofs geometry)",
+      "status": "not-reached",
+      "reason": "not reached: derive failed first"
+    },
+    {
+      "phase": "6 whole-building spatial constraints and declarations (coordinatePlan)",
+      "status": "not-reached",
+      "reason": "not reached through the compiler; coordinatePlan was run independently (see diagnostics.json)"
+    },
+    {
+      "phase": "7 overlapping wall sections between staggered levels",
+      "status": "not-reached",
+      "reason": "not reached"
+    },
+    {
+      "phase": "8 composition fidelity (declared composition honoured by built geometry)",
+      "status": "not-reached",
+      "reason": "not reached"
+    },
+    {
+      "phase": "9 pool/landscape inside site, no site overlap, all geometry in site bounds",
+      "status": "not-reached",
+      "reason": "not reached through the compiler; checked independently by diagnosePlan stage \"site\""
+    },
+    {
+      "phase": "10 validateScene",
+      "status": "not-reached",
+      "reason": "not reached"
+    }
+  ],
+  "independentlyDiagnosedErrorCount": 5,
+  "note": "The compiler stops at its first failing phase and reports that phase's decisions together. Phases marked not-reached were NOT executed and are NOT claimed to pass."
+}

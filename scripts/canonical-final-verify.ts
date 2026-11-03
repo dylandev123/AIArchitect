@@ -1,0 +1,35 @@
+/** Offline checks of the frozen provider request against the Step 2 requirements. No network. Exclusive write. */
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {computeCostUsd} from '../src/lib/ai/pricing';
+const dir='docs/architecture/canonical-final-2026-11-02';
+const body=readFileSync(`${dir}/provider-request.exact.json`,'utf8'),wire=JSON.parse(body);
+const brief=JSON.parse(readFileSync(`${dir}/brief.NOT-SUBMITTED.json`,'utf8')).prompt as string;
+const sys=wire.input.find((m:{role:string})=>m.role==='system'||m.role==='developer')?.content as string;
+const userTexts=wire.input.filter((m:{role:string})=>m.role==='user').flatMap((m:{content:{text:string}[]})=>m.content.map(c=>JSON.parse(c.text)));
+const checks:Record<string,unknown>={};
+const ok=(k:string,v:boolean,extra?:unknown)=>{checks[k]={pass:v,...(extra?{detail:extra}:{})};};
+ok('identity-first',sys.startsWith('ROLE AND ARCHITECTURAL MISSION\nYou are the principal residential architect'));
+ok('seven-priorities',[1,2,3,4,5,6,7].every(n=>sys.includes(`\n${n}. `)));
+ok('mission-once',sys.split('ROLE AND ARCHITECTURAL MISSION').length===2);
+ok('mission-precedes-mechanics',sys.indexOf('SELF-CHECK')<sys.indexOf('OUTPUT CONTRACT')&&sys.indexOf('OUTPUT CONTRACT')<sys.indexOf('Spaces are rectangular allocations'));
+ok('brief-verbatim-and-sole-user-content',userTexts.length===1&&userTexts[0].prompt===brief&&userTexts[0].mode==='generate'&&!('current' in userTexts[0]));
+ok('wing-placement-and-constraints',sys.includes('Compose the building as WINGS first')&&sys.includes('kind "separate"')&&sys.includes('"enclose"'));
+ok('precedence-note-after-knowledge',sys.indexOf('CONTRACT PRECEDENCE')>sys.indexOf('RETRIEVED ARCHITECTURAL KNOWLEDGE')&&sys.indexOf('CONTRACT PRECEDENCE')>0);
+const contra=['Simple or complex architecture is valid','restrained home.','Return a semantic proposal','scene operations as','semantic-pilot','V3'].filter(t=>sys.includes(t));
+ok('no-contradictory-or-retired-wording',contra.length===0,contra);
+const bannedForce=/must (use|have) (a )?(flat roof|symmetr|corridor)/i.test(sys);
+ok('no-forced-composition',!bannedForce);
+ok('model-and-limits',wire.model==='gpt-5.6-terra'&&wire.max_output_tokens===30000&&wire.reasoning===undefined&&wire.text.format.type==='json_schema'&&wire.text.format.strict===true);
+// Strict-schema compatibility: every object closed with all properties required.
+const bad:string[]=[];
+(function walk(n:any,path:string){if(!n||typeof n!=='object')return;if(n.type==='object'||n.properties){if(n.additionalProperties!==false)bad.push(`${path}: additionalProperties`);const keys=Object.keys(n.properties??{}),req=n.required??[];if(keys.some(k=>!req.includes(k)))bad.push(`${path}: optional property`);}for(const [k,v] of Object.entries(n))walk(v,`${path}/${k}`);})(wire.text.format.schema,'#');
+ok('strict-schema-closed-and-required',bad.length===0,bad.slice(0,5));
+ok('schema-is-canonical-plan',JSON.stringify(wire.text.format.schema).includes('architectural-plan-1')&&JSON.stringify(wire.text.format.schema).includes('constraints'));
+ok('no-tools-no-retries-in-wire',!wire.tools||wire.tools.length===0);
+const inTok=Math.ceil(Buffer.byteLength(body)/3.6);
+const est=(out:number)=>computeCostUsd('gpt-5.6-terra',{inputTokens:inTok,cachedInputTokens:0,outputTokens:out});
+const result={requestSha256:createHash('sha256').update(body).digest('hex'),requestBytes:Buffer.byteLength(body),checks,allPass:Object.values(checks).every((c:any)=>c.pass),estimate:{inputTokensApprox:inTok,previousRun:{input:5771,output:8541,usd:0.114},usdAtOutput:{'8.5k':est(8541),'15k':est(15000),'30k_ceiling':est(30000)},note:'local estimate, not an invoice'}};
+writeFileSync(`${dir}/verification.json`,JSON.stringify(result,null,2),{flag:'wx'});
+console.log(JSON.stringify(result,null,1));

@@ -2,6 +2,7 @@ import { PROPERTY_VALUE_GUIDANCE } from './propertyValue';
 import type { KnowledgeRevision } from './model';
 import { EXPANDED_ARCHITECTURAL_GUIDANCE } from './expanded';
 import { EXTENDED_ARCHITECTURAL_GUIDANCE } from './guidance';
+import { WHOLE_HOUSE_STRATEGIES } from './strategies';
 /** Reviewed repository-derived guidance, not researched code or engineering advice. */
 export const ARCHITECTURAL_KNOWLEDGE_SEEDS: KnowledgeRevision[] = [
 
@@ -476,4 +477,5 @@ export const ARCHITECTURAL_KNOWLEDGE_SEEDS: KnowledgeRevision[] = [
   ...EXTENDED_ARCHITECTURAL_GUIDANCE,
   ...EXPANDED_ARCHITECTURAL_GUIDANCE,
   ...PROPERTY_VALUE_GUIDANCE,
+  ...WHOLE_HOUSE_STRATEGIES,
 ];

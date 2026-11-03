@@ -1,0 +1,261 @@
+{
+  "findings": [
+    {
+      "stage": "volumes",
+      "severity": "error",
+      "id": "living-salon/west-gallery",
+      "message": "occupied volumes overlap by 0.5×6 m (4 m vertical): living-salon spans x -4.5..13.5, z -12..0, west-gallery spans x -9..-4, z -6..14. Cause: living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neither chain accounts for the other's extent: 0.5×6 m overlap. Single edits that clear it: powder-room.gap 0→0.5; powder-room.gap 0→6; living-salon.gap 0→6; living-salon.alignment centre→start."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "waterfront-lawn",
+      "message": "waterfront-lawn (x -12.5..21.5, z -43.5..-29.5) lies 0.5 m outside the 110×80 m site, which is centred on the room cells (building spans x -32..59.5, z -20..14)."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "arrival-bed",
+      "message": "arrival-bed overlaps powder-room, west-gallery, west-suite-hall, west-suite-3-bedroom."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "east-garden-reserve",
+      "message": "east-garden-reserve overlaps east-suite-hall, east-suite-1-bedroom."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "pantry-east-cloister",
+      "message": "pantry and east-suite-hall share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "dining-deck-link",
+      "message": "dining-gallery and dining-deck share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-gallery/living-salon",
+      "message": "roof of west-gallery (0 m overhang) projects 0.5×6 m into the taller volume of living-salon."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "arrival-bronze-screen",
+      "message": "screen obstructs the passable opening arrival-entry."
+    },
+    {
+      "stage": "screens",
+      "severity": "error",
+      "id": "arrival-bronze-screen",
+      "message": "screen stands in arrival-court."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "levels",
+      "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "roofs",
+      "message": "every roof is flat with no overhang (23 slabs): no roof-led silhouette or deep eaves for shade."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "daylight",
+      "message": "22 of 22 interior rooms have no window: entry-hall, living-salon, dining-gallery, show-kitchen, pantry, laundry-service, powder-room, west-gallery, west-suite-hall, west-suite-1-bedroom, west-suite-1-bath, west-suite-2-bedroom, west-suite-2-bath, west-suite-3-bedroom, west-suite-3-bath, east-suite-hall, east-suite-1-bedroom, east-suite-1-bath, east-suite-2-bedroom, east-suite-2-bath, east-suite-3-bedroom, east-suite-3-bath."
+    }
+  ],
+  "errors": 9,
+  "rects": {
+    "entry-hall": {
+      "x": 0,
+      "z": 0,
+      "width": 9,
+      "depth": 8
+    },
+    "arrival-court": {
+      "x": -0.5,
+      "z": 8,
+      "width": 10,
+      "depth": 5
+    },
+    "living-salon": {
+      "x": -4.5,
+      "z": -12,
+      "width": 18,
+      "depth": 12
+    },
+    "dining-gallery": {
+      "x": 13.5,
+      "z": -10,
+      "width": 11,
+      "depth": 10
+    },
+    "show-kitchen": {
+      "x": 13.5,
+      "z": 0,
+      "width": 11,
+      "depth": 8
+    },
+    "pantry": {
+      "x": 24.5,
+      "z": 0,
+      "width": 6,
+      "depth": 8
+    },
+    "laundry-service": {
+      "x": 24.5,
+      "z": 8,
+      "width": 6,
+      "depth": 6
+    },
+    "service-yard": {
+      "x": 30.5,
+      "z": 9,
+      "width": 6,
+      "depth": 4
+    },
+    "powder-room": {
+      "x": -4,
+      "z": 2,
+      "width": 4,
+      "depth": 4
+    },
+    "west-gallery": {
+      "x": -9,
+      "z": -6,
+      "width": 5,
+      "depth": 20
+    },
+    "water-veranda": {
+      "x": -4.5,
+      "z": -20,
+      "width": 18,
+      "depth": 8
+    },
+    "dining-deck": {
+      "x": 13.5,
+      "z": -20,
+      "width": 11,
+      "depth": 8
+    },
+    "west-suite-hall": {
+      "x": -14,
+      "z": -20,
+      "width": 5,
+      "depth": 33
+    },
+    "west-suite-1-bedroom": {
+      "x": -26,
+      "z": -20,
+      "width": 12,
+      "depth": 10
+    },
+    "west-suite-1-bath": {
+      "x": -32,
+      "z": -20,
+      "width": 6,
+      "depth": 10
+    },
+    "west-suite-2-bedroom": {
+      "x": -26,
+      "z": -8.5,
+      "width": 12,
+      "depth": 10
+    },
+    "west-suite-2-bath": {
+      "x": -32,
+      "z": -8.5,
+      "width": 6,
+      "depth": 10
+    },
+    "west-suite-3-bedroom": {
+      "x": -26,
+      "z": 3,
+      "width": 12,
+      "depth": 10
+    },
+    "west-suite-3-bath": {
+      "x": -32,
+      "z": 3,
+      "width": 6,
+      "depth": 10
+    },
+    "east-suite-hall": {
+      "x": 36.5,
+      "z": -19,
+      "width": 5,
+      "depth": 33
+    },
+    "east-suite-1-bedroom": {
+      "x": 41.5,
+      "z": -19,
+      "width": 12,
+      "depth": 10
+    },
+    "east-suite-1-bath": {
+      "x": 53.5,
+      "z": -19,
+      "width": 6,
+      "depth": 10
+    },
+    "east-suite-2-bedroom": {
+      "x": 41.5,
+      "z": -7.5,
+      "width": 12,
+      "depth": 10
+    },
+    "east-suite-2-bath": {
+      "x": 53.5,
+      "z": -7.5,
+      "width": 6,
+      "depth": 10
+    },
+    "east-suite-3-bedroom": {
+      "x": 41.5,
+      "z": 4,
+      "width": 12,
+      "depth": 10
+    },
+    "east-suite-3-bath": {
+      "x": 53.5,
+      "z": 4,
+      "width": 6,
+      "depth": 10
+    }
+  },
+  "siteRects": {
+    "waterfront-pool": {
+      "x": -4.5,
+      "z": -27.5,
+      "width": 18,
+      "depth": 5
+    },
+    "waterfront-lawn": {
+      "x": -12.5,
+      "z": -43.5,
+      "width": 34,
+      "depth": 14
+    },
+    "arrival-bed": {
+      "x": -14.5,
+      "z": 5.5,
+      "width": 12,
+      "depth": 10
+    },
+    "east-garden-reserve": {
+      "x": 26.5,
+      "z": -23,
+      "width": 16,
+      "depth": 14
+    }
+  }
+}

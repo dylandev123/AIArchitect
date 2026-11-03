@@ -1,0 +1,779 @@
+{
+  "readOnly": true,
+  "providerCalls": 0,
+  "planSha256": "9b889d13e212336c35f0551b34917d61350ff44b2fa672104731800c88814204",
+  "totals": {
+    "diagnosticErrors": 5,
+    "diagnosticObservations": 14,
+    "coordinatorErrors": 2,
+    "distinctPhysicalConflictGroups": 7,
+    "byStage": {
+      "site": 2,
+      "openings": 3
+    }
+  },
+  "layoutProblems": [],
+  "siteProblems": [],
+  "groupedPhysicalConflicts": [
+    {
+      "key": "site:arrival-lawn",
+      "stage": "site",
+      "entities": [
+        "arrival-lawn"
+      ],
+      "messages": [
+        "arrival-lawn overlaps powder-room."
+      ],
+      "sources": [
+        "diagnosePlan"
+      ]
+    },
+    {
+      "key": "site:pool-lawn-reserve",
+      "stage": "site",
+      "entities": [
+        "pool-lawn-reserve"
+      ],
+      "messages": [
+        "pool-lawn-reserve (x -10..18, z 29..43) lies 1.5 m outside the 80×75 m site, which is centred on the room cells (building spans x -13..27, z -9..17)."
+      ],
+      "sources": [
+        "diagnosePlan"
+      ]
+    },
+    {
+      "key": "openings:dining-to-terrace",
+      "stage": "openings",
+      "entities": [
+        "dining-to-terrace"
+      ],
+      "messages": [
+        "opening (1.6..4.4 m) does not fit the shared segment with waterfront-terrace (3..6 m) with 0.18 m margins."
+      ],
+      "sources": [
+        "diagnosePlan"
+      ]
+    },
+    {
+      "key": "openings:living-to-west-gallery",
+      "stage": "openings",
+      "entities": [
+        "living-to-west-gallery"
+      ],
+      "messages": [
+        "living-salon and west-gallery share no wall, so there is no wall to open between them."
+      ],
+      "sources": [
+        "diagnosePlan"
+      ]
+    },
+    {
+      "key": "openings:dining-to-east-gallery",
+      "stage": "openings",
+      "entities": [
+        "dining-to-east-gallery"
+      ],
+      "messages": [
+        "dining-salon and east-gallery share no wall, so there is no wall to open between them."
+      ],
+      "sources": [
+        "diagnosePlan"
+      ]
+    },
+    {
+      "key": "constraint:core-pavilion+west-suite-wing+west-wing-pavilion-adjoin",
+      "stage": "constraint",
+      "entities": [
+        "core-pavilion",
+        "west-suite-wing",
+        "west-wing-pavilion-adjoin"
+      ],
+      "messages": [
+        "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Single edits that would meet it: wing west-suite-wing.alignment centre→end. Software has changed nothing."
+      ],
+      "sources": [
+        "coordinatePlan"
+      ]
+    },
+    {
+      "key": "site:unattributed",
+      "stage": "site",
+      "entities": [],
+      "messages": [
+        "The arrangement needs a site of at least 64×78 m (centred on the room cells, orientation applied); the plan declares 80×75 m. Enlarging the site is a determined consequence; moving the allocations inward is a design choice."
+      ],
+      "sources": [
+        "coordinatePlan"
+      ]
+    }
+  ],
+  "repeatedMessageTemplates": [
+    {
+      "template": "openings|<id> and <id> share no wall, so there is no wall to open between them.",
+      "count": 2,
+      "ids": [
+        "living-to-west-gallery",
+        "dining-to-east-gallery"
+      ]
+    },
+    {
+      "template": "site|<id> overlaps <id>.",
+      "count": 1,
+      "ids": [
+        "arrival-lawn"
+      ]
+    },
+    {
+      "template": "site|<id> (x <n>..<n>, z <n>..<n>) lies <n> m outside the <n>×<n> m site, which is centred on the room cells (build",
+      "count": 1,
+      "ids": [
+        "pool-lawn-reserve"
+      ]
+    },
+    {
+      "template": "openings|opening (<n>..<n> m) does not fit the shared segment with <id> (<n>..<n> m) with <n> m margins.",
+      "count": 1,
+      "ids": [
+        "dining-to-terrace"
+      ]
+    }
+  ],
+  "compositionExpansion": {
+    "expanded": true,
+    "error": null,
+    "expandedRoofs": 8,
+    "spans": [
+      {
+        "id": "salon-gable",
+        "lead": "living-salon",
+        "members": [
+          "living-salon",
+          "dining-salon"
+        ],
+        "form": "gable",
+        "rise": 2,
+        "overhang": 0.9
+      },
+      {
+        "id": "west-wing-hip",
+        "lead": "west-gallery",
+        "members": [
+          "west-gallery",
+          "west-guest-suite-1",
+          "west-guest-suite-2",
+          "west-guest-suite-3"
+        ],
+        "form": "hip",
+        "rise": 0.8,
+        "overhang": 0
+      },
+      {
+        "id": "east-wing-hip",
+        "lead": "east-gallery",
+        "members": [
+          "east-gallery",
+          "primary-suite",
+          "east-guest-suite-1",
+          "east-guest-suite-2"
+        ],
+        "form": "hip",
+        "rise": 0.8,
+        "overhang": 0
+      }
+    ],
+    "facadeOpenings": 14,
+    "windowBays": 14
+  },
+  "diagnosticBlindSpot": {
+    "explanation": "diagnosePlan does not expand composition.roofSpans or composition.facades. These raw findings name rooms that the production expandComposition places under a declared roof span; they are a defect in the read-only diagnostic, not in Terra's plan.",
+    "rawErrorsFromDiagnosePlan": 15,
+    "falsePositivesRemovedByExpansion": [
+      {
+        "stage": "roofs",
+        "id": "living-salon",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "dining-salon",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "west-gallery",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "west-guest-suite-1",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "west-guest-suite-2",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "west-guest-suite-3",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "east-gallery",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "primary-suite",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "east-guest-suite-1",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "id": "east-guest-suite-2",
+        "message": "interior room has neither a roof nor a space above it."
+      }
+    ],
+    "newFindingsAfterExpansion": []
+  },
+  "daylight": {
+    "interiorRoomsWithAnyExteriorWindow": 7,
+    "interiorRoomsWithoutExteriorWindow": [
+      "living-salon",
+      "dining-salon",
+      "pantry",
+      "powder-room",
+      "west-gallery",
+      "east-gallery"
+    ],
+    "note": "Counts authored exterior window portals plus composition window bays. diagnosePlan's own daylight observation ignores composition bays."
+  },
+  "findings": [
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "arrival-lawn",
+      "message": "arrival-lawn overlaps powder-room."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "pool-lawn-reserve",
+      "message": "pool-lawn-reserve (x -10..18, z 29..43) lies 1.5 m outside the 80×75 m site, which is centred on the room cells (building spans x -13..27, z -9..17)."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "dining-to-terrace",
+      "message": "opening (1.6..4.4 m) does not fit the shared segment with waterfront-terrace (3..6 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "living-to-west-gallery",
+      "message": "living-salon and west-gallery share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "dining-to-east-gallery",
+      "message": "dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "bathrooms",
+      "message": "bedrooms are allocated but no bathroom or dressing space exists; bathrooms are prose inside the bedroom use."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "levels",
+      "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "roofs",
+      "message": "every roof is flat with no overhang (5 slabs): no roof-led silhouette or deep eaves for shade."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "daylight",
+      "message": "13 of 13 interior rooms have no window: living-salon, dining-salon, kitchen, pantry, powder-room, west-gallery, west-guest-suite-1, west-guest-suite-2, west-guest-suite-3, east-gallery, primary-suite, east-guest-suite-1, east-guest-suite-2."
+    }
+  ],
+  "rawFindingsBeforeBlindSpotRemoval": [
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "arrival-lawn",
+      "message": "arrival-lawn overlaps powder-room."
+    },
+    {
+      "stage": "site",
+      "severity": "error",
+      "id": "pool-lawn-reserve",
+      "message": "pool-lawn-reserve (x -10..18, z 29..43) lies 1.5 m outside the 80×75 m site, which is centred on the room cells (building spans x -13..27, z -9..17)."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "dining-to-terrace",
+      "message": "opening (1.6..4.4 m) does not fit the shared segment with waterfront-terrace (3..6 m) with 0.18 m margins."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "living-to-west-gallery",
+      "message": "living-salon and west-gallery share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "openings",
+      "severity": "error",
+      "id": "dining-to-east-gallery",
+      "message": "dining-salon and east-gallery share no wall, so there is no wall to open between them."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "living-salon",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "dining-salon",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-gallery",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-guest-suite-1",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-guest-suite-2",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "west-guest-suite-3",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-gallery",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "primary-suite",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-guest-suite-1",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "roofs",
+      "severity": "error",
+      "id": "east-guest-suite-2",
+      "message": "interior room has neither a roof nor a space above it."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "bathrooms",
+      "message": "bedrooms are allocated but no bathroom or dressing space exists; bathrooms are prose inside the bedroom use."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "levels",
+      "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "roofs",
+      "message": "every roof is flat with no overhang (5 slabs): no roof-led silhouette or deep eaves for shade."
+    },
+    {
+      "stage": "programme",
+      "severity": "observation",
+      "id": "daylight",
+      "message": "13 of 13 interior rooms have no window: living-salon, dining-salon, kitchen, pantry, powder-room, west-gallery, west-guest-suite-1, west-guest-suite-2, west-guest-suite-3, east-gallery, primary-suite, east-guest-suite-1, east-guest-suite-2."
+    }
+  ],
+  "metrics": {
+    "levels": 1,
+    "spaces": 15,
+    "interiorSpaces": 13,
+    "footprintAreaM2": 622,
+    "interiorAreaM2": 531,
+    "roofForms": [
+      "flat"
+    ],
+    "roofOverhangs": [
+      0
+    ],
+    "masses": 3,
+    "screens": 2,
+    "bedroomSpaces": 8,
+    "bathroomSpaces": 0,
+    "windowedInteriorRooms": 0,
+    "interiorRoomsWithoutAnyWindow": [
+      "living-salon",
+      "dining-salon",
+      "kitchen",
+      "pantry",
+      "powder-room",
+      "west-gallery",
+      "west-guest-suite-1",
+      "west-guest-suite-2",
+      "west-guest-suite-3",
+      "east-gallery",
+      "primary-suite",
+      "east-guest-suite-1",
+      "east-guest-suite-2"
+    ]
+  },
+  "coordination": {
+    "wings": [
+      {
+        "id": "core-pavilion",
+        "role": "double-height waterfront living pavilion with arrival, dining and service rooms",
+        "placed": false,
+        "rooms": 7,
+        "indoorRooms": 5,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -3,
+          "z": -9,
+          "width": 20,
+          "depth": 26
+        },
+        "indoorAreaM2": 231,
+        "fill": 0.44,
+        "relation": null,
+        "seed": null
+      },
+      {
+        "id": "west-suite-wing",
+        "role": "three-suite private accommodation bar",
+        "placed": true,
+        "rooms": 4,
+        "indoorRooms": 4,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -13,
+          "z": -3.5,
+          "width": 10,
+          "depth": 15
+        },
+        "indoorAreaM2": 150,
+        "fill": 1,
+        "relation": "west of core-pavilion, centre, gap 0",
+        "seed": "west-gallery"
+      },
+      {
+        "id": "east-suite-wing",
+        "role": "primary and guest accommodation bar",
+        "placed": true,
+        "rooms": 4,
+        "indoorRooms": 4,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": 17,
+          "z": -3.5,
+          "width": 10,
+          "depth": 15
+        },
+        "indoorAreaM2": 150,
+        "fill": 1,
+        "relation": "east of core-pavilion, centre, gap 0",
+        "seed": "east-gallery"
+      }
+    ],
+    "collisions": [],
+    "constraints": [
+      {
+        "id": "west-wing-pavilion-adjoin",
+        "kind": "adjoin",
+        "a": "west-suite-wing",
+        "b": "core-pavilion",
+        "required": 3,
+        "measured": 0,
+        "ok": false,
+        "reason": "The west private gallery is directly entered from the central salon while its suites remain secluded behind it.",
+        "implicated": [
+          {
+            "node": "west-suite-wing",
+            "placement": "west-suite-wing: west of core-pavilion, centre, gap 0"
+          }
+        ],
+        "options": [
+          {
+            "node": "west-suite-wing",
+            "entity": "wing",
+            "field": "alignment",
+            "from": "centre",
+            "to": "end",
+            "measuredAfter": 5,
+            "displaces": 0,
+            "newErrors": [],
+            "note": "re-align west-suite-wing"
+          }
+        ]
+      },
+      {
+        "id": "east-wing-pavilion-adjoin",
+        "kind": "adjoin",
+        "a": "east-suite-wing",
+        "b": "core-pavilion",
+        "required": 3,
+        "measured": 3.5,
+        "ok": true,
+        "reason": "The east private gallery is directly entered from the dining side of the pavilion without requiring passage through the living room.",
+        "implicated": [
+          {
+            "node": "east-suite-wing",
+            "placement": "east-suite-wing: east of core-pavilion, centre, gap 0"
+          }
+        ],
+        "options": []
+      },
+      {
+        "id": "private-wing-separation",
+        "kind": "separate",
+        "a": "west-suite-wing",
+        "b": "east-suite-wing",
+        "required": 14,
+        "measured": 20,
+        "ok": true,
+        "reason": "The tall central salon creates a meaningful acoustic and visual separation between the two accommodation wings.",
+        "implicated": [
+          {
+            "node": "west-suite-wing",
+            "placement": "west-suite-wing: west of core-pavilion, centre, gap 0"
+          },
+          {
+            "node": "east-suite-wing",
+            "placement": "east-suite-wing: east of core-pavilion, centre, gap 0"
+          }
+        ],
+        "options": []
+      }
+    ],
+    "circulation": {
+      "arrival": "arrival-porch",
+      "wings": [
+        {
+          "id": "core-pavilion",
+          "interiorRooms": 5,
+          "reachable": 5,
+          "adjoins": [
+            {
+              "wing": "east-suite-wing",
+              "sharedM": 3.5,
+              "connected": true
+            }
+          ]
+        },
+        {
+          "id": "west-suite-wing",
+          "interiorRooms": 4,
+          "reachable": 4,
+          "adjoins": []
+        },
+        {
+          "id": "east-suite-wing",
+          "interiorRooms": 4,
+          "reachable": 4,
+          "adjoins": [
+            {
+              "wing": "core-pavilion",
+              "sharedM": 3.5,
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    "vertical": [],
+    "site": {
+      "required": {
+        "width": 64,
+        "depth": 78
+      },
+      "available": {
+        "width": 80,
+        "depth": 75
+      },
+      "fits": false
+    },
+    "errors": [
+      {
+        "kind": "constraint",
+        "ids": [
+          "west-wing-pavilion-adjoin",
+          "west-suite-wing",
+          "core-pavilion"
+        ],
+        "message": "west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its suites remain secluded behind it.) is not met: west-suite-wing and core-pavilion share 0 m of wall, 3 m required. Single edits that would meet it: wing west-suite-wing.alignment centre→end. Software has changed nothing."
+      },
+      {
+        "kind": "site",
+        "ids": [],
+        "message": "The arrangement needs a site of at least 64×78 m (centred on the room cells, orientation applied); the plan declares 80×75 m. Enlarging the site is a determined consequence; moving the allocations inward is a design choice."
+      }
+    ],
+    "openChoices": [],
+    "ok": false
+  },
+  "resolvedRects": {
+    "living-salon": {
+      "x": 0,
+      "z": 0,
+      "width": 8,
+      "depth": 12
+    },
+    "dining-salon": {
+      "x": 8,
+      "z": 0,
+      "width": 6,
+      "depth": 12
+    },
+    "arrival-porch": {
+      "x": 1,
+      "z": -3.5,
+      "width": 6,
+      "depth": 3.5
+    },
+    "waterfront-terrace": {
+      "x": -3,
+      "z": 12,
+      "width": 14,
+      "depth": 5
+    },
+    "kitchen": {
+      "x": 8,
+      "z": -6,
+      "width": 6,
+      "depth": 6
+    },
+    "pantry": {
+      "x": 14,
+      "z": -6,
+      "width": 3,
+      "depth": 6
+    },
+    "powder-room": {
+      "x": 14,
+      "z": -9,
+      "width": 3,
+      "depth": 3
+    },
+    "west-gallery": {
+      "x": -6,
+      "z": -3.5,
+      "width": 3,
+      "depth": 15
+    },
+    "west-guest-suite-1": {
+      "x": -13,
+      "z": -3.5,
+      "width": 7,
+      "depth": 5
+    },
+    "west-guest-suite-2": {
+      "x": -13,
+      "z": 1.5,
+      "width": 7,
+      "depth": 5
+    },
+    "west-guest-suite-3": {
+      "x": -13,
+      "z": 6.5,
+      "width": 7,
+      "depth": 5
+    },
+    "east-gallery": {
+      "x": 17,
+      "z": -3.5,
+      "width": 3,
+      "depth": 15
+    },
+    "primary-suite": {
+      "x": 20,
+      "z": -3.5,
+      "width": 7,
+      "depth": 5
+    },
+    "east-guest-suite-1": {
+      "x": 20,
+      "z": 1.5,
+      "width": 7,
+      "depth": 5
+    },
+    "east-guest-suite-2": {
+      "x": 20,
+      "z": 6.5,
+      "width": 7,
+      "depth": 5
+    }
+  },
+  "resolvedSiteRects": {
+    "waterfront-pool": {
+      "x": -2,
+      "z": 21,
+      "width": 12,
+      "depth": 5
+    },
+    "arrival-lawn": {
+      "x": -7,
+      "z": -24.5,
+      "width": 22,
+      "depth": 16
+    },
+    "pool-lawn-reserve": {
+      "x": -10,
+      "z": 29,
+      "width": 28,
+      "depth": 14
+    },
+    "east-garden-reserve": {
+      "x": 31,
+      "z": -7,
+      "width": 8,
+      "depth": 22
+    }
+  },
+  "note": "Groups merge findings that name the same entities; they are NOT root causes. Root causes are assigned in root-causes.json."
+}

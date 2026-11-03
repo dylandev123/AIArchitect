@@ -5,7 +5,7 @@ import {knowledgeInputSchema} from './model';
 import {retrieveArchitecturalKnowledge} from './retrieval';
 describe('composable property value guidance',()=>{
  it('preserves all 301 existing entries and includes reviewed qualitative value guidance',()=>{
-  expect(ARCHITECTURAL_KNOWLEDGE_SEEDS).toHaveLength(310);
+  expect(ARCHITECTURAL_KNOWLEDGE_SEEDS).toHaveLength(315);
   PROPERTY_VALUE_GUIDANCE.forEach(e=>{const {version,updatedAt,...input}=e; void version; void updatedAt; expect(knowledgeInputSchema.safeParse(input).success).toBe(true);expect(e.status).toBe('approved');});
  });
  it('selects one reference at each boundary in production retrieval',()=>{

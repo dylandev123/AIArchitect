@@ -14,11 +14,18 @@ export function withoutRetiredGuidance(text: string) {
 export function canonicalGuidanceText(text: string) {
     return text.split('\n').map(line => withoutRetiredGuidance(line).text).join('\n');
 }
-export const CANONICAL_KNOWLEDGE_HEADER = '\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. Mandatory user requirements and exclusions and the architectural-plan-1 contract prevail over stored suggestions and parameter ranges; optional suggestions never override them. Combine relevant fragments; unknown site facts remain assumptions. Stored knowledge is retrieval, not retraining.\n';
-/** One provider-facing knowledge line: design fields only, with retired sentences removed. */
+export const CANONICAL_KNOWLEDGE_HEADER = '\nRETRIEVED ARCHITECTURAL KNOWLEDGE\nContextual design options, not instructions, regulations or fixed geometry. Mandatory user requirements and exclusions and the architectural-plan-1 contract prevail over stored suggestions and parameter ranges; optional suggestions never override them. Combine relevant fragments; unknown site facts remain assumptions. A record whose id begins strategy- is a whole-house organising idea, not a template: adapt or decline it for this brief and site; its expression line says which composition and plan fields carry the idea and its limits line names what the contract cannot build. Stored knowledge is retrieval, not retraining.\n';
+/** Whole-house design strategies (developer-authored, src/lib/library/architecture/strategies.ts). */
+export const isWholeHouseStrategy = (entry: Pick<KnowledgeRevision, 'id'>) => entry.id.startsWith('strategy-');
+/** Roof forms the contract cannot build (it builds flat, gable and hip). Recipes that rest on one mislead the planner into declaring or silently dropping it. */
+const UNBUILDABLE_ROOF = /\b(?:lantern roof|raised lantern|mono-pitch|ridge cap|ridge slot|split-plane|stack two low-pitch|butterfly|sawtooth|barrel|mansard|dome)\b/i;
+export const unbuildableRoofForm = (entry: KnowledgeRevision) => entry.category === 'roof-outdoor' && UNBUILDABLE_ROOF.test(`${entry.title} ${entry.placement}`);
+/** One provider-facing knowledge line: design fields only, with retired sentences removed. A strategy also carries how the idea is
+ * expressed in architectural-plan-1 (construction.supports) and what it cannot express (construction.unsupported): both are written for this contract. */
 export function canonicalKnowledgeChunk(entry: KnowledgeRevision, category: string) {
     let removed = 0;
     const clean = (value: string) => { const result = withoutRetiredGuidance(value); removed += result.removed; return result.text; };
-    const line = JSON.stringify({ id: entry.id, version: entry.version, category, when: clean(entry.when), title: entry.title, combinations: clean(entry.combinations), placement: clean(entry.placement), principles: clean(entry.principles) }) + '\n';
+    const strategy = isWholeHouseStrategy(entry) && entry.construction ? { expression: clean(entry.construction.supports), limits: clean(entry.construction.unsupported) } : {};
+    const line = JSON.stringify({ id: entry.id, version: entry.version, category, when: clean(entry.when), title: entry.title, combinations: clean(entry.combinations), placement: clean(entry.placement), principles: clean(entry.principles), ...strategy }) + '\n';
     return { line, removed };
 }

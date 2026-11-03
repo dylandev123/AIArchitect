@@ -1,0 +1,21 @@
+{
+ "note": "compile-only sensitivity; decisions are NOT Terra output and NOT automatic recovery; nothing rendered",
+ "variants": {
+  "G4 living-salon.alignment centre→start": {
+   "diagnosticErrors": [],
+   "compile": "compiles"
+  },
+  "G5 living-salon.width 18→17": {
+   "diagnosticErrors": [
+    "site:east-garden-reserve: east-garden-reserve overlaps east-suite-hall."
+   ],
+   "compile": "east-garden-reserve: overlaps occupied site allocation (conservative bounds)."
+  },
+  "G6 west-gallery.alignment centre→start": {
+   "diagnosticErrors": [
+    "site:waterfront-lawn: waterfront-lawn (x -12.5..21.5, z -43.5..-29.5) lies 4 m outside the 110×81 m site, which is centred on the room cells (building spans x -32..59.5, z -20..22)."
+   ],
+   "compile": "waterfront-lawn: outside site."
+  }
+ }
+}

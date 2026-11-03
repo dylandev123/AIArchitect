@@ -1,0 +1,561 @@
+{
+ "version": "architectural-scene-1",
+ "name": "partial-wall-house",
+ "elements": [
+  {
+   "id": "hall-floor",
+   "label": "hall-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    -3,
+    0.1,
+    1.5
+   ],
+   "rotation": 0,
+   "size": [
+    10,
+    0.2,
+    10
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "hall-roof",
+   "label": "hall-roof",
+   "kind": "roof",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    -3,
+    3.7100000000000004,
+    1.5
+   ],
+   "rotation": 0,
+   "size": [
+    10,
+    0.22,
+    10
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "wing-room-floor",
+   "label": "wing-room-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    5,
+    0.1,
+    4.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.2,
+    4
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "wing-room-roof",
+   "label": "wing-room-roof",
+   "kind": "roof",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    5,
+    3.7100000000000004,
+    4.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    0.22,
+    4
+   ],
+   "material": "timber",
+   "panels": 4
+  },
+  {
+   "id": "porch-floor",
+   "label": "porch-floor",
+   "kind": "plate",
+   "geometry": {
+    "type": "extrusion",
+    "axis": "y",
+    "outline": [
+     [
+      -0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      -0.5
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      -0.5,
+      0.5
+     ]
+    ],
+    "holes": []
+   },
+   "at": [
+    -6,
+    0.1,
+    -5
+   ],
+   "rotation": 0,
+   "size": [
+    4,
+    0.2,
+    3
+   ],
+   "material": "limestone",
+   "panels": 4
+  },
+  {
+   "id": "hall-porch",
+   "label": "hall-porch",
+   "kind": "entrance",
+   "at": [
+    -6,
+    1.3499999999999999,
+    -3.5
+   ],
+   "rotation": 0,
+   "size": [
+    2,
+    2.3,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "hall-e0-s0-wall",
+   "label": "hall-e0-s0",
+   "kind": "wall",
+   "at": [
+    -6,
+    1.9,
+    -3.5
+   ],
+   "rotation": 0,
+   "size": [
+    4,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4,
+   "opening": {
+    "x": 0,
+    "sill": 0,
+    "width": 2,
+    "height": 2.3,
+    "glazed": false
+   }
+  },
+  {
+   "id": "hall-e0-s1-wall",
+   "label": "hall-e0-s1",
+   "kind": "wall",
+   "at": [
+    -1,
+    1.9,
+    -3.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "hall-e1-s0-wall",
+   "label": "hall-e1-s0",
+   "kind": "wall",
+   "at": [
+    2,
+    1.9,
+    -0.5
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    6,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "hall-wing-door",
+   "label": "hall-wing-door",
+   "kind": "entrance",
+   "at": [
+    2,
+    1.3499999999999999,
+    3.3499999999999996
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    1.2,
+    2.3,
+    0.08
+   ],
+   "material": "bronze",
+   "panels": 4
+  },
+  {
+   "id": "hall-e1-s1-wall",
+   "label": "hall-e1-s1",
+   "kind": "wall",
+   "at": [
+    2,
+    1.9,
+    4.5
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    4,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4,
+   "opening": {
+    "x": -1.1500000000000004,
+    "sill": 0,
+    "width": 1.2,
+    "height": 2.3,
+    "glazed": false
+   }
+  },
+  {
+   "id": "hall-e2-wall",
+   "label": "hall-e2",
+   "kind": "wall",
+   "at": [
+    -3,
+    1.9,
+    6.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    10,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "hall-e3-wall",
+   "label": "hall-e3",
+   "kind": "wall",
+   "at": [
+    -8,
+    1.9,
+    1.5
+   ],
+   "rotation": 1.5707963267948966,
+   "size": [
+    10,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "wing-room-e0-wall",
+   "label": "wing-room-e0",
+   "kind": "wall",
+   "at": [
+    5,
+    1.9,
+    2.5
+   ],
+   "rotation": 0,
+   "size": [
+    6,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "wing-room-e1-wall",
+   "label": "wing-room-e1",
+   "kind": "wall",
+   "at": [
+    8,
+    1.9,
+    4.5
+   ],
+   "rotation": -1.5707963267948966,
+   "size": [
+    4,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  },
+  {
+   "id": "wing-room-e2-wall",
+   "label": "wing-room-e2",
+   "kind": "wall",
+   "at": [
+    5,
+    1.9,
+    6.5
+   ],
+   "rotation": -3.141592653589793,
+   "size": [
+    6,
+    3.4,
+    0.18
+   ],
+   "material": "ivory",
+   "panels": 4
+  }
+ ],
+ "terrain": {
+  "width": 60,
+  "depth": 60,
+  "elevation": 0,
+  "grade": 0,
+  "fall": "z"
+ },
+ "architecturalPlan": {
+  "version": "architectural-plan-1",
+  "id": "partial-wall-house",
+  "thesis": "Developer fixture: a hall, a short wing touching part of its east wall, and an explicit-side door that must land on the shared part.",
+  "orientation": 0,
+  "site": {
+   "width": 60,
+   "depth": 60,
+   "elevation": 0,
+   "grade": 0,
+   "fall": "z"
+  },
+  "levels": [
+   {
+    "id": "ground",
+    "above": null,
+    "rise": 0.2
+   }
+  ],
+  "masses": [
+   {
+    "id": "house",
+    "role": "hall and wing"
+   }
+  ],
+  "spaces": [
+   {
+    "id": "hall",
+    "mass": "house",
+    "level": "ground",
+    "use": "hall",
+    "width": 10,
+    "depth": 10,
+    "height": 3.4,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": null,
+     "side": "origin",
+     "alignment": "centre",
+     "gap": 0
+    }
+   },
+   {
+    "id": "wing-room",
+    "mass": "house",
+    "level": "ground",
+    "use": "wing-room",
+    "width": 6,
+    "depth": 4,
+    "height": 3.4,
+    "outdoor": false,
+    "placement": {
+     "relativeTo": "hall",
+     "side": "east",
+     "alignment": "end",
+     "gap": 0
+    }
+   },
+   {
+    "id": "porch",
+    "mass": "house",
+    "level": "ground",
+    "use": "porch",
+    "width": 4,
+    "depth": 3,
+    "height": 3.2,
+    "outdoor": true,
+    "placement": {
+     "relativeTo": "hall",
+     "side": "south",
+     "alignment": "start",
+     "gap": 0
+    }
+   }
+  ],
+  "portals": [
+   {
+    "id": "hall-porch",
+    "host": {
+     "space": "hall",
+     "side": "shared"
+    },
+    "to": "porch",
+    "alignment": "centre",
+    "width": 2,
+    "height": 2.3,
+    "mode": "door"
+   },
+   {
+    "id": "hall-wing-door",
+    "host": {
+     "space": "hall",
+     "side": "east"
+    },
+    "to": "wing-room",
+    "alignment": "start",
+    "width": 1.2,
+    "height": 2.3,
+    "mode": "door"
+   }
+  ],
+  "stairs": [],
+  "arrival": "porch",
+  "roofs": [
+   {
+    "space": "hall",
+    "form": "flat",
+    "rise": 0.22
+   },
+   {
+    "space": "wing-room",
+    "form": "flat",
+    "rise": 0.22
+   }
+  ],
+  "screens": [],
+  "terraces": [],
+  "pools": [],
+  "landscape": [],
+  "materials": {
+   "floor": "limestone",
+   "wall": "ivory",
+   "roof": "timber"
+  },
+  "cameraViews": [
+   "Aerial",
+   "Arrival",
+   "Garden",
+   "Poolside"
+  ]
+ }
+}

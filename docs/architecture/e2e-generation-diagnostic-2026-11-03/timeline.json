@@ -1,0 +1,78 @@
+[
+  {
+    "phase": "preflight (offline, no provider call)",
+    "stage": "A",
+    "event": "knowledge-retrieval",
+    "startedAt": "2026-11-03T17:49:00.212Z",
+    "durationMs": 2055,
+    "outcome": "12 records selected, tier complex"
+  },
+  {
+    "phase": "preflight (offline, no provider call)",
+    "stage": "B-D",
+    "event": "route-total (provider + parse + compile)",
+    "startedAt": "2026-11-03T17:49:02.540Z",
+    "durationMs": 543,
+    "outcome": "route HTTP 422 — Error: OFFLINE_PREFLIGHT_NO_PROVIDER_CALL"
+  },
+  {
+    "phase": "preflight (offline, no provider call)",
+    "stage": "A",
+    "event": "connectivity-probe (GET only)",
+    "startedAt": "2026-11-03T17:49:03.084Z",
+    "durationMs": 1627,
+    "outcome": "ok"
+  },
+  {
+    "phase": "live",
+    "stage": "A",
+    "event": "knowledge-retrieval",
+    "startedAt": "2026-11-03T17:53:28.108Z",
+    "durationMs": 1742,
+    "outcome": "12 records selected, tier complex"
+  },
+  {
+    "phase": "live",
+    "stage": "B",
+    "event": "provider-request",
+    "startedAt": "2026-11-03T17:53:32.230Z",
+    "durationMs": 76254,
+    "outcome": "HTTP 200"
+  },
+  {
+    "phase": "live",
+    "stage": "B-D",
+    "event": "route-total (provider + parse + compile)",
+    "startedAt": "2026-11-03T17:53:30.108Z",
+    "durationMs": 78457,
+    "outcome": "route HTTP 422 — Error: west-wing-pavilion-adjoin (adjoin: The west private gallery is directly entered from the central salon while its "
+  },
+  {
+    "stage": "B",
+    "event": "parse-provider-output-with-production-schema",
+    "startedAt": "2026-11-03T17:58:24.137Z",
+    "durationMs": 11,
+    "outcome": "parsed (proposed)"
+  },
+  {
+    "stage": "C",
+    "event": "diagnosePlan (all independent checks)",
+    "startedAt": "2026-11-03T17:58:24.150Z",
+    "durationMs": 3,
+    "outcome": "15 errors, 4 observations"
+  },
+  {
+    "stage": "C",
+    "event": "coordinatePlan (whole-building coordinator)",
+    "startedAt": "2026-11-03T17:58:24.153Z",
+    "durationMs": 5,
+    "outcome": "2 errors, 1 violated constraints"
+  },
+  {
+    "stage": "D",
+    "event": "compileArchitecturalPlan (authoritative)",
+    "startedAt": "2026-11-03T17:58:24.159Z",
+    "durationMs": 1,
+    "outcome": "REJECTED"
+  }
+]

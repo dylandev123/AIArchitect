@@ -1,0 +1,385 @@
+{
+ "readOnly": true,
+ "providerCalls": 0,
+ "sourceSha256": "dd8c2ef009a28ff4d9aeddd655fd83c2dec43ac3587083619a23c67f2a2fbf6c",
+ "baseline": {
+  "edits": [],
+  "diagnosticErrors": [
+   "volumes:living-salon/west-gallery",
+   "site:waterfront-lawn",
+   "site:arrival-bed",
+   "site:east-garden-reserve",
+   "openings:pantry-east-cloister",
+   "openings:dining-deck-link",
+   "roofs:west-gallery/living-salon",
+   "screens:arrival-bronze-screen",
+   "screens:arrival-bronze-screen"
+  ],
+  "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+  "coordinatorErrors": [
+   "collision:living-salon/west-gallery",
+   "site:"
+  ]
+ },
+ "mechanicalOnly": {
+  "edits": [
+   "site.depth 80 → 81"
+  ],
+  "diagnosticErrors": [
+   "volumes:living-salon/west-gallery",
+   "site:arrival-bed",
+   "site:east-garden-reserve",
+   "openings:pantry-east-cloister",
+   "openings:dining-deck-link",
+   "roofs:west-gallery/living-salon",
+   "screens:arrival-bronze-screen",
+   "screens:arrival-bronze-screen"
+  ],
+  "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+  "coordinatorErrors": [
+   "collision:living-salon/west-gallery"
+  ]
+ },
+ "candidates": {
+  "salon-gallery overlap": [
+   {
+    "edits": [
+     "powder-room.placement.gap → 0.5"
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:entry-powder",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "entry-powder: entry-hall and powder-room share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "powder-room.placement.gap → 6"
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:entry-powder",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "entry-powder: entry-hall and powder-room share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "living-salon.placement.gap → 6"
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:entry-living",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "entry-living: entry-hall and living-salon share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "living-salon.placement.alignment → \"start\""
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "living-salon.width → 17"
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "west-gallery.placement.alignment → \"start\""
+    ],
+    "diagnosticErrors": [
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "site:"
+    ]
+   }
+  ],
+  "dining → deck: no shared wall": [
+   {
+    "edits": [
+     "dining-gallery.placement.alignment → \"start\""
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "dining-gallery.depth → 12"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   }
+  ],
+  "pantry → east wing: no shared wall": [
+   {
+    "edits": [
+     "pantry-east-cloister host pantry → service-yard"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | dining-deck-link: dining-gallery and dining-deck share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   }
+  ],
+  "waterfront lawn 0.5 m outside": [
+   {
+    "edits": [
+     "site.depth 80 → 81"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery"
+    ]
+   },
+   {
+    "edits": [
+     "waterfront-lawn.depth → 13.5"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery"
+    ]
+   },
+   {
+    "edits": [
+     "waterfront-lawn.placement.gap → 1.5"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery"
+    ]
+   }
+  ],
+  "arrival-bed overlaps wing": [
+   {
+    "edits": [
+     "remove arrival-bed"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "arrival-bed.placement.side → \"north\""
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   }
+  ],
+  "east-garden-reserve overlaps wing": [
+   {
+    "edits": [
+     "east-garden-reserve.width → 10"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon",
+     "screens:arrival-bronze-screen",
+     "screens:arrival-bronze-screen"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   }
+  ],
+  "arrival screen": [
+   {
+    "edits": [
+     "remove arrival-bronze-screen"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   },
+   {
+    "edits": [
+     "arrival-bronze-screen side north → east"
+    ],
+    "diagnosticErrors": [
+     "volumes:living-salon/west-gallery",
+     "site:waterfront-lawn",
+     "site:arrival-bed",
+     "site:east-garden-reserve",
+     "openings:pantry-east-cloister",
+     "openings:dining-deck-link",
+     "roofs:west-gallery/living-salon"
+    ],
+    "compile": "living-salon × west-gallery (inside wing social-hall): living-salon and west-gallery are reached by independent placement chains (living-salon ← entry-hall | west-gallery ← powder-room ← entry-hall, diverging at entry-hall); neith | pantry-east-cloister: pantry and east-suite-hall share no wall, so there is no wall to open between them.",
+    "coordinatorErrors": [
+     "collision:living-salon/west-gallery",
+     "site:"
+    ]
+   }
+  ]
+ }
+}

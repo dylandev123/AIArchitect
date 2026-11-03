@@ -1,6 +1,8 @@
 'use client';
 import { isCanonicalPlan } from '@/lib/villa/canonical/plan';
 import { useGenerationReview } from './useGenerationReview';
+import { RejectedPlanPanel } from './RejectedPlanPanel';
+import type { RejectedGeneration } from '@/lib/villa/canonical/rejection';
 import {ProfileEditor} from './ProfileEditor';
 import {SCENE_TEST_MODELS,type SceneTestSettings} from '@/lib/ai/sceneTesting';
 import type {SceneRequest} from '@/lib/villa/scene/terra';
@@ -60,6 +62,8 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     sceneRef.current = scene;
     const [diagnostic, setDiagnostic] = useState<ReturnType<typeof generationDiagnostics>>();
     const [recoverableDraft, setRecoverableDraft] = useState<ArchitecturalScene>();
+    // A plan the compiler refused: shown and exportable as evidence, never a scene, never saved to the project.
+    const [rejectedPlan, setRejectedPlan] = useState<RejectedGeneration>();
     const cameraRight = useRef<[number,number,number] | undefined>(undefined);
     const [cameraReset, setCameraReset] = useState(0);
     const [brief, setBrief] = useState(''), [busy, setBusy] = useState(false);
@@ -106,6 +110,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         const output = await response.json();
         setTestResult(output.experiment??{responseId:output.responseId,error:output.error,architecturalQuality:output.architecturalAudit});
         setDiagnostic(generationDiagnostics(output.responseId, input, output));
+        setRejectedPlan(output.rejected?.status === 'rejected' ? output.rejected : undefined);
         if (!response.ok) {
             if (output.recoverableDraft) setRecoverableDraft(validateScene(output.recoverableDraft));
             throw Error(output.error + (Array.isArray(output.candidates) && output.candidates.length ? ` Candidates: ${output.candidates.slice(0,10).join(', ')}. Select one and refer to the selected object.` : ''));
@@ -160,6 +165,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const image = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = () => reject(Error('Image could not be read.')); reader.readAsDataURL(file); });
     setReference(sceneReferenceSchema.parse({source:file.name,image}));
  } catch (err) { setError(String(err)); } }} /></label>{reference && <><span>{reference.source}</span> <button onClick={() => setReference(undefined)}>Clear reference</button></>}</p>
+ {rejectedPlan && <RejectedPlanPanel rejected={rejectedPlan} onDismiss={() => setRejectedPlan(undefined)} />}
  {generationReview.panel}
  {process.env.NODE_ENV === 'development' && !isCanonicalPlan(scene.architecturalPlan) && <SceneReview scene={scene} reference={reference} brief={brief} commit={next => commit(next)} current={() => sceneRef.current} />}
  {!project && <label>Comparison <select aria-label="Comparison" value={source} onChange={ev => setSource(ev.target.value)}><option value="ladera">Current direct scene</option><option value="solana">Villa Solana</option></select></label>}
