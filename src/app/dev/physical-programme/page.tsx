@@ -12,6 +12,6 @@ export default async function Page({searchParams}:{searchParams:Promise<{case?:s
  if(process.env.NODE_ENV!=='development')notFound();
  const selected=(await searchParams).case;
  if(!selected || !(selected in sources))notFound();
- const scene=validateScene(JSON.parse(await readFile(sources[selected as keyof typeof sources],'utf8')));
+ const scene=validateScene(JSON.parse(await readFile(/*turbopackIgnore: true*/ sources[selected as keyof typeof sources],'utf8')));
  return <GenerationQualityViewer scene={scene} accepted={selected!=='estate'} provenance="Retained Terra evidence · offline replay · no new generation"/>;
 }
