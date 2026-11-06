@@ -1,0 +1,273 @@
+{
+ "rooms": [
+  {
+   "id": "arrival-foyer",
+   "block": "entry-pavilion",
+   "type": "foyer",
+   "name": "arrival foyer",
+   "area": 22,
+   "priority": "core",
+   "facing": "n"
+  },
+  {
+   "id": "entry-gallery",
+   "block": "entry-pavilion",
+   "type": "gallery",
+   "name": "entry gallery",
+   "area": 18,
+   "priority": "flex",
+   "facing": "any"
+  },
+  {
+   "id": "great-living",
+   "block": "main-living-plinth",
+   "type": "living",
+   "name": "great living",
+   "area": 80,
+   "priority": "core",
+   "facing": "s"
+  },
+  {
+   "id": "dining",
+   "block": "main-living-plinth",
+   "type": "dining",
+   "name": "dining",
+   "area": 36,
+   "priority": "normal",
+   "facing": "s"
+  },
+  {
+   "id": "kitchen",
+   "block": "main-living-plinth",
+   "type": "kitchen",
+   "name": "kitchen",
+   "area": 34,
+   "priority": "normal",
+   "facing": "any"
+  },
+  {
+   "id": "stair-hall",
+   "block": "main-living-plinth",
+   "type": "stair",
+   "name": "stair hall",
+   "area": 26,
+   "priority": "core",
+   "facing": "any"
+  },
+  {
+   "id": "powder-room",
+   "block": "main-living-plinth",
+   "type": "bath",
+   "name": "powder room",
+   "area": 8,
+   "priority": "core",
+   "facing": "any"
+  },
+  {
+   "id": "guest-bedroom",
+   "block": "east-bedroom-wing",
+   "type": "bedroom",
+   "name": "guest bedroom",
+   "area": 32,
+   "priority": "normal",
+   "facing": "e"
+  },
+  {
+   "id": "guest-bath",
+   "block": "east-bedroom-wing",
+   "type": "bath",
+   "name": "guest bath",
+   "area": 10,
+   "priority": "core",
+   "facing": "any"
+  },
+  {
+   "id": "east-gallery",
+   "block": "east-bedroom-wing",
+   "type": "gallery",
+   "name": "east gallery",
+   "area": 14,
+   "priority": "flex",
+   "facing": "any"
+  },
+  {
+   "id": "family-lounge",
+   "block": "east-bedroom-wing",
+   "type": "lounge",
+   "name": "family lounge",
+   "area": 40,
+   "priority": "flex",
+   "facing": "s"
+  },
+  {
+   "id": "upper-landing",
+   "block": "upper-bedroom-bar",
+   "type": "hall",
+   "name": "upper landing",
+   "area": 28,
+   "priority": "flex",
+   "facing": "any"
+  },
+  {
+   "id": "bedroom-two",
+   "block": "upper-bedroom-bar",
+   "type": "bedroom",
+   "name": "bedroom two",
+   "area": 30,
+   "priority": "normal",
+   "facing": "n"
+  },
+  {
+   "id": "bath-two",
+   "block": "upper-bedroom-bar",
+   "type": "bath",
+   "name": "bath two",
+   "area": 10,
+   "priority": "core",
+   "facing": "any"
+  },
+  {
+   "id": "bedroom-three",
+   "block": "upper-bedroom-bar",
+   "type": "bedroom",
+   "name": "bedroom three",
+   "area": 30,
+   "priority": "normal",
+   "facing": "s"
+  },
+  {
+   "id": "bath-three",
+   "block": "upper-bedroom-bar",
+   "type": "bath",
+   "name": "bath three",
+   "area": 10,
+   "priority": "core",
+   "facing": "any"
+  },
+  {
+   "id": "primary-hall",
+   "block": "upper-east-suite",
+   "type": "hall",
+   "name": "primary hall",
+   "area": 9,
+   "priority": "flex",
+   "facing": "any"
+  },
+  {
+   "id": "primary-bedroom",
+   "block": "upper-east-suite",
+   "type": "bedroom",
+   "name": "primary bedroom",
+   "area": 34,
+   "priority": "core",
+   "facing": "e"
+  },
+  {
+   "id": "primary-bath",
+   "block": "upper-east-suite",
+   "type": "bath",
+   "name": "primary bath",
+   "area": 12,
+   "priority": "core",
+   "facing": "any"
+  }
+ ],
+ "connections": [
+  {
+   "a": "arrival-foyer",
+   "b": "entry-gallery",
+   "kind": "door"
+  },
+  {
+   "a": "arrival-foyer",
+   "b": "great-living",
+   "kind": "open"
+  },
+  {
+   "a": "great-living",
+   "b": "dining",
+   "kind": "open"
+  },
+  {
+   "a": "dining",
+   "b": "kitchen",
+   "kind": "open"
+  },
+  {
+   "a": "kitchen",
+   "b": "stair-hall",
+   "kind": "door"
+  },
+  {
+   "a": "great-living",
+   "b": "powder-room",
+   "kind": "door"
+  },
+  {
+   "a": "great-living",
+   "b": "east-gallery",
+   "kind": "door"
+  },
+  {
+   "a": "east-gallery",
+   "b": "guest-bedroom",
+   "kind": "door"
+  },
+  {
+   "a": "guest-bedroom",
+   "b": "guest-bath",
+   "kind": "door"
+  },
+  {
+   "a": "east-gallery",
+   "b": "family-lounge",
+   "kind": "open"
+  },
+  {
+   "a": "upper-landing",
+   "b": "bedroom-two",
+   "kind": "door"
+  },
+  {
+   "a": "bedroom-two",
+   "b": "bath-two",
+   "kind": "door"
+  },
+  {
+   "a": "upper-landing",
+   "b": "bedroom-three",
+   "kind": "door"
+  },
+  {
+   "a": "bedroom-three",
+   "b": "bath-three",
+   "kind": "door"
+  },
+  {
+   "a": "upper-landing",
+   "b": "primary-hall",
+   "kind": "door"
+  },
+  {
+   "a": "primary-hall",
+   "b": "primary-bedroom",
+   "kind": "door"
+  },
+  {
+   "a": "primary-bedroom",
+   "b": "primary-bath",
+   "kind": "door"
+  }
+ ],
+ "stairs": [
+  {
+   "id": "main-stair",
+   "room": "stair-hall",
+   "landing": "upper-landing"
+  }
+ ],
+ "intentions": [
+  "Living and dining face the south veranda and pool.",
+  "Primary suite is a private upper wing reached through its own hall."
+ ]
+}

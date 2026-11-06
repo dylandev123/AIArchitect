@@ -1,0 +1,79 @@
+{
+  "id": "roof-upper-east-suite",
+  "beforeContactOrIntersection": true,
+  "afterContactOrIntersection": true,
+  "beforeStrictPairs": [
+    {
+      "a": 7,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.09999999999999964
+    }
+  ],
+  "afterStrictPairs": [
+    {
+      "a": 3,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.0004999999999997229
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.0004675891094425566
+    },
+    {
+      "a": 7,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.09999999999999964
+    }
+  ],
+  "newCrossings": [
+    {
+      "a": 3,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.0004999999999997229
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "minimumSeparatingAxisOverlap": 0.0004675891094425566
+    }
+  ],
+  "existingCrossings": [
+    {
+      "parts": {
+        "a": 3,
+        "b": 6,
+        "minimumSeparatingAxisOverlap": 0.0004999999999997229
+      },
+      "hipPart": "slope",
+      "neighbourPart": "fascia",
+      "beforeAabbOverlapVolume": 0,
+      "afterAabbOverlapVolume": 0.00033999999999981034
+    },
+    {
+      "parts": {
+        "a": 4,
+        "b": 6,
+        "minimumSeparatingAxisOverlap": 0.0004675891094425566
+      },
+      "hipPart": "slope",
+      "neighbourPart": "fascia",
+      "beforeAabbOverlapVolume": 0,
+      "afterAabbOverlapVolume": 0.00048499999999972946
+    },
+    {
+      "parts": {
+        "a": 7,
+        "b": 6,
+        "minimumSeparatingAxisOverlap": 0.09999999999999964
+      },
+      "hipPart": "fascia",
+      "neighbourPart": "fascia",
+      "beforeAabbOverlapVolume": 0.0027999999999999826,
+      "afterAabbOverlapVolume": 0.0027949999999999854
+    }
+  ],
+  "beforeGuaranteedClearanceLowerBound": 0,
+  "afterGuaranteedClearanceLowerBound": 0,
+  "neighbourUnchanged": true
+}

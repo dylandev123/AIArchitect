@@ -1,0 +1,146 @@
+{
+  "before": {
+    "pitches": [
+      19.813793,
+      24.010799
+    ],
+    "bounds": {
+      "min": [
+        -8.399999999999999,
+        6.52,
+        -7.8999999999999995
+      ],
+      "max": [
+        5.1,
+        9.25,
+        5.8999999999999995
+      ]
+    },
+    "ridgeY": 9.25,
+    "eaveY": 6.800000000000001,
+    "triangles": 6
+  },
+  "after": {
+    "pitches": [
+      17.031059,
+      20.743043
+    ],
+    "bounds": {
+      "min": [
+        -8.399999999999999,
+        6.5195,
+        -7.8999999999999995
+      ],
+      "max": [
+        5.1,
+        8.8825,
+        5.8999999999999995
+      ]
+    },
+    "ridgeY": 8.8825,
+    "eaveY": 6.7995,
+    "triangles": 6
+  },
+  "neighbours": [
+    {
+      "id": "roof-entry-pavilion",
+      "beforeContactOrIntersection": false,
+      "afterContactOrIntersection": false,
+      "beforeStrictPairs": [],
+      "afterStrictPairs": [],
+      "newCrossings": [],
+      "existingCrossings": [],
+      "beforeGuaranteedClearanceLowerBound": 1.6667633305301628,
+      "afterGuaranteedClearanceLowerBound": 1.666286364944514,
+      "neighbourUnchanged": true
+    },
+    {
+      "id": "roof-upper-east-suite",
+      "beforeContactOrIntersection": true,
+      "afterContactOrIntersection": true,
+      "beforeStrictPairs": [
+        {
+          "a": 7,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.09999999999999964
+        }
+      ],
+      "afterStrictPairs": [
+        {
+          "a": 3,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.0004999999999997229
+        },
+        {
+          "a": 4,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.0004675891094425566
+        },
+        {
+          "a": 7,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.09999999999999964
+        }
+      ],
+      "newCrossings": [
+        {
+          "a": 3,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.0004999999999997229
+        },
+        {
+          "a": 4,
+          "b": 6,
+          "minimumSeparatingAxisOverlap": 0.0004675891094425566
+        }
+      ],
+      "existingCrossings": [
+        {
+          "parts": {
+            "a": 3,
+            "b": 6,
+            "minimumSeparatingAxisOverlap": 0.0004999999999997229
+          },
+          "hipPart": "slope",
+          "neighbourPart": "fascia",
+          "beforeAabbOverlapVolume": 0,
+          "afterAabbOverlapVolume": 0.00033999999999981034
+        },
+        {
+          "parts": {
+            "a": 4,
+            "b": 6,
+            "minimumSeparatingAxisOverlap": 0.0004675891094425566
+          },
+          "hipPart": "slope",
+          "neighbourPart": "fascia",
+          "beforeAabbOverlapVolume": 0,
+          "afterAabbOverlapVolume": 0.00048499999999972946
+        },
+        {
+          "parts": {
+            "a": 7,
+            "b": 6,
+            "minimumSeparatingAxisOverlap": 0.09999999999999964
+          },
+          "hipPart": "fascia",
+          "neighbourPart": "fascia",
+          "beforeAabbOverlapVolume": 0.0027999999999999826,
+          "afterAabbOverlapVolume": 0.0027949999999999854
+        }
+      ],
+      "beforeGuaranteedClearanceLowerBound": 0,
+      "afterGuaranteedClearanceLowerBound": 0,
+      "neighbourUnchanged": true
+    }
+  ],
+  "sourceRise": 2.0825,
+  "compiledRise": 2.083,
+  "eaveDeltaMetres": -0.0005000000000006111,
+  "notes": [
+    "Existing compiler rounds element centre and size to millimetres; source rise remains exactly 2.0825.",
+    "Contact SAT includes intended shared-edge contact; strict test excludes zero-depth seam contact at 1 micrometre tolerance.",
+    "Zero gap at upper-east-suite is the retained abutting seam. Small pre-existing fascia corner overlaps are measured and must not increase; no new roof-slope intersections permitted.",
+    "No engineering, waterproof flashing or code certification implied."
+  ]
+}

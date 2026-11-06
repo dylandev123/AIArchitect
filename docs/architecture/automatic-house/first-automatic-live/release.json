@@ -1,0 +1,38 @@
+{
+  "action": "Release operational hold only; no new job, approval or direct provider dispatch",
+  "releasedAt": "2026-11-06T13:41:18.769Z",
+  "runId": "386d0a81-92a3-4871-8252-c93aaeec4dce",
+  "projectId": "776bf256-9d53-46e8-b77b-6ab95f15fdbe",
+  "approvalId": "b5b9be8d-a7da-4af7-8921-84768c1a3e57",
+  "brief": "Design a single-storey Mediterranean garden house with three bedrooms and two bathrooms on a completely flat 60 by 48 metre site. Compose connected rectangular volumes in an asymmetric L shape around a sheltered garden. Use warm ivory plaster, pale limestone accents, terracotta pitched roofs with a clear main-roof hierarchy, a shaded entrance and generous room-proportioned glazing. Include a modern open-plan kitchen and dining area, comfortable private bedroom circulation, a covered veranda facing the garden, a modest swimming pool, a terrace and restrained planting. Keep the house coherent and fully editable, with no detached buildings, terrain changes or basement.",
+  "policy": {
+    "version": 1,
+    "model": "gpt-5.6-terra",
+    "maxCalls": 5,
+    "maxOutputTokens": 12000,
+    "maxInputTokens": 65536,
+    "maxWireBytes": 60000,
+    "timeoutMs": 170000,
+    "maxCostMicros": 1400000,
+    "site": {
+      "width": 60,
+      "depth": 48
+    },
+    "price": {
+      "input": 2,
+      "cachedInput": 0.2,
+      "output": 12
+    }
+  },
+  "worker": {
+    "held": true,
+    "available": true,
+    "lastSeen": 1793972477052
+  },
+  "before": {
+    "state": "ready",
+    "calls": 0,
+    "reservations": 0,
+    "spendingUsd": 0
+  }
+}

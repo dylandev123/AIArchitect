@@ -1,0 +1,246 @@
+{
+ "label": "OFFLINE MEASUREMENT — no model calls; production plan never modified",
+ "production": {
+  "sha256": "468a0e5bd47d3ceb30d3d3a97997b0c7fdcd8bcffd63e1874b0a669f1519395a",
+  "asAuthored": {
+   "errors": 43,
+   "roofReach": 25,
+   "roofReachPartialEdge": 25,
+   "roofReachGap": 0,
+   "roofReachCorner": 0,
+   "flushEdges": 29,
+   "facadeFindings": 7,
+   "facadeRhythms": 7,
+   "other": 11,
+   "compiles": false,
+   "stage": "derive",
+   "decisions": 8
+  },
+  "ownershipConflictRemovedInMemory": {
+   "errors": 40,
+   "roofReach": 25,
+   "roofReachPartialEdge": 25,
+   "roofReachGap": 0,
+   "roofReachCorner": 0,
+   "flushEdges": 29,
+   "facadeFindings": 7,
+   "facadeRhythms": 7,
+   "other": 8,
+   "compiles": false,
+   "stage": "derive",
+   "decisions": 6
+  },
+  "ownershipConflictRemovedAndAllOverhangsZero": {
+   "errors": 15,
+   "roofReach": 0,
+   "roofReachPartialEdge": 0,
+   "roofReachGap": 0,
+   "roofReachCorner": 0,
+   "flushEdges": 0,
+   "facadeFindings": 7,
+   "facadeRhythms": 7,
+   "other": 8,
+   "compiles": false,
+   "stage": "derive",
+   "decisions": 6
+  },
+  "before": {
+   "note": "docs/architecture/production-rejected-2026-11-03/REPORT.md (previous analysis, same plan)",
+   "roofFindings": 40,
+   "facadeFindings": 17,
+   "errors": 69
+  }
+ },
+ "fixtures": {
+  "compact": {
+   "errors": 0,
+   "flushEdges": [
+    {
+     "roof": "gallery",
+     "side": "east",
+     "authored": 1,
+     "against": "sleep-room",
+     "edge": 8
+    },
+    {
+     "roof": "sleep-room",
+     "side": "west",
+     "authored": 0.7,
+     "against": "gallery",
+     "edge": 8
+    }
+   ],
+   "roofs": [
+    {
+     "id": "gallery-roof",
+     "form": "flat",
+     "overhang": null,
+     "eaves": null,
+     "size": [
+      4,
+      0.22,
+      10
+     ]
+    },
+    {
+     "id": "sleep-room-roof",
+     "form": "hip",
+     "overhang": 0.7,
+     "eaves": {
+      "west": 0
+     },
+     "size": [
+      5,
+      0.9,
+      8
+     ]
+    }
+   ],
+   "elements": 44,
+   "saveReloadRecompileIdentical": true,
+   "provenanceComplete": true
+  },
+  "multilevel": {
+   "errors": 0,
+   "flushEdges": [
+    {
+     "roof": "salon",
+     "side": "west",
+     "authored": 0.6,
+     "against": "upper-gallery",
+     "edge": 12
+    }
+   ],
+   "roofs": [
+    {
+     "id": "salon-roof",
+     "form": "gable",
+     "overhang": 0.6,
+     "eaves": {
+      "west": 0
+     },
+     "size": [
+      12,
+      1.2,
+      12
+     ]
+    },
+    {
+     "id": "arrival-roof",
+     "form": "flat",
+     "overhang": null,
+     "eaves": null,
+     "size": [
+      5,
+      0.22,
+      4
+     ]
+    },
+    {
+     "id": "upper-gallery-roof",
+     "form": "hip",
+     "overhang": 0,
+     "eaves": null,
+     "size": [
+      5,
+      0.9,
+      12
+     ]
+    },
+    {
+     "id": "master-suite-roof",
+     "form": "gable",
+     "overhang": 0,
+     "eaves": null,
+     "size": [
+      7,
+      1,
+      7
+     ]
+    },
+    {
+     "id": "veranda-roof",
+     "form": "flat",
+     "overhang": null,
+     "eaves": null,
+     "size": [
+      12,
+      0.2,
+      4
+     ]
+    }
+   ],
+   "elements": 67,
+   "saveReloadRecompileIdentical": true,
+   "provenanceComplete": true
+  },
+  "multi-wing": {
+   "errors": 0,
+   "flushEdges": [
+    {
+     "roof": "porch",
+     "side": "north",
+     "authored": 0.6,
+     "against": "living",
+     "edge": 10
+    },
+    {
+     "roof": "deck",
+     "side": "west",
+     "authored": 0.6,
+     "against": "dining",
+     "edge": 10
+    }
+   ],
+   "roofs": [
+    {
+     "id": "pavilion-roof",
+     "form": "hip",
+     "overhang": 0.8,
+     "eaves": null,
+     "size": [
+      18,
+      3.2,
+      10
+     ]
+    },
+    {
+     "id": "porch-roof",
+     "form": "flat",
+     "overhang": null,
+     "eaves": null,
+     "size": [
+      11.2,
+      0.22,
+      4.6
+     ]
+    },
+    {
+     "id": "deck-roof",
+     "form": "flat",
+     "overhang": null,
+     "eaves": null,
+     "size": [
+      5.6,
+      0.22,
+      11.2
+     ]
+    },
+    {
+     "id": "bar-roof",
+     "form": "gable",
+     "overhang": 0.8,
+     "eaves": null,
+     "size": [
+      24,
+      2.4,
+      9.4
+     ]
+    }
+   ],
+   "elements": 59,
+   "saveReloadRecompileIdentical": true,
+   "provenanceComplete": true
+  }
+ }
+}

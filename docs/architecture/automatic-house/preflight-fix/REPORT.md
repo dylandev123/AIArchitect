@@ -1,0 +1,13 @@
+# Approved-prompt preflight correction
+
+The approved Mediterranean prompt ends with “no detached buildings, terrain changes or basement.” The server admission regex rejected any occurrence of `basement`, including explicit exclusions. This is a reproducible false rejection, not a genuinely unsupported feature in this prompt. No live run was created and its approval remains unused. The browser status could also retain the previous rejection after editing; the status alone was not proof of current eligibility.
+
+A shared, lightweight capability preflight now recognizes explicit exclusion lists of known features. It does not discard whole sentences: “no basement, but add curved walls” still rejects. Positive unsupported requirements remain blocked, as do conflicting or unsupported storey counts. This is a bounded capability screen, not a general natural-language architecture interpreter; downstream physical validation is unchanged.
+
+The server repeats preflight before its approval-consuming transaction. The UI uses the same check to disable Generate House, shows the current rejection, and suppresses an obsolete Unsupported status once the description passes. Approval matching, exact prompt hashing, spending controls, five-call limit, zero retries, worker progression and geometry construction are unchanged.
+
+Verification: 9 relevant suites / 62 tests passed, including the exact prompt through authenticated HTTP admission in a disposable store, and positive unsupported requests with matching isolated test approvals. Rejections leave approvals, runs and ledger unchanged and dispatch zero calls. The existing browser harness, with a disposable store and stopped worker, admits the exact prompt and disables Generate House for a genuinely unsupported prompt even when it matches an unused mock approval. External requests were blocked; zero provider calls. An initial browser assertion counted an unrelated page alert; scoping it to the architecture warning resolved the test assertion. Typecheck, targeted ESLint and production build pass.
+
+The real private state was hash-checked byte-for-byte unchanged after verification. Existing approval b5b9be8d-a7da-4af7-8921-84768c1a3e57 remains unused; project 776bf256-9d53-46e8-b77b-6ab95f15fdbe still has no run. No live calls, new real approvals, commits or deployment occurred.
+
+The existing approved generation is safe to initiate under its unchanged controls after reloading Studio, selecting Mediterranean Garden House — Automatic Live Test 1 and confirming the exact prompt match. No prompt change or new approval is required. Successful live model construction remains unproven until the user starts the experiment.

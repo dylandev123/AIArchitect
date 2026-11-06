@@ -1,0 +1,3295 @@
+{
+  "status": "rejected",
+  "completedHouse": false,
+  "scene": null,
+  "stage": "derive",
+  "notReached": [
+    "construction",
+    "exterior",
+    "composition",
+    "site",
+    "validate"
+  ],
+  "compilerRejection": {
+    "decisions": [
+      "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+    ]
+  },
+  "limitations": [
+    "The beach orientation, prevailing wind, flood elevation, legal setbacks and shoreline position are assumed rather than surveyed; validate these before siting the estate.",
+    "Hurricane-resistance, corrosion specifications, structural uplift design, drainage, pool engineering, landscape planting and exterior lighting require specialist design.",
+    "The plan establishes architectural accommodation and envelope only; bespoke interiors, furniture, kitchens, bathrooms, AV, security and detailed service infrastructure remain to be developed."
+  ],
+  "persisted": false,
+  "plan": {
+    "version": "architectural-plan-1",
+    "id": "caribbean-beach-estate-01",
+    "thesis": "A low, deeply shaded Caribbean estate organized as a sequence from a limestone arrival court through a tall ocean-facing great hall to a broad covered veranda and pool. A single high living pavilion is the civic heart; quieter sleeping, guest and service wings step down behind and beside it, creating privacy without competing with the sea-facing silhouette.",
+    "orientation": 0,
+    "site": {
+      "width": 90,
+      "depth": 75,
+      "elevation": 0,
+      "grade": 0,
+      "fall": "-z"
+    },
+    "levels": [
+      {
+        "id": "ground",
+        "above": null,
+        "rise": 0.35
+      }
+    ],
+    "masses": [
+      {
+        "id": "living-pavilion",
+        "role": "primary double-height ocean-facing living pavilion with entertaining rooms and sheltered veranda"
+      },
+      {
+        "id": "sleeping-wing",
+        "role": "secondary private family suite wing, reached across the covered arrival court",
+        "relatesTo": "living-pavilion",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 4
+        }
+      },
+      {
+        "id": "guest-wing",
+        "role": "secondary guest accommodation and library wing",
+        "relatesTo": "living-pavilion",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "service-wing",
+        "role": "subordinate discreet service and staff wing",
+        "relatesTo": "living-pavilion",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "west",
+          "alignment": "start",
+          "gap": 0
+        }
+      }
+    ],
+    "spaces": [
+      {
+        "id": "great-hall",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Double-height principal salon with framed southward sea view, natural light and cross-ventilation through shaded openings.",
+        "width": 16,
+        "depth": 12,
+        "height": 6.6,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "kitchen",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Chef's kitchen with direct service and outdoor-kitchen connection.",
+        "width": 7,
+        "depth": 8,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "great-hall",
+          "side": "west",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "dining-room",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Formal dining room opening toward the veranda and sea.",
+        "width": 9,
+        "depth": 8,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "great-hall",
+          "side": "east",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "scullery",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Back kitchen, cold storage and catering preparation.",
+        "width": 4,
+        "depth": 5,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "kitchen",
+          "side": "north",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "powder-room",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Guest powder room off the entertaining sequence.",
+        "width": 3,
+        "depth": 3,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "dining-room",
+          "side": "north",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "ocean-veranda",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Deep roofed outdoor living and dining veranda facing the water.",
+        "width": 18,
+        "depth": 7,
+        "height": 3.8,
+        "outdoor": true,
+        "facadeMaterial": "timber",
+        "attached": true,
+        "placement": {
+          "relativeTo": "great-hall",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "outdoor-kitchen",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Roofed outdoor kitchen and bar, directly served from the indoor kitchen and veranda.",
+        "width": 6,
+        "depth": 5,
+        "height": 3.8,
+        "outdoor": true,
+        "facadeMaterial": "limestone",
+        "attached": true,
+        "placement": {
+          "relativeTo": "ocean-veranda",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "arrival-court",
+        "mass": "living-pavilion",
+        "level": "ground",
+        "use": "Roofed open-air arrival court and sheltered threshold between landward arrival and the private wing.",
+        "width": 12,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": true,
+        "facadeMaterial": "limestone",
+        "attached": true,
+        "placement": {
+          "relativeTo": "great-hall",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "family-gallery",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Private daylit gallery connecting the family suites and arrival court.",
+        "width": 18,
+        "depth": 3,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "primary-bedroom",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Secluded primary bedroom with filtered garden light.",
+        "width": 9,
+        "depth": 8,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": "family-gallery",
+          "side": "north",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "primary-dressing",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Primary suite dressing room.",
+        "width": 4,
+        "depth": 5,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "primary-bedroom",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "primary-bath",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Primary bathroom with a screened private exterior wall.",
+        "width": 5,
+        "depth": 5,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "primary-dressing",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "family-bedroom-one",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Family bedroom suite with morning garden light.",
+        "width": 6,
+        "depth": 6,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "family-gallery",
+          "side": "north",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "family-bath-one",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Ensuite bathroom for family bedroom one.",
+        "width": 4,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "family-bedroom-one",
+          "side": "north",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "family-bedroom-two",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Family bedroom suite with a more secluded corner outlook.",
+        "width": 6,
+        "depth": 6,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "family-gallery",
+          "side": "south",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "family-bath-two",
+        "mass": "sleeping-wing",
+        "level": "ground",
+        "use": "Ensuite bathroom for family bedroom two.",
+        "width": 4,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "family-bedroom-two",
+          "side": "south",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-gallery",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Quiet guest circulation gallery with framed landscape light.",
+        "width": 3,
+        "depth": 14,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "ivory",
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bedroom-one",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Ocean-oriented guest bedroom suite.",
+        "width": 7,
+        "depth": 6,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "guest-gallery",
+          "side": "east",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bath-one",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Ensuite bathroom for guest bedroom one.",
+        "width": 4,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "guest-bedroom-one",
+          "side": "east",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bedroom-two",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Garden-oriented guest bedroom suite set apart from the first guest room.",
+        "width": 7,
+        "depth": 6,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "guest-gallery",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "guest-bath-two",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Ensuite bathroom for guest bedroom two.",
+        "width": 4,
+        "depth": 4,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "guest-bedroom-two",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "library",
+        "mass": "guest-wing",
+        "level": "ground",
+        "use": "Intimate library and retreat with shaded east light.",
+        "width": 7,
+        "depth": 5,
+        "height": 3.8,
+        "outdoor": false,
+        "facadeMaterial": "timber",
+        "placement": {
+          "relativeTo": "guest-gallery",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "service-foyer",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Discreet service entry and internal service distribution.",
+        "width": 3,
+        "depth": 10,
+        "height": 3.4,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": null,
+          "side": "origin",
+          "alignment": "centre",
+          "gap": 0
+        }
+      },
+      {
+        "id": "laundry",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Laundry and linen handling room.",
+        "width": 5,
+        "depth": 5,
+        "height": 3.4,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "service-foyer",
+          "side": "west",
+          "alignment": "start",
+          "gap": 0
+        }
+      },
+      {
+        "id": "staff-bedroom",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Staff bedroom with natural light.",
+        "width": 5,
+        "depth": 5,
+        "height": 3.4,
+        "outdoor": false,
+        "facadeMaterial": "sage",
+        "placement": {
+          "relativeTo": "service-foyer",
+          "side": "west",
+          "alignment": "end",
+          "gap": 0
+        }
+      },
+      {
+        "id": "staff-bath",
+        "mass": "service-wing",
+        "level": "ground",
+        "use": "Bathroom for staff accommodation.",
+        "width": 3,
+        "depth": 3,
+        "height": 3.4,
+        "outdoor": false,
+        "facadeMaterial": "limestone",
+        "placement": {
+          "relativeTo": "staff-bedroom",
+          "side": "west",
+          "alignment": "end",
+          "gap": 0
+        }
+      }
+    ],
+    "portals": [
+      {
+        "id": "arrival-door",
+        "host": {
+          "space": "great-hall",
+          "side": "north"
+        },
+        "to": "arrival-court",
+        "alignment": "centre",
+        "width": 2.4,
+        "height": 3,
+        "mode": "door"
+      },
+      {
+        "id": "court-to-family-gallery",
+        "host": {
+          "space": "family-gallery",
+          "side": "south"
+        },
+        "to": "arrival-court",
+        "alignment": "centre",
+        "width": 1.8,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "hall-to-kitchen",
+        "host": {
+          "space": "great-hall",
+          "side": "shared"
+        },
+        "to": "kitchen",
+        "alignment": "start",
+        "width": 1.8,
+        "height": 2.6,
+        "mode": "open"
+      },
+      {
+        "id": "hall-to-dining",
+        "host": {
+          "space": "great-hall",
+          "side": "shared"
+        },
+        "to": "dining-room",
+        "alignment": "start",
+        "width": 2.4,
+        "height": 2.8,
+        "mode": "open"
+      },
+      {
+        "id": "kitchen-to-scullery",
+        "host": {
+          "space": "kitchen",
+          "side": "shared"
+        },
+        "to": "scullery",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "dining-to-powder",
+        "host": {
+          "space": "dining-room",
+          "side": "shared"
+        },
+        "to": "powder-room",
+        "alignment": "end",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "hall-to-veranda",
+        "host": {
+          "space": "great-hall",
+          "side": "south"
+        },
+        "to": "ocean-veranda",
+        "alignment": "centre",
+        "width": 4.8,
+        "height": 3.2,
+        "mode": "door"
+      },
+      {
+        "id": "dining-to-veranda",
+        "host": {
+          "space": "dining-room",
+          "side": "south"
+        },
+        "to": "ocean-veranda",
+        "alignment": "centre",
+        "width": 2.4,
+        "height": 2.7,
+        "mode": "door"
+      },
+      {
+        "id": "kitchen-to-outdoor-kitchen",
+        "host": {
+          "space": "kitchen",
+          "side": "south"
+        },
+        "to": "outdoor-kitchen",
+        "alignment": "end",
+        "width": 1.2,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "primary-suite-entry",
+        "host": {
+          "space": "family-gallery",
+          "side": "shared"
+        },
+        "to": "primary-bedroom",
+        "alignment": "end",
+        "width": 1.1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "primary-bedroom-to-dressing",
+        "host": {
+          "space": "primary-bedroom",
+          "side": "shared"
+        },
+        "to": "primary-dressing",
+        "alignment": "end",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "primary-dressing-to-bath",
+        "host": {
+          "space": "primary-dressing",
+          "side": "shared"
+        },
+        "to": "primary-bath",
+        "alignment": "end",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "family-one-entry",
+        "host": {
+          "space": "family-gallery",
+          "side": "shared"
+        },
+        "to": "family-bedroom-one",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "family-one-bath",
+        "host": {
+          "space": "family-bedroom-one",
+          "side": "shared"
+        },
+        "to": "family-bath-one",
+        "alignment": "start",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "family-two-entry",
+        "host": {
+          "space": "family-gallery",
+          "side": "shared"
+        },
+        "to": "family-bedroom-two",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "family-two-bath",
+        "host": {
+          "space": "family-bedroom-two",
+          "side": "shared"
+        },
+        "to": "family-bath-two",
+        "alignment": "start",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "dining-to-guest-gallery",
+        "host": {
+          "space": "dining-room",
+          "side": "shared"
+        },
+        "to": "guest-gallery",
+        "alignment": "end",
+        "width": 1.2,
+        "height": 2.4,
+        "mode": "door"
+      },
+      {
+        "id": "guest-one-entry",
+        "host": {
+          "space": "guest-gallery",
+          "side": "shared"
+        },
+        "to": "guest-bedroom-one",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "guest-one-bath",
+        "host": {
+          "space": "guest-bedroom-one",
+          "side": "shared"
+        },
+        "to": "guest-bath-one",
+        "alignment": "start",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "guest-two-entry",
+        "host": {
+          "space": "guest-gallery",
+          "side": "shared"
+        },
+        "to": "guest-bedroom-two",
+        "alignment": "end",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "guest-two-bath",
+        "host": {
+          "space": "guest-bedroom-two",
+          "side": "shared"
+        },
+        "to": "guest-bath-two",
+        "alignment": "end",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "library-entry",
+        "host": {
+          "space": "guest-gallery",
+          "side": "shared"
+        },
+        "to": "library",
+        "alignment": "centre",
+        "width": 1.1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "kitchen-to-service",
+        "host": {
+          "space": "kitchen",
+          "side": "shared"
+        },
+        "to": "service-foyer",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.3,
+        "mode": "door"
+      },
+      {
+        "id": "service-to-laundry",
+        "host": {
+          "space": "service-foyer",
+          "side": "shared"
+        },
+        "to": "laundry",
+        "alignment": "start",
+        "width": 1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "service-to-staff",
+        "host": {
+          "space": "service-foyer",
+          "side": "shared"
+        },
+        "to": "staff-bedroom",
+        "alignment": "end",
+        "width": 1,
+        "height": 2.2,
+        "mode": "door"
+      },
+      {
+        "id": "staff-to-bath",
+        "host": {
+          "space": "staff-bedroom",
+          "side": "shared"
+        },
+        "to": "staff-bath",
+        "alignment": "end",
+        "width": 0.9,
+        "height": 2.2,
+        "mode": "door"
+      }
+    ],
+    "stairs": [],
+    "arrival": "arrival-court",
+    "roofs": [
+      {
+        "space": "kitchen",
+        "form": "flat",
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "dining-room",
+        "form": "flat",
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "scullery",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "powder-room",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "ocean-veranda",
+        "form": "flat",
+        "overhang": 0.8,
+        "material": "timber"
+      },
+      {
+        "space": "outdoor-kitchen",
+        "form": "flat",
+        "overhang": 0.7,
+        "material": "timber"
+      },
+      {
+        "space": "arrival-court",
+        "form": "flat",
+        "overhang": 0.5,
+        "material": "bronze"
+      },
+      {
+        "space": "family-gallery",
+        "form": "flat",
+        "overhang": 0.55,
+        "material": "bronze"
+      },
+      {
+        "space": "primary-bedroom",
+        "form": "hip",
+        "rise": 1.1,
+        "overhang": 0.8,
+        "material": "bronze"
+      },
+      {
+        "space": "primary-dressing",
+        "form": "flat",
+        "overhang": 0.45,
+        "material": "bronze"
+      },
+      {
+        "space": "primary-bath",
+        "form": "flat",
+        "overhang": 0.45,
+        "material": "bronze"
+      },
+      {
+        "space": "family-bedroom-one",
+        "form": "hip",
+        "rise": 0.9,
+        "overhang": 0.7,
+        "material": "bronze"
+      },
+      {
+        "space": "family-bath-one",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "family-bedroom-two",
+        "form": "hip",
+        "rise": 0.9,
+        "overhang": 0.7,
+        "material": "bronze"
+      },
+      {
+        "space": "family-bath-two",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-gallery",
+        "form": "flat",
+        "overhang": 0.5,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bedroom-one",
+        "form": "hip",
+        "rise": 0.9,
+        "overhang": 0.7,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bath-one",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bedroom-two",
+        "form": "hip",
+        "rise": 0.9,
+        "overhang": 0.7,
+        "material": "bronze"
+      },
+      {
+        "space": "guest-bath-two",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "library",
+        "form": "flat",
+        "overhang": 0.6,
+        "material": "bronze"
+      },
+      {
+        "space": "service-foyer",
+        "form": "flat",
+        "overhang": 0.45,
+        "material": "bronze"
+      },
+      {
+        "space": "laundry",
+        "form": "flat",
+        "overhang": 0.4,
+        "material": "bronze"
+      },
+      {
+        "space": "staff-bedroom",
+        "form": "flat",
+        "overhang": 0.45,
+        "material": "bronze"
+      },
+      {
+        "space": "staff-bath",
+        "form": "flat",
+        "overhang": 0.35,
+        "material": "bronze"
+      }
+    ],
+    "screens": [
+      {
+        "id": "primary-bath-screen",
+        "space": "primary-bath",
+        "side": "east",
+        "alignment": "centre",
+        "width": 4,
+        "height": 2.6,
+        "sill": 0.7,
+        "standOff": 0.25,
+        "depth": 0.08,
+        "panels": 9,
+        "material": "timber"
+      },
+      {
+        "id": "library-screen",
+        "space": "library",
+        "side": "east",
+        "alignment": "centre",
+        "width": 4.5,
+        "height": 2.8,
+        "sill": 0.45,
+        "standOff": 0.25,
+        "depth": 0.08,
+        "panels": 11,
+        "material": "timber"
+      }
+    ],
+    "terraces": [
+      "ocean-veranda",
+      "arrival-court",
+      "outdoor-kitchen"
+    ],
+    "pools": [
+      {
+        "id": "infinity-pool",
+        "placement": {
+          "relativeTo": "ocean-veranda",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 3
+        },
+        "width": 16,
+        "depth": 5,
+        "waterDepth": 1.45,
+        "level": "ground"
+      }
+    ],
+    "landscape": [
+      {
+        "id": "arrival-lawn",
+        "kind": "lawn",
+        "placement": {
+          "relativeTo": "arrival-court",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 3
+        },
+        "width": 26,
+        "depth": 13
+      },
+      {
+        "id": "pool-lawn",
+        "kind": "lawn",
+        "placement": {
+          "relativeTo": "infinity-pool",
+          "side": "south",
+          "alignment": "centre",
+          "gap": 3
+        },
+        "width": 32,
+        "depth": 12
+      },
+      {
+        "id": "east-garden-bed",
+        "kind": "bed",
+        "placement": {
+          "relativeTo": "guest-wing",
+          "side": "east",
+          "alignment": "centre",
+          "gap": 3
+        },
+        "width": 7,
+        "depth": 24
+      },
+      {
+        "id": "service-buffer-bed",
+        "kind": "bed",
+        "placement": {
+          "relativeTo": "service-wing",
+          "side": "west",
+          "alignment": "centre",
+          "gap": 3
+        },
+        "width": 6,
+        "depth": 18
+      }
+    ],
+    "constraints": [
+      {
+        "id": "ocean-entertaining-adjacency",
+        "kind": "adjoin",
+        "a": "great-hall",
+        "b": "ocean-veranda",
+        "amount": 4.8,
+        "reason": "The principal living room must open directly onto its shaded sea-facing entertaining edge."
+      },
+      {
+        "id": "private-wing-separation",
+        "kind": "separate",
+        "a": "sleeping-wing",
+        "b": "guest-wing",
+        "amount": 5,
+        "reason": "Family and guest accommodation remain acoustically and visually distinct."
+      },
+      {
+        "id": "veranda-enclosure",
+        "kind": "enclose",
+        "a": "ocean-veranda",
+        "amount": 0.35,
+        "reason": "The veranda should feel protected by the main house while remaining open to the sea."
+      }
+    ],
+    "composition": {
+      "volumes": [
+        {
+          "id": "living-volume",
+          "masses": [
+            "living-pavilion"
+          ],
+          "tier": "primary",
+          "roof": "great-hall-roof",
+          "material": "ivory"
+        },
+        {
+          "id": "family-volume",
+          "masses": [
+            "sleeping-wing"
+          ],
+          "tier": "secondary",
+          "material": "ivory"
+        },
+        {
+          "id": "guest-volume",
+          "masses": [
+            "guest-wing"
+          ],
+          "tier": "secondary",
+          "material": "sage"
+        },
+        {
+          "id": "service-volume",
+          "masses": [
+            "service-wing"
+          ],
+          "tier": "subordinate",
+          "material": "limestone"
+        }
+      ],
+      "heightStep": 0.6,
+      "roofSpans": [
+        {
+          "id": "great-hall-roof",
+          "spaces": [
+            "great-hall",
+            "ocean-veranda"
+          ],
+          "form": "hip",
+          "rise": 1.6,
+          "overhang": 1,
+          "material": "bronze"
+        }
+      ],
+      "facades": [
+        {
+          "id": "great-hall-sea-glazing",
+          "space": "great-hall",
+          "side": "south",
+          "kind": "doors",
+          "to": "ocean-veranda",
+          "bays": 3,
+          "width": 3.2,
+          "height": 3.2
+        },
+        {
+          "id": "great-hall-west-light",
+          "space": "great-hall",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 2.1,
+          "height": 2.8,
+          "sill": 0.6
+        },
+        {
+          "id": "dining-sea-doors",
+          "space": "dining-room",
+          "side": "south",
+          "kind": "doors",
+          "to": "ocean-veranda",
+          "bays": 2,
+          "width": 2.1,
+          "height": 2.7
+        },
+        {
+          "id": "kitchen-west-windows",
+          "space": "kitchen",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.5,
+          "sill": 1.15
+        },
+        {
+          "id": "primary-bedroom-north-windows",
+          "space": "primary-bedroom",
+          "side": "north",
+          "kind": "windows",
+          "bays": 3,
+          "width": 1.6,
+          "height": 2.2,
+          "sill": 0.65
+        },
+        {
+          "id": "family-one-west-windows",
+          "space": "family-bedroom-one",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.35,
+          "height": 1.8,
+          "sill": 0.7
+        },
+        {
+          "id": "guest-one-east-windows",
+          "space": "guest-bedroom-one",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.9,
+          "sill": 0.7
+        },
+        {
+          "id": "guest-two-east-windows",
+          "space": "guest-bedroom-two",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.9,
+          "sill": 0.7
+        },
+        {
+          "id": "library-east-windows",
+          "space": "library",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 2.1,
+          "sill": 0.55
+        }
+      ],
+      "entrance": {
+        "portal": "arrival-door",
+        "porch": "arrival-court"
+      }
+    },
+    "materials": {
+      "floor": "limestone",
+      "wall": "ivory",
+      "roof": "bronze"
+    },
+    "cameraViews": [
+      "Aerial",
+      "Arrival",
+      "Garden",
+      "Poolside"
+    ]
+  },
+  "designDecisions": {
+    "thesis": "A low, deeply shaded Caribbean estate organized as a sequence from a limestone arrival court through a tall ocean-facing great hall to a broad covered veranda and pool. A single high living pavilion is the civic heart; quieter sleeping, guest and service wings step down behind and beside it, creating privacy without competing with the sea-facing silhouette.",
+    "orientation": 0,
+    "arrival": "arrival-court",
+    "levels": [
+      {
+        "id": "ground",
+        "above": null,
+        "rise": 0.35
+      }
+    ],
+    "wings": [
+      {
+        "id": "living-pavilion",
+        "role": "primary double-height ocean-facing living pavilion with entertaining rooms and sheltered veranda",
+        "placement": null,
+        "rooms": 8
+      },
+      {
+        "id": "sleeping-wing",
+        "role": "secondary private family suite wing, reached across the covered arrival court",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "north",
+          "alignment": "centre",
+          "gap": 4
+        },
+        "rooms": 8
+      },
+      {
+        "id": "guest-wing",
+        "role": "secondary guest accommodation and library wing",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "east",
+          "alignment": "end",
+          "gap": 0
+        },
+        "rooms": 6
+      },
+      {
+        "id": "service-wing",
+        "role": "subordinate discreet service and staff wing",
+        "placement": {
+          "relativeTo": "living-pavilion",
+          "side": "west",
+          "alignment": "start",
+          "gap": 0
+        },
+        "rooms": 4
+      }
+    ],
+    "composition": {
+      "volumes": [
+        {
+          "id": "living-volume",
+          "masses": [
+            "living-pavilion"
+          ],
+          "tier": "primary",
+          "roof": "great-hall-roof",
+          "material": "ivory"
+        },
+        {
+          "id": "family-volume",
+          "masses": [
+            "sleeping-wing"
+          ],
+          "tier": "secondary",
+          "material": "ivory"
+        },
+        {
+          "id": "guest-volume",
+          "masses": [
+            "guest-wing"
+          ],
+          "tier": "secondary",
+          "material": "sage"
+        },
+        {
+          "id": "service-volume",
+          "masses": [
+            "service-wing"
+          ],
+          "tier": "subordinate",
+          "material": "limestone"
+        }
+      ],
+      "heightStep": 0.6,
+      "roofSpans": [
+        {
+          "id": "great-hall-roof",
+          "spaces": [
+            "great-hall",
+            "ocean-veranda"
+          ],
+          "form": "hip",
+          "rise": 1.6,
+          "overhang": 1,
+          "material": "bronze"
+        }
+      ],
+      "facades": [
+        {
+          "id": "great-hall-sea-glazing",
+          "space": "great-hall",
+          "side": "south",
+          "kind": "doors",
+          "to": "ocean-veranda",
+          "bays": 3,
+          "width": 3.2,
+          "height": 3.2
+        },
+        {
+          "id": "great-hall-west-light",
+          "space": "great-hall",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 2.1,
+          "height": 2.8,
+          "sill": 0.6
+        },
+        {
+          "id": "dining-sea-doors",
+          "space": "dining-room",
+          "side": "south",
+          "kind": "doors",
+          "to": "ocean-veranda",
+          "bays": 2,
+          "width": 2.1,
+          "height": 2.7
+        },
+        {
+          "id": "kitchen-west-windows",
+          "space": "kitchen",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.5,
+          "sill": 1.15
+        },
+        {
+          "id": "primary-bedroom-north-windows",
+          "space": "primary-bedroom",
+          "side": "north",
+          "kind": "windows",
+          "bays": 3,
+          "width": 1.6,
+          "height": 2.2,
+          "sill": 0.65
+        },
+        {
+          "id": "family-one-west-windows",
+          "space": "family-bedroom-one",
+          "side": "west",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.35,
+          "height": 1.8,
+          "sill": 0.7
+        },
+        {
+          "id": "guest-one-east-windows",
+          "space": "guest-bedroom-one",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.9,
+          "sill": 0.7
+        },
+        {
+          "id": "guest-two-east-windows",
+          "space": "guest-bedroom-two",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 1.9,
+          "sill": 0.7
+        },
+        {
+          "id": "library-east-windows",
+          "space": "library",
+          "side": "east",
+          "kind": "windows",
+          "bays": 2,
+          "width": 1.5,
+          "height": 2.1,
+          "sill": 0.55
+        }
+      ],
+      "entrance": {
+        "portal": "arrival-door",
+        "porch": "arrival-court"
+      }
+    },
+    "roofForms": [
+      "flat",
+      "hip"
+    ],
+    "site": {
+      "width": 90,
+      "depth": 75,
+      "elevation": 0,
+      "grade": 0,
+      "fall": "-z"
+    },
+    "siteBasis": "model-defined",
+    "constraints": [
+      {
+        "id": "ocean-entertaining-adjacency",
+        "kind": "adjoin",
+        "a": "great-hall",
+        "b": "ocean-veranda",
+        "amount": 4.8,
+        "reason": "The principal living room must open directly onto its shaded sea-facing entertaining edge."
+      },
+      {
+        "id": "private-wing-separation",
+        "kind": "separate",
+        "a": "sleeping-wing",
+        "b": "guest-wing",
+        "amount": 5,
+        "reason": "Family and guest accommodation remain acoustically and visually distinct."
+      },
+      {
+        "id": "veranda-enclosure",
+        "kind": "enclose",
+        "a": "ocean-veranda",
+        "amount": 0.35,
+        "reason": "The veranda should feel protected by the main house while remaining open to the sea."
+      }
+    ],
+    "materials": {
+      "floor": "limestone",
+      "wall": "ivory",
+      "roof": "bronze"
+    }
+  },
+  "diagnostics": {
+    "findings": [
+      {
+        "stage": "resolution",
+        "severity": "error",
+        "id": "composition",
+        "message": "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+      },
+      {
+        "stage": "site",
+        "severity": "error",
+        "id": "arrival-lawn",
+        "message": "arrival-lawn overlaps family-gallery, primary-bedroom, family-bedroom-one, family-bedroom-two, family-bath-two."
+      },
+      {
+        "stage": "site",
+        "severity": "error",
+        "id": "pool-lawn",
+        "message": "pool-lawn (x -8..24, z -30..-18) lies 9 m outside the 90×75 m site, which is centred on the room cells (building spans x -18..46, z -7..40)."
+      },
+      {
+        "stage": "openings",
+        "severity": "error",
+        "id": "court-to-family-gallery",
+        "message": "family-gallery and arrival-court share no wall on the south edge."
+      },
+      {
+        "stage": "openings",
+        "severity": "error",
+        "id": "dining-to-veranda",
+        "message": "dining-room touches ocean-veranda along only 0..1 m (1 m) of its south edge (9 m long), but a 2.4 m opening needs 2.76 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms."
+      },
+      {
+        "stage": "openings",
+        "severity": "error",
+        "id": "kitchen-to-outdoor-kitchen",
+        "message": "kitchen and outdoor-kitchen share no wall on the south edge."
+      },
+      {
+        "stage": "openings",
+        "severity": "error",
+        "id": "dining-to-guest-gallery",
+        "message": "dining-room and guest-gallery share no wall, so there is no wall to open between them."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "great-hall",
+        "message": "interior room has neither a roof nor a space above it."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "kitchen/scullery",
+        "message": "roof bounds intersect by 4.8×1 m at the same height (overhangs 0.6 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "kitchen/ocean-veranda",
+        "message": "roof bounds intersect by 2.4×1.4 m at the same height (overhangs 0.6 and 0.8 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "dining-room/powder-room",
+        "message": "roof bounds intersect by 3.8×1 m at the same height (overhangs 0.6 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "dining-room/ocean-veranda",
+        "message": "roof bounds intersect by 2.4×1.4 m at the same height (overhangs 0.6 and 0.8 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "dining-room/outdoor-kitchen",
+        "message": "roof bounds intersect by 7.4×1.3 m at the same height (overhangs 0.6 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "dining-room/library",
+        "message": "roof bounds intersect by 1.2×5.7 m at the same height (overhangs 0.6 and 0.6 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "powder-room/library",
+        "message": "roof bounds intersect by 1×1.5 m at the same height (overhangs 0.4 and 0.6 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "ocean-veranda/outdoor-kitchen",
+        "message": "roof bounds intersect by 1.5×6.4 m at the same height (overhangs 0.8 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-gallery/primary-bedroom",
+        "message": "roof bounds intersect by 10.35×1.35 m at the same height (overhangs 0.55 and 0.8 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-gallery/family-bedroom-one",
+        "message": "roof bounds intersect by 7.25×1.25 m at the same height (overhangs 0.55 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-gallery/family-bedroom-two",
+        "message": "roof bounds intersect by 7.25×1.25 m at the same height (overhangs 0.55 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "primary-bedroom/primary-dressing",
+        "message": "roof bounds intersect by 1.25×5.9 m at the same height (overhangs 0.8 and 0.45 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "primary-dressing/primary-bath",
+        "message": "roof bounds intersect by 0.9×5.9 m at the same height (overhangs 0.45 and 0.45 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-one/family-bath-one",
+        "message": "roof bounds intersect by 4.8×1.1 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-two/family-bath-two",
+        "message": "roof bounds intersect by 4.8×1.1 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-gallery/guest-bedroom-one",
+        "message": "roof bounds intersect by 1.2×7.2 m at the same height (overhangs 0.5 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-gallery/guest-bedroom-two",
+        "message": "roof bounds intersect by 1.2×7.2 m at the same height (overhangs 0.5 and 0.7 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-gallery/library",
+        "message": "roof bounds intersect by 1.1×6.2 m at the same height (overhangs 0.5 and 0.6 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-one/guest-bath-one",
+        "message": "roof bounds intersect by 1.1×4.8 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-two/guest-bath-two",
+        "message": "roof bounds intersect by 1.1×4.8 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "service-foyer/laundry",
+        "message": "roof bounds intersect by 0.85×5.8 m at the same height (overhangs 0.45 and 0.4 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "service-foyer/staff-bedroom",
+        "message": "roof bounds intersect by 0.9×5.9 m at the same height (overhangs 0.45 and 0.45 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "laundry/staff-bedroom",
+        "message": "roof bounds intersect by 5.8×0.85 m at the same height (overhangs 0.4 and 0.45 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "staff-bedroom/staff-bath",
+        "message": "roof bounds intersect by 0.8×3.7 m at the same height (overhangs 0.45 and 0.35 m): select separated roof sections."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "kitchen/great-hall",
+        "message": "roof of kitchen (0.6 m overhang) projects 0.6×8.6 m into the taller volume of great-hall."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "dining-room/great-hall",
+        "message": "roof of dining-room (0.6 m overhang) projects 0.6×8.6 m into the taller volume of great-hall."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "ocean-veranda/great-hall",
+        "message": "roof of ocean-veranda (0.8 m overhang) projects 16×0.8 m into the taller volume of great-hall."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "arrival-court/great-hall",
+        "message": "roof of arrival-court (0.5 m overhang) projects 13×0.5 m into the taller volume of great-hall."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "primary-bedroom/family-gallery",
+        "message": "roof of primary-bedroom (0.8 m overhang, fascia board) projects 9.8×0.1 m into the taller volume of family-gallery."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "primary-bedroom/primary-dressing",
+        "message": "roof of primary-bedroom (0.8 m overhang, fascia board) projects 0.1×5 m into the taller volume of primary-dressing."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-one/family-gallery",
+        "message": "roof of family-bedroom-one (0.7 m overhang, fascia board) projects 6.7×0.1 m into the taller volume of family-gallery."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-one/family-bath-one",
+        "message": "roof of family-bedroom-one (0.7 m overhang, fascia board) projects 4×0.1 m into the taller volume of family-bath-one."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-two/family-gallery",
+        "message": "roof of family-bedroom-two (0.7 m overhang, fascia board) projects 6.7×0.1 m into the taller volume of family-gallery."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "family-bedroom-two/family-bath-two",
+        "message": "roof of family-bedroom-two (0.7 m overhang, fascia board) projects 4×0.1 m into the taller volume of family-bath-two."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-one/guest-gallery",
+        "message": "roof of guest-bedroom-one (0.7 m overhang, fascia board) projects 0.1×6.7 m into the taller volume of guest-gallery."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-one/guest-bath-one",
+        "message": "roof of guest-bedroom-one (0.7 m overhang, fascia board) projects 0.1×4 m into the taller volume of guest-bath-one."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-two/guest-gallery",
+        "message": "roof of guest-bedroom-two (0.7 m overhang, fascia board) projects 0.1×6.7 m into the taller volume of guest-gallery."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "guest-bedroom-two/guest-bath-two",
+        "message": "roof of guest-bedroom-two (0.7 m overhang, fascia board) projects 0.1×4 m into the taller volume of guest-bath-two."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "service-foyer/kitchen",
+        "message": "roof of service-foyer (0.45 m overhang) projects 0.45×8 m into the taller volume of kitchen."
+      },
+      {
+        "stage": "roofs",
+        "severity": "error",
+        "id": "service-foyer/scullery",
+        "message": "roof of service-foyer (0.45 m overhang) projects 0.45×2.45 m into the taller volume of scullery."
+      },
+      {
+        "stage": "screens",
+        "severity": "error",
+        "id": "library-screen",
+        "message": "screen lies on the interior boundary shared with guest-gallery."
+      },
+      {
+        "stage": "screens",
+        "severity": "error",
+        "id": "library-screen",
+        "message": "screen stands in guest-gallery."
+      },
+      {
+        "stage": "programme",
+        "severity": "observation",
+        "id": "levels",
+        "message": "single level: no vertical composition, no stair, no upper terrace or roof deck."
+      },
+      {
+        "stage": "programme",
+        "severity": "observation",
+        "id": "daylight",
+        "message": "23 of 23 interior rooms have no window: great-hall, kitchen, dining-room, scullery, powder-room, family-gallery, primary-bedroom, primary-dressing, primary-bath, family-bedroom-one, family-bath-one, family-bedroom-two, family-bath-two, guest-gallery, guest-bedroom-one, guest-bath-one, guest-bedroom-two, guest-bath-two, library, service-foyer, laundry, staff-bedroom, staff-bath."
+      }
+    ],
+    "errors": 50,
+    "observations": 2,
+    "truncated": false,
+    "metrics": {
+      "levels": 1,
+      "spaces": 26,
+      "interiorSpaces": 23,
+      "footprintAreaM2": 1110,
+      "interiorAreaM2": 906,
+      "roofForms": [
+        "flat",
+        "hip"
+      ],
+      "roofOverhangs": [
+        0.6,
+        0.4,
+        0.8,
+        0.7,
+        0.5,
+        0.55,
+        0.45,
+        0.35
+      ],
+      "masses": 4,
+      "screens": 2,
+      "bedroomSpaces": 12,
+      "bathroomSpaces": 6,
+      "windowedInteriorRooms": 0,
+      "interiorRoomsWithoutAnyWindow": [
+        "great-hall",
+        "kitchen",
+        "dining-room",
+        "scullery",
+        "powder-room",
+        "family-gallery",
+        "primary-bedroom",
+        "primary-dressing",
+        "primary-bath",
+        "family-bedroom-one",
+        "family-bath-one",
+        "family-bedroom-two",
+        "family-bath-two",
+        "guest-gallery",
+        "guest-bedroom-one",
+        "guest-bath-one",
+        "guest-bedroom-two",
+        "guest-bath-two",
+        "library",
+        "service-foyer",
+        "laundry",
+        "staff-bedroom",
+        "staff-bath"
+      ]
+    }
+  },
+  "measured": {
+    "rects": {
+      "great-hall": {
+        "x": 0,
+        "z": 0,
+        "width": 16,
+        "depth": 12
+      },
+      "kitchen": {
+        "x": -7,
+        "z": 0,
+        "width": 7,
+        "depth": 8
+      },
+      "dining-room": {
+        "x": 16,
+        "z": 0,
+        "width": 9,
+        "depth": 8
+      },
+      "scullery": {
+        "x": -7,
+        "z": 8,
+        "width": 4,
+        "depth": 5
+      },
+      "powder-room": {
+        "x": 22,
+        "z": 8,
+        "width": 3,
+        "depth": 3
+      },
+      "ocean-veranda": {
+        "x": -1,
+        "z": -7,
+        "width": 18,
+        "depth": 7
+      },
+      "outdoor-kitchen": {
+        "x": 17,
+        "z": -5,
+        "width": 6,
+        "depth": 5
+      },
+      "arrival-court": {
+        "x": 2,
+        "z": 12,
+        "width": 12,
+        "depth": 4
+      },
+      "family-gallery": {
+        "x": -4.5,
+        "z": 27,
+        "width": 18,
+        "depth": 3
+      },
+      "primary-bedroom": {
+        "x": 4.5,
+        "z": 30,
+        "width": 9,
+        "depth": 8
+      },
+      "primary-dressing": {
+        "x": 13.5,
+        "z": 33,
+        "width": 4,
+        "depth": 5
+      },
+      "primary-bath": {
+        "x": 17.5,
+        "z": 33,
+        "width": 5,
+        "depth": 5
+      },
+      "family-bedroom-one": {
+        "x": -4.5,
+        "z": 30,
+        "width": 6,
+        "depth": 6
+      },
+      "family-bath-one": {
+        "x": -4.5,
+        "z": 36,
+        "width": 4,
+        "depth": 4
+      },
+      "family-bedroom-two": {
+        "x": -4.5,
+        "z": 21,
+        "width": 6,
+        "depth": 6
+      },
+      "family-bath-two": {
+        "x": -4.5,
+        "z": 17,
+        "width": 4,
+        "depth": 4
+      },
+      "guest-gallery": {
+        "x": 32,
+        "z": -1,
+        "width": 3,
+        "depth": 14
+      },
+      "guest-bedroom-one": {
+        "x": 35,
+        "z": -1,
+        "width": 7,
+        "depth": 6
+      },
+      "guest-bath-one": {
+        "x": 42,
+        "z": -1,
+        "width": 4,
+        "depth": 4
+      },
+      "guest-bedroom-two": {
+        "x": 35,
+        "z": 7,
+        "width": 7,
+        "depth": 6
+      },
+      "guest-bath-two": {
+        "x": 42,
+        "z": 9,
+        "width": 4,
+        "depth": 4
+      },
+      "library": {
+        "x": 25,
+        "z": 3.5,
+        "width": 7,
+        "depth": 5
+      },
+      "service-foyer": {
+        "x": -10,
+        "z": 0,
+        "width": 3,
+        "depth": 10
+      },
+      "laundry": {
+        "x": -15,
+        "z": 0,
+        "width": 5,
+        "depth": 5
+      },
+      "staff-bedroom": {
+        "x": -15,
+        "z": 5,
+        "width": 5,
+        "depth": 5
+      },
+      "staff-bath": {
+        "x": -18,
+        "z": 7,
+        "width": 3,
+        "depth": 3
+      }
+    },
+    "siteRects": {
+      "infinity-pool": {
+        "x": 0,
+        "z": -15,
+        "width": 16,
+        "depth": 5
+      },
+      "arrival-lawn": {
+        "x": -5,
+        "z": 19,
+        "width": 26,
+        "depth": 13
+      },
+      "pool-lawn": {
+        "x": -8,
+        "z": -30,
+        "width": 32,
+        "depth": 12
+      },
+      "east-garden-bed": {
+        "x": 49,
+        "z": -6,
+        "width": 7,
+        "depth": 24
+      },
+      "service-buffer-bed": {
+        "x": -27,
+        "z": -4,
+        "width": 6,
+        "depth": 18
+      }
+    }
+  },
+  "coordination": {
+    "wings": [
+      {
+        "id": "living-pavilion",
+        "role": "primary double-height ocean-facing living pavilion with entertaining rooms and sheltered veranda",
+        "placed": false,
+        "rooms": 8,
+        "indoorRooms": 5,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -7,
+          "z": -7,
+          "width": 32,
+          "depth": 23
+        },
+        "placementEnvelope": {
+          "x": -7,
+          "z": 0,
+          "width": 32,
+          "depth": 13
+        },
+        "attached": [
+          "ocean-veranda",
+          "outdoor-kitchen",
+          "arrival-court"
+        ],
+        "extentDrivers": [
+          {
+            "side": "west",
+            "spaces": [
+              "kitchen",
+              "scullery"
+            ],
+            "beyondBy": 7,
+            "outdoor": false
+          },
+          {
+            "side": "east",
+            "spaces": [
+              "dining-room",
+              "powder-room"
+            ],
+            "beyondBy": 9,
+            "outdoor": false
+          },
+          {
+            "side": "south",
+            "spaces": [
+              "great-hall",
+              "kitchen",
+              "dining-room"
+            ],
+            "beyondBy": 8,
+            "outdoor": false
+          },
+          {
+            "side": "north",
+            "spaces": [
+              "scullery"
+            ],
+            "beyondBy": 1,
+            "outdoor": false
+          }
+        ],
+        "indoorAreaM2": 349,
+        "fill": 0.47,
+        "relation": null,
+        "seed": null
+      },
+      {
+        "id": "sleeping-wing",
+        "role": "secondary private family suite wing, reached across the covered arrival court",
+        "placed": true,
+        "rooms": 8,
+        "indoorRooms": 8,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -4.5,
+          "z": 17,
+          "width": 27,
+          "depth": 23
+        },
+        "placementEnvelope": {
+          "x": -4.5,
+          "z": 17,
+          "width": 27,
+          "depth": 23
+        },
+        "attached": [],
+        "extentDrivers": [
+          {
+            "side": "west",
+            "spaces": [
+              "family-gallery",
+              "family-bedroom-one",
+              "family-bath-one",
+              "family-bedroom-two",
+              "family-bath-two"
+            ],
+            "beyondBy": 9,
+            "outdoor": false
+          },
+          {
+            "side": "east",
+            "spaces": [
+              "primary-bath"
+            ],
+            "beyondBy": 5,
+            "outdoor": false
+          },
+          {
+            "side": "south",
+            "spaces": [
+              "family-bath-two"
+            ],
+            "beyondBy": 4,
+            "outdoor": false
+          },
+          {
+            "side": "north",
+            "spaces": [
+              "family-bath-one"
+            ],
+            "beyondBy": 2,
+            "outdoor": false
+          }
+        ],
+        "indoorAreaM2": 275,
+        "fill": 0.44,
+        "relation": "north of living-pavilion, centre, gap 4",
+        "seed": "family-gallery"
+      },
+      {
+        "id": "guest-wing",
+        "role": "secondary guest accommodation and library wing",
+        "placed": true,
+        "rooms": 6,
+        "indoorRooms": 6,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": 25,
+          "z": -1,
+          "width": 21,
+          "depth": 14
+        },
+        "placementEnvelope": {
+          "x": 25,
+          "z": -1,
+          "width": 21,
+          "depth": 14
+        },
+        "attached": [],
+        "extentDrivers": [
+          {
+            "side": "west",
+            "spaces": [
+              "library"
+            ],
+            "beyondBy": 7,
+            "outdoor": false
+          },
+          {
+            "side": "east",
+            "spaces": [
+              "guest-bath-one",
+              "guest-bath-two"
+            ],
+            "beyondBy": 4,
+            "outdoor": false
+          },
+          {
+            "side": "south",
+            "spaces": [
+              "guest-gallery",
+              "guest-bedroom-one",
+              "guest-bath-one"
+            ],
+            "beyondBy": 4.5,
+            "outdoor": false
+          },
+          {
+            "side": "north",
+            "spaces": [
+              "guest-gallery",
+              "guest-bedroom-two",
+              "guest-bath-two"
+            ],
+            "beyondBy": 4.5,
+            "outdoor": false
+          }
+        ],
+        "indoorAreaM2": 193,
+        "fill": 0.66,
+        "relation": "east of living-pavilion, end, gap 0",
+        "seed": "guest-gallery"
+      },
+      {
+        "id": "service-wing",
+        "role": "subordinate discreet service and staff wing",
+        "placed": true,
+        "rooms": 4,
+        "indoorRooms": 4,
+        "levels": [
+          "ground"
+        ],
+        "envelope": {
+          "x": -18,
+          "z": 0,
+          "width": 11,
+          "depth": 10
+        },
+        "placementEnvelope": {
+          "x": -18,
+          "z": 0,
+          "width": 11,
+          "depth": 10
+        },
+        "attached": [],
+        "extentDrivers": [
+          {
+            "side": "west",
+            "spaces": [
+              "staff-bath"
+            ],
+            "beyondBy": 3,
+            "outdoor": false
+          },
+          {
+            "side": "east",
+            "spaces": [
+              "service-foyer"
+            ],
+            "beyondBy": 3,
+            "outdoor": false
+          },
+          {
+            "side": "south",
+            "spaces": [
+              "service-foyer",
+              "laundry"
+            ],
+            "beyondBy": 5,
+            "outdoor": false
+          },
+          {
+            "side": "north",
+            "spaces": [
+              "service-foyer",
+              "staff-bedroom",
+              "staff-bath"
+            ],
+            "beyondBy": 5,
+            "outdoor": false
+          }
+        ],
+        "indoorAreaM2": 89,
+        "fill": 0.81,
+        "relation": "west of living-pavilion, start, gap 0",
+        "seed": "service-foyer"
+      }
+    ],
+    "collisions": [],
+    "constraints": [
+      {
+        "id": "ocean-entertaining-adjacency",
+        "kind": "adjoin",
+        "a": "great-hall",
+        "b": "ocean-veranda",
+        "required": 4.8,
+        "measured": 16,
+        "ok": true,
+        "reason": "The principal living room must open directly onto its shaded sea-facing entertaining edge.",
+        "implicated": [
+          {
+            "node": "ocean-veranda",
+            "placement": "ocean-veranda: south of great-hall, centre, gap 0"
+          }
+        ],
+        "options": []
+      },
+      {
+        "id": "private-wing-separation",
+        "kind": "separate",
+        "a": "sleeping-wing",
+        "b": "guest-wing",
+        "required": 5,
+        "measured": 21.78,
+        "ok": true,
+        "reason": "Family and guest accommodation remain acoustically and visually distinct.",
+        "implicated": [
+          {
+            "node": "sleeping-wing",
+            "placement": "sleeping-wing: north of living-pavilion, centre, gap 4"
+          },
+          {
+            "node": "guest-wing",
+            "placement": "guest-wing: east of living-pavilion, end, gap 0"
+          }
+        ],
+        "options": []
+      },
+      {
+        "id": "veranda-enclosure",
+        "kind": "enclose",
+        "a": "ocean-veranda",
+        "required": 0.35,
+        "measured": 0.36,
+        "ok": true,
+        "reason": "The veranda should feel protected by the main house while remaining open to the sea.",
+        "implicated": [
+          {
+            "node": "ocean-veranda",
+            "placement": "ocean-veranda: south of great-hall, centre, gap 0"
+          }
+        ],
+        "options": []
+      }
+    ],
+    "circulation": {
+      "arrival": "arrival-court",
+      "wings": [
+        {
+          "id": "living-pavilion",
+          "interiorRooms": 5,
+          "reachable": 5,
+          "adjoins": [
+            {
+              "wing": "guest-wing",
+              "sharedM": 5,
+              "connected": true
+            },
+            {
+              "wing": "service-wing",
+              "sharedM": 10,
+              "connected": true
+            }
+          ]
+        },
+        {
+          "id": "sleeping-wing",
+          "interiorRooms": 8,
+          "reachable": 8,
+          "adjoins": []
+        },
+        {
+          "id": "guest-wing",
+          "interiorRooms": 6,
+          "reachable": 6,
+          "adjoins": [
+            {
+              "wing": "living-pavilion",
+              "sharedM": 5,
+              "connected": true
+            }
+          ]
+        },
+        {
+          "id": "service-wing",
+          "interiorRooms": 4,
+          "reachable": 4,
+          "adjoins": [
+            {
+              "wing": "living-pavilion",
+              "sharedM": 10,
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    "vertical": [],
+    "site": {
+      "required": {
+        "width": 84,
+        "depth": 93
+      },
+      "available": {
+        "width": 90,
+        "depth": 75
+      },
+      "fits": false,
+      "basis": "model-defined",
+      "drivers": {
+        "width": "east-garden-bed",
+        "depth": "pool-lawn"
+      }
+    },
+    "siteConflicts": [
+      {
+        "item": "arrival-lawn",
+        "with": "family-gallery",
+        "overlap": {
+          "x": -4.5,
+          "z": 27,
+          "width": 18,
+          "depth": 3
+        },
+        "decision": "arrival-lawn: arrival-lawn: north of arrival-court, centre, gap 3",
+        "explanation": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-gallery (family-gallery: local origin) by 18×3 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-gallery.",
+        "options": [
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "depth",
+                "from": 13,
+                "to": 7
+              }
+            ],
+            "note": "reduce arrival-lawn depth to 7 m",
+            "newErrors": [],
+            "status": "candidate"
+          }
+        ]
+      },
+      {
+        "item": "arrival-lawn",
+        "with": "primary-bedroom",
+        "overlap": {
+          "x": 4.5,
+          "z": 30,
+          "width": 9,
+          "depth": 2
+        },
+        "decision": "arrival-lawn: arrival-lawn: north of arrival-court, centre, gap 3",
+        "explanation": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps primary-bedroom (primary-bedroom: north of family-gallery, end, gap 0) by 9×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by primary-bedroom.",
+        "options": [
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "depth",
+                "from": 13,
+                "to": 9
+              }
+            ],
+            "note": "reduce arrival-lawn depth to 9 m",
+            "newErrors": [],
+            "status": "candidate"
+          }
+        ]
+      },
+      {
+        "item": "arrival-lawn",
+        "with": "family-bedroom-one",
+        "overlap": {
+          "x": -4.5,
+          "z": 30,
+          "width": 6,
+          "depth": 2
+        },
+        "decision": "arrival-lawn: arrival-lawn: north of arrival-court, centre, gap 3",
+        "explanation": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bedroom-one (family-bedroom-one: north of family-gallery, start, gap 0) by 6×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bedroom-one.",
+        "options": [
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "alignment",
+                "from": "centre",
+                "to": "start"
+              }
+            ],
+            "note": "re-align arrival-lawn",
+            "newErrors": [],
+            "status": "candidate"
+          },
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "depth",
+                "from": 13,
+                "to": 9
+              }
+            ],
+            "note": "reduce arrival-lawn depth to 9 m",
+            "newErrors": [],
+            "status": "candidate"
+          }
+        ]
+      },
+      {
+        "item": "arrival-lawn",
+        "with": "family-bedroom-two",
+        "overlap": {
+          "x": -4.5,
+          "z": 21,
+          "width": 6,
+          "depth": 6
+        },
+        "decision": "arrival-lawn: arrival-lawn: north of arrival-court, centre, gap 3",
+        "explanation": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bedroom-two (family-bedroom-two: south of family-gallery, start, gap 0) by 6×6 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bedroom-two.",
+        "options": [
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "alignment",
+                "from": "centre",
+                "to": "start"
+              }
+            ],
+            "note": "re-align arrival-lawn",
+            "newErrors": [],
+            "status": "candidate"
+          },
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "depth",
+                "from": 13,
+                "to": 1
+              }
+            ],
+            "note": "reduce arrival-lawn depth to 1 m",
+            "newErrors": [],
+            "status": "candidate"
+          }
+        ]
+      },
+      {
+        "item": "arrival-lawn",
+        "with": "family-bath-two",
+        "overlap": {
+          "x": -4.5,
+          "z": 19,
+          "width": 4,
+          "depth": 2
+        },
+        "decision": "arrival-lawn: arrival-lawn: north of arrival-court, centre, gap 3",
+        "explanation": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bath-two (family-bath-two: south of family-bedroom-two, start, gap 0) by 4×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bath-two.",
+        "options": [
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "alignment",
+                "from": "centre",
+                "to": "start"
+              }
+            ],
+            "note": "re-align arrival-lawn",
+            "newErrors": [],
+            "status": "candidate"
+          },
+          {
+            "edits": [
+              {
+                "node": "arrival-lawn",
+                "field": "gap",
+                "from": 3,
+                "to": 5
+              }
+            ],
+            "note": "move arrival-lawn 2 m further from arrival-court (the gap is a design separation)",
+            "newErrors": [
+              "site:overlap:arrival-lawn/primary-dressing",
+              "site:overlap:arrival-lawn/primary-bath"
+            ],
+            "status": "candidate"
+          }
+        ]
+      }
+    ],
+    "errors": [
+      {
+        "kind": "site",
+        "ids": [
+          "east-garden-bed",
+          "pool-lawn"
+        ],
+        "message": "The arrangement needs a site of at least 84×93 m (centred on the room cells, orientation applied); the plan declares 90×75 m. Depth is set by pool-lawn (pool-lawn: south of infinity-pool, centre, gap 3). The site is model-defined: enlarging it to the stated minimum is a determined consequence; moving the allocations inward is a design choice."
+      },
+      {
+        "kind": "site",
+        "ids": [
+          "arrival-lawn",
+          "family-gallery"
+        ],
+        "message": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-gallery (family-gallery: local origin) by 18×3 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-gallery. Candidate edits (not verified beyond the arrangement): arrival-lawn.depth 13→7. Software has moved nothing."
+      },
+      {
+        "kind": "site",
+        "ids": [
+          "arrival-lawn",
+          "primary-bedroom"
+        ],
+        "message": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps primary-bedroom (primary-bedroom: north of family-gallery, end, gap 0) by 9×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by primary-bedroom. Candidate edits (not verified beyond the arrangement): arrival-lawn.depth 13→9. Software has moved nothing."
+      },
+      {
+        "kind": "site",
+        "ids": [
+          "arrival-lawn",
+          "family-bedroom-one"
+        ],
+        "message": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bedroom-one (family-bedroom-one: north of family-gallery, start, gap 0) by 6×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bedroom-one. Candidate edits (not verified beyond the arrangement): arrival-lawn.alignment centre→start; arrival-lawn.depth 13→9. Software has moved nothing."
+      },
+      {
+        "kind": "site",
+        "ids": [
+          "arrival-lawn",
+          "family-bedroom-two"
+        ],
+        "message": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bedroom-two (family-bedroom-two: south of family-gallery, start, gap 0) by 6×6 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bedroom-two. Candidate edits (not verified beyond the arrangement): arrival-lawn.alignment centre→start; arrival-lawn.depth 13→1. Software has moved nothing."
+      },
+      {
+        "kind": "site",
+        "ids": [
+          "arrival-lawn",
+          "family-bath-two"
+        ],
+        "message": "arrival-lawn (arrival-lawn: north of arrival-court, centre, gap 3; 26×13 m, x -5..21, z 19..32) overlaps family-bath-two (family-bath-two: south of family-bedroom-two, start, gap 0) by 4×2 m. It is 26 m wide against its anchor arrival-court, which is 12 m wide, so it extends 7 m past each side of that anchor when centred; the overlap is created by this item's own size and placement, not by family-bath-two. Candidate edits (not verified beyond the arrangement): arrival-lawn.alignment centre→start; arrival-lawn.gap 3→5. Software has moved nothing."
+      }
+    ],
+    "openChoices": [],
+    "ok": false
+  },
+  "corrections": {
+    "baseline": {
+      "arrangementFindings": 6,
+      "diagnosticErrors": 44,
+      "compiles": false,
+      "compilationStage": "derive"
+    },
+    "corrections": [
+      {
+        "targets": [
+          "arr:site:overlap:arrival-lawn/family-gallery"
+        ],
+        "edits": [
+          {
+            "node": "arrival-lawn",
+            "field": "depth",
+            "from": 13,
+            "to": 7
+          }
+        ],
+        "note": "reduce arrival-lawn depth to 7 m",
+        "resolved": [
+          "arr:site:overlap:arrival-lawn/family-gallery"
+        ],
+        "alsoResolved": [
+          "arr:site:overlap:arrival-lawn/primary-bedroom",
+          "arr:site:overlap:arrival-lawn/family-bedroom-one"
+        ],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "3 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (1 problem(s)); downstream phases were not reached, so the edit is not verified."
+      },
+      {
+        "targets": [
+          "arr:site:overlap:arrival-lawn/primary-bedroom"
+        ],
+        "edits": [
+          {
+            "node": "arrival-lawn",
+            "field": "depth",
+            "from": 13,
+            "to": 9
+          }
+        ],
+        "note": "reduce arrival-lawn depth to 9 m",
+        "resolved": [
+          "arr:site:overlap:arrival-lawn/primary-bedroom"
+        ],
+        "alsoResolved": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-one"
+        ],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "4 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (1 problem(s)); downstream phases were not reached, so the edit is not verified."
+      },
+      {
+        "targets": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-one"
+        ],
+        "edits": [
+          {
+            "node": "arrival-lawn",
+            "field": "alignment",
+            "from": "centre",
+            "to": "start"
+          }
+        ],
+        "note": "re-align arrival-lawn",
+        "resolved": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-one"
+        ],
+        "alsoResolved": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-two",
+          "arr:site:overlap:arrival-lawn/family-bath-two"
+        ],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "3 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (1 problem(s)); downstream phases were not reached, so the edit is not verified."
+      },
+      {
+        "targets": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-two"
+        ],
+        "edits": [
+          {
+            "node": "arrival-lawn",
+            "field": "depth",
+            "from": 13,
+            "to": 1
+          }
+        ],
+        "note": "reduce arrival-lawn depth to 1 m",
+        "resolved": [
+          "arr:site:overlap:arrival-lawn/family-bedroom-two"
+        ],
+        "alsoResolved": [
+          "arr:site:overlap:arrival-lawn/family-gallery",
+          "arr:site:overlap:arrival-lawn/primary-bedroom",
+          "arr:site:overlap:arrival-lawn/family-bedroom-one"
+        ],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "2 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (1 problem(s)); downstream phases were not reached, so the edit is not verified."
+      },
+      {
+        "targets": [
+          "arr:site:fit"
+        ],
+        "edits": [
+          {
+            "node": "site",
+            "field": "site-depth",
+            "from": 75,
+            "to": 93
+          }
+        ],
+        "note": "enlarge the model-defined site to its stated minimum (84×93 m, rounded up): a determined consequence of the arrangement",
+        "resolved": [
+          "arr:site:fit"
+        ],
+        "alsoResolved": [
+          "diag:site:pool-lawn"
+        ],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "5 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "43 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The target is cleared and nothing new appears in the checks that ran, but the edited plan still does not compile for reasons this edit does not address (1 problem(s)); downstream phases were not reached, so the edit is not verified."
+      },
+      {
+        "targets": [
+          "diag:openings:court-to-family-gallery"
+        ],
+        "edits": [
+          {
+            "node": "court-to-family-gallery",
+            "field": "portal-side",
+            "from": "south",
+            "to": "shared"
+          }
+        ],
+        "note": "declare court-to-family-gallery as a connection between family-gallery and arrival-court (\"shared\") so software finds the wall they share",
+        "resolved": [],
+        "alsoResolved": [],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "6 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The edit does not clear diag:openings:court-to-family-gallery."
+      },
+      {
+        "targets": [
+          "diag:openings:kitchen-to-outdoor-kitchen"
+        ],
+        "edits": [
+          {
+            "node": "kitchen-to-outdoor-kitchen",
+            "field": "portal-side",
+            "from": "south",
+            "to": "shared"
+          }
+        ],
+        "note": "declare kitchen-to-outdoor-kitchen as a connection between kitchen and outdoor-kitchen (\"shared\") so software finds the wall they share",
+        "resolved": [],
+        "alsoResolved": [],
+        "newFindings": [],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": true,
+            "detail": "6 arrangement finding(s) after, 0 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "unverified",
+        "statusReason": "The edit does not clear diag:openings:kitchen-to-outdoor-kitchen."
+      },
+      {
+        "targets": [
+          "arr:site:overlap:arrival-lawn/family-bath-two"
+        ],
+        "edits": [
+          {
+            "node": "arrival-lawn",
+            "field": "gap",
+            "from": 3,
+            "to": 5
+          }
+        ],
+        "note": "move arrival-lawn 2 m further from arrival-court (the gap is a design separation)",
+        "resolved": [
+          "arr:site:overlap:arrival-lawn/family-bath-two"
+        ],
+        "alsoResolved": [],
+        "newFindings": [
+          "arr:site:overlap:arrival-lawn/primary-dressing",
+          "arr:site:overlap:arrival-lawn/primary-bath"
+        ],
+        "compilationBlockers": [
+          "great-hall-roof: ocean-veranda already has its own roof entry; a space has exactly one roof."
+        ],
+        "lostConnections": [],
+        "displaced": [],
+        "neverApplied": true,
+        "checks": [
+          {
+            "name": "arrangement",
+            "ran": true,
+            "passed": false,
+            "detail": "7 arrangement finding(s) after, 2 new"
+          },
+          {
+            "name": "diagnosis",
+            "ran": true,
+            "passed": true,
+            "detail": "44 diagnostic error(s) after, 0 new"
+          },
+          {
+            "name": "compilation",
+            "ran": true,
+            "passed": false,
+            "detail": "stops at the derive phase with 1 problem(s); phases after it (construction, exterior, composition, site, validate) were not reached"
+          },
+          {
+            "name": "interior-connections",
+            "ran": true,
+            "passed": true,
+            "detail": "no interior adjacency is lost"
+          }
+        ],
+        "status": "introduces-conflicts",
+        "statusReason": "The edit introduces 2 finding(s) that the plan did not have: arr:site:overlap:arrival-lawn/primary-dressing, arr:site:overlap:arrival-lawn/primary-bath."
+      }
+    ],
+    "byStatus": {
+      "verified": 0,
+      "decision-required": 0,
+      "introduces-conflicts": 1,
+      "unverified": 7
+    },
+    "noOffer": [
+      "diag:resolution:composition",
+      "diag:site:arrival-lawn",
+      "diag:openings:court-to-family-gallery",
+      "diag:openings:dining-to-veranda",
+      "diag:openings:kitchen-to-outdoor-kitchen",
+      "diag:openings:dining-to-guest-gallery",
+      "diag:roofs:great-hall",
+      "diag:roofs:kitchen/scullery",
+      "diag:roofs:kitchen/ocean-veranda",
+      "diag:roofs:dining-room/powder-room",
+      "diag:roofs:dining-room/ocean-veranda",
+      "diag:roofs:dining-room/outdoor-kitchen",
+      "diag:roofs:dining-room/library",
+      "diag:roofs:powder-room/library",
+      "diag:roofs:ocean-veranda/outdoor-kitchen",
+      "diag:roofs:family-gallery/primary-bedroom",
+      "diag:roofs:family-gallery/family-bedroom-one",
+      "diag:roofs:family-gallery/family-bedroom-two",
+      "diag:roofs:primary-bedroom/primary-dressing",
+      "diag:roofs:primary-dressing/primary-bath",
+      "diag:roofs:family-bedroom-one/family-bath-one",
+      "diag:roofs:family-bedroom-two/family-bath-two",
+      "diag:roofs:guest-gallery/guest-bedroom-one",
+      "diag:roofs:guest-gallery/guest-bedroom-two",
+      "diag:roofs:guest-gallery/library",
+      "diag:roofs:guest-bedroom-one/guest-bath-one",
+      "diag:roofs:guest-bedroom-two/guest-bath-two",
+      "diag:roofs:service-foyer/laundry",
+      "diag:roofs:service-foyer/staff-bedroom",
+      "diag:roofs:laundry/staff-bedroom",
+      "diag:roofs:staff-bedroom/staff-bath",
+      "diag:roofs:kitchen/great-hall",
+      "diag:roofs:dining-room/great-hall",
+      "diag:roofs:ocean-veranda/great-hall",
+      "diag:roofs:arrival-court/great-hall",
+      "diag:roofs:primary-bedroom/family-gallery",
+      "diag:roofs:family-bedroom-one/family-gallery",
+      "diag:roofs:family-bedroom-two/family-gallery",
+      "diag:roofs:guest-bedroom-one/guest-gallery",
+      "diag:roofs:guest-bedroom-two/guest-gallery",
+      "diag:roofs:service-foyer/kitchen",
+      "diag:roofs:service-foyer/scullery",
+      "diag:screens:library-screen"
+    ]
+  },
+  "concept": {
+    "commission": {
+      "ambitious": true,
+      "reasons": [
+        "brief asks for \"mansion\"",
+        "the plan has 23 interior rooms"
+      ]
+    },
+    "composition": {
+      "declared": true,
+      "gaps": []
+    },
+    "programme": {
+      "brief": {
+        "requirements": [],
+        "missing": []
+      },
+      "daylight": [
+        {
+          "room": "great-hall",
+          "windows": 0,
+          "exteriorDoors": [
+            "arrival-court",
+            "ocean-veranda"
+          ],
+          "status": "doors-only"
+        },
+        {
+          "room": "dining-room",
+          "windows": 0,
+          "exteriorDoors": [
+            "ocean-veranda"
+          ],
+          "status": "doors-only"
+        }
+      ],
+      "repeatedCells": [],
+      "findings": [
+        {
+          "category": "subjective-design-concern",
+          "code": "daylight-unestablished",
+          "elementIds": [
+            "great-hall"
+          ],
+          "message": "Daylight: great-hall is a primary living or dining space with no window; its exterior openings are doors to arrival-court, ocean-veranda. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+        },
+        {
+          "category": "subjective-design-concern",
+          "code": "daylight-unestablished",
+          "elementIds": [
+            "dining-room"
+          ],
+          "message": "Daylight: dining-room is a primary living or dining space with no window; its exterior openings are doors to ocean-veranda. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+        }
+      ]
+    },
+    "findings": [
+      {
+        "category": "subjective-design-concern",
+        "code": "daylight-unestablished",
+        "elementIds": [
+          "great-hall"
+        ],
+        "message": "Daylight: great-hall is a primary living or dining space with no window; its exterior openings are doors to arrival-court, ocean-veranda. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+      },
+      {
+        "category": "subjective-design-concern",
+        "code": "daylight-unestablished",
+        "elementIds": [
+          "dining-room"
+        ],
+        "message": "Daylight: dining-room is a primary living or dining space with no window; its exterior openings are doors to ocean-veranda. Whether those doors are glazed is not modelled, so usable daylight is unestablished. If glazed doors are the intended light source, state it in the room's use or add windows."
+      }
+    ],
+    "limits": "Plan-level review only: no house was built, so concept fidelity of built geometry is not assessed. Programme counts come from the brief's own words; nothing is scored, rejected or repaired."
+  },
+  "drawing": {
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1384\" height=\"1460\" font-family=\"Helvetica,Arial,sans-serif\" data-plan=\"caribbean-beach-estate-01\"><defs><pattern id=\"hatch\" width=\"6\" height=\"6\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#c00\" stroke-width=\"1.5\"/></pattern><pattern id=\"dark\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><circle cx=\"1\" cy=\"1\" r=\".8\" fill=\"#c00\" fill-opacity=\".5\"/></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"#fff\"/><text x=\"34\" y=\"22\" font-size=\"15\" font-weight=\"bold\">REJECTED PLAN: caribbean-beach-estate-01</text><text x=\"34\" y=\"40\" font-size=\"10.5\" fill=\"#555\">A low, deeply shaded Caribbean estate organized as a sequence from a limestone arrival court through a tall ocean-facing great hall to a broad covered veranda and pool. A…</text><g data-level=\"ground\"><text x=\"34\" y=\"65\" font-size=\"12\" font-weight=\"bold\">Level ground · floor 0.3 m</text><rect x=\"34\" y=\"70\" width=\"1316\" height=\"1232\" fill=\"#fafafa\" stroke=\"#ddd\"/><rect data-site=\"site\" data-x=\"-31\" data-z=\"-21\" data-w=\"90\" data-d=\"75\" x=\"62\" y=\"98\" width=\"1260\" height=\"1050\" fill=\"none\" stroke=\"#888\" stroke-dasharray=\"8 5\"/><text x=\"66\" y=\"110\" font-size=\"9.5\" fill=\"#888\">site 90×75 m (centred on room cells)</text><rect data-pool=\"infinity-pool\" data-x=\"0\" data-z=\"-15\" data-w=\"16\" data-d=\"5\" x=\"496\" y=\"994\" width=\"224\" height=\"70\" fill=\"#bfe0ee\" stroke=\"#5a8\" stroke-width=\"1\"/><text x=\"499\" y=\"1005\" font-size=\"9\">infinity-pool 16×5</text><rect data-lawn=\"arrival-lawn\" data-x=\"-5\" data-z=\"19\" data-w=\"26\" data-d=\"13\" x=\"426\" y=\"406\" width=\"364\" height=\"182\" fill=\"#e3efd6\" stroke=\"#c00\" stroke-width=\"2.5\"/><text x=\"429\" y=\"417\" font-size=\"9\">arrival-lawn 26×13</text><rect data-lawn=\"pool-lawn\" data-x=\"-8\" data-z=\"-30\" data-w=\"32\" data-d=\"12\" x=\"384\" y=\"1106\" width=\"448\" height=\"168\" fill=\"#e3efd6\" stroke=\"#c00\" stroke-width=\"2.5\"/><text x=\"387\" y=\"1117\" font-size=\"9\">pool-lawn 32×12</text><rect data-bed=\"east-garden-bed\" data-x=\"49\" data-z=\"-6\" data-w=\"7\" data-d=\"24\" x=\"1182\" y=\"602\" width=\"98\" height=\"336\" fill=\"#eadcc8\" stroke=\"#9a8\" stroke-width=\"1\"/><text x=\"1185\" y=\"613\" font-size=\"9\">east-garden-bed 7×24</text><rect data-bed=\"service-buffer-bed\" data-x=\"-27\" data-z=\"-4\" data-w=\"6\" data-d=\"18\" x=\"118\" y=\"658\" width=\"84\" height=\"252\" fill=\"#eadcc8\" stroke=\"#9a8\" stroke-width=\"1\"/><text x=\"121\" y=\"669\" font-size=\"9\">service-buffer-bed 6×18</text><rect data-room=\"great-hall\" data-x=\"0\" data-z=\"0\" data-w=\"16\" data-d=\"12\" x=\"496\" y=\"686\" width=\"224\" height=\"168\" fill=\"#e8dcc0\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"499\" y=\"696\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">great-hall</text><text x=\"499\" y=\"706\" font-size=\"8\" fill=\"#444\">16×12 m · h 6.6</text><rect data-room=\"kitchen\" data-x=\"-7\" data-z=\"0\" data-w=\"7\" data-d=\"8\" x=\"398\" y=\"742\" width=\"98\" height=\"112\" fill=\"#e8dcc0\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"401\" y=\"752\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">kitchen</text><text x=\"401\" y=\"762\" font-size=\"8\" fill=\"#444\">7×8 m · h 3.8</text><rect data-room=\"dining-room\" data-x=\"16\" data-z=\"0\" data-w=\"9\" data-d=\"8\" x=\"720\" y=\"742\" width=\"126\" height=\"112\" fill=\"#e8dcc0\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"723\" y=\"752\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">dining-room</text><text x=\"723\" y=\"762\" font-size=\"8\" fill=\"#444\">9×8 m · h 3.8</text><rect data-room=\"scullery\" data-x=\"-7\" data-z=\"8\" data-w=\"4\" data-d=\"5\" x=\"398\" y=\"672\" width=\"56\" height=\"70\" fill=\"#e8dcc0\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"401\" y=\"682\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">scullery</text><text x=\"401\" y=\"692\" font-size=\"8\" fill=\"#444\">4×5 m · h 3.8</text><rect data-room=\"powder-room\" data-x=\"22\" data-z=\"8\" data-w=\"3\" data-d=\"3\" x=\"804\" y=\"700\" width=\"42\" height=\"42\" fill=\"#e8dcc0\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"807\" y=\"710\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">powder-room</text><text x=\"807\" y=\"720\" font-size=\"8\" fill=\"#444\">3×3 m · h 3.8</text><rect data-room=\"ocean-veranda\" data-x=\"-1\" data-z=\"-7\" data-w=\"18\" data-d=\"7\" x=\"482\" y=\"854\" width=\"252\" height=\"98\" fill=\"#f2f6ee\" fill-opacity=\"0.6\" stroke=\"#333\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\"/><text x=\"485\" y=\"864\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">ocean-veranda</text><text x=\"485\" y=\"874\" font-size=\"8\" fill=\"#444\">18×7 m · h 3.8</text><rect data-room=\"outdoor-kitchen\" data-x=\"17\" data-z=\"-5\" data-w=\"6\" data-d=\"5\" x=\"734\" y=\"854\" width=\"84\" height=\"70\" fill=\"#f2f6ee\" fill-opacity=\"0.6\" stroke=\"#333\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\"/><text x=\"737\" y=\"864\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">outdoor-kitchen</text><text x=\"737\" y=\"874\" font-size=\"8\" fill=\"#444\">6×5 m · h 3.8</text><rect data-room=\"arrival-court\" data-x=\"2\" data-z=\"12\" data-w=\"12\" data-d=\"4\" x=\"524\" y=\"630\" width=\"168\" height=\"56\" fill=\"#f2f6ee\" fill-opacity=\"0.6\" stroke=\"#333\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\"/><text x=\"527\" y=\"640\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">arrival-court</text><text x=\"527\" y=\"650\" font-size=\"8\" fill=\"#444\">12×4 m · h 3.8</text><rect data-room=\"family-gallery\" data-x=\"-4.5\" data-z=\"27\" data-w=\"18\" data-d=\"3\" x=\"433\" y=\"434\" width=\"252\" height=\"42\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"436\" y=\"444\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">family-gallery</text><text x=\"436\" y=\"454\" font-size=\"8\" fill=\"#444\">18×3 m · h 3.8</text><rect data-room=\"primary-bedroom\" data-x=\"4.5\" data-z=\"30\" data-w=\"9\" data-d=\"8\" x=\"559\" y=\"322\" width=\"126\" height=\"112\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"562\" y=\"332\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">primary-bedroom</text><text x=\"562\" y=\"342\" font-size=\"8\" fill=\"#444\">9×8 m · h 3.8</text><rect data-room=\"primary-dressing\" data-x=\"13.5\" data-z=\"33\" data-w=\"4\" data-d=\"5\" x=\"685\" y=\"322\" width=\"56\" height=\"70\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"688\" y=\"332\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">primary-dressing</text><text x=\"688\" y=\"342\" font-size=\"8\" fill=\"#444\">4×5 m · h 3.8</text><rect data-room=\"primary-bath\" data-x=\"17.5\" data-z=\"33\" data-w=\"5\" data-d=\"5\" x=\"741\" y=\"322\" width=\"70\" height=\"70\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"744\" y=\"332\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">primary-bath</text><text x=\"744\" y=\"342\" font-size=\"8\" fill=\"#444\">5×5 m · h 3.8</text><rect data-room=\"family-bedroom-one\" data-x=\"-4.5\" data-z=\"30\" data-w=\"6\" data-d=\"6\" x=\"433\" y=\"350\" width=\"84\" height=\"84\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"436\" y=\"360\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">family-bedroom-one</text><text x=\"436\" y=\"370\" font-size=\"8\" fill=\"#444\">6×6 m · h 3.8</text><rect data-room=\"family-bath-one\" data-x=\"-4.5\" data-z=\"36\" data-w=\"4\" data-d=\"4\" x=\"433\" y=\"294\" width=\"56\" height=\"56\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"436\" y=\"304\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">family-bath-one</text><text x=\"436\" y=\"314\" font-size=\"8\" fill=\"#444\">4×4 m · h 3.8</text><rect data-room=\"family-bedroom-two\" data-x=\"-4.5\" data-z=\"21\" data-w=\"6\" data-d=\"6\" x=\"433\" y=\"476\" width=\"84\" height=\"84\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"436\" y=\"486\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">family-bedroom-two</text><text x=\"436\" y=\"496\" font-size=\"8\" fill=\"#444\">6×6 m · h 3.8</text><rect data-room=\"family-bath-two\" data-x=\"-4.5\" data-z=\"17\" data-w=\"4\" data-d=\"4\" x=\"433\" y=\"560\" width=\"56\" height=\"56\" fill=\"#dfe9d8\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"436\" y=\"570\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">family-bath-two</text><text x=\"436\" y=\"580\" font-size=\"8\" fill=\"#444\">4×4 m · h 3.8</text><rect data-room=\"guest-gallery\" data-x=\"32\" data-z=\"-1\" data-w=\"3\" data-d=\"14\" x=\"944\" y=\"672\" width=\"42\" height=\"196\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"947\" y=\"682\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">guest-gallery</text><text x=\"947\" y=\"692\" font-size=\"8\" fill=\"#444\">3×14 m · h 3.8</text><rect data-room=\"guest-bedroom-one\" data-x=\"35\" data-z=\"-1\" data-w=\"7\" data-d=\"6\" x=\"986\" y=\"784\" width=\"98\" height=\"84\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"989\" y=\"794\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">guest-bedroom-one</text><text x=\"989\" y=\"804\" font-size=\"8\" fill=\"#444\">7×6 m · h 3.8</text><rect data-room=\"guest-bath-one\" data-x=\"42\" data-z=\"-1\" data-w=\"4\" data-d=\"4\" x=\"1084\" y=\"812\" width=\"56\" height=\"56\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"1087\" y=\"822\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">guest-bath-one</text><text x=\"1087\" y=\"832\" font-size=\"8\" fill=\"#444\">4×4 m · h 3.8</text><rect data-room=\"guest-bedroom-two\" data-x=\"35\" data-z=\"7\" data-w=\"7\" data-d=\"6\" x=\"986\" y=\"672\" width=\"98\" height=\"84\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"989\" y=\"682\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">guest-bedroom-two</text><text x=\"989\" y=\"692\" font-size=\"8\" fill=\"#444\">7×6 m · h 3.8</text><rect data-room=\"guest-bath-two\" data-x=\"42\" data-z=\"9\" data-w=\"4\" data-d=\"4\" x=\"1084\" y=\"672\" width=\"56\" height=\"56\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"1087\" y=\"682\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">guest-bath-two</text><text x=\"1087\" y=\"692\" font-size=\"8\" fill=\"#444\">4×4 m · h 3.8</text><rect data-room=\"library\" data-x=\"25\" data-z=\"3.5\" data-w=\"7\" data-d=\"5\" x=\"846\" y=\"735\" width=\"98\" height=\"70\" fill=\"#d6dfee\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"849\" y=\"745\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">library</text><text x=\"849\" y=\"755\" font-size=\"8\" fill=\"#444\">7×5 m · h 3.8</text><rect data-room=\"service-foyer\" data-x=\"-10\" data-z=\"0\" data-w=\"3\" data-d=\"10\" x=\"356\" y=\"714\" width=\"42\" height=\"140\" fill=\"#eed9d9\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"359\" y=\"724\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">service-foyer</text><text x=\"359\" y=\"734\" font-size=\"8\" fill=\"#444\">3×10 m · h 3.4</text><rect data-room=\"laundry\" data-x=\"-15\" data-z=\"0\" data-w=\"5\" data-d=\"5\" x=\"286\" y=\"784\" width=\"70\" height=\"70\" fill=\"#eed9d9\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"289\" y=\"794\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">laundry</text><text x=\"289\" y=\"804\" font-size=\"8\" fill=\"#444\">5×5 m · h 3.4</text><rect data-room=\"staff-bedroom\" data-x=\"-15\" data-z=\"5\" data-w=\"5\" data-d=\"5\" x=\"286\" y=\"714\" width=\"70\" height=\"70\" fill=\"#eed9d9\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"289\" y=\"724\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">staff-bedroom</text><text x=\"289\" y=\"734\" font-size=\"8\" fill=\"#444\">5×5 m · h 3.4</text><rect data-room=\"staff-bath\" data-x=\"-18\" data-z=\"7\" data-w=\"3\" data-d=\"3\" x=\"244\" y=\"714\" width=\"42\" height=\"42\" fill=\"#eed9d9\" fill-opacity=\"0.9\" stroke=\"#333\" stroke-width=\"1.2\" /><text x=\"247\" y=\"724\" font-size=\"8.5\" font-weight=\"bold\" fill=\"#222\">staff-bath</text><text x=\"247\" y=\"734\" font-size=\"8\" fill=\"#444\">3×3 m · h 3.4</text><rect data-roof=\"kitchen\" data-x=\"-7.6\" data-z=\"-0.6\" data-w=\"8.2\" data-d=\"9.2\" x=\"389.6\" y=\"733.6\" width=\"114.8\" height=\"128.8\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"dining-room\" data-x=\"15.4\" data-z=\"-0.6\" data-w=\"10.2\" data-d=\"9.2\" x=\"711.6\" y=\"733.6\" width=\"142.8\" height=\"128.8\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"scullery\" data-x=\"-7.4\" data-z=\"7.6\" data-w=\"4.8\" data-d=\"5.8\" x=\"392.4\" y=\"666.4\" width=\"67.2\" height=\"81.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"powder-room\" data-x=\"21.6\" data-z=\"7.6\" data-w=\"3.8\" data-d=\"3.8\" x=\"798.4\" y=\"694.4\" width=\"53.2\" height=\"53.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"ocean-veranda\" data-x=\"-1.8\" data-z=\"-7.8\" data-w=\"19.6\" data-d=\"8.6\" x=\"470.8\" y=\"842.8\" width=\"274.4\" height=\"120.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"outdoor-kitchen\" data-x=\"16.3\" data-z=\"-5.7\" data-w=\"7.4\" data-d=\"6.4\" x=\"724.2\" y=\"844.2\" width=\"103.6\" height=\"89.6\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"arrival-court\" data-x=\"1.5\" data-z=\"11.5\" data-w=\"13\" data-d=\"5\" x=\"517\" y=\"623\" width=\"182\" height=\"70\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"family-gallery\" data-x=\"-5\" data-z=\"26.4\" data-w=\"19.1\" data-d=\"4.1\" x=\"425.3\" y=\"426.3\" width=\"267.4\" height=\"57.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"primary-bedroom\" data-x=\"3.6\" data-z=\"29.1\" data-w=\"10.8\" data-d=\"9.8\" x=\"546.4\" y=\"309.4\" width=\"151.2\" height=\"137.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"primary-dressing\" data-x=\"13.1\" data-z=\"32.5\" data-w=\"4.9\" data-d=\"5.9\" x=\"678.7\" y=\"315.7\" width=\"68.6\" height=\"82.6\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"primary-bath\" data-x=\"17.1\" data-z=\"32.5\" data-w=\"5.9\" data-d=\"5.9\" x=\"734.7\" y=\"315.7\" width=\"82.6\" height=\"82.6\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"family-bedroom-one\" data-x=\"-5.3\" data-z=\"29.2\" data-w=\"7.6\" data-d=\"7.6\" x=\"421.8\" y=\"338.8\" width=\"106.4\" height=\"106.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"family-bath-one\" data-x=\"-4.9\" data-z=\"35.6\" data-w=\"4.8\" data-d=\"4.8\" x=\"427.4\" y=\"288.4\" width=\"67.2\" height=\"67.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"family-bedroom-two\" data-x=\"-5.3\" data-z=\"20.2\" data-w=\"7.6\" data-d=\"7.6\" x=\"421.8\" y=\"464.8\" width=\"106.4\" height=\"106.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"family-bath-two\" data-x=\"-4.9\" data-z=\"16.6\" data-w=\"4.8\" data-d=\"4.8\" x=\"427.4\" y=\"554.4\" width=\"67.2\" height=\"67.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"guest-gallery\" data-x=\"31.5\" data-z=\"-1.5\" data-w=\"4\" data-d=\"15\" x=\"937\" y=\"665\" width=\"56\" height=\"210\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"guest-bedroom-one\" data-x=\"34.2\" data-z=\"-1.8\" data-w=\"8.6\" data-d=\"7.6\" x=\"974.8\" y=\"772.8\" width=\"120.4\" height=\"106.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"guest-bath-one\" data-x=\"41.6\" data-z=\"-1.4\" data-w=\"4.8\" data-d=\"4.8\" x=\"1078.4\" y=\"806.4\" width=\"67.2\" height=\"67.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"guest-bedroom-two\" data-x=\"34.2\" data-z=\"6.2\" data-w=\"8.6\" data-d=\"7.6\" x=\"974.8\" y=\"660.8\" width=\"120.4\" height=\"106.4\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"guest-bath-two\" data-x=\"41.6\" data-z=\"8.6\" data-w=\"4.8\" data-d=\"4.8\" x=\"1078.4\" y=\"666.4\" width=\"67.2\" height=\"67.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"library\" data-x=\"24.4\" data-z=\"2.9\" data-w=\"8.2\" data-d=\"6.2\" x=\"837.6\" y=\"726.6\" width=\"114.8\" height=\"86.8\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"service-foyer\" data-x=\"-10.4\" data-z=\"-0.5\" data-w=\"3.9\" data-d=\"10.9\" x=\"349.7\" y=\"707.7\" width=\"54.6\" height=\"152.6\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"laundry\" data-x=\"-15.4\" data-z=\"-0.4\" data-w=\"5.8\" data-d=\"5.8\" x=\"280.4\" y=\"778.4\" width=\"81.2\" height=\"81.2\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"staff-bedroom\" data-x=\"-15.4\" data-z=\"4.5\" data-w=\"5.9\" data-d=\"5.9\" x=\"279.7\" y=\"707.7\" width=\"82.6\" height=\"82.6\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof=\"staff-bath\" data-x=\"-18.4\" data-z=\"6.7\" data-w=\"3.7\" data-d=\"3.7\" x=\"239.1\" y=\"709.1\" width=\"51.8\" height=\"51.8\" fill=\"none\" stroke=\"#e08a00\" stroke-width=\"1\" stroke-dasharray=\"5 3\"/><rect data-roof-conflict=\"kitchen/scullery\" data-x=\"-7.4\" data-z=\"7.6\" data-w=\"4.8\" data-d=\"1\" x=\"392.4\" y=\"733.6\" width=\"67.2\" height=\"14\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"kitchen/ocean-veranda\" data-x=\"-1.8\" data-z=\"-0.6\" data-w=\"2.4\" data-d=\"1.4\" x=\"470.8\" y=\"842.8\" width=\"33.6\" height=\"19.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"kitchen/service-foyer\" data-x=\"-7.6\" data-z=\"-0.5\" data-w=\"1.1\" data-d=\"9\" x=\"389.6\" y=\"733.6\" width=\"14.7\" height=\"126.7\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"dining-room/powder-room\" data-x=\"21.6\" data-z=\"7.6\" data-w=\"3.8\" data-d=\"1\" x=\"798.4\" y=\"733.6\" width=\"53.2\" height=\"14\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"dining-room/ocean-veranda\" data-x=\"15.4\" data-z=\"-0.6\" data-w=\"2.4\" data-d=\"1.4\" x=\"711.6\" y=\"842.8\" width=\"33.6\" height=\"19.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"dining-room/outdoor-kitchen\" data-x=\"16.3\" data-z=\"-0.6\" data-w=\"7.4\" data-d=\"1.3\" x=\"724.2\" y=\"844.2\" width=\"103.6\" height=\"18.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"dining-room/library\" data-x=\"24.4\" data-z=\"2.9\" data-w=\"1.2\" data-d=\"5.7\" x=\"837.6\" y=\"733.6\" width=\"16.8\" height=\"79.8\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"scullery/service-foyer\" data-x=\"-7.4\" data-z=\"7.6\" data-w=\"0.9\" data-d=\"2.9\" x=\"392.4\" y=\"707.7\" width=\"11.9\" height=\"39.9\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"powder-room/library\" data-x=\"24.4\" data-z=\"7.6\" data-w=\"1\" data-d=\"1.5\" x=\"837.6\" y=\"726.6\" width=\"14\" height=\"21\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"ocean-veranda/outdoor-kitchen\" data-x=\"16.3\" data-z=\"-5.7\" data-w=\"1.5\" data-d=\"6.4\" x=\"724.2\" y=\"844.2\" width=\"21\" height=\"89.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"family-gallery/primary-bedroom\" data-x=\"3.6\" data-z=\"29.1\" data-w=\"10.5\" data-d=\"1.4\" x=\"546.4\" y=\"426.3\" width=\"146.3\" height=\"20.3\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"family-gallery/family-bedroom-one\" data-x=\"-5\" data-z=\"29.2\" data-w=\"7.3\" data-d=\"1.3\" x=\"425.3\" y=\"426.3\" width=\"102.9\" height=\"18.9\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"family-gallery/family-bedroom-two\" data-x=\"-5\" data-z=\"26.4\" data-w=\"7.3\" data-d=\"1.3\" x=\"425.3\" y=\"464.8\" width=\"102.9\" height=\"18.9\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"primary-bedroom/primary-dressing\" data-x=\"13.1\" data-z=\"32.5\" data-w=\"1.3\" data-d=\"5.9\" x=\"678.7\" y=\"315.7\" width=\"18.9\" height=\"82.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"primary-dressing/primary-bath\" data-x=\"17.1\" data-z=\"32.5\" data-w=\"0.9\" data-d=\"5.9\" x=\"734.7\" y=\"315.7\" width=\"12.6\" height=\"82.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"family-bedroom-one/family-bath-one\" data-x=\"-4.9\" data-z=\"35.6\" data-w=\"4.8\" data-d=\"1.2\" x=\"427.4\" y=\"338.8\" width=\"67.2\" height=\"16.8\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"family-bedroom-two/family-bath-two\" data-x=\"-4.9\" data-z=\"20.2\" data-w=\"4.8\" data-d=\"1.2\" x=\"427.4\" y=\"554.4\" width=\"67.2\" height=\"16.8\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"guest-gallery/guest-bedroom-one\" data-x=\"34.2\" data-z=\"-1.5\" data-w=\"1.3\" data-d=\"7.3\" x=\"974.8\" y=\"772.8\" width=\"18.2\" height=\"102.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"guest-gallery/guest-bedroom-two\" data-x=\"34.2\" data-z=\"6.2\" data-w=\"1.3\" data-d=\"7.3\" x=\"974.8\" y=\"665\" width=\"18.2\" height=\"102.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"guest-gallery/library\" data-x=\"31.5\" data-z=\"2.9\" data-w=\"1.1\" data-d=\"6.2\" x=\"937\" y=\"726.6\" width=\"15.4\" height=\"86.8\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"guest-bedroom-one/guest-bath-one\" data-x=\"41.6\" data-z=\"-1.4\" data-w=\"1.2\" data-d=\"4.8\" x=\"1078.4\" y=\"806.4\" width=\"16.8\" height=\"67.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"guest-bedroom-two/guest-bath-two\" data-x=\"41.6\" data-z=\"8.6\" data-w=\"1.2\" data-d=\"4.8\" x=\"1078.4\" y=\"666.4\" width=\"16.8\" height=\"67.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"service-foyer/laundry\" data-x=\"-10.4\" data-z=\"-0.4\" data-w=\"0.8\" data-d=\"5.8\" x=\"349.7\" y=\"778.4\" width=\"11.9\" height=\"81.2\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"service-foyer/staff-bedroom\" data-x=\"-10.4\" data-z=\"4.5\" data-w=\"0.9\" data-d=\"5.9\" x=\"349.7\" y=\"707.7\" width=\"12.6\" height=\"82.6\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"laundry/staff-bedroom\" data-x=\"-15.4\" data-z=\"4.5\" data-w=\"5.8\" data-d=\"0.8\" x=\"280.4\" y=\"778.4\" width=\"81.2\" height=\"11.9\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><rect data-roof-conflict=\"staff-bedroom/staff-bath\" data-x=\"-15.4\" data-z=\"6.7\" data-w=\"0.8\" data-d=\"3.7\" x=\"279.7\" y=\"709.1\" width=\"11.2\" height=\"51.8\" fill=\"url(#hatch)\" fill-opacity=\".8\"/><line data-route=\"arrival-door\" x1=\"608\" y1=\"770\" x2=\"608\" y2=\"658\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"court-to-family-gallery\" x1=\"559\" y1=\"455\" x2=\"608\" y2=\"658\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"hall-to-kitchen\" x1=\"608\" y1=\"770\" x2=\"447\" y2=\"798\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"hall-to-dining\" x1=\"608\" y1=\"770\" x2=\"783\" y2=\"798\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"kitchen-to-scullery\" x1=\"447\" y1=\"798\" x2=\"426\" y2=\"707\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"dining-to-powder\" x1=\"783\" y1=\"798\" x2=\"825\" y2=\"721\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"hall-to-veranda\" x1=\"608\" y1=\"770\" x2=\"608\" y2=\"903\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"dining-to-veranda\" x1=\"783\" y1=\"798\" x2=\"608\" y2=\"903\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"kitchen-to-outdoor-kitchen\" x1=\"447\" y1=\"798\" x2=\"776\" y2=\"889\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"primary-suite-entry\" x1=\"559\" y1=\"455\" x2=\"622\" y2=\"378\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"primary-bedroom-to-dressing\" x1=\"622\" y1=\"378\" x2=\"713\" y2=\"357\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"primary-dressing-to-bath\" x1=\"713\" y1=\"357\" x2=\"776\" y2=\"357\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"family-one-entry\" x1=\"559\" y1=\"455\" x2=\"475\" y2=\"392\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"family-one-bath\" x1=\"475\" y1=\"392\" x2=\"461\" y2=\"322\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"family-two-entry\" x1=\"559\" y1=\"455\" x2=\"475\" y2=\"518\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"family-two-bath\" x1=\"475\" y1=\"518\" x2=\"461\" y2=\"588\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"dining-to-guest-gallery\" x1=\"783\" y1=\"798\" x2=\"965\" y2=\"770\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"guest-one-entry\" x1=\"965\" y1=\"770\" x2=\"1035\" y2=\"826\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"guest-one-bath\" x1=\"1035\" y1=\"826\" x2=\"1112\" y2=\"840\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"guest-two-entry\" x1=\"965\" y1=\"770\" x2=\"1035\" y2=\"714\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"guest-two-bath\" x1=\"1035\" y1=\"714\" x2=\"1112\" y2=\"700\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"library-entry\" x1=\"965\" y1=\"770\" x2=\"895\" y2=\"770\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"kitchen-to-service\" x1=\"447\" y1=\"798\" x2=\"377\" y2=\"784\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"service-to-laundry\" x1=\"377\" y1=\"784\" x2=\"321\" y2=\"819\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"service-to-staff\" x1=\"377\" y1=\"784\" x2=\"321\" y2=\"749\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><line data-route=\"staff-to-bath\" x1=\"321\" y1=\"749\" x2=\"265\" y2=\"735\" stroke=\"#2a8\" stroke-width=\".9\" stroke-opacity=\".7\"/><rect data-opening=\"arrival-door\" data-x=\"6.8\" data-z=\"11.9\" data-w=\"2.4\" data-d=\"0.2\" x=\"591.2\" y=\"684.3\" width=\"33.6\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"court-to-family-gallery\" data-x=\"3.6\" data-z=\"26.9\" data-w=\"1.8\" data-d=\"0.2\" x=\"546.4\" y=\"474.3\" width=\"25.2\" height=\"3.4\" fill=\"#e00\"/><circle cx=\"559\" cy=\"476\" r=\"6\" fill=\"none\" stroke=\"#e00\" stroke-width=\"1.5\"/><text x=\"566\" y=\"471\" font-size=\"7.5\" fill=\"#c00\">court-to-family-gallery</text><rect data-opening=\"hall-to-kitchen\" data-x=\"-0.1\" data-z=\"5.9\" data-w=\"0.2\" data-d=\"1.8\" x=\"494.3\" y=\"745.5\" width=\"3.4\" height=\"25.2\" fill=\"#2a5\"/><rect data-opening=\"hall-to-dining\" data-x=\"15.9\" data-z=\"0.3\" data-w=\"0.2\" data-d=\"2.4\" x=\"718.3\" y=\"816.9\" width=\"3.4\" height=\"33.6\" fill=\"#2a5\"/><rect data-opening=\"kitchen-to-scullery\" data-x=\"-4.3\" data-z=\"7.9\" data-w=\"1\" data-d=\"0.2\" x=\"436.5\" y=\"740.3\" width=\"14\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"dining-to-powder\" data-x=\"22.3\" data-z=\"7.9\" data-w=\"0.9\" data-d=\"0.2\" x=\"807.5\" y=\"740.3\" width=\"12.6\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"hall-to-veranda\" data-x=\"5.6\" data-z=\"-0.1\" data-w=\"4.8\" data-d=\"0.2\" x=\"574.4\" y=\"852.3\" width=\"67.2\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"kitchen-to-outdoor-kitchen\" data-x=\"-1.4\" data-z=\"-0.1\" data-w=\"1.2\" data-d=\"0.2\" x=\"475.7\" y=\"852.3\" width=\"16.8\" height=\"3.4\" fill=\"#e00\"/><circle cx=\"484.1\" cy=\"854\" r=\"6\" fill=\"none\" stroke=\"#e00\" stroke-width=\"1.5\"/><text x=\"491.1\" y=\"849\" font-size=\"7.5\" fill=\"#c00\">kitchen-to-outdoor-kitchen</text><rect data-opening=\"primary-suite-entry\" data-x=\"4.8\" data-z=\"29.9\" data-w=\"1.1\" data-d=\"0.2\" x=\"562.5\" y=\"432.3\" width=\"15.4\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"primary-bedroom-to-dressing\" data-x=\"13.4\" data-z=\"36.8\" data-w=\"0.2\" data-d=\"1\" x=\"683.3\" y=\"325.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"primary-dressing-to-bath\" data-x=\"17.4\" data-z=\"36.8\" data-w=\"0.2\" data-d=\"1\" x=\"739.3\" y=\"325.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"family-one-entry\" data-x=\"0.3\" data-z=\"29.9\" data-w=\"1\" data-d=\"0.2\" x=\"499.5\" y=\"432.3\" width=\"14\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"family-one-bath\" data-x=\"-1.7\" data-z=\"35.9\" data-w=\"0.9\" data-d=\"0.2\" x=\"472.9\" y=\"348.3\" width=\"12.6\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"family-two-entry\" data-x=\"-4.3\" data-z=\"26.9\" data-w=\"1\" data-d=\"0.2\" x=\"436.5\" y=\"474.3\" width=\"14\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"family-two-bath\" data-x=\"-4.3\" data-z=\"20.9\" data-w=\"0.9\" data-d=\"0.2\" x=\"436.5\" y=\"558.3\" width=\"12.6\" height=\"3.4\" fill=\"#852\"/><rect data-opening=\"guest-one-entry\" data-x=\"34.9\" data-z=\"-0.8\" data-w=\"0.2\" data-d=\"1\" x=\"984.3\" y=\"850.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"guest-one-bath\" data-x=\"41.9\" data-z=\"-0.8\" data-w=\"0.2\" data-d=\"0.9\" x=\"1082.3\" y=\"851.9\" width=\"3.4\" height=\"12.6\" fill=\"#852\"/><rect data-opening=\"guest-two-entry\" data-x=\"34.9\" data-z=\"11.8\" data-w=\"0.2\" data-d=\"1\" x=\"984.3\" y=\"675.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"guest-two-bath\" data-x=\"41.9\" data-z=\"11.9\" data-w=\"0.2\" data-d=\"0.9\" x=\"1082.3\" y=\"675.5\" width=\"3.4\" height=\"12.6\" fill=\"#852\"/><rect data-opening=\"library-entry\" data-x=\"31.9\" data-z=\"5.5\" data-w=\"0.2\" data-d=\"1.1\" x=\"942.3\" y=\"762.3\" width=\"3.4\" height=\"15.4\" fill=\"#852\"/><rect data-opening=\"kitchen-to-service\" data-x=\"-7.1\" data-z=\"6.8\" data-w=\"0.2\" data-d=\"1\" x=\"396.3\" y=\"745.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"service-to-laundry\" data-x=\"-10.1\" data-z=\"3.8\" data-w=\"0.2\" data-d=\"1\" x=\"354.3\" y=\"787.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"service-to-staff\" data-x=\"-10.1\" data-z=\"5.3\" data-w=\"0.2\" data-d=\"1\" x=\"354.3\" y=\"766.5\" width=\"3.4\" height=\"14\" fill=\"#852\"/><rect data-opening=\"staff-to-bath\" data-x=\"-15.1\" data-z=\"7.3\" data-w=\"0.2\" data-d=\"0.9\" x=\"284.3\" y=\"739.9\" width=\"3.4\" height=\"12.6\" fill=\"#852\"/><text x=\"608\" y=\"662\" font-size=\"16\" text-anchor=\"middle\" fill=\"#a50\">★</text><line x1=\"244\" x2=\"1140\" y1=\"1276\" y2=\"1276\" stroke=\"#333\" stroke-width=\".8\"/><line x1=\"244\" x2=\"244\" y1=\"1272\" y2=\"1280\" stroke=\"#333\"/><line x1=\"1140\" x2=\"1140\" y1=\"1272\" y2=\"1280\" stroke=\"#333\"/><text x=\"692\" y=\"1272\" font-size=\"10\" text-anchor=\"middle\">building 64 m</text><line x1=\"1334\" x2=\"1334\" y1=\"952\" y2=\"294\" stroke=\"#333\" stroke-width=\".8\"/><line x1=\"1330\" x2=\"1338\" y1=\"952\" y2=\"952\" stroke=\"#333\"/><line x1=\"1330\" x2=\"1338\" y1=\"294\" y2=\"294\" stroke=\"#333\"/><text transform=\"translate(1330 623) rotate(-90)\" font-size=\"10\" text-anchor=\"middle\">building 47 m</text><g transform=\"translate(1324 96)\"><path d=\"M0 -16 L6 6 L0 2 L-6 6 Z\" fill=\"#222\"/><text y=\"-19\" font-size=\"10\" text-anchor=\"middle\">N (+Z)</text></g><line x1=\"42\" x2=\"182\" y1=\"1292\" y2=\"1292\" stroke=\"#222\" stroke-width=\"2\"/><text x=\"42\" y=\"1288\" font-size=\"9\">10 m</text></g><rect x=\"0\" y=\"1342\" width=\"1384\" height=\"118\" fill=\"#f5f5f2\"/><text x=\"34\" y=\"1354\" font-size=\"9.5\" fill=\"#333\">Rooms coloured by mass</text><text x=\"692\" y=\"1354\" font-size=\"9.5\" fill=\"#333\">Dashed orange: roof extent with eaves</text><text x=\"34\" y=\"1367\" font-size=\"9.5\" fill=\"#333\">Red fill: measured overlap</text><text x=\"692\" y=\"1367\" font-size=\"9.5\" fill=\"#333\">Red hatch: eave/roof overlap</text><text x=\"34\" y=\"1380\" font-size=\"9.5\" fill=\"#333\">Brown bar door · green passage · blue window · red ring: opening not on a shared wall</text><text x=\"692\" y=\"1380\" font-size=\"9.5\" fill=\"#333\">Thin green line: door/passage circulation</text><text x=\"34\" y=\"1393\" font-size=\"9.5\" fill=\"#333\">Hatched room: not reachable from arrival</text><text x=\"692\" y=\"1393\" font-size=\"9.5\" fill=\"#333\">Dotted outline: ghost of rooms on other levels</text><text x=\"34\" y=\"1416\" font-size=\"10\" font-weight=\"bold\" fill=\"#7a5a00\">REJECTED PLAN — NOT A BUILDING. The model-authored plan as resolved by the production layout resolver; compilation refused it. Nothing here was repaired, simplified or accepted as construction.</text><text x=\"34\" y=\"1432\" font-size=\"9.5\" fill=\"#555\">Levels: ground 0.35 m · Findings: 50 errors in 6 cause groups · Masses: living-pavilion, sleeping-wing, guest-wing, service-wing</text></svg>",
+    "caption": "REJECTED PLAN — NOT A BUILDING. The model-authored plan as resolved by the production layout resolver; compilation refused it. Nothing here was repaired, simplified or accepted as construction."
+  },
+  "notes": [
+    "Compilation stopped in the \"derive\" phase; the later phases (construction, exterior, composition, site, validate) never ran, so their results are unknown, not passed.",
+    "The plan is exactly as authored; correction offers are never applied."
+  ]
+}

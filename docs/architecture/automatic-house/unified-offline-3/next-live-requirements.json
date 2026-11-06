@@ -1,0 +1,13 @@
+{
+  "status": "PREPARED FOR APPROVAL — NO APPROVAL CREATED, NO CALL MADE",
+  "supersedes": "../unified-offline-2/next-live-requirements.json",
+  "brief": "Design a single-storey Mediterranean garden house with three bedrooms and two bathrooms on a completely flat 60 by 48 metre site. Compose connected rectangular volumes in an asymmetric L shape around a sheltered garden. Use warm ivory plaster, pale limestone accents, terracotta pitched roofs with a clear main-roof hierarchy, a shaded entrance and generous room-proportioned glazing. Include a modern open-plan kitchen and dining area, comfortable private bedroom circulation, a covered veranda facing the garden, a modest swimming pool, a terrace and restrained planting. Keep the house coherent and fully editable, with no detached buildings, terrain changes or basement.",
+  "briefHash": "f291c332405e967663585e7998133af86011a43277f519bf94a62f583b8b4268",
+  "parsedRequirements": {"bedrooms": 3, "bathrooms": 2, "storeys": 1, "pool": "required"},
+  "policy": {"version": 3, "hash": "ec714f66c0c9316d36893162bec25f847059ac6dce72f522029e10c98a039b70", "model": "gpt-5.6-terra", "stageCalls": 5, "correctionCalls": 5, "correctionsPerStage": 1, "outputTokensByStage": {"1": 4000, "2": 6000, "3": 8000, "4": 6000, "5": 4000}, "maxCostUsd": 1.4, "providerTimeoutSeconds": 170, "sdkRetries": 0, "reservationPrices": {"inputPerM": 2.5, "cachedInputPerM": 0.25, "outputPerM": 15}},
+  "worstCaseForThisBrief": {"method": "real Terra Stage 1-2 replay + authored Stage 3-5, measured request bytes", "allTenCallsUsd": 1.241, "perCallUsd": "0.083-0.169"},
+  "expectedTypicalCostUsd": "about 0.05-0.15 (prior Terra calls cost 0.008-0.024 each at US$2/US$12)",
+  "project": "one new owned Private Studio project; one single-use approval bound to it, the brief hash and the policy hash",
+  "stopRules": ["Stop on any uncertain outcome, timeout, missing usage or truncated output; never retry it.", "At most one correction per stage, only after a completed answer with specific findings.", "Stop if the remaining budget cannot cover the next call's upper bound; keep the last accepted checkpoint."],
+  "successCriteria": ["All five stages accepted without manual intervention", "Zero final validation and feature-audit findings", "Authoritative save reopens identically", "Editable import into project history", "Rendered review from four angles"]
+}

@@ -1,0 +1,129 @@
+{
+  "status": "READY FOR USER APPROVAL — NOT SENT",
+  "provider": "OpenAI",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "model": "gpt-5.6-terra",
+  "wireSHA256": "9e2e685e9a1b48dd3b2d8f53872b4c506b1d5a7bb439007f2aa04fdceb6c53f7",
+  "wireBytes": 8226615,
+  "maxOutputTokens": 4000,
+  "maxCostUsd": 0.2,
+  "maxCalls": 1,
+  "maxRetries": 0,
+  "timeoutMs": 170000,
+  "cost": {
+    "textInputTokenBound": 46419,
+    "imageInputTokenBound": 12000,
+    "inputTokenBound": 58419,
+    "outputTokenBound": 4000,
+    "rates": {
+      "inputPerMillion": 2,
+      "cacheWriteMultiplier": 1.25,
+      "outputPerMillion": 12
+    },
+    "conservativeBoundUsd": 0.1940475,
+    "maximumApprovedRequestUsd": 0.2,
+    "approved": false,
+    "exactProviderTokenCount": false
+  },
+  "transport": {
+    "localSerializations": 1,
+    "providerRequests": 0,
+    "credentialReads": 0
+  },
+  "documentation": {
+    "checkedOn": "2026-11-04",
+    "sources": {
+      "model": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+      "vision": "https://developers.openai.com/api/docs/guides/images-vision",
+      "structured": "https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses"
+    },
+    "imageInput": true,
+    "structuredOutputs": true,
+    "accountAccess": "Not contacted or checked; Stage 5 successful text request is historical evidence, not a live vision test."
+  },
+  "scope": "One image review and concrete proposal response only. No refinement execution or second model call authorized.",
+  "preservation": {
+    "baselineElements": 377,
+    "cap": 400,
+    "remaining": 23,
+    "rooms": 23,
+    "bedrooms": 4,
+    "bathrooms": 5,
+    "unchangedInputHashes": true,
+    "unchangedSource": true,
+    "originalValidationFindings": [],
+    "retainedWarnings": [
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "media-lounge",
+        "message": "media-lounge (media, 7.3×3.4 m = 24.8 m²) received only 73% of the 34 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "ground-gallery",
+        "message": "ground-gallery (hall, 18.0×1.8 m = 32.4 m²) is a long thin circulation space (10.0:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is narrow: shorter side 3.0 m (comfortable 3.2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom",
+        "message": "north-bedroom (bedroom, 5.3×3.7 m = 19.6 m²) received only 63% of the 31 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is awkwardly elongated (3.1:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "east-suite-hall",
+        "message": "east-suite-hall (hall, 2.1×8.0 m = 16.8 m²) is a long thin circulation space (3.8:1)."
+      }
+    ]
+  },
+  "executionRequirements": [
+    "Obtain explicit approval for this exact wire hash, model and maximum cost.",
+    "Recheck every source/image/schema hash and cost bound before network.",
+    "Reserve exclusive sticky attempt and network markers; one POST only, no redirects/retries/fallback model.",
+    "Use existing configuration without credential changes; never record authorization headers.",
+    "Raw HTTP body, usage, finish reason and refusal recorded before JSON interpretation.",
+    "Reject incomplete, refused, invalid or out-of-scope proposals without a repair call.",
+    "Do not apply proposals from review approval; execute only after bounded executor and preservation checks are ready.",
+    "Preserve original checkpoint and warnings. Candidate diff/save/reload/matched cameras required before visual improvement claims."
+  ],
+  "billingCaveat": "Conservative bound uses current published standard rates plus 25% cache-write margin. No provider token-count endpoint or invoice checked. Historical failed Stage 3 cost remains unknown; existing US$5 experiment ceiling is unchanged."
+}

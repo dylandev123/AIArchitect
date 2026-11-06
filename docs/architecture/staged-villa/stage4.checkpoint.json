@@ -1,0 +1,138 @@
+{
+ "stage": 4,
+ "name": "exterior architecture",
+ "accepted": true,
+ "findings": [],
+ "calls": [
+  {
+   "stage": 4,
+   "purpose": "design",
+   "usage": {
+    "model": "mock",
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costUsd": 0
+   }
+  }
+ ],
+ "slice": {
+  "roofs": {
+   "entry": {
+    "form": "flat",
+    "overhang": 1,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "living": {
+    "form": "flat",
+    "overhang": 0.5,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "west-wing": {
+    "form": "flat",
+    "overhang": 0.5,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "east-wing": {
+    "form": "hip",
+    "rise": 1.5,
+    "overhang": 1.2,
+    "material": "timber",
+    "color": "#6b4a36"
+   },
+   "tower": {
+    "form": "flat",
+    "overhang": 1,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "suite": {
+    "form": "hip",
+    "rise": 2,
+    "overhang": 1.8,
+    "material": "timber",
+    "color": "#6b4a36"
+   }
+  },
+  "exterior": {
+   "facades": {
+    "entry:n": "glass-wall",
+    "entry:e": "glass-wall",
+    "living:s": "glass-wall",
+    "tower:n": "glass-wall",
+    "suite:s": "glass-wall",
+    "suite:e": "glass-wall",
+    "west-wing:n": "large-windows"
+   },
+   "doors": [
+    {
+     "id": "main-door",
+     "room": "foyer",
+     "side": "n",
+     "kind": "main",
+     "width": 1.5,
+     "t": 0.5
+    },
+    {
+     "id": "garden-living",
+     "room": "living-room",
+     "side": "s",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.7
+    },
+    {
+     "id": "garden-dining",
+     "room": "dining",
+     "side": "s",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    },
+    {
+     "id": "terrace-primary",
+     "room": "primary-bedroom",
+     "side": "w",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    },
+    {
+     "id": "cabana-east",
+     "room": "pool-lounge",
+     "side": "e",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    }
+   ],
+   "entrance": {
+    "door": "main-door",
+    "canopy": {
+     "depth": 3.2,
+     "width": 6.5,
+     "material": "timber"
+    },
+    "court": {
+     "w": 8,
+     "d": 7
+    }
+   },
+   "verandas": [
+    {
+     "id": "south",
+     "block": "living",
+     "side": "s",
+     "from": -10,
+     "to": 5,
+     "depth": 4.5,
+     "columns": 5,
+     "roofMaterial": "timber",
+     "deckMaterial": "limestone"
+    }
+   ]
+  }
+ }
+}

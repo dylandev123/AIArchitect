@@ -1,0 +1,34 @@
+{
+  "providerRequests": 1,
+  "modelRequested": "gpt-5.6-terra",
+  "modelReturned": "gpt-5.6-terra",
+  "httpStatus": 200,
+  "status": "completed",
+  "finishReason": "stop",
+  "finishReasonBasis": "Responses completed status maps to normal stop; raw status and incomplete_details retained",
+  "incompleteDetails": null,
+  "usage": {
+    "input_tokens": 19463,
+    "input_tokens_details": {
+      "cache_write_tokens": 19460,
+      "cached_tokens": 0
+    },
+    "output_tokens": 3240,
+    "output_tokens_details": {
+      "reasoning_tokens": 1310
+    },
+    "total_tokens": 22703
+  },
+  "usageBasedActualCostUsd": 0.087536,
+  "costBreakdown": {
+    "uncachedInputTokens": 3,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 19460,
+    "inputRatePerMillion": 2,
+    "cachedRatePerMillion": 0.2,
+    "cacheWriteRatePerMillion": 2.5,
+    "outputRatePerMillion": 12
+  },
+  "costBasis": "Actual provider usage including reported cache writes at freshly checked published standard rates; invoice not independently checked",
+  "refinementsExecuted": 0
+}

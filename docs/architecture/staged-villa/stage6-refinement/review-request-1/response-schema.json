@@ -1,0 +1,662 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "assessments": {
+      "minItems": 8,
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "beauty",
+              "proportions",
+              "roofs",
+              "facades",
+              "materials",
+              "entrance",
+              "pool",
+              "landscaping"
+            ]
+          },
+          "judgment": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "views": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "arrival",
+                "aerial",
+                "garden",
+                "poolside"
+              ]
+            }
+          },
+          "components": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "block:east-bedroom-wing",
+                "block:entry-pavilion",
+                "block:main-living-plinth",
+                "block:upper-bedroom-bar",
+                "block:upper-east-suite",
+                "entrance",
+                "landscape:arrival-drive",
+                "landscape:arrival-screen",
+                "landscape:arrival-walk-link",
+                "landscape:border-1",
+                "landscape:border-2",
+                "landscape:border-3",
+                "landscape:border-4",
+                "landscape:border-5",
+                "landscape:border-6",
+                "landscape:border-7",
+                "landscape:dining-chair-1",
+                "landscape:dining-chair-2",
+                "landscape:dining-chair-3",
+                "landscape:dining-chair-4",
+                "landscape:dining-table",
+                "landscape:garden-coffee-table",
+                "landscape:garden-link",
+                "landscape:garden-sofa",
+                "landscape:garden-walk",
+                "landscape:lawn-arrival",
+                "landscape:lawn-east",
+                "landscape:lawn-garden",
+                "landscape:lawn-west",
+                "landscape:palm-1",
+                "landscape:palm-10",
+                "landscape:palm-2",
+                "landscape:palm-3",
+                "landscape:palm-4",
+                "landscape:palm-5",
+                "landscape:palm-6",
+                "landscape:palm-7",
+                "landscape:palm-8",
+                "landscape:palm-9",
+                "landscape:path-light-1",
+                "landscape:path-light-2",
+                "landscape:path-light-3",
+                "landscape:path-light-4",
+                "landscape:path-light-5",
+                "landscape:path-light-6",
+                "landscape:sunbed-1",
+                "landscape:sunbed-2",
+                "landscape:sunbed-3",
+                "landscape:sunbed-4",
+                "landscape:terrace-1",
+                "landscape:terrace-2",
+                "landscape:terrace-3",
+                "landscape:terrace-4",
+                "landscape:terrace-5",
+                "landscape:terrace-6",
+                "pool",
+                "roof:entry-pavilion",
+                "roof:upper-bedroom-bar",
+                "roof:upper-east-suite",
+                "room:arrival-foyer",
+                "room:east-suite-bath",
+                "room:east-suite-bedroom",
+                "room:east-suite-hall",
+                "room:entry-link-hall",
+                "room:family-lounge",
+                "room:garden-dining",
+                "room:great-room",
+                "room:ground-gallery",
+                "room:ground-suite-bath",
+                "room:ground-suite-bedroom",
+                "room:ground-suite-hall",
+                "room:ground-suite-lounge",
+                "room:main-stair",
+                "room:media-lounge",
+                "room:north-bedroom",
+                "room:north-bedroom-bath",
+                "room:powder-bath",
+                "room:show-kitchen",
+                "room:south-bedroom",
+                "room:south-bedroom-bath",
+                "room:upper-gallery",
+                "room:upper-lounge",
+                "stair:main-stair-to-upper-gallery",
+                "veranda:south-veranda"
+              ]
+            }
+          }
+        },
+        "required": [
+          "category",
+          "judgment",
+          "views",
+          "components"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "weaknesses": {
+      "maxItems": 6,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "beauty",
+              "proportions",
+              "roofs",
+              "facades",
+              "materials",
+              "entrance",
+              "pool",
+              "landscaping"
+            ]
+          },
+          "responsibility": {
+            "type": "string",
+            "enum": [
+              "architecture",
+              "renderer",
+              "mixed",
+              "uncertain"
+            ]
+          },
+          "views": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "arrival",
+                "aerial",
+                "garden",
+                "poolside"
+              ]
+            }
+          },
+          "components": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "block:east-bedroom-wing",
+                "block:entry-pavilion",
+                "block:main-living-plinth",
+                "block:upper-bedroom-bar",
+                "block:upper-east-suite",
+                "entrance",
+                "landscape:arrival-drive",
+                "landscape:arrival-screen",
+                "landscape:arrival-walk-link",
+                "landscape:border-1",
+                "landscape:border-2",
+                "landscape:border-3",
+                "landscape:border-4",
+                "landscape:border-5",
+                "landscape:border-6",
+                "landscape:border-7",
+                "landscape:dining-chair-1",
+                "landscape:dining-chair-2",
+                "landscape:dining-chair-3",
+                "landscape:dining-chair-4",
+                "landscape:dining-table",
+                "landscape:garden-coffee-table",
+                "landscape:garden-link",
+                "landscape:garden-sofa",
+                "landscape:garden-walk",
+                "landscape:lawn-arrival",
+                "landscape:lawn-east",
+                "landscape:lawn-garden",
+                "landscape:lawn-west",
+                "landscape:palm-1",
+                "landscape:palm-10",
+                "landscape:palm-2",
+                "landscape:palm-3",
+                "landscape:palm-4",
+                "landscape:palm-5",
+                "landscape:palm-6",
+                "landscape:palm-7",
+                "landscape:palm-8",
+                "landscape:palm-9",
+                "landscape:path-light-1",
+                "landscape:path-light-2",
+                "landscape:path-light-3",
+                "landscape:path-light-4",
+                "landscape:path-light-5",
+                "landscape:path-light-6",
+                "landscape:sunbed-1",
+                "landscape:sunbed-2",
+                "landscape:sunbed-3",
+                "landscape:sunbed-4",
+                "landscape:terrace-1",
+                "landscape:terrace-2",
+                "landscape:terrace-3",
+                "landscape:terrace-4",
+                "landscape:terrace-5",
+                "landscape:terrace-6",
+                "pool",
+                "roof:entry-pavilion",
+                "roof:upper-bedroom-bar",
+                "roof:upper-east-suite",
+                "room:arrival-foyer",
+                "room:east-suite-bath",
+                "room:east-suite-bedroom",
+                "room:east-suite-hall",
+                "room:entry-link-hall",
+                "room:family-lounge",
+                "room:garden-dining",
+                "room:great-room",
+                "room:ground-gallery",
+                "room:ground-suite-bath",
+                "room:ground-suite-bedroom",
+                "room:ground-suite-hall",
+                "room:ground-suite-lounge",
+                "room:main-stair",
+                "room:media-lounge",
+                "room:north-bedroom",
+                "room:north-bedroom-bath",
+                "room:powder-bath",
+                "room:show-kitchen",
+                "room:south-bedroom",
+                "room:south-bedroom-bath",
+                "room:upper-gallery",
+                "room:upper-lounge",
+                "stair:main-stair-to-upper-gallery",
+                "veranda:south-veranda"
+              ]
+            }
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "priority",
+          "category",
+          "responsibility",
+          "views",
+          "components",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "refinements": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "weaknessPriority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "targetComponent": {
+            "type": "string",
+            "enum": [
+              "block:east-bedroom-wing",
+              "block:entry-pavilion",
+              "block:main-living-plinth",
+              "block:upper-bedroom-bar",
+              "block:upper-east-suite",
+              "entrance",
+              "landscape:arrival-drive",
+              "landscape:arrival-screen",
+              "landscape:arrival-walk-link",
+              "landscape:border-1",
+              "landscape:border-2",
+              "landscape:border-3",
+              "landscape:border-4",
+              "landscape:border-5",
+              "landscape:border-6",
+              "landscape:border-7",
+              "landscape:dining-chair-1",
+              "landscape:dining-chair-2",
+              "landscape:dining-chair-3",
+              "landscape:dining-chair-4",
+              "landscape:dining-table",
+              "landscape:garden-coffee-table",
+              "landscape:garden-link",
+              "landscape:garden-sofa",
+              "landscape:garden-walk",
+              "landscape:lawn-arrival",
+              "landscape:lawn-east",
+              "landscape:lawn-garden",
+              "landscape:lawn-west",
+              "landscape:palm-1",
+              "landscape:palm-10",
+              "landscape:palm-2",
+              "landscape:palm-3",
+              "landscape:palm-4",
+              "landscape:palm-5",
+              "landscape:palm-6",
+              "landscape:palm-7",
+              "landscape:palm-8",
+              "landscape:palm-9",
+              "landscape:path-light-1",
+              "landscape:path-light-2",
+              "landscape:path-light-3",
+              "landscape:path-light-4",
+              "landscape:path-light-5",
+              "landscape:path-light-6",
+              "landscape:sunbed-1",
+              "landscape:sunbed-2",
+              "landscape:sunbed-3",
+              "landscape:sunbed-4",
+              "landscape:terrace-1",
+              "landscape:terrace-2",
+              "landscape:terrace-3",
+              "landscape:terrace-4",
+              "landscape:terrace-5",
+              "landscape:terrace-6",
+              "pool",
+              "roof:entry-pavilion",
+              "roof:upper-bedroom-bar",
+              "roof:upper-east-suite",
+              "room:arrival-foyer",
+              "room:east-suite-bath",
+              "room:east-suite-bedroom",
+              "room:east-suite-hall",
+              "room:entry-link-hall",
+              "room:family-lounge",
+              "room:garden-dining",
+              "room:great-room",
+              "room:ground-gallery",
+              "room:ground-suite-bath",
+              "room:ground-suite-bedroom",
+              "room:ground-suite-hall",
+              "room:ground-suite-lounge",
+              "room:main-stair",
+              "room:media-lounge",
+              "room:north-bedroom",
+              "room:north-bedroom-bath",
+              "room:powder-bath",
+              "room:show-kitchen",
+              "room:south-bedroom",
+              "room:south-bedroom-bath",
+              "room:upper-gallery",
+              "room:upper-lounge",
+              "stair:main-stair-to-upper-gallery",
+              "veranda:south-veranda"
+            ]
+          },
+          "operation": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "const": "set-finish"
+                  },
+                  "block": {
+                    "type": "string",
+                    "enum": [
+                      "main-living-plinth",
+                      "east-bedroom-wing",
+                      "entry-pavilion",
+                      "upper-bedroom-bar",
+                      "upper-east-suite"
+                    ]
+                  },
+                  "wall": {
+                    "type": "string",
+                    "enum": [
+                      "ivory",
+                      "limestone",
+                      "timber",
+                      "bronze",
+                      "sage"
+                    ]
+                  },
+                  "wallColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9a-fA-F]{6}$"
+                  }
+                },
+                "required": [
+                  "op",
+                  "block",
+                  "wall",
+                  "wallColor"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "const": "move-site-item"
+                  },
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "palm-1",
+                      "palm-2",
+                      "palm-3",
+                      "palm-4",
+                      "palm-5",
+                      "palm-6",
+                      "palm-7",
+                      "palm-8",
+                      "palm-9",
+                      "palm-10",
+                      "sunbed-1",
+                      "sunbed-2",
+                      "sunbed-3",
+                      "sunbed-4",
+                      "garden-sofa",
+                      "garden-coffee-table"
+                    ]
+                  },
+                  "dx": {
+                    "type": "number",
+                    "minimum": -1,
+                    "maximum": 1
+                  },
+                  "dz": {
+                    "type": "number",
+                    "minimum": -1,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "op",
+                  "id",
+                  "dx",
+                  "dz"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "const": "set-facade"
+                  },
+                  "key": {
+                    "type": "string",
+                    "enum": [
+                      "east-bedroom-wing:e",
+                      "east-bedroom-wing:n",
+                      "east-bedroom-wing:s",
+                      "entry-pavilion:e",
+                      "entry-pavilion:n",
+                      "entry-pavilion:s",
+                      "entry-pavilion:w",
+                      "main-living-plinth:e",
+                      "main-living-plinth:n",
+                      "main-living-plinth:s",
+                      "main-living-plinth:w",
+                      "upper-bedroom-bar:e",
+                      "upper-bedroom-bar:n",
+                      "upper-bedroom-bar:s",
+                      "upper-bedroom-bar:w",
+                      "upper-east-suite:e",
+                      "upper-east-suite:n",
+                      "upper-east-suite:s",
+                      "upper-east-suite:w"
+                    ]
+                  },
+                  "style": {
+                    "type": "string",
+                    "enum": [
+                      "punched",
+                      "large-windows"
+                    ]
+                  }
+                },
+                "required": [
+                  "op",
+                  "key",
+                  "style"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "const": "set-roof"
+                  },
+                  "blocks": {
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "entry-pavilion",
+                        "upper-bedroom-bar",
+                        "upper-east-suite"
+                      ]
+                    }
+                  },
+                  "roof": {
+                    "type": "object",
+                    "properties": {
+                      "form": {
+                        "type": "string",
+                        "enum": [
+                          "hip",
+                          "gable"
+                        ]
+                      },
+                      "rise": {
+                        "type": "number",
+                        "minimum": 0.6,
+                        "maximum": 5
+                      },
+                      "overhang": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 3
+                      },
+                      "material": {
+                        "type": "string",
+                        "const": "bronze"
+                      },
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "form",
+                      "rise",
+                      "overhang",
+                      "material",
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "op",
+                  "blocks",
+                  "roof"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "expectedVisualBenefit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "acceptance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "priority",
+          "weaknessPriority",
+          "targetComponent",
+          "operation",
+          "expectedVisualBenefit",
+          "acceptance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "noSupportedRefinementReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "summary",
+    "assessments",
+    "weaknesses",
+    "refinements",
+    "noSupportedRefinementReason"
+  ],
+  "additionalProperties": false
+}

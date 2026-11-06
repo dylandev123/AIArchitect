@@ -1,0 +1,269 @@
+{
+ "stage": 3,
+ "name": "interior spatial planning",
+ "accepted": true,
+ "findings": [],
+ "calls": [
+  {
+   "stage": 3,
+   "purpose": "design",
+   "usage": {
+    "model": "mock",
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costUsd": 0
+   }
+  }
+ ],
+ "slice": {
+  "plans": {
+   "entry": {
+    "split": "x",
+    "at": 6,
+    "a": {
+     "room": {
+      "id": "foyer",
+      "name": "Foyer",
+      "type": "foyer"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "stair-hall",
+      "name": "Stair hall",
+      "type": "stair"
+     }
+    }
+   },
+   "living": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "room": {
+      "id": "living-room",
+      "name": "Living room",
+      "type": "living"
+     }
+    },
+    "b": {
+     "split": "x",
+     "at": 5,
+     "a": {
+      "room": {
+       "id": "dining",
+       "name": "Dining",
+       "type": "dining"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "type": "kitchen"
+      }
+     }
+    }
+   },
+   "west-wing": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "split": "z",
+     "at": 6,
+     "a": {
+      "room": {
+       "id": "bedroom-guest",
+       "name": "Guest bedroom",
+       "type": "bedroom"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "bedroom-2",
+       "name": "Bedroom 2",
+       "type": "bedroom"
+      }
+     }
+    },
+    "b": {
+     "room": {
+      "id": "gallery",
+      "name": "Gallery",
+      "type": "gallery"
+     }
+    }
+   },
+   "east-wing": {
+    "split": "z",
+    "at": 8,
+    "a": {
+     "room": {
+      "id": "pool-lounge",
+      "name": "Pool lounge",
+      "type": "lounge"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "pool-bath",
+      "name": "Pool bath",
+      "type": "bath"
+     }
+    }
+   },
+   "tower": {
+    "split": "x",
+    "at": 6,
+    "a": {
+     "room": {
+      "id": "bedroom-3",
+      "name": "Bedroom 3",
+      "type": "bedroom"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "landing",
+      "name": "Landing",
+      "type": "hall"
+     }
+    }
+   },
+   "suite": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "split": "z",
+     "at": 8,
+     "a": {
+      "room": {
+       "id": "primary-bedroom",
+       "name": "Primary bedroom",
+       "type": "bedroom"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "primary-bath",
+       "name": "Primary bath",
+       "type": "bath"
+      }
+     }
+    },
+    "b": {
+     "split": "z",
+     "at": 3,
+     "a": {
+      "room": {
+       "id": "upper-hall",
+       "name": "Upper hall",
+       "type": "hall"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "family-lounge",
+       "name": "Family lounge",
+       "type": "lounge"
+      }
+     }
+    }
+   }
+  },
+  "links": [
+   {
+    "a": "foyer",
+    "b": "living-room",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "foyer",
+    "b": "stair-hall",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "living-room",
+    "b": "dining",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "dining",
+    "b": "kitchen",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "gallery",
+    "b": "living-room",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "bedroom-guest",
+    "b": "gallery",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "bedroom-2",
+    "b": "gallery",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "kitchen",
+    "b": "pool-lounge",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "pool-lounge",
+    "b": "pool-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "landing",
+    "b": "bedroom-3",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "landing",
+    "b": "upper-hall",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "primary-bedroom",
+    "b": "primary-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "primary-bedroom",
+    "b": "upper-hall",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "upper-hall",
+    "b": "family-lounge",
+    "kind": "open",
+    "t": 0.5
+   }
+  ],
+  "stairs": [
+   {
+    "id": "main",
+    "room": "stair-hall",
+    "start": "n",
+    "hug": "e",
+    "width": 1.2
+   }
+  ]
+ }
+}

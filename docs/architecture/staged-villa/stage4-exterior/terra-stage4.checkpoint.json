@@ -1,0 +1,1289 @@
+{
+ "stage": 4,
+ "accepted": true,
+ "findings": [],
+ "derivation": {
+  "adjustments": [],
+  "roofs": [
+   {
+    "block": "entry-pavilion",
+    "form": "gable",
+    "pitchDeg": 27,
+    "rise": 1.53,
+    "eave": 0.9,
+    "requestedEave": 0.9
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "form": "hip",
+    "pitchDeg": 24,
+    "rise": 2.45,
+    "eave": 1.3,
+    "requestedEave": 1.3
+   },
+   {
+    "block": "upper-east-suite",
+    "form": "gable",
+    "pitchDeg": 20,
+    "rise": 1.27,
+    "eave": 0.9,
+    "requestedEave": 0.9
+   }
+  ],
+  "doors": [
+   {
+    "id": "main-entrance",
+    "room": "arrival-foyer",
+    "side": "n",
+    "kind": "main",
+    "width": 1.8
+   },
+   {
+    "id": "door-garden-dining-s",
+    "room": "garden-dining",
+    "side": "s",
+    "kind": "garden",
+    "width": 2.4
+   },
+   {
+    "id": "door-great-room-s",
+    "room": "great-room",
+    "side": "s",
+    "kind": "garden",
+    "width": 2.4
+   },
+   {
+    "id": "door-ground-suite-lounge-s",
+    "room": "ground-suite-lounge",
+    "side": "s",
+    "kind": "garden",
+    "width": 2.4
+   },
+   {
+    "id": "door-north-bedroom-w",
+    "room": "north-bedroom",
+    "side": "w",
+    "kind": "garden",
+    "width": 1.8
+   },
+   {
+    "id": "door-south-bedroom-s",
+    "room": "south-bedroom",
+    "side": "s",
+    "kind": "garden",
+    "width": 1.8
+   },
+   {
+    "id": "door-east-suite-bedroom-e",
+    "room": "east-suite-bedroom",
+    "side": "e",
+    "kind": "garden",
+    "width": 1.8
+   }
+  ],
+  "veranda": {
+   "from": -9,
+   "to": 9,
+   "depth": 4.5,
+   "columns": 6
+  }
+ },
+ "usage": {
+  "model": "gpt-5.6-terra",
+  "inputTokens": 4360,
+  "outputTokens": 1119,
+  "costUsd": 0.022148
+ },
+ "design": {
+  "statement": "Breezeway Courtyard Villa is expressed as a grounded pale-limestone living plinth, a sculptural stone arrival pavilion and light cream upper bedroom volumes beneath layered warm-bronze and terracotta roofs. Deep shade, tall vertical glazing and teak soffits give the south garden elevation a resort-like Caribbean character, while quieter punched north and east faces preserve arrival-side composure. Glass-railed roof terraces and a generous limestone veranda extend living toward the pool garden.",
+  "roofFinish": "warm-bronze",
+  "wallFinish": "cream-stucco",
+  "stone": "pale-limestone",
+  "timber": "teak",
+  "blockFinishes": [
+   {
+    "block": "main-living-plinth",
+    "finish": "stone"
+   },
+   {
+    "block": "east-bedroom-wing",
+    "finish": "stucco"
+   },
+   {
+    "block": "entry-pavilion",
+    "finish": "stone"
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "finish": "stucco"
+   },
+   {
+    "block": "upper-east-suite",
+    "finish": "stucco"
+   }
+  ],
+  "roofs": [
+   {
+    "block": "entry-pavilion",
+    "form": "gable",
+    "pitchDeg": 27,
+    "eaves": "deep"
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "form": "hip",
+    "pitchDeg": 24,
+    "eaves": "very-deep"
+   },
+   {
+    "block": "upper-east-suite",
+    "form": "gable",
+    "pitchDeg": 20,
+    "eaves": "deep"
+   }
+  ],
+  "facades": [
+   {
+    "block": "main-living-plinth",
+    "side": "n",
+    "style": "punched"
+   },
+   {
+    "block": "main-living-plinth",
+    "side": "s",
+    "style": "glass-wall"
+   },
+   {
+    "block": "main-living-plinth",
+    "side": "e",
+    "style": "punched"
+   },
+   {
+    "block": "east-bedroom-wing",
+    "side": "n",
+    "style": "punched"
+   },
+   {
+    "block": "east-bedroom-wing",
+    "side": "s",
+    "style": "large-windows"
+   },
+   {
+    "block": "east-bedroom-wing",
+    "side": "e",
+    "style": "punched"
+   },
+   {
+    "block": "entry-pavilion",
+    "side": "n",
+    "style": "punched"
+   },
+   {
+    "block": "entry-pavilion",
+    "side": "w",
+    "style": "solid"
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "side": "n",
+    "style": "punched"
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "side": "s",
+    "style": "glass-wall"
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "side": "w",
+    "style": "large-windows"
+   },
+   {
+    "block": "upper-east-suite",
+    "side": "n",
+    "style": "punched"
+   },
+   {
+    "block": "upper-east-suite",
+    "side": "e",
+    "style": "glass-wall"
+   },
+   {
+    "block": "upper-east-suite",
+    "side": "s",
+    "style": "large-windows"
+   }
+  ],
+  "windowTrim": "stone-and-shutters",
+  "railing": "glass",
+  "details": {
+   "plinth": true,
+   "cornice": true
+  },
+  "entrance": {
+   "room": "arrival-foyer",
+   "side": "n",
+   "canopy": "deep",
+   "portal": true,
+   "court": "generous"
+  },
+  "doors": [
+   {
+    "room": "garden-dining",
+    "side": "s",
+    "kind": "garden"
+   },
+   {
+    "room": "great-room",
+    "side": "s",
+    "kind": "garden"
+   },
+   {
+    "room": "ground-suite-lounge",
+    "side": "s",
+    "kind": "garden"
+   },
+   {
+    "room": "north-bedroom",
+    "side": "w",
+    "kind": "terrace"
+   },
+   {
+    "room": "south-bedroom",
+    "side": "s",
+    "kind": "terrace"
+   },
+   {
+    "room": "east-suite-bedroom",
+    "side": "e",
+    "kind": "terrace"
+   }
+  ],
+  "veranda": {
+   "openSpace": "south-veranda",
+   "columns": "stone-piers",
+   "spacing": "generous",
+   "ceiling": "timber-beams",
+   "roof": "bronze",
+   "deck": "limestone"
+  },
+  "intentions": [
+   "Make the upper bedroom bar the unmistakable warm-bronze roof crown.",
+   "Use the limestone plinth and pavilion to give the villa a permanent, crafted base.",
+   "Keep the north arrival face shaded and composed with restrained openings.",
+   "Open the south living rooms fully onto the deep veranda and pool garden.",
+   "Use teak soffits and shutters to warm the pale stone and cream stucco palette.",
+   "Treat the roof terraces as elevated outdoor rooms behind light glass rails."
+  ]
+ },
+ "spec": {
+  "version": "staged-house-1",
+  "site": {
+   "width": 60,
+   "depth": 48
+  },
+  "direction": {
+   "name": "Breezeway Courtyard Villa",
+   "concept": "A contemporary Caribbean composition organized as a strong, low limestone plinth facing the arrival court, with a lighter, offset upper bedroom bar and a deeply shaded south-facing garden veranda. The asymmetrical entry pavilion and stepped upper volume give the villa a distinct identity from every approach while preserving a broad, calm pool garden.",
+   "hierarchy": [
+    "Primary mass: broad two-storey central living volume",
+    "Secondary mass: lower east bedroom/service wing",
+    "Arrival marker: compact west entry pavilion projecting toward the north forecourt",
+    "Garden threshold: full-width covered south veranda",
+    "Crowning mass: offset upper bedroom bar with a smaller east suite volume"
+   ],
+   "roofLanguage": "Low, crisply edged Caribbean roof planes with deep overhangs; the upper volumes should read as floating shade canopies above recessed glazing and shaded terraces.",
+   "entrance": "Arrival is from the north into a generous forecourt. The projecting west entry pavilion creates a protected, memorable approach before guests turn into a tall, shaded entry recess beneath the offset upper mass.",
+   "outdoorLiving": "The south side is the dedicated garden face: a 4.5 m-deep covered veranda extends from the main living mass and forms the shaded transition to the future pool terrace and approximately 9 m-deep swimming pool beyond.",
+   "landscape": "Maintain an open north arrival lawn and forecourt, with palms framing the entry pavilion. The south garden is a broad resort-like lawn and palm grove around the pool, with layered tropical planting concentrated along the east and west boundaries.",
+   "palette": {
+    "walls": "ivory",
+    "accent": "limestone",
+    "roof": "bronze",
+    "roofColor": "#4A4037",
+    "deck": "timber"
+   }
+  },
+  "blocks": [
+   {
+    "id": "main-living-plinth",
+    "role": "primary ground-floor living, dining, kitchen and bedroom mass",
+    "cx": 0,
+    "cz": 1,
+    "w": 18,
+    "d": 14,
+    "level": 0,
+    "plan": {
+     "split": "z",
+     "at": 3.4,
+     "a": {
+      "split": "x",
+      "at": 14,
+      "a": {
+       "split": "x",
+       "at": 7.3,
+       "a": {
+        "room": {
+         "id": "media-lounge",
+         "name": "Media Retreat",
+         "type": "media"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "main-stair",
+         "name": "Sculptural Stair Hall",
+         "type": "stair"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "powder-bath",
+        "name": "Guest Powder Bath",
+        "type": "bath"
+       }
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 1.8,
+      "a": {
+       "room": {
+        "id": "ground-gallery",
+        "name": "Ground Floor Gallery",
+        "type": "hall"
+       }
+      },
+      "b": {
+       "split": "x",
+       "at": 15,
+       "a": {
+        "split": "x",
+        "at": 7.1,
+        "a": {
+         "split": "z",
+         "at": 4.4,
+         "a": {
+          "room": {
+           "id": "show-kitchen",
+           "name": "Open Entertaining Kitchen",
+           "type": "kitchen"
+          }
+         },
+         "b": {
+          "room": {
+           "id": "garden-dining",
+           "name": "Veranda Dining Room",
+           "type": "dining"
+          }
+         }
+        },
+        "b": {
+         "room": {
+          "id": "great-room",
+          "name": "Garden Great Room",
+          "type": "living"
+         }
+        }
+       },
+       "b": {
+        "room": {
+         "id": "family-lounge",
+         "name": "Informal Family Lounge",
+         "type": "lounge"
+        }
+       }
+      }
+     }
+    },
+    "roof": {
+     "form": "flat",
+     "overhang": 0,
+     "material": "bronze"
+    },
+    "wall": "limestone",
+    "wallColor": "#D6C8A8"
+   },
+   {
+    "id": "east-bedroom-wing",
+    "role": "secondary ground-floor bedroom and support wing",
+    "cx": 14.5,
+    "cz": 2,
+    "w": 11,
+    "d": 10,
+    "level": 0,
+    "plan": {
+     "split": "x",
+     "at": 6.2,
+     "a": {
+      "split": "z",
+      "at": 2.6,
+      "a": {
+       "room": {
+        "id": "ground-suite-hall",
+        "name": "Ground Suite Vestibule",
+        "type": "hall"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "ground-suite-lounge",
+        "name": "Private Garden Lounge",
+        "type": "lounge"
+       }
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 7.5,
+      "a": {
+       "room": {
+        "id": "ground-suite-bedroom",
+        "name": "Ground Garden Suite",
+        "type": "bedroom"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "ground-suite-bath",
+        "name": "Ground Suite Ensuite",
+        "type": "bath"
+       }
+      }
+     }
+    },
+    "roof": {
+     "form": "flat",
+     "overhang": 0,
+     "material": "bronze"
+    },
+    "wall": "ivory",
+    "wallColor": "#EDE1C4"
+   },
+   {
+    "id": "entry-pavilion",
+    "role": "projecting arrival entry and stair pavilion",
+    "cx": -12,
+    "cz": -4,
+    "w": 6,
+    "d": 7,
+    "level": 0,
+    "plan": {
+     "split": "z",
+     "at": 3.7,
+     "a": {
+      "room": {
+       "id": "arrival-foyer",
+       "name": "Shaded Arrival Foyer",
+       "type": "foyer"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "entry-link-hall",
+       "name": "Entry Gallery Hall",
+       "type": "hall"
+      }
+     }
+    },
+    "roof": {
+     "form": "gable",
+     "rise": 1.53,
+     "overhang": 0.9,
+     "material": "bronze",
+     "color": "#7A5B3A"
+    },
+    "wall": "limestone",
+    "wallColor": "#D6C8A8"
+   },
+   {
+    "id": "upper-bedroom-bar",
+    "role": "primary upper-floor bedroom mass",
+    "cx": -1,
+    "cz": -1,
+    "w": 12,
+    "d": 11,
+    "level": 1,
+    "plan": {
+     "split": "z",
+     "at": 5.5,
+     "a": {
+      "split": "x",
+      "at": 5.3,
+      "a": {
+       "split": "z",
+       "at": 3.7,
+       "a": {
+        "room": {
+         "id": "north-bedroom",
+         "name": "North Garden Bedroom",
+         "type": "bedroom"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "north-bedroom-bath",
+         "name": "North Bedroom Ensuite",
+         "type": "bath"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "upper-gallery",
+        "name": "Upper Landing Gallery",
+        "type": "gallery"
+       }
+      }
+     },
+     "b": {
+      "split": "x",
+      "at": 7.3,
+      "a": {
+       "split": "x",
+       "at": 1.8,
+       "a": {
+        "room": {
+         "id": "south-bedroom-bath",
+         "name": "South Bedroom Ensuite",
+         "type": "bath"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "south-bedroom",
+         "name": "South Veranda Bedroom",
+         "type": "bedroom"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "upper-lounge",
+        "name": "Upper Sunset Lounge",
+        "type": "lounge"
+       }
+      }
+     }
+    },
+    "roof": {
+     "form": "hip",
+     "rise": 2.45,
+     "overhang": 1.3,
+     "material": "bronze",
+     "color": "#7A5B3A"
+    },
+    "wall": "ivory",
+    "wallColor": "#EDE1C4"
+   },
+   {
+    "id": "upper-east-suite",
+    "role": "stepped upper-floor bedroom suite mass",
+    "cx": 8.5,
+    "cz": 1,
+    "w": 7,
+    "d": 8,
+    "level": 1,
+    "plan": {
+     "split": "x",
+     "at": 2.1,
+     "a": {
+      "room": {
+       "id": "east-suite-hall",
+       "name": "East Suite Vestibule",
+       "type": "hall"
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 6,
+      "a": {
+       "room": {
+        "id": "east-suite-bedroom",
+        "name": "East Sky Suite",
+        "type": "bedroom"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "east-suite-bath",
+        "name": "East Sky Suite Ensuite",
+        "type": "bath"
+       }
+      }
+     }
+    },
+    "roof": {
+     "form": "gable",
+     "rise": 1.27,
+     "overhang": 0.9,
+     "material": "bronze",
+     "color": "#7A5B3A"
+    },
+    "wall": "ivory",
+    "wallColor": "#EDE1C4"
+   }
+  ],
+  "openSpaces": [
+   {
+    "id": "south-veranda",
+    "role": "covered garden-facing outdoor living veranda",
+    "cx": 0,
+    "cz": 10.25,
+    "w": 18,
+    "d": 4.5,
+    "host": "main-living-plinth",
+    "side": "s"
+   }
+  ],
+  "links": [
+   {
+    "a": "arrival-foyer",
+    "b": "entry-link-hall",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "entry-link-hall",
+    "b": "ground-gallery",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-gallery",
+    "b": "great-room",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-gallery",
+    "b": "media-lounge",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-gallery",
+    "b": "main-stair",
+    "kind": "door",
+    "t": 0.8
+   },
+   {
+    "a": "ground-gallery",
+    "b": "powder-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-gallery",
+    "b": "ground-suite-hall",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "great-room",
+    "b": "garden-dining",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "garden-dining",
+    "b": "show-kitchen",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "great-room",
+    "b": "family-lounge",
+    "kind": "open",
+    "t": 0.5
+   },
+   {
+    "a": "ground-suite-hall",
+    "b": "ground-suite-bedroom",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-suite-hall",
+    "b": "ground-suite-lounge",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "ground-suite-bedroom",
+    "b": "ground-suite-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "upper-gallery",
+    "b": "north-bedroom",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "upper-gallery",
+    "b": "south-bedroom",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "upper-gallery",
+    "b": "upper-lounge",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "north-bedroom",
+    "b": "north-bedroom-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "south-bedroom",
+    "b": "south-bedroom-bath",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "upper-gallery",
+    "b": "east-suite-hall",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "east-suite-hall",
+    "b": "east-suite-bedroom",
+    "kind": "door",
+    "t": 0.5
+   },
+   {
+    "a": "east-suite-bedroom",
+    "b": "east-suite-bath",
+    "kind": "door",
+    "t": 0.5
+   }
+  ],
+  "stairs": [
+   {
+    "id": "main-stair-to-upper-gallery",
+    "room": "main-stair",
+    "start": "e",
+    "hug": "n",
+    "width": 1.2
+   }
+  ],
+  "exterior": {
+   "facades": {
+    "main-living-plinth:n": "punched",
+    "main-living-plinth:s": "glass-wall",
+    "main-living-plinth:e": "punched",
+    "east-bedroom-wing:n": "punched",
+    "east-bedroom-wing:s": "large-windows",
+    "east-bedroom-wing:e": "punched",
+    "entry-pavilion:n": "punched",
+    "entry-pavilion:w": "solid",
+    "upper-bedroom-bar:n": "punched",
+    "upper-bedroom-bar:s": "glass-wall",
+    "upper-bedroom-bar:w": "large-windows",
+    "upper-east-suite:n": "punched",
+    "upper-east-suite:e": "glass-wall",
+    "upper-east-suite:s": "large-windows"
+   },
+   "doors": [
+    {
+     "id": "main-entrance",
+     "room": "arrival-foyer",
+     "side": "n",
+     "kind": "main",
+     "width": 1.8,
+     "t": 0.5
+    },
+    {
+     "id": "door-garden-dining-s",
+     "room": "garden-dining",
+     "side": "s",
+     "kind": "garden",
+     "width": 2.4,
+     "t": 0.5
+    },
+    {
+     "id": "door-great-room-s",
+     "room": "great-room",
+     "side": "s",
+     "kind": "garden",
+     "width": 2.4,
+     "t": 0.5
+    },
+    {
+     "id": "door-ground-suite-lounge-s",
+     "room": "ground-suite-lounge",
+     "side": "s",
+     "kind": "garden",
+     "width": 2.4,
+     "t": 0.5
+    },
+    {
+     "id": "door-north-bedroom-w",
+     "room": "north-bedroom",
+     "side": "w",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    },
+    {
+     "id": "door-south-bedroom-s",
+     "room": "south-bedroom",
+     "side": "s",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    },
+    {
+     "id": "door-east-suite-bedroom-e",
+     "room": "east-suite-bedroom",
+     "side": "e",
+     "kind": "garden",
+     "width": 1.8,
+     "t": 0.5
+    }
+   ],
+   "entrance": {
+    "door": "main-entrance",
+    "canopy": {
+     "depth": 3.2,
+     "width": 5.4,
+     "material": "timber"
+    },
+    "court": {
+     "w": 7,
+     "d": 6
+    }
+   },
+   "verandas": [
+    {
+     "id": "south-veranda",
+     "block": "main-living-plinth",
+     "side": "s",
+     "from": -9,
+     "to": 9,
+     "depth": 4.5,
+     "columns": 6,
+     "roofMaterial": "bronze",
+     "deckMaterial": "limestone",
+     "columnMaterial": "limestone",
+     "beams": true
+    }
+   ]
+  },
+  "siteWork": {
+   "pool": {
+    "x": 0,
+    "z": 0,
+    "w": 3,
+    "d": 2,
+    "basinDepth": 1
+   },
+   "lawns": [],
+   "beds": [],
+   "trees": [],
+   "hedges": [],
+   "paths": []
+  },
+  "trim": {
+   "windowTrim": "stone-and-shutters",
+   "railing": "glass",
+   "plinth": true,
+   "cornice": true,
+   "portal": true,
+   "stoneColor": "#D6C8A8",
+   "timberColor": "#7A5230",
+   "plasterColor": "#EDE1C4",
+   "canopy": "deep"
+  }
+ },
+ "metrics": {
+  "roofs": [
+   {
+    "block": "entry-pavilion",
+    "form": "gable",
+    "nominalPitchDeg": 27,
+    "rise": 1.53,
+    "ridgeHeight": 4.93,
+    "riseToWallHeight": 0.49,
+    "eaves": {
+     "north": 0,
+     "east": 0,
+     "south": 0.9,
+     "west": 0.9
+    },
+    "maxEave": 0.9
+   },
+   {
+    "block": "upper-bedroom-bar",
+    "form": "hip",
+    "nominalPitchDeg": 24,
+    "rise": 2.45,
+    "ridgeHeight": 9.25,
+    "riseToWallHeight": 0.79,
+    "eaves": {
+     "north": 1.3,
+     "east": 0,
+     "south": 1.3,
+     "west": 1.3
+    },
+    "maxEave": 1.3
+   },
+   {
+    "block": "upper-east-suite",
+    "form": "gable",
+    "nominalPitchDeg": 19.9,
+    "rise": 1.27,
+    "ridgeHeight": 8.07,
+    "riseToWallHeight": 0.41,
+    "eaves": {
+     "north": 0.9,
+     "east": 0.9,
+     "south": 0.9,
+     "west": 0
+    },
+    "maxEave": 0.9
+   }
+  ],
+  "openings": {
+   "total": 26,
+   "glazed": 26,
+   "minWidth": 0.6,
+   "minHeight": 0.7,
+   "slits": 13,
+   "medianHeightToWidth": 0.82,
+   "byFacade": {
+    "main-living-plinth:n": {
+     "windows": 5,
+     "doors": 0,
+     "glazedAreaRatio": 0.21,
+     "wallArea": 55.8,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "main-living-plinth:e": {
+     "windows": 1,
+     "doors": 0,
+     "glazedAreaRatio": 0.07,
+     "wallArea": 10.5,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "main-living-plinth:w": {
+     "windows": 2,
+     "doors": 0,
+     "glazedAreaRatio": 0.43,
+     "wallArea": 25.4,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "main-living-plinth:s": {
+     "windows": 0,
+     "doors": 7,
+     "glazedAreaRatio": 0.57,
+     "wallArea": 55.8,
+     "maxRelief": 0,
+     "reliefLayers": []
+    },
+    "east-bedroom-wing:n": {
+     "windows": 4,
+     "doors": 0,
+     "glazedAreaRatio": 0.11,
+     "wallArea": 34.1,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "east-bedroom-wing:s": {
+     "windows": 1,
+     "doors": 1,
+     "glazedAreaRatio": 0.19,
+     "wallArea": 34.1,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "east-bedroom-wing:e": {
+     "windows": 3,
+     "doors": 0,
+     "glazedAreaRatio": 0.22,
+     "wallArea": 29.1,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "plinth",
+      "window surrounds"
+     ]
+    },
+    "entry-pavilion:n": {
+     "windows": 0,
+     "doors": 1,
+     "glazedAreaRatio": 0.26,
+     "wallArea": 18.6,
+     "maxRelief": 0.18,
+     "reliefLayers": [
+      "cornice",
+      "plinth"
+     ]
+    },
+    "entry-pavilion:e": {
+     "windows": 0,
+     "doors": 0,
+     "glazedAreaRatio": 0,
+     "wallArea": 3.7,
+     "maxRelief": 0.18,
+     "reliefLayers": [
+      "cornice",
+      "plinth"
+     ]
+    },
+    "entry-pavilion:w": {
+     "windows": 0,
+     "doors": 0,
+     "glazedAreaRatio": 0,
+     "wallArea": 19.8,
+     "maxRelief": 0.9,
+     "reliefLayers": [
+      "cornice",
+      "plinth",
+      "eave"
+     ]
+    },
+    "entry-pavilion:s": {
+     "windows": 1,
+     "doors": 0,
+     "glazedAreaRatio": 0.04,
+     "wallArea": 18.6,
+     "maxRelief": 0.9,
+     "reliefLayers": [
+      "cornice",
+      "plinth",
+      "eave",
+      "window surrounds"
+     ]
+    },
+    "upper-bedroom-bar:n": {
+     "windows": 4,
+     "doors": 0,
+     "glazedAreaRatio": 0.22,
+     "wallArea": 37.2,
+     "maxRelief": 1.3,
+     "reliefLayers": [
+      "eave",
+      "window surrounds"
+     ]
+    },
+    "upper-bedroom-bar:w": {
+     "windows": 1,
+     "doors": 1,
+     "glazedAreaRatio": 0.16,
+     "wallArea": 31.3,
+     "maxRelief": 1.3,
+     "reliefLayers": [
+      "eave",
+      "window surrounds"
+     ]
+    },
+    "upper-bedroom-bar:e": {
+     "windows": 1,
+     "doors": 0,
+     "glazedAreaRatio": 0.4,
+     "wallArea": 9.9,
+     "maxRelief": 0.2,
+     "reliefLayers": [
+      "window surrounds"
+     ]
+    },
+    "upper-bedroom-bar:s": {
+     "windows": 0,
+     "doors": 2,
+     "glazedAreaRatio": 0.4,
+     "wallArea": 37.2,
+     "maxRelief": 1.3,
+     "reliefLayers": [
+      "eave"
+     ]
+    },
+    "upper-east-suite:n": {
+     "windows": 2,
+     "doors": 0,
+     "glazedAreaRatio": 0.11,
+     "wallArea": 21.7,
+     "maxRelief": 0.9,
+     "reliefLayers": [
+      "eave",
+      "window surrounds"
+     ]
+    },
+    "upper-east-suite:s": {
+     "windows": 1,
+     "doors": 0,
+     "glazedAreaRatio": 0.04,
+     "wallArea": 21.7,
+     "maxRelief": 0.9,
+     "reliefLayers": [
+      "eave",
+      "window surrounds"
+     ]
+    },
+    "upper-east-suite:w": {
+     "windows": 0,
+     "doors": 0,
+     "glazedAreaRatio": 0,
+     "wallArea": 0.6,
+     "maxRelief": 0,
+     "reliefLayers": []
+    },
+    "upper-east-suite:e": {
+     "windows": 0,
+     "doors": 3,
+     "glazedAreaRatio": 0.36,
+     "wallArea": 22.9,
+     "maxRelief": 0.9,
+     "reliefLayers": [
+      "eave"
+     ]
+    }
+   }
+  },
+  "massing": {
+   "distinctRoofForms": [
+    "gable",
+    "hip"
+   ],
+   "distinctRidgeHeights": 3,
+   "tallestRoofBlock": "upper-bedroom-bar",
+   "largestMassBlock": "main-living-plinth",
+   "materials": [
+    "ivory",
+    "limestone",
+    "timber"
+   ],
+   "trimElements": 128,
+   "elementCount": 307
+  },
+  "entrance": {
+   "canopyDepth": 3.2,
+   "portal": true,
+   "stoneColumns": true,
+   "roofFormOverEntrance": "gable"
+  },
+  "warnings": [
+   {
+    "area": "facade-depth",
+    "severity": "warning",
+    "subject": "main-living-plinth:s",
+    "message": "The 18 m s facade of main-living-plinth has almost no relief (0.00 m): it will read as a flat plane."
+   },
+   {
+    "area": "facade-depth",
+    "severity": "warning",
+    "subject": "upper-east-suite:w",
+    "message": "The 8 m w facade of upper-east-suite has almost no relief (0.00 m): it will read as a flat plane."
+   },
+   {
+    "area": "openings",
+    "severity": "warning",
+    "subject": "openings",
+    "message": "13 windows are slit-like (<0.9 m wide or <1.2 m tall)."
+   },
+   {
+    "area": "openings",
+    "severity": "warning",
+    "subject": "openings",
+    "message": "Median window is wider than tall (h/w 0.82); Mediterranean proportion is vertical."
+   },
+   {
+    "area": "roof",
+    "severity": "note",
+    "subject": "main-living-plinth",
+    "message": "main-living-plinth lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+   },
+   {
+    "area": "roof",
+    "severity": "note",
+    "subject": "east-bedroom-wing",
+    "message": "east-bedroom-wing lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "media-lounge",
+    "message": "media-lounge (media, 7.3×3.4 m = 24.8 m²) received only 73% of the 34 m² Terra asked for (the block could not give more)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "ground-gallery",
+    "message": "ground-gallery (hall, 18.0×1.8 m = 32.4 m²) is a long thin circulation space (10.0:1)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "family-lounge",
+    "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is narrow: shorter side 3.0 m (comfortable 3.2 m)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "family-lounge",
+    "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is awkwardly elongated (2.9:1)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "north-bedroom",
+    "message": "north-bedroom (bedroom, 5.3×3.7 m = 19.6 m²) received only 63% of the 31 m² Terra asked for (the block could not give more)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "north-bedroom-bath",
+    "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "north-bedroom-bath",
+    "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is awkwardly elongated (2.9:1)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "south-bedroom-bath",
+    "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "south-bedroom-bath",
+    "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is awkwardly elongated (3.1:1)."
+   },
+   {
+    "area": "room-plan",
+    "severity": "warning",
+    "subject": "east-suite-hall",
+    "message": "east-suite-hall (hall, 2.1×8.0 m = 16.8 m²) is a long thin circulation space (3.8:1)."
+   }
+  ]
+ },
+ "preservedFrom": "stage3-programme/live/stage3.scene.json (unchanged)"
+}

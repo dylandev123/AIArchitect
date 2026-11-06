@@ -1,0 +1,51 @@
+{
+  "acceptedBaseline": "Actual Terra Stage 5",
+  "rejectedCandidateAccepted": false,
+  "baselineDatums": [
+    {
+      "block": "entry-pavilion",
+      "sourceRise": 1.53,
+      "renderedEave": 3.4,
+      "expectedWallTop": 3.4,
+      "driftMetres": 0.0
+    },
+    {
+      "block": "upper-bedroom-bar",
+      "sourceRise": 2.45,
+      "renderedEave": 6.800000000000001,
+      "expectedWallTop": 6.8,
+      "driftMetres": 8.881784197001252e-16
+    },
+    {
+      "block": "upper-east-suite",
+      "sourceRise": 1.27,
+      "renderedEave": 6.8,
+      "expectedWallTop": 6.8,
+      "driftMetres": 0.0
+    }
+  ],
+  "candidateDatums": [
+    {
+      "block": "entry-pavilion",
+      "sourceRise": 1.53,
+      "renderedEave": 3.4,
+      "expectedWallTop": 3.4,
+      "driftMetres": 0.0
+    },
+    {
+      "block": "upper-bedroom-bar",
+      "sourceRise": 2.0825,
+      "renderedEave": 6.7995,
+      "expectedWallTop": 6.8,
+      "driftMetres": -0.0004999999999997229
+    },
+    {
+      "block": "upper-east-suite",
+      "sourceRise": 1.27,
+      "renderedEave": 6.8,
+      "expectedWallTop": 6.8,
+      "driftMetres": 0.0
+    }
+  ],
+  "finding": "The two newly reported submillimetre crossings are isolated to the rejected roof candidate at this checkpoint. Independently rounding roof centre and height is a generic compiler precision risk for future fractional inputs. Existing accepted baseline has zero eave drift. Pre-existing fascia corner overlap remains disclosed; no roof correction or new junction engine implemented."
+}

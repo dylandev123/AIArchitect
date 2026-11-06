@@ -1,0 +1,410 @@
+[
+  {
+    "stage": 1,
+    "normalizations": [],
+    "warnings": []
+  },
+  {
+    "stage": 2,
+    "normalizations": [
+      {
+        "path": "blocks.0.id",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "blocks.1.id",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "blocks.2.id",
+        "from": "arrival_entry",
+        "to": "arrival-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "blocks.3.id",
+        "from": "garden_veranda",
+        "to": "garden-veranda",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "blocks.4.id",
+        "from": "limestone_terrace",
+        "to": "limestone-terrace",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "blocks.5.id",
+        "from": "garden_pool",
+        "to": "garden-pool",
+        "reason": "identifier underscore → hyphen"
+      }
+    ],
+    "warnings": [
+      {
+        "stage": 2,
+        "code": "site-intent-reservation",
+        "subject": "garden-pool",
+        "message": "garden-pool is an open-space footprint reservation at massing stage, not a constructed swimming pool. Stage 5 must resolve the basin/deck and site clearance without silently relocating accepted components."
+      }
+    ]
+  },
+  {
+    "stage": 3,
+    "normalizations": [
+      {
+        "path": "rooms.0.id",
+        "from": "entry_foyer",
+        "to": "entry-foyer",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.1.id",
+        "from": "living_room",
+        "to": "living-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.2.id",
+        "from": "dining_room",
+        "to": "dining-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.3.id",
+        "from": "kitchen_room",
+        "to": "kitchen-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.4.id",
+        "from": "private_hall",
+        "to": "private-hall",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.5.id",
+        "from": "bed_1",
+        "to": "bed-1",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.6.id",
+        "from": "bed_2",
+        "to": "bed-2",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.7.id",
+        "from": "bed_3",
+        "to": "bed-3",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.8.id",
+        "from": "bath_1",
+        "to": "bath-1",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.9.id",
+        "from": "bath_2",
+        "to": "bath-2",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.0.block",
+        "from": "arrival_entry",
+        "to": "arrival-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.1.block",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.2.block",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.3.block",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.4.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.5.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.6.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.7.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.8.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "rooms.9.block",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.0.a",
+        "from": "entry_foyer",
+        "to": "entry-foyer",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.0.b",
+        "from": "living_room",
+        "to": "living-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.1.a",
+        "from": "living_room",
+        "to": "living-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.1.b",
+        "from": "dining_room",
+        "to": "dining-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.2.a",
+        "from": "dining_room",
+        "to": "dining-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.2.b",
+        "from": "kitchen_room",
+        "to": "kitchen-room",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.3.a",
+        "from": "entry_foyer",
+        "to": "entry-foyer",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.3.b",
+        "from": "private_hall",
+        "to": "private-hall",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.4.a",
+        "from": "private_hall",
+        "to": "private-hall",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.4.b",
+        "from": "bed_1",
+        "to": "bed-1",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.5.a",
+        "from": "private_hall",
+        "to": "private-hall",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.5.b",
+        "from": "bed_2",
+        "to": "bed-2",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.6.a",
+        "from": "private_hall",
+        "to": "private-hall",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.6.b",
+        "from": "bed_3",
+        "to": "bed-3",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.7.a",
+        "from": "bed_1",
+        "to": "bed-1",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.7.b",
+        "from": "bath_1",
+        "to": "bath-1",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.8.a",
+        "from": "bed_2",
+        "to": "bed-2",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "connections.8.b",
+        "from": "bath_2",
+        "to": "bath-2",
+        "reason": "identifier underscore → hyphen"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "stage": 4,
+    "normalizations": [
+      {
+        "path": "roofs.social_main",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "roofs.private_wing",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "roofs.arrival_entry",
+        "from": "arrival_entry",
+        "to": "arrival-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.facades.social_main:s",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.facades.private_wing:s",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.facades.arrival_entry:s",
+        "from": "arrival_entry",
+        "to": "arrival-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.doors.0.id",
+        "from": "main_entry",
+        "to": "main-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.doors.0.room",
+        "from": "entry_foyer",
+        "to": "entry-foyer",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.entrance.door",
+        "from": "main_entry",
+        "to": "main-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.verandas.0.id",
+        "from": "garden_veranda",
+        "to": "garden-veranda",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "exterior.verandas.0.block",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "stage": 5,
+    "normalizations": [
+      {
+        "path": "siteWork.pool.sourceIntent",
+        "from": "garden_pool",
+        "to": "garden-pool",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "finishes.social_main",
+        "from": "social_main",
+        "to": "social-main",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "finishes.private_wing",
+        "from": "private_wing",
+        "to": "private-wing",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "finishes.arrival_entry",
+        "from": "arrival_entry",
+        "to": "arrival-entry",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "siteWork.lawns.0.id",
+        "from": "garden_lawn",
+        "to": "garden-lawn",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "siteWork.beds.0.id",
+        "from": "aromatic_bed",
+        "to": "aromatic-bed",
+        "reason": "identifier underscore → hyphen"
+      },
+      {
+        "path": "siteWork.trees.0.id",
+        "from": "sculptural_tree",
+        "to": "sculptural-tree",
+        "reason": "identifier underscore → hyphen"
+      }
+    ],
+    "warnings": []
+  }
+]

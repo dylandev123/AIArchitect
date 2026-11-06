@@ -1,0 +1,90 @@
+{
+  "method": "Read-only inspection of current source, retained scene and raw review. No candidate compilation or edit executor invocation.",
+  "overall": "Specific roof hierarchy diagnosis and a measurable roof proposal; the facade operation does not reliably deliver the prose intent. Not evidence of achieved visual improvement.",
+  "recommendations": [
+    {
+      "priority": 1,
+      "target": "roof:upper-bedroom-bar",
+      "operation": {
+        "op": "set-roof",
+        "blocks": [
+          "upper-bedroom-bar"
+        ],
+        "roof": {
+          "form": "hip",
+          "rise": 2.0825,
+          "overhang": 1.3,
+          "material": "bronze",
+          "color": "#7A5B3A"
+        }
+      },
+      "existingCoreOperation": true,
+      "narrowStage6ExecutorSupports": false,
+      "needs": "Bounded roof executor/dependency checks, actual roof-surface/abutment validation and matched-camera comparison; no new geometry primitive is inherently required.",
+      "baselineRiseMetres": 2.45,
+      "proposedRiseMetres": 2.0825,
+      "deltaMetres": -0.3675,
+      "risePercentChange": -15,
+      "caveats": [
+        "Lower ridge does not expose additional vertical facade when wall top/eaves stay fixed.",
+        "Same roof breadth and topology remain; lower rise alone may not separate the roof cluster visually.",
+        "Preserving adjacent roof relationships geometrically requires checking actual junction surfaces, not accepting prose."
+      ]
+    },
+    {
+      "priority": 2,
+      "target": "upper-bedroom-bar:s",
+      "operation": {
+        "op": "set-facade",
+        "key": "upper-bedroom-bar:s",
+        "style": "large-windows"
+      },
+      "existingCoreOperation": true,
+      "narrowStage6ExecutorSupports": false,
+      "baselineStyle": "glass-wall",
+      "proposedStyle": "large-windows",
+      "finding": "The style name is misleading for this intention: revised bays use smaller individual non-bath openings for large-windows than glass-wall.",
+      "currentUpperLoungeOpening": {
+        "count": 1,
+        "width": 2.2,
+        "height": 2.65,
+        "sill": 0
+      },
+      "sourceRuleExpectedUpperLoungeOpenings": {
+        "count": 2,
+        "width": 1.5,
+        "height": 2.1,
+        "sill": 0.7
+      },
+      "expectedValuesBasis": "Static reading of bays() for the retained 4.7 m upper-lounge south wall; NOT a constructed/tested candidate.",
+      "needs": "Do not apply as a guaranteed glazing enlargement. Bounded facade execution/preservation coverage plus an explicit opening-size/rhythm contract if the goal remains wider/taller glazing.",
+      "caveats": [
+        "Bathroom privacy window and existing bedroom door constrain the full 12 m frontage.",
+        "Source rule suggests more, individually smaller lounge windows; this could increase repetition, even though total lounge glazing area may rise slightly.",
+        "No predicted aesthetic improvement or construction acceptance is established."
+      ]
+    }
+  ],
+  "rendererFindings": [
+    "Roof-striping/stone tiling/exposure",
+    "Thin repeated vegetation assets and ground transitions",
+    "Flat water and low-detail furniture"
+  ],
+  "additionalCapabilitiesNeeded": [
+    "Room-aware facade bay width/height/count/rhythm controls beyond the discrete style label",
+    "Planting asset/layout richness for real landscape depth",
+    "Renderer material/texture/lighting/water/furniture improvements outside semantic building edits"
+  ],
+  "visionEvidence": {
+    "fourOriginalImagesIncluded": true,
+    "providerHTTP": 200,
+    "providerStatus": "completed",
+    "allFourViewsCited": true,
+    "limitations": "No image-ablation call or eye-tracking evidence; observations are consistent with the renders, but JSON and prompt also provided architectural and renderer context."
+  },
+  "reviewQualityFindings": [
+    "The summary ends mid-sentence at its 500-character schema limit despite a completed response.",
+    "Schema/proposal checks do not verify operation-to-visual-effect correctness; the facade mismatch is a post-review semantic finding."
+  ],
+  "refinementsExecuted": 0
+}

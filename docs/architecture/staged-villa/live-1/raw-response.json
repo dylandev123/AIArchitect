@@ -1,0 +1,37 @@
+{
+ "model": "gpt-5.6-terra",
+ "brief": "A beautiful, contemporary Caribbean luxury villa on completely flat land (60 x 48 m site). Two storeys, four bedrooms, distinctive massing, beautiful roofs and glazing, a beautiful main entrance, covered outdoor veranda living, an integrated swimming pool, attractive landscaped grounds. Avoid generic rectangular blocks and repetitive identical wings; it must look good from every camera angle.",
+ "system": "You are the architect in a staged house generator. Return the design direction and the building MASSING only; later stages (room plans, openings, roofs, site) are done separately and by software.\nCoordinates: metres, x east, z south (north = -z), origin at site centre, site x in [-30,30], z in [-24,24]. Ground is perfectly flat at elevation 0.\nThe building is a set of axis-aligned rectangular BLOCKS: id (lowercase-hyphen), role, cx,cz (centre), w (x extent), d (z extent), level 0 (ground) or 1 (upper). Two storeys = a level-1 block stacked over level-0 blocks.\nHard rules measured by software: every block >=1 m inside the site; same-level blocks may touch but must not overlap; a level-1 block must be >=60% supported by level-0 blocks (cantilever <=3 m); every block must touch or stack with another; block sides 3-40 m.\nLeave room for later stages: a covered veranda ~4.5 m deep on a garden side, a swimming pool about 9 m deep beyond it, a forecourt at the arrival side, lawns and palms. Total gross floor area should plausibly hold 4 bedrooms plus living, dining, kitchen, entry and stair (about 400-700 m2 over both levels).\nMake the composition distinctive and hierarchical: a clear primary mass, a memorable entry, varied heights and offsets.\ndirection: concept, hierarchy of masses, roofLanguage, entrance, outdoorLiving, landscape, palette (materials from ivory, limestone, timber, bronze, sage; roofColor optional hex).",
+ "text": "{\"direction\":{\"name\":\"Breezeway Courtyard Villa\",\"concept\":\"A contemporary Caribbean composition organized as a strong, low limestone plinth facing the arrival court, with a lighter, offset upper bedroom bar and a deeply shaded south-facing garden veranda. The asymmetrical entry pavilion and stepped upper volume give the villa a distinct identity from every approach while preserving a broad, calm pool garden.\",\"hierarchy\":[\"Primary mass: broad two-storey central living volume\",\"Secondary mass: lower east bedroom/service wing\",\"Arrival marker: compact west entry pavilion projecting toward the north forecourt\",\"Garden threshold: full-width covered south veranda\",\"Crowning mass: offset upper bedroom bar with a smaller east suite volume\"],\"roofLanguage\":\"Low, crisply edged Caribbean roof planes with deep overhangs; the upper volumes should read as floating shade canopies above recessed glazing and shaded terraces.\",\"entrance\":\"Arrival is from the north into a generous forecourt. The projecting west entry pavilion creates a protected, memorable approach before guests turn into a tall, shaded entry recess beneath the offset upper mass.\",\"outdoorLiving\":\"The south side is the dedicated garden face: a 4.5 m-deep covered veranda extends from the main living mass and forms the shaded transition to the future pool terrace and approximately 9 m-deep swimming pool beyond.\",\"landscape\":\"Maintain an open north arrival lawn and forecourt, with palms framing the entry pavilion. The south garden is a broad resort-like lawn and palm grove around the pool, with layered tropical planting concentrated along the east and west boundaries.\",\"palette\":{\"walls\":\"ivory\",\"accent\":\"limestone\",\"roof\":\"bronze\",\"roofColor\":\"#4A4037\",\"deck\":\"timber\"}},\"blocks\":[{\"id\":\"main-living-plinth\",\"role\":\"primary ground-floor living, dining, kitchen and bedroom mass\",\"cx\":0,\"cz\":1,\"w\":18,\"d\":14,\"level\":0},{\"id\":\"east-bedroom-wing\",\"role\":\"secondary ground-floor bedroom and support wing\",\"cx\":14.5,\"cz\":2,\"w\":11,\"d\":10,\"level\":0},{\"id\":\"entry-pavilion\",\"role\":\"projecting arrival entry and stair pavilion\",\"cx\":-12,\"cz\":-4,\"w\":6,\"d\":7,\"level\":0},{\"id\":\"south-veranda\",\"role\":\"covered garden-facing outdoor living veranda\",\"cx\":0,\"cz\":10.25,\"w\":18,\"d\":4.5,\"level\":0},{\"id\":\"upper-bedroom-bar\",\"role\":\"primary upper-floor bedroom mass\",\"cx\":-1,\"cz\":-1,\"w\":12,\"d\":11,\"level\":1},{\"id\":\"upper-east-suite\",\"role\":\"stepped upper-floor bedroom suite mass\",\"cx\":8.5,\"cz\":1,\"w\":7,\"d\":8,\"level\":1}]}",
+ "usage": {
+  "inputTokens": 709,
+  "inputTokenDetails": {
+   "noCacheTokens": 709,
+   "cacheReadTokens": 0,
+   "cacheWriteTokens": 0
+  },
+  "outputTokens": 1488,
+  "outputTokenDetails": {
+   "textTokens": 588,
+   "reasoningTokens": 900
+  },
+  "totalTokens": 2197,
+  "raw": {
+   "input_tokens": 709,
+   "input_tokens_details": {
+    "cache_write_tokens": 0,
+    "cached_tokens": 0
+   },
+   "output_tokens": 1488,
+   "output_tokens_details": {
+    "reasoning_tokens": 900
+   },
+   "total_tokens": 2197
+  },
+  "reasoningTokens": 900,
+  "cachedInputTokens": 0
+ },
+ "costUsd": 0.019274,
+ "seconds": 22.095,
+ "error": "No object generated: response did not match schema."
+}

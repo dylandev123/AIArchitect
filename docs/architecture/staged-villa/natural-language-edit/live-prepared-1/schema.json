@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "ops": {
+      "minItems": 1,
+      "maxItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "move-pool-relative"
+          },
+          "pool": {
+            "type": "string",
+            "const": "pool"
+          },
+          "veranda": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "towards",
+              "away"
+            ]
+          },
+          "distance": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "op",
+          "pool",
+          "veranda",
+          "direction",
+          "distance"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "summary",
+    "ops"
+  ],
+  "additionalProperties": false
+}

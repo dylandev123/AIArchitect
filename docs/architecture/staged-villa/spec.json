@@ -1,0 +1,770 @@
+{
+ "version": "staged-house-1",
+ "site": {
+  "width": 60,
+  "depth": 48
+ },
+ "direction": {
+  "name": "Casa Corallina · contemporary Caribbean villa",
+  "concept": "A low, wide ground-floor living pavilion opens to a deep veranda and pool; a hip-roofed sleeping bar floats above it and a tall stone entry tower marks arrival. Flat site, cross-breezes, deep shade.",
+  "hierarchy": [
+   "Stone entry tower (arrival landmark)",
+   "Glazed living pavilion + veranda + pool (heart of the house)",
+   "Hip-roofed primary suite bar above",
+   "Low guest wing and cabana wing as quiet flanks"
+  ],
+  "roofLanguage": "Low hip roofs with deep timber eaves over the suite and cabana; crisp flat bronze roof on the tower; roof terrace on the guest wing.",
+  "entrance": "Pivot door in a stone tower beneath a timber canopy, with a double-height glazed stair hall beside it.",
+  "outdoorLiving": "Fifteen-metre covered veranda stepping out to a limestone pool terrace; cabana lounge with garden door.",
+  "landscape": "Palm-lined forecourt, clipped boundary hedges, lawns and planting beds that frame but never touch the building.",
+  "palette": {
+   "walls": "ivory",
+   "accent": "timber",
+   "roof": "timber",
+   "roofColor": "#6b4a36",
+   "deck": "limestone"
+  }
+ },
+ "blocks": [
+  {
+   "id": "entry",
+   "role": "arrival tower base",
+   "cx": 0,
+   "cz": -8.5,
+   "w": 10,
+   "d": 7,
+   "level": 0,
+   "plan": {
+    "split": "x",
+    "at": 6,
+    "a": {
+     "room": {
+      "id": "foyer",
+      "name": "Foyer",
+      "type": "foyer"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "stair-hall",
+      "name": "Stair hall",
+      "type": "stair"
+     }
+    }
+   },
+   "roof": {
+    "form": "flat",
+    "overhang": 1,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "wall": "limestone"
+  },
+  {
+   "id": "living",
+   "role": "living pavilion",
+   "cx": 0,
+   "cz": 1,
+   "w": 20,
+   "d": 12,
+   "level": 0,
+   "plan": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "room": {
+      "id": "living-room",
+      "name": "Living room",
+      "type": "living"
+     }
+    },
+    "b": {
+     "split": "x",
+     "at": 5,
+     "a": {
+      "room": {
+       "id": "dining",
+       "name": "Dining",
+       "type": "dining"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "kitchen",
+       "name": "Kitchen",
+       "type": "kitchen"
+      }
+     }
+    }
+   },
+   "roof": {
+    "form": "flat",
+    "overhang": 0.5,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "wall": "ivory"
+  },
+  {
+   "id": "west-wing",
+   "role": "guest wing",
+   "cx": -16,
+   "cz": 1,
+   "w": 12,
+   "d": 12,
+   "level": 0,
+   "plan": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "split": "z",
+     "at": 6,
+     "a": {
+      "room": {
+       "id": "bedroom-guest",
+       "name": "Guest bedroom",
+       "type": "bedroom"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "bedroom-2",
+       "name": "Bedroom 2",
+       "type": "bedroom"
+      }
+     }
+    },
+    "b": {
+     "room": {
+      "id": "gallery",
+      "name": "Gallery",
+      "type": "gallery"
+     }
+    }
+   },
+   "roof": {
+    "form": "flat",
+    "overhang": 0.5,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "wall": "ivory"
+  },
+  {
+   "id": "east-wing",
+   "role": "cabana wing",
+   "cx": 15,
+   "cz": 1,
+   "w": 10,
+   "d": 12,
+   "level": 0,
+   "plan": {
+    "split": "z",
+    "at": 8,
+    "a": {
+     "room": {
+      "id": "pool-lounge",
+      "name": "Pool lounge",
+      "type": "lounge"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "pool-bath",
+      "name": "Pool bath",
+      "type": "bath"
+     }
+    }
+   },
+   "roof": {
+    "form": "hip",
+    "rise": 1.5,
+    "overhang": 1.2,
+    "material": "timber",
+    "color": "#6b4a36"
+   },
+   "wall": "timber"
+  },
+  {
+   "id": "tower",
+   "role": "entry tower upper floor",
+   "cx": 0,
+   "cz": -8.5,
+   "w": 10,
+   "d": 7,
+   "level": 1,
+   "plan": {
+    "split": "x",
+    "at": 6,
+    "a": {
+     "room": {
+      "id": "bedroom-3",
+      "name": "Bedroom 3",
+      "type": "bedroom"
+     }
+    },
+    "b": {
+     "room": {
+      "id": "landing",
+      "name": "Landing",
+      "type": "hall"
+     }
+    }
+   },
+   "roof": {
+    "form": "flat",
+    "overhang": 1,
+    "material": "bronze",
+    "color": "#3a3d38"
+   },
+   "wall": "limestone"
+  },
+  {
+   "id": "suite",
+   "role": "primary suite bar",
+   "cx": -1,
+   "cz": 1,
+   "w": 22,
+   "d": 12,
+   "level": 1,
+   "plan": {
+    "split": "x",
+    "at": 10,
+    "a": {
+     "split": "z",
+     "at": 8,
+     "a": {
+      "room": {
+       "id": "primary-bedroom",
+       "name": "Primary bedroom",
+       "type": "bedroom"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "primary-bath",
+       "name": "Primary bath",
+       "type": "bath"
+      }
+     }
+    },
+    "b": {
+     "split": "z",
+     "at": 3,
+     "a": {
+      "room": {
+       "id": "upper-hall",
+       "name": "Upper hall",
+       "type": "hall"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "family-lounge",
+       "name": "Family lounge",
+       "type": "lounge"
+      }
+     }
+    }
+   },
+   "roof": {
+    "form": "hip",
+    "rise": 2,
+    "overhang": 1.8,
+    "material": "timber",
+    "color": "#6b4a36"
+   },
+   "wall": "ivory"
+  }
+ ],
+ "links": [
+  {
+   "a": "foyer",
+   "b": "living-room",
+   "kind": "open",
+   "t": 0.5
+  },
+  {
+   "a": "foyer",
+   "b": "stair-hall",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "living-room",
+   "b": "dining",
+   "kind": "open",
+   "t": 0.5
+  },
+  {
+   "a": "dining",
+   "b": "kitchen",
+   "kind": "open",
+   "t": 0.5
+  },
+  {
+   "a": "gallery",
+   "b": "living-room",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "bedroom-guest",
+   "b": "gallery",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "bedroom-2",
+   "b": "gallery",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "kitchen",
+   "b": "pool-lounge",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "pool-lounge",
+   "b": "pool-bath",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "landing",
+   "b": "bedroom-3",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "landing",
+   "b": "upper-hall",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "primary-bedroom",
+   "b": "primary-bath",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "primary-bedroom",
+   "b": "upper-hall",
+   "kind": "door",
+   "t": 0.5
+  },
+  {
+   "a": "upper-hall",
+   "b": "family-lounge",
+   "kind": "open",
+   "t": 0.5
+  }
+ ],
+ "stairs": [
+  {
+   "id": "main",
+   "room": "stair-hall",
+   "start": "n",
+   "hug": "e",
+   "width": 1.2
+  }
+ ],
+ "exterior": {
+  "facades": {
+   "entry:n": "glass-wall",
+   "entry:e": "glass-wall",
+   "living:s": "glass-wall",
+   "tower:n": "glass-wall",
+   "suite:s": "glass-wall",
+   "suite:e": "glass-wall",
+   "west-wing:n": "large-windows"
+  },
+  "doors": [
+   {
+    "id": "main-door",
+    "room": "foyer",
+    "side": "n",
+    "kind": "main",
+    "width": 1.5,
+    "t": 0.5
+   },
+   {
+    "id": "garden-living",
+    "room": "living-room",
+    "side": "s",
+    "kind": "garden",
+    "width": 1.8,
+    "t": 0.7
+   },
+   {
+    "id": "garden-dining",
+    "room": "dining",
+    "side": "s",
+    "kind": "garden",
+    "width": 1.8,
+    "t": 0.5
+   },
+   {
+    "id": "terrace-primary",
+    "room": "primary-bedroom",
+    "side": "w",
+    "kind": "garden",
+    "width": 1.8,
+    "t": 0.5
+   },
+   {
+    "id": "cabana-east",
+    "room": "pool-lounge",
+    "side": "e",
+    "kind": "garden",
+    "width": 1.8,
+    "t": 0.5
+   }
+  ],
+  "entrance": {
+   "door": "main-door",
+   "canopy": {
+    "depth": 3.2,
+    "width": 6.5,
+    "material": "timber"
+   },
+   "court": {
+    "w": 8,
+    "d": 7
+   }
+  },
+  "verandas": [
+   {
+    "id": "south",
+    "block": "living",
+    "side": "s",
+    "from": -10,
+    "to": 5,
+    "depth": 4.5,
+    "columns": 5,
+    "roofMaterial": "timber",
+    "deckMaterial": "limestone"
+   }
+  ]
+ },
+ "siteWork": {
+  "pool": {
+   "x": -2.5,
+   "z": 13.5,
+   "w": 11,
+   "d": 4,
+   "basinDepth": 1.6
+  },
+  "lawns": [
+   {
+    "id": "front-west",
+    "rect": {
+     "x": -17.5,
+     "z": -17.75,
+     "w": 23,
+     "d": 11.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "front-east",
+    "rect": {
+     "x": 15.5,
+     "z": -17.75,
+     "w": 27,
+     "d": 11.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "front-mid-w",
+    "rect": {
+     "x": -4.75,
+     "z": -21.25,
+     "w": 2.5,
+     "d": 4.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "front-mid-e",
+    "rect": {
+     "x": 0.75,
+     "z": -21.25,
+     "w": 2.5,
+     "d": 4.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "nw-yard",
+    "rect": {
+     "x": -13.5,
+     "z": -8.5,
+     "w": 17,
+     "d": 7
+    },
+    "material": "sage"
+   },
+   {
+    "id": "ne-yard",
+    "rect": {
+     "x": 12.5,
+     "z": -8.5,
+     "w": 15,
+     "d": 7
+    },
+    "material": "sage"
+   },
+   {
+    "id": "west",
+    "rect": {
+     "x": -25.75,
+     "z": 0,
+     "w": 6.5,
+     "d": 24
+    },
+    "material": "sage"
+   },
+   {
+    "id": "east",
+    "rect": {
+     "x": 24.75,
+     "z": 0,
+     "w": 8.5,
+     "d": 24
+    },
+    "material": "sage"
+   },
+   {
+    "id": "rear-west",
+    "rect": {
+     "x": -19.75,
+     "z": 17.75,
+     "w": 18.5,
+     "d": 11.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "rear-east",
+    "rect": {
+     "x": 17.25,
+     "z": 17.75,
+     "w": 23.5,
+     "d": 11.5
+    },
+    "material": "sage"
+   },
+   {
+    "id": "pool-gap",
+    "rect": {
+     "x": -2.5,
+     "z": 12.5,
+     "w": 14.2,
+     "d": 2
+    },
+    "material": "sage"
+   }
+  ],
+  "beds": [
+   {
+    "id": "entry-w",
+    "rect": {
+     "x": -7.75,
+     "z": -15.75,
+     "w": 2.5,
+     "d": 6.5
+    }
+   },
+   {
+    "id": "entry-e",
+    "rect": {
+     "x": 3.75,
+     "z": -15.75,
+     "w": 2.5,
+     "d": 6.5
+    }
+   },
+   {
+    "id": "pool-w",
+    "rect": {
+     "x": -12.4,
+     "z": 17,
+     "w": 3.1999999999999993,
+     "d": 8
+    }
+   },
+   {
+    "id": "pool-e",
+    "rect": {
+     "x": 7.4,
+     "z": 17,
+     "w": 3.2,
+     "d": 8
+    }
+   }
+  ],
+  "trees": [
+   {
+    "id": "p1",
+    "x": -12,
+    "z": -16,
+    "height": 8,
+    "kind": "palm"
+   },
+   {
+    "id": "p2",
+    "x": 7,
+    "z": -16,
+    "height": 9,
+    "kind": "palm"
+   },
+   {
+    "id": "p3",
+    "x": -17,
+    "z": -20,
+    "height": 10,
+    "kind": "palm"
+   },
+   {
+    "id": "p4",
+    "x": 13,
+    "z": -20,
+    "height": 8.5,
+    "kind": "palm"
+   },
+   {
+    "id": "p5",
+    "x": -26,
+    "z": -8,
+    "height": 9,
+    "kind": "palm"
+   },
+   {
+    "id": "p6",
+    "x": -26,
+    "z": 8,
+    "height": 8,
+    "kind": "palm"
+   },
+   {
+    "id": "p7",
+    "x": 25,
+    "z": -8,
+    "height": 9.5,
+    "kind": "palm"
+   },
+   {
+    "id": "p8",
+    "x": 25,
+    "z": 8,
+    "height": 8.5,
+    "kind": "palm"
+   },
+   {
+    "id": "p9",
+    "x": -16,
+    "z": 15,
+    "height": 9,
+    "kind": "palm"
+   },
+   {
+    "id": "p10",
+    "x": -16,
+    "z": 20,
+    "height": 10,
+    "kind": "palm"
+   },
+   {
+    "id": "p11",
+    "x": 12,
+    "z": 15,
+    "height": 8,
+    "kind": "palm"
+   },
+   {
+    "id": "p12",
+    "x": 12,
+    "z": 20,
+    "height": 9.5,
+    "kind": "palm"
+   },
+   {
+    "id": "c1",
+    "x": -26,
+    "z": 19,
+    "height": 4,
+    "kind": "canopy"
+   },
+   {
+    "id": "c2",
+    "x": 25,
+    "z": 19,
+    "height": 4,
+    "kind": "canopy"
+   }
+  ],
+  "hedges": [
+   {
+    "id": "front-w",
+    "rect": {
+     "x": -17.4,
+     "z": -23.5,
+     "w": 24.8,
+     "d": 0.7999999999999972
+    }
+   },
+   {
+    "id": "front-e",
+    "rect": {
+     "x": 15.4,
+     "z": -23.5,
+     "w": 28.8,
+     "d": 0.7999999999999972
+    }
+   },
+   {
+    "id": "west",
+    "rect": {
+     "x": -29.4,
+     "z": 0,
+     "w": 0.8000000000000007,
+     "d": 46.2
+    }
+   },
+   {
+    "id": "east",
+    "rect": {
+     "x": 29.4,
+     "z": 0,
+     "w": 0.8000000000000007,
+     "d": 46.2
+    }
+   },
+   {
+    "id": "rear",
+    "rect": {
+     "x": 0,
+     "z": 23.5,
+     "w": 58,
+     "d": 0.7999999999999972
+    }
+   }
+  ],
+  "paths": [
+   {
+    "id": "drive",
+    "rect": {
+     "x": -2,
+     "z": -21.25,
+     "w": 3,
+     "d": 4.5
+    }
+   }
+  ]
+ }
+}

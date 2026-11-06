@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "statement": {
+      "type": "string"
+    },
+    "pool": {
+      "type": "object",
+      "properties": {
+        "scale": {
+          "type": "string",
+          "enum": [
+            "intimate",
+            "generous",
+            "lap"
+          ]
+        },
+        "alignment": {
+          "type": "string",
+          "enum": [
+            "veranda-centre",
+            "living-axis"
+          ]
+        },
+        "separation": {
+          "type": "string",
+          "enum": [
+            "close",
+            "promenade"
+          ]
+        },
+        "water": {
+          "type": "string",
+          "enum": [
+            "turquoise",
+            "deep-jade"
+          ]
+        }
+      },
+      "required": [
+        "scale",
+        "alignment",
+        "separation",
+        "water"
+      ],
+      "additionalProperties": false
+    },
+    "terrace": {
+      "type": "object",
+      "properties": {
+        "finish": {
+          "type": "string",
+          "enum": [
+            "limestone",
+            "warm-paving"
+          ]
+        },
+        "sunbeds": {
+          "type": "string",
+          "enum": [
+            "two",
+            "four"
+          ]
+        },
+        "social": {
+          "type": "string",
+          "enum": [
+            "dining",
+            "dining-and-lounge"
+          ]
+        }
+      },
+      "required": [
+        "finish",
+        "sunbeds",
+        "social"
+      ],
+      "additionalProperties": false
+    },
+    "arrival": {
+      "type": "object",
+      "properties": {
+        "boundary": {
+          "type": "string",
+          "enum": [
+            "north",
+            "west"
+          ]
+        },
+        "finish": {
+          "type": "string",
+          "enum": [
+            "limestone",
+            "warm-paving"
+          ]
+        },
+        "character": {
+          "type": "string",
+          "enum": [
+            "palm-avenue",
+            "garden-court"
+          ]
+        }
+      },
+      "required": [
+        "boundary",
+        "finish",
+        "character"
+      ],
+      "additionalProperties": false
+    },
+    "planting": {
+      "type": "object",
+      "properties": {
+        "palms": {
+          "type": "string",
+          "enum": [
+            "six",
+            "eight",
+            "ten"
+          ]
+        },
+        "stature": {
+          "type": "string",
+          "enum": [
+            "medium",
+            "varied-tall"
+          ]
+        },
+        "beds": {
+          "type": "string",
+          "enum": [
+            "layered-tropical",
+            "restrained-tropical"
+          ]
+        },
+        "lawn": {
+          "type": "string",
+          "enum": [
+            "garden-panels",
+            "open-lawn"
+          ]
+        }
+      },
+      "required": [
+        "palms",
+        "stature",
+        "beds",
+        "lawn"
+      ],
+      "additionalProperties": false
+    },
+    "lighting": {
+      "type": "string",
+      "enum": [
+        "arrival-only",
+        "arrival-and-garden"
+      ]
+    },
+    "intentions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "statement",
+    "pool",
+    "terrace",
+    "arrival",
+    "planting",
+    "lighting",
+    "intentions"
+  ],
+  "additionalProperties": false
+}

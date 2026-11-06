@@ -1,0 +1,79 @@
+{
+  "mockedAI": true,
+  "actualTerraHouse": true,
+  "providerCalls": 0,
+  "instruction": "Move the swimming pool two metres closer to the veranda without changing the building.",
+  "op": {
+    "op": "move-pool-relative",
+    "pool": "pool",
+    "veranda": "veranda:south-veranda",
+    "direction": "towards",
+    "distance": 2
+  },
+  "accepted": true,
+  "waterNorthBefore": 15.3,
+  "waterNorthAfter": 13.299999999999999,
+  "poolSpecBefore": {
+    "x": 0,
+    "z": 13.1,
+    "w": 12,
+    "d": 4.5,
+    "basinDepth": 1.4
+  },
+  "poolSpecAfter": {
+    "x": 0,
+    "z": 12.5,
+    "w": 12,
+    "d": 4.5,
+    "basinDepth": 1.4,
+    "nearDeckDepth": 0.1
+  },
+  "diff": {
+    "added": [
+      "path-terrace-1-pool-1",
+      "path-pool-edit-infill-1"
+    ],
+    "removed": [],
+    "changed": [
+      "pool",
+      "pool-floor",
+      "pool-water",
+      "pool-wall-z-minus",
+      "pool-wall-x-minus",
+      "pool-coping-z-minus",
+      "pool-coping-x-minus",
+      "pool-deck-x-minus",
+      "pool-wall-z-plus",
+      "pool-wall-x-plus",
+      "pool-coping-z-plus",
+      "pool-coping-x-plus",
+      "pool-deck-x-plus",
+      "pool-deck-far",
+      "path-terrace-1"
+    ],
+    "unchanged": 362,
+    "byComponent": {
+      "pool": {
+        "added": 0,
+        "removed": 0,
+        "changed": 14
+      },
+      "landscape:terrace-1": {
+        "added": 0,
+        "removed": 0,
+        "changed": 1
+      },
+      "landscape:terrace-1-pool-1": {
+        "added": 1,
+        "removed": 0,
+        "changed": 0
+      },
+      "landscape:pool-edit-infill-1": {
+        "added": 1,
+        "removed": 0,
+        "changed": 0
+      }
+    }
+  },
+  "saveReload": true
+}

@@ -1,0 +1,1544 @@
+{
+  "source": "docs/architecture/staged-villa/stage4-exterior/live/result.json",
+  "originalHashes": {
+    "docs/architecture/staged-villa/stage4-exterior/live/result.json": "c792a8e4edc059ee42f91dd6f127c87a7b2d8567e19a394e786bb092e5d402d0",
+    "docs/architecture/staged-villa/stage4-exterior/terra-stage4.checkpoint.json": "7fd9e84de3181a1a54ed603e170286d541f7414dc43228c2502c8b6024ae0109",
+    "docs/architecture/staged-villa/stage4-exterior/terra-stage4.scene.json": "7f338f61f769a6e228d67fe93544d0942b3d416c296aa38903a2ee3517c6b9f6",
+    "docs/architecture/staged-villa/stage3-programme/live/stage3.scene.json": "83db6541935d8a8b727111840264d31ff79ceb2573389d8104096ea226339216",
+    "docs/architecture/staged-villa/live-1/raw-response.json": "f1037423f36c26d789f673e1d1d588e734a7fb774685e0c2744f7e682e049bec"
+  },
+  "paidCalls": 0,
+  "rooms": 23,
+  "roomTypes": [
+    {
+      "id": "media-lounge",
+      "type": "media"
+    },
+    {
+      "id": "main-stair",
+      "type": "stair"
+    },
+    {
+      "id": "powder-bath",
+      "type": "bath"
+    },
+    {
+      "id": "ground-gallery",
+      "type": "hall"
+    },
+    {
+      "id": "show-kitchen",
+      "type": "kitchen"
+    },
+    {
+      "id": "garden-dining",
+      "type": "dining"
+    },
+    {
+      "id": "great-room",
+      "type": "living"
+    },
+    {
+      "id": "family-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "ground-suite-hall",
+      "type": "hall"
+    },
+    {
+      "id": "ground-suite-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "ground-suite-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "ground-suite-bath",
+      "type": "bath"
+    },
+    {
+      "id": "arrival-foyer",
+      "type": "foyer"
+    },
+    {
+      "id": "entry-link-hall",
+      "type": "hall"
+    },
+    {
+      "id": "north-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "north-bedroom-bath",
+      "type": "bath"
+    },
+    {
+      "id": "upper-gallery",
+      "type": "gallery"
+    },
+    {
+      "id": "south-bedroom-bath",
+      "type": "bath"
+    },
+    {
+      "id": "south-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "upper-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "east-suite-hall",
+      "type": "hall"
+    },
+    {
+      "id": "east-suite-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "east-suite-bath",
+      "type": "bath"
+    }
+  ],
+  "hardFindings": [],
+  "beforeElements": 307,
+  "afterElements": 314,
+  "stage5Capacity": 86,
+  "protectedElementsUnchanged": 87,
+  "unchanged": [
+    "slab-main-living-plinth",
+    "slab-east-bedroom-wing",
+    "slab-entry-pavilion",
+    "slab-up-main-living-plinth",
+    "slab-up-main-living-plinth-1",
+    "slab-up-main-living-plinth-2",
+    "slab-up-main-living-plinth-3",
+    "slab-up-east-bedroom-wing",
+    "slab-up-upper-bedroom-bar-c0",
+    "p-media-lounge-main-stair",
+    "p-media-lounge-ground-gallery",
+    "p-media-lounge-ground-gallery-door",
+    "p-arrival-foyer-media-lounge",
+    "p-entry-link-hall-media-lounge",
+    "p-main-stair-powder-bath",
+    "p-main-stair-ground-gallery",
+    "p-main-stair-ground-gallery-door",
+    "p-powder-bath-ground-gallery",
+    "p-powder-bath-ground-gallery-door",
+    "p-ground-gallery-show-kitchen",
+    "p-ground-gallery-great-room",
+    "p-ground-gallery-great-room-door",
+    "p-ground-gallery-family-lounge",
+    "p-ground-gallery-ground-suite-hall",
+    "p-ground-gallery-ground-suite-hall-door",
+    "p-entry-link-hall-ground-gallery",
+    "p-entry-link-hall-ground-gallery-door",
+    "p-show-kitchen-great-room",
+    "p-family-lounge-ground-suite-hall",
+    "p-family-lounge-ground-suite-lounge",
+    "p-ground-suite-hall-ground-suite-lounge",
+    "p-ground-suite-hall-ground-suite-lounge-door",
+    "p-ground-suite-hall-ground-suite-bedroom",
+    "p-ground-suite-hall-ground-suite-bedroom-door",
+    "p-ground-suite-lounge-ground-suite-bedroom",
+    "p-ground-suite-lounge-ground-suite-bath",
+    "p-ground-suite-bedroom-ground-suite-bath",
+    "p-ground-suite-bedroom-ground-suite-bath-door",
+    "p-north-bedroom-north-bedroom-bath",
+    "p-north-bedroom-north-bedroom-bath-door",
+    "p-north-bedroom-upper-gallery",
+    "p-north-bedroom-upper-gallery-door",
+    "p-north-bedroom-bath-upper-gallery",
+    "p-north-bedroom-bath-south-bedroom-bath",
+    "p-north-bedroom-bath-south-bedroom",
+    "p-upper-gallery-south-bedroom",
+    "p-upper-gallery-south-bedroom-door",
+    "p-upper-gallery-upper-lounge",
+    "p-upper-gallery-upper-lounge-door",
+    "p-upper-gallery-east-suite-hall",
+    "p-upper-gallery-east-suite-hall-door",
+    "p-south-bedroom-bath-south-bedroom",
+    "p-south-bedroom-bath-south-bedroom-door",
+    "p-south-bedroom-upper-lounge",
+    "p-upper-lounge-east-suite-hall",
+    "p-east-suite-hall-east-suite-bedroom",
+    "p-east-suite-hall-east-suite-bedroom-door",
+    "p-east-suite-hall-east-suite-bath",
+    "p-east-suite-bedroom-east-suite-bath",
+    "p-east-suite-bedroom-east-suite-bath-door",
+    "stair-main-stair-to-upper-gallery-1",
+    "stair-main-stair-to-upper-gallery-2",
+    "stair-main-stair-to-upper-gallery-3",
+    "stair-main-stair-to-upper-gallery-4",
+    "stair-main-stair-to-upper-gallery-5",
+    "stair-main-stair-to-upper-gallery-6",
+    "stair-main-stair-to-upper-gallery-7",
+    "stair-main-stair-to-upper-gallery-8",
+    "stair-main-stair-to-upper-gallery-9",
+    "stair-main-stair-to-upper-gallery-10",
+    "stair-main-stair-to-upper-gallery-11",
+    "stair-main-stair-to-upper-gallery-12",
+    "stair-main-stair-to-upper-gallery-13",
+    "stair-main-stair-to-upper-gallery-14",
+    "stair-main-stair-to-upper-gallery-15",
+    "stair-main-stair-to-upper-gallery-16",
+    "stair-main-stair-to-upper-gallery-17",
+    "guard-main-stair-to-upper-gallery",
+    "rail-main-living-plinth-n-0",
+    "rail-main-living-plinth-n-1",
+    "rail-main-living-plinth-s-0",
+    "rail-main-living-plinth-e-0",
+    "rail-main-living-plinth-e-1",
+    "rail-main-living-plinth-w-0",
+    "rail-east-bedroom-wing-n-0",
+    "rail-east-bedroom-wing-s-0",
+    "rail-east-bedroom-wing-e-0",
+    "veranda-south-veranda-deck",
+    "veranda-south-veranda-column-0",
+    "veranda-south-veranda-column-1",
+    "veranda-south-veranda-column-2",
+    "veranda-south-veranda-column-3",
+    "veranda-south-veranda-column-4",
+    "veranda-south-veranda-column-5",
+    "veranda-south-veranda-beam-0",
+    "veranda-south-veranda-beam-1",
+    "veranda-south-veranda-beam-2",
+    "veranda-south-veranda-beam-3",
+    "veranda-south-veranda-beam-4",
+    "veranda-south-veranda-beam-5",
+    "veranda-south-veranda-beam-6",
+    "veranda-south-veranda-beam-7",
+    "veranda-south-veranda-beam-8",
+    "veranda-south-veranda-beam-9",
+    "veranda-south-veranda-beam-10",
+    "veranda-south-veranda-beam-11",
+    "entrance-canopy",
+    "entrance-column-a",
+    "entrance-column-b",
+    "entrance-court"
+  ],
+  "changed": [
+    "w-media-lounge-n-0",
+    "w-media-lounge-n-1",
+    "w-main-stair-n-0",
+    "w-main-stair-n-1",
+    "w-powder-bath-n-0",
+    "w-powder-bath-e-0",
+    "w-show-kitchen-w-0",
+    "w-garden-dining-s-0",
+    "w-garden-dining-s-1",
+    "w-garden-dining-s-1-door",
+    "w-garden-dining-s-2",
+    "w-garden-dining-w-0",
+    "w-great-room-s-0",
+    "w-great-room-s-1",
+    "w-great-room-s-1-door",
+    "w-great-room-s-2",
+    "w-family-lounge-s-0",
+    "w-family-lounge-e-0",
+    "w-ground-suite-hall-n-0",
+    "w-ground-suite-hall-n-1",
+    "w-ground-suite-lounge-s-0",
+    "w-ground-suite-lounge-s-1",
+    "w-ground-suite-lounge-s-1-door",
+    "w-ground-suite-lounge-s-2",
+    "w-ground-suite-bedroom-n-0",
+    "w-ground-suite-bedroom-n-1",
+    "w-ground-suite-bedroom-e-0",
+    "w-ground-suite-bedroom-e-1",
+    "w-ground-suite-bath-s-0",
+    "w-ground-suite-bath-e-0",
+    "w-arrival-foyer-n-0",
+    "w-arrival-foyer-n-1",
+    "w-arrival-foyer-n-1-door",
+    "w-arrival-foyer-n-2",
+    "w-arrival-foyer-e-0",
+    "w-arrival-foyer-w-0",
+    "w-entry-link-hall-s-0",
+    "w-entry-link-hall-w-0",
+    "w-north-bedroom-n-0",
+    "w-north-bedroom-n-1",
+    "w-north-bedroom-w-0",
+    "w-north-bedroom-w-0-door",
+    "w-north-bedroom-w-1",
+    "w-north-bedroom-bath-w-0",
+    "w-upper-gallery-n-0",
+    "w-upper-gallery-n-1",
+    "w-upper-gallery-e-0",
+    "w-south-bedroom-bath-s-0",
+    "w-south-bedroom-bath-w-0",
+    "w-south-bedroom-s-0",
+    "w-south-bedroom-s-1",
+    "w-south-bedroom-s-1-door",
+    "w-south-bedroom-s-2",
+    "w-upper-lounge-s-0",
+    "w-east-suite-hall-n-0",
+    "w-east-suite-hall-s-0",
+    "w-east-suite-hall-w-0",
+    "w-east-suite-bedroom-n-0",
+    "w-east-suite-bedroom-n-1",
+    "w-east-suite-bedroom-e-0",
+    "w-east-suite-bedroom-e-1",
+    "w-east-suite-bedroom-e-1-door",
+    "w-east-suite-bedroom-e-2",
+    "w-east-suite-bath-s-0",
+    "w-east-suite-bath-e-0",
+    "roof-entry-pavilion",
+    "roof-upper-bedroom-bar",
+    "roof-upper-east-suite",
+    "veranda-south-veranda-roof",
+    "entrance-pier-a",
+    "entrance-pier-b",
+    "entrance-lintel",
+    "plinth-main-living-plinth-n-0",
+    "plinth-main-living-plinth-n-1",
+    "plinth-main-living-plinth-n-2",
+    "plinth-main-living-plinth-n-3",
+    "plinth-main-living-plinth-e-0",
+    "plinth-main-living-plinth-e-1",
+    "plinth-main-living-plinth-w-0",
+    "plinth-east-bedroom-wing-n-0",
+    "plinth-east-bedroom-wing-n-1",
+    "plinth-east-bedroom-wing-s-0",
+    "plinth-east-bedroom-wing-s-1",
+    "plinth-east-bedroom-wing-s-2",
+    "plinth-east-bedroom-wing-e-0",
+    "plinth-east-bedroom-wing-e-1",
+    "cornice-entry-pavilion-n-0",
+    "plinth-entry-pavilion-n-0",
+    "plinth-entry-pavilion-n-1",
+    "cornice-entry-pavilion-s-0",
+    "plinth-entry-pavilion-s-0",
+    "cornice-entry-pavilion-e-0",
+    "plinth-entry-pavilion-e-0",
+    "cornice-entry-pavilion-w-0",
+    "plinth-entry-pavilion-w-0",
+    "lintel-0",
+    "sill-0",
+    "lintel-1",
+    "sill-1",
+    "lintel-2",
+    "sill-2",
+    "lintel-3",
+    "sill-3",
+    "lintel-4",
+    "sill-4",
+    "lintel-5",
+    "sill-5",
+    "lintel-6",
+    "sill-6",
+    "lintel-7",
+    "lintel-8",
+    "lintel-9",
+    "sill-9",
+    "lintel-10",
+    "lintel-11",
+    "lintel-12",
+    "lintel-13",
+    "sill-13",
+    "lintel-14",
+    "sill-14",
+    "lintel-15",
+    "sill-15",
+    "lintel-16",
+    "sill-16",
+    "lintel-17",
+    "sill-17",
+    "lintel-18",
+    "sill-18",
+    "lintel-19",
+    "sill-19",
+    "lintel-20",
+    "sill-20",
+    "lintel-21",
+    "sill-21",
+    "lintel-22",
+    "sill-22",
+    "lintel-23",
+    "sill-23",
+    "lintel-24",
+    "sill-24",
+    "lintel-25",
+    "sill-25",
+    "lintel-26",
+    "sill-26",
+    "lintel-27",
+    "sill-27",
+    "lintel-28",
+    "lintel-29",
+    "sill-29",
+    "lintel-30",
+    "sill-30",
+    "lintel-31",
+    "lintel-32",
+    "lintel-33",
+    "sill-33",
+    "shutter-0-a",
+    "shutter-0-b",
+    "shutter-1-a",
+    "shutter-1-b",
+    "shutter-6-a",
+    "shutter-6-b",
+    "shutter-9-a",
+    "shutter-9-b",
+    "shutter-17-a",
+    "shutter-17-b",
+    "shutter-18-a",
+    "shutter-18-b",
+    "shutter-22-a",
+    "shutter-22-b",
+    "shutter-23-a",
+    "shutter-23-b"
+  ],
+  "removed": [
+    "shutter-2-a",
+    "shutter-2-b",
+    "shutter-3-a",
+    "shutter-3-b",
+    "shutter-4-a",
+    "shutter-4-b",
+    "shutter-5-a",
+    "shutter-5-b",
+    "shutter-13-a",
+    "shutter-13-b",
+    "shutter-14-a",
+    "shutter-14-b",
+    "shutter-19-a",
+    "shutter-19-b",
+    "shutter-21-a",
+    "shutter-21-b",
+    "shutter-24-a",
+    "shutter-24-b",
+    "shutter-25-a",
+    "shutter-25-b",
+    "shutter-26-a",
+    "shutter-26-b",
+    "shutter-27-a",
+    "shutter-27-b",
+    "shutter-33-a",
+    "shutter-33-b"
+  ],
+  "added": [
+    "cornice-main-living-plinth-n-0",
+    "cornice-main-living-plinth-s-0",
+    "cornice-main-living-plinth-e-0",
+    "cornice-main-living-plinth-e-1",
+    "cornice-main-living-plinth-w-0",
+    "cornice-east-bedroom-wing-n-0",
+    "cornice-east-bedroom-wing-s-0",
+    "cornice-east-bedroom-wing-e-0",
+    "cornice-upper-bedroom-bar-n-0",
+    "cornice-upper-bedroom-bar-s-0",
+    "cornice-upper-bedroom-bar-e-0",
+    "cornice-upper-bedroom-bar-w-0",
+    "cornice-upper-east-suite-n-0",
+    "cornice-upper-east-suite-s-0",
+    "cornice-upper-east-suite-e-0",
+    "lintel-34",
+    "sill-34",
+    "lintel-35",
+    "sill-35",
+    "lintel-36",
+    "sill-36",
+    "lintel-37",
+    "sill-37",
+    "lintel-38",
+    "sill-38",
+    "shutter-15-a",
+    "shutter-15-b",
+    "shutter-16-a",
+    "shutter-16-b",
+    "shutter-29-a",
+    "shutter-29-b",
+    "shutter-30-a",
+    "shutter-30-b"
+  ],
+  "components": {
+    "slab-main-living-plinth": "block:main-living-plinth",
+    "slab-east-bedroom-wing": "block:east-bedroom-wing",
+    "slab-entry-pavilion": "block:entry-pavilion",
+    "slab-up-main-living-plinth": "block:main-living-plinth",
+    "slab-up-main-living-plinth-1": "block:main-living-plinth",
+    "slab-up-main-living-plinth-2": "block:main-living-plinth",
+    "slab-up-main-living-plinth-3": "block:main-living-plinth",
+    "slab-up-east-bedroom-wing": "block:east-bedroom-wing",
+    "slab-up-upper-bedroom-bar-c0": "block:upper-bedroom-bar",
+    "p-media-lounge-main-stair": "room:media-lounge",
+    "p-media-lounge-ground-gallery": "room:media-lounge",
+    "p-media-lounge-ground-gallery-door": "room:media-lounge",
+    "p-arrival-foyer-media-lounge": "room:arrival-foyer",
+    "p-entry-link-hall-media-lounge": "room:entry-link-hall",
+    "p-main-stair-powder-bath": "room:main-stair",
+    "p-main-stair-ground-gallery": "room:main-stair",
+    "p-main-stair-ground-gallery-door": "room:main-stair",
+    "p-powder-bath-ground-gallery": "room:powder-bath",
+    "p-powder-bath-ground-gallery-door": "room:powder-bath",
+    "p-ground-gallery-show-kitchen": "room:ground-gallery",
+    "p-ground-gallery-great-room": "room:ground-gallery",
+    "p-ground-gallery-great-room-door": "room:ground-gallery",
+    "p-ground-gallery-family-lounge": "room:ground-gallery",
+    "p-ground-gallery-ground-suite-hall": "room:ground-gallery",
+    "p-ground-gallery-ground-suite-hall-door": "room:ground-gallery",
+    "p-entry-link-hall-ground-gallery": "room:entry-link-hall",
+    "p-entry-link-hall-ground-gallery-door": "room:entry-link-hall",
+    "p-show-kitchen-great-room": "room:show-kitchen",
+    "p-family-lounge-ground-suite-hall": "room:family-lounge",
+    "p-family-lounge-ground-suite-lounge": "room:family-lounge",
+    "p-ground-suite-hall-ground-suite-lounge": "room:ground-suite-hall",
+    "p-ground-suite-hall-ground-suite-lounge-door": "room:ground-suite-hall",
+    "p-ground-suite-hall-ground-suite-bedroom": "room:ground-suite-hall",
+    "p-ground-suite-hall-ground-suite-bedroom-door": "room:ground-suite-hall",
+    "p-ground-suite-lounge-ground-suite-bedroom": "room:ground-suite-lounge",
+    "p-ground-suite-lounge-ground-suite-bath": "room:ground-suite-lounge",
+    "p-ground-suite-bedroom-ground-suite-bath": "room:ground-suite-bedroom",
+    "p-ground-suite-bedroom-ground-suite-bath-door": "room:ground-suite-bedroom",
+    "p-north-bedroom-north-bedroom-bath": "room:north-bedroom",
+    "p-north-bedroom-north-bedroom-bath-door": "room:north-bedroom",
+    "p-north-bedroom-upper-gallery": "room:north-bedroom",
+    "p-north-bedroom-upper-gallery-door": "room:north-bedroom",
+    "p-north-bedroom-bath-upper-gallery": "room:north-bedroom-bath",
+    "p-north-bedroom-bath-south-bedroom-bath": "room:north-bedroom-bath",
+    "p-north-bedroom-bath-south-bedroom": "room:north-bedroom-bath",
+    "p-upper-gallery-south-bedroom": "room:upper-gallery",
+    "p-upper-gallery-south-bedroom-door": "room:upper-gallery",
+    "p-upper-gallery-upper-lounge": "room:upper-gallery",
+    "p-upper-gallery-upper-lounge-door": "room:upper-gallery",
+    "p-upper-gallery-east-suite-hall": "room:upper-gallery",
+    "p-upper-gallery-east-suite-hall-door": "room:upper-gallery",
+    "p-south-bedroom-bath-south-bedroom": "room:south-bedroom-bath",
+    "p-south-bedroom-bath-south-bedroom-door": "room:south-bedroom-bath",
+    "p-south-bedroom-upper-lounge": "room:south-bedroom",
+    "p-upper-lounge-east-suite-hall": "room:upper-lounge",
+    "p-east-suite-hall-east-suite-bedroom": "room:east-suite-hall",
+    "p-east-suite-hall-east-suite-bedroom-door": "room:east-suite-hall",
+    "p-east-suite-hall-east-suite-bath": "room:east-suite-hall",
+    "p-east-suite-bedroom-east-suite-bath": "room:east-suite-bedroom",
+    "p-east-suite-bedroom-east-suite-bath-door": "room:east-suite-bedroom",
+    "w-media-lounge-n-0": "room:media-lounge",
+    "w-media-lounge-n-1": "room:media-lounge",
+    "w-main-stair-n-0": "room:main-stair",
+    "w-main-stair-n-1": "room:main-stair",
+    "w-powder-bath-n-0": "room:powder-bath",
+    "w-powder-bath-e-0": "room:powder-bath",
+    "w-show-kitchen-w-0": "room:show-kitchen",
+    "w-garden-dining-s-0": "room:garden-dining",
+    "w-garden-dining-s-1": "room:garden-dining",
+    "w-garden-dining-s-1-door": "room:garden-dining",
+    "w-garden-dining-s-2": "room:garden-dining",
+    "w-garden-dining-w-0": "room:garden-dining",
+    "w-great-room-s-0": "room:great-room",
+    "w-great-room-s-1": "room:great-room",
+    "w-great-room-s-1-door": "room:great-room",
+    "w-great-room-s-2": "room:great-room",
+    "w-family-lounge-s-0": "room:family-lounge",
+    "w-family-lounge-e-0": "room:family-lounge",
+    "w-ground-suite-hall-n-0": "room:ground-suite-hall",
+    "w-ground-suite-hall-n-1": "room:ground-suite-hall",
+    "w-ground-suite-lounge-s-0": "room:ground-suite-lounge",
+    "w-ground-suite-lounge-s-1": "room:ground-suite-lounge",
+    "w-ground-suite-lounge-s-1-door": "room:ground-suite-lounge",
+    "w-ground-suite-lounge-s-2": "room:ground-suite-lounge",
+    "w-ground-suite-bedroom-n-0": "room:ground-suite-bedroom",
+    "w-ground-suite-bedroom-n-1": "room:ground-suite-bedroom",
+    "w-ground-suite-bedroom-e-0": "room:ground-suite-bedroom",
+    "w-ground-suite-bedroom-e-1": "room:ground-suite-bedroom",
+    "w-ground-suite-bath-s-0": "room:ground-suite-bath",
+    "w-ground-suite-bath-e-0": "room:ground-suite-bath",
+    "w-arrival-foyer-n-0": "room:arrival-foyer",
+    "w-arrival-foyer-n-1": "entrance",
+    "w-arrival-foyer-n-1-door": "entrance",
+    "w-arrival-foyer-n-2": "room:arrival-foyer",
+    "w-arrival-foyer-e-0": "room:arrival-foyer",
+    "w-arrival-foyer-w-0": "room:arrival-foyer",
+    "w-entry-link-hall-s-0": "room:entry-link-hall",
+    "w-entry-link-hall-w-0": "room:entry-link-hall",
+    "w-north-bedroom-n-0": "room:north-bedroom",
+    "w-north-bedroom-n-1": "room:north-bedroom",
+    "w-north-bedroom-w-0": "room:north-bedroom",
+    "w-north-bedroom-w-0-door": "room:north-bedroom",
+    "w-north-bedroom-w-1": "room:north-bedroom",
+    "w-north-bedroom-bath-w-0": "room:north-bedroom-bath",
+    "w-upper-gallery-n-0": "room:upper-gallery",
+    "w-upper-gallery-n-1": "room:upper-gallery",
+    "w-upper-gallery-e-0": "room:upper-gallery",
+    "w-south-bedroom-bath-s-0": "room:south-bedroom-bath",
+    "w-south-bedroom-bath-w-0": "room:south-bedroom-bath",
+    "w-south-bedroom-s-0": "room:south-bedroom",
+    "w-south-bedroom-s-1": "room:south-bedroom",
+    "w-south-bedroom-s-1-door": "room:south-bedroom",
+    "w-south-bedroom-s-2": "room:south-bedroom",
+    "w-upper-lounge-s-0": "room:upper-lounge",
+    "w-east-suite-hall-n-0": "room:east-suite-hall",
+    "w-east-suite-hall-s-0": "room:east-suite-hall",
+    "w-east-suite-hall-w-0": "room:east-suite-hall",
+    "w-east-suite-bedroom-n-0": "room:east-suite-bedroom",
+    "w-east-suite-bedroom-n-1": "room:east-suite-bedroom",
+    "w-east-suite-bedroom-e-0": "room:east-suite-bedroom",
+    "w-east-suite-bedroom-e-1": "room:east-suite-bedroom",
+    "w-east-suite-bedroom-e-1-door": "room:east-suite-bedroom",
+    "w-east-suite-bedroom-e-2": "room:east-suite-bedroom",
+    "w-east-suite-bath-s-0": "room:east-suite-bath",
+    "w-east-suite-bath-e-0": "room:east-suite-bath",
+    "stair-main-stair-to-upper-gallery-1": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-2": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-3": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-4": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-5": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-6": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-7": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-8": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-9": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-10": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-11": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-12": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-13": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-14": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-15": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-16": "stair:main-stair-to-upper-gallery",
+    "stair-main-stair-to-upper-gallery-17": "stair:main-stair-to-upper-gallery",
+    "guard-main-stair-to-upper-gallery": "stair:main-stair-to-upper-gallery",
+    "rail-main-living-plinth-n-0": "block:main-living-plinth",
+    "rail-main-living-plinth-n-1": "block:main-living-plinth",
+    "rail-main-living-plinth-s-0": "block:main-living-plinth",
+    "rail-main-living-plinth-e-0": "block:main-living-plinth",
+    "rail-main-living-plinth-e-1": "block:main-living-plinth",
+    "rail-main-living-plinth-w-0": "block:main-living-plinth",
+    "rail-east-bedroom-wing-n-0": "block:east-bedroom-wing",
+    "rail-east-bedroom-wing-s-0": "block:east-bedroom-wing",
+    "rail-east-bedroom-wing-e-0": "block:east-bedroom-wing",
+    "roof-entry-pavilion": "roof:entry-pavilion",
+    "roof-upper-bedroom-bar": "roof:upper-bedroom-bar",
+    "roof-upper-east-suite": "roof:upper-east-suite",
+    "veranda-south-veranda-deck": "veranda:south-veranda",
+    "veranda-south-veranda-column-0": "veranda:south-veranda",
+    "veranda-south-veranda-column-1": "veranda:south-veranda",
+    "veranda-south-veranda-column-2": "veranda:south-veranda",
+    "veranda-south-veranda-column-3": "veranda:south-veranda",
+    "veranda-south-veranda-column-4": "veranda:south-veranda",
+    "veranda-south-veranda-column-5": "veranda:south-veranda",
+    "veranda-south-veranda-beam-0": "veranda:south-veranda",
+    "veranda-south-veranda-beam-1": "veranda:south-veranda",
+    "veranda-south-veranda-beam-2": "veranda:south-veranda",
+    "veranda-south-veranda-beam-3": "veranda:south-veranda",
+    "veranda-south-veranda-beam-4": "veranda:south-veranda",
+    "veranda-south-veranda-beam-5": "veranda:south-veranda",
+    "veranda-south-veranda-beam-6": "veranda:south-veranda",
+    "veranda-south-veranda-beam-7": "veranda:south-veranda",
+    "veranda-south-veranda-beam-8": "veranda:south-veranda",
+    "veranda-south-veranda-beam-9": "veranda:south-veranda",
+    "veranda-south-veranda-beam-10": "veranda:south-veranda",
+    "veranda-south-veranda-beam-11": "veranda:south-veranda",
+    "veranda-south-veranda-roof": "veranda:south-veranda",
+    "entrance-canopy": "entrance",
+    "entrance-column-a": "entrance",
+    "entrance-column-b": "entrance",
+    "entrance-court": "entrance",
+    "entrance-pier-a": "entrance",
+    "entrance-pier-b": "entrance",
+    "entrance-lintel": "entrance",
+    "cornice-main-living-plinth-n-0": "block:main-living-plinth",
+    "plinth-main-living-plinth-n-0": "block:main-living-plinth",
+    "plinth-main-living-plinth-n-1": "block:main-living-plinth",
+    "plinth-main-living-plinth-n-2": "block:main-living-plinth",
+    "plinth-main-living-plinth-n-3": "block:main-living-plinth",
+    "cornice-main-living-plinth-s-0": "block:main-living-plinth",
+    "cornice-main-living-plinth-e-0": "block:main-living-plinth",
+    "cornice-main-living-plinth-e-1": "block:main-living-plinth",
+    "plinth-main-living-plinth-e-0": "block:main-living-plinth",
+    "plinth-main-living-plinth-e-1": "block:main-living-plinth",
+    "cornice-main-living-plinth-w-0": "block:main-living-plinth",
+    "plinth-main-living-plinth-w-0": "block:main-living-plinth",
+    "cornice-east-bedroom-wing-n-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-n-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-n-1": "block:east-bedroom-wing",
+    "cornice-east-bedroom-wing-s-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-s-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-s-1": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-s-2": "block:east-bedroom-wing",
+    "cornice-east-bedroom-wing-e-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-e-0": "block:east-bedroom-wing",
+    "plinth-east-bedroom-wing-e-1": "block:east-bedroom-wing",
+    "cornice-entry-pavilion-n-0": "block:entry-pavilion",
+    "plinth-entry-pavilion-n-0": "block:entry-pavilion",
+    "plinth-entry-pavilion-n-1": "block:entry-pavilion",
+    "cornice-entry-pavilion-s-0": "block:entry-pavilion",
+    "plinth-entry-pavilion-s-0": "block:entry-pavilion",
+    "cornice-entry-pavilion-e-0": "block:entry-pavilion",
+    "plinth-entry-pavilion-e-0": "block:entry-pavilion",
+    "cornice-entry-pavilion-w-0": "block:entry-pavilion",
+    "plinth-entry-pavilion-w-0": "block:entry-pavilion",
+    "cornice-upper-bedroom-bar-n-0": "block:upper-bedroom-bar",
+    "cornice-upper-bedroom-bar-s-0": "block:upper-bedroom-bar",
+    "cornice-upper-bedroom-bar-e-0": "block:upper-bedroom-bar",
+    "cornice-upper-bedroom-bar-w-0": "block:upper-bedroom-bar",
+    "cornice-upper-east-suite-n-0": "block:upper-east-suite",
+    "cornice-upper-east-suite-s-0": "block:upper-east-suite",
+    "cornice-upper-east-suite-e-0": "block:upper-east-suite",
+    "lintel-0": "block:main-living-plinth",
+    "sill-0": "block:main-living-plinth",
+    "lintel-1": "block:main-living-plinth",
+    "sill-1": "block:main-living-plinth",
+    "lintel-2": "block:main-living-plinth",
+    "sill-2": "block:main-living-plinth",
+    "lintel-3": "block:main-living-plinth",
+    "sill-3": "block:main-living-plinth",
+    "lintel-4": "block:main-living-plinth",
+    "sill-4": "block:main-living-plinth",
+    "lintel-5": "block:main-living-plinth",
+    "sill-5": "block:main-living-plinth",
+    "lintel-6": "block:main-living-plinth",
+    "sill-6": "block:main-living-plinth",
+    "lintel-7": "block:main-living-plinth",
+    "lintel-8": "block:main-living-plinth",
+    "lintel-9": "block:main-living-plinth",
+    "sill-9": "block:main-living-plinth",
+    "lintel-10": "block:main-living-plinth",
+    "lintel-11": "block:main-living-plinth",
+    "lintel-12": "block:main-living-plinth",
+    "lintel-13": "block:east-bedroom-wing",
+    "sill-13": "block:east-bedroom-wing",
+    "lintel-14": "block:east-bedroom-wing",
+    "sill-14": "block:east-bedroom-wing",
+    "lintel-15": "block:east-bedroom-wing",
+    "sill-15": "block:east-bedroom-wing",
+    "lintel-16": "block:east-bedroom-wing",
+    "sill-16": "block:east-bedroom-wing",
+    "lintel-17": "block:east-bedroom-wing",
+    "sill-17": "block:east-bedroom-wing",
+    "lintel-18": "block:east-bedroom-wing",
+    "sill-18": "block:east-bedroom-wing",
+    "lintel-19": "block:east-bedroom-wing",
+    "sill-19": "block:east-bedroom-wing",
+    "lintel-20": "block:east-bedroom-wing",
+    "sill-20": "block:east-bedroom-wing",
+    "lintel-21": "block:entry-pavilion",
+    "sill-21": "block:entry-pavilion",
+    "lintel-22": "block:upper-bedroom-bar",
+    "sill-22": "block:upper-bedroom-bar",
+    "lintel-23": "block:upper-bedroom-bar",
+    "sill-23": "block:upper-bedroom-bar",
+    "lintel-34": "block:upper-bedroom-bar",
+    "sill-34": "block:upper-bedroom-bar",
+    "lintel-24": "block:upper-bedroom-bar",
+    "sill-24": "block:upper-bedroom-bar",
+    "lintel-25": "block:upper-bedroom-bar",
+    "sill-25": "block:upper-bedroom-bar",
+    "lintel-26": "block:upper-bedroom-bar",
+    "sill-26": "block:upper-bedroom-bar",
+    "lintel-35": "block:upper-bedroom-bar",
+    "sill-35": "block:upper-bedroom-bar",
+    "lintel-27": "block:upper-bedroom-bar",
+    "sill-27": "block:upper-bedroom-bar",
+    "lintel-28": "block:upper-bedroom-bar",
+    "lintel-36": "block:upper-east-suite",
+    "sill-36": "block:upper-east-suite",
+    "lintel-37": "block:upper-east-suite",
+    "sill-37": "block:upper-east-suite",
+    "lintel-29": "block:upper-east-suite",
+    "sill-29": "block:upper-east-suite",
+    "lintel-30": "block:upper-east-suite",
+    "sill-30": "block:upper-east-suite",
+    "lintel-31": "block:upper-east-suite",
+    "lintel-32": "block:upper-east-suite",
+    "lintel-33": "block:upper-east-suite",
+    "sill-33": "block:upper-east-suite",
+    "lintel-38": "block:upper-east-suite",
+    "sill-38": "block:upper-east-suite",
+    "shutter-0-a": "block:main-living-plinth",
+    "shutter-0-b": "block:main-living-plinth",
+    "shutter-1-a": "block:main-living-plinth",
+    "shutter-1-b": "block:main-living-plinth",
+    "shutter-6-a": "block:main-living-plinth",
+    "shutter-6-b": "block:main-living-plinth",
+    "shutter-9-a": "block:main-living-plinth",
+    "shutter-9-b": "block:main-living-plinth",
+    "shutter-15-a": "block:east-bedroom-wing",
+    "shutter-15-b": "block:east-bedroom-wing",
+    "shutter-16-a": "block:east-bedroom-wing",
+    "shutter-16-b": "block:east-bedroom-wing",
+    "shutter-17-a": "block:east-bedroom-wing",
+    "shutter-17-b": "block:east-bedroom-wing",
+    "shutter-18-a": "block:east-bedroom-wing",
+    "shutter-18-b": "block:east-bedroom-wing",
+    "shutter-22-a": "block:upper-bedroom-bar",
+    "shutter-22-b": "block:upper-bedroom-bar",
+    "shutter-23-a": "block:upper-bedroom-bar",
+    "shutter-23-b": "block:upper-bedroom-bar",
+    "shutter-29-a": "block:upper-east-suite",
+    "shutter-29-b": "block:upper-east-suite",
+    "shutter-30-a": "block:upper-east-suite",
+    "shutter-30-b": "block:upper-east-suite"
+  },
+  "beforeMetrics": {
+    "roofs": [
+      {
+        "block": "entry-pavilion",
+        "form": "gable",
+        "nominalPitchDeg": 27,
+        "rise": 1.53,
+        "ridgeHeight": 4.93,
+        "riseToWallHeight": 0.49,
+        "eaves": {
+          "north": 0,
+          "east": 0,
+          "south": 0.9,
+          "west": 0.9
+        },
+        "maxEave": 0.9
+      },
+      {
+        "block": "upper-bedroom-bar",
+        "form": "hip",
+        "nominalPitchDeg": 24,
+        "rise": 2.45,
+        "ridgeHeight": 9.25,
+        "riseToWallHeight": 0.79,
+        "eaves": {
+          "north": 1.3,
+          "east": 0,
+          "south": 1.3,
+          "west": 1.3
+        },
+        "maxEave": 1.3
+      },
+      {
+        "block": "upper-east-suite",
+        "form": "gable",
+        "nominalPitchDeg": 19.9,
+        "rise": 1.27,
+        "ridgeHeight": 8.07,
+        "riseToWallHeight": 0.41,
+        "eaves": {
+          "north": 0.9,
+          "east": 0.9,
+          "south": 0.9,
+          "west": 0
+        },
+        "maxEave": 0.9
+      }
+    ],
+    "openings": {
+      "total": 26,
+      "glazed": 26,
+      "minWidth": 0.6,
+      "minHeight": 0.7,
+      "slits": 13,
+      "medianHeightToWidth": 0.82,
+      "byFacade": {
+        "main-living-plinth:n": {
+          "windows": 5,
+          "doors": 0,
+          "glazedAreaRatio": 0.21,
+          "wallArea": 55.8,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:e": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.07,
+          "wallArea": 10.5,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:w": {
+          "windows": 2,
+          "doors": 0,
+          "glazedAreaRatio": 0.43,
+          "wallArea": 25.4,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:s": {
+          "windows": 0,
+          "doors": 7,
+          "glazedAreaRatio": 0.57,
+          "wallArea": 55.8,
+          "maxRelief": 0,
+          "reliefLayers": []
+        },
+        "east-bedroom-wing:n": {
+          "windows": 4,
+          "doors": 0,
+          "glazedAreaRatio": 0.11,
+          "wallArea": 34.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "east-bedroom-wing:s": {
+          "windows": 1,
+          "doors": 1,
+          "glazedAreaRatio": 0.19,
+          "wallArea": 34.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "east-bedroom-wing:e": {
+          "windows": 3,
+          "doors": 0,
+          "glazedAreaRatio": 0.22,
+          "wallArea": 29.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "entry-pavilion:n": {
+          "windows": 0,
+          "doors": 1,
+          "glazedAreaRatio": 0.26,
+          "wallArea": 18.6,
+          "maxRelief": 0.18,
+          "reliefLayers": [
+            "cornice",
+            "plinth"
+          ]
+        },
+        "entry-pavilion:e": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 3.7,
+          "maxRelief": 0.18,
+          "reliefLayers": [
+            "cornice",
+            "plinth"
+          ]
+        },
+        "entry-pavilion:w": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 19.8,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "eave"
+          ]
+        },
+        "entry-pavilion:s": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.04,
+          "wallArea": 18.6,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:n": {
+          "windows": 4,
+          "doors": 0,
+          "glazedAreaRatio": 0.22,
+          "wallArea": 37.2,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:w": {
+          "windows": 1,
+          "doors": 1,
+          "glazedAreaRatio": 0.16,
+          "wallArea": 31.3,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:e": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.4,
+          "wallArea": 9.9,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:s": {
+          "windows": 0,
+          "doors": 2,
+          "glazedAreaRatio": 0.4,
+          "wallArea": 37.2,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "eave"
+          ]
+        },
+        "upper-east-suite:n": {
+          "windows": 2,
+          "doors": 0,
+          "glazedAreaRatio": 0.11,
+          "wallArea": 21.7,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-east-suite:s": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.04,
+          "wallArea": 21.7,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-east-suite:w": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 0.6,
+          "maxRelief": 0,
+          "reliefLayers": []
+        },
+        "upper-east-suite:e": {
+          "windows": 0,
+          "doors": 3,
+          "glazedAreaRatio": 0.36,
+          "wallArea": 22.9,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "eave"
+          ]
+        }
+      }
+    },
+    "massing": {
+      "distinctRoofForms": [
+        "gable",
+        "hip"
+      ],
+      "distinctRidgeHeights": 3,
+      "tallestRoofBlock": "upper-bedroom-bar",
+      "largestMassBlock": "main-living-plinth",
+      "materials": [
+        "ivory",
+        "limestone",
+        "timber"
+      ],
+      "trimElements": 128,
+      "elementCount": 307
+    },
+    "entrance": {
+      "canopyDepth": 3.2,
+      "portal": true,
+      "stoneColumns": true,
+      "roofFormOverEntrance": "gable"
+    },
+    "warnings": [
+      {
+        "area": "facade-depth",
+        "severity": "warning",
+        "subject": "main-living-plinth:s",
+        "message": "The 18 m s facade of main-living-plinth has almost no relief (0.00 m): it will read as a flat plane."
+      },
+      {
+        "area": "facade-depth",
+        "severity": "warning",
+        "subject": "upper-east-suite:w",
+        "message": "The 8 m w facade of upper-east-suite has almost no relief (0.00 m): it will read as a flat plane."
+      },
+      {
+        "area": "openings",
+        "severity": "warning",
+        "subject": "openings",
+        "message": "13 windows are slit-like (<0.9 m wide or <1.2 m tall)."
+      },
+      {
+        "area": "openings",
+        "severity": "warning",
+        "subject": "openings",
+        "message": "Median window is wider than tall (h/w 0.82); Mediterranean proportion is vertical."
+      },
+      {
+        "area": "roof",
+        "severity": "note",
+        "subject": "main-living-plinth",
+        "message": "main-living-plinth lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+      },
+      {
+        "area": "roof",
+        "severity": "note",
+        "subject": "east-bedroom-wing",
+        "message": "east-bedroom-wing lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "media-lounge",
+        "message": "media-lounge (media, 7.3×3.4 m = 24.8 m²) received only 73% of the 34 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "ground-gallery",
+        "message": "ground-gallery (hall, 18.0×1.8 m = 32.4 m²) is a long thin circulation space (10.0:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is narrow: shorter side 3.0 m (comfortable 3.2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom",
+        "message": "north-bedroom (bedroom, 5.3×3.7 m = 19.6 m²) received only 63% of the 31 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is awkwardly elongated (3.1:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "east-suite-hall",
+        "message": "east-suite-hall (hall, 2.1×8.0 m = 16.8 m²) is a long thin circulation space (3.8:1)."
+      }
+    ]
+  },
+  "afterMetrics": {
+    "roofs": [
+      {
+        "block": "entry-pavilion",
+        "form": "gable",
+        "nominalPitchDeg": 27,
+        "rise": 1.53,
+        "ridgeHeight": 4.93,
+        "riseToWallHeight": 0.49,
+        "eaves": {
+          "north": 0,
+          "east": 0,
+          "south": 0.9,
+          "west": 0.9
+        },
+        "maxEave": 0.9
+      },
+      {
+        "block": "upper-bedroom-bar",
+        "form": "hip",
+        "nominalPitchDeg": 24,
+        "rise": 2.45,
+        "ridgeHeight": 9.25,
+        "riseToWallHeight": 0.79,
+        "eaves": {
+          "north": 1.3,
+          "east": 0,
+          "south": 1.3,
+          "west": 1.3
+        },
+        "maxEave": 1.3
+      },
+      {
+        "block": "upper-east-suite",
+        "form": "gable",
+        "nominalPitchDeg": 19.9,
+        "rise": 1.27,
+        "ridgeHeight": 8.07,
+        "riseToWallHeight": 0.41,
+        "eaves": {
+          "north": 0.9,
+          "east": 0.9,
+          "south": 0.9,
+          "west": 0
+        },
+        "maxEave": 0.9
+      }
+    ],
+    "openings": {
+      "total": 31,
+      "glazed": 31,
+      "minWidth": 0.9,
+      "minHeight": 0.95,
+      "slits": 9,
+      "medianHeightToWidth": 1.44,
+      "byFacade": {
+        "main-living-plinth:n": {
+          "windows": 5,
+          "doors": 0,
+          "glazedAreaRatio": 0.17,
+          "wallArea": 55.8,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:e": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.09,
+          "wallArea": 10.5,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:w": {
+          "windows": 2,
+          "doors": 0,
+          "glazedAreaRatio": 0.25,
+          "wallArea": 25.4,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "main-living-plinth:s": {
+          "windows": 0,
+          "doors": 7,
+          "glazedAreaRatio": 0.58,
+          "wallArea": 55.8,
+          "maxRelief": 0.18,
+          "reliefLayers": [
+            "cornice"
+          ]
+        },
+        "east-bedroom-wing:n": {
+          "windows": 4,
+          "doors": 0,
+          "glazedAreaRatio": 0.25,
+          "wallArea": 34.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "east-bedroom-wing:s": {
+          "windows": 1,
+          "doors": 1,
+          "glazedAreaRatio": 0.2,
+          "wallArea": 34.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "east-bedroom-wing:e": {
+          "windows": 3,
+          "doors": 0,
+          "glazedAreaRatio": 0.19,
+          "wallArea": 29.1,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "window surrounds"
+          ]
+        },
+        "entry-pavilion:n": {
+          "windows": 0,
+          "doors": 1,
+          "glazedAreaRatio": 0.26,
+          "wallArea": 18.6,
+          "maxRelief": 0.18,
+          "reliefLayers": [
+            "cornice",
+            "plinth"
+          ]
+        },
+        "entry-pavilion:e": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 3.7,
+          "maxRelief": 0.18,
+          "reliefLayers": [
+            "cornice",
+            "plinth"
+          ]
+        },
+        "entry-pavilion:w": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 19.8,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "eave"
+          ]
+        },
+        "entry-pavilion:s": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.12,
+          "wallArea": 18.6,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "plinth",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:n": {
+          "windows": 4,
+          "doors": 0,
+          "glazedAreaRatio": 0.23,
+          "wallArea": 37.2,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:w": {
+          "windows": 2,
+          "doors": 1,
+          "glazedAreaRatio": 0.2,
+          "wallArea": 31.3,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:e": {
+          "windows": 1,
+          "doors": 0,
+          "glazedAreaRatio": 0.23,
+          "wallArea": 9.9,
+          "maxRelief": 0.2,
+          "reliefLayers": [
+            "cornice",
+            "window surrounds"
+          ]
+        },
+        "upper-bedroom-bar:s": {
+          "windows": 1,
+          "doors": 2,
+          "glazedAreaRatio": 0.3,
+          "wallArea": 37.2,
+          "maxRelief": 1.3,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-east-suite:n": {
+          "windows": 3,
+          "doors": 0,
+          "glazedAreaRatio": 0.3,
+          "wallArea": 21.7,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-east-suite:s": {
+          "windows": 2,
+          "doors": 0,
+          "glazedAreaRatio": 0.15,
+          "wallArea": 21.7,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        },
+        "upper-east-suite:w": {
+          "windows": 0,
+          "doors": 0,
+          "glazedAreaRatio": 0,
+          "wallArea": 0.6,
+          "maxRelief": 0,
+          "reliefLayers": []
+        },
+        "upper-east-suite:e": {
+          "windows": 1,
+          "doors": 3,
+          "glazedAreaRatio": 0.41,
+          "wallArea": 22.9,
+          "maxRelief": 0.9,
+          "reliefLayers": [
+            "cornice",
+            "eave",
+            "window surrounds"
+          ]
+        }
+      }
+    },
+    "massing": {
+      "distinctRoofForms": [
+        "gable",
+        "hip"
+      ],
+      "distinctRidgeHeights": 3,
+      "tallestRoofBlock": "upper-bedroom-bar",
+      "largestMassBlock": "main-living-plinth",
+      "materials": [
+        "ivory",
+        "limestone",
+        "timber"
+      ],
+      "trimElements": 135,
+      "elementCount": 314
+    },
+    "entrance": {
+      "canopyDepth": 3.2,
+      "portal": true,
+      "stoneColumns": true,
+      "roofFormOverEntrance": "gable"
+    },
+    "warnings": [
+      {
+        "area": "facade-depth",
+        "severity": "warning",
+        "subject": "upper-east-suite:w",
+        "message": "The 8 m w facade of upper-east-suite has almost no relief (0.00 m): it will read as a flat plane."
+      },
+      {
+        "area": "openings",
+        "severity": "warning",
+        "subject": "openings",
+        "message": "9 windows are slit-like (<0.9 m wide or <1.2 m tall)."
+      },
+      {
+        "area": "roof",
+        "severity": "note",
+        "subject": "main-living-plinth",
+        "message": "main-living-plinth lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+      },
+      {
+        "area": "roof",
+        "severity": "note",
+        "subject": "east-bedroom-wing",
+        "message": "east-bedroom-wing lies under an upper volume and has no pitched roof: it reads as a flat roof terrace (renderer limitation: no pitched roof over an L-shaped uncovered area)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "media-lounge",
+        "message": "media-lounge (media, 7.3×3.4 m = 24.8 m²) received only 73% of the 34 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "ground-gallery",
+        "message": "ground-gallery (hall, 18.0×1.8 m = 32.4 m²) is a long thin circulation space (10.0:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is narrow: shorter side 3.0 m (comfortable 3.2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "family-lounge",
+        "message": "family-lounge (lounge, 3.0×8.8 m = 26.4 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom",
+        "message": "north-bedroom (bedroom, 5.3×3.7 m = 19.6 m²) received only 63% of the 31 m² Terra asked for (the block could not give more)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "north-bedroom-bath",
+        "message": "north-bedroom-bath (bath, 5.3×1.8 m = 9.5 m²) is awkwardly elongated (2.9:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is narrow: shorter side 1.8 m (comfortable 2 m)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "south-bedroom-bath",
+        "message": "south-bedroom-bath (bath, 1.8×5.5 m = 9.9 m²) is awkwardly elongated (3.1:1)."
+      },
+      {
+        "area": "room-plan",
+        "severity": "warning",
+        "subject": "east-suite-hall",
+        "message": "east-suite-hall (hall, 2.1×8.0 m = 16.8 m²) is a long thin circulation space (3.8:1)."
+      }
+    ]
+  }
+}

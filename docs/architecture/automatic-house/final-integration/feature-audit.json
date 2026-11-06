@@ -1,0 +1,222 @@
+{
+  "old91": {
+    "elements": 91,
+    "inventory": {
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "kitchens": 1,
+      "living": 1,
+      "dining": 1,
+      "circulation": 2,
+      "roofElements": 5,
+      "verandas": 1,
+      "waterSurfaces": 1,
+      "terraces": 4,
+      "trees": 0,
+      "plantingBeds": 0,
+      "hedges": 0,
+      "lawns": 1
+    },
+    "findings": [
+      {
+        "stage": 5,
+        "code": "missing-architectural-feature",
+        "subject": "planting",
+        "message": "The brief requires planting; lawn alone is not constructed planting."
+      }
+    ],
+    "intentions": [
+      {
+        "id": "garden-veranda",
+        "role": "Covered garden-facing veranda for outdoor dining and relaxed seating",
+        "cx": 1.25,
+        "cz": -0.25,
+        "w": 8.5,
+        "d": 4.5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "veranda",
+        "constructAt": 4
+      },
+      {
+        "id": "limestone-terrace",
+        "role": "Open limestone terrace adjoining the veranda and sheltered garden",
+        "cx": 7.75,
+        "cz": -0.25,
+        "w": 4.5,
+        "d": 4.5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "terrace",
+        "constructAt": 2
+      },
+      {
+        "id": "garden-pool",
+        "role": "Modest rectangular swimming pool at the sheltered garden edge",
+        "cx": 12.5,
+        "cz": 0,
+        "w": 5,
+        "d": 5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "pool",
+        "constructAt": 5
+      }
+    ],
+    "intentFindings": [
+      {
+        "stage": 5,
+        "code": "unresolved-architectural-intent",
+        "subject": "garden-pool",
+        "message": "Stage 5 must explicitly bind its actual pool to the retained pool intention using sourceIntent."
+      }
+    ],
+    "physicalFindings": []
+  },
+  "current93": {
+    "elements": 93,
+    "inventory": {
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "kitchens": 1,
+      "living": 1,
+      "dining": 1,
+      "circulation": 2,
+      "roofElements": 5,
+      "verandas": 1,
+      "waterSurfaces": 1,
+      "terraces": 3,
+      "trees": 1,
+      "plantingBeds": 1,
+      "hedges": 0,
+      "lawns": 1
+    },
+    "findings": [],
+    "intentions": [
+      {
+        "id": "garden-veranda",
+        "role": "Covered garden-facing veranda for outdoor dining and relaxed seating",
+        "cx": 1.25,
+        "cz": -0.25,
+        "w": 8.5,
+        "d": 4.5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "veranda",
+        "constructAt": 4
+      },
+      {
+        "id": "limestone-terrace",
+        "role": "Open limestone terrace adjoining the veranda and sheltered garden",
+        "cx": 7.75,
+        "cz": -0.25,
+        "w": 4.5,
+        "d": 4.5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "terrace",
+        "constructAt": 2
+      },
+      {
+        "id": "garden-pool",
+        "role": "Modest rectangular swimming pool at the sheltered garden edge",
+        "cx": 12.5,
+        "cz": 0,
+        "w": 5,
+        "d": 5,
+        "host": "social-main",
+        "side": "s",
+        "kind": "pool",
+        "constructAt": 5
+      }
+    ],
+    "intentFindings": [],
+    "physicalFindings": []
+  },
+  "rooms": [
+    {
+      "id": "living-room",
+      "type": "living",
+      "width": 10,
+      "depth": 9,
+      "area": 90
+    },
+    {
+      "id": "dining-room",
+      "type": "dining",
+      "width": 6.7,
+      "depth": 9,
+      "area": 60.300000000000004
+    },
+    {
+      "id": "kitchen-room",
+      "type": "kitchen",
+      "width": 7.3,
+      "depth": 9,
+      "area": 65.7
+    },
+    {
+      "id": "bed-3",
+      "type": "bedroom",
+      "width": 9,
+      "depth": 4,
+      "area": 36
+    },
+    {
+      "id": "private-hall",
+      "type": "hall",
+      "width": 9,
+      "depth": 4,
+      "area": 36
+    },
+    {
+      "id": "bed-2",
+      "type": "bedroom",
+      "width": 4.5,
+      "depth": 8,
+      "area": 36
+    },
+    {
+      "id": "bath-2",
+      "type": "bath",
+      "width": 4.5,
+      "depth": 2,
+      "area": 9
+    },
+    {
+      "id": "bed-1",
+      "type": "bedroom",
+      "width": 4.5,
+      "depth": 8,
+      "area": 36
+    },
+    {
+      "id": "bath-1",
+      "type": "bath",
+      "width": 4.5,
+      "depth": 2,
+      "area": 9
+    },
+    {
+      "id": "entry-foyer",
+      "type": "foyer",
+      "width": 6,
+      "depth": 5,
+      "area": 30
+    }
+  ],
+  "poolResolution": {
+    "sourceIntent": "garden-pool",
+    "intentResolution": "The original 5 × 5 m pool intention is too small for the existing 8.2 × 7.4 m basin/deck assembly and touches the house. Keep the same pool intention and move this one assembly to x=8,z=10 for clear separation; original conceptual footprint remains recorded.",
+    "x": 8,
+    "z": 10,
+    "w": 5,
+    "d": 3,
+    "basinDepth": 1.4
+  },
+  "simplifications": [
+    "Room boundaries and circulation are constructed; kitchen appliances and bathroom fixtures/plumbing are not modeled.",
+    "Planting is one existing schematic canopy tree and one existing planting-bed plate, plus lawn.",
+    "Roof/veranda geometry uses the existing simplified editable components."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "status": "AWAITING APPROVAL — NO PAID CALL MADE",
+  "model": "gpt-5.6-terra",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "instruction": "Move the swimming pool two metres closer to the veranda without changing the building.",
+  "plannedCalls": 1,
+  "maxRetries": 0,
+  "maxOutputTokens": 2000,
+  "maxCostUsd": 0.06,
+  "conservativeBoundUsd": 0.044835,
+  "textTokenBound": 8334,
+  "outputTokenBound": 2000,
+  "rates": {
+    "input": 2,
+    "cachedInput": 0.2,
+    "cacheWrite": 2.5,
+    "output": 12
+  },
+  "wireSHA256": "c5ef1b7615f09e96f08c3c32d4bed066b8dd4685cf6325c66a0ba073aea12132",
+  "baselineHash": "bc43ee732ef19971c9425736615787e0164dced462146fe9c5b2967747bb5e7b",
+  "providerCalls": 0,
+  "scope": "One natural-language planner call. Retain raw answer/usage/finish before validation. Do not automatically promote the accepted baseline.",
+  "expectedInterpretation": {
+    "pool": "pool",
+    "veranda": "veranda:south-veranda",
+    "direction": "towards",
+    "distance": 2
+  },
+  "validation": "Strict schema -> exact instruction/target/distance scope -> accepted-save edit service -> full scene/site/collision/route and preservation checks -> save/reload -> normal renderer. Invalid proposal returns original save without repair calls.",
+  "controls": "Future runner must pin exact packet/source hashes, recheck published pricing and bound, reserve exclusive attempt/network markers, use existing approved credentials, permit one POST only with redirect:error, zero retries, no additional AI calls or database writes.",
+  "costCaveat": "No exact provider token count or invoice. Conservatively bounds UTF-8 bytes plus framing at cache-write rate and reserves full output. Existing US$5 experiment ceiling unchanged; historical failed usage remains unknown.",
+  "capabilityBoundary": "Relative pool movement for existing rich-site Stage 5 saves with a south-facing veranda. Software derives positions, clips affected paving and fills vacated pool reservation. It never relocates plants/furniture or changes architecture. Invalid moves reject atomically."
+}

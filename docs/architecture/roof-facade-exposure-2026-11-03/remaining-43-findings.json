@@ -1,0 +1,294 @@
+[
+ {
+  "stage": "resolution",
+  "severity": "error",
+  "id": "composition",
+  "message": "great-hall-roof: ocean-veranda is listed in this span (hip, rise 1.6 m, overhang 1 m, bronze) and also has its own different roof (flat, overhang 0.8 m, timber; differs in form, rise, overhang, material); a space has exactly one roof. Decide which design stands: keep ocean-veranda in the span and delete its roofs entry, or remove ocean-veranda from the span so it keeps its own roof.",
+  "cause": "composition-span:0"
+ },
+ {
+  "stage": "resolution",
+  "severity": "error",
+  "id": "composition",
+  "message": "great-hall-roof: its rooms do not tile one rectangle (318.00 m² of rooms in a 342.00 m² envelope). A single roof needs contiguous rooms filling a rectangle: split the span, or give the rest their own roofs.",
+  "cause": "composition-span:1"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "great-hall-west-light",
+  "message": "great-hall-west-light: 2 bays of 2.1 m (2.46 m each with piers) fit no exposed run of the west wall of great-hall. Exposed runs: 0.00..4.00 m (4.00 m, room for 1 bay of 2.1 m). Fewer or narrower bays, or another wall.",
+  "cause": "facade:great-hall-west-light"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "dining-sea-doors",
+  "message": "dining-sea-doors: 2 bays of 2.1 m (2.46 m each with piers) fit no ocean-veranda-facing run of the south wall of dining-room. Bordering runs: 0.00..1.00 m (1.00 m, room for 0 bays of 2.1 m). Fewer or narrower bays, or another wall.",
+  "cause": "facade:dining-sea-doors"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "kitchen-west-windows",
+  "message": "kitchen-west-windows: the west wall of kitchen (8 m) is shared with other rooms along its whole length, so it has no exposed wall for windows. Choose another wall of kitchen.",
+  "cause": "facade:kitchen-west-windows"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "guest-one-east-windows",
+  "message": "guest-one-east-windows: 2 bays of 1.5 m (1.86 m each with piers) fit no exposed run of the east wall of guest-bedroom-one. Exposed runs: 4.00..6.00 m (2.00 m, room for 1 bay of 1.5 m). Fewer or narrower bays, or another wall.",
+  "cause": "facade:guest-one-east-windows"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "guest-two-east-windows",
+  "message": "guest-two-east-windows: 2 bays of 1.5 m (1.86 m each with piers) fit no exposed run of the east wall of guest-bedroom-two. Exposed runs: 0.00..2.00 m (2.00 m, room for 1 bay of 1.5 m). Fewer or narrower bays, or another wall.",
+  "cause": "facade:guest-two-east-windows"
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "library-east-windows",
+  "message": "library-east-windows: the east wall of library (5 m) is shared with other rooms along its whole length, so it has no exposed wall for windows. Choose another wall of library.",
+  "cause": "facade:library-east-windows"
+ },
+ {
+  "stage": "site",
+  "severity": "error",
+  "id": "arrival-lawn",
+  "message": "arrival-lawn overlaps family-gallery, primary-bedroom, family-bedroom-one, family-bedroom-two, family-bath-two."
+ },
+ {
+  "stage": "site",
+  "severity": "error",
+  "id": "pool-lawn",
+  "message": "pool-lawn (x -8..24, z -30..-18) lies 9 m outside the 90×75 m site, which is centred on the room cells (building spans x -18..46, z -7..40)."
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "court-to-family-gallery",
+  "message": "family-gallery and arrival-court share no wall on the south edge."
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "dining-to-veranda",
+  "message": "dining-room touches ocean-veranda along only 0..1 m (1 m) of its south edge (9 m long), but a 2.4 m opening needs 2.76 m with 0.18 m wall margins: it cannot fit the shared boundary. Choose a narrower opening or change the relationship of the two rooms."
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "kitchen-to-outdoor-kitchen",
+  "message": "kitchen and outdoor-kitchen share no wall on the south edge."
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "dining-to-guest-gallery",
+  "message": "dining-room and guest-gallery share no wall, so there is no wall to open between them."
+ },
+ {
+  "stage": "openings",
+  "severity": "error",
+  "id": "hall-to-veranda/great-hall-sea-glazing-2",
+  "message": "openings on great-hall:south leave under 0.36 m of pier.",
+  "cause": "facade:great-hall-sea-glazing"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "great-hall-roof",
+  "message": "great-hall-roof: one roof needs one envelope height; great-hall 6.6 m, ocean-veranda 3.8 m. Give them the same height or separate roofs."
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "kitchen/scullery",
+  "message": "roof bounds intersect by 4.8×0.6 m at the same height (overhangs 0.6 and 0.4 m): select separated roof sections. kitchen: the north eave (0.6 m) cannot reach scullery but scullery stands against only part of that 7 m edge; 0..3 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give kitchen no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "kitchen/ocean-veranda",
+  "message": "roof bounds intersect by 1.8×0.6 m at the same height (overhangs 0.6 and 0.8 m): select separated roof sections. kitchen: the south eave (0.6 m) cannot reach ocean-veranda but ocean-veranda stands against only part of that 7 m edge; 0..6 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give kitchen no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "dining-room/powder-room",
+  "message": "roof bounds intersect by 3.8×0.6 m at the same height (overhangs 0.6 and 0.4 m): select separated roof sections. dining-room: the north eave (0.6 m) cannot reach powder-room but powder-room stands against only part of that 9 m edge; 3..9 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give dining-room no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "dining-room/ocean-veranda",
+  "message": "roof bounds intersect by 1.8×0.6 m at the same height (overhangs 0.6 and 0.8 m): select separated roof sections. dining-room: the south eave (0.6 m) cannot reach ocean-veranda but ocean-veranda stands against only part of that 9 m edge; 7..9 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give dining-room no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "dining-room/outdoor-kitchen",
+  "message": "roof bounds intersect by 6.7×0.6 m at the same height (overhangs 0.6 and 0.7 m): select separated roof sections. dining-room: the south eave (0.6 m) cannot reach outdoor-kitchen but outdoor-kitchen stands against only part of that 9 m edge; 7..9 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give dining-room no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "dining-room/library",
+  "message": "roof bounds intersect by 0.6×5.7 m at the same height (overhangs 0.6 and 0.6 m): select separated roof sections. dining-room: the east eave (0.6 m) cannot reach library but library stands against only part of that 8 m edge; 0..3.5 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give dining-room no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "powder-room/library",
+  "message": "roof bounds intersect by 0.4×1.1 m at the same height (overhangs 0.4 and 0.6 m): select separated roof sections. powder-room: the east eave (0.4 m) cannot reach library but library stands against only part of that 3 m edge; 0.5..3 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give powder-room no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "ocean-veranda/outdoor-kitchen",
+  "message": "roof bounds intersect by 0.8×5.7 m at the same height (overhangs 0.8 and 0.7 m): select separated roof sections. ocean-veranda: the east eave (0.8 m) cannot reach outdoor-kitchen but outdoor-kitchen stands against only part of that 7 m edge; 0..2 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give ocean-veranda no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-gallery/primary-bedroom",
+  "message": "roof bounds intersect by 10.35×0.55 m at the same height (overhangs 0.55 and 0.8 m): select separated roof sections. family-gallery: the north eave (0.55 m) cannot reach primary-bedroom but primary-bedroom stands against only part of that 18 m edge; 9..12 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-gallery no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-gallery/family-bedroom-one",
+  "message": "roof bounds intersect by 7.25×0.55 m at the same height (overhangs 0.55 and 0.7 m): select separated roof sections. family-gallery: the north eave (0.55 m) cannot reach family-bedroom-one but family-bedroom-one stands against only part of that 18 m edge; 9..12 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-gallery no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-gallery/family-bedroom-two",
+  "message": "roof bounds intersect by 7.25×0.55 m at the same height (overhangs 0.55 and 0.7 m): select separated roof sections. family-gallery: the south eave (0.55 m) cannot reach family-bedroom-two but family-bedroom-two stands against only part of that 18 m edge; 6..18 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-gallery no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "primary-bedroom/primary-dressing",
+  "message": "roof bounds intersect by 0.8×5.9 m at the same height (overhangs 0.8 and 0.45 m): select separated roof sections. primary-bedroom: the east eave (0.8 m) cannot reach primary-dressing but primary-dressing stands against only part of that 8 m edge; 0..3 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give primary-bedroom no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-bedroom-one/family-bath-one",
+  "message": "roof bounds intersect by 4.8×0.7 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections. family-bedroom-one: the north eave (0.7 m) cannot reach family-bath-one but family-bath-one stands against only part of that 6 m edge; 0..2 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-bedroom-one no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-bedroom-two/family-bath-two",
+  "message": "roof bounds intersect by 4.8×0.7 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections. family-bedroom-two: the south eave (0.7 m) cannot reach family-bath-two but family-bath-two stands against only part of that 6 m edge; 4..6 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-bedroom-two no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-gallery/guest-bedroom-one",
+  "message": "roof bounds intersect by 0.5×7.2 m at the same height (overhangs 0.5 and 0.7 m): select separated roof sections. guest-gallery: the east eave (0.5 m) cannot reach guest-bedroom-one but guest-bedroom-one stands against only part of that 14 m edge; 6..8 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-gallery no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-gallery/guest-bedroom-two",
+  "message": "roof bounds intersect by 0.5×7.2 m at the same height (overhangs 0.5 and 0.7 m): select separated roof sections. guest-gallery: the east eave (0.5 m) cannot reach guest-bedroom-two but guest-bedroom-two stands against only part of that 14 m edge; 6..8 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-gallery no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-gallery/library",
+  "message": "roof bounds intersect by 0.5×6.2 m at the same height (overhangs 0.5 and 0.6 m): select separated roof sections. guest-gallery: the west eave (0.5 m) cannot reach library but library stands against only part of that 14 m edge; 0..4.5 m, 9.5..14 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-gallery no overhang, or make west edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-bedroom-one/guest-bath-one",
+  "message": "roof bounds intersect by 0.7×4.8 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections. guest-bedroom-one: the east eave (0.7 m) cannot reach guest-bath-one but guest-bath-one stands against only part of that 6 m edge; 4..6 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-bedroom-one no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-bedroom-two/guest-bath-two",
+  "message": "roof bounds intersect by 0.7×4.8 m at the same height (overhangs 0.7 and 0.4 m): select separated roof sections. guest-bedroom-two: the east eave (0.7 m) cannot reach guest-bath-two but guest-bath-two stands against only part of that 6 m edge; 0..2 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-bedroom-two no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "staff-bedroom/staff-bath",
+  "message": "roof bounds intersect by 0.45×3.7 m at the same height (overhangs 0.45 and 0.35 m): select separated roof sections. staff-bedroom: the west eave (0.45 m) cannot reach staff-bath but staff-bath stands against only part of that 5 m edge; 3..5 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give staff-bedroom no overhang, or make west edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:abutting"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "primary-bedroom/primary-dressing",
+  "message": "roof of primary-bedroom (0.8 m overhang, fascia board) projects 0.1×5 m into the taller volume of primary-dressing. primary-bedroom: the east eave (0.8 m) cannot reach primary-dressing but primary-dressing stands against only part of that 8 m edge; 0..3 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give primary-bedroom no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:taller-neighbour"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-bedroom-one/family-bath-one",
+  "message": "roof of family-bedroom-one (0.7 m overhang, fascia board) projects 4×0.1 m into the taller volume of family-bath-one. family-bedroom-one: the north eave (0.7 m) cannot reach family-bath-one but family-bath-one stands against only part of that 6 m edge; 0..2 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-bedroom-one no overhang, or make north edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:taller-neighbour"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "family-bedroom-two/family-bath-two",
+  "message": "roof of family-bedroom-two (0.7 m overhang, fascia board) projects 4×0.1 m into the taller volume of family-bath-two. family-bedroom-two: the south eave (0.7 m) cannot reach family-bath-two but family-bath-two stands against only part of that 6 m edge; 4..6 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give family-bedroom-two no overhang, or make south edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:taller-neighbour"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-bedroom-one/guest-bath-one",
+  "message": "roof of guest-bedroom-one (0.7 m overhang, fascia board) projects 0.1×4 m into the taller volume of guest-bath-one. guest-bedroom-one: the east eave (0.7 m) cannot reach guest-bath-one but guest-bath-one stands against only part of that 6 m edge; 4..6 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-bedroom-one no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:taller-neighbour"
+ },
+ {
+  "stage": "roofs",
+  "severity": "error",
+  "id": "guest-bedroom-two/guest-bath-two",
+  "message": "roof of guest-bedroom-two (0.7 m overhang, fascia board) projects 0.1×4 m into the taller volume of guest-bath-two. guest-bedroom-two: the east eave (0.7 m) cannot reach guest-bath-two but guest-bath-two stands against only part of that 6 m edge; 0..2 m of it is open. One eave line cannot be flush along part of an edge and project along the rest: give guest-bedroom-two no overhang, or make east edge abut walls along its whole length or none of it.",
+  "cause": "roof-reach:taller-neighbour"
+ },
+ {
+  "stage": "screens",
+  "severity": "error",
+  "id": "library-screen",
+  "message": "screen lies on the interior boundary shared with guest-gallery."
+ },
+ {
+  "stage": "screens",
+  "severity": "error",
+  "id": "library-screen",
+  "message": "screen stands in guest-gallery."
+ }
+]

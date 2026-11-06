@@ -1,0 +1,125 @@
+{
+  "format": "staged-house-save-1",
+  "baselineHash": "bc43ee732ef19971c9425736615787e0164dced462146fe9c5b2967747bb5e7b",
+  "elements": 377,
+  "cap": 400,
+  "rooms": [
+    {
+      "id": "media-lounge",
+      "type": "media"
+    },
+    {
+      "id": "main-stair",
+      "type": "stair"
+    },
+    {
+      "id": "powder-bath",
+      "type": "bath"
+    },
+    {
+      "id": "ground-gallery",
+      "type": "hall"
+    },
+    {
+      "id": "show-kitchen",
+      "type": "kitchen"
+    },
+    {
+      "id": "garden-dining",
+      "type": "dining"
+    },
+    {
+      "id": "great-room",
+      "type": "living"
+    },
+    {
+      "id": "family-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "ground-suite-hall",
+      "type": "hall"
+    },
+    {
+      "id": "ground-suite-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "ground-suite-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "ground-suite-bath",
+      "type": "bath"
+    },
+    {
+      "id": "arrival-foyer",
+      "type": "foyer"
+    },
+    {
+      "id": "entry-link-hall",
+      "type": "hall"
+    },
+    {
+      "id": "north-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "north-bedroom-bath",
+      "type": "bath"
+    },
+    {
+      "id": "upper-gallery",
+      "type": "gallery"
+    },
+    {
+      "id": "south-bedroom-bath",
+      "type": "bath"
+    },
+    {
+      "id": "south-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "upper-lounge",
+      "type": "lounge"
+    },
+    {
+      "id": "east-suite-hall",
+      "type": "hall"
+    },
+    {
+      "id": "east-suite-bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "east-suite-bath",
+      "type": "bath"
+    }
+  ],
+  "pool": {
+    "component": "pool",
+    "waterElement": "pool-water",
+    "waterNorth": 15.3,
+    "reservation": {
+      "x0": -7.6,
+      "x1": 7.6,
+      "z0": 13.1,
+      "z1": 22
+    },
+    "dimensions": {
+      "width": 12,
+      "depth": 4.5,
+      "basinDepth": 1.4
+    }
+  },
+  "verandas": [
+    {
+      "component": "veranda:south-veranda",
+      "side": "s",
+      "edge": 12.5
+    }
+  ],
+  "preserve": "All building elements/materials, palms, beds, hedges, lawn masks, furniture, unrelated paths and IDs. Only pool/apron and directly affected terrace patches can change.",
+  "capabilities": "Relative pool movement for existing rich-site Stage 5 saves with a south-facing veranda. Software derives positions, clips affected paving and fills vacated pool reservation. It never relocates plants/furniture or changes architecture. Invalid moves reject atomically."
+}

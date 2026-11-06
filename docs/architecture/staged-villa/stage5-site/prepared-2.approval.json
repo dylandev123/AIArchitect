@@ -1,0 +1,26 @@
+{
+  "status": "AWAITING EXPLICIT USER APPROVAL — NOT SENT",
+  "model": "gpt-5.6-terra",
+  "providerCalls": 0,
+  "plannedCalls": 1,
+  "maxRetries": 0,
+  "maxOutputTokens": 4000,
+  "maxCostUsd": 0.15,
+  "conservativeCostBoundUsd": 0.074398,
+  "inputTokenConservativeByteBound": 13199,
+  "recordedExperimentSpendUsd": 0.07613,
+  "experimentBudgetUsd": 5,
+  "recordedRemainderUsd": 4.92387,
+  "budgetCaveat": "The earlier failed Stage 3 call had unrecorded cost; the exact remaining balance is unknown.",
+  "baseSceneSHA256": "ef689e7e7b4ff49f1582a7810f228834aa65dac0fe10dd359dc397e0d11f2668",
+  "requestSHA256": "8de19e06c934d0ee0b7a90213c6fe52f1c091fad590fdec4237e5ac76910da93",
+  "schemaSHA256": "b901727db19a31aa5b9621158ca91b1afc022638540e2ba7b93ae8566ddcea32",
+  "constructionSourceSHA256": {
+    "src/lib/villa/staged/site.ts": "ca5e33f1d1aff79e38c3fe83424faa407c76f7504b59321feeb08a11fe5890ec",
+    "src/lib/villa/staged/siteContract.ts": "e9fca8e31e0572a4ab0a3480879adf36602672edd034ec099c7b072ac5b3295d",
+    "src/lib/villa/staged/compile.ts": "7ead0cc983576e73546cf975384859ecf447d251407479b639110df3a120decf"
+  },
+  "baseElements": 314,
+  "remainingElements": 86,
+  "requiredExecution": "After approval: pin these exact source/request/schema hashes; reserve a one-call marker exclusively before network; enforce input/output cost bound and timeout; maxRetries 0; save raw answer/usage/finish reason before interpretation; refuse another call; derive/validate without repairs; retain Stage 4 on failure."
+}

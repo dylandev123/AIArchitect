@@ -1,0 +1,754 @@
+{
+ "seconds": 43.438,
+ "status": "paused",
+ "findings": [],
+ "calls": [
+  {
+   "stage": 3,
+   "purpose": "design",
+   "usage": {
+    "model": "gpt-5.6-terra",
+    "inputTokens": 2162,
+    "outputTokens": 2532,
+    "costUsd": 0.034708
+   },
+   "finishReason": "stop"
+  }
+ ],
+ "programme": {
+  "rooms": [
+   {
+    "id": "arrival-foyer",
+    "block": "entry-pavilion",
+    "type": "foyer",
+    "name": "Shaded Arrival Foyer",
+    "area": 22,
+    "priority": "core",
+    "facing": "n"
+   },
+   {
+    "id": "entry-link-hall",
+    "block": "entry-pavilion",
+    "type": "hall",
+    "name": "Entry Gallery Hall",
+    "area": 20,
+    "priority": "flex",
+    "facing": "any"
+   },
+   {
+    "id": "great-room",
+    "block": "main-living-plinth",
+    "type": "living",
+    "name": "Garden Great Room",
+    "area": 75,
+    "priority": "core",
+    "facing": "s"
+   },
+   {
+    "id": "garden-dining",
+    "block": "main-living-plinth",
+    "type": "dining",
+    "name": "Veranda Dining Room",
+    "area": 34,
+    "priority": "normal",
+    "facing": "s"
+   },
+   {
+    "id": "show-kitchen",
+    "block": "main-living-plinth",
+    "type": "kitchen",
+    "name": "Open Entertaining Kitchen",
+    "area": 34,
+    "priority": "core",
+    "facing": "e"
+   },
+   {
+    "id": "media-lounge",
+    "block": "main-living-plinth",
+    "type": "media",
+    "name": "Media Retreat",
+    "area": 34,
+    "priority": "normal",
+    "facing": "w"
+   },
+   {
+    "id": "family-lounge",
+    "block": "main-living-plinth",
+    "type": "lounge",
+    "name": "Informal Family Lounge",
+    "area": 29,
+    "priority": "flex",
+    "facing": "s"
+   },
+   {
+    "id": "ground-gallery",
+    "block": "main-living-plinth",
+    "type": "hall",
+    "name": "Ground Floor Gallery",
+    "area": 18,
+    "priority": "normal",
+    "facing": "any"
+   },
+   {
+    "id": "main-stair",
+    "block": "main-living-plinth",
+    "type": "stair",
+    "name": "Sculptural Stair Hall",
+    "area": 20,
+    "priority": "core",
+    "facing": "any"
+   },
+   {
+    "id": "powder-bath",
+    "block": "main-living-plinth",
+    "type": "bath",
+    "name": "Guest Powder Bath",
+    "area": 8,
+    "priority": "normal",
+    "facing": "any"
+   },
+   {
+    "id": "ground-suite-bedroom",
+    "block": "east-bedroom-wing",
+    "type": "bedroom",
+    "name": "Ground Garden Suite",
+    "area": 36,
+    "priority": "core",
+    "facing": "e"
+   },
+   {
+    "id": "ground-suite-bath",
+    "block": "east-bedroom-wing",
+    "type": "bath",
+    "name": "Ground Suite Ensuite",
+    "area": 12,
+    "priority": "core",
+    "facing": "s"
+   },
+   {
+    "id": "ground-suite-hall",
+    "block": "east-bedroom-wing",
+    "type": "hall",
+    "name": "Ground Suite Vestibule",
+    "area": 16,
+    "priority": "normal",
+    "facing": "any"
+   },
+   {
+    "id": "ground-suite-lounge",
+    "block": "east-bedroom-wing",
+    "type": "lounge",
+    "name": "Private Garden Lounge",
+    "area": 46,
+    "priority": "flex",
+    "facing": "s"
+   },
+   {
+    "id": "upper-gallery",
+    "block": "upper-bedroom-bar",
+    "type": "gallery",
+    "name": "Upper Landing Gallery",
+    "area": 26,
+    "priority": "core",
+    "facing": "any"
+   },
+   {
+    "id": "north-bedroom",
+    "block": "upper-bedroom-bar",
+    "type": "bedroom",
+    "name": "North Garden Bedroom",
+    "area": 31,
+    "priority": "core",
+    "facing": "n"
+   },
+   {
+    "id": "north-bedroom-bath",
+    "block": "upper-bedroom-bar",
+    "type": "bath",
+    "name": "North Bedroom Ensuite",
+    "area": 9,
+    "priority": "normal",
+    "facing": "any"
+   },
+   {
+    "id": "south-bedroom",
+    "block": "upper-bedroom-bar",
+    "type": "bedroom",
+    "name": "South Veranda Bedroom",
+    "area": 31,
+    "priority": "core",
+    "facing": "s"
+   },
+   {
+    "id": "south-bedroom-bath",
+    "block": "upper-bedroom-bar",
+    "type": "bath",
+    "name": "South Bedroom Ensuite",
+    "area": 9,
+    "priority": "normal",
+    "facing": "any"
+   },
+   {
+    "id": "upper-lounge",
+    "block": "upper-bedroom-bar",
+    "type": "lounge",
+    "name": "Upper Sunset Lounge",
+    "area": 26,
+    "priority": "flex",
+    "facing": "w"
+   },
+   {
+    "id": "east-suite-bedroom",
+    "block": "upper-east-suite",
+    "type": "bedroom",
+    "name": "East Sky Suite",
+    "area": 29,
+    "priority": "core",
+    "facing": "e"
+   },
+   {
+    "id": "east-suite-bath",
+    "block": "upper-east-suite",
+    "type": "bath",
+    "name": "East Sky Suite Ensuite",
+    "area": 10,
+    "priority": "core",
+    "facing": "s"
+   },
+   {
+    "id": "east-suite-hall",
+    "block": "upper-east-suite",
+    "type": "hall",
+    "name": "East Suite Vestibule",
+    "area": 17,
+    "priority": "flex",
+    "facing": "any"
+   }
+  ],
+  "connections": [
+   {
+    "a": "arrival-foyer",
+    "b": "entry-link-hall",
+    "kind": "open"
+   },
+   {
+    "a": "entry-link-hall",
+    "b": "ground-gallery",
+    "kind": "door"
+   },
+   {
+    "a": "ground-gallery",
+    "b": "great-room",
+    "kind": "door"
+   },
+   {
+    "a": "ground-gallery",
+    "b": "media-lounge",
+    "kind": "door"
+   },
+   {
+    "a": "ground-gallery",
+    "b": "main-stair",
+    "kind": "door"
+   },
+   {
+    "a": "ground-gallery",
+    "b": "powder-bath",
+    "kind": "door"
+   },
+   {
+    "a": "ground-gallery",
+    "b": "ground-suite-hall",
+    "kind": "door"
+   },
+   {
+    "a": "great-room",
+    "b": "garden-dining",
+    "kind": "open"
+   },
+   {
+    "a": "garden-dining",
+    "b": "show-kitchen",
+    "kind": "open"
+   },
+   {
+    "a": "great-room",
+    "b": "family-lounge",
+    "kind": "open"
+   },
+   {
+    "a": "ground-suite-hall",
+    "b": "ground-suite-bedroom",
+    "kind": "door"
+   },
+   {
+    "a": "ground-suite-hall",
+    "b": "ground-suite-lounge",
+    "kind": "door"
+   },
+   {
+    "a": "ground-suite-bedroom",
+    "b": "ground-suite-bath",
+    "kind": "door"
+   },
+   {
+    "a": "upper-gallery",
+    "b": "north-bedroom",
+    "kind": "door"
+   },
+   {
+    "a": "upper-gallery",
+    "b": "south-bedroom",
+    "kind": "door"
+   },
+   {
+    "a": "upper-gallery",
+    "b": "upper-lounge",
+    "kind": "door"
+   },
+   {
+    "a": "north-bedroom",
+    "b": "north-bedroom-bath",
+    "kind": "door"
+   },
+   {
+    "a": "south-bedroom",
+    "b": "south-bedroom-bath",
+    "kind": "door"
+   },
+   {
+    "a": "upper-gallery",
+    "b": "east-suite-hall",
+    "kind": "door"
+   },
+   {
+    "a": "east-suite-hall",
+    "b": "east-suite-bedroom",
+    "kind": "door"
+   },
+   {
+    "a": "east-suite-bedroom",
+    "b": "east-suite-bath",
+    "kind": "door"
+   }
+  ],
+  "stairs": [
+   {
+    "id": "main-stair-to-upper-gallery",
+    "room": "main-stair",
+    "landing": "upper-gallery"
+   }
+  ],
+  "intentions": [
+   "The arrival foyer remains a deliberately compressed, shaded threshold before opening through the gallery into the garden-facing great room.",
+   "Living, dining and kitchen form a continuous social interior that spills south to the covered veranda and pool garden.",
+   "The east ground suite is buffered by its own vestibule and private lounge for resort-like privacy.",
+   "All bedroom doors are reached from galleries or vestibules, never directly from the public living spaces.",
+   "The sculptural stair rises into a generous upper gallery, turning circulation into a daylit overlook between the offset bedroom volumes.",
+   "Upper lounges and bedrooms are oriented to varied north, south, east and west outlooks so the asymmetrical massing reads differently from every side."
+  ]
+ },
+ "construction": {
+  "chosen": "layout-1",
+  "options": [
+   {
+    "id": "layout-1",
+    "score": 23.86620255187904,
+    "metrics": {
+     "facingMet": 11,
+     "facingWanted": 14,
+     "maxAspect": 10,
+     "worstAreaDeviation": 0.7999999999999999,
+     "addedLinks": 0
+    }
+   },
+   {
+    "id": "layout-2",
+    "score": 24.062078236929338,
+    "metrics": {
+     "facingMet": 11,
+     "facingWanted": 14,
+     "maxAspect": 10,
+     "worstAreaDeviation": 0.7999999999999999,
+     "addedLinks": 0
+    }
+   }
+  ],
+  "slice": {
+   "plans": {
+    "entry-pavilion": {
+     "split": "z",
+     "at": 3.7,
+     "a": {
+      "room": {
+       "id": "arrival-foyer",
+       "name": "Shaded Arrival Foyer",
+       "type": "foyer"
+      }
+     },
+     "b": {
+      "room": {
+       "id": "entry-link-hall",
+       "name": "Entry Gallery Hall",
+       "type": "hall"
+      }
+     }
+    },
+    "east-bedroom-wing": {
+     "split": "x",
+     "at": 6.2,
+     "a": {
+      "split": "z",
+      "at": 2.6,
+      "a": {
+       "room": {
+        "id": "ground-suite-hall",
+        "name": "Ground Suite Vestibule",
+        "type": "hall"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "ground-suite-lounge",
+        "name": "Private Garden Lounge",
+        "type": "lounge"
+       }
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 7.5,
+      "a": {
+       "room": {
+        "id": "ground-suite-bedroom",
+        "name": "Ground Garden Suite",
+        "type": "bedroom"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "ground-suite-bath",
+        "name": "Ground Suite Ensuite",
+        "type": "bath"
+       }
+      }
+     }
+    },
+    "main-living-plinth": {
+     "split": "z",
+     "at": 3.4,
+     "a": {
+      "split": "x",
+      "at": 14,
+      "a": {
+       "split": "x",
+       "at": 7.3,
+       "a": {
+        "room": {
+         "id": "media-lounge",
+         "name": "Media Retreat",
+         "type": "media"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "main-stair",
+         "name": "Sculptural Stair Hall",
+         "type": "stair"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "powder-bath",
+        "name": "Guest Powder Bath",
+        "type": "bath"
+       }
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 1.8,
+      "a": {
+       "room": {
+        "id": "ground-gallery",
+        "name": "Ground Floor Gallery",
+        "type": "hall"
+       }
+      },
+      "b": {
+       "split": "x",
+       "at": 15,
+       "a": {
+        "split": "x",
+        "at": 7.1,
+        "a": {
+         "split": "z",
+         "at": 4.4,
+         "a": {
+          "room": {
+           "id": "show-kitchen",
+           "name": "Open Entertaining Kitchen",
+           "type": "kitchen"
+          }
+         },
+         "b": {
+          "room": {
+           "id": "garden-dining",
+           "name": "Veranda Dining Room",
+           "type": "dining"
+          }
+         }
+        },
+        "b": {
+         "room": {
+          "id": "great-room",
+          "name": "Garden Great Room",
+          "type": "living"
+         }
+        }
+       },
+       "b": {
+        "room": {
+         "id": "family-lounge",
+         "name": "Informal Family Lounge",
+         "type": "lounge"
+        }
+       }
+      }
+     }
+    },
+    "upper-east-suite": {
+     "split": "x",
+     "at": 2.1,
+     "a": {
+      "room": {
+       "id": "east-suite-hall",
+       "name": "East Suite Vestibule",
+       "type": "hall"
+      }
+     },
+     "b": {
+      "split": "z",
+      "at": 6,
+      "a": {
+       "room": {
+        "id": "east-suite-bedroom",
+        "name": "East Sky Suite",
+        "type": "bedroom"
+       }
+      },
+      "b": {
+       "room": {
+        "id": "east-suite-bath",
+        "name": "East Sky Suite Ensuite",
+        "type": "bath"
+       }
+      }
+     }
+    },
+    "upper-bedroom-bar": {
+     "split": "z",
+     "at": 5.5,
+     "a": {
+      "split": "x",
+      "at": 5.3,
+      "a": {
+       "split": "z",
+       "at": 3.7,
+       "a": {
+        "room": {
+         "id": "north-bedroom",
+         "name": "North Garden Bedroom",
+         "type": "bedroom"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "north-bedroom-bath",
+         "name": "North Bedroom Ensuite",
+         "type": "bath"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "upper-gallery",
+        "name": "Upper Landing Gallery",
+        "type": "gallery"
+       }
+      }
+     },
+     "b": {
+      "split": "x",
+      "at": 7.3,
+      "a": {
+       "split": "x",
+       "at": 1.8,
+       "a": {
+        "room": {
+         "id": "south-bedroom-bath",
+         "name": "South Bedroom Ensuite",
+         "type": "bath"
+        }
+       },
+       "b": {
+        "room": {
+         "id": "south-bedroom",
+         "name": "South Veranda Bedroom",
+         "type": "bedroom"
+        }
+       }
+      },
+      "b": {
+       "room": {
+        "id": "upper-lounge",
+        "name": "Upper Sunset Lounge",
+        "type": "lounge"
+       }
+      }
+     }
+    }
+   },
+   "links": [
+    {
+     "a": "arrival-foyer",
+     "b": "entry-link-hall",
+     "kind": "open",
+     "t": 0.5
+    },
+    {
+     "a": "entry-link-hall",
+     "b": "ground-gallery",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-gallery",
+     "b": "great-room",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-gallery",
+     "b": "media-lounge",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-gallery",
+     "b": "main-stair",
+     "kind": "door",
+     "t": 0.8
+    },
+    {
+     "a": "ground-gallery",
+     "b": "powder-bath",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-gallery",
+     "b": "ground-suite-hall",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "great-room",
+     "b": "garden-dining",
+     "kind": "open",
+     "t": 0.5
+    },
+    {
+     "a": "garden-dining",
+     "b": "show-kitchen",
+     "kind": "open",
+     "t": 0.5
+    },
+    {
+     "a": "great-room",
+     "b": "family-lounge",
+     "kind": "open",
+     "t": 0.5
+    },
+    {
+     "a": "ground-suite-hall",
+     "b": "ground-suite-bedroom",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-suite-hall",
+     "b": "ground-suite-lounge",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "ground-suite-bedroom",
+     "b": "ground-suite-bath",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "upper-gallery",
+     "b": "north-bedroom",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "upper-gallery",
+     "b": "south-bedroom",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "upper-gallery",
+     "b": "upper-lounge",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "north-bedroom",
+     "b": "north-bedroom-bath",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "south-bedroom",
+     "b": "south-bedroom-bath",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "upper-gallery",
+     "b": "east-suite-hall",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "east-suite-hall",
+     "b": "east-suite-bedroom",
+     "kind": "door",
+     "t": 0.5
+    },
+    {
+     "a": "east-suite-bedroom",
+     "b": "east-suite-bath",
+     "kind": "door",
+     "t": 0.5
+    }
+   ],
+   "stairs": [
+    {
+     "id": "main-stair-to-upper-gallery",
+     "room": "main-stair",
+     "start": "e",
+     "hug": "n",
+     "width": 1.2
+    }
+   ]
+  },
+  "addedLinks": []
+ },
+ "raw": "{\"rooms\":[{\"id\":\"arrival-foyer\",\"block\":\"entry-pavilion\",\"type\":\"foyer\",\"name\":\"Shaded Arrival Foyer\",\"area\":22,\"priority\":\"core\",\"facing\":\"n\"},{\"id\":\"entry-link-hall\",\"block\":\"entry-pavilion\",\"type\":\"hall\",\"name\":\"Entry Gallery Hall\",\"area\":20,\"priority\":\"flex\",\"facing\":\"any\"},{\"id\":\"great-room\",\"block\":\"main-living-plinth\",\"type\":\"living\",\"name\":\"Garden Great Room\",\"area\":75,\"priority\":\"core\",\"facing\":\"s\"},{\"id\":\"garden-dining\",\"block\":\"main-living-plinth\",\"type\":\"dining\",\"name\":\"Veranda Dining Room\",\"area\":34,\"priority\":\"normal\",\"facing\":\"s\"},{\"id\":\"show-kitchen\",\"block\":\"main-living-plinth\",\"type\":\"kitchen\",\"name\":\"Open Entertaining Kitchen\",\"area\":34,\"priority\":\"core\",\"facing\":\"e\"},{\"id\":\"media-lounge\",\"block\":\"main-living-plinth\",\"type\":\"media\",\"name\":\"Media Retreat\",\"area\":34,\"priority\":\"normal\",\"facing\":\"w\"},{\"id\":\"family-lounge\",\"block\":\"main-living-plinth\",\"type\":\"lounge\",\"name\":\"Informal Family Lounge\",\"area\":29,\"priority\":\"flex\",\"facing\":\"s\"},{\"id\":\"ground-gallery\",\"block\":\"main-living-plinth\",\"type\":\"hall\",\"name\":\"Ground Floor Gallery\",\"area\":18,\"priority\":\"normal\",\"facing\":\"any\"},{\"id\":\"main-stair\",\"block\":\"main-living-plinth\",\"type\":\"stair\",\"name\":\"Sculptural Stair Hall\",\"area\":20,\"priority\":\"core\",\"facing\":\"any\"},{\"id\":\"powder-bath\",\"block\":\"main-living-plinth\",\"type\":\"bath\",\"name\":\"Guest Powder Bath\",\"area\":8,\"priority\":\"normal\",\"facing\":\"any\"},{\"id\":\"ground-suite-bedroom\",\"block\":\"east-bedroom-wing\",\"type\":\"bedroom\",\"name\":\"Ground Garden Suite\",\"area\":36,\"priority\":\"core\",\"facing\":\"e\"},{\"id\":\"ground-suite-bath\",\"block\":\"east-bedroom-wing\",\"type\":\"bath\",\"name\":\"Ground Suite Ensuite\",\"area\":12,\"priority\":\"core\",\"facing\":\"s\"},{\"id\":\"ground-suite-hall\",\"block\":\"east-bedroom-wing\",\"type\":\"hall\",\"name\":\"Ground Suite Vestibule\",\"area\":16,\"priority\":\"normal\",\"facing\":\"any\"},{\"id\":\"ground-suite-lounge\",\"block\":\"east-bedroom-wing\",\"type\":\"lounge\",\"name\":\"Private Garden Lounge\",\"area\":46,\"priority\":\"flex\",\"facing\":\"s\"},{\"id\":\"upper-gallery\",\"block\":\"upper-bedroom-bar\",\"type\":\"gallery\",\"name\":\"Upper Landing Gallery\",\"area\":26,\"priority\":\"core\",\"facing\":\"any\"},{\"id\":\"north-bedroom\",\"block\":\"upper-bedroom-bar\",\"type\":\"bedroom\",\"name\":\"North Garden Bedroom\",\"area\":31,\"priority\":\"core\",\"facing\":\"n\"},{\"id\":\"north-bedroom-bath\",\"block\":\"upper-bedroom-bar\",\"type\":\"bath\",\"name\":\"North Bedroom Ensuite\",\"area\":9,\"priority\":\"normal\",\"facing\":\"any\"},{\"id\":\"south-bedroom\",\"block\":\"upper-bedroom-bar\",\"type\":\"bedroom\",\"name\":\"South Veranda Bedroom\",\"area\":31,\"priority\":\"core\",\"facing\":\"s\"},{\"id\":\"south-bedroom-bath\",\"block\":\"upper-bedroom-bar\",\"type\":\"bath\",\"name\":\"South Bedroom Ensuite\",\"area\":9,\"priority\":\"normal\",\"facing\":\"any\"},{\"id\":\"upper-lounge\",\"block\":\"upper-bedroom-bar\",\"type\":\"lounge\",\"name\":\"Upper Sunset Lounge\",\"area\":26,\"priority\":\"flex\",\"facing\":\"w\"},{\"id\":\"east-suite-bedroom\",\"block\":\"upper-east-suite\",\"type\":\"bedroom\",\"name\":\"East Sky Suite\",\"area\":29,\"priority\":\"core\",\"facing\":\"e\"},{\"id\":\"east-suite-bath\",\"block\":\"upper-east-suite\",\"type\":\"bath\",\"name\":\"East Sky Suite Ensuite\",\"area\":10,\"priority\":\"core\",\"facing\":\"s\"},{\"id\":\"east-suite-hall\",\"block\":\"upper-east-suite\",\"type\":\"hall\",\"name\":\"East Suite Vestibule\",\"area\":17,\"priority\":\"flex\",\"facing\":\"any\"}],\"connections\":[{\"a\":\"arrival-foyer\",\"b\":\"entry-link-hall\",\"kind\":\"open\"},{\"a\":\"entry-link-hall\",\"b\":\"ground-gallery\",\"kind\":\"door\"},{\"a\":\"ground-gallery\",\"b\":\"great-room\",\"kind\":\"door\"},{\"a\":\"ground-gallery\",\"b\":\"media-lounge\",\"kind\":\"door\"},{\"a\":\"ground-gallery\",\"b\":\"main-stair\",\"kind\":\"door\"},{\"a\":\"ground-gallery\",\"b\":\"powder-bath\",\"kind\":\"door\"},{\"a\":\"ground-gallery\",\"b\":\"ground-suite-hall\",\"kind\":\"door\"},{\"a\":\"great-room\",\"b\":\"garden-dining\",\"kind\":\"open\"},{\"a\":\"garden-dining\",\"b\":\"show-kitchen\",\"kind\":\"open\"},{\"a\":\"great-room\",\"b\":\"family-lounge\",\"kind\":\"open\"},{\"a\":\"ground-suite-hall\",\"b\":\"ground-suite-bedroom\",\"kind\":\"door\"},{\"a\":\"ground-suite-hall\",\"b\":\"ground-suite-lounge\",\"kind\":\"door\"},{\"a\":\"ground-suite-bedroom\",\"b\":\"ground-suite-bath\",\"kind\":\"door\"},{\"a\":\"upper-gallery\",\"b\":\"north-bedroom\",\"kind\":\"door\"},{\"a\":\"upper-gallery\",\"b\":\"south-bedroom\",\"kind\":\"door\"},{\"a\":\"upper-gallery\",\"b\":\"upper-lounge\",\"kind\":\"door\"},{\"a\":\"north-bedroom\",\"b\":\"north-bedroom-bath\",\"kind\":\"door\"},{\"a\":\"south-bedroom\",\"b\":\"south-bedroom-bath\",\"kind\":\"door\"},{\"a\":\"upper-gallery\",\"b\":\"east-suite-hall\",\"kind\":\"door\"},{\"a\":\"east-suite-hall\",\"b\":\"east-suite-bedroom\",\"kind\":\"door\"},{\"a\":\"east-suite-bedroom\",\"b\":\"east-suite-bath\",\"kind\":\"door\"}],\"stairs\":[{\"id\":\"main-stair-to-upper-gallery\",\"room\":\"main-stair\",\"landing\":\"upper-gallery\"}],\"intentions\":[\"The arrival foyer remains a deliberately compressed, shaded threshold before opening through the gallery into the garden-facing great room.\",\"Living, dining and kitchen form a continuous social interior that spills south to the covered veranda and pool garden.\",\"The east ground suite is buffered by its own vestibule and private lounge for resort-like privacy.\",\"All bedroom doors are reached from galleries or vestibules, never directly from the public living spaces.\",\"The sculptural stair rises into a generous upper gallery, turning circulation into a daylit overlook between the offset bedroom volumes.\",\"Upper lounges and bedrooms are oriented to varied north, south, east and west outlooks so the asymmetrical massing reads differently from every side.\"]}"
+}
