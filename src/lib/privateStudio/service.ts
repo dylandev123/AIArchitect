@@ -4,11 +4,12 @@ import {randomUUID} from 'node:crypto';
 import {z} from 'zod';
 import {identity} from './auth';
 import {StudioStore,type Run,type State,type Call} from './store';
-import {LIVE_POLICY,briefHash,policyHash,reservationMicros,settleUsage,stageOutputTokens,StudioError,type ReportedUsage,type StudioPolicy} from './policy';
+import {LIVE_POLICY,STAGE5_CONTINUATION_POLICY,briefHash,policyHash,reservationMicros,settleUsage,stageOutputTokens,StudioError,type ReportedUsage,type StudioPolicy} from './policy';
 import {promptInput,advancePromptRun} from '@/lib/villa/staged/promptGeneration';
 import {DispatchRefused,type Designer,type StageNo} from '@/lib/villa/staged/pipeline';
 import {LiveDesigner,type ProviderObservation} from '@/lib/villa/staged/liveDesigner';
 import {preflightBrief} from './preflight';
+import {continuationSource} from './continuation';
 import {withReservedCall} from '@/lib/ai/paidExecution';
 
 export const liveInput=z.discriminatedUnion('action',[
@@ -37,11 +38,14 @@ const liveDesigner=(policy:StudioPolicy):DesignerFactory=>observe=>new LiveDesig
 export class PrivateStudioService{
  private factory:DesignerFactory;
  constructor(readonly store:StudioStore,factory?:DesignerFactory,readonly policy:StudioPolicy=LIVE_POLICY){this.factory=factory??liveDesigner(policy);}
+ /** The policy a run or approval was granted under: the active policy, or the Stage 5-only continuation policy. */
+ private policyFor(hash:string){return [this.policy,STAGE5_CONTINUATION_POLICY].find(p=>policyHash(p)===hash);}
+ private readonly hashes=()=>[policyHash(this.policy),policyHash(STAGE5_CONTINUATION_POLICY)];
  async read(request:Request,id?:string){const worker=await workerHealth(this.store.directory);return this.store.transaction(s=>{
   const session=identity(s,request,false);
   if(id)return {...publicRun(ownedRun(s,request,id,false),s),worker};
-  const approvals=s.approvals.filter(a=>a.owner===session.owner&&a.policyHash===policyHash(this.policy)&&!a.consumedBy);
-  return {worker,authenticated:true,csrf:session.csrf,projects:Object.entries(s.projects).filter(([,p])=>p.owner===session.owner).map(([id,p])=>({id,name:p.name,runId:p.runId})),policy:this.policy,policyHash:policyHash(this.policy),approved:approvals.length>0,availableApprovals:approvals.map(a=>({projectId:a.projectId,briefHash:a.briefHash}))};
+  const approvals=s.approvals.filter(a=>a.owner===session.owner&&this.hashes().includes(a.policyHash)&&!a.consumedBy);
+  return {worker,authenticated:true,csrf:session.csrf,projects:Object.entries(s.projects).filter(([,p])=>p.owner===session.owner).map(([id,p])=>({id,name:p.name,runId:p.runId,continuesFrom:p.continuesFrom})),policy:this.policy,continuationPolicy:STAGE5_CONTINUATION_POLICY,policyHash:policyHash(this.policy),approved:approvals.length>0,availableApprovals:approvals.map(a=>({projectId:a.projectId,briefHash:a.briefHash}))};
  });}
  async execute(request:Request,raw:unknown){
   const input=liveInput.parse(raw);
@@ -55,9 +59,12 @@ export class PrivateStudioService{
     const owner=identity(s,request).owner,p=s.projects[input.projectId];
     if(!p||p.owner!==owner)throw new StudioError(404,'Project not found');
     if(p.runId)throw new StudioError(409,'Project already has a run; reopen it instead of restarting');
-    const approval=s.approvals.find(a=>a.owner===owner&&(!a.projectId||a.projectId===input.projectId)&&a.policyHash===policyHash(this.policy)&&a.briefHash===briefHash(input.brief)&&!a.consumedBy);
+    // A continuation project runs only under the continuation policy, bound to its own project-specific approval.
+    const policy=p.continuesFrom?STAGE5_CONTINUATION_POLICY:this.policy,hash=policyHash(policy);
+    const approval=s.approvals.find(a=>a.owner===owner&&(p.continuesFrom?a.projectId===input.projectId:(!a.projectId||a.projectId===input.projectId))&&a.policyHash===hash&&a.briefHash===briefHash(input.brief)&&!a.consumedBy);
     if(!approval)throw new StudioError(403,'No explicit live approval for this exact description and spending policy. Zero calls made.');
-    const id=randomUUID(),run:Run={id,owner,projectId:input.projectId,source:{input:promptInput.parse({brief:input.brief,site:this.policy.site})},state:'ready',automatic:input.automatic??false,policyHash:policyHash(this.policy),callIds:[]};
+    const source=p.continuesFrom?continuationSource(s,owner,p.continuesFrom,input.brief):{input:promptInput.parse({brief:input.brief,site:policy.site})};
+    const id=randomUUID(),run:Run={id,owner,projectId:input.projectId,source,state:'ready',automatic:input.automatic??false,policyHash:hash,callIds:[],...(p.continuesFrom?{continuesFrom:structuredClone(p.continuesFrom)}:{})};
     approval.consumedBy=id;p.runId=id;s.runs[id]=run;return publicRun(run,s);
    });
   }
@@ -96,27 +103,33 @@ export class PrivateStudioService{
   }
  }
  private async advance(owner:string,input:{runId:string;stage:number;key:string}){
-  const policy=this.policy,hash=policyHash(policy);
   const admitted=await this.store.transaction(async s=>{
    if(await executionHeld(this.store.directory))throw new StudioError(409,'Generation is on hold; no provider call was dispatched.');
    const run=s.runs[input.runId];
    if(!run||run.owner!==owner||s.projects[run.projectId]?.owner!==owner)throw new StudioError(404,'Run not found');
-   if(!s.approvals.some(a=>a.consumedBy===run.id&&a.owner===owner&&a.policyHash===hash&&a.briefHash===briefHash(run.source.input.brief)&&(!a.projectId||a.projectId===run.projectId)))throw new StudioError(403,'Run authorization missing');
+   const runPolicy=this.policyFor(run.policyHash);
+   if(!runPolicy)throw new StudioError(409,'Run is not executing under a recognised approved policy. Zero calls made.');
+   if(!s.approvals.some(a=>a.consumedBy===run.id&&a.owner===owner&&a.policyHash===run.policyHash&&a.briefHash===briefHash(run.source.input.brief)&&(!a.projectId||a.projectId===run.projectId)))throw new StudioError(403,'Run authorization missing');
    const repeated=run.callIds.map(id=>s.calls[id]).find(c=>c.key===input.key);
    if(repeated){if(repeated.stage!==input.stage)throw new StudioError(409,'Idempotency key reused for another stage');return {cached:publicRun(run,s)};}
-   if(run.cancelRequested||run.state!=='ready'||run.policyHash!==hash)throw new StudioError(409,'Run is stopped or already executing; read its status. No retry call is permitted.');
+   if(run.cancelRequested||run.state!=='ready')throw new StudioError(409,'Run is stopped or already executing; read its status. No retry call is permitted.');
    if(Object.values(s.runs).some(r=>r.owner===run.owner&&(r.state==='running'||r.state==='uncertain')))throw new StudioError(409,'An active or unaccounted paid call already exists');
    const stage=(run.source.result?.lastGood?.stage??0)+1;
    if(input.stage!==stage)throw new StudioError(409,'Stage revision conflict');
+   if(runPolicy.continuationStage&&(stage!==runPolicy.continuationStage||!run.continuesFrom))throw new StudioError(409,'A continuation run may execute only its single approved stage.');
    run.state='running';run.runningSince=Date.now();return {run:structuredClone(run)};
   });
   if('cached'in admitted)return admitted.cached;
-  const {run}=admitted;
+  const {run}=admitted,policy=this.policyFor(run.policyHash)!;
   const calls:string[]=[];
   let response:Awaited<ReturnType<typeof advancePromptRun>>|undefined;
   let error:string|undefined,executionException:{message:string;stack?:string}|undefined;
-  const designer=this.reservedDesigner(owner,run.id,input.key,calls);
-  try{response=await advancePromptRun(run.source,designer,{maxCostUsd:policy.maxCostMicros/1e6,maxCalls:policy.maxCalls+policy.maxCorrectionCalls,maxCorrectionsPerStage:policy.maxCorrectionCalls>0?1:0,onCheckpoint:async checkpoint=>{await this.store.transaction(s=>{const last=calls.at(-1);if(last)s.calls[last].checkpoint=checkpoint;});}});}
+  const designer=this.reservedDesigner(owner,run.id,input.key,calls,policy);
+  // A continuation's copied checkpoints carry the source run's calls; the pipeline budget counts them, so the
+  // continuation's own allowance is added on top. The server ledger below enforces this run's own spending.
+  const prior=run.continuesFrom?(run.source.result?.checkpoints??[]).filter(c=>c.accepted).flatMap(c=>c.calls):[];
+  const priorUsd=prior.reduce((sum,c)=>sum+(c.usage?.costUsd??0),0);
+  try{response=await advancePromptRun(run.source,designer,{maxCostUsd:priorUsd+policy.maxCostMicros/1e6,maxCalls:prior.length+policy.maxCalls+policy.maxCorrectionCalls,maxCorrectionsPerStage:policy.maxCorrectionCalls>0?1:0,onCheckpoint:async checkpoint=>{await this.store.transaction(s=>{const last=calls.at(-1);if(last)s.calls[last].checkpoint=checkpoint;});}});}
   catch(e){executionException={message:e instanceof Error?e.message:String(e),stack:e instanceof Error?e.stack:undefined};error=`Stage ${input.stage} execution interrupted: ${e instanceof Error?e.message:'unknown error'}. No retry was made.`;}
   return this.store.transaction(s=>{
    const stored=s.runs[run.id],mine=calls.map(id=>s.calls[id]);
@@ -137,17 +150,17 @@ export class PrivateStudioService{
   });
  }
  /** Every provider call - design or correction - is admitted, reserved and accounted individually. */
- private reservedDesigner(owner:string,runId:string,key:string,calls:string[]):Designer{
+ private reservedDesigner(owner:string,runId:string,key:string,calls:string[],policy:StudioPolicy):Designer{
   const live=(observe:(v:ProviderObservation)=>Promise<void>)=>this.factory(observe);
-  const call=<T>(stage:StageNo,purpose:'design'|'correction',bytes:number|undefined,go:(d:Designer)=>Promise<T>)=>this.reservedCall(owner,runId,calls.length?undefined:key,stage,purpose,bytes,calls,observe=>go(live(observe)));
+  const call=<T>(stage:StageNo,purpose:'design'|'correction',bytes:number|undefined,go:(d:Designer)=>Promise<T>)=>this.reservedCall(owner,runId,calls.length?undefined:key,stage,purpose,bytes,calls,policy,observe=>go(live(observe)));
   const probe=live(async()=>{});
   return {label:`reserved ${probe.label}`,
    design:(stage,ctx)=>call(stage,'design',probe.wireBytes?.(stage,ctx),d=>d.design(stage,ctx)),
    correct:(stage,ctx,previous,findings)=>call(stage,'correction',probe.wireBytes?.(stage,ctx,{previous,findings}),d=>d.correct(stage,ctx,previous,findings)),
   };
  }
- private async reservedCall<T>(owner:string,runId:string,key:string|undefined,stage:StageNo,purpose:'design'|'correction',bytes:number|undefined,calls:string[],run:(observe:(v:ProviderObservation)=>Promise<void>)=>Promise<T>):Promise<T>{
-  const policy=this.policy,hash=policyHash(policy);
+ private async reservedCall<T>(owner:string,runId:string,key:string|undefined,stage:StageNo,purpose:'design'|'correction',bytes:number|undefined,calls:string[],policy:StudioPolicy,run:(observe:(v:ProviderObservation)=>Promise<void>)=>Promise<T>):Promise<T>{
+  const hash=policyHash(policy);
   if(bytes!==undefined&&bytes>policy.maxWireBytes)throw new DispatchRefused(`Stage ${stage} request would be ${bytes} bytes, above the ${policy.maxWireBytes}-byte ceiling; nothing was sent.`);
   const wire=bytes??policy.maxWireBytes,outputCap=stageOutputTokens(policy,stage),reservation=reservationMicros(policy,wire,stage);
   const callId=await this.store.transaction(async s=>{

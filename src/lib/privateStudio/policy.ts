@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {LIVE_POLICY,type StudioPolicy} from './contract';
 import {getPricingTable,type ModelPricing} from '@/lib/ai/pricing';
-export {FIRST_BRIEF,LIVE_POLICY,NO_CORRECTION_POLICY,type StudioPolicy} from './contract';
+export {FIRST_BRIEF,LIVE_POLICY,NO_CORRECTION_POLICY,STAGE5_CONTINUATION_POLICY,type StudioPolicy} from './contract';
 export const policyHash=(policy:StudioPolicy)=>createHash('sha256').update(JSON.stringify(policy)).digest('hex');
 export const POLICY_HASH=policyHash(LIVE_POLICY);
 export const briefHash=(brief:string)=>createHash('sha256').update(brief.trim()).digest('hex');

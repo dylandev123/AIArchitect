@@ -7,11 +7,12 @@ import type {Usage,Checkpoint} from '@/lib/villa/staged/pipeline';
 import {StudioError} from './policy';
 export interface Session{owner:string;csrf:string;expires:number}
 export interface Call {normalizations?:import('@/lib/villa/staged/normalize').Normalization[];responseBody?:string;httpStatus?:number;wireRequestBody?:string;phase?:'validating'|'finished';checkpoint?:Checkpoint;executionException?:{message:string;stack?:string};raw?:string;request?:{system:string;prompt:string};id:string;runId:string;stage:number;purpose?:'design'|'correction';wireBound?:number;key:string;status:'reserved'|'settled'|'unknown';reservation:number;costMicros?:number;usage?:Usage;providerUsage?:unknown;/** Estimated provider bill at published per-category rates (costMicros is the budget charge). Absent on records settled before 2026-11-06. */billedMicros?:number;requestId?:string;finishReason?:string;error?:string;createdAt:number;finishedAt?:number;limitViolation?:boolean}
-export interface Run {id:string;owner:string;projectId:string;source:PromptRun;automatic?:boolean;cancelRequested?:boolean;executionError?:string;state:'ready'|'running'|'failed'|'complete'|'uncertain'|'cancelled';policyHash:string;callIds:string[];lastResponse?:unknown;runningSince?:number}
+export interface Run {id:string;owner:string;projectId:string;source:PromptRun;automatic?:boolean;cancelRequested?:boolean;executionError?:string;state:'ready'|'running'|'failed'|'complete'|'uncertain'|'cancelled';policyHash:string;callIds:string[];lastResponse?:unknown;runningSince?:number;/** Stage 5-only continuation: the stopped run whose accepted Stages 1-4 were copied (that run is never modified). */continuesFrom?:Continuation}
+export interface Continuation{runId:string;stage:5;checkpointsSha256:string}
 export interface State{
  version:1;account?:{owner:string;salt:string;hash:string};sessions:Record<string,Session>;
  loginFailures:number;lockedUntil:number;
- projects:Record<string,{owner:string;name:string;runId?:string;save?:string}>;
+ projects:Record<string,{owner:string;name:string;runId?:string;save?:string;continuesFrom?:Continuation}>;
  runs:Record<string,Run>;calls:Record<string,Call>;
  approvals:{id:string;owner:string;projectId?:string;briefHash:string;policyHash:string;approvedAt:string;consumedBy?:string}[];
 }
