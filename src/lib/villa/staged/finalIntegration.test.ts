@@ -31,7 +31,8 @@ it('audits the old 91-element scene as geometrically valid but semantically inco
 });
 it('constructs exactly one bound pool and preserves all rooms, terraces and covered outdoor intentions',async()=>{
  const {run,out}=await replay();expect(out.status,JSON.stringify(out.findings)).toBe('complete');const h=loadHouse(out.save!);
- expect(h.scene.elements).toHaveLength(93);expect(h.spec.siteWork.pool!.sourceIntent).toBe('garden-pool');expect(h.spec.siteWork.pool!.intentResolution).toContain('5 × 5');
+ expect(h.scene.elements).toHaveLength(90); // scale-1: veranda columns and beams are grouped components (was 93 single pieces)
+ expect(h.spec.construction).toBe('scale-1');expect(h.spec.siteWork.pool!.sourceIntent).toBe('garden-pool');expect(h.spec.siteWork.pool!.intentResolution).toContain('5 × 5');
  expect(h.scene.elements.filter(x=>x.kind==='water')).toHaveLength(1);expect(h.scene.elements.some(x=>x.id==='open-garden-pool')).toBe(false);
  expect(h.scene.elements.find(x=>x.kind==='water')!.aliases).toContain('garden-pool');
  expect(h.scene.elements.some(x=>x.id==='open-limestone-terrace')).toBe(true);expect(h.scene.elements.some(x=>x.id==='veranda-garden-veranda-roof')).toBe(true);

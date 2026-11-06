@@ -2,10 +2,11 @@
 import {z} from 'zod';
 import {runStagedGeneration, type Designer, type PipelineResult, type StageNo, type Checkpoint} from './pipeline';
 import {saveHouse} from './save';
+import {SITE_MAX} from './spec';
 
 export const promptInput = z.object({
   brief: z.string().trim().min(10).max(4000),
-  site: z.object({width:z.number().min(30).max(120),depth:z.number().min(30).max(120)}).strict().default({width:60,depth:48}),
+  site: z.object({width:z.number().min(30).max(SITE_MAX),depth:z.number().min(30).max(SITE_MAX)}).strict().default({width:60,depth:48}),
 }).strict();
 export type PromptInput = z.infer<typeof promptInput>;
 import {promptRequirements} from './requirements';

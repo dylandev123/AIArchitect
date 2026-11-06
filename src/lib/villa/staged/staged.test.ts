@@ -72,7 +72,7 @@ describe('natural-language edits', () => {
     expect(wallX(out.scene, 'p-primary-bedroom-upper-hall')).toBeCloseTo(wallX(h.scene, 'p-primary-bedroom-upper-hall') + 2, 3);
     const touched = Object.keys(out.diff!.byComponent);
     expect(touched.every(c => c.startsWith('room:'))).toBe(true);
-    expect(out.diff!.unchanged).toBeGreaterThan(200);
+    expect(out.diff!.unchanged).toBeGreaterThan(0.9 * out.scene!.elements.length); // nearly everything is untouched
   });
   it('changes roofs to Mediterranean without touching walls', async () => {
     const {out} = await edit('Change the roof to Mediterranean architecture.');

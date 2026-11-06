@@ -1,6 +1,6 @@
 import {DIRECT_SCENE_KINDS} from '@/lib/semantic/vocabulary';
 import { z } from 'zod';
-import { elementFieldsSchema, operationSchema, sceneSchema } from './model';
+import { elementFieldsSchema, operationSchema, MODEL_AUTHORED_ELEMENT_LIMIT } from './model';
 
 /** Executable contracts, not a second catalogue. Derived afresh from the same
  * schemas used to parse transactions; renderer semantics stay in the design guide. */
@@ -16,10 +16,11 @@ export function constructionCapabilityReference() {
         });
     };
     return '\nEXECUTABLE CONSTRUCTION CONTRACT (derived from runtime schemas)\n' + JSON.stringify({
-        element: Object.fromEntries(contract(elementFieldsSchema)),
+        // `parts` is software-grouped geometry (staged construction only), never authored by a model.
+        element: Object.fromEntries(contract(elementFieldsSchema.omit({parts: true}))),
         semanticKinds: Object.fromEntries(elementFieldsSchema.shape.kind.options.map(kind => [kind,Object.entries(DIRECT_SCENE_KINDS).filter(([,kinds])=>kinds.includes(kind)).map(([type])=>type).join(',')])),
         operations: operationSchema.options.map(schema => Object.fromEntries(contract(schema))),
-        maxElements: z.toJSONSchema(sceneSchema.shape.elements, {io:'input',unrepresentable:'any'}).maxItems,
+        maxElements: MODEL_AUTHORED_ELEMENT_LIMIT,
         note: 'Root transforms carry descendants; resize edits one part.',
     });
 }

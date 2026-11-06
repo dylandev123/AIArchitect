@@ -4,7 +4,7 @@ import type {ArchitecturalScene, SceneElement} from '../scene/model';
 import {compileHouse} from './compile';
 import {allRooms, area, blockRect, overlapArea, rectDiff, type R} from './layout';
 import {measure, type Usage} from './pipeline';
-import {blockSchema, exteriorDoorSchema, entranceSchema, facadeStyleSchema, houseSpecSchema, linkSchema, roofSchema, sideSchema, type Block, type HouseSpec, type PlanNode} from './spec';
+import {BLOCK_HEIGHTS, blockSchema, exteriorDoorSchema, entranceSchema, facadeStyleSchema, houseSpecSchema, linkSchema, roofSchema, sideSchema, type Block, type HouseSpec, type PlanNode} from './spec';
 import {siteObstacles, verandaRect, type Finding} from './validate';
 import {deriveSite} from './site';
 import {requirePool} from './poolGeometry';
@@ -18,6 +18,8 @@ export const editOpSchema = z.discriminatedUnion('op', [
   z.object({op:z.literal('move-site-item'),id,dx:z.number().min(-20).max(20),dz:z.number().min(-20).max(20)}).strict(),
   z.object({op: z.literal('resize-room'), room: id, edge: sideSchema, delta: z.number().min(-10).max(10)}).strict(),
   z.object({op: z.literal('set-roof'), blocks: z.array(id).min(1).max(12), roof: roofSchema}).strict(),
+  /** Change one volume's wall height; software re-derives walls, openings, eaves, verandas and trim. */
+  z.object({op: z.literal('set-block-height'), block: id, height: z.enum(BLOCK_HEIGHTS)}).strict(),
   z.object({op: z.literal('add-block'), block: blockSchema, links: z.array(linkSchema).max(12), facades: z.record(z.string(), facadeStyleSchema).optional()}).strict(),
   z.object({op: z.literal('move-pool'), veranda: id, gap: z.number().min(0).max(12)}).strict(),
   z.object({op: z.literal('set-entrance'), entrance: entranceSchema, door: exteriorDoorSchema}).strict(),
@@ -119,6 +121,10 @@ export function applyOps(spec: HouseSpec, ops: EditOp[]): {spec: HouseSpec; note
       case 'set-entrance': {
         const doors = next.exterior.doors.filter(d => d.id !== next.exterior.entrance.door && d.id !== op.door.id);
         next = {...next, exterior: {...next.exterior, entrance: op.entrance, doors: [op.door, ...doors]}}; break;
+      }
+      case 'set-block-height': {
+        if (!next.blocks.some(b => b.id === op.block)) throw new EditError('unknown-block', `Block ${op.block} does not exist.`);
+        next = {...next, blocks: next.blocks.map(b => { if (b.id !== op.block) return b; const rest = {...b}; delete rest.height; return op.height === 'standard' ? rest : {...rest, height: op.height}; })}; break;
       }
       case 'set-facade': next = {...next, exterior: {...next.exterior, facades: {...next.exterior.facades, [op.key]: op.style}}}; break;
       case 'set-finish': next = {...next, blocks: next.blocks.map(b => b.id === op.block ? {...b, wall: op.wall, wallColor: op.wallColor} : b)}; break;

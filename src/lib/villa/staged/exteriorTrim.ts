@@ -1,6 +1,8 @@
 import {SIDES, blockRect, sideLine, sideRun, subtractIntervals, type R} from './layout';
-import {SLAB, WALL_H, levelTop, type HouseSpec, type Side} from './spec';
+import {SLAB, levelTop, wallTopOf, type HouseSpec, type Side} from './spec';
+import {neighbourStopsEave} from './heights';
 import type {SceneElement} from '../scene/model';
+import {chunks, elementCap, groupBoxes} from './grouping';
 
 /**
  * Software-derived exterior trim. Terra chooses the character (`spec.trim`); everything here is measured from the
@@ -19,8 +21,21 @@ function abutsSide(a: R, b: R, s: Side): [number, number] | undefined {
 const dir = (s: Side) => s === 'n' || s === 'w' ? -1 : 1;
 
 export function buildTrim(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisting: number}): TrimEl[] {
-  const T = spec.trim!, out: TrimEl[] = [], cap = 400 - ctx.nExisting - 4, byId = new Map(spec.blocks.map(b => [b.id, b]));
-  const push = (e: TrimEl) => { if (out.length < cap) out.push(e); };
+  return buildTrimBudgeted(spec, ctx).elements;
+}
+
+/** Trim in priority order within the remaining element budget; `requested` counts every piece the design asked for. */
+export function buildTrimBudgeted(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisting: number}): {elements: TrimEl[]; requested: number} {
+  const T = spec.trim!, out: TrimEl[] = [], cap = elementCap(spec) - ctx.nExisting - 4, byId = new Map(spec.blocks.map(b => [b.id, b]));
+  const G = spec.construction === 'scale-1';
+  /** scale-1: window surrounds and shutters of one block facade and level become one grouped trim component. */
+  const groups = new Map<string, {comp: string; id: string; extra: Partial<SceneElement>; boxes: {at: [number, number, number]; size: [number, number, number]}[]}>();
+  const collect = (key: string, comp: string, prefix: string, e: TrimEl) => {
+    const g = groups.get(key) ?? {comp, id: prefix, extra: e.extra, boxes: []};
+    g.boxes.push({at: e.at, size: e.size}); groups.set(key, g);
+  };
+  let requested = 0;
+  const push = (e: TrimEl) => { requested++; if (out.length < cap) out.push(e); };
   const at = (horiz: boolean, along: number, y: number, across: number): [number, number, number] => horiz ? [along, y, across] : [across, y, along];
   const sz = (horiz: boolean, len: number, h: number, dp: number): [number, number, number] => horiz ? [len, h, dp] : [dp, h, len];
   const ex = (m: 'limestone' | 'timber', color: string): Partial<SceneElement> => ({material: m, color});
@@ -29,7 +44,9 @@ export function buildTrim(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisti
   const main = ctx.openings.find(o => o.main);
   if (main && T.portal) {
     const br = blockRect(byId.get(main.block)!), s = sideOfOpening(main, br), horiz = s === 'n' || s === 's', face = sideLine(br, s) + dir(s) * 0.1;
-    for (const k of [-1, 1]) push({comp: 'entrance', id: `entrance-pier-${k > 0 ? 'b' : 'a'}`, kind: 'volume', at: at(horiz, main.c + k * (main.width / 2 + 0.225), (SLAB + 3.15) / 2, face), size: sz(horiz, 0.45, 3.15 - SLAB, 0.2), extra: ex('limestone', T.stoneColor)});
+    // Piers rise to the lintel over the actual door (2.7 m on standard volumes: top 3.15 m).
+    const pierTop = SLAB + main.height + 0.15;
+    for (const k of [-1, 1]) push({comp: 'entrance', id: `entrance-pier-${k > 0 ? 'b' : 'a'}`, kind: 'volume', at: at(horiz, main.c + k * (main.width / 2 + 0.225), (SLAB + pierTop) / 2, face), size: sz(horiz, 0.45, pierTop - SLAB, 0.2), extra: ex('limestone', T.stoneColor)});
     push({comp: 'entrance', id: 'entrance-lintel', kind: 'volume', at: at(horiz, main.c, levelTop(0) + main.height + 0.075, face), size: sz(horiz, main.width, 0.15, 0.2), extra: ex('limestone', T.stoneColor)});
   }
 
@@ -41,12 +58,14 @@ export function buildTrim(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisti
     for (const s of SIDES) {
       const [a0, a1] = sideRun(br, s), horiz = s === 'n' || s === 's', face = sideLine(br, s);
       const abut: [number, number][] = spec.blocks.filter(o => o.id !== b.id && o.level >= b.level).flatMap(o => { const r = abutsSide(br, blockRect(o), s); return r ? [r] : []; });
+      // A taller volume's cornice continues above a lower neighbour; the plinth is always stopped by it.
+      const eaveAbut: [number, number][] = spec.blocks.filter(o => o.id !== b.id && neighbourStopsEave(b, o)).flatMap(o => { const r = abutsSide(br, blockRect(o), s); return r ? [r] : []; });
       const low: [number, number][] = ctx.openings.filter(o => o.block === b.id && o.level === 0 && sideOfOpening(o, br) === s && (o.sill < 0.7 || o.door)).map(o => [o.c - o.width / 2 - 0.15, o.c + o.width / 2 + 0.15]);
       for (const v of spec.exterior.verandas) if (v.block === b.id && v.side === s) low.push([v.from - 0.05, v.to + 0.05]);
       // A terrace-bearing lower block still needs a shadow line at its exposed wall head.
       if (T.cornice && (!covered(b) || T.visualRevision === 'stage4-v2')) {
-        const wallTop = levelTop(b.level) + WALL_H;
-        subtractIntervals(a0, a1, abut).filter(([x, y]) => y - x > 0.5).forEach(([x, y], i) => push({comp: `block:${b.id}`, id: `cornice-${b.id}-${s}-${i}`, kind: 'volume', at: at(horiz, (x + y) / 2, wallTop - 0.13, face + dir(s) * 0.09), size: sz(horiz, y - x + 0.1, 0.26, 0.18), extra: ex('limestone', T.stoneColor)}));
+        const wallTop = wallTopOf(b);
+        subtractIntervals(a0, a1, eaveAbut).filter(([x, y]) => y - x > 0.5).forEach(([x, y], i) => push({comp: `block:${b.id}`, id: `cornice-${b.id}-${s}-${i}`, kind: 'volume', at: at(horiz, (x + y) / 2, wallTop - 0.13, face + dir(s) * 0.09), size: sz(horiz, y - x + 0.1, 0.26, 0.18), extra: ex('limestone', T.stoneColor)}));
       }
       if (T.plinth && b.level === 0) {
         subtractIntervals(a0, a1, [...abut, ...low]).filter(([x, y]) => y - x > 0.6).forEach(([x, y], i) => push({comp: `block:${b.id}`, id: `plinth-${b.id}-${s}-${i}`, kind: 'volume', at: at(horiz, (x + y) / 2, 0.3, face + dir(s) * 0.06), size: sz(horiz, y - x, 0.6, 0.12), extra: ex('limestone', T.stoneColor)}));
@@ -60,8 +79,10 @@ export function buildTrim(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisti
     placed.forEach(({o, s, horiz, face}, index) => {
       const i = o.trimIndex ?? index;
       const y0 = levelTop(o.level) + o.sill;
-      push({comp: `block:${o.block}`, id: `lintel-${i}`, kind: 'volume', at: at(horiz, o.c, y0 + o.height + 0.1, face + dir(s) * 0.07), size: sz(horiz, o.width + 0.5, 0.2, 0.14), extra: ex('limestone', T.stoneColor)});
-      if (o.sill > 0.2) push({comp: `block:${o.block}`, id: `sill-${i}`, kind: 'volume', at: at(horiz, o.c, y0 - 0.045, face + dir(s) * 0.1), size: sz(horiz, o.width + 0.3, 0.09, 0.2), extra: ex('limestone', T.stoneColor)});
+      const lintel: TrimEl = {comp: `block:${o.block}`, id: `lintel-${i}`, kind: 'volume', at: at(horiz, o.c, y0 + o.height + 0.1, face + dir(s) * 0.07), size: sz(horiz, o.width + 0.5, 0.2, 0.14), extra: ex('limestone', T.stoneColor)};
+      const sill: TrimEl | undefined = o.sill > 0.2 ? {comp: `block:${o.block}`, id: `sill-${i}`, kind: 'volume', at: at(horiz, o.c, y0 - 0.045, face + dir(s) * 0.1), size: sz(horiz, o.width + 0.3, 0.09, 0.2), extra: ex('limestone', T.stoneColor)} : undefined;
+      if (G) { for (const e of [lintel, sill]) if (e) collect(`s|${o.block}|${s}|${o.level}`, `block:${o.block}`, `lintels-${o.block}-${s}-${o.level}`, e); return; }
+      push(lintel); if (sill) push(sill);
     });
   }
   if (T.windowTrim === 'stone-and-shutters') {
@@ -72,8 +93,13 @@ export function buildTrim(spec: HouseSpec, ctx: {openings: OpeningRec[]; nExisti
       if (T.visualRevision === 'stage4-v2' && (o.width < 1.2 || o.height < 1.5)) return;
       const near = placed.filter((p, j) => j !== index && p.o.block === o.block && p.s === s && p.o.level === o.level).map(p => Math.abs(p.o.c - o.c) - (p.o.width + o.width) / 2);
       if (near.length && Math.min(...near) < 1.0) return;
-      for (const k of [-1, 1]) push({comp: `block:${o.block}`, id: `shutter-${i}-${k > 0 ? 'b' : 'a'}`, kind: 'volume', at: at(horiz, o.c + k * (o.width / 2 + 0.3), levelTop(o.level) + o.sill + o.height / 2, face + dir(s) * 0.035), size: sz(horiz, 0.42, o.height, 0.07), extra: ex('timber', T.timberColor)});
+      for (const k of [-1, 1]) {
+        const e: TrimEl = {comp: `block:${o.block}`, id: `shutter-${i}-${k > 0 ? 'b' : 'a'}`, kind: 'volume', at: at(horiz, o.c + k * (o.width / 2 + 0.3), levelTop(o.level) + o.sill + o.height / 2, face + dir(s) * 0.035), size: sz(horiz, 0.42, o.height, 0.07), extra: ex('timber', T.timberColor)};
+        if (G) collect(`t|${o.block}|${s}|${o.level}`, `block:${o.block}`, `shutters-${o.block}-${s}-${o.level}`, e); else push(e);
+      }
     });
   }
-  return out;
+  // Grouped trim joins the same priority order and budget as single pieces: never dropped silently.
+  for (const g of groups.values()) chunks(g.boxes).forEach((boxes, k) => { const b = groupBoxes(boxes); push({comp: g.comp, id: `${g.id}${k ? `-${k}` : ''}`, kind: 'volume', at: b.at, size: b.size, extra: {...g.extra, parts: b.parts}}); });
+  return {elements: out, requested};
 }

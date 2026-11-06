@@ -266,7 +266,8 @@ describe('pipeline: stage 3 from a programme, with usage kept on provider failur
     expect(cp.accepted).toBe(true);
     expect(cp.construction!.options.length).toBeGreaterThan(1);
     expect(cp.calls[0].finishReason).toBe('stop');
-    expect(res.scene!.elements.length).toBeGreaterThan(100);
+    expect(res.scene!.elements.length).toBeGreaterThan(80); // scale-1: the 17-tread flight is one stair component
+    expect(res.scene!.elements.filter(e => e.semanticType === 'stair').every(e => e.parts?.length === 17)).toBe(true);
     expect(res.checkpoints[1].spec.blocks.every(b => 'room' in b.plan)).toBe(true); // stage 2 checkpoint untouched
   });
   it('an infeasible programme fails stage 3 with the conflicts, keeps stage 2 as last good, and one correction may repair it', async () => {

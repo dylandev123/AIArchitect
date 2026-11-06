@@ -19,10 +19,11 @@ export type SiteDesign = z.infer<typeof siteDesignSchema>;
  * Terra chooses the outdoor composition; software measures the accepted house and places every component.
  * `pool.scale: none` is only valid when no pool intention exists and the brief does not ask for one.
  */
-export const POOL_SCALES = {plunge: [6, 3], intimate: [10, 4], generous: [12, 4.5], lap: [14, 4]} as const;
+/** `resort` (Phase 2): a resort-scale pool for estates; the full deck is 23.2 x 11.4 m. */
+export const POOL_SCALES = {plunge: [6, 3], intimate: [10, 4], generous: [12, 4.5], lap: [14, 4], resort: [20, 7]} as const;
 export const siteDesignV2Schema = z.object({
   statement: z.string(),
-  pool: z.object({scale: z.enum(['none', 'plunge', 'intimate', 'generous', 'lap']), anchor: z.enum(['pool-intention', 'veranda', 'living-room']), separation: z.enum(['close', 'promenade']), water: z.enum(['turquoise', 'deep-jade'])}).strict(),
+  pool: z.object({scale: z.enum(['none', 'plunge', 'intimate', 'generous', 'lap', 'resort']), anchor: z.enum(['pool-intention', 'veranda', 'living-room']), separation: z.enum(['close', 'promenade']), water: z.enum(['turquoise', 'deep-jade'])}).strict(),
   terrace: z.object({finish: z.enum(['limestone', 'warm-paving']), sunbeds: z.enum(['none', 'two', 'four']), social: z.enum(['none', 'dining', 'dining-and-lounge'])}).strict(),
   arrival: z.object({finish: z.enum(['limestone', 'warm-paving']), character: z.enum(['tree-avenue', 'garden-court'])}).strict(),
   planting: z.object({trees: z.enum(['palm', 'canopy', 'mixed']), count: z.enum(['four', 'six', 'eight', 'ten']), stature: z.enum(['medium', 'varied-tall']), beds: z.enum(['layered', 'restrained']), lawn: z.enum(['garden-panels', 'open-lawn'])}).strict(),

@@ -13,7 +13,7 @@ try {
   page.on('pageerror', e => errors.push('pageerror: ' + e));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text().slice(0, 300)); });
   await page.route('**/*', r => { const u = new URL(r.request().url()); if (!['127.0.0.1', 'localhost'].includes(u.hostname) || u.pathname.startsWith('/api/')) return r.abort(); return r.continue(); });
-  await page.goto(`http://localhost:3015/dev/staged-villa?file=automatic-live-v3_${base}.scene.json`, {waitUntil: 'networkidle', timeout: 240000});
+  await page.goto(`http://localhost:3015/dev/staged-villa?file=automatic-${process.env.CAPTURE_FOLDER ?? 'live-v3'}_${base}.scene.json`, {waitUntil: 'networkidle', timeout: 240000});
   await page.locator('canvas').waitFor({timeout: 120000});
   for (const view of views) {
     await page.getByRole('button', {name: view, exact: true}).click(); await page.waitForTimeout(4000);

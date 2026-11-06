@@ -1,8 +1,9 @@
 import {z} from 'zod';
 import type {ArchitecturalScene} from '../scene/model';
 import {SIDES, allRooms, blockRect, roomEdges, roomSideInterval, sideLine, sideRun, type R, type Room} from './layout';
-import {WALL_H, levelTop, sideSchema, type Block, type HouseSpec, type Side, type Trim} from './spec';
-import {validateExterior, verandaRect, type Finding} from './validate';
+import {MAX_DOORS, wallHeight, wallTopOf, sideSchema, type Block, type HouseSpec, type Side, type Trim} from './spec';
+import {neighbourAtLeastAsTall} from './heights';
+import {cornerTrim, validateExterior, verandaRect, type Finding} from './validate';
 import {outdoorKind} from './intentions';
 
 /**
@@ -49,7 +50,10 @@ export type ExteriorDesign = z.infer<typeof exteriorDesignSchema>;
  */
 export const ROOF_FINISHES_V2 = [...ROOF_FINISHES, 'slate-grey'] as const;
 export const verandaChoiceSchema = exteriorDesignSchema.shape.veranda;
-export const exteriorDesignV2Schema = exteriorDesignSchema.omit({veranda: true, roofFinish: true}).extend({roofFinish: z.enum(ROOF_FINISHES_V2), verandas: z.array(verandaChoiceSchema)}).strict();
+/** `grand` (scale-1 houses): a wide, tall entrance door sized to its hall, a deep canopy and a formal arrival court. */
+export const ENTRANCE_CANOPIES_V2 = ['none', 'shallow', 'deep', 'grand'] as const, ENTRANCE_COURTS_V2 = ['compact', 'generous', 'grand'] as const;
+export const exteriorDesignV2Schema = exteriorDesignSchema.omit({veranda: true, roofFinish: true, entrance: true}).extend({roofFinish: z.enum(ROOF_FINISHES_V2), verandas: z.array(verandaChoiceSchema),
+  entrance: exteriorDesignSchema.shape.entrance.extend({canopy: z.enum(ENTRANCE_CANOPIES_V2), court: z.enum(ENTRANCE_COURTS_V2)}).strict()}).strict();
 export type ExteriorDesignV2 = z.infer<typeof exteriorDesignV2Schema>;
 export type AnyExteriorDesign = ExteriorDesign | ExteriorDesignV2;
 export const verandaChoices = (d: AnyExteriorDesign) => 'verandas' in d ? d.verandas : [d.veranda];
@@ -87,6 +91,8 @@ export function exteriorWalls(spec: HouseSpec): ExteriorWall[] {
   return out;
 }
 
+/** Garden/terrace doors besides the main entrance: 7 originally; a scale-1 house may open up to 15. */
+export const maxGardenDoors = (spec: Pick<HouseSpec, 'construction'>) => spec.construction === 'scale-1' ? MAX_DOORS - 1 : 7;
 export function exteriorIssues(spec: HouseSpec, d: AnyExteriorDesign): Finding[] {
   const out: Finding[] = [], blocks = new Map(spec.blocks.map(b => [b.id, b])), rooms = new Map(allRooms(spec).map(r => [r.id, r])), walls = exteriorWalls(spec);
   const roofable = roofableBlocks(spec).map(b => b.id), seen = new Set<string>();
@@ -115,7 +121,7 @@ export function exteriorIssues(spec: HouseSpec, d: AnyExteriorDesign): Finding[]
     else if (dr.kind === 'garden' && (w.level !== 0)) out.push(f('garden-door-upstairs', k, `Garden door ${k} is on level ${w.level}; use kind terrace for a roof terrace.`));
     else if (w.free < 2.1) out.push(f('door-wall-short', k, `Exterior wall ${k} has only ${w.free} m free; a door needs 2.1 m.`));
   }
-  if (d.doors.length > 7) out.push(f('too-many-doors', 'doors', 'At most 7 doors besides the main entrance.'));
+  if (d.doors.length > maxGardenDoors(spec)) out.push(f('too-many-doors', 'doors', `At most ${maxGardenDoors(spec)} doors besides the main entrance.`));
   const covered = new Set<string>();
   for (const v of verandaChoices(d)) {
     const os = (spec.openSpaces ?? []).find(o => o.id === v.openSpace);
@@ -142,7 +148,7 @@ function eaveClearance(spec: HouseSpec, b: Block): number {
   const br = blockRect(b), site = {x0: -spec.site.width / 2 + 1, x1: spec.site.width / 2 - 1, z0: -spec.site.depth / 2 + 1, z1: spec.site.depth / 2 - 1};
   let best = 3;
   for (const s of SIDES) {
-    const abutted = spec.blocks.some(o => o.id !== b.id && o.level >= b.level && (() => { const r = blockRect(o), gap = s === 'n' ? r.z1 - br.z0 : s === 's' ? r.z0 - br.z1 : s === 'e' ? r.x0 - br.x1 : r.x1 - br.x0, [lo, hi] = s === 'n' || s === 's' ? [Math.max(br.x0, r.x0), Math.min(br.x1, r.x1)] : [Math.max(br.z0, r.z0), Math.min(br.z1, r.z1)]; return Math.abs(gap) < 0.02 && hi - lo > 0.05; })());
+    const abutted = spec.blocks.some(o => o.id !== b.id && neighbourAtLeastAsTall(b, o) && (() => { const r = blockRect(o), gap = s === 'n' ? r.z1 - br.z0 : s === 's' ? r.z0 - br.z1 : s === 'e' ? r.x0 - br.x1 : r.x1 - br.x0, [lo, hi] = s === 'n' || s === 's' ? [Math.max(br.x0, r.x0), Math.min(br.x1, r.x1)] : [Math.max(br.z0, r.z0), Math.min(br.z1, r.z1)]; return Math.abs(gap) < 0.02 && hi - lo > 0.05; })());
     if (abutted) continue;
     const edge = s === 'n' ? br.z0 - site.z0 : s === 's' ? site.z1 - br.z1 : s === 'e' ? site.x1 - br.x1 : br.x0 - site.x0;
     best = Math.min(best, edge);
@@ -178,16 +184,26 @@ export function deriveStage4(base: HouseSpec, d: AnyExteriorDesign): {spec: Hous
   for (const x of d.facades) facades[`${x.block}:${x.side}`] = x.style;
   // Doors: widths are derived from the measured free wall, never authored.
   const mainWall = walls.find(w => w.room === d.entrance.room && w.side === d.entrance.side)!;
-  const doors: HouseSpec['exterior']['doors'] = [{id: 'main-entrance', room: d.entrance.room, side: d.entrance.side, kind: 'main', width: Math.min(1.8, +(mainWall.free - 1.2).toFixed(2)), t: 0.5}];
+  // scale-1: doors are sized to the wall the compiler actually builds (east/west walls lose 0.3 m at block corners).
+  const buildable = (room: string, side: Side, free: number) => { if (base.construction !== 'scale-1') return free; const r = allRooms(base).find(x => x.id === room)!; return free - cornerTrim(r, blockRect(base.blocks.find(b => b.id === r.block)!), side); };
+  // A grand entrance (scale-1 only) opens a wide double door: 2.4 m, or 2.8 m in a tall or double-height hall.
+  const hall = base.blocks.find(b => allRooms(base).some(r => r.id === d.entrance.room && r.block === b.id));
+  const grandWanted = d.entrance.canopy === 'grand' || d.entrance.court === 'grand';
+  if (grandWanted && base.construction !== 'scale-1') findings.push(f('grand-entrance-unsupported', 'entrance', 'This saved house predates grand entrances; choose shallow/deep canopy and compact/generous court.'));
+  const mainWant = grandWanted && base.construction === 'scale-1' ? (hall?.height === 'tall' || hall?.height === 'double' ? 2.8 : 2.4) : 1.8;
+  const doors: HouseSpec['exterior']['doors'] = [{id: 'main-entrance', room: d.entrance.room, side: d.entrance.side, kind: 'main', width: Math.min(mainWant, +(buildable(mainWall.room, mainWall.side, mainWall.free) - 1.2).toFixed(2)), t: 0.5}];
+  if (mainWant > 1.8 && doors[0].width < mainWant) adjustments.push({subject: 'main-entrance', what: `Grand entrance door reduced from ${mainWant} m to ${doors[0].width} m to fit the ${mainWall.free} m free wall.`});
   for (const dr of d.doors) {
-    const w = walls.find(x => x.room === dr.room && x.side === dr.side)!, want = dr.kind === 'garden' ? 2.4 : 1.8, width = +Math.min(want, w.free - 1.2).toFixed(2);
+    const w = walls.find(x => x.room === dr.room && x.side === dr.side)!, want = dr.kind === 'garden' ? 2.4 : 1.8, width = +Math.min(want, buildable(w.room, w.side, w.free) - 1.2).toFixed(2);
     if (width < want) adjustments.push({subject: `${dr.room}:${dr.side}`, what: `Door width reduced from ${want} m to ${width} m to fit the ${w.free} m free wall.`});
     doors.push({id: `door-${dr.room}-${dr.side}`, room: dr.room, side: dr.side, kind: 'garden', width, t: 0.5});
   }
   doors.forEach(x => derivation.doors.push({id: x.id, room: x.room, side: x.side, kind: x.kind, width: x.width}));
   // Entrance: canopy and court sizes derive from the foyer's measured wall.
-  const canopyDepth = {none: 0, shallow: 1.8, deep: 3.2}[d.entrance.canopy], canopyWidth = Math.min({none: 2, shallow: 3.6, deep: 5.4}[d.entrance.canopy], Math.max(2, mainWall.run - 0.2));
-  const entrance = {door: 'main-entrance', canopy: {depth: canopyDepth, width: canopyWidth, material: 'timber' as const}, court: d.entrance.court === 'generous' ? {w: 7, d: 6} : {w: 5, d: 4}};
+  const canopyDepth = {none: 0, shallow: 1.8, deep: 3.2, grand: 4.2}[d.entrance.canopy], canopyWidth = Math.min({none: 2, shallow: 3.6, deep: 5.4, grand: 8}[d.entrance.canopy], Math.max(2, mainWall.run - 0.2));
+  // A grand arrival court is a formal forecourt scaled to the entrance front (12-24 m wide, 12 m deep).
+  const grandCourt = {w: +Math.min(24, Math.max(12, mainWall.run)).toFixed(1), d: 12};
+  const entrance = {door: 'main-entrance', canopy: {depth: canopyDepth, width: canopyWidth, material: 'timber' as const}, court: d.entrance.court === 'grand' ? grandCourt : d.entrance.court === 'generous' ? {w: 7, d: 6} : {w: 5, d: 4}};
   // Each veranda spans exactly the measured open space on its host block.
   const verandas = verandaChoices(d).map(choice => {
     const os = base.openSpaces.find(o => o.id === choice.openSpace)!, host = base.blocks.find(b => b.id === os.host)!, hr = blockRect(host), [hlo, hhi] = sideRun(hr, os.side);
@@ -199,7 +215,7 @@ export function deriveStage4(base: HouseSpec, d: AnyExteriorDesign): {spec: Hous
   if (verandas[0]) derivation.veranda = {from: verandas[0].from, to: verandas[0].to, depth: verandas[0].depth, columns: verandas[0].columns};
   const trim: Trim = {windowTrim: d.windowTrim, railing: d.railing, plinth: d.details.plinth, cornice: d.details.cornice, portal: d.entrance.portal, stoneColor: stone, timberColor: timber, plasterColor: plaster, canopy: d.entrance.canopy};
   const spec: HouseSpec = {...base, blocks, exterior: {facades, doors, entrance, verandas}, trim};
-  const post = [...validateExterior(spec)];
+  const post = [...findings, ...validateExterior(spec)];
   for (const v of verandas) {
     const os = base.openSpaces.find(o => o.id === v.id)!, deck = verandaRect(spec, os.id);
     const r = {x0: os.cx - os.w / 2, x1: os.cx + os.w / 2, z0: os.cz - os.d / 2, z1: os.cz + os.d / 2};
@@ -244,10 +260,10 @@ export interface ExteriorMetrics {
 export function measureExterior(spec: HouseSpec, scene: ArchitecturalScene, stage3Warnings: Warning[] = roomPlanWarnings(spec)): ExteriorMetrics {
   const els = scene.elements as unknown as Placed[], warnings: Warning[] = [];
   const roofs = els.filter(e => e.kind === 'roof' && e.id.startsWith('roof-')).map(e => {
-    const b = spec.blocks.find(x => `roof-${x.id}` === e.id)!, eaves = Object.fromEntries(Object.entries(e.eaves ?? {})) as Record<string, number>, wallTop = levelTop(b.level) + WALL_H;
+    const b = spec.blocks.find(x => `roof-${x.id}` === e.id)!, eaves = Object.fromEntries(Object.entries(e.eaves ?? {})) as Record<string, number>, wallTop = wallTopOf(b);
     const pitched = e.roofForm && e.roofForm !== 'flat', rise = pitched ? e.size[1] : 0, nominal = pitched ? Math.atan(rise / (Math.min(b.w, b.d) / 2)) * 180 / Math.PI : 0;
     const maxEave = Math.max(0, ...Object.values(eaves), pitched ? 0 : b.roof.overhang);
-    const m = {block: b.id, form: e.roofForm ?? 'flat', nominalPitchDeg: +nominal.toFixed(1), rise: +rise.toFixed(2), ridgeHeight: +(wallTop + rise).toFixed(2), riseToWallHeight: +(rise / WALL_H).toFixed(2), eaves, maxEave};
+    const m = {block: b.id, form: e.roofForm ?? 'flat', nominalPitchDeg: +nominal.toFixed(1), rise: +rise.toFixed(2), ridgeHeight: +(wallTop + rise).toFixed(2), riseToWallHeight: +(rise / wallHeight(b)).toFixed(2), eaves, maxEave};
     if (pitched && (nominal < 17 || nominal > 36)) warnings.push({area: 'roof', severity: 'warning', subject: b.id, message: `Pitch ${nominal.toFixed(0)}° is outside the 17-36° Mediterranean range.`});
     if (pitched && maxEave < 0.7) warnings.push({area: 'roof', severity: 'warning', subject: b.id, message: `Eaves reach only ${maxEave.toFixed(2)} m; the brief asks for deep eaves (≥0.7 m).`});
     if (pitched && Object.values(eaves).some(v => v === 0) && Object.values(eaves).every(v => v === 0)) warnings.push({area: 'roof', severity: 'warning', subject: b.id, message: 'This roof has no eaves on any side.'});

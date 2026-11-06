@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {z} from 'zod';
-import {applySlice, emptyDraft, measure, type Draft} from './pipeline';
+import {applySlice, legacyDraft, measure, type Draft} from './pipeline';
 import {directionSchema, stageSchemas} from './spec';
 
 /**
@@ -15,7 +15,7 @@ export function loadTerraStage3(root = process.cwd()) {
   const parsed = z.object({direction: directionSchema, blocks: stageSchemas[2].shape.blocks}).strict().parse(JSON.parse(first.text));
   const live = JSON.parse(rd('stage3-programme/live/result.json'));
   const site = {width: 60, depth: 48};
-  const d1 = applySlice(emptyDraft(site), 1, parsed.direction), d2 = applySlice(d1, 2, {blocks: parsed.blocks});
+  const d1 = applySlice(legacyDraft(site), 1, parsed.direction), d2 = applySlice(d1, 2, {blocks: parsed.blocks});
   const slice3 = stageSchemas[3].parse(live.construction.slice);
   const spec: Draft = applySlice(d2, 3, slice3);
   const m3 = measure(spec, 3, 4, 3);

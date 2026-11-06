@@ -1,7 +1,7 @@
 /** Offline orchestration adapter. Never imports a provider or reads credentials. */
 import {readFileSync} from 'node:fs';
 import {loadTerraStage3} from './stage3Checkpoint';
-import {applySlice,emptyDraft,measure} from './pipeline';
+import {applySlice,legacyDraft,measure} from './pipeline';
 import {deriveStage4} from './exterior';
 import {deriveSite,STAGE4_BASE} from './site';
 import {loadHouse,saveHouse} from './save';
@@ -26,7 +26,7 @@ export async function studioRehearsal(raw:unknown){
  if(!/caribbean|tropical/i.test(input.brief)||!/flat/i.test(input.brief)||/hillside|slope|basement|snow|skyscraper/i.test(input.brief))throw Error('This rehearsal supports only a flat-site Caribbean villa. Unsupported requests are not converted to a template.');
  const base=loadTerraStage3();
  let spec=base.spec;
- if(input.stage===2){const first=read('docs/architecture/staged-villa/live-1/raw-response.json');const value=JSON.parse(first.text);spec=applySlice(applySlice(emptyDraft(base.site),1,value.direction),2,{blocks:value.blocks});}
+ if(input.stage===2){const first=read('docs/architecture/staged-villa/live-1/raw-response.json');const value=JSON.parse(first.text);spec=applySlice(applySlice(legacyDraft(base.site),1,value.direction),2,{blocks:value.blocks});}
  if(input.stage>=4){const cp=read(`${STAGE4_BASE}.checkpoint.json`);const result=deriveStage4(base.spec,cp.design);if(result.findings.length)throw Error(JSON.stringify(result.findings));spec={...result.spec,trim:cp.spec.trim};}
  if(input.stage===5){const cp=read('docs/architecture/staged-villa/stage5-site/terra-stage5.checkpoint.json');const result=deriveSite(spec,cp.design);if(result.findings.length)throw Error(JSON.stringify(result.findings));spec=result.spec;}
  const built=measure(spec,input.stage as 2|3|4|5,4,3);

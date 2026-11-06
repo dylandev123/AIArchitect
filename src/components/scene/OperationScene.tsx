@@ -64,6 +64,9 @@ const Element = memo(function Element({ element: e, children, onSelect }: {
         const o = e.opening, left = o.x - o.width / 2, right = o.x + o.width / 2, head = h - o.sill - o.height;
         content = <>{left > -w / 2 && solid('left', [(-w / 2 + left) / 2, 0, 0], [left + w / 2, h, d])}{right < w / 2 && solid('right', [(right + w / 2) / 2, 0, 0], [w / 2 - right, h, d])}{o.sill > 0 && solid('sill', [o.x, -h / 2 + o.sill / 2, 0], [o.width, o.sill, d])}{head > 0 && solid('head', [o.x, h / 2 - head / 2, 0], [o.width, head, d])}{o.glazed && <Glazing at={[o.x, -h / 2 + o.sill + o.height / 2, 0]} width={o.width} height={o.height} panels={e.panels}/>}</>;
     }
+    else if (e.parts)
+        // Grouped repetitive geometry: one selectable component, several boxes in its own frame.
+        content = <>{e.parts.map(([x, y, z, pw, ph, pd], i) => solid(`part-${i}`, [x, y, z], [pw, ph, pd]))}</>;
     else
         content = solid('body', [0, 0, 0], e.size);
     const handles = e.appearance === 'glazed-door' || e.appearance === 'timber-door' ? [-1, 1] : [1];
@@ -73,6 +76,9 @@ export function OperationScene({ scene, onSelect }: {
     scene: ArchitecturalScene;
     onSelect: (id: string) => void;
 }) {
-    const render = (parent?: string): React.ReactNode => scene.elements.filter(e => e.parent === parent).map(e => <Element key={e.id} element={e} onSelect={onSelect}>{render(e.id)}</Element>);
+    // One pass over the elements (large staged estates hold well over a thousand); order within a parent is unchanged.
+    const children = new Map<string | undefined, SceneElement[]>();
+    for (const e of scene.elements) { const list = children.get(e.parent); if (list) list.push(e); else children.set(e.parent, [e]); }
+    const render = (parent?: string): React.ReactNode => (children.get(parent) ?? []).map(e => <Element key={e.id} element={e} onSelect={onSelect}>{render(e.id)}</Element>);
     return <group name="Declarative architectural scene">{render()}</group>;
 }

@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import {blockRect, overlapArea, roomEdgesBetween, type R} from './layout';
-import {roomTypeSchema, type HouseSpec} from './spec';
+import {MAX_STAIRS, roomTypeSchema, type HouseSpec} from './spec';
 
 /**
  * Stage 3, new contract. Terra designs the room RELATIONSHIPS; software solves the geometry.
@@ -92,7 +92,7 @@ export function programmeIssues(p: Programme, spec: Pick<HouseSpec, 'blocks'>, r
   // Stairs.
   const hasUpper = blocks.some(b => b.level === 1);
   if (hasUpper && !p.stairs.length) out.push(c('no-stair', 'stairs', 'The massing has an upper level but the programme has no stair. Add a stair room on the ground level and its landing room above.'));
-  if (p.stairs.length > 2) out.push(c('too-many-stairs', 'stairs', 'At most 2 stairs are supported.'));
+  if (p.stairs.length > MAX_STAIRS) out.push(c('too-many-stairs', 'stairs', `At most ${MAX_STAIRS} stairs are supported.`));
   const stairRoomIds = new Set<string>();
   for (const s of p.stairs) {
     const sr = rooms.get(s.room), lr = rooms.get(s.landing);

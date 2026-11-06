@@ -9,7 +9,9 @@ import { useProjectStore } from '@/store/useProjectStore';
 
 it('derives all executable fields and tags for all generation/edit modes',()=>{
  const reference=constructionCapabilityReference();
- for(const field of Object.keys(elementFieldsSchema.shape))expect(reference).toContain(`"${field}"`);
+ // `parts` is software-grouped staged geometry (Phase 2): never offered to a model.
+ for(const field of Object.keys(elementFieldsSchema.shape))if(field!=='parts')expect(reference).toContain(`"${field}"`);
+ expect(reference).not.toContain('"parts"');expect(reference).toContain('"maxElements":400');
  for(const schema of operationSchema.options)expect(reference).toContain(schema.shape.op.value);
  for(const editIntent of ['refine','redesign','complete'] as const)
   expect(sceneSystemPrompt({mode:'edit',editIntent,prompt:'Improve architecture',current:codeArchitectureStudies().solana})).toContain(reference);

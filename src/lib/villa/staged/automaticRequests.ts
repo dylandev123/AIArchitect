@@ -4,17 +4,17 @@
  * The Breezeway-era `exteriorRequest`/`siteDesignRequest` remain unchanged for historical replay.
  */
 import {allRooms, blockRect} from './layout';
-import {EAVE_M, PITCH_RANGE, exteriorWalls, roofableBlocks, terraceBlocks} from './exterior';
+import {EAVE_M, PITCH_RANGE, exteriorWalls, maxGardenDoors, roofableBlocks, terraceBlocks} from './exterior';
 import {outdoorIntentions} from './intentions';
 import {POOL_SCALES} from './siteContract';
 import {siteContext} from './siteGeneral';
-import type {HouseSpec} from './spec';
+import {wallTopOf, type HouseSpec} from './spec';
 import {poolRequirement} from './requirements';
 import {siteFeasibility} from './siteFeasibility';
 
 export function exteriorRequestV2(brief: string, spec: HouseSpec): {system: string; prompt: string} {
   const rf = new Set(roofableBlocks(spec).map(b => b.id)), terr = terraceBlocks(spec).map(b => b.id);
-  const blocks = spec.blocks.map(b => { const r = blockRect(b); return `${b.id}: level ${b.level}, ${b.w} x ${b.d} m, x ${r.x0}..${r.x1}, z ${r.z0}..${r.z1}; role: ${b.role}; top: ${rf.has(b.id) ? 'EXPOSED, needs a roof' : 'under an upper volume (roof terrace, no roof)'}`; });
+  const blocks = spec.blocks.map(b => { const r = blockRect(b); return `${b.id}: level ${b.level}, ${b.w} x ${b.d} m, x ${r.x0}..${r.x1}, z ${r.z0}..${r.z1}; role: ${b.role}; top: ${rf.has(b.id) ? 'EXPOSED, needs a roof' : 'under an upper volume (roof terrace, no roof)'}${b.height ? `; height ${b.height}, wall top ${wallTopOf(b).toFixed(1)} m${b.rank ? `, rank ${b.rank}` : ''}` : ''}`; });
   // exteriorWalls labels every open space "covered"; say what each one actually is (v1 request text stays unchanged).
   const kinds = new Map(outdoorIntentions(spec).map(o => [o.id, o.kind]));
   const outside = (text: string) => text.replace(/^covered (\S+) \(open space\)$/, (_m, id: string) => kinds.get(id) === 'veranda' ? `veranda ${id} (to be covered)` : `${kinds.get(id) ?? 'open'} ${id} (open, not covered)`);
@@ -26,13 +26,14 @@ export function exteriorRequestV2(brief: string, spec: HouseSpec): {system: stri
 Follow the BRIEF and accepted direction; do not impose a Mediterranean or Caribbean villa on another style. Create a clear roof hierarchy (the primary mass reads as the crown; secondary masses lower or flatter), a legible entrance, facade depth, shadow and climate-appropriate shading.
 Rules: north = -z, south = +z. Pitched roofs ${PITCH_RANGE[0]}-${PITCH_RANGE[1]} degrees. Eaves: ${Object.entries(EAVE_M).map(([k, v]) => `${k} = ${v} m`).join(', ')}; software reduces them where a neighbour or the site edge leaves less room. Every EXPOSED block needs exactly one roofs entry; give none for blocks under an upper volume. Roof finishes: terracotta / aged-terracotta (clay tiles), warm-bronze or slate-grey (standing-seam metal); flat roofs read as stone-capped parapet roofs.
 Facades (only list non-default sides; default large-windows): glass-wall (floor-to-ceiling glazed bays), large-windows, punched (smaller, wall-dominant), solid. Generous glazing toward garden/veranda; calmer walls toward arrival and neighbours.
-entrance.room must be the ground-level foyer on one of its EXTERIOR WALLS sides. doors: garden = French doors from a ground room to the garden or a veranda; terrace = from an upper room onto a roof terrace (see "outside"). Only walls with at least 2.1 m free. At most 7 doors.
+entrance.room must be the ground-level foyer on one of its EXTERIOR WALLS sides.${spec.construction === 'scale-1' ? ' canopy none/shallow (1.8 m)/deep (3.2 m)/grand (4.2 m deep, up to 8 m wide); court compact (5x4 m)/generous (7x6 m)/grand (formal arrival court 12-24 m wide, 12 m deep). Either grand option also opens a wide double entrance door (2.4 m; 2.8 m in a tall or double-height hall). Use grand only for a grand, luxury or estate brief; a modest house stays modest.' : ''} doors: garden = French doors from a ground room to the garden or a veranda; terrace = from an upper room onto a roof terrace (see "outside"). Only walls with at least 2.1 m free. At most ${maxGardenDoors(spec)} doors.
 verandas: exactly one entry for every OPEN SPACE whose kind is veranda, and none for terrace or pool kinds (those stay open). Use [] when there is none.
 blockFinishes per block: stucco (painted render), stone (natural stone walls) or timber-clad. Use stone/timber to articulate a base, tower or wing, not everywhere.
 Identifiers: copy block, room and open-space IDs exactly as listed. Statement <=900 characters; intentions: up to 6 short sentences.`;
   const prompt = `BRIEF: ${brief}
-SITE: ${spec.site.width} x ${spec.site.depth} m, flat. Storey height 3.4 m.
-ACCEPTED DIRECTION: ${JSON.stringify({name: d.name, concept: d.concept, hierarchy: d.hierarchy, roofLanguage: d.roofLanguage, entrance: d.entrance, outdoorLiving: d.outdoorLiving, palette: d.palette})}
+SITE: ${spec.site.width} x ${spec.site.depth} m, flat. Storey height 3.4 m${spec.blocks.some(b => b.height) ? ' (block wall heights vary: see BLOCKS)' : ''}.
+ACCEPTED DIRECTION: ${JSON.stringify({name: d.name, concept: d.concept, hierarchy: d.hierarchy, roofLanguage: d.roofLanguage, entrance: d.entrance, outdoorLiving: d.outdoorLiving, palette: d.palette, ...(d.vision ? {vision: d.vision} : {})})}${d.vision ? `
+VISION CHECKS AT THIS STAGE: roof strategy ${d.vision.roofStrategy}; the primary volume's roof must read as the crown when the strategy is primary-crown-with-lower-wings; layered-roofs needs roof tops at clearly different heights; glass-pavilion needs a volume with at least two glass-wall facades. Volumes of different heights: a lower roof tucks under a taller volume's eave; keep lower roofs below the taller wall top.` : ''}
 BLOCKS (fixed):
 ${blocks.join('\n')}
 OPEN SPACES (fixed, not rooms): ${open.join('; ') || 'none'}

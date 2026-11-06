@@ -19,6 +19,11 @@ const size = z.array(z.number().finite().positive().max(10000)).length(3).transf
     number
 ]);
 const id = z.string().regex(/^[a-z][a-z0-9-]{0,79}$/);
+/** Scene representation limit (renderer, editor, saves). Measured with staged estates; see automatic-house/scale-2. */
+export const SCENE_ELEMENT_LIMIT = 1600;
+/** Scenes authored element-by-element by a model keep the original 400-element safety budget. */
+export const MODEL_AUTHORED_ELEMENT_LIMIT = 400;
+export const PART_LIMIT = 64;
 export const elementFieldsSchema = z.object({
     semanticType: z.enum(OBJECT_TYPES).optional(), aliases: z.array(z.string().min(1).max(80)).max(12).optional(),
     id, label: z.string().max(120), kind: z.enum(['plate', 'wall', 'roof', 'glazing', 'balcony', 'entrance', 'screen', 'sofa', 'volume', 'water', 'pavilion']),
@@ -39,6 +44,9 @@ export const elementFieldsSchema = z.object({
     /** Eave projection of single edges of a gable/hip roof (builder compass, north = -z), replacing `overhang` on those edges; `overhang` stays the roof's largest projection. */
     eaves: z.object({north: z.number().finite().min(0).max(10).optional(), east: z.number().finite().min(0).max(10).optional(), south: z.number().finite().min(0).max(10).optional(), west: z.number().finite().min(0).max(10).optional()}).strict().optional(),
     panels: z.number().int().min(1).max(40).default(4),
+    /** Software-grouped repetitive geometry (stair treads, colonnades, window surrounds): boxes [x,y,z,w,h,d] in the
+     * element's own frame, all inside its `size` envelope. One element = one selectable, editable, persisted component. */
+    parts: z.array(z.array(z.number().finite()).length(6)).min(1).max(PART_LIMIT).optional(),
     opening: z.object({ x: scalar, sill: z.number().finite().min(0).max(10000), width: z.number().finite().positive().max(10000), height: z.number().finite().positive().max(10000), glazed: z.boolean() }).strict().optional(),
 }).strict();
 /** Geometry-bearing semantic types are constrained per renderer, from the shared
@@ -55,7 +63,7 @@ export const sceneTerrainSchema = z.object({
     grade: z.number().finite().min(0).max(1), fall: z.enum(['x', '-x', 'z', '-z']),
     cliff: z.object({at: z.number().finite().min(-100).max(100), drop: z.number().finite().min(0).max(100), run: z.number().finite().min(1).max(100)}).strict().optional(),
 }).strict();
-export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationStatus:z.enum(['pending-visual-review','rejected','reviewed-envelope']).optional(), generationBrief: z.string().max(12000).optional(), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(400), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementFieldsSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
+export const sceneSchema = z.object({ version: z.literal('architectural-scene-1'), name: z.string().max(120), generationStatus:z.enum(['pending-visual-review','rejected','reviewed-envelope']).optional(), generationBrief: z.string().max(12000).optional(), generationResponseId: z.string().uuid().optional(), elements: z.array(elementSchema).max(SCENE_ELEMENT_LIMIT), terrain: sceneTerrainSchema.optional(), architecturalPlan: z.unknown().optional(), knowledgeEvidence: z.array(z.object({id:z.string().max(80),version:z.number().int().positive(),requiredKinds:z.array(elementFieldsSchema.shape.kind).max(12)}).strict()).max(24).optional() }).strict();
 export type ArchitecturalScene = z.infer<typeof sceneSchema>;
 export function validateScene(input: unknown): ArchitecturalScene {
     const scene = sceneSchema.parse(input), map = new Map(scene.elements.map(e => [e.id, e]));
@@ -70,6 +78,11 @@ export function validateScene(input: unknown): ArchitecturalScene {
             validateProfile(e.geometry);
         }
         if (e.kind === 'pavilion') scenePavilionPlacement(e);
+        if (e.parts) {
+            if (e.kind !== 'volume' || e.geometry || e.opening || e.siteAsset) throw Error(`Element ${e.id}: grouped parts require a plain volume`);
+            for (const [x, y, z, w, h, d] of e.parts) if (!(w > 0 && h > 0 && d > 0) || Math.abs(x) + w / 2 > e.size[0] / 2 + 1e-3 || Math.abs(y) + h / 2 > e.size[1] / 2 + 1e-3 || Math.abs(z) + d / 2 > e.size[2] / 2 + 1e-3)
+                throw Error(`Element ${e.id}: every grouped part must lie inside the element envelope`);
+        }
         if ((e.roofForm !== undefined || e.overhang !== undefined || e.fascia !== undefined || e.eaves !== undefined || e.roofWallFinish !== undefined) && e.kind !== 'roof')
             throw Error('Roof parameters require a roof element');
         if (e.fascia && ((e.roofForm !== 'gable' && e.roofForm !== 'hip') || new Set(e.fascia).size !== e.fascia.length))
@@ -172,6 +185,10 @@ export function stageSceneOperations(scene: ArchitecturalScene, input: unknown, 
     }
     const next = { ...scene, elements };
     if (terrain) next.terrain = terrain; else delete next.terrain;
+    // Element operations (model-authored or manual) keep the original 400-element budget; only software-compiled
+    // staged houses exceed it, and operations never grow a scene beyond its current size past that budget.
+    if (elements.length > Math.max(MODEL_AUTHORED_ELEMENT_LIMIT, scene.elements.length))
+        throw Error(`Element operations are limited to ${MODEL_AUTHORED_ELEMENT_LIMIT} elements per scene.`);
     validateScene(next);
     return next;
 }

@@ -85,7 +85,7 @@ it('makes no correction under a zero-correction policy',async()=>{
 });
 
 it('never corrects a software construction fault',async()=>{
- const env=await setup(LIVE_POLICY,(stage,v:any)=>stage===2?{...v,blocks:[...v.blocks,{id:'detached',role:'Veranda',cx:24,cz:-18,w:4,d:4,level:0,open:true}]}:v);
+ const env=await setup(LIVE_POLICY,(stage,v:any)=>stage===2?{...v,blocks:[...v.blocks,{id:'detached',role:'Veranda',cx:24,cz:-18,w:4,d:4,level:0,open:true,height:'standard',rank:'secondary'}]}:v);
  const out=await env.runAll();expect(out.status).toBe('failed');expect(out.findings.some((f:any)=>f.code==='construction-error')).toBe(true);
  expect(env.requests.some(r=>r.correction)).toBe(false);expect(env.transport).toHaveBeenCalledTimes(2);
 });

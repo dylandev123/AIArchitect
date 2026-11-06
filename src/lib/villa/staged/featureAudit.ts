@@ -17,6 +17,8 @@ export function featureAudit(spec:HouseSpec,scene:ArchitecturalScene,components:
  }
  if(stage>=4){
   for(const b of spec.blocks)if(!(b.level===0&&spec.blocks.some(u=>u.level===1&&overlapArea(blockRect(b),blockRect(u))>.01))&&!elements.some(e=>components[e.id]===`roof:${b.id}`&&e.kind==='roof'))missing(b.id,'An exposed building volume has no constructed roof.');
+  // Every declared door must be a constructed door, the main entrance above all (an equal-length wall once lost it).
+  for(const d of spec.exterior.doors)if(!elements.some(e=>e.kind==='entrance'&&e.parent&&components[e.id]===(d.kind==='main'?'entrance':`room:${d.room}`)&&e.parent.startsWith(`w-${d.room}-${d.side}-`)))missing(d.id,`Door ${d.id} (${d.room}, ${d.side}) was declared but no door was constructed in that wall.`);
   for(const v of spec.exterior.verandas)for(const suffix of ['deck','roof'])if(!elements.some(e=>e.id===`veranda-${v.id}-${suffix}`))missing(v.id,`Veranda ${suffix} is absent from the scene.`);
  }
  for(const o of spec.openSpaces){

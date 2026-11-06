@@ -16,7 +16,15 @@ import {MOCK_BRIEFS} from './promptExamples';
 const room=(id:string,block:string,type:ProgRoom['type'],area:number,priority:ProgRoom['priority']='normal',facing:ProgRoom['facing']='any'):ProgRoom=>({id,block,type,name:id.replace(/-/g,' '),area,priority,facing});
 const door=(a:string,b:string)=>({a,b,kind:'door' as const});
 const open=(a:string,b:string)=>({a,b,kind:'open' as const});
-const block=(id:string,role:string,cx:number,cz:number,w:number,d:number,level:0|1=0,isOpen=false)=>({id,role,cx,cz,w,d,level,open:isOpen});
+const PRIMARY=new Set(['living-pavilion','sleeping-bar']);
+const block=(id:string,role:string,cx:number,cz:number,w:number,d:number,level:0|1=0,isOpen=false)=>({id,role,cx,cz,w,d,level,open:isOpen,height:'standard' as const,rank:(PRIMARY.has(id)?'primary':'secondary') as 'primary'|'secondary'});
+const vision=(v:Record<string,unknown>)=>({briefConstraints:[],focalPoints:['The garden-facing living rooms'],...v});
+/** Structured visions matching what each sample massing actually builds (offline doubles, not AI evidence). */
+const VISION:Record<MockKind,object>={
+ caribbean:vision({style:'Contemporary Caribbean',character:'Low, shaded and relaxed',ambition:'comfortable',ambitionEvidence:'a compact single-storey home',composition:'linear-bar',compositionIntent:'A living pavilion and a bedroom wing in one line behind a full-width veranda.',primaryVolume:'The living pavilion under the main hip roof',heightStrategy:'uniform',roofStrategy:'primary-crown-with-lower-wings',entranceConcept:'sheltered-porch',signatureFeatures:[{feature:'covered-veranda',intent:'Deep shade across the living rooms.'}],briefConstraints:['single storey','hip roof'],scale:{footprintM2:280,grossFloorAreaM2:280,levels:1,wings:2,principalSpaces:[{name:'Living pavilion',kind:'living',approxAreaM2:52,height:'standard'}],scaleEvidence:'OFFLINE MOCK: matches the sample massing'}}),
+ courtyard:vision({style:'Mediterranean courtyard villa',character:'Warm, enclosed and calm',ambition:'refined',ambitionEvidence:'a two-storey courtyard villa',composition:'u-courtyard',compositionIntent:'Three wings embrace a north garden courtyard; an upper sleeping bar crowns the hall wing.',primaryVolume:'The upper sleeping bar crowning the hall wing',heightStrategy:'pronounced-hierarchy',roofStrategy:'primary-crown-with-lower-wings',entranceConcept:'sheltered-porch',signatureFeatures:[{feature:'upper-storey-bar',intent:'A crowning sleeping storey.'},{feature:'courtyard',intent:'A garden room held by three wings.'},{feature:'loggia',intent:'A shaded edge to the court.'}],briefConstraints:['two storeys'],scale:{footprintM2:350,grossFloorAreaM2:476,levels:2,wings:3,principalSpaces:[{name:'Courtyard living room',kind:'living',approxAreaM2:62,height:'standard'}],scaleEvidence:'OFFLINE MOCK: matches the sample massing'}}),
+ estate:vision({style:'Contemporary estate',character:'Long, calm and horizontal',ambition:'luxury',ambitionEvidence:'a larger multi-wing estate',composition:'central-hall-with-wings',compositionIntent:'A living pavilion between two bedroom wings, linked by an entry spine.',primaryVolume:'The glass-walled living pavilion',heightStrategy:'uniform',roofStrategy:'flat-planes',entranceConcept:'recessed-portal',signatureFeatures:[{feature:'covered-veranda',intent:'A garden loggia off the pavilion.'},{feature:'framed-garden-view',intent:'The pavilion frames the east garden.'}],briefConstraints:['single storey','flat roofs'],scale:{footprintM2:560,grossFloorAreaM2:560,levels:1,wings:4,principalSpaces:[{name:'Glass living pavilion',kind:'living',approxAreaM2:120,height:'standard'}],scaleEvidence:'OFFLINE MOCK: matches the sample massing'}}),
+};
 type MockKind='caribbean'|'courtyard'|'estate';
 function kindFor(brief:string):MockKind {
  // Exact sample requests only. Other prompts must never silently become a template.
@@ -96,7 +104,7 @@ export class PromptMockDesigner implements Designer {
  async design(stage:StageNo,ctx:StageContext){
   this.requests.push({stage,brief:ctx.brief});
   const k=this.kind;
-  const value:unknown=stage===1?{...emptyDraft(ctx.site).direction,...DIRECTION[k]}:stage===2?{blocks:MASSING[k]}:stage===3?programme(k):stage===4?exterior(k,ctx):SITE[k];
+  const value:unknown=stage===1?{...emptyDraft(ctx.site).direction,...DIRECTION[k],vision:VISION[k]}:stage===2?{blocks:MASSING[k]}:stage===3?programme(k):stage===4?exterior(k,ctx):SITE[k];
   return {value:structuredClone(value),usage:{model:'offline-mock',inputTokens:0,outputTokens:0,costUsd:0}};
  }
  async correct():Promise<never>{throw Error('No mock retries');}

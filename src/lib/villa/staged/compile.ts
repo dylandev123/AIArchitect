@@ -2,15 +2,23 @@ import {outdoorKind,resolvedPoolIntent} from './intentions';
 import {poolNearDeck} from './poolGeometry';
 import {assemblyOperations} from '../scene/assemblies';
 import {validateScene, type ArchitecturalScene, type SceneElement} from '../scene/model';
+import {elementCap, groupBoxes, chunks} from './grouping';
 import {
   SIDES, allRooms, blockRect, layoutRooms, rectDiff, roomEdges, roomSideInterval, sideLine, sideRun, snap, subtractIntervals,
   type R, type Room,
 } from './layout';
-import {buildTrim, type OpeningRec} from './exteriorTrim';
-import {SLAB, STOREY, WALL_H, levelTop, type Block, type FacadeStyle, type HouseSpec, type Mat, type RoofSpec, type Side} from './spec';
+import {buildTrimBudgeted, type OpeningRec} from './exteriorTrim';
+import {SLAB, STOREY, WALL_H, levelTop, wallHeight, wallTopOf, type Block, type FacadeStyle, type HouseSpec, type Mat, type RoofSpec, type Side} from './spec';
+import {neighbourStopsEave} from './heights';
 
 export type Stage = 2 | 3 | 4 | 5;
+export {ELEMENT_CAP, elementCap, groupBoxes, chunks} from './grouping';
+export interface ElementBudget {cap: number; total: number; architecture: number; site: number; trimRequested: number; trimPlaced: number; trimDropped: number}
+/** Required architecture (and site) cannot fit the scene: never silently dropped, always reported. */
+export class ElementBudgetError extends Error {constructor(readonly budget: Omit<ElementBudget, 'total' | 'trimPlaced' | 'trimDropped'>) { super(`Element budget exceeded: required architecture ${budget.architecture} + site ${budget.site} elements exceed the ${budget.cap}-element scene limit. Simplify the composition (fewer volumes, rooms or landscape pieces).`); }}
 export interface Compiled {
+  /** Present from Stage 4 (when decorative trim is budgeted). */
+  budget?: ElementBudget;
   scene: ArchitecturalScene;
   /** elementId -> component id (`room:x`, `block:x`, `roof:x`, `stair:x`, `entrance`, `veranda:x`, `pool`, `landscape:x`). */
   components: Record<string, string>;
@@ -30,7 +38,12 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
     elements.push({id, label: id.replaceAll('-', ' '), kind, at: at.map(snap) as [number, number, number], size: size.map(v => snap(v)) as [number, number, number], rotation: 0, material: 'ivory', panels: 4, ...extra} as SceneElement);
   };
   const blocks = spec.blocks, byId = new Map(blocks.map(b => [b.id, b]));
-  const T = spec.trim, openings: OpeningRec[] = [];
+  const T = spec.trim, openings: OpeningRec[] = [], G = spec.construction === 'scale-1', CAP = elementCap(spec);
+  /** One grouped component element (scale-1): repetitive boxes under a single selectable identity. */
+  const addGroup = (comp: string, id: string, boxes: {at: [number, number, number]; size: [number, number, number]}[], extra: Extra = {}) => {
+    const g = groupBoxes(boxes);
+    add(comp, id, 'volume', g.at, g.size, {...extra, parts: g.parts});
+  };
   const revised = T?.visualRevision === 'stage4-v2';
   // Trim previously used global ordinal IDs. Keep those ordinals tied to the original wall ID,
   // so a merged/added window cannot transfer a saved lintel selection to a different block.
@@ -42,7 +55,7 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
 
   if (stage === 2) {
     for (const b of blocks) {
-      const base = levelTop(b.level) - SLAB, h = SLAB + WALL_H;
+      const base = levelTop(b.level) - SLAB, h = SLAB + wallHeight(b);
       add(`block:${b.id}`, `mass-${b.id}`, 'volume', [b.cx, base + h / 2, b.cz], [b.w, h, b.d], {material: b.level ? 'limestone' : 'ivory', semanticType: 'mass', aliases: [b.role.slice(0, 80)]});
     }
     for (const o of spec.openSpaces ?? []) add(`open:${o.id}`, `open-${o.id}`, 'plate', [o.cx, 0.03, o.cz], [o.w, 0.06, o.d], {material: 'limestone', semanticType: 'terrace', aliases: [o.role.slice(0, 80)],...(stage<5&&outdoorKind(o)==='pool'?{label:`Pool intention ${o.id} — reserved, not constructed`}:{})});
@@ -94,15 +107,15 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
 
   // ---- Walls ----
   const owner = (a: Room, b: Room) => a.block <= b.block ? a : b;
-  const wall = (comp: string, id: string, level: number, axis: 'x' | 'z', line: number, lo: number, hi: number, thick: number, b: Block, opening?: {c: number; sill: number; width: number; height: number; glazed: boolean}, door?: {width: number; height: number; material?: Mat}, extra: Extra = {}) => {
-    const centre = (lo + hi) / 2, y = levelTop(level) + WALL_H / 2;
-    add(comp, id, 'wall', axis === 'x' ? [centre, y, line] : [line, y, centre], [hi - lo, WALL_H, thick], {
+  const wall = (comp: string, id: string, level: number, axis: 'x' | 'z', line: number, lo: number, hi: number, thick: number, b: Block, opening?: {c: number; sill: number; width: number; height: number; glazed: boolean}, door?: {width: number; height: number; material?: Mat}, extra: Extra = {}, H = wallHeight(b)) => {
+    const centre = (lo + hi) / 2, y = levelTop(level) + H / 2;
+    add(comp, id, 'wall', axis === 'x' ? [centre, y, line] : [line, y, centre], [hi - lo, H, thick], {
       rotation: axis === 'x' ? 0 : -Math.PI / 2, semanticType: 'wall', ...(T && id.startsWith('p-') ? {} : finish(b)), ...extra,
       ...(opening ? {opening: {x: snap(opening.c - centre), sill: opening.sill, width: snap(opening.width), height: opening.height, glazed: opening.glazed}} : {}),
       ...(revised && id.startsWith('w-') && opening?.glazed ? {panels: opening.width < 1.4 ? 1 : 2} : {}),
     });
     if (opening && stage >= 4) openings.push({level, axis, line, c: opening.c, sill: opening.sill, width: opening.width, height: opening.height, door: !!door, block: b.id, main: comp === 'entrance', ...(revised && !door ? {trimIndex: trimIndices.get(id) ?? newTrimIndex++} : {})});
-    if (opening && door) add(comp, `${id}-door`, 'entrance', [snap(opening.c - centre), (-WALL_H + door.height) / 2, 0], [door.width, door.height, 0.06], {
+    if (opening && door) add(comp, `${id}-door`, 'entrance', [snap(opening.c - centre), (-H + door.height) / 2, 0], [door.width, door.height, 0.06], {
       parent: id, material: door.material ?? 'timber', semanticType: comp === 'entrance' ? 'front-door' : id.startsWith('p-') ? 'interior-door' : 'exterior-door',
       ...(revised && id.startsWith('w-') ? {appearance: comp === 'entrance' ? 'timber-door' : 'glazed-door', panels: 2, color: comp === 'entrance' ? T.timberColor : '#62594B'} : {}),
     });
@@ -111,19 +124,27 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
   // Party walls and doors between rooms.
   for (const e of edges) {
     const a = roomById.get(e.a)!, b = roomById.get(e.b)!, link = linkOf(e.a, e.b);
-    if (link?.kind === 'open') continue;
     const o = e.sameBlock ? a : owner(a, b), ob = roomBlock(o), or = blockRect(ob);
     const thick = e.sameBlock ? PARTY : EXT;
     let line = e.line;
     if (!e.sameBlock) { const toward = e.axis === 'x' ? (o === a ? -1 : 1) : (o === a ? -1 : 1); line = e.line + toward * EXT / 2; }
     const [bl, bh] = e.axis === 'x' ? [or.z0, or.z1] : [or.x0, or.x1];
     const lo = e.lo <= bl + 1e-4 ? e.lo + EXT : e.lo, hi = e.hi >= bh - 1e-4 ? e.hi - EXT : e.hi;
+    // Volumes of different heights: the shared wall rises to the lower eave; the taller volume's exposed upper
+    // wall (its facade above the lower roof) is a separate band inside the taller block, in its own finish.
+    const ha = wallHeight(roomBlock(a)), hb = wallHeight(roomBlock(b)), lowH = Math.min(ha, hb);
+    if (!e.sameBlock && Math.abs(ha - hb) > 1e-6 && hi - lo >= 0.2) {
+      const tall = ha > hb ? a : b, tb = roomBlock(tall), toward = e.axis === 'x' ? (tall === a ? -1 : 1) : (tall === a ? -1 : 1), bandLine = e.line + toward * EXT / 2;
+      const bandH = Math.max(ha, hb) - lowH, c = (lo + hi) / 2, y = levelTop(a.level) + lowH + bandH / 2, axis = e.axis === 'x' ? 'z' : 'x';
+      add(`block:${tb.id}`, `band-${a.id}-${b.id}`, 'wall', axis === 'x' ? [c, y, bandLine] : [bandLine, y, c], [hi - lo, bandH, EXT], {rotation: axis === 'x' ? 0 : -Math.PI / 2, semanticType: 'wall', ...finish(tb)});
+    }
+    if (link?.kind === 'open') continue;
     if (hi - lo < 0.2) continue;
     const door = link?.kind === 'door' ? {c: snap(Math.min(hi - DOOR_W / 2 - 0.15, Math.max(lo + DOOR_W / 2 + 0.15, lo + link.t * (hi - lo))))} : undefined;
     if (link?.kind === 'door' && hi - lo < DOOR_W + 0.3) continue;
     wall(`room:${a.id}`, `p-${a.id}-${b.id}`, a.level, e.axis === 'x' ? 'z' : 'x', line, lo, hi, thick, ob,
       door ? {c: door.c, sill: 0, width: DOOR_W, height: DOOR_H, glazed: false} : undefined, door ? {width: DOOR_W - 0.06, height: DOOR_H - 0.04} : undefined,
-      e.sameBlock ? {} : {});
+      e.sameBlock ? {} : {}, e.sameBlock ? wallHeight(ob) : lowH);
   }
 
   // Exterior walls per room run, with openings from facade styles (stage 4+).
@@ -141,12 +162,12 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
       for (const [flo, fhi] of free) {
         // Corner trim: east/west walls stop at the north/south walls.
         const [lo0, hi0] = side === 'n' || side === 's' ? [flo, fhi] : [Math.abs(flo - br.z0) < 1e-4 ? flo + EXT : flo, Math.abs(fhi - br.z1) < 1e-4 ? fhi - EXT : fhi];
-        const pieces = splitForDoors(lo0, hi0, doors);
+        const pieces = splitForDoors(lo0, hi0, doors, G);
         for (const p of pieces) {
           const line = side === 'n' ? br.z0 + EXT / 2 : side === 's' ? br.z1 - EXT / 2 : side === 'e' ? br.x1 - EXT / 2 : br.x0 + EXT / 2;
           const axis = side === 'n' || side === 's' ? 'x' : 'z';
           const legacyCount = bays(p, style, room, stage >= 4, side, b, !!T).length;
-          const nextBays = bays(p, style, room, stage >= 4, side, b, !!T, revised);
+          const nextBays = heightBays(bays(p, style, room, stage >= 4, side, b, !!T, revised, G), b, style, G);
           for (const [i, [lo, hi, opening, door]] of nextBays.entries()) {
             wall(p.door?.kind === 'main' ? 'entrance' : `room:${room.id}`, `w-${room.id}-${side}-${n + i}`, b.level, axis, line, lo, hi, EXT, b, opening, door);
           }
@@ -159,12 +180,16 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
 
   // ---- Stairs (treads + void guard) ----
   for (const s of stairs) {
+    const treads: {at: [number, number, number]; size: [number, number, number]}[] = [];
     for (let i = 1; i <= TREADS; i++) {
       const h = i * s.rise, g = TREAD_GOING;
       const cx = s.alongZ ? (s.strip.x0 + s.strip.x1) / 2 : (s.start === 'w' ? s.strip.x0 + (i - 0.5) * g : s.strip.x1 - (i - 0.5) * g);
       const cz = s.alongZ ? (s.start === 'n' ? s.strip.z0 + (i - 0.5) * g : s.strip.z1 - (i - 0.5) * g) : (s.strip.z0 + s.strip.z1) / 2;
-      add(`stair:${s.id}`, `stair-${s.id}-${i}`, 'volume', [cx, SLAB + h / 2, cz], s.alongZ ? [s.width, h, g] : [g, h, s.width], {semanticType: 'stair', material: 'timber'});
+      if (G) treads.push({at: [cx, SLAB + h / 2, cz], size: s.alongZ ? [s.width, h, g] : [g, h, s.width]});
+      else add(`stair:${s.id}`, `stair-${s.id}-${i}`, 'volume', [cx, SLAB + h / 2, cz], s.alongZ ? [s.width, h, g] : [g, h, s.width], {semanticType: 'stair', material: 'timber'});
     }
+    // scale-1: the whole flight is one stair component (17 treads as parts).
+    if (G) addGroup(`stair:${s.id}`, `stair-${s.id}`, treads, {semanticType: 'stair', material: 'timber'});
     // Guard on the open landing edge, leaving the stair exit clear.
     const gh = 1.0, y = levelTop(1) + gh / 2;
     if (s.alongZ) {
@@ -226,18 +251,23 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
       const b = byId.get(v.block)!, br = blockRect(b), line = sideLine(br, v.side);
       const dir = v.side === 'n' || v.side === 'w' ? -1 : 1, horiz = v.side === 'n' || v.side === 's';
       const len = v.to - v.from, c = (v.from + v.to) / 2, mid = line + dir * v.depth / 2;
+      // A veranda never rises above its host's eave (a low host lowers it); taller hosts keep the 3 m veranda.
+      const vh = Math.min(3.0, wallTopOf(b) - SLAB - 0.1);
       const at = (along: number, across: number, y: number): [number, number, number] => horiz ? [along, y, across] : [across, y, along];
       const sz = (l: number, h: number, dp: number): [number, number, number] => horiz ? [l, h, dp] : [dp, h, l];
       add(`veranda:${v.id}`, `veranda-${v.id}-deck`, 'plate', at(c, mid, SLAB / 2), sz(len, SLAB, v.depth), {material: v.deckMaterial, semanticType: 'terrace'});
-      for (let i = 0; i < v.columns; i++) {
-        const along = v.from + 0.25 + i * (len - 0.5) / (v.columns - 1);
-        add(`veranda:${v.id}`, `veranda-${v.id}-column-${i}`, 'volume', at(along, line + dir * (v.depth - 0.25), SLAB + 1.5), sz(0.3, 3.0, 0.3), {material: v.columnMaterial ?? 'bronze', ...(v.columnMaterial === 'limestone' && T ? {color: T.stoneColor} : v.columnMaterial === 'timber' && T ? {color: T.timberColor} : {})});
-      }
+      const columnFinish: Extra = {material: v.columnMaterial ?? 'bronze', ...(v.columnMaterial === 'limestone' && T ? {color: T.stoneColor} : v.columnMaterial === 'timber' && T ? {color: T.timberColor} : {})};
+      const columns = Array.from({length: v.columns}, (_, i) => ({at: at(v.from + 0.25 + i * (len - 0.5) / (v.columns - 1), line + dir * (v.depth - 0.25), SLAB + vh / 2), size: sz(0.3, vh, 0.3)}));
+      // scale-1: a colonnade is one component; its rhythm stays derived from the span.
+      if (G) chunks(columns).forEach((c, k) => addGroup(`veranda:${v.id}`, `veranda-${v.id}-columns${k ? `-${k}` : ''}`, c, columnFinish));
+      else columns.forEach((c, i) => add(`veranda:${v.id}`, `veranda-${v.id}-column-${i}`, 'volume', c.at, c.size, columnFinish));
       if (v.beams) {
-        const nb = Math.max(2, Math.round(len / 1.5));
-        for (let i = 0; i < nb; i++) add(`veranda:${v.id}`, `veranda-${v.id}-beam-${i}`, 'volume', at(v.from + 0.3 + i * (len - 0.6) / (nb - 1), line + dir * (v.depth + 0.3) / 2, SLAB + 2.9 - 0.05), sz(0.16, 0.2, v.depth - 0.2), {material: 'timber', ...(T ? {color: T.timberColor} : {})});
+        const nb = Math.max(2, Math.round(len / 1.5)), beamFinish: Extra = {material: 'timber', ...(T ? {color: T.timberColor} : {})};
+        const beams = Array.from({length: nb}, (_, i) => ({at: at(v.from + 0.3 + i * (len - 0.6) / (nb - 1), line + dir * (v.depth + 0.3) / 2, SLAB + vh - 0.1 - 0.05), size: sz(0.16, 0.2, v.depth - 0.2)}));
+        if (G) chunks(beams).forEach((c, k) => addGroup(`veranda:${v.id}`, `veranda-${v.id}-beams${k ? `-${k}` : ''}`, c, beamFinish));
+        else beams.forEach((c, i) => add(`veranda:${v.id}`, `veranda-${v.id}-beam-${i}`, 'volume', c.at, c.size, beamFinish));
       }
-      add(`veranda:${v.id}`, `veranda-${v.id}-roof`, 'roof', at(c, line + dir * (v.depth + 0.3) / 2, SLAB + 3.0 + 0.15), sz(len + 0.6, 0.3, v.depth + 0.3), {material: v.roofMaterial, semanticType: 'roof', ...(revised && v.roofMaterial === 'bronze' ? {appearance: 'bronze-roof', color: '#887457'} : {})});
+      add(`veranda:${v.id}`, `veranda-${v.id}-roof`, 'roof', at(c, line + dir * (v.depth + 0.3) / 2, SLAB + vh + 0.15), sz(len + 0.6, 0.3, v.depth + 0.3), {material: v.roofMaterial, semanticType: 'roof', ...(revised && v.roofMaterial === 'bronze' ? {appearance: 'bronze-roof', color: '#887457'} : {})});
     }
     // ---- Main entrance forecourt and canopy ----
     const door = spec.exterior.doors.find(d => d.id === spec.exterior.entrance.door);
@@ -248,7 +278,9 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
       const at = (along: number, across: number, y: number): [number, number, number] => horiz ? [along, y, across] : [across, y, along];
       const sz = (l: number, h: number, dp: number): [number, number, number] => horiz ? [l, h, dp] : [dp, h, l];
       if (en.canopy.depth > 0) {
-        const cy = T ? 3.26 : SLAB + 2.9 + 0.15 + 0.1, ct = T ? 0.22 : 0.3;
+        // Standard hosts keep the original canopy line; taller/lower hosts follow their real door and eave.
+        const custom = !!b.height && b.height !== 'standard', mainH = custom ? (G ? GRAND_DOOR_HEIGHTS : DOOR_HEIGHTS)[b.height as keyof typeof DOOR_HEIGHTS].main : 0;
+        const cy = custom && T ? Math.min(levelTop(0) + mainH + 0.45, wallTopOf(b) - 0.15) : T ? 3.26 : SLAB + 2.9 + 0.15 + 0.1, ct = T ? 0.22 : 0.3;
         add('entrance', 'entrance-canopy', 'roof', at(c, line + dir * en.canopy.depth / 2, cy), sz(en.canopy.width, ct, en.canopy.depth), {material: en.canopy.material, semanticType: 'roof', ...(T && en.canopy.material === 'timber' ? {color: T.timberColor} : {})});
         for (const k of [-1, 1]) add('entrance', `entrance-column-${k > 0 ? 'b' : 'a'}`, 'volume', at(c + k * (en.canopy.width / 2 - 0.3), line + dir * (en.canopy.depth - 0.3), T ? (cy - ct / 2 + SLAB) / 2 : SLAB + 1.55), sz(T ? 0.4 : 0.3, T ? cy - ct / 2 - SLAB : 3.1, T ? 0.4 : 0.3), T ? {material: 'limestone', color: T.stoneColor} : {material: 'bronze'});
       }
@@ -256,7 +288,17 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
     }
   }
 
-  if (stage >= 4 && T) for (const t of buildTrim(spec, {openings, nExisting: elements.length})) add(t.comp, t.id, t.kind, t.at, t.size, {...t.extra, ...(revised && t.extra.material === 'limestone' ? {appearance: 'cut-limestone', color: '#B9A486'} : {})});
+  // Decorative trim is the only geometry that yields to the element budget, and the site is reserved first,
+  // so required architecture and landscape are never displaced. What was dropped is reported, never silent.
+  let budget: ElementBudget | undefined, trimElements: ReturnType<typeof buildTrimBudgeted>['elements'] = [];
+  if (stage >= 4) {
+    const architecture = elements.length, site = stage >= 5 ? siteElementCount(spec) : 0;
+    if (architecture + site > CAP) throw new ElementBudgetError({cap: CAP, architecture, site, trimRequested: 0});
+    const trim = T ? buildTrimBudgeted(spec, {openings, nExisting: architecture + site}) : {elements: [], requested: 0};
+    trimElements = trim.elements;
+    budget = {cap: CAP, total: architecture + site + trim.elements.length, architecture, site, trimRequested: trim.requested, trimPlaced: trim.elements.length, trimDropped: trim.requested - trim.elements.length};
+  }
+  if (budget) for (const t of trimElements) add(t.comp, t.id, t.kind, t.at, t.size, {...t.extra, ...(revised && t.extra.material === 'limestone' ? {appearance: 'cut-limestone', color: '#B9A486'} : {})});
 
   if (stage >= 5) {
     const sw = spec.siteWork, p = sw.pool;
@@ -277,7 +319,7 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
         const base=f.support==='ground'?0:SLAB;
         add(`landscape:${f.id}`,`site-${f.id}`,'volume',[f.rect.x,base+f.height/2,f.rect.z],[f.rect.w,f.height,f.rect.d],{siteAsset:f.asset,rotation:f.rotation,material:f.asset==='bollard'?'bronze':'timber',semanticType:f.asset==='bollard'?'lighting':'outdoor-furniture'});
       }
-      return finalize(spec,elements,components);
+      return finalize(spec,elements,components,budget);
     }
     for (const l of sw.lawns) add(`landscape:${l.id}`, `lawn-${l.id}`, 'plate', [l.rect.x, 0.04, l.rect.z], [l.rect.w, 0.08, l.rect.d], {material: l.material, color: l.material === 'sage' ? '#6c9a58' : undefined, semanticType: 'garden'});
     for (const l of sw.beds) add(`landscape:${l.id}`, `bed-${l.id}`, 'plate', [l.rect.x, 0.1, l.rect.z], [l.rect.w, 0.2, l.rect.d], {color: '#3f6b3a', semanticType: 'planting-bed'});
@@ -290,12 +332,21 @@ export function compileHouse(spec: HouseSpec, stage: Stage): Compiled {
       else add(`landscape:${t.id}`, `tree-${t.id}-crown`, 'volume', [t.x, t.height + 1.2, t.z], [4.2, 2.6, 4.2], {color: '#4f8f3d', semanticType: 'tree'});
     }
   }
-  return finalize(spec, elements, components);
+  return finalize(spec, elements, components, budget);
 }
 
-function finalize(spec: HouseSpec, elements: SceneElement[], components: Record<string, string>): Compiled {
+function finalize(spec: HouseSpec, elements: SceneElement[], components: Record<string, string>, budget?: ElementBudget): Compiled {
   const scene = validateScene({version: 'architectural-scene-1', name: spec.direction.name, elements});
-  return {scene, components};
+  return budget ? {scene, components, budget} : {scene, components};
+}
+
+/** Exact number of site elements Stage 5 will add (pool assembly, landscape, fixtures), reserved before trim. */
+export function siteElementCount(spec: HouseSpec): number {
+  const sw = spec.siteWork, p = sw.pool;
+  const pool = p ? assemblyOperations({kind: 'rectangular-pool', parameters: {id: 'pool', at: [p.x, SLAB / 2, p.z + 0.75], width: p.w, depth: p.d, basinDepth: p.basinDepth, material: 'limestone'}}).filter(o => o.op === 'add').length : 0;
+  const base = sw.paths.length + sw.lawns.length + sw.beds.length + sw.hedges.length;
+  if (spec.sitePresentation) return pool + base + sw.trees.length + spec.sitePresentation.fixtures.length;
+  return pool + base + sw.trees.reduce((n, t) => n + (t.kind === 'palm' ? 4 : 2), 0);
 }
 
 const overlap = (a: R, b: R) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.z1, b.z1) - Math.max(a.z0, b.z0));
@@ -308,8 +359,9 @@ function abuts(a: R, b: R, side: Side) {
 type Door = HouseSpec['exterior']['doors'][number];
 const doorCentre = (iv: [number, number], d: Door) => snap(Math.min(iv[1] - d.width / 2 - 0.6, Math.max(iv[0] + d.width / 2 + 0.6, iv[0] + d.t * (iv[1] - iv[0]))));
 interface Piece {lo: number; hi: number; door?: Door}
-function splitForDoors(lo: number, hi: number, doors: Door[]): Piece[] {
-  const d = doors.find(x => hi - lo > x.width + 1.2);
+function splitForDoors(lo: number, hi: number, doors: Door[], exact = false): Piece[] {
+  // scale-1: a wall exactly as long as door + 1.2 m (what Stage 4 derives) holds its door; the original strict test lost it.
+  const d = doors.find(x => exact ? hi - lo >= x.width + 1.2 - 1e-6 : hi - lo > x.width + 1.2);
   if (!d) return [{lo, hi}];
   const c = doorCentre([lo, hi], d), half = d.width / 2 + (d.kind === 'main' ? 0.9 : 0.5);
   const l = Math.max(lo, c - half), h = Math.min(hi, c + half);
@@ -317,11 +369,12 @@ function splitForDoors(lo: number, hi: number, doors: Door[]): Piece[] {
 }
 
 type Bay = [number, number, {c: number; sill: number; width: number; height: number; glazed: boolean} | undefined, {width: number; height: number; material?: Mat} | undefined];
-function bays(p: Piece, style: FacadeStyle, room: Room, openings: boolean, side: Side, b: Block, refined = false, revised = false): Bay[] {
+function bays(p: Piece, style: FacadeStyle, room: Room, openings: boolean, side: Side, b: Block, refined = false, revised = false, grand = false): Bay[] {
   const L = p.hi - p.lo;
   if (!openings) return [[p.lo, p.hi, undefined, undefined]];
   if (p.door) {
-    const d = p.door, main = d.kind === 'main', h = main ? (refined ? 2.7 : 3.0) : 2.4, w = main ? Math.min(d.width, refined ? 1.8 : 1.6) : d.width, c = (p.lo + p.hi) / 2;
+    // scale-1: the main door keeps its derived width (a wide double door in a grand hall), not the 1.8 m ceiling.
+    const d = p.door, main = d.kind === 'main', h = main ? (refined ? 2.7 : 3.0) : 2.4, w = main ? Math.min(d.width, grand ? 3.0 : refined ? 1.8 : 1.6) : d.width, c = (p.lo + p.hi) / 2;
     return [[p.lo, p.hi, {c, sill: 0, width: w, height: h, glazed: false}, {width: w - 0.06, height: h - 0.04, material: main ? 'timber' : 'bronze'}]];
   }
   if (style === 'solid' || L < 1.4) return [[p.lo, p.hi, undefined, undefined]];
@@ -361,9 +414,25 @@ function bays(p: Piece, style: FacadeStyle, room: Room, openings: boolean, side:
   });
 }
 
+/** Door heights by block height (standard blocks keep the original 2.7 m main / 2.4 m garden doors). */
+export const DOOR_HEIGHTS = {low: {main: 2.3, garden: 2.2}, tall: {main: 3.3, garden: 3.0}, double: {main: 3.3, garden: 3.4}} as const;
+/** scale-1: a double-height hall carries a correspondingly tall entrance door (still well below its 6.5 m wall). */
+export const GRAND_DOOR_HEIGHTS = {...DOOR_HEIGHTS, tall: {main: 3.4, garden: 3.0}, double: {main: 4.2, garden: 3.6}} as const;
+/** Openings follow the volume's real wall height: taller rooms get taller glazing and doors, low rooms lower ones. */
+function heightBays(list: Bay[], b: Block, style: FacadeStyle, grand = false): Bay[] {
+  if (!b.height || b.height === 'standard') return list;
+  const H = wallHeight(b), extra = H - WALL_H, doors = (grand ? GRAND_DOOR_HEIGHTS : DOOR_HEIGHTS)[b.height];
+  return list.map(([lo, hi, o, d]): Bay => {
+    if (!o) return [lo, hi, o, d];
+    if (d) { /* main entrance doors are timber, garden doors bronze */ const h = d.material === 'timber' ? doors.main : doors.garden; return [lo, hi, {...o, height: h}, {...d, height: h - 0.04}]; }
+    const height = o.sill < 0.05 ? H - 0.45 : o.sill >= 1.4 ? Math.min(o.height, H - o.sill - 0.3) : Math.min(H - o.sill - 0.35, o.height + Math.max(extra, -1) * (style === 'punched' ? 0.45 : 0.7));
+    return [lo, hi, {...o, height: snap(height)}, d];
+  });
+}
+
 function eaves(b: Block, blocks: Block[], roof: RoofSpec, caps: Partial<Record<Side, number>> = {}): Record<Side, number> {
   const br = blockRect(b), out = {} as Record<Side, number>;
-  for (const s of SIDES) out[s] = blocks.some(o => o.id !== b.id && o.level >= b.level && abuts(br, blockRect(o), s)) ? 0 : Math.min(roof.overhang, caps[s] ?? Infinity);
+  for (const s of SIDES) out[s] = blocks.some(o => o.id !== b.id && abuts(br, blockRect(o), s) && neighbourStopsEave(b, o)) ? 0 : Math.min(roof.overhang, caps[s] ?? Infinity);
   return out;
 }
 /** Eave caps where the entrance canopy meets a roof edge: the canopy replaces the eave on that side. */
@@ -374,7 +443,7 @@ export function canopyCaps(spec: HouseSpec): Record<string, Partial<Record<Side,
 }
 
 function roofGeometry(b: Block, blocks: Block[], roof: RoofSpec, caps: Partial<Record<Side, number>> = {}): [[number, number, number], [number, number, number]] {
-  const e = eaves(b, blocks, roof, caps), wallTop = levelTop(b.level) + WALL_H;
+  const e = eaves(b, blocks, roof, caps), wallTop = wallTopOf(b);
   if (roof.form === 'flat') {
     const w = b.w + e.w + e.e, d = b.d + e.n + e.s;
     return [[b.cx + (e.e - e.w) / 2, wallTop + 0.15, b.cz + (e.s - e.n) / 2], [w, 0.3, d]];

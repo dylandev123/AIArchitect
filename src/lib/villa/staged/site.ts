@@ -1,3 +1,4 @@
+import {elementCap} from './grouping';
 import {poolWaterNorth,requirePool} from './poolGeometry';
 import {allRooms, blockRect, rectDiff, overlapArea, snap, type R} from './layout';
 import {compileHouse} from './compile';
@@ -36,7 +37,7 @@ export function siteMeasurements(spec:HouseSpec) {
     return [{id:d.id,rect:{x0:x-d.width/2-.3,x1:x+d.width/2+.3,z0:edge,z1:edge+(r.block===v?.block?4.5:3.0)}}];
   });
   const site={x0:-spec.site.width/2,x1:spec.site.width/2,z0:-spec.site.depth/2,z1:spec.site.depth/2};
-  return {building,veranda,court,main,doorRoutes,site,remainingElements:400-building.scene.elements.length,
+  return {building,veranda,court,main,doorRoutes,site,remainingElements:elementCap(spec)-building.scene.elements.length,
     southDepth:veranda?site.z1-veranda.z1:0, poolAssemblyElements:14, legacyPalmElements:4, compactPalmElements:1};
 }
 

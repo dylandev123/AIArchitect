@@ -78,7 +78,12 @@ it('validates explicit brief counts and rejects a model that changes the request
  const {promptRequirements}=await import('./promptGeneration');
  expect(promptRequirements('A two-storey Spanish house with 4 bedrooms and two bathrooms')).toEqual({bedrooms:4,bathrooms:2,storeys:2,pool:'optional'});
  expect(()=>promptRequirements('A house with three bedrooms or four bedrooms')).toThrow('Conflicting');
- const run:PromptRun={input:promptInput.parse({brief:'A two-storey three-bedroom Caribbean house'})},d=new PromptMockDesigner(MOCK_BRIEFS[0]);
+ // Phase 2: the single-storey sample's Stage 1 scale plan already contradicts a two-storey brief: stopped before massing.
+ const early:PromptRun={input:promptInput.parse({brief:'A two-storey three-bedroom Caribbean house'})},first=await advancePromptRun(early,new PromptMockDesigner(MOCK_BRIEFS[0]));
+ expect(first.status).toBe('failed');expect(first.findings.some(f=>f.code==='brief-vision-contradiction'&&f.subject==='scale')).toBe(true);
+ // Without a scale plan (a vision written before Phase 2) the Stage 2 storey guard still rejects the single-storey massing.
+ const mock=new PromptMockDesigner(MOCK_BRIEFS[0]),d={label:mock.label,correct:mock.correct.bind(mock),design:async(stage:1|2|3|4|5,ctx:Parameters<typeof mock.design>[1])=>{const r=await mock.design(stage,ctx);if(stage===1)delete (r.value as {vision:{scale?:unknown}}).vision.scale;return r;}};
+ const run:PromptRun={input:promptInput.parse({brief:'A two-storey three-bedroom Caribbean house'})};
  await advancePromptRun(run,d);
  const out=await advancePromptRun(run,d);
  expect(out.status).toBe('failed');expect(out.findings[0].code).toBe('brief-storeys');expect(out.stage).toBe(1);

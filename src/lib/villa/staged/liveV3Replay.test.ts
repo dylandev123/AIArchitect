@@ -48,7 +48,7 @@ it('root cause: the accepted open terrace covers the entrance court, so the stra
 
 it('no longer reports a pool-independent driveway failure as "every pool does not fit"', () => {
   const fit = poolFit(accepted4, brief), reservation = Object.entries(fit).find(([k]) => k.startsWith('pool-intention'))![1];
-  expect(reservation).toEqual({plunge: 'fits', intimate: 'fits', generous: 'fits', lap: 'fits'});
+  expect(reservation).toEqual({plunge: 'fits', intimate: 'fits', generous: 'fits', lap: 'fits', resort: 'fits'}); // resort scale added in Phase 2
   // The drive now ends at the terrace's outer edge, clear of every building, veranda and pool.
   const d = deriveSiteGeneral(accepted4, {...JSON.parse(raw(5)), pool: {...JSON.parse(raw(5)).pool, scale: 'intimate'}}, brief);
   expect(d.findings).toEqual([]);

@@ -49,7 +49,7 @@ it('completes the house with exactly one new Stage 5 call, reusing Stages 1–4 
  expect(generateText).toHaveBeenCalledTimes(1);
  const options=generateText.mock.calls[0][0];
  expect(options.maxOutputTokens).toBe(4000);expect(options.maxRetries).toBe(0);
- expect(options.prompt).toContain('"pool-intention (pool intention pool-garden-reservation, garden side s)":{"plunge":"fits","intimate":"fits","generous":"fits","lap":"fits"}');
+ expect(options.prompt).toContain('"pool-intention (pool intention pool-garden-reservation, garden side s)":{"plunge":"fits","intimate":"fits","generous":"fits","lap":"fits","resort":"fits"}'); // Phase 2 resort scale
  const s=await store.transaction(x=>structuredClone(x)),run=s.runs[runId];
  expect(run.state).toBe('complete');expect(run.continuesFrom?.runId).toBe(SOURCE);expect(run.callIds).toHaveLength(1);
  const call=s.calls[run.callIds[0]];

@@ -8,6 +8,7 @@ import {strictSchemaIssues} from '@/lib/villa/scene/strictSchema';
 import {emptyDraft} from '@/lib/villa/staged/pipeline';
 import {withReservedCall} from '@/lib/ai/paidExecution';
 import {LIVE_POLICY} from './contract';
+import {withVisionContract} from '@/lib/villa/staged/contractUpgrade.fixture';
 const recorded=JSON.parse(readFileSync('docs/architecture/secure-live-studio/first-failure/recorded-direction.json','utf8'));
 const evidence=JSON.parse(readFileSync('docs/architecture/secure-live-studio/first-failure/evidence.json','utf8'));
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();});
@@ -25,7 +26,8 @@ it('enables strict-compatible Stage 1 and Stage 3 wire schemas',async()=>{
 });
 it.each([false,true,'null'] as const)('replays the real SDK contract with hex corrected=%s; one dispatch and billed usage retained',async corrected=>{
  vi.stubEnv('OPENAI_API_KEY','offline-placeholder');
- const value=structuredClone(recorded);if(corrected)value.palette.roofColor=corrected==='null'?null:'#B65A36';
+ // Recorded before the vision contract: a neutral labelled vision is added; the roofColor behaviour under test is unchanged.
+ const value=withVisionContract(1,recorded,evidence.brief) as typeof recorded;if(corrected)value.palette.roofColor=corrected==='null'?null:'#B65A36';
  const transport=vi.fn<typeof fetch>(async(_url,init)=>{
   const wire=JSON.parse(String(init?.body));
   expect(wire.model).toBe(LIVE_POLICY.model);expect(wire.max_output_tokens).toBe(LIVE_POLICY.stageOutputTokens[1]);
@@ -39,7 +41,7 @@ it.each([false,true,'null'] as const)('replays the real SDK contract with hex co
  const designer=new LiveDesigner(LIVE_POLICY.stageOutputTokens,{modelId:LIVE_POLICY.model,price:LIVE_POLICY.price,observe});
  const result=withReservedCall({model:LIVE_POLICY.model,maxOutputTokens:LIVE_POLICY.stageOutputTokens[1],maxWireBytes:60000},()=>designer.design(1,{brief:evidence.brief,site:LIVE_POLICY.site,draft:emptyDraft(LIVE_POLICY.site),requiredBedrooms:3,requiredBaths:2,checkpoints:[]}));
  if(corrected){const expected=structuredClone(value);if(corrected==='null')delete expected.palette.roofColor;expect((await result).value).toEqual(expected);}
- else await expect(result).rejects.toMatchObject({detail:{raw:JSON.stringify(recorded),finishReason:'stop',validationIssues:[expect.objectContaining({path:['palette','roofColor']})],request:expect.objectContaining({prompt:expect.stringContaining(evidence.brief)})}});
+ else await expect(result).rejects.toMatchObject({detail:{raw:JSON.stringify(value),finishReason:'stop',validationIssues:[expect.objectContaining({path:['palette','roofColor']})],request:expect.objectContaining({prompt:expect.stringContaining(evidence.brief)})}});
  expect(transport).toHaveBeenCalledTimes(1);
  expect(observe).toHaveBeenCalledWith(expect.objectContaining({usage:expect.objectContaining({costUsd:(563*LIVE_POLICY.price.input+564*LIVE_POLICY.price.output)/1e6})}));
 });

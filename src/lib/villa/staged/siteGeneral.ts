@@ -96,6 +96,23 @@ const sharesEdge = (a: R, b: R) => overlapArea(a, b) > .001 || ((Math.abs(a.x0 -
  * Turn-penalised shortest path on a 0.5 m grid, from inside the court to any goal surface, keeping a 1.5 m walk
  * (plus 0.3 m clearance) off every blocked rectangle and inside the property. Returns one rectangle per straight run.
  */
+/**
+ * Priority queue ordered by (cost, insertion order): exactly the pop order of the former stable sort + shift,
+ * so routes are unchanged, in O(log n) instead of O(n log n) per step (large estates have ~70,000 grid cells).
+ */
+class MinQueue {
+  private heap: {v: [number, number, number, number]; seq: number}[] = []; private seq = 0;
+  get length() { return this.heap.length; }
+  private less(a: number, b: number) { const x = this.heap[a], y = this.heap[b]; return x.v[0] < y.v[0] || (x.v[0] === y.v[0] && x.seq < y.seq); }
+  private swap(a: number, b: number) { const t = this.heap[a]; this.heap[a] = this.heap[b]; this.heap[b] = t; }
+  push(v: [number, number, number, number]) { const h = this.heap; h.push({v, seq: this.seq++}); for (let i = h.length - 1; i > 0;) { const p = (i - 1) >> 1; if (!this.less(i, p)) break; this.swap(i, p); i = p; } }
+  pop(): [number, number, number, number] {
+    const h = this.heap, top = h[0].v, last = h.pop()!;
+    if (h.length) { h[0] = last; for (let i = 0; ;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < h.length && this.less(l, m)) m = l; if (r < h.length && this.less(r, m)) m = r; if (m === i) break; this.swap(i, m); i = m; } }
+    return top;
+  }
+}
+
 export function routeWalk(start: R, goals: R[], blocked: R[], bounds: R, walk = 1.5): R[] | undefined {
   const step = .5, half = walk / 2, nx = Math.floor((bounds.x1 - bounds.x0) / step), nz = Math.floor((bounds.z1 - bounds.z0) / step);
   const cx = (i: number) => bounds.x0 + (i + .5) * step, cz = (j: number) => bounds.z0 + (j + .5) * step;
@@ -103,12 +120,11 @@ export function routeWalk(start: R, goals: R[], blocked: R[], bounds: R, walk = 
   const free = (i: number, j: number) => { const x = cx(i), z = cz(j); return x - half >= bounds.x0 && x + half <= bounds.x1 && z - half >= bounds.z0 && z + half <= bounds.z1 && !keepOut.some(r => x > r.x0 && x < r.x1 && z > r.z0 && z < r.z1); };
   const inR = (r: R, i: number, j: number) => cx(i) > r.x0 && cx(i) < r.x1 && cz(j) > r.z0 && cz(j) < r.z1;
   const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]], key = (i: number, j: number, d: number) => (j * nx + i) * 4 + d;
-  const dist = new Map<number, number>(), prev = new Map<number, number>(), queue: [number, number, number, number][] = [];
+  const dist = new Map<number, number>(), prev = new Map<number, number>(), queue = new MinQueue();
   for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) if (inR(start, i, j) && free(i, j)) for (let d = 0; d < 4; d++) { dist.set(key(i, j, d), 0); queue.push([0, i, j, d]); }
   let end: number | undefined;
   while (queue.length) {
-    queue.sort((a, b) => a[0] - b[0]);
-    const [c, i, j, d] = queue.shift()!, k = key(i, j, d);
+    const [c, i, j, d] = queue.pop(), k = key(i, j, d);
     if (c > (dist.get(k) ?? Infinity)) continue;
     if (goals.some(g => inR(g, i, j))) { end = k; break; }
     for (let e = 0; e < 4; e++) {

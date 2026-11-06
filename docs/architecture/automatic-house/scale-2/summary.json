@@ -1,0 +1,681 @@
+{
+ "modest": {
+  "provenance": "OFFLINE SCALE STUDY modest: developer-authored answers, zero provider calls",
+  "brief": "Design a simple single-storey Caribbean family home with three bedrooms and two bathrooms on a flat 40 by 32 metre lot. Keep it modest and well proportioned: calm hip roofs, a shaded front porch, an open kitchen, living and dining room onto a covered garden veranda, and a small garden with palms. No swimming pool.",
+  "site": {
+   "width": 40,
+   "depth": 32
+  },
+  "construction": "scale-1",
+  "dimensions": {
+   "buildingExtentM": [
+    24,
+    8
+   ],
+   "footprintM2": 192,
+   "grossFloorAreaM2": 192,
+   "upperFloorAreaM2": 0,
+   "levels": 1,
+   "wings": 2,
+   "doubleHeightM2": 0,
+   "tallM2": 0,
+   "upperTerraceM2": 0,
+   "cantileverM2": 0,
+   "highestRoofM": 5.02,
+   "siteCoverage": 0.15
+  },
+  "plannedScale": {
+   "footprintM2": 190,
+   "grossFloorAreaM2": 190,
+   "levels": 1,
+   "wings": 2,
+   "principalSpaces": [
+    {
+     "name": "Open living, dining and kitchen",
+     "kind": "living",
+     "approxAreaM2": 60,
+     "height": "standard"
+    },
+    {
+     "name": "Garden veranda",
+     "kind": "covered-terrace",
+     "approxAreaM2": 45,
+     "height": "standard"
+    }
+   ],
+   "scaleEvidence": "Three bedrooms, two bathrooms, one storey, a modest lot: about 190 m²."
+  },
+  "blocks": {
+   "living-bar": "14×8 m, level 0, standard (wall top 3.4 m), primary",
+   "bedroom-wing": "10×8 m, level 0, standard (wall top 3.4 m), secondary"
+  },
+  "rooms": {
+   "count": 11,
+   "bedrooms": 3,
+   "baths": 2,
+   "upper": 0,
+   "largest": [
+    "living 4.8×8.0 m = 38 m²",
+    "kitchen 6.3×4.2 m = 26 m²",
+    "dining 6.3×3.8 m = 24 m²",
+    "wing-hall 10.0×1.9 m = 19 m²",
+    "bedroom-one 5.2×3.1 m = 16 m²"
+   ]
+  },
+  "entrance": {
+   "door": {
+    "id": "main-entrance",
+    "room": "foyer",
+    "side": "n",
+    "kind": "main",
+    "width": 1.7,
+    "t": 0.5
+   },
+   "canopy": {
+    "depth": 1.8,
+    "width": 2.6999999999999997,
+    "material": "timber"
+   },
+   "court": {
+    "w": 5,
+    "d": 4
+   },
+   "frontDoorElement": [
+    1.64,
+    2.66,
+    0.06
+   ]
+  },
+  "stairs": [],
+  "upperAccess": [],
+  "verandas": [
+   "garden-veranda 14.0×3.5 m, 5 columns"
+  ],
+  "validity": {
+   "stage5Findings": [],
+   "featureAudit": [],
+   "saveReopenIdentical": true
+  },
+  "elements": {
+   "total": 91,
+   "budget": {
+    "cap": 1600,
+    "total": 91,
+    "architecture": 63,
+    "site": 28,
+    "trimRequested": 0,
+    "trimPlaced": 0,
+    "trimDropped": 0
+   },
+   "grouped": 2,
+   "groupedParts": 14,
+   "sampleGroups": [
+    {
+     "id": "veranda-garden-veranda-columns",
+     "component": "veranda:garden-veranda",
+     "parts": 5
+    },
+    {
+     "id": "veranda-garden-veranda-beams",
+     "component": "veranda:garden-veranda",
+     "parts": 9
+    }
+   ],
+   "legacyConstruction": {
+    "cap": 400,
+    "total": 102,
+    "wouldNeed": 102,
+    "trimDropped": 0
+   }
+  },
+  "performance": {
+   "stageMs": [
+    4,
+    4,
+    22,
+    13,
+    15
+   ],
+   "reopenMs": 4,
+   "compileMs": 2,
+   "saveBytes": 33422,
+   "sceneBytes": 24399
+  },
+  "edits": [
+   {
+    "instruction": "Open the living bar to the garden with floor-to-ceiling glass.",
+    "accepted": true,
+    "ms": 5,
+    "changedComponents": 1,
+    "unchanged": 89,
+    "violations": [],
+    "findings": [],
+    "reopenedIdentically": true
+   }
+  ],
+  "warnings": []
+ },
+ "villa": {
+  "provenance": "OFFLINE SCALE STUDY villa: developer-authored answers, zero provider calls",
+  "brief": "Design a substantial luxury two-storey Mediterranean villa with six bedrooms and seven bathrooms on a flat 90 by 70 metre site. Connect several wings around a double-height living room, with a grand double-height entrance hall, upper-level bedroom terraces, an upper master suite that projects over the arrival court, terracotta roofs stepping down from the living room, a shaded loggia and a large swimming pool.",
+  "site": {
+   "width": 90,
+   "depth": 70
+  },
+  "construction": "scale-1",
+  "dimensions": {
+   "buildingExtentM": [
+    60,
+    24
+   ],
+   "footprintM2": 764,
+   "grossFloorAreaM2": 1160,
+   "upperFloorAreaM2": 396,
+   "levels": 2,
+   "wings": 4,
+   "doubleHeightM2": 324,
+   "tallM2": 0,
+   "upperTerraceM2": 80,
+   "cantileverM2": 36,
+   "highestRoofM": 10.84,
+   "siteCoverage": 0.121
+  },
+  "plannedScale": {
+   "footprintM2": 764,
+   "grossFloorAreaM2": 1160,
+   "levels": 2,
+   "wings": 4,
+   "principalSpaces": [
+    {
+     "name": "Entrance hall",
+     "kind": "entrance-hall",
+     "approxAreaM2": 100,
+     "height": "double"
+    },
+    {
+     "name": "Living pavilion",
+     "kind": "living",
+     "approxAreaM2": 224,
+     "height": "double"
+    },
+    {
+     "name": "Upper master suite",
+     "kind": "master-suite",
+     "approxAreaM2": 120,
+     "height": "standard"
+    },
+    {
+     "name": "Bedroom terraces",
+     "kind": "upper-terrace",
+     "approxAreaM2": 80,
+     "height": "standard"
+    },
+    {
+     "name": "Pool garden",
+     "kind": "pool-terrace",
+     "approxAreaM2": 220,
+     "height": "standard"
+    }
+   ],
+   "scaleEvidence": "Six bedrooms, seven bathrooms, two storeys, luxury: about 1,160 m² over 764 m² of footprint."
+  },
+  "blocks": {
+   "entrance-hall": "10×10 m, level 0, double (wall top 6.8 m), entrance",
+   "living-pavilion": "16×14 m, level 0, double (wall top 6.8 m), primary",
+   "family-wing": "22×10 m, level 0, standard (wall top 3.4 m), secondary",
+   "west-bedrooms": "18×10 m, level 1, standard (wall top 6.8 m), secondary",
+   "east-wing": "22×10 m, level 0, standard (wall top 3.4 m), secondary",
+   "master-floor": "18×12 m, level 1, standard (wall top 6.8 m), secondary"
+  },
+  "rooms": {
+   "count": 28,
+   "bedrooms": 6,
+   "baths": 7,
+   "upper": 13,
+   "largest": [
+    "living 10.7×14.0 m = 150 m²",
+    "foyer 10.0×10.0 m = 100 m²",
+    "dining 5.3×14.0 m = 74 m²",
+    "west-landing 6.0×10.0 m = 60 m²",
+    "east-gallery 17.4×3.3 m = 57 m²"
+   ]
+  },
+  "entrance": {
+   "door": {
+    "id": "main-entrance",
+    "room": "foyer",
+    "side": "n",
+    "kind": "main",
+    "width": 2.8,
+    "t": 0.5
+   },
+   "canopy": {
+    "depth": 4.2,
+    "width": 8,
+    "material": "timber"
+   },
+   "court": {
+    "w": 12,
+    "d": 12
+   },
+   "frontDoorElement": [
+    2.74,
+    4.16,
+    0.06
+   ]
+  },
+  "stairs": [
+   "west-stair-flight",
+   "east-stair-flight"
+  ],
+  "upperAccess": [
+   {
+    "block": "west-bedrooms",
+    "area": 180,
+    "rooms": [
+     "bath-b",
+     "bedroom-b",
+     "west-landing",
+     "bedroom-c",
+     "bath-c",
+     "bedroom-a",
+     "bath-a"
+    ],
+    "stairs": [
+     "west-stair-flight"
+    ],
+    "supportedShare": 1,
+    "wallTop": 6.8
+   },
+   {
+    "block": "master-floor",
+    "area": 216,
+    "rooms": [
+     "master-bath",
+     "master-bedroom",
+     "east-landing",
+     "master-sitting",
+     "bath-f",
+     "bedroom-f"
+    ],
+    "stairs": [
+     "east-stair-flight"
+    ],
+    "supportedShare": 0.83,
+    "wallTop": 6.8
+   }
+  ],
+  "pool": {
+   "w": 14,
+   "d": 4
+  },
+  "verandas": [
+   "living-loggia 16.0×5 m, 5 columns"
+  ],
+  "validity": {
+   "stage5Findings": [],
+   "featureAudit": [],
+   "saveReopenIdentical": true
+  },
+  "elements": {
+   "total": 367,
+   "budget": {
+    "cap": 1600,
+    "total": 367,
+    "architecture": 217,
+    "site": 66,
+    "trimRequested": 84,
+    "trimPlaced": 84,
+    "trimDropped": 0
+   },
+   "grouped": 37,
+   "groupedParts": 280,
+   "sampleGroups": [
+    {
+     "id": "stair-west-stair-flight",
+     "component": "stair:west-stair-flight",
+     "parts": 17
+    },
+    {
+     "id": "stair-east-stair-flight",
+     "component": "stair:east-stair-flight",
+     "parts": 17
+    },
+    {
+     "id": "veranda-living-loggia-columns",
+     "component": "veranda:living-loggia",
+     "parts": 5
+    },
+    {
+     "id": "veranda-living-loggia-beams",
+     "component": "veranda:living-loggia",
+     "parts": 11
+    },
+    {
+     "id": "lintels-entrance-hall-n-0",
+     "component": "block:entrance-hall",
+     "parts": 4
+    },
+    {
+     "id": "lintels-entrance-hall-e-0",
+     "component": "block:entrance-hall",
+     "parts": 6
+    }
+   ],
+   "legacyConstruction": {
+    "cap": 400,
+    "total": 396,
+    "wouldNeed": 610,
+    "trimDropped": 214
+   }
+  },
+  "performance": {
+   "stageMs": [
+    0,
+    3,
+    752,
+    52,
+    325
+   ],
+   "reopenMs": 14,
+   "compileMs": 9,
+   "saveBytes": 117883,
+   "sceneBytes": 100508
+  },
+  "edits": [
+   {
+    "instruction": "Make the entrance hall a single tall storey instead of double height.",
+    "accepted": true,
+    "ms": 26,
+    "changedComponents": 5,
+    "unchanged": 343,
+    "violations": [],
+    "findings": [],
+    "reopenedIdentically": true
+   },
+   {
+    "instruction": "Clad the upper master suite in natural stone.",
+    "accepted": true,
+    "ms": 30,
+    "changedComponents": 7,
+    "unchanged": 344,
+    "violations": [],
+    "findings": [],
+    "reopenedIdentically": true
+   }
+  ],
+  "warnings": [
+   "stage 2 composition-note: Primary volume holds only 25% of the built volume; its dominance relies on height or position."
+  ]
+ },
+ "estate": {
+  "provenance": "OFFLINE SCALE STUDY estate: developer-authored answers, zero provider calls",
+  "brief": "Design an extraordinary contemporary Caribbean luxury estate with seven bedroom suites on a spacious flat 150 by 120 metre property. Use multiple architectural wings with dramatic layering: a commanding double-height arrival hall on a formal arrival court, a vast double-height glass great room opening to a deep covered terrace, upper bedroom floors that step back to terraces and project over the court, generous suites, a family wing, a guest wing, a staff wing, a pool pavilion and a resort-scale swimming pool.",
+  "site": {
+   "width": 150,
+   "depth": 120
+  },
+  "construction": "scale-1",
+  "dimensions": {
+   "buildingExtentM": [
+    114,
+    50
+   ],
+   "footprintM2": 2324,
+   "grossFloorAreaM2": 3104,
+   "upperFloorAreaM2": 780,
+   "levels": 2,
+   "wings": 7,
+   "doubleHeightM2": 764,
+   "tallM2": 144,
+   "upperTerraceM2": 192,
+   "cantileverM2": 60,
+   "highestRoofM": 7.1,
+   "siteCoverage": 0.129
+  },
+  "plannedScale": {
+   "footprintM2": 2320,
+   "grossFloorAreaM2": 3100,
+   "levels": 2,
+   "wings": 7,
+   "principalSpaces": [
+    {
+     "name": "Arrival hall",
+     "kind": "entrance-hall",
+     "approxAreaM2": 224,
+     "height": "double"
+    },
+    {
+     "name": "Great room",
+     "kind": "living",
+     "approxAreaM2": 540,
+     "height": "double"
+    },
+    {
+     "name": "Master suite",
+     "kind": "master-suite",
+     "approxAreaM2": 170,
+     "height": "standard"
+    },
+    {
+     "name": "Covered terrace",
+     "kind": "covered-terrace",
+     "approxAreaM2": 240,
+     "height": "standard"
+    },
+    {
+     "name": "Formal arrival court",
+     "kind": "arrival-court",
+     "approxAreaM2": 280,
+     "height": "standard"
+    },
+    {
+     "name": "Resort pool garden",
+     "kind": "pool-terrace",
+     "approxAreaM2": 430,
+     "height": "standard"
+    },
+    {
+     "name": "Upper terraces",
+     "kind": "upper-terrace",
+     "approxAreaM2": 190,
+     "height": "standard"
+    }
+   ],
+   "scaleEvidence": "Seven suites, family, guest, staff and pool wings on 18,000 m²: about 3,100 m² over 2,320 m² of footprint."
+  },
+  "blocks": {
+   "arrival-hall": "16×14 m, level 0, double (wall top 6.8 m), entrance",
+   "great-room": "30×18 m, level 0, double (wall top 6.8 m), primary",
+   "family-wing": "36×12 m, level 0, standard (wall top 3.4 m), secondary",
+   "family-suites": "30×12 m, level 1, standard (wall top 6.8 m), secondary",
+   "master-wing": "40×12 m, level 0, standard (wall top 3.4 m), secondary",
+   "master-floor": "30×14 m, level 1, standard (wall top 6.8 m), secondary",
+   "guest-wing": "14×24 m, level 0, low (wall top 3.0 m), secondary",
+   "staff-wing": "14×12 m, level 0, low (wall top 3.0 m), service",
+   "pool-pavilion": "12×12 m, level 0, tall (wall top 4.6 m), feature"
+  },
+  "rooms": {
+   "count": 49,
+   "bedrooms": 7,
+   "baths": 12,
+   "upper": 15,
+   "largest": [
+    "great-living 30.0×10.0 m = 300 m²",
+    "foyer 16.0×14.0 m = 224 m²",
+    "family-gallery 29.3×6.6 m = 193 m²",
+    "master-gallery 33.0×5.3 m = 175 m²",
+    "family-landing 18.2×6.6 m = 120 m²"
+   ]
+  },
+  "entrance": {
+   "door": {
+    "id": "main-entrance",
+    "room": "foyer",
+    "side": "n",
+    "kind": "main",
+    "width": 2.8,
+    "t": 0.5
+   },
+   "canopy": {
+    "depth": 4.2,
+    "width": 8,
+    "material": "timber"
+   },
+   "court": {
+    "w": 16,
+    "d": 12
+   },
+   "frontDoorElement": [
+    2.74,
+    4.16,
+    0.06
+   ]
+  },
+  "stairs": [
+   "family-stair-flight",
+   "master-stair-flight"
+  ],
+  "upperAccess": [
+   {
+    "block": "family-suites",
+    "area": 360,
+    "rooms": [
+     "suite-three-bath",
+     "suite-three",
+     "suite-one-bath",
+     "suite-one",
+     "family-landing",
+     "upper-family-lounge",
+     "suite-two",
+     "suite-two-bath"
+    ],
+    "stairs": [
+     "family-stair-flight"
+    ],
+    "supportedShare": 1,
+    "wallTop": 6.8
+   },
+   {
+    "block": "master-floor",
+    "area": 420,
+    "rooms": [
+     "suite-six",
+     "suite-six-bath",
+     "master-landing",
+     "master-sitting",
+     "master-dressing",
+     "master-bedroom",
+     "master-bath"
+    ],
+    "stairs": [
+     "master-stair-flight"
+    ],
+    "supportedShare": 0.86,
+    "wallTop": 6.8
+   }
+  ],
+  "pool": {
+   "w": 20,
+   "d": 7
+  },
+  "verandas": [
+   "great-veranda 30.0×8 m, 9 columns"
+  ],
+  "validity": {
+   "stage5Findings": [],
+   "featureAudit": [],
+   "saveReopenIdentical": true
+  },
+  "elements": {
+   "total": 510,
+   "budget": {
+    "cap": 1600,
+    "total": 510,
+    "architecture": 365,
+    "site": 68,
+    "trimRequested": 77,
+    "trimPlaced": 77,
+    "trimDropped": 0
+   },
+   "grouped": 34,
+   "groupedParts": 388,
+   "sampleGroups": [
+    {
+     "id": "stair-family-stair-flight",
+     "component": "stair:family-stair-flight",
+     "parts": 17
+    },
+    {
+     "id": "stair-master-stair-flight",
+     "component": "stair:master-stair-flight",
+     "parts": 17
+    },
+    {
+     "id": "veranda-great-veranda-columns",
+     "component": "veranda:great-veranda",
+     "parts": 9
+    },
+    {
+     "id": "veranda-great-veranda-beams",
+     "component": "veranda:great-veranda",
+     "parts": 20
+    },
+    {
+     "id": "lintels-arrival-hall-n-0",
+     "component": "block:arrival-hall",
+     "parts": 8
+    },
+    {
+     "id": "lintels-arrival-hall-e-0",
+     "component": "block:arrival-hall",
+     "parts": 10
+    }
+   ],
+   "legacyConstruction": {
+    "cap": 400,
+    "failed": true,
+    "required": 492,
+    "message": "Element budget exceeded: required architecture 424 + site 68 elements exceed the 400-element scene limit. Simplify the composition (fewer volumes, rooms or landscape pieces)."
+   }
+  },
+  "performance": {
+   "stageMs": [
+    0,
+    7,
+    5550,
+    93,
+    681
+   ],
+   "reopenMs": 17,
+   "compileMs": 11,
+   "saveBytes": 166986,
+   "sceneBytes": 144511
+  },
+  "edits": [
+   {
+    "instruction": "Lower the great room to a tall single storey.",
+    "accepted": true,
+    "ms": 37,
+    "changedComponents": 7,
+    "unchanged": 476,
+    "violations": [],
+    "findings": [],
+    "reopenedIdentically": true
+   },
+   {
+    "instruction": "Open the south side of the pool pavilion with floor-to-ceiling glass.",
+    "accepted": true,
+    "ms": 36,
+    "changedComponents": 2,
+    "unchanged": 504,
+    "violations": [],
+    "findings": [],
+    "reopenedIdentically": true
+   }
+  ],
+  "warnings": [
+   "stage 2 composition-note: Primary volume holds only 24% of the built volume; its dominance relies on height or position."
+  ]
+ }
+}

@@ -17,6 +17,7 @@ import {loadHouse} from '@/lib/villa/staged/save';
 import {retainedMassingDownstreamV2} from '@/lib/villa/staged/normalization.fixture';
 import {allRooms} from '@/lib/villa/staged/layout';
 import {strictSchemaIssues} from '@/lib/villa/staged/strictSchema';
+import {withVisionContractRaw} from '@/lib/villa/staged/contractUpgrade.fixture';
 const dirs:string[]=[];
 afterEach(async()=>{
  if(process.env.OFFLINE_EVIDENCE_DIR){
@@ -138,7 +139,7 @@ it('leaves old stopped runs and manual ready runs untouched',async()=>{
 
 const physicalFailures=[
  {stage:2,name:'overlapping volumes',change:(v:any)=>({...v,blocks:[...v.blocks,{...v.blocks[0],id:'overlapping'}]}),code:'block-overlap'},
- {stage:2,name:'synthetic detached veranda',change:(v:any)=>({...v,blocks:[...v.blocks,{id:'detached',role:'Veranda',cx:22,cz:0,w:4,d:4,level:0,open:true}]}),code:'construction-error'},
+ {stage:2,name:'synthetic detached veranda',change:(v:any)=>({...v,blocks:[...v.blocks,{id:'detached',role:'Veranda',cx:22,cz:0,w:4,d:4,level:0,open:true,height:'standard',rank:'secondary'}]}),code:'construction-error'},
  {stage:3,name:'unknown room host',change:(v:any)=>({...v,rooms:v.rooms.map((r:any,i:number)=>i===0?{...r,block:'unknown'}:r)}),code:'unknown-block'},
  {stage:4,name:'missing entrance',change:(v:any)=>({...v,entrance:{...v.entrance,room:'missing'}}),code:'invalid-main-entrance'},
  {stage:4,name:'veranda intention left uncovered',change:(v:any)=>({...v,verandas:[]}),code:'veranda-missing'},
@@ -260,14 +261,15 @@ it('automatically replays real Terra Stages 1â€“2, then authored mock Stages 3â€
   expect(wire.text.format.strict).toBe(true);expect(wire.max_output_tokens).toBe(LIVE_POLICY.stageOutputTokens[stage]);
   expect(JSON.stringify(wire.input)).toContain(env.brief);
   const source=await env.store.transaction(s=>structuredClone(s.runs[env.runId].source));
-  const raw=stage<=2?evidence.calls[stage-1].raw:JSON.stringify(retainedMassingDownstreamV2(stage,{brief:env.brief,site:LIVE_POLICY.site,draft:source.result!.spec!,checkpoints:source.result!.checkpoints,requiredBedrooms:3,requiredBaths:2}));
+  // Recorded Stage 1-2 answers predate the vision contract: neutral labelled fields are added (see fixture).
+  const raw=stage<=2?withVisionContractRaw(stage,evidence.calls[stage-1].raw,env.brief):JSON.stringify(retainedMassingDownstreamV2(stage,{brief:env.brief,site:LIVE_POLICY.site,draft:source.result!.spec!,checkpoints:source.result!.checkpoints,requiredBedrooms:3,requiredBaths:2}));
   if(stage>=3){expect(source.result!.spec!.blocks[0].id).toBe('social-main');expect(JSON.stringify(wire.input)).toContain('social-main');}
   return new Response(JSON.stringify({id:`offline-retained-${stage}`,object:'response',created_at:0,model:LIVE_POLICY.model,status:'completed',output:[{type:'message',id:`msg-${stage}`,role:'assistant',content:[{type:'output_text',text:raw,annotations:[]}]}],usage:{input_tokens:1000,output_tokens:200,total_tokens:1200}}),{headers:{'content-type':'application/json'}});
  });vi.stubGlobal('fetch',transport);
  for(let stage=1;stage<=5;stage++){
   await env.service.tick();const out=await env.read();expect(out.stage,JSON.stringify(out)).toBe(stage);expect(out.status).toBe(stage===5?'complete':'ready');
   const call=await env.store.transaction(s=>s.calls[s.runs[env.runId].callIds.at(-1)!]);
-  if(stage===2){expect(call.raw).toBe(evidence.calls[1].raw);expect(call.normalizations).toHaveLength(6);}
+  if(stage===2){expect(call.raw).toBe(withVisionContractRaw(2,evidence.calls[1].raw,env.brief));expect(call.normalizations).toHaveLength(6);}
   if(stage===3||stage===4)expect(call.normalizations!.length).toBeGreaterThan(0);
  }
  const out=await env.read(),saved=loadHouse(out.save);

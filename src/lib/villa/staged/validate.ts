@@ -5,7 +5,7 @@ import type {ArchitecturalScene} from '../scene/model';
 import {SIDES, allRooms, area, blockRect, layoutRooms, overlapArea, rectDiff, roomEdges, roomSideInterval, sideLine, type R, type Room} from './layout';
 import type {Block, HouseSpec} from './spec';
 
-export interface Finding {stage: 2 | 3 | 4 | 5; code: string; subject: string; message: string}
+export interface Finding {stage: 1 | 2 | 3 | 4 | 5; code: string; subject: string; message: string}
 const f = (stage: Finding['stage'], code: string, subject: string, message: string): Finding => ({stage, code, subject, message});
 const SITE_MARGIN = 1.0;
 export const MIN_DIM: Record<string, number> = {gallery: 1.8, hall: 1.8, bath: 1.8, stair: 3};
@@ -26,6 +26,12 @@ export function validateMassing(spec: Pick<HouseSpec, 'site' | 'blocks'> & {open
       out.push(f(2, 'block-overlap', `${blocks[i].id},${blocks[j].id}`, `${blocks[i].id} and ${blocks[j].id} overlap in plan on the same level.`));
   }
   const lower = blocks.filter(b => b.level === 0).map(blockRect);
+  // Heights: a double-height volume is one tall ground level; an upper floor needs a standard storey below it.
+  for (const b of blocks) {
+    if (b.level === 1 && b.height === 'double') out.push(f(2, 'height-double-upper', b.id, `${b.id} is a level-1 block with height double; a double-height room is one tall ground-level volume (use level 0), and an extra floor is a separate level-1 block.`));
+    if (b.level === 0 && b.height && b.height !== 'standard' && blocks.some(u => u.level === 1 && overlapArea(blockRect(u), blockRect(b)) > 0.01))
+      out.push(f(2, 'height-under-upper', b.id, `${b.id} carries a level-1 block, so it must be height standard (the upper floor sits at the standard storey line); it is ${b.height}.`));
+  }
   for (const b of blocks.filter(b => b.level === 1)) {
     const r = blockRect(b), unsupported = rectDiff(r, lower);
     const missing = unsupported.reduce((s, p) => s + area(p), 0);
@@ -118,8 +124,8 @@ export function validateExterior(spec: HouseSpec): Finding[] {
     else {
       // Only walls parallel to this facade can occupy it (a perpendicular wall at the same coordinate cannot).
       const edges = roomEdges(rooms).filter(e => (e.a === room.id || e.b === room.id) && e.axis === (d.side === 'n' || d.side === 's' ? 'z' : 'x') && Math.abs(e.line - sideLine(blockRect(blocks.get(room.block)!), d.side)) < 1e-4);
-      const free = iv[1] - iv[0] - edges.reduce((s, e) => s + (e.hi - e.lo), 0);
-      if (free < d.width + 1.2) out.push(f(4, 'door-wall-too-short', d.id, `Exterior wall of ${room.id} (${d.side}) has ${free.toFixed(2)} m free; door ${d.id} needs ${(d.width + 1.2).toFixed(2)} m.`));
+      const free = iv[1] - iv[0] - edges.reduce((s, e) => s + (e.hi - e.lo), 0) - (spec.construction === 'scale-1' ? cornerTrim(room, blockRect(blocks.get(room.block)!), d.side) : 0);
+      if (free < d.width + 1.2 - (spec.construction === 'scale-1' ? 1e-6 : 0)) out.push(f(4, 'door-wall-too-short', d.id, `Exterior wall of ${room.id} (${d.side}) has ${free.toFixed(2)} m free; door ${d.id} needs ${(d.width + 1.2).toFixed(2)} m.`));
     }
   }
   for (const v of spec.exterior.verandas) {
@@ -131,6 +137,12 @@ export function validateExterior(spec: HouseSpec): Finding[] {
     for (const o of spec.blocks) if (o.level === 0 && overlapArea(deck, blockRect(o)) > 0.01) out.push(f(4, 'veranda-collides', v.id, `Veranda ${v.id} overlaps block ${o.id}.`));
   }
   return out;
+}
+
+/** East/west exterior walls stop 0.3 m short of a block corner (the compiler's corner trim); that wall cannot hold a door. */
+export function cornerTrim(room: R, block: R, side: 'n' | 's' | 'e' | 'w'): number {
+  if (side === 'n' || side === 's') return 0;
+  return (Math.abs(room.z0 - block.z0) < 1e-4 ? 0.3 : 0) + (Math.abs(room.z1 - block.z1) < 1e-4 ? 0.3 : 0);
 }
 
 export function verandaRect(spec: HouseSpec, id: string): R | undefined {

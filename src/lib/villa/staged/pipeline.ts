@@ -4,7 +4,8 @@ import {intentionFindings} from './intentions';
 import {z} from 'zod';
 import {assertUniqueJsonKeys,normalizeStage,NormalizationError,type Normalization} from './normalize';
 import type {ArchitecturalScene} from '../scene/model';
-import {compileHouse, type Stage} from './compile';
+import {compileHouse, ElementBudgetError, type ElementBudget, type Stage} from './compile';
+import {briefScaleFindings, scalePlanConsistency, compositionReport, isCorrectableOnly, visionBriefFindings, type CompositionMetrics} from './composition';
 import {separateOpenSpaces} from './openSpaces';
 import {programmeSchema} from './programme';
 import {solveProgramme, type LayoutOption} from './roomSolver';
@@ -49,6 +50,10 @@ export interface Checkpoint {normalizations?:Normalization[];
   slice: unknown; spec: HouseSpec; scene?: ArchitecturalScene; components?: Record<string, string>;
   findings: Finding[]; calls: CallRecord[];
   input?:StageContext; warnings?:Finding[]; failure?:{category:string;message:string;stack?:string;schemaIssues?:unknown;correction:{authorized:false;maxCalls:0;prompt:string}};
+  /** Stages 2-4 with a structured vision: the measured composition this checkpoint was judged on. */
+  composition?: CompositionMetrics;
+  /** Stages 4-5: scene element budget, including decorative trim that did not fit. */
+  budget?: ElementBudget;
   /** Stage 3: what software built from the programme (the slice that was validated and applied). */
   construction?: {chosen: string; options: {id: string; score: number; metrics: LayoutOption['metrics']}[]; slice: unknown; addedLinks: unknown[]; adjustments?: unknown[]};
 }
@@ -70,10 +75,13 @@ export class CallBudget {
 
 const STAGE_NAMES: Record<StageNo, string> = {1: 'architectural designer', 2: 'building massing', 3: 'interior spatial planning', 4: 'exterior architecture', 5: 'materials and site'};
 
+/** Draft for REBUILDING a house designed before Phase 2 (historical checkpoints): the original construction. */
+export function legacyDraft(site: HouseSpec['site']): Draft { const {construction: _legacy, ...d} = emptyDraft(site); void _legacy; return d; }
 /** Placeholders only fill fields of later stages so earlier stages compile from the same spec type. */
 export function emptyDraft(site: HouseSpec['site']): Draft {
   return {
-    version: 'staged-house-1', site,
+    // New generations use the scale-1 construction (grouped repetitive geometry, measured scene budget).
+    version: 'staged-house-1', construction: 'scale-1', site,
     direction: {name: 'Untitled', concept: '-', hierarchy: ['-', '-'], roofLanguage: '-', entrance: '-', outdoorLiving: '-', landscape: '-', palette: {walls: 'ivory', accent: 'timber', roof: 'timber', deck: 'limestone'}},
     blocks: [], openSpaces: [], links: [], stairs: [],
     exterior: {facades: {}, doors: [], entrance: {door: '-', canopy: {depth: 0, width: 2, material: 'timber'}, court: {w: 2, d: 2}}, verandas: []},
@@ -84,7 +92,8 @@ export function emptyDraft(site: HouseSpec['site']): Draft {
 export function applySlice(draft: Draft, stage: StageNo, slice: any): Draft {
   switch (stage) {
     case 1: return {...draft, direction: slice};
-    case 2: { const sep = separateOpenSpaces(slice.blocks); return {...draft, openSpaces: sep.openSpaces, blocks: sep.blocks.map((b: any) => ({...b, plan: {room: {id: `${b.id}-room`, name: b.role, type: 'hall'}}, roof: {form: 'flat', overhang: 0, material: 'bronze'}, wall: 'ivory'}))}; }
+    // Canonical heights: "standard" is stored as absent, so a uniform-height design compiles exactly as before.
+    case 2: { const sep = separateOpenSpaces(slice.blocks); return {...draft, openSpaces: sep.openSpaces, blocks: sep.blocks.map(({height, ...b}: any) => ({...b, ...(height && height !== 'standard' ? {height} : {}), plan: {room: {id: `${b.id}-room`, name: b.role, type: 'hall'}}, roof: {form: 'flat', overhang: 0, material: 'bronze'}, wall: 'ivory'}))}; }
     case 3: return {...draft, blocks: draft.blocks.map(b => ({...b, plan: slice.plans[b.id] ?? b.plan})), links: slice.links, stairs: slice.stairs};
     case 4: return {...draft, blocks: draft.blocks.map(b => ({...b, roof: slice.roofs[b.id] ?? b.roof, ...(slice.walls?.[b.id] ?? {})})), exterior: slice.exterior, ...(slice.trim ? {trim: slice.trim} : {})};
     case 5: return {...draft, siteWork: slice.siteWork, ...(slice.sitePresentation ? {sitePresentation: slice.sitePresentation} : {}), blocks: draft.blocks.map(b => ({...b, ...(slice.finishes[b.id] ? {wall: slice.finishes[b.id].wall, wallColor: slice.finishes[b.id].wallColor} : {})}))};
@@ -93,17 +102,18 @@ export function applySlice(draft: Draft, stage: StageNo, slice: any): Draft {
 
 const generalSiteIssues5 = (d: Draft) => d.sitePresentation?.version === 'staged-site-2' ? generalSiteIssues(d) : [];
 
-export function measure(draft: Draft, stage: StageNo, requiredBedrooms: number, requiredBaths = 0): {findings: Finding[]; scene?: ArchitecturalScene; components?: Record<string, string>;executionError?:{message:string;stack?:string}} {
+export function measure(draft: Draft, stage: StageNo, requiredBedrooms: number, requiredBaths = 0): {findings: Finding[]; scene?: ArchitecturalScene; components?: Record<string, string>;budget?:ElementBudget;executionError?:{message:string;stack?:string}} {
   if (stage === 1) return {findings: []};
   // Spec-level checks first: they explain failures a compiler crash would hide.
   const own = stage === 2 ? validateMassing(draft) : stage === 3 ? validateInterior(draft, requiredBedrooms, requiredBaths) : stage === 4 ? [...validateInterior(draft, requiredBedrooms, requiredBaths), ...validateExterior(draft)] : [...validateMassing(draft), ...validateInterior(draft,requiredBedrooms,requiredBaths), ...validateExterior(draft), ...validateSite(draft), ...siteLayoutIssues(draft), ...generalSiteIssues5(draft)];
   own.push(...intentionFindings(draft,stage as Stage));
   // Build even when checks fail so the failed stage stays inspectable.
   try {
-    const {scene, components} = compileHouse(draft, stage as Stage);
-    return {findings: [...own, ...(stage >= 3 ? relationshipFindings(scene, stage as Finding['stage']) : [])], scene, components};
+    const {scene, components, budget} = compileHouse(draft, stage as Stage);
+    return {findings: [...own, ...(stage >= 3 ? relationshipFindings(scene, stage as Finding['stage']) : [])], scene, components, ...(budget ? {budget} : {})};
   } catch (e) {
-    return {findings: [...own, {stage: stage as Finding['stage'], code: 'compile-failed', subject: 'compiler', message: (e as Error).message}],executionError:{message:e instanceof Error?e.message:String(e),stack:e instanceof Error?e.stack:undefined}};
+    // Required architecture that cannot fit the scene is a specific, repairable design finding, never a silent drop.
+    return {findings: [...own, {stage: stage as Finding['stage'], code: e instanceof ElementBudgetError ? 'element-budget' : 'compile-failed', subject: 'compiler', message: (e as Error).message}],executionError:{message:e instanceof Error?e.message:String(e),stack:e instanceof Error?e.stack:undefined}};
   }
 }
 
@@ -137,6 +147,7 @@ export async function runStagedGeneration(o: RunOptions): Promise<PipelineResult
     if (checkpoints.some(c => c.stage === stage && c.accepted)) continue;
     const stageCalls: CallRecord[] = [];
     let slice: unknown, findings: Finding[] = [], attempt = 0, trial: ReturnType<typeof measure> | undefined, candidate = draft, construction: Checkpoint['construction'];
+    let attemptWarnings: Finding[] = [], composition: CompositionMetrics | undefined;
     const stageInput=structuredClone({...ctx(),checkpoints:checkpoints.map(c=>({...c,input:undefined}))});
     let schemaIssues:unknown,executionError:{message:string;stack?:string}|undefined;
     const warnings:Finding[]=[];
@@ -212,6 +223,17 @@ export async function runStagedGeneration(o: RunOptions): Promise<PipelineResult
       if(stage===5){const complete=houseSpecSchema.safeParse(candidate);if(!complete.success){schemaIssues=complete.error.issues;findings=complete.error.issues.map(i=>({stage:5 as const,code:'schema',subject:i.path.join('.'),message:i.message}));trial=undefined;continue;}}
       trial = measure(candidate, stage, bedrooms, baths);
       findings = trial.findings;
+      // Architectural vision: brief contradictions are hard; unbuilt promises are correctable; notes are recorded.
+      attemptWarnings = []; composition = undefined;
+      if (stage === 1) findings.push(...visionBriefFindings(candidate.direction.vision, o.brief), ...scalePlanConsistency(candidate.direction.vision, o.site));
+      // An explicit luxury/estate brief is never satisfied by a modest residence with the right room labels.
+      if (stage === 2) findings.push(...briefScaleFindings(candidate, o.brief));
+      if (stage >= 2 && stage <= 4) {
+        const report = compositionReport(candidate, stage as 2 | 3 | 4, trial.scene);
+        findings.push(...report.findings); attemptWarnings.push(...report.observations);
+        if (candidate.direction.vision) composition = report.metrics;
+      }
+      if (trial.budget?.trimDropped) attemptWarnings.push({stage: stage as Finding['stage'], code: 'element-budget-trim', subject: 'scene', message: `${trial.budget.trimDropped} of ${trial.budget.trimRequested} decorative trim pieces did not fit the ${trial.budget.cap}-element scene (architecture ${trial.budget.architecture}, site ${trial.budget.site}); every required component was kept.`});
       if(trial.scene&&trial.components)findings.push(...featureAudit(candidate,trial.scene,trial.components,stage as Stage,o.brief).findings);
       // The entrance is decided at Stage 4: verify now that it can be reached at all, while Stage 4 can still repair it.
       if(stage===4)findings.push(...siteAccessBlockers(candidate).map(b=>({...b,stage:4 as const,code:'arrival-access',message:`${b.message} Choose an entrance side and room that the site boundary can reach.`})));
@@ -238,8 +260,14 @@ export async function runStagedGeneration(o: RunOptions): Promise<PipelineResult
       // Only specific, potentially repairable architecture/contract findings earn the bounded correction.
       if (!repairable(findings)) { attempt = corrections; break; }
     }
+    // A vision promise still unbuilt after the one correction is recorded, not a failed house: taste never loops.
+    if (isCorrectableOnly(findings) && trial?.scene !== undefined) {
+      attemptWarnings.push(...findings.map(x => ({...x, message: `Unresolved vision discrepancy (accepted after ${Math.min(attempt, corrections)} correction${Math.min(attempt, corrections) === 1 ? '' : 's'}): ${x.message}`})));
+      findings = [];
+    }
+    warnings.push(...attemptWarnings);
     const accepted = findings.length === 0;
-    const cp: Checkpoint = {normalizations:stageCalls.flatMap(c=>c.normalizations??[]),stage, name: STAGE_NAMES[stage], attempt: Math.min(attempt, corrections), accepted, slice, spec: accepted ? candidate : draft, scene: trial?.scene, components: trial?.components, findings, calls: stageCalls, input:stageInput,warnings,...(!accepted?{failure:{category:failureCategory(stage,findings),message:executionError?.message??findings.map(f=>f.message).join(' | '),stack:executionError?.stack??trial?.executionError?.stack,schemaIssues,correction:{authorized:false as const,maxCalls:0 as const,prompt:`Reconsider only stage ${stage}, preserving accepted components. Diagnostics: ${JSON.stringify(findings)}. Previous response: ${JSON.stringify(slice)}`}}}:{}), ...(construction ? {construction} : {})};
+    const cp: Checkpoint = {normalizations:stageCalls.flatMap(c=>c.normalizations??[]),stage, name: STAGE_NAMES[stage], attempt: Math.min(attempt, corrections), accepted, slice, spec: accepted ? candidate : draft, scene: trial?.scene, components: trial?.components, findings, calls: stageCalls, input:stageInput,warnings,...(composition?{composition}:{}),...(trial?.budget?{budget:trial.budget}:{}),...(!accepted?{failure:{category:failureCategory(stage,findings),message:executionError?.message??findings.map(f=>f.message).join(' | '),stack:executionError?.stack??trial?.executionError?.stack,schemaIssues,correction:{authorized:false as const,maxCalls:0 as const,prompt:`Reconsider only stage ${stage}, preserving accepted components. Diagnostics: ${JSON.stringify(findings)}. Previous response: ${JSON.stringify(slice)}`}}}:{}), ...(construction ? {construction} : {})};
     checkpoints.push(cp); await o.onCheckpoint?.(cp);
     if (!accepted) return result('failed', findings, stage);
     draft = candidate;
