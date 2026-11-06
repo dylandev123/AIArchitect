@@ -50,7 +50,7 @@ describe("computeCostUsd", () => {
 
 describe("pricing configuration", () => {
   it("exposes the initial rates", () => {
-    expect(DEFAULT_PRICING["gpt-5.6-terra"]).toEqual({ input: 2, cachedInput: 0.2, output: 12 });
+    expect(DEFAULT_PRICING["gpt-5.6-terra"]).toEqual({ input: 2, cachedInput: 0.2, output: 12, cacheWrite: 2.5 });
     expect(DEFAULT_PRICING["gpt-5.6-luna"]).toEqual({ input: 0.2, cachedInput: 0.02, output: 1.2 });
   });
 

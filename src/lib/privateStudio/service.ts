@@ -4,7 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {z} from 'zod';
 import {identity} from './auth';
 import {StudioStore,type Run,type State,type Call} from './store';
-import {LIVE_POLICY,briefHash,policyHash,reservationMicros,stageOutputTokens,StudioError,type StudioPolicy} from './policy';
+import {LIVE_POLICY,briefHash,policyHash,reservationMicros,settleUsage,stageOutputTokens,StudioError,type ReportedUsage,type StudioPolicy} from './policy';
 import {promptInput,advancePromptRun} from '@/lib/villa/staged/promptGeneration';
 import {DispatchRefused,type Designer,type StageNo} from '@/lib/villa/staged/pipeline';
 import {LiveDesigner,type ProviderObservation} from '@/lib/villa/staged/liveDesigner';
@@ -30,7 +30,7 @@ export function publicRun(run:Run,state?:State){
   direction:result?.spec?.direction,scene:result?.scene,checkpoints:accepted.map(c=>({stage:c.stage,brief:run.source.input.brief,scene:c.scene})),
   findings:result?.findings??[],save:(run.lastResponse as {save?:string})?.save,calls:run.callIds.length,
   correcting:run.state==='running'&&latest?.purpose==='correction',corrections:state?run.callIds.filter(id=>state.calls[id].purpose==='correction').length:0,
-  costUsd:state?run.callIds.reduce((sum,id)=>sum+(state.calls[id].costMicros??0),0)/1e6:result?.totalCostUsd??0,heldUsd:state?run.callIds.reduce((sum,id)=>sum+(state.calls[id].status==='settled'?0:state.calls[id].reservation),0)/1e6:0,provenance:'Live staged provider; no fixture selection'};
+  costUsd:state?run.callIds.reduce((sum,id)=>sum+(state.calls[id].costMicros??0),0)/1e6:result?.totalCostUsd??0,billedUsd:state?run.callIds.reduce((sum,id)=>sum+(state.calls[id].billedMicros??state.calls[id].costMicros??0),0)/1e6:undefined,heldUsd:state?run.callIds.reduce((sum,id)=>sum+(state.calls[id].status==='settled'?0:state.calls[id].reservation),0)/1e6:0,provenance:'Live staged provider; no fixture selection'};
 }
 export type DesignerFactory=(observe:(v:ProviderObservation)=>Promise<void>)=>Designer;
 const liveDesigner=(policy:StudioPolicy):DesignerFactory=>observe=>new LiveDesigner(policy.stageOutputTokens,{modelId:policy.model,price:policy.price,observe});
@@ -174,7 +174,9 @@ export class PrivateStudioService{
    if(value.phase==='request'){c.request=value.request;return;}
    if(value.phase==='transport'){c.responseBody=value.responseBody;c.httpStatus=value.httpStatus;c.wireRequestBody=value.wireRequestBody;c.phase='validating';return;}
    c.phase='validating';c.raw=value.raw;c.request=value.request;c.providerUsage=value.providerUsage;c.requestId=value.requestId;c.finishReason=value.finishReason;c.error=value.error;
-   if(value.usage&&Number.isFinite(value.usage.costUsd)&&value.usage.costUsd>=0){c.usage=value.usage;c.limitViolation=value.usage.inputTokens>policy.maxInputTokens||value.usage.outputTokens>outputCap;c.costMicros=Math.ceil(value.usage.costUsd*1e6);c.status='settled';}
+   // Budget charge and billed estimate come from the provider's own token categories (cache read/write split), never from the designer's estimate.
+   const settled=value.usage&&Number.isFinite(value.usage.costUsd)&&value.usage.costUsd>=0?settleUsage(policy,value.providerUsage as ReportedUsage|undefined)??settleUsage(policy,value.usage):undefined;
+   if(settled){c.usage=value.usage;c.limitViolation=settled.inputTokens>policy.maxInputTokens||settled.outputTokens>outputCap;c.costMicros=settled.chargeMicros;c.billedMicros=settled.billedMicros;c.status='settled';}
    else c.status='unknown';
   });};
   let dispatched=false;

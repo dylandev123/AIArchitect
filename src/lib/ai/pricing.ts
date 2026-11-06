@@ -3,6 +3,8 @@ export interface ModelPricing {
   input: number;
   cachedInput: number;
   output: number;
+  /** Prompt-cache write rate. Unset: cache-write tokens are billed at the full input rate. */
+  cacheWrite?: number;
 }
 
 /**
@@ -11,7 +13,7 @@ export interface ModelPricing {
  * Costs are computed when a request is logged, so changing a rate never rewrites past records.
  */
 export const DEFAULT_PRICING: Record<string, ModelPricing> = {
-  "gpt-5.6-terra": { input: 2, cachedInput: 0.2, output: 12 },
+  "gpt-5.6-terra": { input: 2, cachedInput: 0.2, output: 12, cacheWrite: 2.5 },
   "gpt-5.6-luna": { input: 0.2, cachedInput: 0.02, output: 1.2 },
 };
 
@@ -31,7 +33,7 @@ export function parsePricingOverride(raw: string | undefined): Record<string, Mo
   for (const [model, p] of Object.entries(parsed)) {
     const r = p as Partial<ModelPricing> | null;
     if (r && isRate(r.input) && isRate(r.cachedInput) && isRate(r.output)) {
-      out[model] = { input: r.input, cachedInput: r.cachedInput, output: r.output };
+      out[model] = { input: r.input, cachedInput: r.cachedInput, output: r.output, ...(isRate(r.cacheWrite) ? { cacheWrite: r.cacheWrite } : {}) };
     }
   }
   return out;
@@ -45,12 +47,15 @@ export interface TokenUsage {
   inputTokens: number;
   cachedInputTokens: number;
   outputTokens: number;
+  /** Portion of `inputTokens` written to the prompt cache (OpenAI cacheWriteTokens). */
+  cacheWriteInputTokens?: number;
 }
 
 /**
  * Cost in USD, or null when the model has no configured price (so unpriced usage is reported
  * as unknown instead of silently counting as $0). `inputTokens` includes the cached portion,
- * as OpenAI reports it, so cached tokens are billed at the cached rate and only the rest at the full rate.
+ * as OpenAI reports it, so cached tokens are billed at the cached rate, cache-write tokens at the
+ * cache-write rate, and only the rest at the full rate.
  */
 export function computeCostUsd(
   model: string,
@@ -60,6 +65,7 @@ export function computeCostUsd(
   const price = table[model];
   if (!price) return null;
   const cached = Math.min(Math.max(usage.cachedInputTokens, 0), usage.inputTokens);
-  const uncached = usage.inputTokens - cached;
-  return (uncached * price.input + cached * price.cachedInput + usage.outputTokens * price.output) / 1_000_000;
+  const written = Math.min(Math.max(usage.cacheWriteInputTokens ?? 0, 0), usage.inputTokens - cached);
+  const uncached = usage.inputTokens - cached - written;
+  return (uncached * price.input + cached * price.cachedInput + written * (price.cacheWrite ?? price.input) + usage.outputTokens * price.output) / 1_000_000;
 }
