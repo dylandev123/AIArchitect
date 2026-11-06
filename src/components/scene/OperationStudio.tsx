@@ -1,4 +1,5 @@
 'use client';
+import {StagedStudio} from './StagedStudio';
 import { isCanonicalPlan } from '@/lib/villa/canonical/plan';
 import { useGenerationReview } from './useGenerationReview';
 import { RejectedPlanPanel } from './RejectedPlanPanel';
@@ -55,7 +56,8 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const [reference, setReference] = useState<z.infer<typeof sceneReferenceSchema> | undefined>(initialReference);
     const sceneFromProject = project ? validateScene(JSON.parse(project.houseConfigJson)) : undefined;
     const [localScene, setScene] = useState(laderaScene), [history, setHistory] = useState<ArchitecturalScene[]>([]), [selected, setSelected] = useState('bridge-roof'), [view, setView] = useState<View>('Poolside'), [source, setSource] = useState('ladera'), [error, setError] = useState('');
-    const scene = sceneFromProject ?? localScene;
+    const [stagedPreview,setStagedPreview]=useState<ArchitecturalScene>();
+    const scene = stagedPreview ?? sceneFromProject ?? localScene;
     const architecturalReview = reviewSceneArchitecture(scene);
     const constructionIssues = sceneRelationshipIssues(scene);
     const sceneRef = useRef(scene);
@@ -64,6 +66,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const [recoverableDraft, setRecoverableDraft] = useState<ArchitecturalScene>();
     // A plan the compiler refused: shown and exportable as evidence, never a scene, never saved to the project.
     const [rejectedPlan, setRejectedPlan] = useState<RejectedGeneration>();
+    const [rejectedBrief, setRejectedBrief] = useState('');
     const cameraRight = useRef<[number,number,number] | undefined>(undefined);
     const [cameraReset, setCameraReset] = useState(0);
     const [brief, setBrief] = useState(''), [busy, setBusy] = useState(false);
@@ -93,7 +96,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         return; const frame = requestAnimationFrame(() => { if (started.current)
         return; started.current = true; const pending = useUIStore.getState().takePendingBrief(project.id); if (pending)
         generateInitial(pending); }); return () => cancelAnimationFrame(frame); }, [project]);
-    function commit(next: ArchitecturalScene, label = 'Scene edit') { const previous = sceneRef.current; if (project)
+    function commit(next: ArchitecturalScene, label = 'Scene edit') { setStagedPreview(undefined); const previous = sceneRef.current; if (project)
         useProjectStore.getState().appendVersion(project.id, label, JSON.stringify(next));
     else {
         localStorage.setItem('terra-direct-scene-1', JSON.stringify(next));
@@ -110,7 +113,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
         const output = await response.json();
         setTestResult(output.experiment??{responseId:output.responseId,error:output.error,architecturalQuality:output.architecturalAudit});
         setDiagnostic(generationDiagnostics(output.responseId, input, output));
-        setRejectedPlan(output.rejected?.status === 'rejected' ? output.rejected : undefined);
+        setRejectedPlan(output.rejected?.status === 'rejected' ? output.rejected : undefined); setRejectedBrief(mode === 'generate' ? prompt : '');
         if (!response.ok) {
             if (output.recoverableDraft) setRecoverableDraft(validateScene(output.recoverableDraft));
             throw Error(output.error + (Array.isArray(output.candidates) && output.candidates.length ? ` Candidates: ${output.candidates.slice(0,10).join(', ')}. Select one and refer to the selected object.` : ''));
@@ -147,6 +150,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     return <main className="operation-studio" style={{ height: '100vh', background: '#ece9df', color: '#26352e', fontFamily: 'sans-serif', display: 'grid', gridTemplateColumns: '310px 1fr' }}>
  <aside style={{ padding: 24, overflow: 'auto' }}><fieldset disabled={busy} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}><Link href="/">← All projects</Link>{onLegacy && <p><button type="button" onClick={onLegacy}>Legacy villas</button></p>}{!project && <p><Link href="/dev/villa-playground?scene=legacy">Villa composition, components and visual review</Link></p>}<p>DIRECT ARCHITECTURAL OPERATIONS</p><h1>{scene.name}</h1><p>{architecturalReview.designStage}</p><p>Compose individual architectural elements with Terra. Every part has its own editable identity.</p>
  <details><summary>Generation diagnostics {scene.generationResponseId ?? diagnostic?.responseId ?? '(historical trace unavailable)'}</summary>{scene.generationResponseId && <button type="button" onClick={async()=>{try{const response=await fetch(`/api/dev/scene-diagnostics/${scene.generationResponseId}`);if(!response.ok)throw Error('Saved diagnostics are available locally in development only.');setDiagnostic(await response.json());}catch(error){setError(String(error));}}}>Load retained report</button>}<p>Exact request, provider output and execution records are retained privately under .data/scene-responses using this response ID. Current geometry and warnings below include subsequent edits; the generation snapshot remains unchanged.</p>{diagnostic && <><p>Transaction: {diagnostic.outcome}</p><details><summary>Selected component provenance: {selected}</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify({component:diagnostic.components?.find(c=>c.element.id===selected),operations:diagnostic.operations?.filter(o=>o.changes.some(c=>c.id===selected)),explicitIntent:diagnostic.explicitIntent,currentElement:scene.elements.find(c=>c.id===selected)},null,2)}</pre></details><details><summary>Original ordered operations and execution report</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(diagnostic,null,2)}</pre></details></>}</details>
+ {process.env.NODE_ENV==='development' && <StagedStudio project={project} display={next=>{setStagedPreview(next);setCameraReset(n=>n+1);}}/>}
  <details open={architecturalReview.issues.length > 0 || constructionIssues.length > 0}><summary>Architectural warnings ({architecturalReview.issues.length + constructionIssues.length})</summary><p>Renderable geometry does not certify a complete house.</p><p>{architecturalReview.geometry.waterSurfaceAreaM2.toFixed(1)} m² water surface · {architecturalReview.geometry.surfaces.filter(s=>s.kind==='plate').length} floor/deck plates</p>{architecturalReview.interiorsDeferred && <details><summary>Deferred interiors</summary><p>Exterior allocations describe capacity, not completed rooms.</p><ul>{architecturalReview.programme.deferredInteriors?.map((item,n)=><li key={n}>{item}</li>)}</ul></details>}<details><summary>Measured element inventory</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(architecturalReview.geometry,null,2)}</pre></details>{architecturalReview.knowledgeUse.length > 0 && <details><summary>Knowledge application ({architecturalReview.knowledgeUse.length})</summary><p>Evidence checks element references and kinds; architectural completeness still needs review.</p><ul>{architecturalReview.knowledgeUse.map(entry=><li key={entry.id}>{entry.id}: {entry.status}{entry.elementIds.length ? ` (${entry.elementIds.join(', ')})` : ''}</li>)}</ul></details>}<ul>{constructionIssues.map((i,n)=><li key={`construction-${n}`}>Construction draft: {i.message}</li>)}{architecturalReview.issues.map((issue,n)=><li key={n}>{issue}</li>)}</ul>{scene.architecturalPlan !== undefined && <details><summary>Original design intent</summary><pre style={{whiteSpace:'pre-wrap'}}>{JSON.stringify(scene.architecturalPlan,null,2)}</pre></details>}</details>
  {process.env.NODE_ENV==='development'&&<details><summary>Development model test</summary>
  <p>One request per click, zero retries. Production default: {currentModel}. Model access is unverified.</p>
@@ -165,7 +169,7 @@ export function OperationStudio({ project, initialBrief, initialReference, onLeg
     const image = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = () => reject(Error('Image could not be read.')); reader.readAsDataURL(file); });
     setReference(sceneReferenceSchema.parse({source:file.name,image}));
  } catch (err) { setError(String(err)); } }} /></label>{reference && <><span>{reference.source}</span> <button onClick={() => setReference(undefined)}>Clear reference</button></>}</p>
- {rejectedPlan && <RejectedPlanPanel rejected={rejectedPlan} onDismiss={() => setRejectedPlan(undefined)} />}
+ {rejectedPlan && <RejectedPlanPanel rejected={rejectedPlan} brief={rejectedBrief || undefined} onDismiss={() => setRejectedPlan(undefined)} onAdopt={revised => { try { commit(validateScene(revised), 'Revised from rejected plan'); setCameraReset(n => n + 1); setRejectedPlan(undefined); } catch (err) { setError(String(err)); } }} />}
  {generationReview.panel}
  {process.env.NODE_ENV === 'development' && !isCanonicalPlan(scene.architecturalPlan) && <SceneReview scene={scene} reference={reference} brief={brief} commit={next => commit(next)} current={() => sceneRef.current} />}
  {!project && <label>Comparison <select aria-label="Comparison" value={source} onChange={ev => setSource(ev.target.value)}><option value="ladera">Current direct scene</option><option value="solana">Villa Solana</option></select></label>}

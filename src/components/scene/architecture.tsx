@@ -4,19 +4,21 @@ import { memo, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { PrimitiveMesh } from "@/components/workspace/viewport/house/PrimitiveMesh";
 import type { BoxPrimitive } from "@/lib/house/types";
+import type {ComponentFinish} from '@/lib/villa/scene/appearance';
 
 export type Vector = [number, number, number];
 const ivory = "#e4dfd1", stone = "#d1c2a5", teak = "#795239", bronze = "#343932";
 
 /** Small, directly authored building parts, using the workspace's metre-scaled PBR finishes. */
-export function FinishBox({ name, at, size, color = ivory, surface = "concrete" }: {
-  name: string; at: Vector; size: Vector; color?: string; surface?: BoxPrimitive["surface"];
+export function FinishBox({ name, at, size, color = ivory, surface = "concrete", physical }: {
+  name: string; at: Vector; size: Vector; color?: string; surface?: BoxPrimitive["surface"]; physical?: ComponentFinish;
 }) {
-  const finish = surface === "stone" || surface === "paving" ? "concrete" : surface;
+  const finish = physical?.surface ?? (surface === "stone" || surface === "paving" ? "concrete" : surface);
+  const roughness = physical?.roughness ?? .82, metalness = physical?.metalness;
   const primitive = useMemo<BoxPrimitive>(() => ({ kind: "box", id: `villa-${name}`, label: name,
     category: "landscape", position: at, size, rotation: [0, 0, 0], color, surface: finish,
-    roughness: .82, bevel: .018 }), [name, at, size, color, finish]);
-  return <PrimitiveMesh primitive={primitive} surface={finish} readOnly />;
+    roughness, ...(metalness === undefined ? {} : {metalness}), bevel: .018 }), [name, at, size, color, finish, roughness, metalness]);
+  return <PrimitiveMesh primitive={primitive} surface={finish} proceduralDetail={physical?.procedural} readOnly />;
 }
 
 export function Box({ at, size, color = bronze, rotation, glow = false }: {

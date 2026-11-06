@@ -25,8 +25,16 @@ export function buildGableRoof(
   const roofHeight = Math.max(0.6, span * (shape?.pitch ?? 0.35));
   const ridgeY = baseY + roofHeight;
   const eave = shape?.overhang ?? ROOF_OVERHANG;
-  const halfRidgeLen = (ridgeAlongX ? width : depth) / 2 + (shape?.rakeOverhang ?? eave);
-  const halfSpan = span / 2 + eave;
+  const rake = shape?.rakeOverhang ?? eave;
+  // Projection per side (builder compass, north = -z): eaves on the two long sides, rakes at the gable ends; `eaves` overrides single sides.
+  const side = {
+    north: shape?.eaves?.north ?? (ridgeAlongX ? eave : rake), south: shape?.eaves?.south ?? (ridgeAlongX ? eave : rake),
+    west: shape?.eaves?.west ?? (ridgeAlongX ? rake : eave), east: shape?.eaves?.east ?? (ridgeAlongX ? rake : eave),
+  };
+  const ridgeLen = (ridgeAlongX ? width : depth) / 2;
+  // Extents of the roof beyond the nominal centre in each direction.
+  const e0 = ridgeAlongX ? ridgeLen + side.west : ridgeLen + side.north, e1 = ridgeAlongX ? ridgeLen + side.east : ridgeLen + side.south;
+  const s0 = span / 2 + (ridgeAlongX ? side.north : side.west), s1 = span / 2 + (ridgeAlongX ? side.south : side.east);
   const roofColor = roofMaterial.color;
   const wallColor = exteriorMaterial.color;
   const primitives: HousePrimitive[] = [];
@@ -37,26 +45,26 @@ export function buildGableRoof(
 
   if (ridgeAlongX) {
     const north: [Vec3, Vec3, Vec3, Vec3] = [
-      [-halfRidgeLen, baseY, -halfSpan],
-      [halfRidgeLen, baseY, -halfSpan],
-      [halfRidgeLen, ridgeY, 0],
-      [-halfRidgeLen, ridgeY, 0],
+      [-e0, baseY, -s0],
+      [e1, baseY, -s0],
+      [e1, ridgeY, 0],
+      [-e0, ridgeY, 0],
     ];
     const south: [Vec3, Vec3, Vec3, Vec3] = [
-      [-halfRidgeLen, ridgeY, 0],
-      [halfRidgeLen, ridgeY, 0],
-      [halfRidgeLen, baseY, halfSpan],
-      [-halfRidgeLen, baseY, halfSpan],
+      [-e0, ridgeY, 0],
+      [e1, ridgeY, 0],
+      [e1, baseY, s1],
+      [-e0, baseY, s1],
     ];
     const west: [Vec3, Vec3, Vec3] = [
-      [-halfRidgeLen, baseY, -halfSpan],
-      [-halfRidgeLen, ridgeY, 0],
-      [-halfRidgeLen, baseY, halfSpan],
+      [-e0, baseY, -s0],
+      [-e0, ridgeY, 0],
+      [-e0, baseY, s1],
     ];
     const east: [Vec3, Vec3, Vec3] = [
-      [halfRidgeLen, baseY, -halfSpan],
-      [halfRidgeLen, baseY, halfSpan],
-      [halfRidgeLen, ridgeY, 0],
+      [e1, baseY, -s0],
+      [e1, baseY, s1],
+      [e1, ridgeY, 0],
     ];
 
     primitives.push(
@@ -68,31 +76,31 @@ export function buildGableRoof(
 
     // Fascia boards on the two long eave edges.
     primitives.push(
-      { kind: "box", id: `${idPrefix}-fascia-n`, category: "roof", label: "Roof Fascia (North)", position: [0, fasciaY, -halfSpan - FASCIA_T / 2], rotation: [0, 0, 0], size: [halfRidgeLen * 2, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
-      { kind: "box", id: `${idPrefix}-fascia-s`, category: "roof", label: "Roof Fascia (South)", position: [0, fasciaY,  halfSpan + FASCIA_T / 2], rotation: [0, 0, 0], size: [halfRidgeLen * 2, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
+      { kind: "box", id: `${idPrefix}-fascia-n`, category: "roof", label: "Roof Fascia (North)", position: [(e1 - e0) / 2, fasciaY, -s0 - FASCIA_T / 2], rotation: [0, 0, 0], size: [e0 + e1, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
+      { kind: "box", id: `${idPrefix}-fascia-s`, category: "roof", label: "Roof Fascia (South)", position: [(e1 - e0) / 2, fasciaY,  s1 + FASCIA_T / 2], rotation: [0, 0, 0], size: [e0 + e1, FASCIA_H, FASCIA_T], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
     );
   } else {
     const west: [Vec3, Vec3, Vec3, Vec3] = [
-      [-halfSpan, baseY, -halfRidgeLen],
-      [0, ridgeY, -halfRidgeLen],
-      [0, ridgeY, halfRidgeLen],
-      [-halfSpan, baseY, halfRidgeLen],
+      [-s0, baseY, -e0],
+      [0, ridgeY, -e0],
+      [0, ridgeY, e1],
+      [-s0, baseY, e1],
     ];
     const east: [Vec3, Vec3, Vec3, Vec3] = [
-      [0, ridgeY, -halfRidgeLen],
-      [halfSpan, baseY, -halfRidgeLen],
-      [halfSpan, baseY, halfRidgeLen],
-      [0, ridgeY, halfRidgeLen],
+      [0, ridgeY, -e0],
+      [s1, baseY, -e0],
+      [s1, baseY, e1],
+      [0, ridgeY, e1],
     ];
     const north: [Vec3, Vec3, Vec3] = [
-      [-halfSpan, baseY, -halfRidgeLen],
-      [0, ridgeY, -halfRidgeLen],
-      [halfSpan, baseY, -halfRidgeLen],
+      [-s0, baseY, -e0],
+      [0, ridgeY, -e0],
+      [s1, baseY, -e0],
     ];
     const south: [Vec3, Vec3, Vec3] = [
-      [-halfSpan, baseY, halfRidgeLen],
-      [halfSpan, baseY, halfRidgeLen],
-      [0, ridgeY, halfRidgeLen],
+      [-s0, baseY, e1],
+      [s1, baseY, e1],
+      [0, ridgeY, e1],
     ];
 
     primitives.push(
@@ -104,8 +112,8 @@ export function buildGableRoof(
 
     // Fascia boards on the two long eave edges.
     primitives.push(
-      { kind: "box", id: `${idPrefix}-fascia-w`, category: "roof", label: "Roof Fascia (West)", position: [-halfSpan - FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfRidgeLen * 2], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
-      { kind: "box", id: `${idPrefix}-fascia-e`, category: "roof", label: "Roof Fascia (East)",  position: [ halfSpan + FASCIA_T / 2, fasciaY, 0], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, halfRidgeLen * 2], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
+      { kind: "box", id: `${idPrefix}-fascia-w`, category: "roof", label: "Roof Fascia (West)", position: [-s0 - FASCIA_T / 2, fasciaY, (e1 - e0) / 2], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, e0 + e1], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness },
+      { kind: "box", id: `${idPrefix}-fascia-e`, category: "roof", label: "Roof Fascia (East)",  position: [ s1 + FASCIA_T / 2, fasciaY, (e1 - e0) / 2], rotation: [0, 0, 0], size: [FASCIA_T, FASCIA_H, e0 + e1], color: roofColor, roughness: roofMaterial.roughness, metalness: roofMaterial.metalness }
     );
   }
 

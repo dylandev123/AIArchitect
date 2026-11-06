@@ -6,6 +6,7 @@ import {assemblyOperations} from './assemblies';
 import { assertSceneRelationships } from './relationships';
 import { isApprovedBuilder } from '../component-registry';
 import { pavilionPlacementSchema } from '../experimental/curved-pavilion';
+import {siteAssetSchema} from '../staged/siteContract';
 const scalar = z.number().finite().min(-10000).max(10000);
 const vector = z.array(scalar).length(3).transform(v => v as [
     number,
@@ -24,10 +25,19 @@ export const elementFieldsSchema = z.object({
     assemblyKind:z.enum(['residential-wing','rectangular-pool','facade-bay','doorway','kitchen-run','straight-stair']).optional(),
     geometry: profileGeometrySchema.optional(),
     color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    /** Optional per-component presentation; absent retains the established renderer unchanged. */
+    appearance: z.enum(['cut-limestone', 'painted-stucco', 'bronze-roof', 'clay-roof', 'timber-door', 'glazed-door']).optional(),
+    roofWallFinish: z.object({appearance: z.enum(['cut-limestone', 'painted-stucco']), color: z.string().regex(/^#[0-9a-fA-F]{6}$/)}).strict().optional(),
+    /** Structured render detail under one selectable, persisted site component. */
+    siteAsset: siteAssetSchema.optional(),
+    /** Normalized [x,z,width,depth] masks for a single editable lawn region. */
+    sitePatches:z.array(z.array(z.number().finite()).length(4)).max(64).optional(),
     parent: id.optional(), at: vector, rotation: scalar.default(0), size,
     material: z.enum(['ivory', 'limestone', 'timber', 'bronze', 'sage']).default('ivory'),
     roofForm: z.enum(['flat', 'gable', 'hip']).optional(), overhang: z.number().finite().min(0).max(10).optional(),
     fascia: z.array(z.enum(['north', 'east', 'south', 'west'])).max(4).optional(),
+    /** Eave projection of single edges of a gable/hip roof (builder compass, north = -z), replacing `overhang` on those edges; `overhang` stays the roof's largest projection. */
+    eaves: z.object({north: z.number().finite().min(0).max(10).optional(), east: z.number().finite().min(0).max(10).optional(), south: z.number().finite().min(0).max(10).optional(), west: z.number().finite().min(0).max(10).optional()}).strict().optional(),
     panels: z.number().int().min(1).max(40).default(4),
     opening: z.object({ x: scalar, sill: z.number().finite().min(0).max(10000), width: z.number().finite().positive().max(10000), height: z.number().finite().positive().max(10000), glazed: z.boolean() }).strict().optional(),
 }).strict();
@@ -53,16 +63,19 @@ export function validateScene(input: unknown): ArchitecturalScene {
         throw Error('Duplicate element ID');
     for (const e of scene.elements) {
         if (e.semanticType && !DIRECT_SCENE_KINDS[e.semanticType]?.includes(e.kind)) throw Error(`Element ${e.id}: semantic type ${e.semanticType} is incompatible with renderer kind ${e.kind}`);
+        if(e.sitePatches && (e.siteAsset!=='lawn'||e.kind!=='plate'||e.sitePatches.some(([x,z,w,d])=>w<=0||d<=0||Math.abs(x)+w/2>.50001||Math.abs(z)+d/2>.50001)))throw Error('Lawn patches must fit their editable plate bounds');
         if (e.geometry) {
             if (!['plate','wall','roof','volume','glazing','entrance'].includes(e.kind)) throw Error('Custom profile requires plate, wall, roof, volume, glazing or entrance');
-            if (e.opening || e.roofForm || e.overhang !== undefined || e.fascia) throw Error('Profile geometry cannot combine with legacy opening/roof parameters; use profile holes or separate pieces');
+            if (e.opening || e.roofForm || e.overhang !== undefined || e.fascia || e.eaves) throw Error('Profile geometry cannot combine with legacy opening/roof parameters; use profile holes or separate pieces');
             validateProfile(e.geometry);
         }
         if (e.kind === 'pavilion') scenePavilionPlacement(e);
-        if ((e.roofForm !== undefined || e.overhang !== undefined || e.fascia !== undefined) && e.kind !== 'roof')
+        if ((e.roofForm !== undefined || e.overhang !== undefined || e.fascia !== undefined || e.eaves !== undefined || e.roofWallFinish !== undefined) && e.kind !== 'roof')
             throw Error('Roof parameters require a roof element');
         if (e.fascia && ((e.roofForm !== 'gable' && e.roofForm !== 'hip') || new Set(e.fascia).size !== e.fascia.length))
             throw Error('Fascia edges require a gable or hip roof and each edge once');
+        if (e.eaves && ((e.roofForm !== 'gable' && e.roofForm !== 'hip') || Math.max(...Object.values(e.eaves)) > (e.overhang ?? 0) + 1e-9))
+            throw Error('Edge eaves require a gable or hip roof and none may exceed its overhang (the overhang is the roof\'s largest projection)');
         if (e.roofForm && e.roofForm !== 'flat' && e.size[1] < .6)
             throw Error('Pitched roof rise must be at least 0.6 metres');
         const visited = new Set([e.id]);
@@ -122,7 +135,7 @@ export function stageSceneOperations(scene: ArchitecturalScene, input: unknown, 
             for(let i=0;i<elements.length;i++)for(const e of elements)if(e.parent&&ids.has(e.parent))ids.add(e.id);
             if(ids.size===1)throw Error('scale-assembly requires an editable hierarchy');
             if(Math.abs(op.factors[0]-op.factors[2])>1e-8)throw Error('Nonuniform plan scaling of wall openings is unsupported; replace coordinated children explicitly');
-            elements=elements.map(e=>!ids.has(e.id)?e:{...e,size:e.size.map((v,i)=>v*op.factors[i]) as SceneElement['size'],at:e.id===op.id?e.at:e.at.map((v,i)=>v*op.factors[i]) as SceneElement['at'],...(e.overhang!==undefined?{overhang:e.overhang*Math.max(op.factors[0],op.factors[2])}:{}),...(e.opening?{opening:{...e.opening,x:e.opening.x*op.factors[0],width:e.opening.width*op.factors[0],sill:e.opening.sill*op.factors[1],height:e.opening.height*op.factors[1]}}:{})});
+            elements=elements.map(e=>!ids.has(e.id)?e:{...e,size:e.size.map((v,i)=>v*op.factors[i]) as SceneElement['size'],at:e.id===op.id?e.at:e.at.map((v,i)=>v*op.factors[i]) as SceneElement['at'],...(e.overhang!==undefined?{overhang:e.overhang*Math.max(op.factors[0],op.factors[2])}:{}),...(e.eaves?{eaves:Object.fromEntries(Object.entries(e.eaves).map(([k,v])=>[k,v*Math.max(op.factors[0],op.factors[2])]))}:{}),...(e.opening?{opening:{...e.opening,x:e.opening.x*op.factors[0],width:e.opening.width*op.factors[0],sill:e.opening.sill*op.factors[1],height:e.opening.height*op.factors[1]}}:{})});
             continue;
         }
         if (op.op === 'add')

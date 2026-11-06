@@ -25,7 +25,7 @@ export function reviseProgrammeEvidence(before: ArchitecturalScene, after: Archi
   const next = structuredClone(programme);
   const a = sceneSpatialGeometry(before), b = sceneSpatialGeometry(after);
   const physical = (e: ArchitecturalScene['elements'][number], g: ReturnType<typeof sceneSpatialGeometry>) =>
-    ({world:g.world(e),size:e.size,kind:e.kind,geometry:e.geometry,opening:e.opening,roofForm:e.roofForm,overhang:e.overhang});
+    ({world:g.world(e),size:e.size,kind:e.kind,geometry:e.geometry,opening:e.opening,roofForm:e.roofForm,overhang:e.overhang,eaves:e.eaves});
   const changed = new Set(before.elements.filter(e => {
     const replacement = b.map.get(e.id);
     return !replacement || JSON.stringify(physical(e,a)) !== JSON.stringify(physical(replacement,b));

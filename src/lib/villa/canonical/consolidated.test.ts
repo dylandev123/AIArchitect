@@ -272,8 +272,8 @@ describe('RC5: diagnosis reads the composition the compiler reads',()=>{
   // A room named by a span and also given its own roof is one finding, from the same expansion the compiler uses.
   const dup=structuredClone(p),lead=view.spans[0].members[0];dup.roofs.push({space:lead,form:'flat'});
   const found=errors(dup,'resolution').filter(f=>f.id==='composition');
-  expect(found).toHaveLength(1);expect(found[0].message).toMatch(/has its own roof entry|a space has exactly one roof/);
-  expect(decisions(dup).join('\n')).toMatch(/has its own roof entry/);
+  expect(found).toHaveLength(1);expect(found[0].message).toMatch(/its own different roof|a space has exactly one roof/);
+  expect(decisions(dup).join('\n')).toMatch(/its own different roof/);
  });
  it('actual omissions stay detectable: remove a span and the rooms it covered are reported; remove window bays and the daylight observation grows',()=>{
   const p=strategyFixture('waterfront-pavilion');
@@ -410,7 +410,7 @@ describe('the retained failure can now be diagnosed accurately',()=>{
   const plan=retainedMansion(),c=coordinatePlan(plan),d=errors(plan);
   const conflicts=[...d.map(f=>f.id),...c.errors.filter(e=>e.kind==='constraint').map(e=>e.ids[0])];
   expect(new Set(conflicts)).toEqual(new Set(['arrival-lawn','pool-lawn-reserve','dining-to-terrace','living-to-west-gallery','dining-to-east-gallery','west-wing-pavilion-adjoin']));
-  expect(d.every(f=>f.stage==='openings'||f.stage==='site')).toBe(true);
+  expect(d.every(f=>f.stage==='openings'||f.stage==='site')).toBe(true); // as before the ownership contract changed: no roof or composition finding is raised for this plan
   expect(JSON.parse(readFileSync('docs/architecture/e2e-generation-diagnostic-2026-11-03/canonical-plan.json','utf8')).plan).toEqual(plan);
  });
 });

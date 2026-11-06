@@ -1,0 +1,31 @@
+/** Offline, read-only analysis of the retained production rejected plan. Never modifies the export; variants are in-memory probes, not Terra's design. */
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {architecturalPlanSchema,compileArchitecturalPlan,PlanRejection,type ArchitecturalPlan} from '../src/lib/villa/canonical/plan';
+import {diagnosePlan} from '../src/lib/villa/canonical/diagnose';
+const file='docs/architecture/production-rejected-2026-11-03/caribbean-beach-estate-01.rejected.json';
+const raw=readFileSync(file);console.log('sha256',createHash('sha256').update(raw).digest('hex'));
+const exported=JSON.parse(raw.toString());
+const base=architecturalPlanSchema.parse(exported.plan);
+const errs=(p:ArchitecturalPlan)=>diagnosePlan(p).findings.filter(f=>f.severity==='error');
+const compile=(p:ArchitecturalPlan)=>{try{compileArchitecturalPlan(p);return 'COMPILES';}catch(e){return e instanceof PlanRejection?`stops in ${e.stage}: ${e.decisions.slice(0,6).map(d=>d.slice(0,170)).join(' | ')}`:`stops: ${String((e as Error).message).slice(0,300)}`;}};
+const summary=(label:string,p:ArchitecturalPlan)=>{const e=errs(p);const by:Record<string,number>={};e.forEach(f=>by[f.stage]=(by[f.stage]??0)+1);console.log(`\n## ${label}: ${e.length} errors ${JSON.stringify(by)}\n   compile: ${compile(p)}`);return e;};
+const asIs=summary('as authored (current diagnosis)',base);
+asIs.filter(f=>f.stage==='resolution'||f.stage==='roofs'&&!f.message.startsWith('roof')).forEach(f=>console.log('  -',f.stage,f.id,f.message));
+const v=(f:(p:ArchitecturalPlan)=>void)=>{const p=structuredClone(base);f(p);return p;};
+const noOverhang=(p:ArchitecturalPlan)=>{p.roofs.forEach(r=>{r.overhang=0;});p.composition!.roofSpans.forEach(s=>{s.overhang=0;});};
+// Probe A: ownership resolved by listing only the hall (one-room span); veranda keeps its own roof. Everything else untouched.
+const A=v(p=>{p.composition!.roofSpans[0].spaces=['great-hall'];});
+const ea=summary('probe A: hall-only span, veranda keeps own roof (overhangs untouched)',A);
+const roofA=ea.filter(f=>f.stage==='roofs');console.log('  roof findings',roofA.length,'pair-clash',roofA.filter(f=>/intersect/.test(f.message)).length,'projection',roofA.filter(f=>/projects/.test(f.message)).length);
+const B=v(p=>{p.composition!.roofSpans[0].spaces=['great-hall'];noOverhang(p);});
+const eb=summary('probe B: probe A with every overhang 0',B);
+eb.forEach(f=>console.log('  -',f.stage,f.id,f.message.slice(0,200)));
+const C=v(p=>{p.composition!.roofSpans[0].spaces=['great-hall'];p.roofs.forEach(r=>{if(r.form==='flat')r.overhang=0;});});
+const ec=summary('probe C: probe A with flat overhangs 0, pitched overhangs kept',C);
+ec.filter(f=>f.stage==='roofs').forEach(f=>console.log('  -',f.id,f.message.slice(0,220)));
+import {rejectedGeneration} from '../src/lib/villa/canonical/rejection';
+const rej=rejectedGeneration({plan:exported.plan,error:new Error('x'),brief:''});
+console.log('\n## root causes of the authored plan');
+rej.rootCauses.forEach(c=>console.log(`- [${c.count}] ${c.title}\n    ${c.explanation.slice(0,420)}`));
+console.log(rej.rootCauses.length,'causes for',rej.diagnostics.errors,'errors');

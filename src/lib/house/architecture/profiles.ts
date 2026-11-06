@@ -27,6 +27,8 @@ export interface RoofShape {
   rakeOverhang: number;
   /** Eave edges that carry a fascia board (builder-local compass, north = -z). Omitted: every edge the form has one on. */
   fascia?: readonly FasciaEdge[];
+  /** Eave projection of single edges (builder-local compass), replacing `overhang` (eave edges; `rakeOverhang` for gable ends) on those edges. Omitted: uniform. */
+  eaves?: Partial<Record<FasciaEdge, number>>;
 }
 export type FasciaEdge = "north" | "east" | "south" | "west";
 

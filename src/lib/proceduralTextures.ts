@@ -161,10 +161,11 @@ export function getGrassTextures(): DetailTextures {
 
 // ── Building surfaces ─────────────────────────────────────────────────────────
 
-const surfaceCache = new Map<SurfacePattern, DetailTextures>();
+const surfaceCache = new Map<string, DetailTextures>();
 
-export function getSurfaceTextures(pattern: SurfacePattern): DetailTextures {
-  const cached = surfaceCache.get(pattern);
+export function getSurfaceTextures(pattern: SurfacePattern, contrast?:number): DetailTextures {
+  const key=contrast===undefined?pattern:`${pattern}:${contrast}`;
+  const cached = surfaceCache.get(key);
   if (cached) return cached;
 
   const rng = createRng(hashSeed("surface", pattern));
@@ -323,8 +324,10 @@ export function getSurfaceTextures(pattern: SurfacePattern): DetailTextures {
     }
   }
 
+  // Explicit opt-in for quiet cut-stone paving; existing surfaces keep their original texture unchanged.
+  if(contrast!==undefined){const pixels=c.getImageData(0,0,SIZE,SIZE);for(let i=0;i<pixels.data.length;i+=4)for(let channel=0;channel<3;channel++)pixels.data[i+channel]=Math.max(0,Math.min(255,255*(.9+contrast*(pixels.data[i+channel]/255-.85))));c.putImageData(pixels,0,0);}
   const textures = { map: finish(colorCanvas, true), bump: finish(heightCanvas, false) };
-  surfaceCache.set(pattern, textures);
+  surfaceCache.set(key, textures);
   return textures;
 }
 

@@ -320,9 +320,12 @@ describe('pitched roofs: fascia only on edges no other room shares',()=>{
   const p=abutting();p.roofs=[{space:'a',form:'gable',rise:1},{space:'b',form:'hip',rise:.9}];p.spaces.find(s=>s.id==='a')!.height=3.6;
   expect(errors(p,'roofs')).toEqual([]);expect(rejection(p)).toBeNull();
  });
- it('an overhang that reaches a neighbour is still rejected by both the diagnosis and the compiler',()=>{
+ it('an overhang whose edge lies wholly against the neighbour is built flush on that edge only, by both the diagnosis and the compiler',()=>{
   const p=abutting();p.roofs=[{space:'a',form:'flat'},{space:'b',form:'hip',rise:.9,overhang:.5}];
-  expect(errors(p,'roofs').length).toBeGreaterThan(0);expect(String(rejection(p))).toMatch(/roof|eaves/);
+  expect(errors(p,'roofs')).toEqual([]);expect(rejection(p)).toBeNull();
+  expect(diagnosePlan(p).findings.filter(f=>f.severity==='observation'&&f.stage==='roofs').map(f=>f.message).join()).toMatch(/west eave is flush \(authored 0.5 m, built 0\)/);
+  const roof=compileArchitecturalPlan(p).scene.elements.find(e=>e.kind==='roof'&&e.roofForm==='hip')!;
+  expect(roof.overhang).toBe(.5);expect(roof.eaves).toEqual({west:0}); // the other three edges keep the authored overhang
  });
 });
 

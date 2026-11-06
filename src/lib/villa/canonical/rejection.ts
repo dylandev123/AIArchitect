@@ -13,6 +13,7 @@
 import {architecturalPlanSchema,PlanRejection,COMPILE_PHASES,type ArchitecturalPlan,type CompilePhase} from './plan';
 import {DesignConflict} from '../experimental/semantic-building/compiler';
 import {diagnosePlan,type Finding} from './diagnose';
+import {rootCauses,type RootCause} from './rootCauses';
 import {coordinatePlan,type Coordination} from './spatial';
 import {reviewCorrections,type CorrectionReview} from './corrections';
 import {planConceptReview,type PlanConceptReview} from './concept';
@@ -44,6 +45,8 @@ export type RejectedGeneration={
  };
  limitations:string[];
  diagnostics:{findings:Finding[];errors:number;observations:number;truncated:boolean;metrics:Record<string,unknown>};
+ /** The error findings grouped by the authored decision behind them: each cause once, every affected finding listed under it. */
+ rootCauses:RootCause[];
  measured:{rects:Record<string,Rect>;siteRects:Record<string,Rect>}|null;
  coordination:Coordination|null;
  corrections:CorrectionReview|null;
@@ -61,7 +64,7 @@ export function rejectedGeneration(input:{plan:unknown;error:unknown;brief:strin
  const base={status:'rejected' as const,completedHouse:false as const,scene:null,stage,notReached,compilerRejection:{decisions},limitations:input.limitations??[],persisted:false as const};
  if(!parsed.success){
   return {...base,plan:null,unparsed:{reason:parsed.error.issues.slice(0,12).map(i=>`${i.path.join('.')||'plan'}: ${i.message}`).join('; '),truncated:false},designDecisions:null,
-   diagnostics:{findings:[],errors:0,observations:0,truncated:false,metrics:{}},measured:null,coordination:null,corrections:null,concept:null,drawing:null,
+   diagnostics:{findings:[],errors:0,observations:0,truncated:false,metrics:{}},rootCauses:[],measured:null,coordination:null,corrections:null,concept:null,drawing:null,
    notes:['The output did not satisfy the architectural-plan-1 contract, so no plan could be measured. Nothing was repaired.']};
  }
  const plan=parsed.data,notes:string[]=[];
@@ -80,6 +83,7 @@ export function rejectedGeneration(input:{plan:unknown;error:unknown;brief:strin
    wings:plan.masses.map(m=>({id:m.id,role:m.role,placement:m.placement??null,rooms:plan.spaces.filter(s=>s.mass===m.id).length})),
    composition:plan.composition??null,roofForms:[...new Set(plan.roofs.map(r=>r.form))],site:plan.site,siteBasis:'model-defined',constraints:plan.constraints??[],materials:plan.materials},
   diagnostics:{findings,errors:all.filter(f=>f.severity==='error').length,observations:all.filter(f=>f.severity==='observation').length,truncated:all.length>findings.length,metrics:diag.metrics as Record<string,unknown>},
+  rootCauses:rootCauses(all,plan),
   measured:{rects:diag.rects as Record<string,Rect>,siteRects:diag.siteRects as Record<string,Rect>},coordination,corrections,concept,drawing,
   notes:[...notes,`Compilation stopped in the "${stage}" phase; ${notReached.length?`the later phase${notReached.length>1?'s':''} (${notReached.join(', ')}) never ran, so ${notReached.length>1?'their results are':'its result is'} unknown, not passed.`:'no later phase exists.'}`,'The plan is exactly as authored; correction offers are never applied.']};
  // Response-size bound: shed the largest optional parts first, in a stated order, and say so.
@@ -94,6 +98,6 @@ export function unparsedGeneration(input:{error:unknown;rawText?:string}):Reject
  const text=input.rawText??'',cut=text.length>REJECTION_LIMITS.rawProviderChars;
  return {status:'rejected',completedHouse:false,scene:null,stage:'provider-output',notReached:[...COMPILE_PHASES],compilerRejection:{decisions:[String((input.error as Error)?.message??input.error)]},plan:null,
   unparsed:{reason:String((input.error as Error)?.message??input.error),rawText:cut?text.slice(0,REJECTION_LIMITS.rawProviderChars):text,truncated:cut},designDecisions:null,limitations:[],
-  diagnostics:{findings:[],errors:0,observations:0,truncated:false,metrics:{}},measured:null,coordination:null,corrections:null,concept:null,drawing:null,persisted:false,
+  diagnostics:{findings:[],errors:0,observations:0,truncated:false,metrics:{}},rootCauses:[],measured:null,coordination:null,corrections:null,concept:null,drawing:null,persisted:false,
   notes:['The provider output could not be read as an architectural-plan-1 proposal; its text is retained unchanged (bounded).']};
 }

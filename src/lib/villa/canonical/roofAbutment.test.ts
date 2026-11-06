@@ -150,10 +150,13 @@ describe('what stays rejected',()=>{
   expect(f.map(x=>x.message).join(' ')).toMatch(/partly covered/);
   expect(()=>compileArchitecturalPlan(p)).toThrow();
  });
- it('an overhang that reaches a neighbour',()=>{
+ it('an overhang whose edge lies wholly against a taller neighbour is built flush there, stated, with the other edges kept',()=>{
   const p=base();p.roofs.find(r=>r.space==='salon')!.overhang=.6;
-  expect(diagnosePlan(p).findings.some(x=>x.stage==='roofs'&&x.severity==='error')).toBe(true);
-  expect(()=>compileArchitecturalPlan(p)).toThrow();
+  const f=diagnosePlan(p).findings;
+  expect(f.filter(x=>x.stage==='roofs'&&x.severity==='error')).toEqual([]);
+  expect(f.filter(x=>x.stage==='roofs'&&x.severity==='observation').map(x=>x.message)).toEqual([expect.stringMatching(/^west eave is flush \(authored 0.6 m, built 0\): upper-gallery stands against that wall along the whole 12 m edge/)]);
+  const salon=compileArchitecturalPlan(p).scene.elements.find(e=>e.kind==='roof'&&e.id==='salon-roof')!;
+  expect(salon.overhang).toBe(.6);expect(salon.eaves).toEqual({west:0});
  });
  it('overlapping rooms are never repaired by the roof rules',()=>{
   const p=rejectedRevision();

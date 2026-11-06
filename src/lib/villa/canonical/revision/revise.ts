@@ -75,7 +75,7 @@ export type StopReason='unrepresentable'|'schema-invalid'|'physically-invalid'|'
 export type Check={id:string;ok:boolean;detail:string};
 export type Assessment={status:'accepted-for-construction'|'stopped';stopReasons:StopReason[];checks:Check[];revisedAnalysis?:PlanAnalysis;diff?:PlanDiff;programme?:ProgrammeCheck;before?:Indicators;after?:Indicators;dimensions?:DimensionVerdict[];resolvedCauses:string[];remainingCauses:string[];newCauses:string[];statement:string};
 /** Pure, deterministic judgement of a model response. All independent failures are reported together. */
-export function assessRevision(original:ArchitecturalPlan,rawResponse:unknown,scope:RevisionScope,a0:PlanAnalysis=analysePlan(original),opts:{brief?:string;redesign?:boolean}={}):Assessment{
+export function assessRevision(original:ArchitecturalPlan,rawResponse:unknown,scope:RevisionScope,a0:PlanAnalysis=analysePlan(original),opts:{brief?:string;redesign?:boolean;qualityGate?:boolean}={}):Assessment{
  const checks:Check[]=[],stops:Set<StopReason>=new Set();
  const parsed=revisionResponseSchema.safeParse(rawResponse);
  const none=(statement:string):Assessment=>({status:'stopped',stopReasons:[...stops],checks,resolvedCauses:[],remainingCauses:[],newCauses:[],statement});
@@ -121,14 +121,19 @@ export function assessRevision(original:ArchitecturalPlan,rawResponse:unknown,sc
   demonstrated=!invalid&&!diff.unchanged&&remaining.length===0&&fresh.length===0&&fired1<=fired0&&by('spatialCoherence')!=='regressed';
   detail=`Original measured as repair. Causes resolved: ${resolved.join(', ')||'none'}; remaining: ${remaining.join(', ')||'none'}; new: ${fresh.join(', ')||'none'}.`;
  }
- checks.push({id:'improvement-demonstrated',ok:demonstrated,detail});
- if(!demonstrated&&!invalid&&!diff.unchanged)stops.add('no-demonstrated-improvement');
+// Physical validity decides whether a plan may be compiled; architectural quality is only a gate when the caller asks for it (redesign, or the historical default).
+ // With the gate off the measurement is reported unchanged, never blocks, and never asks for a better concept than the one the user chose to keep.
+ if(opts.qualityGate===false)checks.push({id:'architectural-quality-reported',ok:true,detail:`Reported, not gating (physical validity is judged separately). ${detail}`});
+ else{
+  checks.push({id:'improvement-demonstrated',ok:demonstrated,detail});
+  if(!demonstrated&&!invalid&&!diff.unchanged)stops.add('no-demonstrated-improvement');
+ }
  const ok=stops.size===0;
  return {status:ok?'accepted-for-construction':'stopped',stopReasons:[...stops],checks,revisedAnalysis:a1,diff,programme,before,after,dimensions,resolvedCauses:resolved,remainingCauses:remaining,newCauses:fresh,statement:ok?'Physically valid, programme-preserving and measurably changed. This is NOT a finding of architectural success: it authorizes compilation and rendered review only. Composition, spatial coherence and ambition are reported separately as indicators.':'Stopped. The model-produced plan, diff and measurements are preserved as evidence; nothing was repaired or retried.'};
 }
 export type RevisionSubmit=(request:RevisionRequest)=>Promise<{output:unknown;raw?:string;usage?:unknown;finishReason?:string}>;
 export type RevisionRecord={version:typeof REVISION_VERSION;experimentId:string;authorization:RevisionAuthorization;brief:string;original:{plan:unknown;sha256:string};analysis:{errorCount:number;groups:PlanAnalysis['groups'];signals:PlanAnalysis['signals'];disposition:PlanAnalysis['disposition'];compilerDecisions:string[]};request:{sha256:RevisionRequest['sha256'];imageIncluded:boolean};provenance:{providerCalls:number;maxModelRevisions:1;model?:string;startedAt:string;finishedAt:string;compiler:'architectural-plan-1.2'};response:{raw?:string;output?:unknown;usage?:unknown;finishReason?:string;error?:string};revised?:{plan:ArchitecturalPlan;revisionKind:string;concept:string;addressed:unknown;changes:unknown;retained:string[];limitations:string[]};assessment:Omit<Assessment,'revisedAnalysis'>&{revisedGroups?:PlanAnalysis['groups'];revisedErrorCount?:number};accepted:boolean};
-export async function reviseCanonicalPlan(input:{authorization:RevisionAuthorization;brief:string;plan:unknown;knowledge?:string;image?:boolean;model?:string;submit:RevisionSubmit}):Promise<RevisionRecord>{
+export async function reviseCanonicalPlan(input:{authorization:RevisionAuthorization;brief:string;plan:unknown;knowledge?:string;image?:boolean;model?:string;qualityGate?:boolean;submit:RevisionSubmit}):Promise<RevisionRecord>{
  const startedAt=new Date().toISOString(),originalJson=JSON.stringify(input.plan);
  const base={version:REVISION_VERSION as typeof REVISION_VERSION,experimentId:input.authorization.experimentId,authorization:input.authorization,brief:input.brief,original:{plan:structuredClone(input.plan),sha256:sha(originalJson)}};
  const parsed=architecturalPlanSchema.safeParse(input.plan);
@@ -140,7 +145,7 @@ export async function reviseCanonicalPlan(input:{authorization:RevisionAuthoriza
  spent.add(input.authorization);
  let res:Awaited<ReturnType<RevisionSubmit>>;
  try{res=await input.submit(request);}catch(e){return stopEarly(String(e),'provider-failure',1,a0,request);}
- const assessment=assessRevision(parsed.data,res.output,input.authorization.scope,a0,{brief:input.brief,redesign}),{revisedAnalysis,...rest}=assessment;
+ const assessment=assessRevision(parsed.data,res.output,input.authorization.scope,a0,{brief:input.brief,redesign,qualityGate:input.qualityGate}),{revisedAnalysis,...rest}=assessment;
  const reparsed=revisionResponseSchema.safeParse(res.output),out=reparsed.success?reparsed.data:undefined;
  const revised=out&&out.status==='revised'?{plan:out.plan,revisionKind:out.revisionKind,concept:out.concept,addressed:out.addressed,changes:out.changes,retained:out.retained,limitations:out.limitations}:undefined;
  return {...base,analysis:{errorCount:a0.errorCount,groups:a0.groups,signals:a0.signals,disposition:a0.disposition,compilerDecisions:a0.compilerDecisions},request:{sha256:request.sha256,imageIncluded:!!request.png},provenance:{providerCalls:1,maxModelRevisions:1,model:input.model,startedAt,finishedAt:new Date().toISOString(),compiler:'architectural-plan-1.2'},response:{raw:res.raw,output:res.output,usage:res.usage,finishReason:res.finishReason},revised,assessment:{...rest,revisedGroups:revisedAnalysis?.groups,revisedErrorCount:revisedAnalysis?.errorCount},accepted:assessment.status==='accepted-for-construction'};

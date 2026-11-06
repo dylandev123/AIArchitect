@@ -1,4 +1,5 @@
-import { openai, createOpenAI } from "@ai-sdk/openai";
+import {authorizeProviderDispatch} from './paidExecution';
+import { createOpenAI } from "@ai-sdk/openai";
 
 /** Server-only: imported by API routes exclusively. OPENAI_API_KEY is never sent to the client. */
 /** House generation deliberately keeps its established Terra policy. */
@@ -26,18 +27,18 @@ export function getAssetPlanningModelId(): string {
   return process.env.AI_ASSET_PLANNING_MODEL || ASSET_PLANNING_MODEL;
 }
 
-export function getAiModel(capture?: (record: {requestBody?: string; responseBody: string; status: number}) => void, modelId = getAiModelId()) {
-  if (!capture) return openai(modelId);
+export function getAiModel(capture?: (record: {requestBody?: string; responseBody: string; status: number}) => unknown, modelId = getAiModelId(), opts: {requireReservation?: boolean} = {}) {
   return createOpenAI({fetch: async (input, init) => {
+    authorizeProviderDispatch(init?.body, opts);
     const response = await fetch(input, init);
     // Capture body bytes as UTF-8 text before SDK parsing; never retain auth headers.
-    const responseBody = await response.clone().text();
-    capture({requestBody: typeof init?.body === 'string' ? init.body : undefined, responseBody, status: response.status});
+    const responseBody = capture ? await response.clone().text() : "";
+    await capture?.({requestBody: typeof init?.body === 'string' ? init.body : undefined, responseBody, status: response.status});
     return response;
   }})(modelId);
 }
-export function getNativeAssetModel() { return openai(getNativeAssetModelId()); }
-export function getAssetPlanningModel() { return openai(getAssetPlanningModelId()); }
+export function getNativeAssetModel() { return getAiModel(undefined,getNativeAssetModelId()); }
+export function getAssetPlanningModel() { return getAiModel(undefined,getAssetPlanningModelId()); }
 
 /**
  * Operation payloads (`value`/`fields`) are free-form objects on the wire and validated locally

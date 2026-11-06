@@ -1,0 +1,31 @@
+/** Offline Stage 5 rehearsal. REAL Terra house, SOFTWARE landscape input; no provider or database access. */
+import {readFileSync,writeFileSync,existsSync,mkdirSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {deriveSite,siteMeasurements,STAGE4_BASE} from '@/lib/villa/staged/site';
+import {offlineSiteDesign} from '@/lib/villa/staged/site.fixture';
+import {measure} from '@/lib/villa/staged/pipeline';
+import {saveHouse,loadHouse} from '@/lib/villa/staged/save';
+
+const tag=process.argv[2]??'offline-preview-1';assert(/^[a-z0-9-]+$/.test(tag));
+const dir='docs/architecture/staged-villa/stage5-site',out=`${dir}/${tag}`;
+assert(!existsSync(`${out}.scene.json`),'Choose a new preview tag; never overwrite evidence.');
+const cp=JSON.parse(readFileSync(`${STAGE4_BASE}.checkpoint.json`,'utf8')),original=JSON.parse(readFileSync(`${STAGE4_BASE}.scene.json`,'utf8'));
+const m=siteMeasurements(cp.spec),result=deriveSite(cp.spec,offlineSiteDesign);
+console.log('MEASURED:',{baseElements:original.elements.length,remaining:m.remainingElements,poolCost:m.poolAssemblyElements,rawPalmCost:m.legacyPalmElements,compactPalmCost:m.compactPalmElements,southDepth:m.southDepth});
+console.log('DERIVE:',result.findings,result.adjustments);
+console.log('SITE COUNTS:',Object.fromEntries(Object.entries(result.spec.siteWork).map(([k,v])=>[k,Array.isArray(v)?v.length:1])), 'fixtures',result.spec.sitePresentation?.fixtures.length);
+assert.deepEqual(result.findings,[]);
+const built=measure(result.spec,5,4,3);console.log('COMPILE:',built.findings,'elements',built.scene?.elements.length);
+assert.deepEqual(built.findings,[]);assert(built.scene&&built.components);
+const after=new Map(built.scene.elements.map(e=>[e.id,e]));
+for(const e of original.elements)assert.equal(JSON.stringify(after.get(e.id)),JSON.stringify(e),`Stage 4 component changed: ${e.id}`);
+assert.equal(built.scene.terrain,undefined);
+const saved=saveHouse(result.spec,built.scene);assert.equal(JSON.stringify(loadHouse(saved).scene),JSON.stringify(built.scene));
+mkdirSync(dir,{recursive:true});
+const provenance={house:'Actual retained Terra Stages 2–4, corrected-v5',landscape:'SOFTWARE-AUTHORED OFFLINE TEST INPUT; NOT A TERRA STAGE 5',providerCalls:0};
+writeFileSync(`${out}.scene.json`,JSON.stringify(built.scene),{flag:'wx'});
+writeFileSync(`${out}.checkpoint.json`,JSON.stringify({...provenance,spec:result.spec,design:offlineSiteDesign,preservedPlanWarnings:cp.metrics.warnings.filter((w:{area:string})=>w.area==='room-plan'),findings:built.findings,adjustments:result.adjustments},null,2),{flag:'wx'});
+writeFileSync(`${out}.save.json`,saved,{flag:'wx'});
+writeFileSync(`${out}.verification.json`,JSON.stringify({...provenance,baseSceneSHA256:createHash('sha256').update(readFileSync(`${STAGE4_BASE}.scene.json`)).digest('hex'),baseElements:original.elements.length,siteElements:built.scene.elements.length-original.elements.length,totalElements:built.scene.elements.length,remaining:400-built.scene.elements.length,preservedElements:original.elements.length,hardFindings:built.findings,components:built.components,site:result.spec.siteWork,fixtures:result.spec.sitePresentation?.fixtures},null,2),{flag:'wx'});
+console.log('Saved',tag,'as OFFLINE SOFTWARE LANDSCAPE PREVIEW:',built.scene.elements.length,'elements,',400-built.scene.elements.length,'remaining');

@@ -3,7 +3,7 @@
 vi.mock('@/lib/villa/scene/designGeneration',()=>({selectDesignProposal:async()=>undefined}));
 import { emptySnapshot } from '@/lib/library/store';
 vi.mock('@/lib/library/store', async original => ({ ...await original<typeof import('@/lib/library/store')>(), readLibrary: async () => emptySnapshot() }));
-import { beforeEach, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createOpenAI } from '@ai-sdk/openai';
 import { Output } from 'ai';
 import { z } from 'zod';
@@ -213,4 +213,35 @@ it.each(['angular','flowing','estate'] as const)('runs %s profile construction t
  expect(JSON.stringify(wire.input)).toContain('GENERAL-PURPOSE EDITABLE PROFILES');
  expect(JSON.stringify(wire.input)).not.toContain('primary salon, subordinate dining pavilion');
  expect(JSON.stringify(wire.text.format.schema)).toContain('innerRatio');
+});
+
+// A strict provider returns every optional field, `null` when unused. `eaves:null` (and null edges inside it) must disappear in the real schema
+// normalization and leave the geometry of a roof without `eaves` untouched.
+describe('strict nulls for the per-edge eaves field (real SDK transport, mocked fetch, no provider call)',()=>{
+ const roof=(extra:Record<string,unknown>)=>({id:'eaves-probe-roof',label:'Probe roof',kind:'roof',at:[40,6,0],size:[8,1.2,6],rotation:0,material:'timber',roofForm:'hip',overhang:.8,...extra});
+ const outputWith=(element:Record<string,unknown>)=>({...complete(),operations:[{op:'add',element}]});
+ const run=async(element:Record<string,unknown>)=>{
+  respond(outputWith(element));
+  const response=await redesignCall();
+  return {status:response.status,body:await response.json() as {scene?:{elements:Record<string,unknown>[]};operations?:{element?:Record<string,unknown>}[];error?:string}};
+ };
+ it('eaves:null equals an absent eaves field, element for element',async()=>{
+  const absent=await run(roof({}));boundary.fetch.mockReset();
+  const nulled=await run(roof({eaves:null,fascia:null,opening:null,panels:null}));
+  expect(absent.body.error ?? '').toBe('');expect(nulled.body.error).toBeUndefined();expect(absent.status).toBe(200);expect(nulled.status).toBe(200);
+  const probe=(r:typeof absent)=>r.body.scene!.elements.find(e=>e.id==='eaves-probe-roof')!;
+  expect(probe(nulled)).toEqual(probe(absent));
+  expect(probe(nulled)).not.toHaveProperty('eaves');
+  expect(nulled.body.scene!.elements).toEqual(absent.body.scene!.elements); // every other element unchanged
+ });
+ it('null edges inside eaves are dropped; the one authored edge is kept and no other edge changes',async()=>{
+  const r=await run(roof({eaves:{north:null,east:null,south:null,west:.3}}));
+  expect(r.status).toBe(200);
+  expect(r.body.scene!.elements.find(e=>e.id==='eaves-probe-roof')).toMatchObject({overhang:.8,eaves:{west:.3}});
+  expect(r.body.scene!.elements.find(e=>e.id==='eaves-probe-roof')!.eaves).toEqual({west:.3});
+ });
+ it('an edge eave larger than the overhang is still refused',async()=>{
+  const r=await run(roof({eaves:{north:null,east:null,south:null,west:1.5}}));
+  expect(r.status).toBe(422);expect(JSON.stringify(r.body)).toMatch(/none may exceed its overhang/);
+ });
 });

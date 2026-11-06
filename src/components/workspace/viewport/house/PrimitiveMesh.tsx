@@ -190,7 +190,7 @@ export interface RenderedMeshAudit {
   id: string; signature: string; kind: HousePrimitive["kind"]; position: number[]; scale: number[]; rotation: number[]; visible: boolean; parent: string; opacity: number; depthWrite: boolean;
 }
 
-export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, readOnly = false, blueprint }: { blueprint?: { clippingPlanes?: THREE.Plane[] }; primitive: HousePrimitive; surface?: SurfaceKey; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
+export function PrimitiveMesh({ primitive, surface, proceduralDetail, xRay = false, onAuditMesh, readOnly = false, blueprint }: { blueprint?: { clippingPlanes?: THREE.Plane[] }; primitive: HousePrimitive; surface?: SurfaceKey; proceduralDetail?: {tileMeters: number; bumpScale: number;contrast?:number}; xRay?: boolean; onAuditMesh?: (mesh: RenderedMeshAudit) => void; readOnly?: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const featureRef = useMemo(() => primitive.sourceObjectId ? undefined : parseFeatureMeshId(primitive.id), [primitive.id, primitive.sourceObjectId]);
   const selectionKey = primitive.sourceObjectId ?? (featureRef ? featureKey(featureRef) : primitive.id);
@@ -205,13 +205,13 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
 
   // Surface detail, only when no imported PBR asset supplies the surface: the bundled PBR set first, procedural canvas
   // patterns as the fallback (surfaces without a set, or a set that fails to load).
-  const libraryDef = !blueprint && !assetId && surface ? SURFACE_PBR[surface] : undefined;
+  const libraryDef = !blueprint && !assetId && !proceduralDetail && surface ? SURFACE_PBR[surface] : undefined;
   const library = usePbrSet(libraryDef);
   const libraryPending = !!libraryDef && !library.textures && !library.failed;
   const pattern = !blueprint && !assetId && surface && !libraryPending && !library.textures ? SURFACE_PATTERN[surface] : undefined;
-  const detail = useMemo(() => (pattern ? getSurfaceTextures(pattern) : null), [pattern]);
+  const detail = useMemo(() => (pattern ? getSurfaceTextures(pattern,proceduralDetail?.contrast) : null), [pattern,proceduralDetail?.contrast]);
   // UVs are in metres / tile so a pattern keeps its real-world scale on any face size.
-  const tile = library.textures && libraryDef ? libraryDef.tile : pattern ? PATTERN_TILE_METERS[pattern] : 1;
+  const tile = proceduralDetail?.tileMeters ?? (library.textures && libraryDef ? libraryDef.tile : pattern ? PATTERN_TILE_METERS[pattern] : 1);
   const worldUv = !!pattern || !!library.textures;
   const grid = library.textures && libraryDef ? libraryDef.grid : pattern ? PATTERN_GRID[pattern] : undefined;
 
@@ -304,7 +304,7 @@ export function PrimitiveMesh({ primitive, surface, xRay = false, onAuditMesh, r
         roughness: Math.min(1, (primitive.roughness ?? 0.85) * libraryDef.roughnessGain * 1.15),
       }
     : detail
-      ? { map: detail.map, bumpMap: detail.bump, bumpScale: 2.2 }
+      ? { map: detail.map, bumpMap: detail.bump, bumpScale: proceduralDetail?.bumpScale ?? 2.2 }
       : {};
   // Tone patchiness and grounding only where a surface carries real detail — plain trim and floors stay clean.
   // Map presence changes the shader program, so the material is remounted when detail arrives (R3F won't flag needsUpdate).

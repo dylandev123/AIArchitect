@@ -97,9 +97,25 @@ describe('a composition the construction cannot honour is rejected, never substi
  it('rooms of different envelope heights cannot share a roof',()=>{const p=clone('pavilion-court');p.spaces.find(s=>s.id==='dining')!.height=4.4;fails(p,'one envelope height');});
  it('a roof span cannot cover rooms that have a storey stacked above',()=>{const p=clone('hillcrest');p.composition!.roofSpans[0].spaces=['hall','salon'];fails(p,'stacked');});
  it('a room cannot have both its own roof and a span',()=>{const p=clone('pavilion-court');p.roofs.push({space:'living',form:'flat'});fails(p,'exactly one roof');});
- it('a volume cannot claim one roof while a room carries another',()=>{
+ it('a volume names its principal building-scale roof; its other rooms keep room-owned roofs; no room has two roofs',()=>{
   const p=clone('pavilion-court');p.composition!.roofSpans[1].spaces=['bed-a','bed-b','bed-c','bed-d'];p.composition!.roofSpans[1].overhang=0;p.roofs.push({space:'spine',form:'flat',rise:.2});
-  fails(p,'separate roof');
+  const r=compileArchitecturalPlan(p),roofs=r.scene.elements.filter(e=>e.kind==='roof');
+  expect(roofs.map(e=>e.id).sort()).toEqual(['bar-roof','deck-roof','pavilion-roof','porch-roof','spine-roof']);
+  const owners=roofs.flatMap(e=>r.provenance[e.id].sources.filter(s=>p.spaces.some(q=>q.id===s)));
+  expect(new Set(owners).size).toBe(owners.length); // every room is under exactly one roof element
+  expect(r.provenance['bar-roof'].sources).toEqual(expect.arrayContaining(['bed-a','bed-b','bed-c','bed-d']));expect(r.provenance['bar-roof'].sources).not.toContain('spine');
+  const spine=roofs.find(e=>e.id==='spine-roof')!;expect(spine.roofForm??'flat').toBe('flat');expect(spine.size[1]).toBeCloseTo(.2,2);
+  expect(physicalEvidence(r).failures).toEqual([]);
+ });
+ it('a room in a span that also has a different roof entry is still rejected, naming both designs',()=>{
+  const p=clone('pavilion-court');p.roofs.push({space:'spine',form:'gable'});
+  fails(p,'spine is listed in this span');fails(p,'also has its own different roof');
+ });
+ it('a volume\'s roof may not be a span covering rooms of other volumes',()=>{
+  const p=clone('pavilion-court');p.composition!.volumes[0].roof='bar-roof';fails(p,'which belong to other volumes');
+ });
+ it('a span may not take a room already in another span',()=>{
+  const p=clone('pavilion-court');p.composition!.roofSpans[1].spaces=[...p.composition!.roofSpans[1].spaces,'dining'];fails(p,'dining already belongs to roof span pavilion-roof');
  });
  it('a primary volume that is not actually taller than a secondary one is rejected',()=>{
   const p=clone('pavilion-court');for(const s of p.spaces.filter(q=>q.mass==='bar'))s.height=4.8;fails(p,'hierarchy needs at least');

@@ -157,7 +157,7 @@ export function assertSceneRelationships(next: ArchitecturalScene, previous?: Ar
     const geometry = (scene: ArchitecturalScene, id: string): string => {
         const e = scene.elements.find(e => e.id === id);
         if (!e) return '';
-        return JSON.stringify([e.kind,e.at,e.rotation,e.size,e.geometry,e.roofForm,e.overhang,e.parent,e.parent ? geometry(scene,e.parent) : null]);
+        return JSON.stringify([e.kind,e.at,e.rotation,e.size,e.geometry,e.roofForm,e.overhang,e.eaves,e.parent,e.parent ? geometry(scene,e.parent) : null]);
     };
     const existing = new Set(previous ? sceneRelationshipIssues(previous)
         .filter(i => [i.id,...(i.relatedIds ?? [])].every(id=>geometry(previous,id) === geometry(next,id))).map(i => `${i.id}:${i.rule}:${i.relatedIds?.join(',') ?? ''}`) : []);

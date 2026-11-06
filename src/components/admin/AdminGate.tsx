@@ -26,6 +26,15 @@ export function AdminGate({ onClose, onSuccess }: AdminGateProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      if (res.status === 404) {
+        // The production proxy deliberately hides /api/admin/*; that is not a network failure.
+        setError("Admin access is disabled on this deployment.");
+        return;
+      }
+      if (!res.ok) {
+        setError(`Admin check failed (HTTP ${res.status}).`);
+        return;
+      }
       const data = (await res.json()) as { admin?: boolean };
       if (data.admin) {
         setAdmin(email);

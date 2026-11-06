@@ -11,3 +11,6 @@ vi.mock('@/lib/villa/canonical/authority', () => ({
   legacyHouseAuthoringEnabled: () => true,
   canonicalGenerationRequired: () => false,
 }));
+// These suites deliberately exercise the legacy routes through an offline transport. Model the explicit
+// LEGACY_AI_ROUTES deployment decision for this project only; the active project keeps the lockdown.
+process.env.LEGACY_AI_ROUTES = 'enabled';

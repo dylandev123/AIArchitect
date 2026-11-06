@@ -1,0 +1,90 @@
+/** One approved request only. Sticky attempt marker, raw evidence first, no repairs/retries. */
+import {readFileSync,writeFileSync,existsSync,mkdirSync,readdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+import {loadEnvConfig} from '@next/env';
+import {createOpenAI} from '@ai-sdk/openai';
+import {generateText,Output} from 'ai';
+import {siteDesignSchema} from '@/lib/villa/staged/siteContract';
+import {deriveSite,siteMeasurements,STAGE4_BASE} from '@/lib/villa/staged/site';
+import {measure} from '@/lib/villa/staged/pipeline';
+import {saveHouse,loadHouse} from '@/lib/villa/staged/save';
+import {computeCostUsd,DEFAULT_PRICING} from '@/lib/ai/pricing';
+
+const dir='docs/architecture/staged-villa/stage5-site',live=`${dir}/live`,out=`${dir}/terra-stage5`;
+const read=(p:string)=>JSON.parse(readFileSync(p,'utf8'));
+const hash=(s:string|Buffer)=>createHash('sha256').update(s).digest('hex');
+const write=(p:string,v:unknown)=>writeFileSync(p,JSON.stringify(v,null,2),{flag:'wx'});
+const approval=read(`${dir}/prepared-2.approval.json`),request=read(`${dir}/prepared-2.request.json`),schema=read(`${dir}/prepared-2.schema.json`);
+assert.equal(hash(JSON.stringify(request)),approval.requestSHA256);
+assert.equal(hash(JSON.stringify(schema)),approval.schemaSHA256);
+for(const [p,h]of Object.entries(approval.constructionSourceSHA256))assert.equal(hash(readFileSync(p)),h,p);
+assert.equal(hash(readFileSync(`${STAGE4_BASE}.scene.json`)),approval.baseSceneSHA256);
+const cp=read(`${STAGE4_BASE}.checkpoint.json`),original=read(`${STAGE4_BASE}.scene.json`);
+assert.equal(original.elements.length,314);
+assert.equal(JSON.stringify(siteMeasurements(cp.spec).building.scene),JSON.stringify(original));
+const runtimeSchema=(await (Output.object({schema:siteDesignSchema}) as unknown as {responseFormat:Promise<{schema:unknown}>}).responseFormat).schema;
+assert.equal(hash(JSON.stringify(runtimeSchema)),approval.schemaSHA256);
+assert.equal(approval.maxOutputTokens,4000);assert.equal(approval.maxCostUsd,.15);
+assert(approval.recordedExperimentSpendUsd+.15<5);
+assert(!existsSync(`${live}/attempt.json`),'One-call marker exists. Never retry.');
+assert(!existsSync(`${out}.scene.json`));
+if(!process.argv.includes('--live')){console.log('Preflight passed: exact approved packet, compiler and 314-element house; no call made.');process.exit(0);}
+loadEnvConfig(process.cwd(),false,{info:()=>{},error:()=>{}});
+assert(process.env.OPENAI_API_KEY?.trim(),'Existing key unavailable');
+assert(!process.env.OPENAI_BASE_URL?.trim(),'Unexpected provider override');
+assert.equal(process.env.AI_HOUSE_MODEL||'gpt-5.6-terra',approval.model);
+mkdirSync(live,{recursive:true});
+const prior:Record<string,string>={};
+function snapshot(p:string){for(const e of readdirSync(p,{withFileTypes:true})){const f=`${p}/${e.name}`;if(e.isDirectory())snapshot(f);else prior[f]=hash(readFileSync(f));}}
+snapshot('docs/architecture/staged-villa');
+write(`${live}/preservation-before.json`,prior);
+write(`${live}/attempt.json`,{authorized:'User approved ONE live Stage 5 call, US$0.15, 4000 output tokens, zero retries',started:new Date().toISOString(),approval});
+let attempts=0;
+const provider=createOpenAI({fetch:async(input,init)=>{
+  assert.equal(attempts,0,'Second network attempt prohibited');
+  const body=JSON.parse(String(init?.body));
+  assert.equal(body.model,approval.model);assert.equal(body.max_output_tokens,4000);
+  assert.equal(body.text.format.strict,true);assert.equal(hash(JSON.stringify(body.text.format.schema)),approval.schemaSHA256);
+  const rate=DEFAULT_PRICING[approval.model],bound=((Buffer.byteLength(JSON.stringify(body))+4096)*rate.input+4000*rate.output)/1e6;
+  assert(bound<=.15,'Wire payload exceeds cost bound');
+  write(`${live}/wire-request.json`,body);
+  write(`${live}/network-sent.json`,{at:new Date().toISOString(),conservativeCostBoundUsd:bound});attempts++;
+  const response=await fetch(input,{...init,redirect:'error'});
+  writeFileSync(`${live}/raw-response.json`,await response.clone().text(),{flag:'wx'});
+  write(`${live}/http.json`,{status:response.status});
+  return response;
+}});
+try{
+  const r=await generateText({model:provider(approval.model),system:request.system,prompt:request.prompt,maxOutputTokens:4000,maxRetries:0,abortSignal:AbortSignal.timeout(170000),providerOptions:{openai:{strictJsonSchema:true}},output:Output.object({schema:siteDesignSchema})});
+  const raw=read(`${live}/raw-response.json`),u=raw.usage;
+  const tokens={inputTokens:u.input_tokens,cachedInputTokens:u.input_tokens_details?.cached_tokens??0,outputTokens:u.output_tokens};
+  const costUsd=computeCostUsd(approval.model,tokens,DEFAULT_PRICING);
+  const result={providerCalls:attempts,finishReason:r.finishReason,text:r.text,usage:r.usage,providerUsage:u,tokens,costUsd,costBasis:'Actual provider tokens at the approved project price table; invoice not independently checked',recordedExperimentSpendUsd:approval.recordedExperimentSpendUsd+(costUsd??0),budgetCaveat:approval.budgetCaveat};
+  write(`${live}/result.json`,result);
+  assert.equal(r.finishReason,'stop','Non-normal completion; stop without repair');assert(costUsd!==null&&costUsd<=.15);
+  const design=siteDesignSchema.parse(JSON.parse(r.text));write(`${live}/terra-design.json`,design);
+  const derived=deriveSite(cp.spec,design);
+  write(`${live}/derivation.json`,derived);
+  assert.deepEqual(derived.findings,[],'Construction derivation failed; no repair');
+  const built=measure(derived.spec,5,4,3);
+  write(`${live}/validation.json`,{findings:built.findings,elements:built.scene?.elements.length,adjustments:derived.adjustments});
+  assert.deepEqual(built.findings,[],'Construction validation failed; no repair');assert(built.scene&&built.components);
+  const after=new Map(built.scene.elements.map(e=>[e.id,e]));
+  for(const e of original.elements)assert.equal(JSON.stringify(after.get(e.id)),JSON.stringify(e),`House element changed: ${e.id}`);
+  assert.equal(built.scene.terrain,undefined);assert(built.scene.elements.length<=400);
+  const saved=saveHouse(derived.spec,built.scene);assert.equal(JSON.stringify(loadHouse(saved).scene),JSON.stringify(built.scene));
+  const provenance={house:'Actual Terra Stages 2–4 corrected-v5',landscape:'ACTUAL LIVE TERRA STAGE 5; approved single call',rawResponse:`${live}/raw-response.json`};
+  writeFileSync(`${out}.scene.json`,JSON.stringify(built.scene),{flag:'wx'});
+  writeFileSync(`${out}.save.json`,saved,{flag:'wx'});
+  write(`${out}.checkpoint.json`,{...provenance,spec:derived.spec,design,preservedPlanWarnings:cp.metrics.warnings.filter((w:{area:string})=>w.area==='room-plan'),findings:built.findings,adjustments:derived.adjustments});
+  write(`${out}.verification.json`,{...provenance,...result,baseElements:314,preservedElements:314,totalElements:built.scene.elements.length,remaining:400-built.scene.elements.length,findings:built.findings,components:built.components});
+  for(const [p,h]of Object.entries(prior))assert.equal(hash(readFileSync(p)),h,`Prior evidence changed: ${p}`);
+  write(`${live}/preservation-after.json`,{checked:Object.keys(prior).length,allUnchanged:true});
+  console.log(JSON.stringify({finishReason:r.finishReason,tokens,costUsd,elements:built.scene.elements.length,remaining:400-built.scene.elements.length,findings:built.findings,design}));
+}catch(error){
+  const secret=process.env.OPENAI_API_KEY??'';
+  const message=String(error).split(secret||'__NO_SECRET__').join('[REDACTED]');
+  write(`${live}/failure.json`,{providerCalls:attempts,error:message,stopped:true,retries:0});
+  console.error('Stage 5 stopped; evidence preserved. No retry.',message);process.exitCode=1;
+}

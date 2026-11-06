@@ -1,0 +1,33 @@
+/** Prepare approval packet only. This script has NO paid-call branch. */
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {Output} from 'ai';
+import {siteDesignSchema} from '@/lib/villa/staged/siteContract';
+import {siteDesignRequest} from '@/lib/villa/staged/siteDesigner';
+import {STAGE4_BASE,siteMeasurements} from '@/lib/villa/staged/site';
+import {strictSchemaIssues} from '@/lib/villa/scene/strictSchema';
+import {DEFAULT_PRICING} from '@/lib/ai/pricing';
+
+assert(!process.argv.includes('--live'),'Paid execution is unavailable here. Explicit user approval is still required.');
+const dir='docs/architecture/staged-villa/stage5-site',tag=process.argv[2]??'prepared-1';assert(/^[a-z0-9-]+$/.test(tag));
+assert(!existsSync(`${dir}/${tag}.request.json`),'Never overwrite an approval packet; use a new tag.');
+const cp=JSON.parse(readFileSync(`${STAGE4_BASE}.checkpoint.json`,'utf8'));
+const programme=JSON.parse(readFileSync('docs/architecture/staged-villa/stage3-programme/live/result.json','utf8')).programme;
+const requestedAreas=Object.fromEntries(programme.rooms.map((r:{id:string;area:number})=>[r.id,r.area]));
+const request=siteDesignRequest(cp.spec,requestedAreas),m=siteMeasurements(cp.spec);
+assert.equal(JSON.stringify(m.building.scene),readFileSync(`${STAGE4_BASE}.scene.json`,'utf8'));
+const schema=(await (Output.object({schema:siteDesignSchema}) as unknown as {responseFormat:Promise<{schema:Record<string,unknown>}>}).responseFormat).schema;
+assert.deepEqual(strictSchemaIssues(schema),[]);
+const model='gpt-5.6-terra',maxOutputTokens=4000,p=DEFAULT_PRICING[model];assert(p);
+const inputBound=Buffer.byteLength(JSON.stringify({...request,schema}))+4096;
+const worstCaseUsd=(inputBound*p.input+maxOutputTokens*p.output)/1e6,maxCostUsd=.15;
+assert(worstCaseUsd<maxCostUsd,'Request plus output ceiling exceeds the proposed call budget.');
+const s12=JSON.parse(readFileSync('docs/architecture/staged-villa/live-1/raw-response.json','utf8'));
+const s3=JSON.parse(readFileSync('docs/architecture/staged-villa/stage3-programme/live/result.json','utf8'));
+const s4=JSON.parse(readFileSync('docs/architecture/staged-villa/stage4-exterior/live/result.json','utf8'));
+const recordedSpend=s12.costUsd+s3.calls.reduce((n:number,c:{usage:{costUsd:number}})=>n+c.usage.costUsd,0)+s4.usage.costUsd;
+const hash=(value:string|Buffer)=>createHash('sha256').update(value).digest('hex');
+const approval={status:'AWAITING EXPLICIT USER APPROVAL — NOT SENT',model,providerCalls:0,plannedCalls:1,maxRetries:0,maxOutputTokens,maxCostUsd,conservativeCostBoundUsd:worstCaseUsd,inputTokenConservativeByteBound:inputBound,recordedExperimentSpendUsd:recordedSpend,experimentBudgetUsd:5,recordedRemainderUsd:5-recordedSpend,budgetCaveat:'The earlier failed Stage 3 call had unrecorded cost; the exact remaining balance is unknown.',baseSceneSHA256:hash(readFileSync(`${STAGE4_BASE}.scene.json`)),requestSHA256:hash(JSON.stringify(request)),schemaSHA256:hash(JSON.stringify(schema)),constructionSourceSHA256:Object.fromEntries(['src/lib/villa/staged/site.ts','src/lib/villa/staged/siteContract.ts','src/lib/villa/staged/compile.ts'].map(p=>[p,hash(readFileSync(p))])),baseElements:m.building.scene.elements.length,remainingElements:m.remainingElements,requiredExecution:'After approval: pin these exact source/request/schema hashes; reserve a one-call marker exclusively before network; enforce input/output cost bound and timeout; maxRetries 0; save raw answer/usage/finish reason before interpretation; refuse another call; derive/validate without repairs; retain Stage 4 on failure.'};
+for(const [suffix,value]of [['request',request],['schema',schema],['approval',approval]]as const)writeFileSync(`${dir}/${tag}.${suffix}.json`,JSON.stringify(value,null,2),{flag:'wx'});
+console.log(JSON.stringify(approval,null,2));

@@ -4,7 +4,7 @@ import { coverOf, type Cover } from '../experimental/semantic-building/vertical'
 import { isMassAnchor, massMembers, boundsOf, massAnchorProblem } from './massAnchor';
 import { locate, resolveLayout, rootSpaces, type Rect } from './layout';
 import { coordinatePlan } from './spatial';
-import { placePortals, exposedFascia, fasciaSides, roofFootprints, ELEMENT_EDGE, FASCIA_DEPTH, FASCIA_THICKNESS, type Side } from './coordination';
+import { placePortals, exposedFascia, fasciaSides, roofFootprints, resolveEaves, eavesOf, ELEMENT_EDGE, FASCIA_DEPTH, FASCIA_THICKNESS, type Side, type EaveSection, type Eaves } from './coordination';
 import { sceneTerrainSchema, elementSchema, validateScene, type SceneElement } from '../scene/model';
 import { id, dimension, material, compositionSchema, expandComposition, checkSpans, compositionFidelity, type SpanInfo } from './composition';
 export const isNewGeneration=(mode:unknown):boolean=>mode==='generate';
@@ -57,7 +57,7 @@ RESPONSIBILITIES: You determine the vision, composition, spatial relationships, 
 SELF-CHECK before returning: Is there a clear concept that answers this brief? Are wings, volumes and spaces meaningfully related? Are entrance and spatial sequence thoughtfully organised? Are proportions, facades, views, light and outdoor relationships considered? Is the design distinctive rather than generic or repetitive? Are declared relationships physically coherent and supported? Are all mandatory client requirements preserved? If the concept is ordinary, reconsider the architectural decisions before finalising.
 OUTPUT CONTRACT
 This is the sole new-house authoring path. Return architectural-plan-1 in a proposed plan or decision-required with unsupported choices. Never return scene operations, component coordinates, polygons, wall/slab/tread arrays, calculated world transforms, access-target lists or riser counts.
-COMPOSITION FIRST: before elaborating rooms, state the building's composition in composition. volumes are the major forms of the house: each owns whole wings (every wing belongs to exactly one volume), a tier (primary, secondary, subordinate) and optionally ONE roof (roof: the id of a roofSpan) and a material character (material is a default for its rooms; a room's facadeMaterial overrides it). Software measures the built tops and rejects a plan whose tiers are not at least heightStep metres apart (default 0.6), so a primary volume must really be taller (a double-height room, an added level) than a secondary one, not merely labelled so. roofSpans put ONE roof over several rooms: a single hip, gable or flat roof over the combined footprint of spaces that sit on one level, share one envelope height, have nothing stacked above and together fill one rectangle exactly (it is built once, from rise and overhang, and never as a roof per room); use it for a sleeping wing, a main pavilion or a long bar instead of repeating a roof on every room. A roofSpan is the one exception to a roof staying within its own room cell. Rooms listed in a roofSpan must not also appear in roofs. facades compose a wall's openings: bays evenly spaced windows (sill optional) or doors (to names the outdoor space they open onto) of width and height on one side of one interior room, software owns the offsets and piers; the wall must be exposed (or border the named outdoor space) along its whole length. entrance names the arrival door (portal) and the roofed outdoor porch it opens onto (porch must be the arrival space and have a roof). Declare composition in the same response as the rooms; software expands it into ordinary roofs and openings and then verifies the built house against it, rejecting, never repairing, anything the construction cannot honour. A house made only of interchangeable rooms with a roof on each is a collection of boxes, not a composition. Composition is expected for luxury, estate, mansion and other architecturally ambitious commissions: omitting it, or declaring volumes without an entrance, roofs or facades, is reported in the architectural review as missing composition, and a written thesis does not substitute for it. A restrained single-volume home satisfies this when its volume, roof, entrance and openings are stated; composition does not require several storeys, wings, pitched roofs or any style. It stays optional for simple briefs.
+COMPOSITION FIRST: before elaborating rooms, state the building's composition in composition. volumes are the major forms of the house: each owns whole wings (every wing belongs to exactly one volume), a tier (primary, secondary, subordinate) and optionally ONE roof (roof: the id of a roofSpan) and a material character (material is a default for its rooms; a room's facadeMaterial overrides it). Software measures the built tops and rejects a plan whose tiers are not at least heightStep metres apart (default 0.6), so a primary volume must really be taller (a double-height room, an added level) than a secondary one, not merely labelled so. roofSpans put ONE roof over several rooms: a single hip, gable or flat roof over the combined footprint of spaces that sit on one level, share one envelope height, have nothing stacked above and together fill one rectangle exactly (it is built once, from rise and overhang, and never as a roof per room); use it for a sleeping wing, a main pavilion or a long bar instead of repeating a roof on every room. A roofSpan is the one exception to a roof staying within its own room cell. A roofSpan may list a single room: that is how a volume's roof (volumes[].roof) is one room's roof, so never add a neighbouring room merely to make a span. Rooms listed in a roofSpan must not also appear in roofs: a space has exactly one roof, and a veranda or porch that should keep its own lower or different roof stays out of the span and gets its own roofs entry. facades compose a wall's openings: bays evenly spaced windows (sill optional) or doors (to names the outdoor space they open onto) of width and height on one side of one interior room, software owns the offsets and piers; the wall must be exposed (or border the named outdoor space) along its whole length. entrance names the arrival door (portal) and the roofed outdoor porch it opens onto (porch must be the arrival space and have a roof). Declare composition in the same response as the rooms; software expands it into ordinary roofs and openings and then verifies the built house against it, rejecting, never repairing, anything the construction cannot honour. A house made only of interchangeable rooms with a roof on each is a collection of boxes, not a composition. Composition is expected for luxury, estate, mansion and other architecturally ambitious commissions: omitting it, or declaring volumes without an entrance, roofs or facades, is reported in the architectural review as missing composition, and a written thesis does not substitute for it. A restrained single-volume home satisfies this when its volume, roof, entrance and openings are stated; composition does not require several storeys, wings, pitched roofs or any style. It stays optional for simple briefs.
 Choose a brief-specific architectural thesis, mass hierarchy, room uses and dimensions, privacy, levels, openings, circulation, terraces, pools, landscape, materials and camera views. Software owns placement coordinates, shared walls, cuts, matching doors, floors, roofs, stairs, collisions and evidence. Do not silently simplify or omit a requested feature.
 Spaces are rectangular allocations. Choose one root space with placement relativeTo:null, side:origin, alignment:centre, gap:0. All other spaces refer to another space by relativeTo and side north (+Z), east (+X), south (-Z), west (-X), or same (stacked plan alignment). Alignment start/centre/end aligns the perpendicular dimension. gap is a selected design separation; connected rooms require gap:0 and a shared segment wide enough for the selected opening. References may be forward but must not cycle. Software centres the whole allocation on the site and applies orientation in radians.
 Compose the building as WINGS first, then rooms inside each wing. Every entry of masses is a wing (a group of rooms that belong together: a living pavilion, a sleeping wing, a link, a court). A wing may carry its own placement {relativeTo, side, alignment, gap} that places the WHOLE wing by its envelope against another wing's envelope (relativeTo a wing id) or against one space: north/east/south/west put it beside the anchor, "same" stacks its envelope over the anchor's footprint, alignment start/centre/end aligns the perpendicular dimension of the two envelopes, gap is a selected separation (a detached pavilion has gap>0 and an outdoor landing). Rooms of a placed wing are arranged in that wing's own frame: exactly one room of it is the wing's local origin (relativeTo:null, side:origin, alignment:centre, gap:0) and every other room of the wing is placed against another room of the same wing; a room of a placed wing is never anchored outside its wing. Software arranges the rooms, takes the wing's envelope, and moves the wing as one rigid body to satisfy its placement, so you never calculate where a wing's corners or rooms land and resizing a room moves what is placed against its wing. Exactly one root space exists among wings without placement. A wing without placement keeps the older meaning: its rooms are placed individually (against rooms, or against a whole wing by relativeTo:<wing id>, never "same" against a wing). Reasoning room by room hides collisions: two wings placed on adjacent sides of one wing both claim its corner whenever each is longer than that wing along the other's axis, so choose alignment and gap for each wing deliberately. Nothing requires symmetry, a particular number of wings or levels, or any one circulation idiom; relate wings as the concept demands (shared wall, link wing, court between wings, stacked over, detached across a gap).
@@ -71,7 +71,8 @@ PLACEMENT, OPENINGS AND PROGRAMME ADDENDUM
 Wing extents: a wing is placed, and others are placed against it, by the extent of its own volume. A space that belongs to a wing but projects beyond its enclosed rooms (a roofed porch, a terrace, a service annex) may be declared attached:true: it moves with its wing but does not enlarge the extent the wing is placed by. Software never decides this; without the declaration every room of the wing counts, so a terrace wider than the salon pushes the neighbouring wing away from it. To meet one particular room, place the wing relativeTo that room instead. An adjoin constraint counts only interior rooms; contact through an outdoor space is not a connection.
 Openings between rooms: an explicit host side keeps its whole-edge meaning where that already lies on the wall the two rooms share; where they share only part of the edge, the opening is placed inside the shared part (start, centre or end of it) and the plan is refused if the opening plus 0.18 m margins cannot fit. Host side "shared" states the relationship directly and is preferred.
 Site and landscape: the site must contain the building, pool basin (with 0.4 m margin) and every lawn and bed; compute width and depth from the arrangement. A lawn, bed or pool never overlaps a room, whatever its size: check a wide lawn centred on a narrow anchor against the rooms beside that anchor.
-Programme fidelity: every accommodation the brief names appears as spaces. A bedroom suite is a bedroom with its own bathroom space joined by a door (or an explicit statement of the facilities it has); a suite label is not a bathroom. Living, dining and other primary rooms need natural light: give them windows on an exposed wall, or state in the room's use how they are lit. Where several bedrooms would be identical, vary them deliberately or say why they repeat. None of this asks for size, storeys or complexity the brief does not.`;
+Programme fidelity: every accommodation the brief names appears as spaces. A bedroom suite is a bedroom with its own bathroom space joined by a door (or an explicit statement of the facilities it has); a suite label is not a bathroom. Living, dining and other primary rooms need natural light: give them windows on an exposed wall, or state in the room's use how they are lit. Where several bedrooms would be identical, vary them deliberately or say why they repeat. None of this asks for size, storeys or complexity the brief does not.
+Roof exposure and ownership: roofSpans are the building-scale roofs and a roofs entry is one room's own roof; a volume's roof names its principal roofSpan, which covers only that volume, and its other rooms may keep their own roofs (a room never has both). State an overhang for the exposed eaves you want. Software builds an edge flush (no eave, other edges keep the overhang, stated in the review) when the whole edge lies against a wall or roof it would otherwise reach; it rejects, naming the edge, an edge that lies against a neighbour along only part of its length, a corner two sides could yield, and a neighbour that does not touch the wall. Facade rhythms: windows go on the wall's exposed run and doors on the run the named outdoor space borders; bays are spread over that run when other rooms share the rest of the wall, and the plan is rejected naming the runs when none or several can hold the rhythm.`;
 /** Retrieved knowledge and shared concept guidance predate this contract and still speak of scene
  * operations and deferred interiors. Stated after them so the plan contract governs. */
 export const CANONICAL_CONTEXT_PRECEDENCE=`
@@ -214,7 +215,7 @@ function compilePlan(raw:unknown,phase:{at:CompilePhase}){
 
  const elements=compiled.scene.elements.map(e=>({...e,material:e.kind==='roof'?plan.materials.roof:e.kind==='plate'?plan.materials.floor:e.kind==='wall'?(derived.intent.spaces.find(s=>compiled.provenance[e.id].sources.includes(s.id)&&!s.outdoor)?.material??plan.materials.wall):e.material}));
  phase.at='exterior';
- applyExteriorIntent({...authored,roofs:derived.composed.roofs},compiled,elements,derived.composed.spans);
+ const eavesEvidence=applyExteriorIntent({...authored,roofs:derived.composed.roofs},compiled,elements,derived.composed.spans);
  phase.at='composition';
  const fidelity=authored.composition?compositionFidelity(authored.composition,compiled.intent.spaces.map(s=>({...s,roof:!!s.roof})),levelId=>compiled.intent.levels.find(l=>l.id===levelId)!.top,derived.composed.spans,derived.composed.facades,elements,compiled.provenance,authored.arrival,compiled.intent.portals):undefined;
  if(fidelity?.problems.length)throw new DesignConflict(fidelity.problems.map(m=>`composition: ${m}`));
@@ -247,9 +248,11 @@ function compilePlan(raw:unknown,phase:{at:CompilePhase}){
  const provenance={...compiled.provenance};
  for(const e of elements)if(!provenance[e.id]){const source=[...plan.pools,...plan.landscape].find(s=>e.id===s.id||e.id.startsWith(`${s.id}-`));provenance[e.id]={sources:[source!.id],rule:'site intent → bounded site geometry'};}
  const scene=validateScene({...compiled.scene,terrain:plan.site,elements,architecturalPlan:authored});
- return {...compiled,provenance,vertical:derived.vertical,composition:fidelity?.evidence,compiler:'architectural-plan-1.2',scene,operations:scene.elements.map(element=>({op:'add' as const,element}))};
+ return {...compiled,provenance,vertical:derived.vertical,composition:fidelity?.evidence,compiler:'architectural-plan-1.2',roofEaves:eavesEvidence,scene,operations:scene.elements.map(element=>({op:'add' as const,element}))};
 }
 
+/** Eave projection per plan side of a built pitched roof element (builder compass mapped back to the plan side). */
+const eavesOfElement=(e:SceneElement):Eaves=>{const o=e.overhang??0;return {south:e.eaves?.[ELEMENT_EDGE.south]??o,north:e.eaves?.[ELEMENT_EDGE.north]??o,east:e.eaves?.[ELEMENT_EDGE.east]??o,west:e.eaves?.[ELEMENT_EDGE.west]??o};};
 const rectOf=(polygon:Point[]):Rect=>{const xs=polygon.map(p=>p[0]),zs=polygon.map(p=>p[1]);return {x:Math.min(...xs),z:Math.min(...zs),width:Math.max(...xs)-Math.min(...xs),depth:Math.max(...zs)-Math.min(...zs)};};
 /** Construction only: roof section and facade-relative attachments selected by the planner. */
 function applyExteriorIntent(plan:ArchitecturalPlan,compiled:ReturnType<typeof compileBuilding>,elements:SceneElement[],spans:SpanInfo[]=[]){
@@ -259,6 +262,22 @@ function applyExteriorIntent(plan:ArchitecturalPlan,compiled:ReturnType<typeof c
  };
  const intersects=(a:ReturnType<typeof bounds>,b:ReturnType<typeof bounds>)=>Math.abs(a.x-b.x)<(a.w+b.w)/2-1e-6&&Math.abs(a.z-b.z)<(a.d+b.d)/2-1e-6&&Math.min(a.top,b.top)-Math.max(a.bottom,b.bottom)>1e-6;
  const roofsOf=(space:string)=>elements.filter(e=>e.kind==='roof'&&compiled.provenance[e.id]?.sources[0]===space);
+ // Eaves: the authored overhang on every side except a side that would reach a wall or roof standing against it (see resolveEaves), computed once for
+ // all roofs so that the pairs are judged together. The same function feeds the diagnosis.
+ const sectionKey=(space:string,index:number)=>`${space}#${index}`;
+ const sections:EaveSection[]=[];
+ for(const r of plan.roofs){
+  const span=spans.find(s=>s.lead===r.space),joined=new Set(span?.members??[r.space]),own=compiled.intent.spaces.find(s=>s.id===r.space);
+  if(!own)continue;
+  for(const [index,e] of roofsOf(r.space).entries()){
+   const piece=rectOf(compiled.roofPieces[r.space]?.[index]??span?.polygon??own.polygon);
+   const near=compiled.intent.spaces.filter(s=>!joined.has(s.id)&&s.level===own.level);
+   sections.push({key:sectionKey(r.space,index),id:r.space,level:own.level,joined,rect:piece,form:r.form,overhang:r.overhang??0,bottom:e.at[1]-e.size[1]/2,rise:r.rise??.18,neighbours:near.map(s=>rectOf(s.polygon)),walls:near.filter(s=>!s.outdoor).map(s=>rectOf(s.polygon))});
+  }
+ }
+ const volumes=compiled.intent.spaces.filter(s=>!s.outdoor).map(s=>{const bottom=compiled.intent.levels.find(l=>l.id===s.level)!.top;return {id:s.id,rect:rectOf(s.polygon),bottom,top:bottom+s.height};});
+ const resolved=resolveEaves(sections,volumes);
+ const frame={c:Math.cos(plan.orientation),s:Math.sin(plan.orientation)};
  for(const r of plan.roofs){
   const pieces=roofsOf(r.space),partial=compiled.partialRoofs[r.space],span=spans.find(s=>s.lead===r.space),joined=new Set(span?.members??[r.space]);
   if(r.rise===undefined&&r.form!=='flat')fail(`${r.space}: unsupported-capability: pitched roof requires selected rise.`);
@@ -269,21 +288,34 @@ function applyExteriorIntent(plan:ArchitecturalPlan,compiled:ReturnType<typeof c
   for(const [index,e] of pieces.entries()){
    const bottom=e.at[1]-e.size[1]/2;
    if(r.form!=='flat')delete e.geometry;
-   e.at[1]=bottom+rise/2;e.size=[e.size[0]+(r.form==='flat'?2*overhang:0),rise,e.size[2]+(r.form==='flat'?2*overhang:0)];
-   if(r.form!=='flat'){e.roofForm=r.form;e.overhang=overhang;}
+   const eaves:Eaves=resolved.eaves.get(sectionKey(r.space,index))??eavesOf(0);
+   e.at[1]=bottom+rise/2;
+   if(r.form==='flat'){
+    // A flat roof is one slab: its size carries the eaves, and the slab is centred on the eave rectangle, not on the wall tops.
+    const dx=(eaves.east-eaves.west)/2,dz=(eaves.north-eaves.south)/2;
+    e.size=[e.size[0]+(eaves.west+eaves.east),rise,e.size[2]+(eaves.south+eaves.north)];
+    e.at[0]+=frame.c*dx+frame.s*dz;e.at[2]+=-frame.s*dx+frame.c*dz;
+   }else{
+    delete e.geometry;e.size=[e.size[0],rise,e.size[2]];
+    e.roofForm=r.form;e.overhang=overhang;
+    // Only where a side is flush: an unobstructed roof keeps the uniform overhang so existing scenes are unchanged. Builder compass (north = -z) is the plan's south.
+    if((Object.keys(eaves) as Side[]).some(side=>eaves[side]<overhang-1e-9))e.eaves=Object.fromEntries((Object.keys(eaves) as Side[]).filter(side=>eaves[side]<overhang-1e-9).map(side=>[ELEMENT_EDGE[side],eaves[side]])) as NonNullable<SceneElement['eaves']>;
+   }
    const own=compiled.intent.spaces.find(s=>s.id===r.space)!,piece=rectOf(compiled.roofPieces[r.space]?.[index]??span?.polygon??own.polygon);
    const neighbours=compiled.intent.spaces.filter(s=>!joined.has(s.id)&&s.level===own.level).map(s=>rectOf(s.polygon));
-   const boards=r.form==='flat'?[]:exposedFascia(r.form,piece,neighbours,overhang);
+   const boards=r.form==='flat'?[]:exposedFascia(r.form,piece,neighbours,eaves);
    // Only when a board is withheld; an unobstructed roof keeps the builder default so existing scenes are unchanged.
    if(r.form!=='flat'&&boards.length<fasciaSides(r.form,piece).length)e.fascia=boards.map(side=>ELEMENT_EDGE[side]);
    e.material=r.material??plan.materials.roof;
-   const solids=roofFootprints(piece,overhang,boards).map(f=>({rect:f.rect,bottom:f.board?bottom-FASCIA_DEPTH:bottom,top:f.board?bottom:bottom+rise}));
+   const flush=resolved.trims.filter(t=>t.roof===r.space);
+   const solids=roofFootprints(piece,eaves,boards).map(f=>({rect:f.rect,bottom:f.board?bottom-FASCIA_DEPTH:bottom,top:f.board?bottom:bottom+rise}));
    for(const other of compiled.intent.spaces.filter(s=>!s.outdoor&&!joined.has(s.id))){
     const top=compiled.intent.levels.find(l=>l.id===other.level)!.top,volume=rectOf(other.polygon);
     const horizontal=solids.some(f=>Math.min(f.rect.x+f.rect.width,volume.x+volume.width)-Math.max(f.rect.x,volume.x)>1e-6&&Math.min(f.rect.z+f.rect.depth,volume.z+volume.depth)-Math.max(f.rect.z,volume.z)>1e-6&&Math.min(f.top,top+other.height)-Math.max(f.bottom,top)>1e-6);
     if(horizontal)fail(`${r.space}/${other.id}: unsupported-capability: roof/eaves penetrate occupied volume; select separated sections.`);
    }
-   compiled.provenance[e.id]={sources:[r.space,plan.spaces.find(s=>s.id===r.space)!.level,...joined].filter((v,i,a)=>a.indexOf(v)===i),rule:span?`declared roof span over ${span.members.length} rooms → one editable roof element over their combined footprint; underside at wall top`:partial?'selected flat roof over the exposed remainder of a partly covered space → editable profile slab; underside at wall top':'selected roof form/rise/overhang → existing editable roof builder; underside at wall top'};
+   const how=(span?`declared roof span over ${span.members.length} rooms → one editable roof element over their combined footprint; underside at wall top`:partial?'selected flat roof over the exposed remainder of a partly covered space → editable profile slab; underside at wall top':'selected roof form/rise/overhang → existing editable roof builder; underside at wall top');
+   compiled.provenance[e.id]={sources:[r.space,plan.spaces.find(s=>s.id===r.space)!.level,...joined].filter((v,i,a)=>a.indexOf(v)===i),rule:how+(flush.length?`; ${flush.map(t=>`${t.side} eave flush (authored ${t.authored} m) against ${t.against} along the whole ${t.edge.toFixed(2)} m edge`).join('; ')}`:'')};
   }
  }
  // Slope envelope (eaves) and the fascia boards actually built, against the site, other roofs and floors. Reject uncertain junctions rather than trim roofs.
@@ -291,7 +323,8 @@ function applyExteriorIntent(plan:ArchitecturalPlan,compiled:ReturnType<typeof c
  const roofSolids=(e:SceneElement)=>{
   const b=bounds(e,true),pitched=!!e.roofForm&&e.roofForm!=='flat',rect={x:b.x-b.w/2,z:b.z-b.d/2,width:b.w,depth:b.d};
   const boards=!pitched?[]:e.fascia?e.fascia.map(edge=>(Object.keys(ELEMENT_EDGE) as Side[]).find(side=>ELEMENT_EDGE[side]===edge)!):fasciaSides(e.roofForm!,rect);
-  return roofFootprints(rect,pitched?e.overhang??0:0,boards).map(f=>({rect:f.rect,bottom:f.board?b.bottom-FASCIA_DEPTH:b.bottom,top:f.board?b.bottom:b.top}));
+  const eaves=!pitched?0:eavesOfElement(e);
+  return roofFootprints(rect,eaves,boards).map(f=>({rect:f.rect,bottom:f.board?b.bottom-FASCIA_DEPTH:b.bottom,top:f.board?b.bottom:b.top}));
  };
  const touches=(a:ReturnType<typeof roofSolids>,b:ReturnType<typeof roofSolids>)=>a.some(x=>b.some(y=>Math.abs(x.rect.x+x.rect.width/2-y.rect.x-y.rect.width/2)<(x.rect.width+y.rect.width)/2-1e-6&&Math.abs(x.rect.z+x.rect.depth/2-y.rect.z-y.rect.depth/2)<(x.rect.depth+y.rect.depth)/2-1e-6&&Math.min(x.top,y.top)-Math.max(x.bottom,y.bottom)>1e-6));
  for(const roof of roofs){
@@ -320,4 +353,5 @@ function applyExteriorIntent(plan:ArchitecturalPlan,compiled:ReturnType<typeof c
   if(elements.some(other=>other.kind!=='roof'&&intersects(bounds(e,true),bounds(other,true))))fail(`${screen.id}: screen intersects construction bounds.`);
   elements.push(e);compiled.provenance[e.id]={sources:[screen.id,space.id,space.level],rule:'selected facade screen → existing editable slat primitive'};
  }
+ return {trims:resolved.trims,unresolved:resolved.unresolved};
 }

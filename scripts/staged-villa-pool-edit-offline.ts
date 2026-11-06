@@ -1,0 +1,21 @@
+/** Actual accepted Stage 5 house; mocked semantic AI proposal, no provider/environment/DB. */
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {editAcceptedStagedSave,stagedSaveHash} from '../src/lib/villa/staged/naturalLanguageEdit';
+import {loadHouse} from '../src/lib/villa/staged/save';
+import {poolWaterNorth} from '../src/lib/villa/staged/poolGeometry';
+const root='docs/architecture/staged-villa',out=`${root}/natural-language-edit/${process.argv[2]??'pool-offline-2'}`;
+mkdirSync(out,{recursive:true});
+const write=(n:string,v:unknown)=>writeFileSync(`${out}/${n}.json`,JSON.stringify(v,null,2),{flag:'wx'});
+const original=loadHouse(readFileSync(`${root}/stage5-site/terra-stage5.save.json`,'utf8'));
+const baseline=readFileSync(`${root}/stage5-site/terra-stage5.scene.json`,'utf8');
+const instruction='Move the swimming pool two metres closer to the veranda without changing the building.';
+const op={op:'move-pool-relative' as const,pool:'pool' as const,veranda:'veranda:south-veranda',direction:'towards' as const,distance:2};
+const result=await editAcceptedStagedSave({save:readFileSync(`${root}/stage5-site/terra-stage5.save.json`,'utf8'),instruction,expectedHash:stagedSaveHash(readFileSync(`${root}/stage5-site/terra-stage5.save.json`,'utf8')),proposal:{summary:instruction,ops:[op]}});
+write('mock-result',result);assert(result.accepted,'Pool edit failed; inspect findings, no scene promoted.');
+assert(Math.abs(poolWaterNorth(original.spec.siteWork.pool!)-poolWaterNorth(result.source.siteWork.pool!)-2)<1e-8);
+const save=result.save;
+assert.equal(JSON.stringify(loadHouse(save).scene.elements),JSON.stringify(result.scene.elements));
+writeFileSync(`${out}/candidate.save.json`,save,{flag:'wx'});write('candidate.scene',result.scene);writeFileSync(`${out}/baseline.scene.json`,baseline,{flag:'wx'});
+write('verification',{mockedAI:true,actualTerraHouse:true,providerCalls:0,instruction,op,accepted:true,waterNorthBefore:poolWaterNorth(original.spec.siteWork.pool!),waterNorthAfter:poolWaterNorth(result.source.siteWork.pool!),poolSpecBefore:original.spec.siteWork.pool!,poolSpecAfter:result.source.siteWork.pool!,diff:'diff' in result?result.diff:null,saveReload:true});
+console.log(JSON.stringify({accepted:result.accepted,findings:result.findings,diff:'diff' in result?result.diff:null,elements:result.scene.elements.length}));

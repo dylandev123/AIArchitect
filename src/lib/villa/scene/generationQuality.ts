@@ -23,7 +23,7 @@ export function generationQualityFindings(scene: ArchitecturalScene): Completion
   // and openings have different shape/origin semantics and are not inferred here.
   if(e.geometry || e.opening || ['pavilion','sofa','screen','glazing','entrance','balcony'].includes(e.kind))continue;
   const p=world(e);
-  const signature=JSON.stringify([e.kind,p.slice(0,3).map(round),round(Math.atan2(Math.sin(p[3]),Math.cos(p[3]))),e.size,e.material,e.color,e.roofForm,e.overhang]);
+  const signature=JSON.stringify([e.kind,p.slice(0,3).map(round),round(Math.atan2(Math.sin(p[3]),Math.cos(p[3]))),e.size,e.material,e.color,e.roofForm,e.overhang,e.eaves]);
   const previous=seen.get(signature);
   if(previous)findings.push({code:'duplicate-rendered-part',category:'confirmed-technical-defect',elementIds:[previous,e.id],message:`${previous} and ${e.id}: coincident identical parts duplicate rendered geometry; review before claiming a finished exterior.`});
   else seen.set(signature,e.id);

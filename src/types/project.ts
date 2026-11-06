@@ -27,7 +27,10 @@ export const PROJECT_TYPE_EMOJI: Record<ProjectType, string> = {
   commercial: "🏢",
 };
 
+export interface StagedStudioRecord { brief: string; save: string; checkpoints: {stage: number; brief: string; scene: unknown}[] }
+
 export interface ProjectVersion {
+  stagedStudio?: StagedStudioRecord;
   id: string;
   createdAt: number;
   /** Plain-language description of what changed in this version. */

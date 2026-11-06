@@ -45,3 +45,10 @@ next-env.d.ts
 
 # Private, bounded development-only V3 failure fixtures
 /.v3-debug/
+
+# Staged-generation evidence: large regenerable artefacts and uncurated captures
+# (curated screenshots are added explicitly with `git add -f`; see docs/architecture/PRESERVATION-PLAN.md)
+docs/architecture/**/comparison.html
+docs/architecture/staged-villa/stage6-refinement/review-request-*/wire-request.json
+docs/architecture/**/*.png
+docs/architecture/**/*.jpg

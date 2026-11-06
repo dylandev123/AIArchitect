@@ -8,3 +8,17 @@
 .operation-studio label:has(input[type=number]) {display:flex !important; align-items:center; justify-content:space-between; min-height:35px;}
 .operation-studio input[type=number] {float:none;margin:2px 0;}
 .operation-studio textarea {display:block;box-sizing:border-box;width:100%;min-height:90px;margin:7px 0;padding:8px;border:1px solid #bdc4b7;border-radius:4px;background:#f9f8f2;color:inherit;font:inherit;}
+
+.house-progress { margin:16px 0; padding:18px; border:1px solid #33534d; border-radius:14px; background:linear-gradient(145deg,#132720,#141c23); color:#edf5ef; }
+.house-progress-heading { display:flex; flex-direction:column; gap:6px; }
+.house-progress-heading span,.house-progress small { color:#b4c5bf; font-size:12px; }
+.house-progress ol { list-style:none; padding:0; margin:18px 0; display:grid; gap:14px; }
+.house-progress li { display:flex; align-items:center; gap:12px; }
+.house-progress li div { display:flex; flex-direction:column; gap:3px; }
+.house-progress li[data-state=pending] { opacity:.55; }
+.house-progress li[data-state=failed] { color:#ffb4a9; }
+.house-stage-number,.house-stage-spinner { display:grid; place-items:center; width:28px; height:28px; flex-shrink:0; border:1px solid #648477; border-radius:50%; font-size:12px; }
+.house-progress li[data-state=completed] .house-stage-number { background:#32654f; }
+.house-stage-spinner { border:2px solid #456257; border-top-color:#d1e9b4; animation:house-stage-spin 1s linear infinite; }
+@keyframes house-stage-spin { to {transform:rotate(360deg)} }
+@media (prefers-reduced-motion:reduce) { .house-stage-spinner { animation:none; border-style:dashed; } }

@@ -137,7 +137,7 @@ interface ProjectStore {
   /** Granular live-JSON edit (manual textarea/inspector/add-buttons) — does not touch version history. */
   updateHouseConfig: (id: string, houseConfigJson: string, debugWriter?: string) => void;
   /** Appends a new, permanent version (used after a successful AI edit) and jumps the cursor to it. */
-  appendVersion: (id: string, summary: string, houseConfigJson: string, debugWriter?: string) => void;
+  appendVersion: (id: string, summary: string, houseConfigJson: string, debugWriter?: string, stagedStudio?: import("@/types/project").StagedStudioRecord) => void;
   /** Moves the cursor one version back, if possible. Nothing is deleted. */
   undo: (id: string) => void;
   /** Moves the cursor one version forward, if possible. */
@@ -275,11 +275,11 @@ export const useProjectStore = create<ProjectStore>()(
         set((state) => ({ projects: state.projects.map((p) => p.id === id ? { ...p, houseConfigJson, updatedAt: Date.now() } : p) }));
       },
 
-      appendVersion: (id, summary, houseConfigJson, debugWriter = "appendVersion") =>
+      appendVersion: (id, summary, houseConfigJson, debugWriter = "appendVersion", stagedStudio) =>
         (houseConfigJson = prepareArchitecturalCommit(get().getProject(id), houseConfigJson, debugWriter), logConfigChange(id, houseConfigJson, debugWriter), set((state) => ({
           projects: state.projects.map((p) => {
             if (p.id !== id) return p;
-            const versions = [...p.versions, makeVersion(summary, houseConfigJson)];
+            const versions = [...p.versions, {...makeVersion(summary, houseConfigJson), ...(stagedStudio ? {stagedStudio} : {})}];
             return {
               ...p,
               houseConfigJson,

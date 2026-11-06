@@ -20,7 +20,8 @@ describe('developer-authored exterior compositions (not AI quality evidence)',()
   expect(r.scene.elements.find(e=>e.id==='salon-sun-filter')!.panels).toBe(32);
  });
  it('rejects unresolved roof junctions, vertical wall duplication and opening junction crossings',()=>{
-  const roofs=compositionFixture('compact');roofs.roofs[0].overhang=1;expect(()=>compileArchitecturalPlan(roofs)).toThrow('intersecting roof');
+  const roofs=compositionFixture('compact');roofs.roofs[0].overhang=1;const flush=compileArchitecturalPlan(roofs).scene.elements.find(e=>e.id==='gallery-roof')!;expect(flush.size[0]).toBeCloseTo(4);expect(flush.size[2]).toBeCloseTo(10); // east edge flush against sleep-room; west, south, north keep 1 m
+  const gap=compositionFixture('compact');gap.roofs[0].overhang=1;gap.spaces.find(s=>s.id==='sleep-room')!.depth=6;expect(()=>compileArchitecturalPlan(gap)).toThrow(/gallery|roof/);
   const walls=compositionFixture('waterfront');walls.spaces.find(s=>s.id==='salon')!.height=4.8;expect(()=>compileArchitecturalPlan(walls)).toThrow('overlapping wall sections');
   const opening=compositionFixture('courtyard');opening.portals.find(p=>p.id==='east-door')!.width=6;expect(()=>compileArchitecturalPlan(opening)).toThrow('opening');
  });

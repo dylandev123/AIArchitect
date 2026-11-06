@@ -153,15 +153,99 @@ export const ELEMENT_EDGE:Record<Side,'north'|'east'|'south'|'west'>={south:'nor
  * 0.2 m thick, centred on the edge), so that board is not built; this is the one rule shared by the compiler and the diagnosis. An edge shared
  * along any length is shared (a board is one piece). With an overhang of at least the board's thickness the board stands outside the wall, on the
  * eave line, so it is kept and the clash checks judge it against whatever lies beyond. */
-export function exposedFascia(form:RoofForm,r:Rect,neighbours:Rect[],overhang=0):Side[]{
- const embedded=overhang<FASCIA_THICKNESS-1e-9;
- return fasciaSides(form,r).filter(side=>!embedded||sharedRuns(r,side,neighbours.map((rect,i)=>({id:String(i),rect}))).length===0);
+export function exposedFascia(form:RoofForm,r:Rect,neighbours:Rect[],overhang:number|Eaves=0):Side[]{
+ const eaves=eavesOf(overhang);
+ return fasciaSides(form,r).filter(side=>eaves[side]>=FASCIA_THICKNESS-1e-9||sharedRuns(r,side,neighbours.map((rect,i)=>({id:String(i),rect}))).length===0);
 }
-/** Plan footprints a roof occupies: the slope envelope (rectangle plus overhang) and one thin strip per fascia board outside it. */
-export function roofFootprints(r:Rect,overhang:number,boards:Side[]):{rect:Rect;board:boolean}[]{
- const o=overhang,t=FASCIA_THICKNESS,env:Rect={x:r.x-o,z:r.z-o,width:r.width+2*o,depth:r.depth+2*o};
+/** Eave projection beyond the wall, per plan side. One number is the historical uniform overhang. */
+export type Eaves=Record<Side,number>;
+export const eavesOf=(o:number|Partial<Eaves>):Eaves=>typeof o==='number'?{south:o,east:o,north:o,west:o}:{south:o.south??0,east:o.east??0,north:o.north??0,west:o.west??0};
+/** Plan footprints a roof occupies: the slope envelope (rectangle plus the eave on each side) and one thin strip per fascia board outside it. */
+export function roofFootprints(r:Rect,overhang:number|Partial<Eaves>,boards:Side[]):{rect:Rect;board:boolean}[]{
+ const o=eavesOf(overhang),t=FASCIA_THICKNESS,env:Rect={x:r.x-o.west,z:r.z-o.south,width:r.width+o.west+o.east,depth:r.depth+o.south+o.north};
  const strip:Record<Side,Rect>={
   south:{x:env.x,z:env.z-t,width:env.width,depth:t},north:{x:env.x,z:env.z+env.depth,width:env.width,depth:t},
   west:{x:env.x-t,z:env.z,width:t,depth:env.depth},east:{x:env.x+env.width,z:env.z,width:t,depth:env.depth}};
  return [{rect:env,board:false},...boards.map(side=>({rect:strip[side],board:true}))];
+}
+
+/** One roof section whose eaves are to be resolved: a rectangle of wall tops, its pitched/flat form, the authored (uniform) overhang and its height band. */
+/** `neighbours`: every other room of the level (what a fascia board may stand against); `walls`: the interior ones, whose walls an eave cannot cross. */
+export type EaveSection={key:string;id:string;level:string;joined:ReadonlySet<string>;rect:Rect;form:RoofForm;overhang:number;bottom:number;rise:number;neighbours:Rect[];walls:Rect[]};
+export type EaveVolume={id:string;rect:Rect;bottom:number;top:number};
+export type EaveTrim={roof:string;side:Side;authored:number;against:string;edge:number};
+/** `eaves`: two eaves overlap in open air outside both walls, so neither roof stands against the other. */
+export type EaveUnresolved={roof:string;against:string;sides:Side[];message:string;kind?:'eaves'};
+const overlapArea=(a:Rect,b:Rect):Rect|null=>{const x=Math.max(a.x,b.x),z=Math.max(a.z,b.z),w=Math.min(a.x+a.width,b.x+b.width)-x,d=Math.min(a.z+a.depth,b.z+b.depth)-z;return w>1e-6&&d>1e-6?{x,z,width:w,depth:d}:null;};
+/** The solids a section occupies given its eaves: the slope envelope and the fascia boards that are actually built. */
+export function sectionSolids(s:EaveSection,eaves:Eaves){
+ const pitched=s.form!=='flat',boards=pitched?exposedFascia(s.form,s.rect,s.neighbours,eaves):[];
+ return roofFootprints(s.rect,eaves,boards).map(f=>({rect:f.rect,board:f.board,bottom:f.board?s.bottom-FASCIA_DEPTH:s.bottom,top:f.board?s.bottom:s.bottom+s.rise}));
+}
+/** Sides of `r` whose eave band (the strip along that wall, between the wall and the eave line) the region `c` lies in. A region only in a corner has none. */
+function bandSides(r:Rect,c:Rect):Side[]{
+ const alongX=c.x<r.x+r.width-1e-9&&c.x+c.width>r.x+1e-9,alongZ=c.z<r.z+r.depth-1e-9&&c.z+c.depth>r.z+1e-9,out:Side[]=[];
+ if(alongX&&c.z<r.z-1e-9)out.push('south');
+ if(alongX&&c.z+c.depth>r.z+r.depth+1e-9)out.push('north');
+ if(alongZ&&c.x<r.x-1e-9)out.push('west');
+ if(alongZ&&c.x+c.width>r.x+r.width+1e-9)out.push('east');
+ return out;
+}
+const cornerSides=(r:Rect,c:Rect):Side[]=>[...(c.z<r.z-1e-9?['south' as Side]:c.z+c.depth>r.z+r.depth+1e-9?['north' as Side]:[]),...(c.x<r.x-1e-9?['west' as Side]:c.x+c.width>r.x+r.width+1e-9?['east' as Side]:[])];
+/** Eaves of every roof section: the authored overhang on each side, except that a side whose eave would reach into another roof at the same height or into a
+ * neighbouring occupied volume (the clashes the compiler and the diagnosis both reject) is flush instead: an eave of 0 against that wall.
+ * It is not a clip: the roof surfaces are built to the resulting eaves, nothing is trimmed afterwards, and every other side keeps the authored overhang.
+ * Both parties of a roof/roof clash give way on the side that meets (neither is preferred); a clash that only touches a corner, where either of two sides
+ * could give way, is not decided here and is reported as unresolved (the ordinary clash checks then reject it). Pure and order independent. */
+export function resolveEaves(sections:EaveSection[],volumes:EaveVolume[]){
+ const eaves=new Map(sections.map(s=>[s.key,eavesOf(s.overhang)])),trims:EaveTrim[]=[];
+ const trim=(s:EaveSection,side:Side,against:string)=>{
+  const e=eaves.get(s.key)!;if(e[side]<=0)return false;
+  trims.push({roof:s.id,side,authored:e[side],against,edge:edgeOf(s.rect,side).len});
+  e[side]=0;return true;
+ };
+ let unresolved:EaveUnresolved[]=[];
+ for(let round=0;round<64;round++){
+  let changed=false;unresolved=[];
+  const solids=new Map(sections.map(s=>[s.key,sectionSolids(s,eaves.get(s.key)!)]));
+  const clashes=(a:ReturnType<typeof sectionSolids>,b:{rect:Rect;bottom:number;top:number}[])=>a.flatMap(x=>b.flatMap(y=>{const c=overlapArea(x.rect,y.rect);return c&&Math.min(x.top,y.top)-Math.max(x.bottom,y.bottom)>1e-6?[c]:[];}));
+  const resolve=(s:EaveSection,c:Rect,against:string,body:Rect)=>{
+   const bands=bandSides(s.rect,c),e=eaves.get(s.key)!;
+   for(const side of bands){
+    const len=edgeOf(s.rect,side).len,pad=(r:{lo:number;hi:number}[])=>r.map(x=>`${f2(x.lo)}..${f2(x.hi)} m`).join(', ');
+    if(!sharedRuns(s.rect,side,[{id:against,rect:body}]).length){
+     unresolved.push({roof:s.id,against,sides:[side],message:`${s.id}: the ${side} eave (${e[side]} m) reaches ${against}, which does not stand against that wall; a smaller eave there would be a design value, not a flush edge. Choose a smaller overhang or more clearance.`});
+     continue;
+    }
+    // Flush is the one physically meaningful eave against a wall, but a roof edge is one straight eave line: it can be flush along its whole length or project along its whole length.
+    const blockers=[...s.walls.map((rect,k)=>({id:`wall${k}`,rect})),...sections.filter(o=>o.key!==s.key&&!s.joined.has(o.id)&&o.level===s.level).map(o=>({id:o.id,rect:o.rect})),{id:against,rect:body}];
+    const open=freeRuns(len,sharedRuns(s.rect,side,blockers));
+    if(open.length){
+     unresolved.push({roof:s.id,against,sides:[side],message:`${s.id}: the ${side} eave (${e[side]} m) cannot reach ${against} but ${against} stands against only part of that ${f2(len)} m edge; ${pad(open)} of it is open. One eave line cannot be flush along part of an edge and project along the rest: give ${s.id} no overhang, or make ${side} edge abut walls along its whole length or none of it.`});
+     continue;
+    }
+    changed=trim(s,side,against)||changed;
+   }
+   if(!bands.length){
+    const corner=cornerSides(s.rect,c).filter(side=>e[side]>0);
+    if(corner.length)unresolved.push({roof:s.id,against,sides:corner,message:`${s.id}: the eave at the ${corner.join('/')} corner reaches ${against}, and either ${corner.join(' or ')} side could give way; the overhang cannot be made flush on one side without choosing between them.`});
+   }
+  };
+  for(let i=0;i<sections.length;i++)for(let j=i+1;j<sections.length;j++){
+   const a=sections[i],b=sections[j];if(a.key===b.key)continue;
+   for(const c of clashes(solids.get(a.key)!,solids.get(b.key)!)){
+    // A region inside a body is that body's wall against the other roof's eave; a region inside neither is two eaves meeting in the open.
+    const inA=!!overlapArea(c,a.rect),inB=!!overlapArea(c,b.rect);
+    if(inB)resolve(a,c,b.id,b.rect);
+    if(inA)resolve(b,c,a.id,a.rect);
+    if(!inA&&!inB)unresolved.push({roof:a.id,against:b.id,sides:[],kind:'eaves',message:`${a.id} and ${b.id}: their eaves overlap over ${f2(c.width)}×${f2(c.depth)} m outside both walls, so neither roof stands against the other. Choose smaller overhangs or more clearance.`});
+   }
+  }
+  for(const s of sections)for(const v of volumes){
+   if(s.joined.has(v.id))continue;
+   for(const c of clashes(solids.get(s.key)!,[{rect:v.rect,bottom:v.bottom,top:v.top}]))resolve(s,c,v.id,v.rect);
+  }
+  if(!changed)break;
+ }
+ return {eaves,trims,unresolved};
 }

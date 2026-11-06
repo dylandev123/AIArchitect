@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { profileContactTester } from './profileContact';
 import { straightWalkingAccess } from './walkingAccess';
 import type { ArchitecturalScene, SceneElement } from './model';
+import { roofEaves } from './roofs';
 import type { CompletionFinding } from './completion';
 
 /** References share the construction graph's metres, datums and parent frames.
@@ -27,8 +28,11 @@ export function sceneSpatialGeometry(scene: ArchitecturalScene) {
     // element as a centre-origin box. These remain bounds, not mesh collision.
     const top = (e: SceneElement) => world(e)[1]+(e.geometry ? e.size[1]/2 : e.kind==='pavilion' ? e.size[1]+.29 : e.kind==='water' ? 0 : e.kind==='sofa' ? 1.085 : e.size[1]/2+(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')&&e.material==='ivory'?.05:0));
     const bottom = (e: SceneElement) => world(e)[1]+(e.geometry ? -e.size[1]/2 : e.kind==='pavilion' ? -.9 : e.kind==='water' ? 0 : e.kind==='sofa' ? .1 : -e.size[1]/2-(e.kind==='roof'&&(!e.roofForm||e.roofForm==='flat')?.08:0));
-    const spans = (e: SceneElement) => {
-        const extension=e.kind==='pavilion' ? .65 : e.kind==='roof'&&e.roofForm&&e.roofForm!=='flat' ? e.overhang??0 : 0;
+    // Symmetric bounds. A roof with different eaves per edge is bounded by its largest eave (a conservative extent for separation) or, when it must
+    // not be over-claimed (as a host that contains something), by its smallest.
+    const spans = (e: SceneElement, inner = false) => {
+        const eaves=e.kind==='roof'&&e.roofForm&&e.roofForm!=='flat' ? Object.values(roofEaves(e)) : [];
+        const extension=e.kind==='pavilion' ? .65 : eaves.length ? (inner ? Math.min(...eaves) : Math.max(...eaves)) : 0;
         return [e.size[0]+extension*2, e.kind==='sofa' ? 1.08 : e.size[2]+extension*2];
     };
     // Positive means separated on an OBB axis; negative means penetration.
@@ -42,7 +46,7 @@ export function sceneSpatialGeometry(scene: ArchitecturalScene) {
     }
     function contains(host: SceneElement, child: SceneElement) {
         const p=world(host),q=world(child);
-        const [hw,hd]=spans(host),[cw,cd]=spans(child);
+        const [hw,hd]=spans(host,true),[cw,cd]=spans(child);
         return [-1,1].every(x=>[-1,1].every(z=>{
             const dx=q[0]+Math.cos(q[3])*x*cw/2+Math.sin(q[3])*z*cd/2-p[0];
             const dz=q[2]-Math.sin(q[3])*x*cw/2+Math.cos(q[3])*z*cd/2-p[2];

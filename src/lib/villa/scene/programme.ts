@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { ArchitecturalScene } from './model';
 import { sceneSpatialGeometry } from './spatial';
+import { roofEaves } from './roofs';
 import { straightWalkingAccess } from './walkingAccess';
 
 export const programmeSpaceSchema = z.object({
@@ -38,10 +39,13 @@ function overheadCoverage(g: ReturnType<typeof sceneSpatialGeometry>, floor: Arc
         const p=g.world(roof);
         if(Math.abs(Math.sin(p[3]-f[3]))>.00001) continue;
         const dx=p[0]-f[0],dz=p[2]-f[2],x=Math.cos(f[3])*dx-Math.sin(f[3])*dz,z=Math.sin(f[3])*dx+Math.cos(f[3])*dz;
-        const overhang=roof.kind==='roof' && roof.roofForm && roof.roofForm!=='flat' ? roof.overhang??0 : 0;
-        const w=roof.size[0]/2+overhang,d=roof.size[2]/2+overhang;
+        // Eaves per edge in the roof's own frame (north = -z); a half-turn between the frames swaps opposite edges.
+        const eaves=roof.kind==='roof' && roof.roofForm && roof.roofForm!=='flat' ? roofEaves(roof) : {north:0,east:0,south:0,west:0};
+        const turned=Math.cos(p[3]-f[3])<0;
+        const [west,east,north,south]=turned?[eaves.east,eaves.west,eaves.south,eaves.north]:[eaves.west,eaves.east,eaves.north,eaves.south];
+        const wMin=x-roof.size[0]/2-west,wMax=x+roof.size[0]/2+east,dMin=z-roof.size[2]/2-north,dMax=z+roof.size[2]/2+south;
         remaining=remaining.flatMap(([x0,x1,z0,z1])=>{
-            const a=Math.max(x0,x-w),b=Math.min(x1,x+w),c=Math.max(z0,z-d),e=Math.min(z1,z+d);
+            const a=Math.max(x0,wMin),b=Math.min(x1,wMax),c=Math.max(z0,dMin),e=Math.min(z1,dMax);
             if(a>=b || c>=e) return [[x0,x1,z0,z1]];
             return [[x0,a,z0,z1],[b,x1,z0,z1],[a,b,z0,c],[a,b,e,z1]].filter(r=>r[1]-r[0]>.00001 && r[3]-r[2]>.00001);
         });
