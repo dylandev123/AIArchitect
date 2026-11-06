@@ -12,6 +12,7 @@ import {houseSpecSchema, stageSchemas, type HouseSpec} from './spec';
 import {relationshipFindings, validateExterior, validateInterior, validateMassing, validateSite, type Finding} from './validate';
 import {siteLayoutIssues} from './site';
 import {deriveSiteGeneral,generalSiteIssues} from './siteGeneral';
+import {siteAccessBlockers,stage5Preflight} from './siteFeasibility';
 import {deriveStage4,exteriorDesignV2Schema} from './exterior';
 import {siteDesignV2Schema} from './siteContract';
 import {allRooms,area} from './layout';
@@ -38,7 +39,7 @@ export interface Designer {
 /** Server admission refused the call before anything was sent (budget, cancellation, unresolved usage). */
 export class DispatchRefused extends Error {}
 /** Findings a targeted model correction can plausibly address. Software faults and provider failures are excluded. */
-const NOT_REPAIRABLE = new Set(['construction-error', 'compile-failed', 'budget', 'dispatch-refused', 'designer-error', 'duplicate-json-key']);
+const NOT_REPAIRABLE = new Set(['site-infeasible', 'construction-error', 'compile-failed', 'budget', 'dispatch-refused', 'designer-error', 'duplicate-json-key']);
 export const repairable = (findings: Finding[]) => findings.length > 0 && findings.every(f => !NOT_REPAIRABLE.has(f.code));
 
 export type Draft = HouseSpec;
@@ -140,6 +141,8 @@ export async function runStagedGeneration(o: RunOptions): Promise<PipelineResult
     let schemaIssues:unknown,executionError:{message:string;stack?:string}|undefined;
     const warnings:Finding[]=[];
     for (; attempt <= corrections; attempt++) {
+      // Stage 5 is never dispatched (nor corrected) when the accepted geometry admits no acceptable site answer.
+      if (stage === 5) { const blocked = stage5Preflight(draft, o.brief); if (blocked.length) return fail(stage, blocked, stageCalls); }
       try { budget.beforeCall(); } catch (e) { return fail(stage, [{stage: Math.max(2, stage) as Finding['stage'], code: 'budget', subject: 'budget', message: (e as Error).message}]); }
       let r: DesignResult;
       try { r = attempt === 0 ? await o.designer.design(stage, ctx()) : await o.designer.correct(stage, ctx(), slice, findings); }
@@ -210,6 +213,8 @@ export async function runStagedGeneration(o: RunOptions): Promise<PipelineResult
       trial = measure(candidate, stage, bedrooms, baths);
       findings = trial.findings;
       if(trial.scene&&trial.components)findings.push(...featureAudit(candidate,trial.scene,trial.components,stage as Stage,o.brief).findings);
+      // The entrance is decided at Stage 4: verify now that it can be reached at all, while Stage 4 can still repair it.
+      if(stage===4)findings.push(...siteAccessBlockers(candidate).map(b=>({...b,stage:4 as const,code:'arrival-access',message:`${b.message} Choose an entrance side and room that the site boundary can reach.`})));
       if(stage===2)for(const o of candidate.openSpaces)if(/\bpool\b/i.test(o.role))warnings.push({stage:2,code:'site-intent-reservation',subject:o.id,message:`${o.id} is an open-space footprint reservation at massing stage, not a constructed swimming pool. Stage 5 places the one actual pool assembly centred on it and records how its envelope resolves the reservation${Math.max(o.w,o.d)<9.2||Math.min(o.w,o.d)<7.4?` (this ${o.w}×${o.d} m reservation is smaller than the smallest pool-with-deck, 9.2×7.4 m, so the constructed envelope will extend beyond it)`:''}.`});
       if(stage===3&&slice&&typeof slice==='object'&&'rooms' in slice){
        const requested=(slice as any).rooms as {id:string;area:number}[];

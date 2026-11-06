@@ -6,10 +6,11 @@
 import {allRooms, blockRect} from './layout';
 import {EAVE_M, PITCH_RANGE, exteriorWalls, roofableBlocks, terraceBlocks} from './exterior';
 import {outdoorIntentions} from './intentions';
-import {POOL_SCALES, type SiteDesignV2} from './siteContract';
-import {deriveSiteGeneral, gardenAnchor, siteContext} from './siteGeneral';
+import {POOL_SCALES} from './siteContract';
+import {siteContext} from './siteGeneral';
 import type {HouseSpec} from './spec';
 import {poolRequirement} from './requirements';
+import {siteFeasibility} from './siteFeasibility';
 
 export function exteriorRequestV2(brief: string, spec: HouseSpec): {system: string; prompt: string} {
   const rf = new Set(roofableBlocks(spec).map(b => b.id)), terr = terraceBlocks(spec).map(b => b.id);
@@ -43,19 +44,9 @@ Return the exterior design as JSON matching the schema.`;
   return {system, prompt};
 }
 
-/** Measured feasibility of each pool scale for each anchor, by actually running the site derivation. */
+/** Measured feasibility of each pool scale for each anchor; pool-independent access blockers are never attributed to the pool. */
 export function poolFit(spec: HouseSpec, brief: string) {
-  const probe = (scale: SiteDesignV2['pool']['scale'], anchor: SiteDesignV2['pool']['anchor']): SiteDesignV2 => ({statement: 'probe', pool: {scale, anchor, separation: 'close', water: 'turquoise'}, terrace: {finish: 'limestone', sunbeds: 'none', social: 'none'}, arrival: {finish: 'limestone', character: 'garden-court'}, planting: {trees: 'palm', count: 'four', stature: 'medium', beds: 'restrained', lawn: 'open-lawn'}, lighting: 'arrival-only', intentions: []});
-  const out: Record<string, Record<string, string>> = {};
-  for (const anchor of ['pool-intention', 'veranda', 'living-room'] as const) {
-    const a = gardenAnchor(spec, anchor);
-    if (!a || (anchor === 'pool-intention' && !siteContext(spec).pools.length) || (anchor === 'veranda' && !a.source.startsWith('veranda')) || (anchor === 'living-room' && !a.source.startsWith('living'))) continue;
-    out[`${anchor} (${a.source}, garden side ${a.side})`] = Object.fromEntries((Object.keys(POOL_SCALES) as (keyof typeof POOL_SCALES)[]).map(scale => {
-      const r = deriveSiteGeneral(spec, probe(scale, anchor), brief), pool = r.findings.find(f => f.code.startsWith('pool') || f.code === 'arrival-space' || f.code === 'garden-route');
-      return [scale, pool ? `does not fit: ${pool.message}` : 'fits'];
-    }));
-  }
-  return out;
+  return siteFeasibility(spec, brief).options;
 }
 
 export function siteRequestV2(brief: string, spec: HouseSpec): {system: string; prompt: string} {

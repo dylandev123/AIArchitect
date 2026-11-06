@@ -159,9 +159,9 @@ function deriveAt(base: HouseSpec, input: unknown, brief: string, setback: numbe
   const ctx = siteContext(base), intent = ctx.pools[0];
   if (ctx.pools.length > 1) findings.push(finding('pool-intentions', 'pool', 'Only one swimming pool is supported; the massing declared several pool intentions.'));
   if (!ctx.court || !ctx.entranceSide) findings.push(finding('site-entrance', 'entrance', 'The accepted house has no constructed entrance court.'));
-  const wantsPool = d.pool.scale !== 'none';
-  if (!wantsPool && intent) findings.push(finding('pool-intention-dropped', intent.id, `Massing retained pool intention ${intent.id}; scale none would silently discard it.`));
-  const required = brief ? poolRequirement(brief) : 'optional';
+  const wantsPool = d.pool.scale !== 'none', required = brief ? poolRequirement(brief) : 'optional';
+  // A brief that excludes a pool overrides a massing pool reservation; otherwise "none" may not discard it.
+  if (!wantsPool && intent && required !== 'excluded') findings.push(finding('pool-intention-dropped', intent.id, `Massing retained pool intention ${intent.id}; scale none would silently discard it.`));
   if (!wantsPool && required === 'required') findings.push(finding('pool-required', 'pool', 'The brief asks for a pool; pool scale none is not permitted.'));
   if (wantsPool && required === 'excluded') findings.push(finding('pool-excluded', 'pool', 'The brief excludes a swimming pool; choose pool scale none.'));
   if (d.pool.anchor === 'pool-intention' && wantsPool && !intent) findings.push(finding('pool-anchor', 'pool', 'Pool anchor pool-intention was chosen, but the massing has no pool intention; use veranda or living-room.'));
@@ -211,16 +211,25 @@ function deriveAt(base: HouseSpec, input: unknown, brief: string, setback: numbe
   const paved: {id: string; r: R}[] = rectDiff(terraceZone, [...fixed, ...(env ? [env] : [])]).filter(r => width(r) > .3 && depth(r) > .3).map((r, i) => ({id: `terrace-${i + 1}`, r}));
 
   // ---- Arrival drive: straight from the court to the property boundary on the entrance side. ----
-  const [ax, az] = OUT[arrival], cc = [(court.x0 + court.x1) / 2, (court.z0 + court.z1) / 2];
-  const others = [...blocks, ...verandas, ...terraces, ...(env ? [env] : [])];
+  const [ax, az] = OUT[arrival], cc = [(court.x0 + court.x1) / 2, (court.z0 + court.z1) / 2], half = 2.4;
+  // An accepted open terrace lying on the entrance court across the full drive width is paved ground directly in front
+  // of the door: it is the arrival forecourt, so the drive starts at its outer edge instead of crossing it. Enclosed
+  // blocks, verandas and the pool are never treated this way.
+  const across = (r: R) => ax ? [r.z0, r.z1] : [r.x0, r.x1], shared = (p: number[], q: number[]) => Math.min(p[1], q[1]) - Math.max(p[0], q[0]);
+  const forecourt = terraces.filter(t => overlapArea(t, court) > .01 && shared(across(t), across(court)) >= 2 * half);
+  const reach = forecourt.reduce((u, t) => ({x0: Math.min(u.x0, t.x0), x1: Math.max(u.x1, t.x1), z0: Math.min(u.z0, t.z0), z1: Math.max(u.z1, t.z1)}), court);
+  const others = [...blocks, ...verandas, ...terraces.filter(t => !forecourt.includes(t)), ...(env ? [env] : [])];
   let drive: R | undefined;
   for (const shift of [0, -1, 1, -2, 2, -3, 3]) {
-    const half = 2.4, r = ax ? {x0: ax > 0 ? court.x1 : site.x0, x1: ax > 0 ? site.x1 : court.x0, z0: cc[1] + shift - half, z1: cc[1] + shift + half}
-      : {x0: cc[0] + shift - half, x1: cc[0] + shift + half, z0: az > 0 ? court.z1 : site.z0, z1: az > 0 ? site.z1 : court.z0};
+    const r = ax ? {x0: ax > 0 ? reach.x1 : site.x0, x1: ax > 0 ? site.x1 : reach.x0, z0: cc[1] + shift - half, z1: cc[1] + shift + half}
+      : {x0: cc[0] + shift - half, x1: cc[0] + shift + half, z0: az > 0 ? reach.z1 : site.z0, z1: az > 0 ? site.z1 : reach.z0};
     if ((ax ? width(r) : depth(r)) < .05) { drive = undefined; break; }
+    // Through a forecourt terrace, the drive must land fully on the terrace's outer edge.
+    if (forecourt.length && !forecourt.some(t => shared(across(t), across(r)) >= 2 * half - .01)) continue;
     if (!hit(r, others)) { drive = r; break; }
   }
-  if (!drive && (ax ? (ax > 0 ? site.x1 - court.x1 : court.x0 - site.x0) : (az > 0 ? site.z1 - court.z1 : court.z0 - site.z0)) > .05) return {spec: base, findings: [finding('arrival-space', 'driveway', 'No straight driveway from the property boundary reaches the entrance court without crossing the accepted house or pool.')], adjustments};
+  if (drive && forecourt.length) adjustments.push(`Arrival drive ends at the outer edge of ${forecourt.map(t => ctx.terraces[terraces.indexOf(t)].id).join(', ')}, which covers the entrance court.`);
+  if (!drive && (ax ? (ax > 0 ? site.x1 - reach.x1 : reach.x0 - site.x0) : (az > 0 ? site.z1 - reach.z1 : reach.z0 - site.z0)) > .05) return {spec: base, findings: [finding('arrival-space', 'driveway', 'No straight driveway from the property boundary reaches the entrance court without crossing the accepted house or pool.')], adjustments};
   if (drive) paved.push({id: 'arrival-drive', r: drive});
 
   // ---- Garden walk: shortest dry route (few turns) from the arrival court to the garden terrace. ----
